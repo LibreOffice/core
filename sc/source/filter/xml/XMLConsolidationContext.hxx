@@ -53,8 +53,8 @@ public:
                                     sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
-                                    ) SAL_OVERRIDE;
-    virtual void                EndElement() SAL_OVERRIDE;
+                                    ) override;
+    virtual void                EndElement() override;
 };
 
 #endif

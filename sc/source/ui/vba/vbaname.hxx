@@ -41,30 +41,30 @@ public:
     virtual ~ScVbaName();
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setName( const OUString &rName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setNameLocal( const OUString &rName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setValue( const OUString &rValue ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getRefersTo() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRefersTo( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getRefersToLocal() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRefersToLocal( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getRefersToR1C1() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRefersToR1C1( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString &rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setNameLocal( const OUString &rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setValue( const OUString &rValue ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRefersTo() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRefersTo( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRefersToLocal() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRefersToLocal( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRefersToR1C1() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRefersToR1C1( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) override;
 
     // XHelperInterface
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBANAME_HXX
 

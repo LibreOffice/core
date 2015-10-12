@@ -95,7 +95,7 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~RptMLMasterStylesContext_Impl();
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );

@@ -57,21 +57,21 @@ protected:
 public:
 
     virtual                     ~_SfxMacroTabPage();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
 
     void                        ScriptChanged();
-    virtual void                PageCreated (const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void                PageCreated (const SfxAllItemSet& aSet) override;
     using TabPage::ActivatePage; // FIXME WTF is this nonsense?
-    virtual void                ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void                ActivatePage( const SfxItemSet& ) override;
     void                        LaunchFillGroup();
 
     // --------- inherit from the base -------------
-    virtual bool                FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool                FillItemSet( SfxItemSet* rSet ) override;
+    virtual void                Reset( const SfxItemSet* rSet ) override;
 
-    bool                        IsReadOnly() const SAL_OVERRIDE;
+    bool                        IsReadOnly() const override;
 };
 
 class SfxMacroTabPage : public _SfxMacroTabPage

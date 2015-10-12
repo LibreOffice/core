@@ -50,11 +50,11 @@ protected:
             virtual ~ScDocumentPool();
 public:
 
-    virtual SfxItemPool*        Clone() const SAL_OVERRIDE;
-    virtual SfxMapUnit          GetMetric( sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual SfxItemPool*        Clone() const override;
+    virtual SfxMapUnit          GetMetric( sal_uInt16 nWhich ) const override;
 
-    virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 ) SAL_OVERRIDE;
-    virtual void                Remove( const SfxPoolItem& ) SAL_OVERRIDE;
+    virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 ) override;
+    virtual void                Remove( const SfxPoolItem& ) override;
     static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // delete templates(?) in organizer
@@ -63,7 +63,7 @@ public:
                                         const SfxPoolItem&  rItem,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
-                                        const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
+                                        const IntlWrapper* pIntl = 0 ) const override;
 
     static void InitVersionMaps();
     static void DeleteVersionMaps();

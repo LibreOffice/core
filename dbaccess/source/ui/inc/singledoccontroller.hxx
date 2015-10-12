@@ -44,7 +44,7 @@ namespace dbaui
         virtual ~OSingleDocumentController();
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
     public:
         /// need for undo's and redo's
@@ -60,14 +60,14 @@ namespace dbaui
         void addUndoActionAndInvalidate( SfxUndoAction* pAction );
 
         // OGenericUnoController
-        virtual FeatureState    GetState( sal_uInt16 nId ) const SAL_OVERRIDE;
-        virtual void            Execute( sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs ) SAL_OVERRIDE;
+        virtual FeatureState    GetState( sal_uInt16 nId ) const override;
+        virtual void            Execute( sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs ) override;
 
         // XUndoManagerSupplier
-        virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
         ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;

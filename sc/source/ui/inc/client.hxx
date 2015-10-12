@@ -33,9 +33,9 @@ private:
     SdrModel*       pModel;
     SdrGrafObj*     pGrafEdit;
 
-    virtual void    ObjectAreaChanged() SAL_OVERRIDE;
-    virtual void    RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
-    virtual void    ViewChanged() SAL_OVERRIDE;
+    virtual void    ObjectAreaChanged() override;
+    virtual void    RequestNewObjectArea( Rectangle& ) override;
+    virtual void    ViewChanged() override;
 
 public:
                     ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );

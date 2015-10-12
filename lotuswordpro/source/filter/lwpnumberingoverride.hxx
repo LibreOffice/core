@@ -69,7 +69,7 @@ public:
     LwpNumberingOverride();
     virtual ~LwpNumberingOverride(){}
 
-    virtual LwpNumberingOverride* clone() const SAL_OVERRIDE;
+    virtual LwpNumberingOverride* clone() const override;
 
     enum
     {
@@ -79,7 +79,7 @@ public:
         SMARTLEVEL      = 0x0008
     };
 public:
-    virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE;
+    virtual void Read(LwpObjectStream *pStrm) override;
 
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;

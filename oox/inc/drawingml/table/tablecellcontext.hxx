@@ -32,7 +32,7 @@ public:
         const ::oox::AttributeList& rAttribs, TableCell& rTableCell );
     virtual ~TableCellContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
 

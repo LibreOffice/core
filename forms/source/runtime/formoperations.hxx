@@ -106,44 +106,44 @@ namespace frm
         virtual ~FormOperations();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XFormOperations
-        virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getCursor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getController() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const css::uno::Sequence< css::beans::NamedValue >& Arguments) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL commitCurrentControl() throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isInsertionRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isModifiedRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getCursor() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getController() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) override;
+        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const css::uno::Sequence< css::beans::NamedValue >& Arguments) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) override;
+        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) override;
+        virtual sal_Bool SAL_CALL commitCurrentControl() throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) override;
+        virtual sal_Bool SAL_CALL isInsertionRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) override;
+        virtual sal_Bool SAL_CALL isModifiedRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) override;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& _rSource ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL modified( const css::lang::EventObject& _rSource ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent/OComponentHelper
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
     private:
         // service constructors

@@ -33,10 +33,10 @@ namespace dbaui
     public:
         OTableRowExchange(const ::std::vector< std::shared_ptr<OTableRow> >& _rvTableRow);
     protected:
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-        virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
-        virtual void        ObjectReleased() SAL_OVERRIDE;
+        virtual void        AddSupportedFormats() override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
+        virtual void        ObjectReleased() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROWEXCHANGE_HXX

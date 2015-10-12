@@ -32,9 +32,9 @@ class SwOleClient : public SfxInPlaceClient
     bool m_IsInDoVerb;
     bool m_IsOldCheckForOLEInCaption;
 
-    virtual void ObjectAreaChanged() SAL_OVERRIDE;
-    virtual void RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
-    virtual void ViewChanged() SAL_OVERRIDE;
+    virtual void ObjectAreaChanged() override;
+    virtual void RequestNewObjectArea( Rectangle& ) override;
+    virtual void ViewChanged() override;
 
 public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
@@ -43,7 +43,7 @@ public:
 
     bool IsCheckForOLEInCaption() const { return m_IsOldCheckForOLEInCaption; }
 
-    virtual void FormatChanged() SAL_OVERRIDE;
+    virtual void FormatChanged() override;
 };
 
 #endif

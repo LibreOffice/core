@@ -51,7 +51,7 @@ namespace
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
-        virtual void Invoke() SAL_OVERRIDE;
+        virtual void Invoke() override;
     };
 
     VDevBuffer::VDevBuffer()

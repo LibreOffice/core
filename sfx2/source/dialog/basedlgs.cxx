@@ -57,7 +57,7 @@ public:
     OString aWinState;
     SfxChildWindow* pMgr;
     bool            bConstructed;
-    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     Idle            aMoveIdle;
 };
@@ -84,7 +84,7 @@ public:
     bool            bConstructed;
     Idle            aMoveIdle;
 
-    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )

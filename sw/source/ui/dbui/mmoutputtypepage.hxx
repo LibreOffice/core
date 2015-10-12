@@ -40,7 +40,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
 public:
     SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
     virtual ~SwMailMergeOutputTypePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 #endif
 

@@ -34,10 +34,10 @@ public:
     virtual ~ChartSidebarModifyListener();
 
     virtual void SAL_CALL modified(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (::css::uno::RuntimeException, ::std::exception) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (::css::uno::RuntimeException, ::std::exception) override;
 
 private:
     ChartSidebarModifyListenerParent* mpParent;

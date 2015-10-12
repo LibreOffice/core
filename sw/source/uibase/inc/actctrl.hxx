@@ -29,7 +29,7 @@ class SW_DLLPUBLIC NumEditAction: public NumericField
 
 protected:
     void Action();
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool Notify( NotifyEvent& rNEvt ) override;
 public:
     NumEditAction( vcl::Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}
@@ -46,7 +46,7 @@ public:
         : Edit(pParent, nStyle)
     {
     }
-    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& ) override;
 
     void SetReturnActionLink(const Link<ReturnActionEdit&,void>& rLink)
             { aReturnActionLink = rLink;}

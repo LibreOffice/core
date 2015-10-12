@@ -62,7 +62,7 @@ public:
                                     ScViewData* pViewData,
                                     ScSplitPos eWhich );
     virtual                     ~ScOutlineWindow();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     /** Sets the size of the header area (width/height dep. on window type). */
     void                        SetHeaderSize( long nNewSize );
@@ -207,20 +207,20 @@ private:
     void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
 
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual void                GetFocus() SAL_OVERRIDE;
-    virtual void                LoseFocus() SAL_OVERRIDE;
+    virtual void                Resize() override;
+    virtual void                GetFocus() override;
+    virtual void                LoseFocus() override;
 
-    virtual void                MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void                MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void                MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 #endif

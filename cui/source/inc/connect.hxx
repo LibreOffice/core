@@ -64,17 +64,17 @@ public:
 
     SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxConnectionPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet * ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 /* Derived from SfxSingleTabDialog, in order to be informed about

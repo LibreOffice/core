@@ -127,8 +127,8 @@ class SwFrmPage: public SfxTabPage
     bool    m_bIsMathOLE;
     bool    m_bIsMathBaselineAlignment;
 
-    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual void    ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK_TYPED(RangeModifyLoseFocusHdl, Control&, void);
     DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
@@ -186,13 +186,13 @@ class SwFrmPage: public SfxTabPage
 public:
     SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
-    virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet *rSet) override;
+    virtual void Reset(const SfxItemSet *rSet) override;
 
     void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFormat);
@@ -226,9 +226,9 @@ class SwGrfExtPage: public SfxTabPage
     DECL_LINK_TYPED(MirrorHdl, Button*, void);
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
 
-    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual ~SwGrfExtPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -238,9 +238,9 @@ public:
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
-    virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet *rSet) override;
+    virtual void Reset(const SfxItemSet *rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet *pSet) override;
 };
 
 class SwFrmURLPage : public SfxTabPage
@@ -263,12 +263,12 @@ class SwFrmURLPage : public SfxTabPage
 public:
     SwFrmURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmURLPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
-    virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet *rSet) override;
+    virtual void Reset(const SfxItemSet *rSet) override;
 };
 
 class SwFrmAddPage : public SfxTabPage
@@ -312,13 +312,13 @@ class SwFrmAddPage : public SfxTabPage
 public:
     SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmAddPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
-    virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet *rSet) override;
+    virtual void Reset(const SfxItemSet *rSet) override;
 
     void            SetFormatUsed(bool bFormat);
     void            SetFrmType(const OUString &rType) { sDlgType = rType; }

@@ -40,7 +40,7 @@ namespace svx
         TextControlCharAttribDialog( vcl::Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
 
     protected:
-        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) SAL_OVERRIDE;
+        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) override;
     };
 
     class TextControlParaAttribDialog : public SfxTabDialog

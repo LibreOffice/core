@@ -31,7 +31,7 @@ namespace connectivity
     // static Data for the Class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_lang_Class();
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Class( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}

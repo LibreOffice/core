@@ -54,10 +54,10 @@ private:
     sal_Int32           nPosLineEndLb;
     bool            mbAreaTP;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
 protected:
-    virtual short       Ok() SAL_OVERRIDE;
+    virtual short       Ok() override;
     DECL_LINK_TYPED( CancelHdlImpl, Button*, void );
     void                SavePalettes();
 
@@ -206,22 +206,22 @@ public:
 
     SvxLineTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    Construct();
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
-    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet* ) override;
 
-    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    virtual void FillUserData() SAL_OVERRIDE;
+    virtual void FillUserData() override;
 
     void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
     void    SetDashList( XDashListRef pDshLst ) { m_pDashList = pDshLst; }
@@ -237,8 +237,8 @@ public:
     void    SetDashChgd( ChangeType* pIn ) { m_pnDashListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
-    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 /*************************************************************************/
@@ -307,16 +307,16 @@ private:
 public:
     SvxLineDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxLineDefTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    Construct();
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
-    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
 
-    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
@@ -327,7 +327,7 @@ public:
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 /*************************************************************************/
@@ -377,16 +377,16 @@ private:
 public:
     SvxLineEndDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineEndDefTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    Construct();
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
-    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
 
-    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
@@ -398,8 +398,8 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void Resize() override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX

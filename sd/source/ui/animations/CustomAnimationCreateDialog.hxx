@@ -41,7 +41,7 @@ class CustomAnimationCreateDialog : public TabDialog
 public:
     CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration );
     virtual ~CustomAnimationCreateDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;

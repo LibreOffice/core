@@ -44,7 +44,7 @@ private:
     bool            bActiveFlag;
 
 protected:
-                    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+                    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
 public:
 
@@ -60,8 +60,8 @@ public:
 
     void            SetActiveFlag(bool bFlag=true);
     bool            GetActiveFlag() { return bActiveFlag;}
-    void            GetFocus() SAL_OVERRIDE;
-    void            LoseFocus() SAL_OVERRIDE;
+    void            GetFocus() override;
+    void            LoseFocus() override;
 };
 
 
@@ -90,7 +90,7 @@ public:
 
                     StructPage( vcl::Window* pParent);
     virtual         ~StructPage();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            ClearStruct();
     SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent,

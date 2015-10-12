@@ -60,7 +60,7 @@ protected:
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
             ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
+                        ::com::sun::star::beans::XPropertySet > rPropSet ) const override;
     const SvXMLExport& GetExport() const { return rExport; }
 
 public:
@@ -75,7 +75,7 @@ public:
         const XMLPropertyState& rProperty,
         SvXmlExportFlags nFlags,
         const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const SAL_OVERRIDE;
+        sal_uInt32 nIdx = 0 ) const override;
 
     virtual void handleSpecialItem(
         SvXMLAttributeList& rAttrList,
@@ -83,7 +83,7 @@ public:
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const SAL_OVERRIDE;
+        sal_uInt32 nIdx = 0 ) const override;
 };
 
 

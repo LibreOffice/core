@@ -113,12 +113,12 @@ public:
     static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xContent );
 
     // SvLockBytes
-    virtual void            SetSynchronMode (bool bSynchron) SAL_OVERRIDE;
-    virtual ErrCode         ReadAt(sal_uInt64 nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const SAL_OVERRIDE;
-    virtual ErrCode         WriteAt(sal_uInt64, const void*, sal_uLong, sal_uLong *pWritten) SAL_OVERRIDE;
-    virtual ErrCode         Flush() const SAL_OVERRIDE;
-    virtual ErrCode         SetSize(sal_uInt64) SAL_OVERRIDE;
-    virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const SAL_OVERRIDE;
+    virtual void            SetSynchronMode (bool bSynchron) override;
+    virtual ErrCode         ReadAt(sal_uInt64 nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const override;
+    virtual ErrCode         WriteAt(sal_uInt64, const void*, sal_uLong, sal_uLong *pWritten) override;
+    virtual ErrCode         Flush() const override;
+    virtual ErrCode         SetSize(sal_uInt64) override;
+    virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const override;
 
     void                    SetError( ErrCode nError )
                             { m_nError = nError; }

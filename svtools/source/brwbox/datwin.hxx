@@ -137,26 +137,26 @@ public:
 public:
                     explicit BrowserDataWin( BrowseBox* pParent );
     virtual         ~BrowserDataWin();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void    Command( const CommandEvent& rEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rEvt ) override;
                     DECL_LINK_TYPED( RepeatedMouseMove, Timer *, void );
 
-    virtual void    MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
 
     // DropTargetHelper overridables
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     // DragSourceHelper overridables
-    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
 
     BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
@@ -170,9 +170,9 @@ public:
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
-    void            Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
-    void            Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE
+    void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    void            Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    void            Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override
                     { Control::Invalidate( rRegion, nFlags ); }
 
 protected:
@@ -197,11 +197,11 @@ public:
                         _pDataWin( pDataWin )
                     {}
    virtual          ~BrowserScrollBar();
-   virtual void     dispose() SAL_OVERRIDE;
+   virtual void     dispose() override;
                     //ScrollBar( vcl::Window* pParent, const ResId& rResId );
 
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    EndScroll() SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void    EndScroll() override;
 };
 
 

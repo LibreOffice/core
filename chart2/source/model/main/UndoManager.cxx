@@ -77,8 +77,8 @@ namespace chart
 
             ::osl::Mutex&                       getMutex();
             // IUndoManagerImplementation
-            virtual ::svl::IUndoManager&        getImplUndoManager() SAL_OVERRIDE;
-            virtual Reference< XUndoManager >   getThis() SAL_OVERRIDE;
+            virtual ::svl::IUndoManager&        getImplUndoManager() override;
+            virtual Reference< XUndoManager >   getThis() override;
 
             // attribute access
             ::cppu::OWeakObject&                getParent() { return m_rParent; }
@@ -153,16 +153,16 @@ namespace chart
             }
 
             // IMutexGuard
-            virtual void clear() SAL_OVERRIDE;
-            virtual ::framework::IMutex& getGuardedMutex() SAL_OVERRIDE;
+            virtual void clear() override;
+            virtual ::framework::IMutex& getGuardedMutex() override;
         };
 
         class DummyMutex : public ::framework::IMutex
         {
         public:
             virtual ~DummyMutex() {}
-            virtual void acquire() SAL_OVERRIDE { }
-            virtual void release() SAL_OVERRIDE { }
+            virtual void acquire() override { }
+            virtual void release() override { }
         };
 
         ::framework::IMutex& UndoManagerMethodGuard::getGuardedMutex()

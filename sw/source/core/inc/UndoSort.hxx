@@ -74,9 +74,9 @@ public:
 
     virtual ~SwUndoSort();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void Insert( const OUString& rOrgPos, const OUString& rNewPos );
     void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );

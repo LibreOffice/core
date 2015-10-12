@@ -72,16 +72,16 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     OUString                m_sSortAlgorithm;
 
 protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
     virtual ~SwAuthorityFieldType();
 
-    virtual SwFieldType* Copy()    const SAL_OVERRIDE;
+    virtual SwFieldType* Copy()    const override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
@@ -148,8 +148,8 @@ class SwAuthorityField : public SwField
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
 
-    virtual OUString    Expand() const SAL_OVERRIDE;
-    virtual SwField*    Copy() const SAL_OVERRIDE;
+    virtual OUString    Expand() const override;
+    virtual SwField*    Copy() const override;
 
 public:
     /// For internal use only, in general continue using ExpandField() instead.
@@ -164,15 +164,15 @@ public:
 
     OUString            GetFieldText(ToxAuthorityField eField) const;
 
-    virtual void        SetPar1(const OUString& rStr) SAL_OVERRIDE;
-    virtual SwFieldType* ChgTyp( SwFieldType* ) SAL_OVERRIDE;
+    virtual void        SetPar1(const OUString& rStr) override;
+    virtual SwFieldType* ChgTyp( SwFieldType* ) override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     sal_IntPtr          GetHandle() const       { return m_nHandle; }
 
-    virtual OUString GetDescription() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const override;
 };
 
 inline OUString SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const

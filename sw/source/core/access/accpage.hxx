@@ -41,10 +41,10 @@ protected:
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets
     // FOCUSABLE(1) and FOCUSED(+)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual void _InvalidateCursorPos() SAL_OVERRIDE;
-    virtual void _InvalidateFocus() SAL_OVERRIDE;
+    virtual void _InvalidateCursorPos() override;
+    virtual void _InvalidateFocus() override;
 
     virtual ~SwAccessiblePage();
 
@@ -56,23 +56,23 @@ public:
     // XAccessibleContext methods that need to be overridden
 
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService (
         const OUString& sServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
-    virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
+    virtual bool HasCursor() override;   // required by map to remember that object
 };
 
 #endif

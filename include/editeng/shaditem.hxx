@@ -48,20 +48,20 @@ public:
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool             operator==( const SfxPoolItem& ) const override;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+                                    OUString &rText, const IntlWrapper * = 0 ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual bool             ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
-    virtual bool             HasMetrics() const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
+    virtual bool             ScaleMetrics( long nMult, long nDiv ) override;
+    virtual bool             HasMetrics() const override;
 
     const Color& GetColor() const { return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }
@@ -75,11 +75,11 @@ public:
     // Calculate width of the shadow on the page.
     sal_uInt16 CalcShadowSpace( SvxShadowItemSide nShadow ) const;
 
-    virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
-    virtual sal_uInt16      GetEnumValue() const SAL_OVERRIDE;
-    virtual void            SetEnumValue( sal_uInt16 nNewVal ) SAL_OVERRIDE;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetValueCount() const override;
+    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual sal_uInt16      GetEnumValue() const override;
+    virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )

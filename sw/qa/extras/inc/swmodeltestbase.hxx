@@ -67,7 +67,7 @@ using namespace css;
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -80,7 +80,7 @@ using namespace css;
     void Import_Export_Import() {\
         executeImportExportImportTest(filename);\
     }\
-    void verify() SAL_OVERRIDE;\
+    void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
@@ -96,7 +96,7 @@ using namespace css;
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -105,7 +105,7 @@ using namespace css;
     void Import() { \
         executeImportTest(filename);\
     }\
-    void verify() SAL_OVERRIDE;\
+    void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
@@ -113,7 +113,7 @@ using namespace css;
 #define DECLARE_SW_EXPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import_Export); \
@@ -122,7 +122,7 @@ using namespace css;
     void Import_Export() {\
         executeImportExport(filename);\
     }\
-    void verify() SAL_OVERRIDE;\
+    void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
@@ -166,14 +166,14 @@ public:
     virtual ~SwModelTestBase()
     {}
 
-    virtual void setUp() SAL_OVERRIDE
+    virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
 
         mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     }
 
-    virtual void tearDown() SAL_OVERRIDE
+    virtual void tearDown() override
     {
         if (mxComponent.is())
             mxComponent->dispose();
@@ -674,7 +674,7 @@ protected:
     /**
      * Helper method to return nodes represented by rXPath.
      */
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) SAL_OVERRIDE
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
         // docx
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));

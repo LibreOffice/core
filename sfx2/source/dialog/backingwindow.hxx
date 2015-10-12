@@ -118,15 +118,15 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 public:
     explicit BackingWindow(vcl::Window* pParent);
     virtual ~BackingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
+    virtual bool PreNotify(NotifyEvent& rNEvt) override;
+    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual void GetFocus() override;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 
     void setOwningFrame(const css::uno::Reference<css::frame::XFrame>& xFrame );
 

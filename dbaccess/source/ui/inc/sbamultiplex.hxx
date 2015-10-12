@@ -55,8 +55,8 @@ namespace dbaui
     public:
         OSbaWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE { m_rParent.release(); }
+        virtual void SAL_CALL acquire() throw() override { m_rParent.acquire(); }
+        virtual void SAL_CALL release() throw() override { m_rParent.release(); }
     };
 
     // declaration of a listener multiplexer class
@@ -71,16 +71,16 @@ namespace dbaui
             ::osl::Mutex& rMutex);                                                          \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
         virtual css::uno::Any  SAL_CALL queryInterface(                        \
-            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override; \
                                                                                             \
         /* css::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;  \
 
     #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
-        virtual void SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+        virtual void SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) override; \
 
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
-        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;   \
+        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) override;   \
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
     /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators */    \
@@ -192,12 +192,12 @@ namespace dbaui
         classname( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );                    \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
         virtual css::uno::Any  SAL_CALL queryInterface(                        \
-            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override; \
                                                                                             \
         /* css::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;  \
                                                                                             \
-        virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions SAL_OVERRIDE;             \
+        virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions override;             \
                                                                                             \
     public:                                                                                 \
         void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);    \

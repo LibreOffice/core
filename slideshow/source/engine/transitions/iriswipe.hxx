@@ -33,7 +33,7 @@ class IrisWipe : public ParametricPolyPolygon
 {
 public:
     IrisWipe() : m_unitRect( createUnitRect() ) {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
 private:
     const ::basegfx::B2DPolyPolygon m_unitRect;
 };

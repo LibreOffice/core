@@ -31,7 +31,7 @@ class BackgroundPropertiesContext : public ::oox::core::FragmentHandler2
 {
 public:
     BackgroundPropertiesContext( ::oox::core::FragmentHandler2& rParent, ::oox::drawingml::FillProperties& rFillProperties );
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 protected:
     ::oox::drawingml::FillProperties& mrFillProperties;

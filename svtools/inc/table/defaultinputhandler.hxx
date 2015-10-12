@@ -44,12 +44,12 @@ namespace svt { namespace table
         DefaultInputHandler();
         virtual ~DefaultInputHandler();
 
-        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual bool    GetFocus        ( ITableControl& _rControl ) SAL_OVERRIDE;
-        virtual bool    LoseFocus       ( ITableControl& _rControl ) SAL_OVERRIDE;
+        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
+        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
+        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
+        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) override;
+        virtual bool    GetFocus        ( ITableControl& _rControl ) override;
+        virtual bool    LoseFocus       ( ITableControl& _rControl ) override;
     };
 
 

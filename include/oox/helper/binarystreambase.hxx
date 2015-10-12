@@ -128,13 +128,13 @@ public:
     virtual             ~BinaryXSeekableStream();
 
     /** Returns the size of the stream, if wrapped stream is seekable, otherwise -1. */
-    virtual sal_Int64   size() const SAL_OVERRIDE;
+    virtual sal_Int64   size() const override;
     /** Returns the current stream position, if wrapped stream is seekable, otherwise -1. */
-    virtual sal_Int64   tell() const SAL_OVERRIDE;
+    virtual sal_Int64   tell() const override;
     /** Seeks the stream to the passed position, if wrapped stream is seekable. */
-    virtual void        seek( sal_Int64 nPos ) SAL_OVERRIDE;
+    virtual void        seek( sal_Int64 nPos ) override;
     /** Releases the reference to the UNO XSeekable interface. */
-    virtual void        close() SAL_OVERRIDE;
+    virtual void        close() override;
 
 protected:
     explicit            BinaryXSeekableStream(
@@ -158,13 +158,13 @@ class OOX_DLLPUBLIC SequenceSeekableStream : public virtual BinaryStreamBase
 {
 public:
     /** Returns the size of the wrapped data sequence. */
-    virtual sal_Int64   size() const SAL_OVERRIDE;
+    virtual sal_Int64   size() const override;
     /** Returns the current stream position. */
-    virtual sal_Int64   tell() const SAL_OVERRIDE;
+    virtual sal_Int64   tell() const override;
     /** Seeks the stream to the passed position. */
-    virtual void        seek( sal_Int64 nPos ) SAL_OVERRIDE;
+    virtual void        seek( sal_Int64 nPos ) override;
     /** Releases the reference to the data sequence. */
-    virtual void        close() SAL_OVERRIDE;
+    virtual void        close() override;
 
 protected:
     explicit            SequenceSeekableStream( const StreamDataSequence& rData );

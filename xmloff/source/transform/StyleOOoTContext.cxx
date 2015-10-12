@@ -159,9 +159,9 @@ public:
     void AddAttribute( sal_uInt16 nPrefix, XMLTokenEnum eToken,
                        const OUString &sValue );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) override;
 
-    virtual void Export() SAL_OVERRIDE;
+    virtual void Export() override;
 };
 
 XMLTypedPropertiesOOoTContext_Impl::XMLTypedPropertiesOOoTContext_Impl(
@@ -242,17 +242,17 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
-            const Reference< XAttributeList >& rAttrList ) SAL_OVERRIDE;
+            const Reference< XAttributeList >& rAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) override;
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) override;
 
-    virtual void Export() SAL_OVERRIDE;
+    virtual void Export() override;
 
-    virtual bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const override;
 };
 
 XMLTypedPropertiesOOoTContext_Impl

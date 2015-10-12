@@ -77,8 +77,8 @@ public:
     inline sal_Int32    GetValue() const { return mnValue; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     sal_Int32           mnValue;
@@ -95,8 +95,8 @@ public:
     inline double       GetValue() const { return mfValue; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     double              mfValue;
@@ -113,8 +113,8 @@ public:
     inline bool         GetValue() const { return mbValue; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     bool                mbValue;
@@ -156,8 +156,8 @@ public:
                             const OUString& rValue );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 };
 
 
@@ -169,8 +169,8 @@ public:
     explicit            SfxOleString16Property( sal_Int32 nPropId );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 };
 
 
@@ -187,8 +187,8 @@ public:
     inline const util::DateTime& GetValue() const { return maDateTime; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     util::DateTime      maDateTime;
@@ -204,8 +204,8 @@ public:
     inline const util::Date& GetValue() const { return maDate; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     util::Date      maDate;
@@ -226,8 +226,8 @@ public:
     inline bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     uno::Sequence<sal_uInt8>    mData;
@@ -248,8 +248,8 @@ public:
     inline bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
-    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplLoad( SvStream& rStrm ) override;
+    virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
     uno::Sequence<sal_uInt8>    mData;

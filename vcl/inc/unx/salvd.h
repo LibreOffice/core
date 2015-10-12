@@ -61,15 +61,15 @@ public:
     sal_uInt16      GetDepth() const { return nDepth_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
 
-    virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual SalGraphics*    AcquireGraphics() override;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
     /// Set new size, without saving the old contents
-    virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const SAL_OVERRIDE { return nDX_; }
-    virtual long GetHeight() const SAL_OVERRIDE { return nDY_; }
+    virtual long GetWidth() const override { return nDX_; }
+    virtual long GetHeight() const override { return nDY_; }
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H

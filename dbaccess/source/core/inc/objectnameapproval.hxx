@@ -66,7 +66,7 @@ namespace dbaccess
         virtual ~ObjectNameApproval();
 
         // IContainerApprove
-        virtual void SAL_CALL approveElement( const OUString& _rName, const css::uno::Reference< css::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
+        virtual void SAL_CALL approveElement( const OUString& _rName, const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;
 
     };
 

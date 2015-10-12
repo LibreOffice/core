@@ -45,19 +45,19 @@ public:
         used by the currently selected page of the document in the
         center pane.
     */
-    virtual void UpdateSelection() SAL_OVERRIDE;
+    virtual void UpdateSelection() override;
 
     /** Copy all master pages that are to be shown into the given list.
     */
-    virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
+    virtual void Fill (ItemList& rItemList) override;
 
     using MasterPagesSelector::Fill;
 
 protected:
-    virtual ResId GetContextMenuResId() const SAL_OVERRIDE;
+    virtual ResId GetContextMenuResId() const override;
 
-    virtual void ProcessPopupMenu (Menu& rMenu) SAL_OVERRIDE;
-    virtual void ExecuteCommand (const sal_Int32 nCommandId) SAL_OVERRIDE;
+    virtual void ProcessPopupMenu (Menu& rMenu) override;
+    virtual void ExecuteCommand (const sal_Int32 nCommandId) override;
 
 private:
     css::uno::Reference<css::lang::XComponent> mxListener;
@@ -69,9 +69,9 @@ private:
         const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~CurrentMasterPagesSelector();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void LateInit() SAL_OVERRIDE;
+    virtual void LateInit() override;
 
     DECL_LINK_TYPED(EventMultiplexerListener,sd::tools::EventMultiplexerEvent&, void);
 };

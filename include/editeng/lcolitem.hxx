@@ -41,7 +41,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 )
-        const SAL_OVERRIDE;
+        const override;
 
     inline SvxLineColorItem& operator=(const SvxLineColorItem& rColor)
         { return static_cast<SvxLineColorItem&>(SvxColorItem::

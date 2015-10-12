@@ -331,42 +331,42 @@ public:
 
     virtual ~InputStreamTransformer();
 
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL release() throw() override;
 
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
         throw( NotConnectedException,
                BufferSizeExceededException,
                IOException,
-               RuntimeException, std::exception) SAL_OVERRIDE;
+               RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
         throw( NotConnectedException,
                BufferSizeExceededException,
                IOException,
-               RuntimeException, std::exception) SAL_OVERRIDE;
+               RuntimeException, std::exception) override;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
                                                                      BufferSizeExceededException,
                                                                      IOException,
-                                                                     RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                                     RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL available() throw( NotConnectedException,
                                                         IOException,
-                                                        RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                        RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL closeInput() throw( NotConnectedException,
                                                     IOException,
-                                                    RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                    RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL seek( sal_Int64 location ) throw( IllegalArgumentException,
                                                             IOException,
-                                                            RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                            RuntimeException, std::exception ) override;
 
-    virtual sal_Int64 SAL_CALL getPosition() throw( IOException,RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getPosition() throw( IOException,RuntimeException, std::exception ) override;
 
-    virtual sal_Int64 SAL_CALL getLength() throw( IOException,RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getLength() throw( IOException,RuntimeException, std::exception ) override;
 
     void addToBuffer( const char* buffer,int len );
 

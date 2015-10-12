@@ -42,22 +42,22 @@ private:
     DECL_LINK_TYPED (ClickNewHdl_Impl, Button*, void );
 
 protected:
-    void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
+    void FillDlgFields(const OUString& rStrURL) override;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
-                             SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
+                             SvxLinkInsertMode& eMode ) override;
 
 public:
     SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkNewDocTp ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static  VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
-    virtual bool        AskApply () SAL_OVERRIDE;
-    virtual void        DoApply () SAL_OVERRIDE;
+    virtual bool        AskApply () override;
+    virtual void        DoApply () override;
 
-    virtual void        SetInitFocus() SAL_OVERRIDE;
+    virtual void        SetInitFocus() override;
 };
 
 

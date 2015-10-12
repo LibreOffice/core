@@ -82,17 +82,17 @@ protected:
     using EscherEx::EndShape;
     void        EndShape(sal_Int32 nShapeElement);
 
-    virtual void        Commit(EscherPropertyContainer& rProps, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void        Commit(EscherPropertyContainer& rProps, const Rectangle& rRect) override;
 
 private:
 
-    virtual void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) SAL_OVERRIDE;
-    virtual void CloseContainer() SAL_OVERRIDE;
+    virtual void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) override;
+    virtual void CloseContainer() override;
 
-    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const Rectangle* pBoundRect = 0) SAL_OVERRIDE;
-    virtual void LeaveGroup() SAL_OVERRIDE;
+    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const Rectangle* pBoundRect = 0) override;
+    virtual void LeaveGroup() override;
 
-    virtual void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) SAL_OVERRIDE;
+    virtual void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) override;
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.

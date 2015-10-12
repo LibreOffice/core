@@ -87,9 +87,9 @@ public:
     virtual bool AddFormulaToken(
         const css::sheet::FormulaToken& rToken,
         svl::SharedStringPool& rSPool,
-        formula::ExternalReferenceHelper* _pRef) SAL_OVERRIDE;
-    virtual void CheckToken( const formula::FormulaToken& r ) SAL_OVERRIDE;
-    virtual formula::FormulaToken* AddOpCode( OpCode eCode ) SAL_OVERRIDE;
+        formula::ExternalReferenceHelper* _pRef) override;
+    virtual void CheckToken( const formula::FormulaToken& r ) override;
+    virtual formula::FormulaToken* AddOpCode( OpCode eCode ) override;
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
     /** ScSingleRefOpToken with ocMatRef. */
@@ -103,7 +103,7 @@ public:
     formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
-    virtual formula::FormulaToken* MergeArray( ) SAL_OVERRIDE;
+    virtual formula::FormulaToken* MergeArray( ) override;
 
     /** Merge very last SingleRef+ocRange+SingleRef combination into DoubleRef
         and adjust pCode array, or do nothing if conditions not met.

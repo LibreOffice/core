@@ -75,18 +75,18 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
 protected:
     virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,
-                            bool bAllowImplicitChangesForNotConvertibleText ) SAL_OVERRIDE;
+                            bool bAllowImplicitChangesForNotConvertibleText ) override;
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
-                                   const sal_Int32 nUnitEnd ) SAL_OVERRIDE;
+                                   const sal_Int32 nUnitEnd ) override;
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
                         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
-                        LanguageType *pNewUnitLanguage ) SAL_OVERRIDE;
+                        LanguageType *pNewUnitLanguage ) override;
 
-    virtual bool    HasRubySupport() const SAL_OVERRIDE;
+    virtual bool    HasRubySupport() const override;
 
 public:
     SwHHCWrapper(

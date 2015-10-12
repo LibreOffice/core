@@ -177,7 +177,7 @@ public:
     SwSizeEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmHeight( pF->Frm().Height() ) {}
     virtual ~SwSizeEnterLeave() {}
-    virtual void Leave() SAL_OVERRIDE;           // resize message
+    virtual void Leave() override;           // resize message
 };
 
 class SwUpperEnterLeave : public SwImplEnterLeave
@@ -187,8 +187,8 @@ public:
     SwUpperEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmId( 0 ) {}
     virtual ~SwUpperEnterLeave() {}
-    virtual void Enter() SAL_OVERRIDE;           // message
-    virtual void Leave() SAL_OVERRIDE;           // message of FrmId from upper
+    virtual void Enter() override;           // message
+    virtual void Leave() override;           // message of FrmId from upper
 };
 
 class SwFrmChangesLeave : public SwImplEnterLeave
@@ -198,8 +198,8 @@ public:
     SwFrmChangesLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrm( pF->Frm() ) {}
     virtual ~SwFrmChangesLeave() {}
-    virtual void Enter() SAL_OVERRIDE;           // no message
-    virtual void Leave() SAL_OVERRIDE;           // message when resizing the Frm area
+    virtual void Enter() override;           // no message
+    virtual void Leave() override;           // message when resizing the Frm area
 };
 
 void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )

@@ -72,7 +72,7 @@ namespace dbaui
             vcl::Window* _pParent,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// number of history entries
         sal_Int32 getHistorySize() const;
@@ -82,7 +82,7 @@ namespace dbaui
         void switchToHistory(sal_Int32 _nHistoryPos, bool _bUpdateListBox = true);
 
         // OEventListenerAdapter
-        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     protected:
         DECL_LINK_TYPED( OnExecute, Button*, void );

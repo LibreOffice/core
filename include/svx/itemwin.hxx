@@ -53,10 +53,10 @@ public:
     void FillControl();
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 };
 
@@ -74,13 +74,13 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     static void     ReleaseFocus_Impl();
 
 protected:
-    virtual void    Modify() SAL_OVERRIDE;
-    virtual void    Down() SAL_OVERRIDE;
-    virtual void    Up() SAL_OVERRIDE;       // just to be sure
+    virtual void    Modify() override;
+    virtual void    Down() override;
+    virtual void    Up() override;       // just to be sure
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
     SvxMetricField( vcl::Window* pParent,
@@ -102,8 +102,8 @@ public:
     void            Selected() { bSelect = true; }
 
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
 private:
     sal_uInt16      nCurPos;
@@ -121,9 +121,9 @@ public:
     SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
 
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    Select() override;
 
 private:
     sal_uInt16      nCurPos;

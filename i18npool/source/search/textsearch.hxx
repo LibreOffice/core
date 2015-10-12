@@ -124,23 +124,23 @@ public:
     // Methods
     virtual void SAL_CALL
         setOptions( const ::com::sun::star::util::SearchOptions& options )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::util::SearchResult SAL_CALL
         searchForward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::util::SearchResult SAL_CALL
         searchBackward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

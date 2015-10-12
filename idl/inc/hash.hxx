@@ -98,14 +98,14 @@ class SvStringHashTable : public SvHashTable
 {
     SvStringHashEntry*      pEntries;
 protected:
-    virtual sal_uInt32          HashFunc( const OString& rElement ) const SAL_OVERRIDE;
-    virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const SAL_OVERRIDE;
+    virtual sal_uInt32          HashFunc( const OString& rElement ) const override;
+    virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const override;
 public:
             SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
             virtual ~SvStringHashTable();
 
     OString GetNearString( const OString& rName ) const;
-    virtual bool    IsEntry( sal_uInt32 nIndex ) const SAL_OVERRIDE;
+    virtual bool    IsEntry( sal_uInt32 nIndex ) const override;
 
     bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
     bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string

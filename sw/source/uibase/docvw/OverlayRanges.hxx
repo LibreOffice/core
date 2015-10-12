@@ -40,7 +40,7 @@ namespace sw
             bool mbShowSolidBorder;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
 
         public:
             static OverlayRanges* CreateOverlayRange(

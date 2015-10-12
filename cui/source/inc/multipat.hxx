@@ -51,7 +51,7 @@ private:
 public:
     SvxMultiPathDialog(vcl::Window* pParent);
     virtual ~SvxMultiPathDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
@@ -71,7 +71,7 @@ private:
 public:
     SvxPathSelectDialog(vcl::Window* pParent);
     virtual ~SvxPathSelectDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );

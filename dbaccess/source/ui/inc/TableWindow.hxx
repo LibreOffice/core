@@ -70,16 +70,16 @@ namespace dbaui
         bool                m_bActive;
 
         // OContainerListener
-        virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual void    Resize() SAL_OVERRIDE;
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void    Resize() override;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void    MouseMove( const MouseEvent& rEvt ) override;
+        virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         VclPtr<OTableWindowListBox> CreateListBox();
             // called at FIRST Init
@@ -124,7 +124,7 @@ namespace dbaui
 
     public:
         virtual ~OTableWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // late Constructor, see also CreateListbox and FillListbox
         virtual bool Init();
@@ -132,9 +132,9 @@ namespace dbaui
         OJoinTableView*             getTableView();
         const OJoinTableView*       getTableView() const;
         OJoinDesignView*            getDesignView();
-        void                        SetPosPixel( const Point& rNewPos ) SAL_OVERRIDE;
-        void                        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
-        void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
+        void                        SetPosPixel( const Point& rNewPos ) override;
+        void                        SetSizePixel( const Size& rNewSize ) override;
+        void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
 
         OUString                    getTitle() const;
         void                        SetBoldTitle( bool bBold );
@@ -173,13 +173,13 @@ namespace dbaui
         Rectangle getSizingRect(const Point& _rPos,const Size& _rOutputSize) const;
 
         // window override
-        virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void                GetFocus() SAL_OVERRIDE;
-        virtual bool                PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void                Command(const CommandEvent& rEvt) SAL_OVERRIDE;
+        virtual void                StateChanged( StateChangedType nStateChange ) override;
+        virtual void                GetFocus() override;
+        virtual bool                PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void                Command(const CommandEvent& rEvt) override;
 
         // Accessibility
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         // do I have connections to the outside?
         bool ExistsAConn() const;

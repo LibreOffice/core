@@ -36,7 +36,7 @@ public:
     void                SetInputHandler(ScInputHandler* pHdl)   { pInputHandler=pHdl;}
     void                SetDocShell(ScDocShell* pSds)           { pScDocShell=pSds;}
 
-    virtual void            SaveValues() SAL_OVERRIDE;
+    virtual void            SaveValues() override;
 
 private:
                         ScFormEditData( const ScFormEditData& );

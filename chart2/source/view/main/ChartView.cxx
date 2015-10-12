@@ -1080,11 +1080,11 @@ public:
     explicit GL2DRenderer(ChartView* pView);
     virtual ~GL2DRenderer();
 
-    virtual void update() SAL_OVERRIDE;
-    virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
-    virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) SAL_OVERRIDE;
-    virtual void scroll(long nDelta) SAL_OVERRIDE;
-    virtual void contextDestroyed() SAL_OVERRIDE;
+    virtual void update() override;
+    virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) override;
+    virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) override;
+    virtual void scroll(long nDelta) override;
+    virtual void contextDestroyed() override;
 
     const OpenGLWindow* getOpenGLWindow() const;
     void updateOpenGLWindow();

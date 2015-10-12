@@ -28,10 +28,10 @@
 class StgInternalStream : public SvStream
 {
     BaseStorageStream* m_pStrm;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
-    virtual void      FlushData() SAL_OVERRIDE;
+    virtual sal_uLong GetData( void* pData, sal_uLong nSize ) override;
+    virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) override;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
+    virtual void      FlushData() override;
 public:
     StgInternalStream( BaseStorage&, const OUString&, bool );
    virtual ~StgInternalStream();

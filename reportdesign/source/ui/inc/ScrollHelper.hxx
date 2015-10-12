@@ -64,16 +64,16 @@ namespace rptui
         OScrollWindowHelper(OScrollWindowHelper&) = delete;
         void operator =(OScrollWindowHelper&) = delete;
     protected:
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
         // window
-        virtual void            Resize() SAL_OVERRIDE;
-        virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void            Resize() override;
+        virtual bool            Notify( NotifyEvent& rNEvt ) override;
         // OPropertyChangeListener
-        virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /** late ctor
         */
@@ -172,9 +172,9 @@ namespace rptui
         void                    setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
         OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
-        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
+        virtual void markSection(const sal_uInt16 _nPos) override;
 
 
         /** fills the positions of all collapsed sections.

@@ -195,19 +195,19 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
-        throw() SAL_OVERRIDE;
+        throw() override;
     virtual void SAL_CALL release()
-        throw() SAL_OVERRIDE;
+        throw() override;
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XResultSetMetaData
 
@@ -219,7 +219,7 @@ public:
     virtual sal_Int32 SAL_CALL
     getColumnCount()
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether column is automatically numbered, which makes it
       * read-only.
@@ -231,7 +231,7 @@ public:
     virtual sal_Bool SAL_CALL
     isAutoIncrement( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether column is case sensitive.
       *
@@ -242,7 +242,7 @@ public:
     virtual sal_Bool SAL_CALL
     isCaseSensitive( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether the value stored in column can be used in a
       * WHERE clause.
@@ -254,7 +254,7 @@ public:
     virtual sal_Bool SAL_CALL
     isSearchable( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether column is a cash value.
       *
@@ -265,7 +265,7 @@ public:
     virtual sal_Bool SAL_CALL
     isCurrency( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether a NULL can be stored in column.
       *
@@ -279,7 +279,7 @@ public:
     virtual sal_Int32 SAL_CALL
     isNullable( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Checks whether the value stored in column is a signed number.
       *
@@ -290,7 +290,7 @@ public:
     virtual sal_Bool SAL_CALL
     isSigned( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the normal maximum width in characters for column.
       *
@@ -301,7 +301,7 @@ public:
     virtual sal_Int32 SAL_CALL
     getColumnDisplaySize( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the suggested column title for column, to be used in print-
       * outs and displays.
@@ -313,7 +313,7 @@ public:
     virtual OUString SAL_CALL
     getColumnLabel( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the name of column.
       *
@@ -324,7 +324,7 @@ public:
     virtual OUString SAL_CALL
     getColumnName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the schema name for the table from which column of this
       * result set was derived.
@@ -338,7 +338,7 @@ public:
     virtual OUString SAL_CALL
     getSchemaName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * For number types, getprecision gets the number of decimal digits
       * in column.
@@ -353,7 +353,7 @@ public:
     virtual sal_Int32 SAL_CALL
     getPrecision( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the number of digits to the right of the decimal point for
       * values in column.
@@ -365,7 +365,7 @@ public:
     virtual sal_Int32 SAL_CALL
     getScale( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the name of the table from which column of this result set
       * was derived or "" if there is none (for example, for a join).
@@ -379,7 +379,7 @@ public:
     virtual OUString SAL_CALL
     getTableName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL
     /**
       * Gets the catalog name for the table from which column of this
@@ -393,7 +393,7 @@ public:
       */
     getCatalogName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the JDBC type for the value stored in column. ... The STRUCT
       * and DISTINCT type codes are always returned for structured and
@@ -408,7 +408,7 @@ public:
     virtual sal_Int32 SAL_CALL
     getColumnType( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Gets the type name used by this particular data source for the
       * values stored in column. If the type code for the type of value
@@ -422,7 +422,7 @@ public:
     virtual OUString SAL_CALL
     getColumnTypeName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Indicates whether a column is definitely not writable.
       *
@@ -433,7 +433,7 @@ public:
     virtual sal_Bool SAL_CALL
     isReadOnly( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Indicates whether it is possible for a write on the column to succeed.
       *
@@ -444,7 +444,7 @@ public:
     virtual sal_Bool SAL_CALL
     isWritable( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Indicates whether a write on the column will definitely succeed.
       *
@@ -455,7 +455,7 @@ public:
     virtual sal_Bool SAL_CALL
     isDefinitelyWritable( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
     /**
       * Returns the fully-qualified name of the service whose instances
       * are manufactured if the method
@@ -470,7 +470,7 @@ public:
     virtual OUString SAL_CALL
     getColumnServiceName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 } // namespace ucbhelper

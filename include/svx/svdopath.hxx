@@ -47,7 +47,7 @@ private:
     friend class ImpPathForDragAndCreate;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
     basegfx::B2DPolyPolygon maPathPolygon;
     SdrObjKind                  meKind;
@@ -66,7 +66,7 @@ protected:
     void impDeleteDAC() const;
 
 public:
-    virtual void SetRectsDirty(bool bNotMyself = false) SAL_OVERRIDE;
+    virtual void SetRectsDirty(bool bNotMyself = false) override;
     double GetBrightness() { return mdBrightness; }
 
     TYPEINFO_OVERRIDE();
@@ -74,55 +74,55 @@ public:
     SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 1.0);
     virtual ~SdrPathObj();
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const SAL_OVERRIDE;
-    virtual SdrPathObj* Clone() const SAL_OVERRIDE;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual SdrPathObj* Clone() const override;
     SdrPathObj& operator=(const SdrPathObj& rObj);
 
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
-    virtual void RecalcSnapRect() SAL_OVERRIDE;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
-    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const SAL_OVERRIDE;
-    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const SAL_OVERRIDE;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    virtual void RecalcSnapRect() override;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual sal_uInt32 GetHdlCount() const override;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
+    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const override;
+    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const override;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool hasSpecialDrag() const override;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
-    virtual bool BckCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual void BrkCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
-    Pointer GetCreatePointer() const SAL_OVERRIDE;
+    virtual bool BegCreate(SdrDragStat& rStat) override;
+    virtual bool MovCreate(SdrDragStat& rStat) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+    virtual bool BckCreate(SdrDragStat& rStat) override;
+    virtual void BrkCreate(SdrDragStat& rStat) override;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
+    Pointer GetCreatePointer() const override;
 
     // during drag or create, allow accessing the so-far created/modified polyPolygon
     basegfx::B2DPolyPolygon getObjectPolyPolygon(const SdrDragStat& rDrag) const;
     basegfx::B2DPolyPolygon getDragPolyPolygon(const SdrDragStat& rDrag) const;
 
-    virtual void NbcMove(const Size& aSize) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) SAL_OVERRIDE;
-    virtual void NbcRotate(const Point& rRefPnt, long nAngle, double fSin, double fCos) SAL_OVERRIDE;
-    virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2) SAL_OVERRIDE;
-    virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear) SAL_OVERRIDE;
+    virtual void NbcMove(const Size& aSize) override;
+    virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
+    virtual void NbcRotate(const Point& rRefPnt, long nAngle, double fSin, double fCos) override;
+    virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2) override;
+    virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear) override;
 
-    virtual sal_uInt32 GetSnapPointCount() const SAL_OVERRIDE;
-    virtual Point GetSnapPoint(sal_uInt32 i) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetSnapPointCount() const override;
+    virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
-    virtual bool IsPolyObj() const SAL_OVERRIDE;
-    virtual sal_uInt32 GetPointCount() const SAL_OVERRIDE;
-    virtual Point GetPoint(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
-    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum) SAL_OVERRIDE;
+    virtual bool IsPolyObj() const override;
+    virtual sal_uInt32 GetPointCount() const override;
+    virtual Point GetPoint(sal_uInt32 nHdlNum) const override;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum) override;
 
     // insert point
     sal_uInt32 NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHideHim);
@@ -132,12 +132,12 @@ public:
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
 protected:
-    virtual SdrObjGeoData* NewGeoData() const SAL_OVERRIDE;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
+    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // Bezier-polygon getter/setter
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }
@@ -161,11 +161,11 @@ public:
     //
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const SAL_OVERRIDE;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) SAL_OVERRIDE;
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 };
 
 #endif // INCLUDED_SVX_SVDOPATH_HXX

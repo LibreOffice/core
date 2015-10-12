@@ -58,18 +58,18 @@ namespace dbaui
         void            ImplSetFont();
 
     protected:
-        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKEvt ) override;
+        virtual void GetFocus() override;
 
         DECL_LINK(ModifyHdl, void*);
 
     public:
         OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);
         virtual ~OSqlEdit();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Edit overridables
-        virtual void SetText(const OUString& rNewText) SAL_OVERRIDE;
+        virtual void SetText(const OUString& rNewText) override;
         using MultiLineEditSyntaxHighlight::SetText;
 
         // own functionality
@@ -81,7 +81,7 @@ namespace dbaui
         void stopTimer();
         void startTimer();
 
-        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
+        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
         using MultiLineEditSyntaxHighlight::Notify;
     };
 }

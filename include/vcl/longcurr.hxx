@@ -51,8 +51,8 @@ protected:
 public:
                             virtual ~LongCurrencyFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            Reformat() override;
+    virtual void            ReformatAll() override;
 
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
@@ -88,14 +88,14 @@ private:
 public:
                     LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
-    void            Modify() SAL_OVERRIDE;
-    void            Up() SAL_OVERRIDE;
-    void            Down() SAL_OVERRIDE;
-    void            First() SAL_OVERRIDE;
-    void            Last() SAL_OVERRIDE;
+    void            Modify() override;
+    void            Up() override;
+    void            Down() override;
+    void            First() override;
+    void            Last() override;
 
     void            SetFirst(const BigInt& rNewFirst ) { mnFirst = rNewFirst; }
     BigInt          GetFirst() const { return mnFirst; }
@@ -114,11 +114,11 @@ class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormat
 public:
                     LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
-    void            Modify() SAL_OVERRIDE;
-    void            ReformatAll() SAL_OVERRIDE;
+    void            Modify() override;
+    void            ReformatAll() override;
 };
 
 #endif // INCLUDED_VCL_LONGCURR_HXX

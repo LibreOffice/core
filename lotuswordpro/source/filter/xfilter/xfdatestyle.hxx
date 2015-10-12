@@ -73,7 +73,7 @@ public:
 public:
     void    SetTexture(bool bTexture);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     bool        m_bTexture;
@@ -107,9 +107,9 @@ public:
 
     void    AddText( const OUString& part );
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     bool    m_bFixed;

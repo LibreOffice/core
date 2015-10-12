@@ -35,10 +35,10 @@ public:
 
     void                SetLinkURL( const OUString& rURL, const OUString& rText );
 
-    virtual void        AddSupportedFormats() SAL_OVERRIDE;
-    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual void        ObjectReleased() SAL_OVERRIDE;
-    virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
+    virtual void        AddSupportedFormats() override;
+    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual void        ObjectReleased() override;
+    virtual void        DragFinished( sal_Int8 nDropAction ) override;
 };
 
 #endif

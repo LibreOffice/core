@@ -49,7 +49,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
 public:
     SwCustomizeAddressListDialog(vcl::Window* pParent, const SwCSVData& rOldData);
     virtual ~SwCustomizeAddressListDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SwCSVData*    GetNewData() { return m_pNewData;}
 };
@@ -65,7 +65,7 @@ protected:
     SwAddRenameEntryDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
     virtual ~SwAddRenameEntryDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 public:
     void                SetFieldName(const OUString& rName) {m_pFieldNameED->SetText(rName);}

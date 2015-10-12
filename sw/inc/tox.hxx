@@ -81,7 +81,7 @@ class SW_DLLPUBLIC SwTOXMark
 
 protected:
     // SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     TYPEINFO_OVERRIDE();   // rtti
@@ -94,8 +94,8 @@ public:
     SwTOXMark& operator=( const SwTOXMark& rCopy );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
 
     void InvalidateTOXMark();
 
@@ -432,7 +432,7 @@ public:
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = 0 );
     virtual ~SwTOXBase();
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     // a kind of CopyCtor - check if the TOXBase is at TOXType of the doc.
     // If not, so create it an copy all other used things. The return is this

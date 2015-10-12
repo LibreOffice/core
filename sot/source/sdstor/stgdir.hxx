@@ -48,7 +48,7 @@ class StgDirEntry : public StgAvlNode
     bool         m_bRemoved;                  // removed per Invalidate()
     bool         m_bRenamed;                  // renamed
     void         InitMembers();             // ctor helper
-    virtual short Compare( const StgAvlNode* ) const SAL_OVERRIDE;
+    virtual short Compare( const StgAvlNode* ) const override;
     bool         StoreStream( StgIo& );     // store the stream
     bool         StoreStreams( StgIo& );    // store all streams
     void         RevertAll();               // revert the whole tree
@@ -97,7 +97,7 @@ class StgDirStrm : public StgDataStrm
 public:
     explicit StgDirStrm( StgIo& );
     virtual ~StgDirStrm();
-    virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;              // change the size
+    virtual bool SetSize( sal_Int32 ) override;              // change the size
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool=false );// get an entry
     StgDirEntry* GetRoot() { return m_pRoot; }

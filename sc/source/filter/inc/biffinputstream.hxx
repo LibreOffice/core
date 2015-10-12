@@ -197,24 +197,24 @@ public:
     // BinaryStreamBase interface (seeking) -----------------------------------
 
     /** Returns the data size of the whole record without record headers. */
-    virtual sal_Int64   size() const SAL_OVERRIDE;
+    virtual sal_Int64   size() const override;
     /** Returns the position inside of the whole record content. */
-    virtual sal_Int64   tell() const SAL_OVERRIDE;
+    virtual sal_Int64   tell() const override;
     /** Seeks in record content to the specified position. */
-    virtual void        seek( sal_Int64 nRecPos ) SAL_OVERRIDE;
+    virtual void        seek( sal_Int64 nRecPos ) override;
     /** Closes the input stream but not the wrapped stream. */
-    virtual void        close() SAL_OVERRIDE;
+    virtual void        close() override;
 
     // BinaryInputStream interface (stream read access) -----------------------
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
     /** Reads nBytes bytes and copies them to the passed buffer opMem.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
     /** Seeks forward inside the current record. */
-    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
 
     /** Stream operator for integral and floating-point types. */
     template< typename Type >

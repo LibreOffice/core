@@ -104,7 +104,7 @@ class MSFILTER_DLLPUBLIC WString : public TBBase
 public:
     WString(){};
     virtual ~WString(){};
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
     OUString getString(){ return sString; }
 };
 
@@ -123,9 +123,9 @@ class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
 public:
     TBCExtraInfo();
     virtual ~TBCExtraInfo(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     OUString getOnAction();
 };
@@ -141,9 +141,9 @@ class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
 public:
     TBCGeneralInfo();
     virtual ~TBCGeneralInfo() {}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     OUString CustomText() { return customText.getString(); }
@@ -157,9 +157,9 @@ friend class TBCBSpecific; // #FIXME hacky access, need to fix
 public:
     TBCBitMap();
     virtual ~TBCBitMap();
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
    // #FIXME Const-ness
     Bitmap& getBitMap() { return mBitMap;}
@@ -172,9 +172,9 @@ class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
 public:
     TBCMenuSpecific();
     virtual ~TBCMenuSpecific(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     OUString Name();
 };
@@ -192,9 +192,9 @@ class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
 public:
     TBCCDData();
     virtual ~TBCCDData();
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
 };
 
@@ -204,9 +204,9 @@ class TBCComboDropdownSpecific : public TBBase
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     TBCComboDropdownSpecific(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
 };
 
@@ -221,9 +221,9 @@ class TBCBSpecific :  public TBBase
 public:
     TBCBSpecific();
     virtual ~TBCBSpecific(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     // #TODO just add a getGraphic member here
     TBCBitMap* getIcon();
@@ -271,9 +271,9 @@ public:
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
     bool isBeginGroup() { return ( bFlagsTCR & 0x2 ) != 0; }
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     sal_uInt32 getTbct() { return tbct; };
 };
@@ -288,9 +288,9 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
 public:
     TBCData( const TBCHeader& Header );
     virtual ~TBCData(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
     TBCGeneralInfo& getGeneralInfo() { return controlGeneralInfo; }
@@ -310,9 +310,9 @@ class MSFILTER_DLLPUBLIC TB : public TBBase
 public:
     TB();
     virtual ~TB(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
     sal_Int16 getcCL(){ return cCL; }
     WString& getName(){ return name; }
@@ -328,9 +328,9 @@ public:
     sal_Int16 top;
     sal_Int16 right;
     sal_Int16 bottom;
-    bool Read( SvStream &rS ) SAL_OVERRIDE { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
+    bool Read( SvStream &rS ) override { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* fo ) SAL_OVERRIDE;
+    virtual void Print( FILE* fo ) override;
 #endif
 };
 
@@ -348,9 +348,9 @@ class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
 public:
     TBVisualData();
     virtual ~TBVisualData(){}
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) SAL_OVERRIDE;
+    virtual void Print( FILE* ) override;
 #endif
 };
 

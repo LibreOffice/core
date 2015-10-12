@@ -52,7 +52,7 @@ class CustomAnimationList : public SvTreeListBox, public ISequenceListener
 public:
     CustomAnimationList( vcl::Window* pParent );
     virtual ~CustomAnimationList();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // methods
 
@@ -71,19 +71,19 @@ public:
     void onSelectionChanged(const css::uno::Any& rSelection);
 
     // overrides
-    virtual void    SelectHdl() SAL_OVERRIDE;
-    virtual bool    DoubleClickHdl() SAL_OVERRIDE;
+    virtual void    SelectHdl() override;
+    virtual bool    DoubleClickHdl() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
-    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual void    SetTabs() SAL_OVERRIDE;
+    virtual void    SetTabs() override;
 
-    virtual void notify_change() SAL_OVERRIDE;
+    virtual void notify_change() override;
 
     const Image& getImage( sal_uInt16 nId );
 

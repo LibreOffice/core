@@ -64,7 +64,7 @@ namespace svt { namespace table
     public:
         TableControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~TableControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// sets a new table model
         void        SetModel( PTableModel _pModel );
@@ -80,7 +80,7 @@ namespace svt { namespace table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        sal_Int32 GetCurrentRow() const SAL_OVERRIDE;
+        sal_Int32 GetCurrentRow() const override;
 
         ITableControl&
                 getTableControlInterface();
@@ -94,7 +94,7 @@ namespace svt { namespace table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        sal_Int32  GetCurrentColumn() const SAL_OVERRIDE;
+        sal_Int32  GetCurrentColumn() const override;
 
         /** activates the cell at the given position
 
@@ -106,7 +106,7 @@ namespace svt { namespace table
         */
         bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
 
-        SVT_DLLPRIVATE virtual void Resize() SAL_OVERRIDE;
+        SVT_DLLPRIVATE virtual void Resize() override;
         void    Select();
 
         /**after removing a row, updates the vector which contains the selected rows
@@ -116,18 +116,18 @@ namespace svt { namespace table
         vcl::Window&             getDataWindow();
 
         // Window overridables
-        virtual void        GetFocus() SAL_OVERRIDE;
-        virtual void        LoseFocus() SAL_OVERRIDE;
-        virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void        StateChanged( StateChangedType i_nStateChange ) SAL_OVERRIDE;
+        virtual void        GetFocus() override;
+        virtual void        LoseFocus() override;
+        virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+        virtual void        StateChanged( StateChangedType i_nStateChange ) override;
 
         /** Creates and returns the accessible object of the whole GridControl. */
-        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) SAL_OVERRIDE;
-        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const SAL_OVERRIDE;
-        SVT_DLLPRIVATE virtual bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) SAL_OVERRIDE;
-        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
-        SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const SAL_OVERRIDE;
+        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
+        SVT_DLLPRIVATE virtual bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const override;
+        SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const override;
 
         // temporary methods
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
@@ -138,36 +138,36 @@ namespace svt { namespace table
 
 
         // IAccessibleTable
-        virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
-        virtual void GrabFocus() SAL_OVERRIDE;
-        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-        virtual vcl::Window* GetAccessibleParentWindow() const SAL_OVERRIDE;
-        virtual vcl::Window* GetWindowInstance() SAL_OVERRIDE;
-        virtual sal_Int32 GetAccessibleControlCount() const SAL_OVERRIDE;
-        virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) SAL_OVERRIDE;
-        virtual long GetRowCount() const SAL_OVERRIDE;
-        virtual long GetColumnCount() const SAL_OVERRIDE;
-        virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) SAL_OVERRIDE;
-        virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) SAL_OVERRIDE;
-        virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) SAL_OVERRIDE;
-        virtual Rectangle calcTableRect( bool _bOnScreen = true ) SAL_OVERRIDE;
-        virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) SAL_OVERRIDE;
-        virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
-        virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
-        virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const SAL_OVERRIDE;
-        virtual OUString GetRowDescription( sal_Int32 _nRow ) const SAL_OVERRIDE;
-        virtual OUString GetRowName(sal_Int32 _nIndex) const SAL_OVERRIDE;
-        virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const SAL_OVERRIDE;
-        virtual OUString GetColumnName( sal_Int32 _nIndex ) const SAL_OVERRIDE;
-        virtual bool HasRowHeader() SAL_OVERRIDE;
-        virtual bool HasColHeader() SAL_OVERRIDE;
-        virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const SAL_OVERRIDE;
+        virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+        virtual void GrabFocus() override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) override;
+        virtual vcl::Window* GetAccessibleParentWindow() const override;
+        virtual vcl::Window* GetWindowInstance() override;
+        virtual sal_Int32 GetAccessibleControlCount() const override;
+        virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;
+        virtual long GetRowCount() const override;
+        virtual long GetColumnCount() const override;
+        virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
+        virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
+        virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
+        virtual Rectangle calcTableRect( bool _bOnScreen = true ) override;
+        virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
+        virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+        virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
+        virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
+        virtual OUString GetRowDescription( sal_Int32 _nRow ) const override;
+        virtual OUString GetRowName(sal_Int32 _nIndex) const override;
+        virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const override;
+        virtual OUString GetColumnName( sal_Int32 _nIndex ) const override;
+        virtual bool HasRowHeader() override;
+        virtual bool HasColHeader() override;
+        virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const override;
 
-        virtual sal_Int32 GetSelectedRowCount() const SAL_OVERRIDE;
-        virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const SAL_OVERRIDE;
-        virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const SAL_OVERRIDE;
-        virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) SAL_OVERRIDE;
-        virtual void SelectAllRows( bool const i_select ) SAL_OVERRIDE;
+        virtual sal_Int32 GetSelectedRowCount() const override;
+        virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const override;
+        virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const override;
+        virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) override;
+        virtual void SelectAllRows( bool const i_select ) override;
 
 
     private:

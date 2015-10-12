@@ -35,17 +35,17 @@ namespace dbaui
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OSplitterView(vcl::Window* _pParent,bool _bVertical = true);
         virtual ~OSplitterView();
         // Window overrides
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void GetFocus() override;
 
         void setSplitter(Splitter* _pSplitter);
         void set(vcl::Window* _pRight,Window* _pLeft = NULL);
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_VERTSPLITVIEW_HXX

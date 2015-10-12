@@ -72,15 +72,15 @@ private:
 
     inline SpellDialog* GetSpellDialog() const;
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
 
-    void            SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
+    void            SetModifyHdl(const Link<>& rLink) override { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
-    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
+    void            SetText( const OUString& rStr ) override;
 
     bool            MarkNextError( bool bIgnoreCurrentError, css::uno::Reference<css::linguistic2::XSpellChecker1> );
     void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
@@ -95,7 +95,7 @@ public:
 
 
     void            ResetModified()   { GetTextEngine()->SetModified(false); m_bIsUndoEditMode = false;}
-    virtual bool    IsModified() const SAL_OVERRIDE { return GetTextEngine()->IsModified(); }
+    virtual bool    IsModified() const override { return GetTextEngine()->IsModified(); }
 
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);
@@ -210,7 +210,7 @@ private:
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
     OUString getReplacementString() const;
 
@@ -220,9 +220,9 @@ public:
         vcl::Window * pParent,
         SfxBindings* pBindings);
     virtual ~SpellDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
     void            InvalidateDialog();
 };

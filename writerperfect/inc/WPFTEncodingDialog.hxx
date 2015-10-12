@@ -45,7 +45,7 @@ private:
     DECL_LINK_TYPED(DoubleClickHdl, ListBox &, void);
     DECL_LINK_TYPED(CancelHdl, Button *, void);
 
-    void dispose() SAL_OVERRIDE;
+    void dispose() override;
 
     WPFTEncodingDialog(WPFTEncodingDialog const &) = delete;
     WPFTEncodingDialog &operator=(WPFTEncodingDialog const &) = delete;

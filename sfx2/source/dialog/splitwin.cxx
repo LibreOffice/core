@@ -117,16 +117,16 @@ public:
 
                         virtual ~SfxEmptySplitWin_Impl()
                         { disposeOnce(); }
-   virtual void         dispose() SAL_OVERRIDE
+   virtual void         dispose() override
                         {
                             aTimer.Stop();
                             pOwner.clear();
                             SplitWindow::dispose();
                         }
 
-    virtual void        MouseMove( const MouseEvent& ) SAL_OVERRIDE;
-    virtual void        AutoHide() SAL_OVERRIDE;
-    virtual void        FadeIn() SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& ) override;
+    virtual void        AutoHide() override;
+    virtual void        FadeIn() override;
     void                Actualize();
 };
 

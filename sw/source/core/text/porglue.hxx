@@ -40,10 +40,10 @@ public:
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };

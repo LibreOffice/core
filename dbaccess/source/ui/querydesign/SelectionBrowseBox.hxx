@@ -81,7 +81,7 @@ namespace dbaui
     public:
         explicit OSelectionBrowseBox( vcl::Window* pParent );
                                     virtual ~OSelectionBrowseBox();
-        virtual void                dispose() SAL_OVERRIDE;
+        virtual void                dispose() override;
 
         void                        initialize();
         OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, bool bVis=true, bool bActivate=true );
@@ -131,9 +131,9 @@ namespace dbaui
         void                        paste();
         void                        copy();
 
-        virtual void                GetFocus() SAL_OVERRIDE;
-        virtual void                DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
-        virtual void                ColumnMoved( sal_uInt16 nColId ) SAL_OVERRIDE { ColumnMoved(nColId,true); }
+        virtual void                GetFocus() override;
+        virtual void                DeactivateCell(bool bUpdate = true) override;
+        virtual void                ColumnMoved( sal_uInt16 nColId ) override { ColumnMoved(nColId,true); }
         void                        ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo);
 
         void                        Fill();
@@ -154,7 +154,7 @@ namespace dbaui
             @return
                 the text out of the cell
         */
-        virtual OUString            GetCellText(long _nRow, sal_uInt16 _nColId) const SAL_OVERRIDE;
+        virtual OUString            GetCellText(long _nRow, sal_uInt16 _nColId) const override;
 
         /** returns the description of the row.
             @param  _nRow
@@ -162,7 +162,7 @@ namespace dbaui
             @return
                 The header text of the specified row.
         */
-        virtual OUString     GetRowDescription( sal_Int32 _nRow ) const SAL_OVERRIDE;
+        virtual OUString     GetRowDescription( sal_Int32 _nRow ) const override;
 
         /** return the name of the specified object.
             @param  eObjType
@@ -172,41 +172,41 @@ namespace dbaui
             @return
                 The name of the specified object.
         */
-        virtual OUString     GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
+        virtual OUString     GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
         // IAccessibleTableProvider
         /** Creates the accessible object of a data table cell.
         @param nRow  The row index of the cell.
         @param nColumnId  The column ID of the cell.
         @return  The XAccessible interface of the specified cell. */
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
     protected:
-        virtual bool                SeekRow( long nRow ) SAL_OVERRIDE;
+        virtual bool                SeekRow( long nRow ) override;
 
-        virtual void                PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const SAL_OVERRIDE;
+        virtual void                PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const override;
         virtual void                PaintCell(OutputDevice& rDev, const Rectangle& rRect,
-                                              sal_uInt16 nColumnId ) const SAL_OVERRIDE;
+                                              sal_uInt16 nColumnId ) const override;
 
-        virtual sal_Int8            AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8            ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual void                MouseButtonDown( const BrowserMouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void                MouseButtonUp( const BrowserMouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void                KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
-        virtual void                Command(const CommandEvent& rEvt) SAL_OVERRIDE;
-        virtual void                ArrangeControls(sal_uInt16& nX, sal_uInt16 nY) SAL_OVERRIDE;
+        virtual sal_Int8            AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
+        virtual sal_Int8            ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) override;
+        virtual void                MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
+        virtual void                MouseButtonUp( const BrowserMouseEvent& rEvt ) override;
+        virtual void                KeyInput( const KeyEvent& rEvt ) override;
+        virtual void                Command(const CommandEvent& rEvt) override;
+        virtual void                ArrangeControls(sal_uInt16& nX, sal_uInt16 nY) override;
 
-        virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
-        virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
-        virtual void                CellModified() SAL_OVERRIDE;
-        virtual bool                SaveModified() SAL_OVERRIDE;
-        virtual void                Init() SAL_OVERRIDE;
-        virtual void                ColumnResized( sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
+        virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;
+        virtual void                CellModified() override;
+        virtual bool                SaveModified() override;
+        virtual void                Init() override;
+        virtual void                ColumnResized( sal_uInt16 nColId ) override;
 
-        virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
+        virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
 
         // if you want to have an own header ...
-        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) override;
 
         void                        stopTimer();
         void                        startTimer();

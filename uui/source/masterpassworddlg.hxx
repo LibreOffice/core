@@ -38,7 +38,7 @@ class MasterPasswordDialog : public ModalDialog
 public:
     MasterPasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
     virtual ~MasterPasswordDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString        GetMasterPassword() const { return m_pEDMasterPassword->GetText(); }
 

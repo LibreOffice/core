@@ -87,9 +87,9 @@ class LwpTableLayout: public LwpLayout
 public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TABLE_LAYOUT;}
     LwpObjectID& GetColumnLayoutHead(){return m_ColumnLayout;}
-    void RegisterStyle() SAL_OVERRIDE;
+    void RegisterStyle() override;
     LwpTable *  GetTable();
     LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}
     LwpSuperTableLayout * GetSuperTableLayout();
@@ -103,7 +103,7 @@ public:
         m_WordProCellsMap[static_cast<size_t>(nRow) * m_nCols + nCol] = pCell;
     };
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     void TraverseTable();
     void RegisterColumns();
     void RegisterRows();
@@ -126,7 +126,7 @@ private:
     LwpColumnLayout ** m_pColumns;
 
 public:
-    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) override;
     void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     OUString GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
@@ -159,7 +159,7 @@ class LwpSuperTableLayout: public LwpPlacableLayout
 public:
     LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTableLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_SUPERTABLE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_SUPERTABLE_LAYOUT;}
     void RegisterNewStyle();
     // for table style
     void ApplyPatternFill(XFTableStyle* pTableStyle);
@@ -167,17 +167,17 @@ public:
 
     void ApplyBackColor(XFTableStyle *pTableStyle);
     void ApplyShadow(XFTableStyle *pTableStyle);
-    double GetWidth() SAL_OVERRIDE;
+    double GetWidth() override;
     double GetTableWidth();
     void ApplyWatermark(XFTableStyle *pTableStyle);
     void ApplyAlignment(XFTableStyle * pTableStyle);
-    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) override;
     // for frame style
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) override;
     void RegisterFrameStyle();
     LwpTableHeadingLayout* GetTableHeadingLayout();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     LwpTableLayout* GetTableLayout();
     bool IsSizeRightToContent();
     bool IsJustifiable();
@@ -194,14 +194,14 @@ class LwpColumnLayout : public LwpVirtualLayout
 public:
     LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_COLUMN_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_COLUMN_LAYOUT;}
     sal_uInt32 GetColumnID(){return ccolid;}
-    double GetWidth() SAL_OVERRIDE {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
+    double GetWidth() override {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
     using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
     bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     sal_uInt8 ccolid;
     sal_Int32 cwidth;
 
@@ -215,10 +215,10 @@ class LwpTableHeadingLayout : public LwpTableLayout
 public:
     LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableHeadingLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_HEADING_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TABLE_HEADING_LAYOUT;}
     void GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nEndRow);
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     sal_uInt16 cStartRow;
     sal_uInt16 cEndRow;
 };
@@ -232,7 +232,7 @@ public:
     LwpSuperParallelColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperParallelColumnLayout();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 };
 
 /**
@@ -245,7 +245,7 @@ public:
     LwpParallelColumnsLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpParallelColumnsLayout();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 };
 
 class LwpSuperGlossaryLayout : public LwpSuperTableLayout
@@ -254,7 +254,7 @@ public:
     LwpSuperGlossaryLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperGlossaryLayout();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 };
 
 #include "lwpcelllayout.hxx"

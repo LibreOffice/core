@@ -65,23 +65,23 @@ public:
     // XInterface
     virtual uno::Any SAL_CALL
     queryInterface( const uno::Type& aType )
-        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( uno::RuntimeException, std::exception ) override
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
-    acquire() throw() SAL_OVERRIDE
+    acquire() throw() override
     { OWeakObject::acquire(); }
     virtual void SAL_CALL
-    release() throw() SAL_OVERRIDE
+    release() throw() override
     { OWeakObject::release(); }
 
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString& aName )
-        throw( container::NoSuchElementException, uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( container::NoSuchElementException, uno::RuntimeException, std::exception ) override
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual sal_Bool SAL_CALL
     hasByHierarchicalName( const OUString& aName )
-        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( uno::RuntimeException, std::exception ) override
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 

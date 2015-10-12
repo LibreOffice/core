@@ -32,32 +32,32 @@ public:
 
     virtual ~GL3DBarChartTypeTemplate();
 
-    virtual css::uno::Reference<css::chart2::XChartType> getChartTypeForIndex( sal_Int32 nChartTypeIndex ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::chart2::XChartType> getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
 
     // XChartTypeTemplate
 
     virtual sal_Bool SAL_CALL matchesTemplate(
         const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
-            throw (css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, ::std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, ::std::exception) override;
 
     // OPropertySet
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException) override;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 }

@@ -43,14 +43,14 @@ bool lcl_IsMetric()
 class CalcConfigItem : public ::utl::ConfigItem
 {
 private:
-    virtual void                    ImplCommit() SAL_OVERRIDE;
+    virtual void                    ImplCommit() override;
 
 public:
     CalcConfigItem();
     virtual ~CalcConfigItem();
 
     FieldUnit getFieldUnit();
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 };
 
 CalcConfigItem::CalcConfigItem()

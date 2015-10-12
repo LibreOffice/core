@@ -115,7 +115,7 @@ namespace dbaui
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
     private:
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
         void impl_initFromDescriptor( const svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
@@ -139,8 +139,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual bool Write() SAL_OVERRIDE;
-        virtual bool Read() SAL_OVERRIDE;
+        virtual bool Write() override;
+        virtual bool Read() override;
     };
     // HTML Import and Export
     #define SBA_HTML_FONTSIZES 7
@@ -182,8 +182,8 @@ namespace dbaui
             , m_nIndent(0)
         {}
 
-        virtual bool Write() SAL_OVERRIDE;
-        virtual bool Read() SAL_OVERRIDE;
+        virtual bool Write() override;
+        virtual bool Read() override;
 
     };
     // normal RowSet Import and Export
@@ -201,7 +201,7 @@ namespace dbaui
 
         bool insertNewRow();
     protected:
-        virtual void initialize() SAL_OVERRIDE;
+        virtual void initialize() override;
 
     public:
         // export data
@@ -217,8 +217,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual bool Write() SAL_OVERRIDE;
-        virtual bool Read() SAL_OVERRIDE;
+        virtual bool Write() override;
+        virtual bool Read() override;
 
     private:
         using ODatabaseImportExport::initialize;

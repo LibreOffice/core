@@ -123,8 +123,8 @@ public:
     SocketPermission(
         connection::SocketPermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() );
-    virtual bool implies( Permission const & perm ) const SAL_OVERRIDE;
-    virtual OUString toString() const SAL_OVERRIDE;
+    virtual bool implies( Permission const & perm ) const override;
+    virtual OUString toString() const override;
 };
 
 char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", 0 };
@@ -285,8 +285,8 @@ public:
     FilePermission(
         io::FilePermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() );
-    virtual bool implies( Permission const & perm ) const SAL_OVERRIDE;
-    virtual OUString toString() const SAL_OVERRIDE;
+    virtual bool implies( Permission const & perm ) const override;
+    virtual OUString toString() const override;
 };
 
 char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", 0 };
@@ -437,8 +437,8 @@ public:
         : Permission( RUNTIME, next )
         , m_name( perm.Name )
         {}
-    virtual bool implies( Permission const & perm ) const SAL_OVERRIDE;
-    virtual OUString toString() const SAL_OVERRIDE;
+    virtual bool implies( Permission const & perm ) const override;
+    virtual OUString toString() const override;
 };
 
 bool RuntimePermission::implies( Permission const & perm ) const

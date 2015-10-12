@@ -51,9 +51,9 @@ private:
     void            InitSettings( bool bForeground, bool bBackground );
 
 protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
     SvxNumberPreview(vcl::Window* pParent, WinBits nStyle = WB_BORDER);
@@ -71,16 +71,16 @@ class SvxNumberFormatTabPage : public SfxTabPage
 
 public:
     virtual ~SvxNumberFormatTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
     // Returns area information.
     static const sal_uInt16* GetRanges() { return pRanges; }
 
-    virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual sfxpg           DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* rSet ) override;
+    virtual void            Reset( const SfxItemSet* rSet ) override;
+    virtual sfxpg           DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
 
     void                    SetInfoItem( const SvxNumberInfoItem& rItem );
     void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )
@@ -88,8 +88,8 @@ public:
 
     void                    SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler );
     void                    HideLanguage(bool bFlag=true);
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 private:
     SvxNumberFormatTabPage( vcl::Window* pParent,
                             const SfxItemSet& rCoreAttrs );

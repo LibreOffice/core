@@ -45,8 +45,8 @@ public:
 protected:
 
     virtual const SwContentFrm* DoSetBidiLevelLeftRight(
-        bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr) SAL_OVERRIDE;
-    virtual void DoSetBidiLevelUpDown() SAL_OVERRIDE;
+        bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr) override;
+    virtual void DoSetBidiLevelUpDown() override;
 
 public:
 
@@ -55,19 +55,19 @@ public:
     virtual bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) override;
 
-    virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
+    virtual bool IsReadOnlyAvailable() const override;
 
     bool IsRemainInSection() const          { return m_bRemainInSection; }
     void SetRemainInSection( bool bFlag )   { m_bRemainInSection = bFlag; }
 
-    virtual bool IsSkipOverProtectSections() const SAL_OVERRIDE
+    virtual bool IsSkipOverProtectSections() const override
                                     { return m_bSkipOverProtectSections; }
     void SetSkipOverProtectSections( bool bFlag )
                                     { m_bSkipOverProtectSections = bFlag; }
 
-    virtual bool IsSkipOverHiddenSections() const SAL_OVERRIDE
+    virtual bool IsSkipOverHiddenSections() const override
                                     { return m_bSkipOverHiddenSections; }
     void SetSkipOverHiddenSections( bool bFlag )
                                     { m_bSkipOverHiddenSections = bFlag; }
@@ -93,7 +93,7 @@ public:
     virtual bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) override;
 
     void MakeBoxSels();
 
@@ -122,12 +122,12 @@ namespace sw
                 if(m_pCursor)
                     m_pCursor->Add(this);
             }
-            virtual ~UnoCursorPointer() SAL_OVERRIDE
+            virtual ~UnoCursorPointer() override
             {
                 if(m_pCursor)
                     m_pCursor->Remove(this);
             }
-            virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE
+            virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
             {
                 SwClient::SwClientNotify(rModify, rHint);
                 if(m_pCursor)

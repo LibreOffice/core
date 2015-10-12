@@ -67,7 +67,7 @@ public:
                             SAL_DLLPRIVATE SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
     SAL_DLLPRIVATE virtual                 ~SdAnimationInfo();
 
-    SAL_DLLPRIVATE virtual SdrObjUserData* Clone(SdrObject* pObject) const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SdrObjUserData* Clone(SdrObject* pObject) const override;
 };
 
 #endif // INCLUDED_SD_INC_ANMINFO_HXX

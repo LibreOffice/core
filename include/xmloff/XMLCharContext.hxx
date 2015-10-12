@@ -54,7 +54,7 @@ public:
     // EndElement is called before a context will be destructed, but
     // after a elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     virtual void InsertControlCharacter(sal_Int16   _nControl);
     virtual void InsertString(const OUString& _sString);

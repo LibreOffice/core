@@ -30,7 +30,7 @@ namespace svx
     public:
         OptHeaderTabListBox(SvSimpleTableContainer& rParent, WinBits nBits);
 
-        virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
+        virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
     };
 } // svx
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTHEADERTABLISTBOX_HXX

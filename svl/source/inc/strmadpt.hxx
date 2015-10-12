@@ -41,21 +41,21 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_Size *) const SAL_OVERRIDE;
+    virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_Size *) const override;
 
     virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_uLong nCount,
-                            sal_Size * pWritten) SAL_OVERRIDE;
+                            sal_Size * pWritten) override;
 
-    virtual ErrCode Flush() const SAL_OVERRIDE;
+    virtual ErrCode Flush() const override;
 
-    virtual ErrCode SetSize(sal_uInt64) SAL_OVERRIDE;
+    virtual ErrCode SetSize(sal_uInt64) override;
 
-    virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const SAL_OVERRIDE;
+    virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const override;
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
-                               sal_uLong * pWritten) SAL_OVERRIDE;
+                               sal_uLong * pWritten) override;
 
-    virtual void Terminate() SAL_OVERRIDE;
+    virtual void Terminate() override;
 };
 
 #endif // INCLUDED_SVL_STRMADPT_HXX

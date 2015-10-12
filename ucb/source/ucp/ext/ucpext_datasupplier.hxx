@@ -51,22 +51,22 @@ namespace ucb { namespace ucp { namespace ext
     protected:
         virtual ~DataSupplier();
 
-        virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) SAL_OVERRIDE;
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex ) SAL_OVERRIDE;
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > queryContent( sal_uInt32 nIndex ) SAL_OVERRIDE;
+        virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
+        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex ) override;
+        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > queryContent( sal_uInt32 nIndex ) override;
 
-        virtual bool getResult( sal_uInt32 nIndex ) SAL_OVERRIDE;
+        virtual bool getResult( sal_uInt32 nIndex ) override;
 
-        virtual sal_uInt32 totalCount() SAL_OVERRIDE;
-        virtual sal_uInt32 currentCount() SAL_OVERRIDE;
-        virtual bool isCountFinal() SAL_OVERRIDE;
+        virtual sal_uInt32 totalCount() override;
+        virtual sal_uInt32 currentCount() override;
+        virtual bool isCountFinal() override;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > queryPropertyValues( sal_uInt32 nIndex  ) SAL_OVERRIDE;
-        virtual void releasePropertyValues( sal_uInt32 nIndex ) SAL_OVERRIDE;
+        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > queryPropertyValues( sal_uInt32 nIndex  ) override;
+        virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
-        virtual void close() SAL_OVERRIDE;
+        virtual void close() override;
 
-        virtual void validate() throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
+        virtual void validate() throw( com::sun::star::ucb::ResultSetException ) override;
 
     private:
         std::unique_ptr< DataSupplier_Impl >    m_pImpl;

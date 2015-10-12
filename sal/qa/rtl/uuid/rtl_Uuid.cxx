@@ -45,11 +45,11 @@ class createUuid : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -116,11 +116,11 @@ class createNamedUuid : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 

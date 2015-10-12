@@ -105,12 +105,12 @@ class RTFSprm
 public:
     RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
     virtual ~RTFSprm() {}
-    virtual sal_uInt32 getId() const SAL_OVERRIDE;
-    virtual Value::Pointer_t getValue() SAL_OVERRIDE;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
+    virtual sal_uInt32 getId() const override;
+    virtual Value::Pointer_t getValue() override;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps() override;
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string getName() const SAL_OVERRIDE;
-    virtual std::string toString() const SAL_OVERRIDE;
+    virtual std::string getName() const override;
+    virtual std::string toString() const override;
 #endif
 private:
     Id m_nKeyword;

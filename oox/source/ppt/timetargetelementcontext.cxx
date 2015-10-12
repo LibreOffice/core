@@ -45,7 +45,7 @@ namespace oox { namespace ppt {
                 , maShapeTarget(aValue)
             {
             }
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
             {
                 switch( aElementToken )
                 {

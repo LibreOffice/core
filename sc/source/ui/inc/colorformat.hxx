@@ -58,7 +58,7 @@ private:
 public:
     ScDataBarSettingsDlg(vcl::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
     virtual ~ScDataBarSettingsDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     ScDataBarFormatData* GetData();
 };

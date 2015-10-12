@@ -40,7 +40,7 @@ namespace drawinglayer
             const primitive2d::ObjectInfoPrimitive2D*      mpFound;
 
             /// tooling methods
-            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) SAL_OVERRIDE;
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
             ObjectInfoPrimitiveExtractor2D(const geometry::ViewInformation2D& rViewInformation);

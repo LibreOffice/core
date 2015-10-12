@@ -47,31 +47,31 @@ protected:
 protected:
     bool            IsDropDownBox() const;
 
-    virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const override;
 
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( vcl::Window* pParent, const ResId& );
     virtual         ~ComboBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    Select();
     virtual void    DoubleClick();
 
-    virtual void    Modify() SAL_OVERRIDE;
+    virtual void    Modify() override;
 
-    virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
+    virtual const Wallpaper& GetDisplayBackground() const override;
 
-    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
-    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
+    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
                         { Edit::SetPosSizePixel( rNewPos, rNewSize ); }
 
     Rectangle       GetDropDownPosSizePixel() const;
@@ -85,8 +85,8 @@ public:
 
     void            EnableDDAutoWidth( bool b );
 
-    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
+    virtual void    SetText( const OUString& rStr ) override;
+    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;
 
     virtual sal_Int32  InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
     sal_Int32       InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
@@ -128,8 +128,8 @@ public:
     void            SetDoubleClickHdl(const Link<>& rLink);
     const Link<>&   GetDoubleClickHdl() const;
 
-    Size            CalcMinimumSize() const SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    Size            CalcMinimumSize() const override;
+    virtual Size    GetOptimalSize() const override;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
@@ -178,7 +178,7 @@ public:
 
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 };
 
 #endif  // _COMBOBOX_HXX

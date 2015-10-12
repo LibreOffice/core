@@ -33,7 +33,7 @@ private:
     vcl::Font aHeadFont;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
 public:
             ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OUString& rMsg );

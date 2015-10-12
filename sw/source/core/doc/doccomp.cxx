@@ -140,7 +140,7 @@ public:
     {
     }
 
-    virtual const SwNode& GetEndOfContent() SAL_OVERRIDE
+    virtual const SwNode& GetEndOfContent() override
     {
         return rDoc.GetNodes().GetEndOfContent();
     }
@@ -156,7 +156,7 @@ public:
     {
     }
 
-    virtual const SwNode& GetEndOfContent() SAL_OVERRIDE
+    virtual const SwNode& GetEndOfContent() override
     {
         return *m_rIndex.GetNode().EndOfSectionNode();
     }
@@ -253,9 +253,9 @@ public:
     LineArrayComparator( const CompareData &rD1, const CompareData &rD2,
                             int nStt1, int nEnd1, int nStt2, int nEnd2 );
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
-    virtual int GetLen1() const SAL_OVERRIDE { return nLen1; }
-    virtual int GetLen2() const SAL_OVERRIDE { return nLen2; }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const override;
+    virtual int GetLen1() const override { return nLen1; }
+    virtual int GetLen2() const override { return nLen2; }
 };
 
 class WordArrayComparator : public ArrayComparator
@@ -271,9 +271,9 @@ public:
     WordArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 );
     virtual ~WordArrayComparator();
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
-    virtual int GetLen1() const SAL_OVERRIDE { return nCnt1; }
-    virtual int GetLen2() const SAL_OVERRIDE { return nCnt2; }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const override;
+    virtual int GetLen1() const override { return nCnt1; }
+    virtual int GetLen2() const override { return nCnt2; }
     int GetCharSequence( const int *pWordLcs1, const int *pWordLcs2,
                         int *pSubseq1, int *pSubseq2, int nLcsLen );
 };
@@ -289,9 +289,9 @@ public:
     {
     }
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
-    virtual int GetLen1() const SAL_OVERRIDE { return pTextNd1->GetText().getLength(); }
-    virtual int GetLen2() const SAL_OVERRIDE { return pTextNd2->GetText().getLength(); }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const override;
+    virtual int GetLen1() const override { return pTextNd1->GetText().getLength(); }
+    virtual int GetLen2() const override { return pTextNd2->GetText().getLength(); }
 };
 
 /// Options set in Tools->Options->Writer->Comparison
@@ -996,8 +996,8 @@ public:
     explicit SwCompareLine( const SwNode& rNd );
     virtual ~SwCompareLine();
 
-    virtual sal_uLong GetHashValue() const SAL_OVERRIDE;
-    virtual bool Compare( const CompareLine& rLine ) const SAL_OVERRIDE;
+    virtual sal_uLong GetHashValue() const override;
+    virtual bool Compare( const CompareLine& rLine ) const override;
 
     static sal_uLong GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal );
     static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );

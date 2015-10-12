@@ -82,25 +82,25 @@ namespace svxform
         }
 
         // form::XFormController
-        virtual Reference< XControl > SAL_CALL getCurrentControl(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Reference< XControl > SAL_CALL getCurrentControl(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL addActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception) override;
 
         // awt::XTabController
-        virtual void SAL_CALL setModel( const Reference< XTabControllerModel >& Model ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XTabControllerModel > SAL_CALL getModel(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setContainer( const Reference< XControlContainer >& Container ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XControlContainer > SAL_CALL getContainer(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< Reference< XControl > > SAL_CALL getControls(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL autoTabOrder(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL activateTabOrder(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL activateFirst(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL activateLast(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setModel( const Reference< XTabControllerModel >& Model ) throw (RuntimeException, std::exception) override;
+        virtual Reference< XTabControllerModel > SAL_CALL getModel(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL setContainer( const Reference< XControlContainer >& Container ) throw (RuntimeException, std::exception) override;
+        virtual Reference< XControlContainer > SAL_CALL getContainer(  ) throw (RuntimeException, std::exception) override;
+        virtual Sequence< Reference< XControl > > SAL_CALL getControls(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL autoTabOrder(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL activateTabOrder(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL activateFirst(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL activateLast(  ) throw (RuntimeException, std::exception) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
     private:
         const Reference< form::runtime::XFormController >   m_xDelegator;

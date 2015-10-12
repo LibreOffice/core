@@ -77,13 +77,13 @@ class SwRevisionConfig : public utl::ConfigItem
 
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
     SwRevisionConfig();
     virtual ~SwRevisionConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -101,13 +101,13 @@ class SwCompareConfig : public utl::ConfigItem
 
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SwCompareConfig();
     virtual ~SwCompareConfig();
 
-    virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ) SAL_OVERRIDE { };
+    virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ) override { };
     void            Load();
     void            SetModified() {ConfigItem::SetModified(); }
 };
@@ -129,13 +129,13 @@ class SwInsertConfig : public utl::ConfigItem
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SwInsertConfig(bool bWeb);
     virtual ~SwInsertConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -156,13 +156,13 @@ class SwTableConfig : public utl::ConfigItem
 
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SwTableConfig(bool bWeb);
     virtual ~SwTableConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -186,13 +186,13 @@ class SwMiscConfig : public utl::ConfigItem
 
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SwMiscConfig();
     virtual ~SwMiscConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

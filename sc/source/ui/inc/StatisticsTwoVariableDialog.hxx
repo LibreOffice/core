@@ -33,10 +33,10 @@ public:
         const OUString& rID, const OUString& rUIXMLDescription );
 
     virtual ~ScStatisticsTwoVariableDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual void        SetActive() SAL_OVERRIDE;
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void        SetActive() override;
 
 protected:
     void CalculateInputAndWriteToOutput();

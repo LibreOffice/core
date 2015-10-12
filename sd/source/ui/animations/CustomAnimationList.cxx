@@ -206,12 +206,12 @@ public:
     CustomAnimationListEntryItem(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& aDescription,
                                  CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
     virtual ~CustomAnimationListEntryItem();
-    void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) SAL_OVERRIDE;
-    SvLBoxItem* Create() const SAL_OVERRIDE;
-    void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
+    void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
+    SvLBoxItem* Create() const override;
+    void Clone(SvLBoxItem* pSource) override;
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) override;
 private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
@@ -345,11 +345,11 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 public:
                     CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
-    SvLBoxItem*     Create() const SAL_OVERRIDE;
-    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
+    SvLBoxItem*     Create() const override;
+    void            Clone( SvLBoxItem* pSource ) override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 
 private:
     OUString        maDescription;

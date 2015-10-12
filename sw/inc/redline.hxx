@@ -59,9 +59,9 @@ public:
     SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
                                 const SfxItemSet* pSet = 0 );
     virtual ~SwRedlineExtraData_FormatColl();
-    virtual SwRedlineExtraData* CreateNew() const SAL_OVERRIDE;
-    virtual void Reject( SwPaM& rPam ) const SAL_OVERRIDE;
-    virtual bool operator == ( const SwRedlineExtraData& ) const SAL_OVERRIDE;
+    virtual SwRedlineExtraData* CreateNew() const override;
+    virtual void Reject( SwPaM& rPam ) const override;
+    virtual bool operator == ( const SwRedlineExtraData& ) const override;
 
     void SetItemSet( const SfxItemSet& rSet );
 };
@@ -75,9 +75,9 @@ class SwRedlineExtraData_Format : public SwRedlineExtraData
 public:
     SwRedlineExtraData_Format( const SfxItemSet& rSet );
     virtual ~SwRedlineExtraData_Format();
-    virtual SwRedlineExtraData* CreateNew() const SAL_OVERRIDE;
-    virtual void Reject( SwPaM& rPam ) const SAL_OVERRIDE;
-    virtual bool operator == ( const SwRedlineExtraData& ) const SAL_OVERRIDE;
+    virtual SwRedlineExtraData* CreateNew() const override;
+    virtual void Reject( SwPaM& rPam ) const override;
+    virtual bool operator == ( const SwRedlineExtraData& ) const override;
 };
 
 /*
@@ -97,9 +97,9 @@ class SW_DLLPUBLIC SwRedlineExtraData_FormattingChanges : public SwRedlineExtraD
 public:
     SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet );
     virtual ~SwRedlineExtraData_FormattingChanges();
-    virtual SwRedlineExtraData* CreateNew() const SAL_OVERRIDE;
-    virtual void Reject( SwPaM& rPam ) const SAL_OVERRIDE;
-    virtual bool operator == ( const SwRedlineExtraData& ) const SAL_OVERRIDE;
+    virtual SwRedlineExtraData* CreateNew() const override;
+    virtual void Reject( SwPaM& rPam ) const override;
+    virtual bool operator == ( const SwRedlineExtraData& ) const override;
     SfxItemSet* GetItemSet( ) const { return pSet; }
 };
 

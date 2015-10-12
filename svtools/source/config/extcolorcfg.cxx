@@ -77,7 +77,7 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
     void FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames);
 
-    virtual void                    ImplCommit() SAL_OVERRIDE;
+    virtual void                    ImplCommit() override;
 
 public:
     explicit ExtendedColorConfig_Impl(bool bEditMode = false);
@@ -88,7 +88,7 @@ public:
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     bool                            ExistsScheme(const OUString& _sSchemeName);
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 
     sal_Int32                       GetComponentCount() const;
     OUString                 GetComponentName(sal_uInt32 _nPos) const;

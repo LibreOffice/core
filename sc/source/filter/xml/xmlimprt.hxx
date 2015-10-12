@@ -974,8 +974,8 @@ protected:
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
-    virtual XMLShapeImportHelper* CreateShapeImport() SAL_OVERRIDE;
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual XMLShapeImportHelper* CreateShapeImport() override;
 
 public:
     ScXMLImport(
@@ -986,7 +986,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -1004,7 +1004,7 @@ public:
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) override;
 
     ScDocumentImport& GetDoc();
 
@@ -1142,8 +1142,8 @@ public:
     void InsertStyles();
 
     void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) override;
 
     void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
@@ -1174,16 +1174,16 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL startDocument()
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL endDocument()
         throw(::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException,
-              std::exception) SAL_OVERRIDE;
+              std::exception) override;
 
-    virtual void DisposingModel() SAL_OVERRIDE;
+    virtual void DisposingModel() override;
 
     /**
      * Use this class to manage solar mutex locking instead of calling
@@ -1251,7 +1251,7 @@ public:
 
     ScEditEngineDefaulter* GetEditEngine();
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;
-    virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
+    virtual void NotifyEmbeddedFontRead() override;
 };
 
 #endif

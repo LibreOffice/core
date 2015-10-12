@@ -44,15 +44,15 @@ private:
 public:
     SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxHlmarkTreeLBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
     {
         mpParentWnd = pParent;
     }
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual Size GetOptimalSize() const override;
 };
 
 
@@ -84,7 +84,7 @@ protected:
     void ClearTree();
     int FillTree( css::uno::Reference< css::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
-    virtual void Move () SAL_OVERRIDE;
+    virtual void Move () override;
 
     DECL_LINK_TYPED( ClickApplyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( DoubleClickApplyHdl_Impl, SvTreeListBox*, bool );
@@ -93,7 +93,7 @@ protected:
 public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
     virtual ~SvxHlinkDlgMarkWnd();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool MoveTo ( Point aNewPos );
     void RefreshTree(const OUString& aStrURL);

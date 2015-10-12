@@ -43,15 +43,15 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
 
     SVL_DLLPRIVATE bool open();
 
-    SVL_DLLPRIVATE virtual sal_uLong GetData(void * pData, sal_uLong nSize) SAL_OVERRIDE;
+    SVL_DLLPRIVATE virtual sal_uLong GetData(void * pData, sal_uLong nSize) override;
 
-    SVL_DLLPRIVATE virtual sal_uLong PutData(void const *, sal_uLong) SAL_OVERRIDE;
+    SVL_DLLPRIVATE virtual sal_uLong PutData(void const *, sal_uLong) override;
 
-    SVL_DLLPRIVATE virtual sal_uInt64 SeekPos(sal_uInt64 nPos) SAL_OVERRIDE;
+    SVL_DLLPRIVATE virtual sal_uInt64 SeekPos(sal_uInt64 nPos) override;
 
-    SVL_DLLPRIVATE virtual void FlushData() SAL_OVERRIDE;
+    SVL_DLLPRIVATE virtual void FlushData() override;
 
-    SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) SAL_OVERRIDE;
+    SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
     SvInputStream(

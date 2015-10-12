@@ -35,11 +35,11 @@ public:
         : AnimationBaseNode( xNode, pParent, rContext ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const SAL_OVERRIDE { return "AnimationSetNode"; }
+    virtual const char* getDescription() const override { return "AnimationSetNode"; }
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
+    virtual AnimationActivitySharedPtr createActivity() const override;
     void implScheduleDeactivationEvent();
 };
 

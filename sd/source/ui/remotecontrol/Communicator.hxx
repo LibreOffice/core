@@ -48,7 +48,7 @@ namespace sd
             void forceClose();
 
         private:
-            void execute() SAL_OVERRIDE;
+            void execute() override;
             IBluetoothSocket *mpSocket;
 
             Transmitter *pTransmitter;

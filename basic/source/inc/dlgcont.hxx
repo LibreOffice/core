@@ -36,37 +36,37 @@ namespace basic
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) SAL_OVERRIDE;
+    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) override;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
-          const OUString& StorageURL, bool ReadOnly ) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
-    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
+          const OUString& StorageURL, bool ReadOnly ) override;
+    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() override;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const override;
     virtual void SAL_CALL writeLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const css::uno::Reference< css::io::XOutputStream >& xOutput
     )
-        throw(css::uno::Exception) SAL_OVERRIDE;
+        throw(css::uno::Exception) override;
 
     virtual css::uno::Any SAL_CALL importLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const css::uno::Reference< css::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
+        const css::uno::Reference< css::io::XInputStream >& xElementStream ) override;
 
-    virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
+    virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) override;
 
-    virtual SfxLibraryContainer* createInstanceImpl() SAL_OVERRIDE;
+    virtual SfxLibraryContainer* createInstanceImpl() override;
 
-    virtual void onNewRootStorage() SAL_OVERRIDE;
+    virtual void onNewRootStorage() override;
 
-    virtual const sal_Char* SAL_CALL    getInfoFileName() const SAL_OVERRIDE;
-    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const SAL_OVERRIDE;
-    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const SAL_OVERRIDE;
-    virtual const sal_Char* SAL_CALL    getLibrariesDir() const SAL_OVERRIDE;
+    virtual const sal_Char* SAL_CALL    getInfoFileName() const override;
+    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const override;
+    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const override;
+    virtual const sal_Char* SAL_CALL    getLibrariesDir() const override;
 
 public:
     SfxDialogLibraryContainer();
@@ -77,7 +77,7 @@ public:
         const css::uno::Reference< css::embed::XStorage >& RootStorage )
             throw (css::uno::RuntimeException,
                    css::lang::WrappedTargetException,
-                   std::exception) SAL_OVERRIDE;
+                   std::exception) override;
 
     // Resource handling
     css::uno::Reference< css::resource::XStringResourcePersistence >
@@ -85,12 +85,12 @@ public:
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -106,13 +106,13 @@ class SfxDialogLibrary  :public SfxLibrary
     OUString                                                          m_aName;
 
     // Provide modify state including resources
-    virtual bool isModified() SAL_OVERRIDE;
-    virtual void storeResources() SAL_OVERRIDE;
-    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
+    virtual bool isModified() override;
+    virtual void storeResources() override;
+    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) override;
     virtual void storeResourcesToURL( const OUString& URL,
-        const css::uno::Reference< css::task::XInteractionHandler >& xHandler  ) SAL_OVERRIDE;
+        const css::uno::Reference< css::task::XInteractionHandler >& xHandler  ) override;
     virtual void storeResourcesToStorage( const css::uno::Reference
-        < css::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+        < css::embed::XStorage >& xStorage ) override;
 
 public:
     SfxDialogLibrary
@@ -139,7 +139,7 @@ public:
 
     // XStringResourceSupplier
     virtual css::uno::Reference< css::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_CALL getStringResource(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     OUString getName()
         { return m_aName; }
@@ -153,7 +153,7 @@ public:
     static bool containsValidDialog( const css::uno::Any& aElement );
 
 protected:
-    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const override;
 };
 
 }   // namespace basic

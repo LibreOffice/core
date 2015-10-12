@@ -71,21 +71,21 @@ public:
                     ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,
                                       ScrollableWindowFlags = ScrollableWindowFlags::DEFAULT );
     virtual         ~ScrollableWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDEvt ) SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDEvt ) override;
 
     using OutputDevice::SetMapMode;
-    virtual void    SetMapMode( const MapMode& rNewMapMode ) SAL_OVERRIDE;
+    virtual void    SetMapMode( const MapMode& rNewMapMode ) override;
     MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) SAL_OVERRIDE;
+    virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;

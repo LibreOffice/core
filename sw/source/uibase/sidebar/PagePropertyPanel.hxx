@@ -64,7 +64,7 @@ namespace sw { namespace sidebar {
             const sal_uInt16 nSId,
             const SfxItemState eState,
             const SfxPoolItem* pState,
-            const bool bIsEnabled) SAL_OVERRIDE;
+            const bool bIsEnabled) override;
 
         SfxBindings* GetBindings() const
         {
@@ -102,7 +102,7 @@ namespace sw { namespace sidebar {
             SfxBindings* pBindings );
     private:
         virtual ~PagePropertyPanel();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         SfxBindings* mpBindings;
 

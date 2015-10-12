@@ -375,7 +375,7 @@ public:
     {
     }
     virtual ~CustomContainer() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         _pFileView.clear();
         _pSplitter.clear();
@@ -400,7 +400,7 @@ public:
         m_pFocusWidgets[FocusState::Next] = pNext;
     }
 
-    virtual void Resize() SAL_OVERRIDE
+    virtual void Resize() override
     {
         Window::Resize();
 
@@ -450,7 +450,7 @@ public:
         }
     }
 
-    virtual void GetFocus() SAL_OVERRIDE
+    virtual void GetFocus() override
     {
         if( !_pFileView || !_pImp || !_pImp->_pPlaces )
             return;
@@ -469,7 +469,7 @@ public:
         }
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
+    virtual bool Notify( NotifyEvent& rNEvt ) override
     {
         if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {

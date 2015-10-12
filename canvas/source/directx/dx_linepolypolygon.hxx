@@ -38,7 +38,7 @@ namespace dxcanvas
 
     private:
         // overridden, to clear mpPath
-        virtual void modifying() const SAL_OVERRIDE;
+        virtual void modifying() const override;
 
         GDIPlusUserSharedPtr            mpGdiPlusUser;
         mutable GraphicsPathSharedPtr   mpPath;

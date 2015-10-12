@@ -32,7 +32,7 @@ protected:
     /// is called when an attribute at the (auto)style element is found
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue ) SAL_OVERRIDE;
+                               const OUString& rValue ) override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -47,13 +47,13 @@ public:
     /// is called after all styles have been read to apply styles
     void FillPropertySet(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
 
     /// necessary for property context (element-property symbol-image)
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLCHARTSTYLECONTEXT_HXX

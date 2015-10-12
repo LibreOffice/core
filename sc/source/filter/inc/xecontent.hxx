@@ -60,8 +60,8 @@ public:
     sal_uInt32          Insert( XclExpStringRef xString );
 
     /** Writes the complete SST and EXTSST records. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     typedef std::unique_ptr< XclExpSstImpl > XclExpSstImplPtr;
@@ -82,8 +82,8 @@ public:
     sal_uInt32          GetBaseXFId( const ScAddress& rPos ) const;
 
     /** Writes the record, if it contains at least one merged cell range. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     ScRangeList         maMergedRanges;     /// All merged cell ranges of the sheet.
@@ -106,7 +106,7 @@ public:
     /** Returns the cell representation text or 0, if not available. */
     inline const OUString* GetRepr() const { return m_Repr.isEmpty() ? 0 : &m_Repr; }
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
     void                WriteEmbeddedData( XclExpStream& rStrm );
 
@@ -120,7 +120,7 @@ public:
 private:
 
     /** Writes the body of the HLINK record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     typedef std::unique_ptr< SvStream > SvStreamPtr;
@@ -146,7 +146,7 @@ public:
     explicit            XclExpLabelranges( const XclExpRoot& rRoot );
 
     /** Writes the LABELRANGES record if it contains at least one range. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
     /** Fills the specified range list with all label headers of the current sheet.
@@ -173,11 +173,11 @@ public:
     explicit            XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority );
     virtual             ~XclExpCF();
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the body of the CF record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     typedef std::unique_ptr< XclExpCFImpl > XclExpCFImplPtr;
@@ -190,7 +190,7 @@ public:
     explicit XclExpDateFormat( const XclExpRoot& rRoot, const ScCondDateFormatEntry& rFormatEntry, sal_Int32 nPriority );
     virtual ~XclExpDateFormat();
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     const ScCondDateFormatEntry& mrFormatEntry;
@@ -203,7 +203,7 @@ public:
     explicit XclExpCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry, const ScAddress& rPos, bool bFirst = true);
     virtual ~XclExpCfvo() {}
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     const ScColorScaleEntry& mrEntry;
     ScAddress maSrcPos;
@@ -216,7 +216,7 @@ public:
     explicit XclExpColScaleCol( const XclExpRoot& rRoot, const Color& rColor);
     virtual ~XclExpColScaleCol();
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     const Color& mrColor;
 };
@@ -235,12 +235,12 @@ public:
     bool                IsValid() const;
 
     /** Writes the CONDFMT record with following CF records, if there is valid data. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the body of the CONDFMT record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     typedef XclExpRecordList< XclExpRecord > XclExpCFList;
@@ -255,7 +255,7 @@ class XclExpColorScale: public XclExpRecord, protected XclExpRoot
 public:
     explicit XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority );
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     typedef XclExpRecordList< XclExpCfvo > XclExpCfvoList;
     typedef XclExpRecordList< XclExpColScaleCol > XclExpColScaleColList;
@@ -270,7 +270,7 @@ class XclExpDataBar : public XclExpRecord, protected XclExpRoot
 public:
     explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID);
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     std::unique_ptr<XclExpCfvo> mpCfvoLowerLimit;
     std::unique_ptr<XclExpCfvo> mpCfvoUpperLimit;
@@ -286,7 +286,7 @@ class XclExpIconSet : public XclExpRecord, protected XclExpRoot
 public:
     explicit XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority );
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:
     typedef XclExpRecordList< XclExpCfvo > XclExpCfvoList;
 
@@ -303,8 +303,8 @@ public:
     explicit            XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst );
 
     /** Writes all contained CONDFMT records with their CF records. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     typedef XclExpRecordList< XclExpCondfmt > XclExpCondfmtList;
@@ -332,11 +332,11 @@ public:
         @return  false = Resulting range list empty - do not write this record. */
     bool                Finalize();
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the body of the DV record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     ScRangeList         maScRanges;     /// Calc range list with all affected cells.
@@ -365,15 +365,15 @@ public:
     void                InsertCellRange( const ScRange& rRange, sal_uLong nScHandle );
 
     /** Writes the DVAL record and the DV record list. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Searches for or creates a XclExpDV record object with the specified handle. */
     XclExpDV&           SearchOrCreateDv( sal_uLong nScHandle );
 
     /** Writes the body of the DVAL record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     typedef XclExpRecordList< XclExpDV >    XclExpDVList;
@@ -401,7 +401,7 @@ public:
     virtual             ~XclExpWebQuery();
 
     /** Writes all needed records for this web query. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
     XclExpString        maDestRange;    /// Destination range.

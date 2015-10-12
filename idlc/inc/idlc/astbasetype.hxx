@@ -33,7 +33,7 @@ public:
 
     virtual ~AstBaseType() {}
 
-    virtual bool isUnsigned() const SAL_OVERRIDE {
+    virtual bool isUnsigned() const override {
         switch (m_exprType) {
         case ET_ushort:
         case ET_ulong:

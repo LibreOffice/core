@@ -45,11 +45,11 @@ public:
         NodeContext const& rContext );
 
 #if defined(DBG_UTIL)
-    virtual void showState() const SAL_OVERRIDE;
+    virtual void showState() const override;
 #endif
 
 protected:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimate> const& getXAnimateNode() const
@@ -61,13 +61,13 @@ protected:
     AttributableShapeSharedPtr          getShape() const;
 
 private:
-    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
+    virtual bool hasPendingAnimation() const override;
 
 private: // state transition callbacks
-    virtual bool init_st() SAL_OVERRIDE;
-    virtual bool resolve_st() SAL_OVERRIDE;
-    virtual void activate_st() SAL_OVERRIDE;
-    virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
+    virtual bool init_st() override;
+    virtual bool resolve_st() override;
+    virtual void activate_st() override;
+    virtual void deactivate_st( NodeState eDestState ) override;
     virtual AnimationActivitySharedPtr createActivity() const = 0;
 
 private:

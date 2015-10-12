@@ -84,7 +84,7 @@ private:
 public:
     SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = NULL);
     virtual ~SfxPasswordDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetUser() const
     {
@@ -126,7 +126,7 @@ public:
 
     void ShowMinLengthText(bool bShow);
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 };
 
 #endif // INCLUDED_SFX2_PASSWD_HXX

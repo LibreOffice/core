@@ -109,7 +109,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
@@ -118,7 +118,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() override;
 
         /**_______________________________________________________________________________________________________
             @short      decrement refcount
@@ -127,7 +127,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() override;
 
         //  XTypeProvider
 
@@ -140,7 +140,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XAggregation
 
@@ -148,7 +148,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XStatusIndicator
 
@@ -158,45 +158,45 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual void SAL_CALL start(
             const OUString&  sText   ,
             sal_Int32 nRange
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XLayoutConstrains
 
         /**_______________________________________________________________________________________________________
         */
 
-        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
         */
 
-        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
         */
 
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XControl
 
@@ -206,26 +206,26 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual void SAL_CALL createPeer(
             const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&    xToolkit    ,
             const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
         */
 
         virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
         */
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XComponent
 
         /**_______________________________________________________________________________________________________
         */
 
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  XWindow
 
@@ -236,7 +236,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
                                             sal_Int32   nY      ,
                                             sal_Int32   nWidth  ,
                                             sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         //  BaseControl
 
@@ -259,7 +259,7 @@ protected:
 
         virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
-        ) SAL_OVERRIDE;
+        ) override;
 
         /**_______________________________________________________________________________________________________
         */
@@ -268,12 +268,12 @@ protected:
             sal_Int32 nX,
             sal_Int32 nY,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & rGraphics
-        ) SAL_OVERRIDE;
+        ) override;
 
         /**_______________________________________________________________________________________________________
         */
 
-        virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent ) SAL_OVERRIDE;
+        virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent ) override;
 
 // debug methods
 

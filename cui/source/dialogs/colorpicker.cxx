@@ -136,8 +136,8 @@ class HexColorControl : public Edit
 public:
     HexColorControl( vcl::Window* pParent, const WinBits& nStyle );
 
-    virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void Paste() SAL_OVERRIDE;
+    virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void Paste() override;
 
     void SetColor( sal_Int32 nColor );
     sal_Int32 GetColor();
@@ -258,7 +258,7 @@ class ColorPreviewControl : public Control
 public:
     ColorPreviewControl( vcl::Window* pParent, const WinBits& nStyle );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
     void SetColor(const Color& rColor);
 
@@ -307,16 +307,16 @@ public:
     ColorFieldControl(vcl::Window* pParent, const WinBits& nStyle);
     virtual ~ColorFieldControl();
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 
     void UpdateBitmap();
     void ShowPosition( const Point& rPos, bool bUpdate );
@@ -714,14 +714,14 @@ class ColorSliderControl : public Control
 public:
     ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorSliderControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Resize() override;
 
     void UpdateBitmap();
     void ChangePosition( long nY );
@@ -985,7 +985,7 @@ public:
     {
         disposeOnce();
     }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void update_color(sal_uInt16 n = UPDATE_ALL);
 
@@ -1515,20 +1515,20 @@ public:
     explicit ColorPicker( Reference< XComponentContext > const & xContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
     // XPropertyAccess
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) override;
 
     // XExecutableDialog
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception) override;
 
 private:
     Reference< XComponentContext > mxContext;

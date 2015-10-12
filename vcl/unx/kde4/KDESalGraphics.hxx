@@ -40,7 +40,7 @@ class KDESalGraphics : public X11SalGraphics
             @param part Specification of the widget's part if it consists of more than one.
             @return true if the platform supports native drawing of the widget type defined by part.
         */
-        virtual bool IsNativeControlSupported( ControlType type, ControlPart part ) SAL_OVERRIDE;
+        virtual bool IsNativeControlSupported( ControlType type, ControlPart part ) override;
 
         /** Test whether the position is in the native widget.
             If the return value is TRUE, bIsInside contains information whether
@@ -49,7 +49,7 @@ class KDESalGraphics : public X11SalGraphics
         */
         virtual bool hitTestNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, const Point& aPos,
-                                        bool& rIsInside ) SAL_OVERRIDE;
+                                        bool& rIsInside ) override;
         /** Draw the requested control described by part/nControlState.
 
             @param rControlRegion
@@ -64,7 +64,7 @@ class KDESalGraphics : public X11SalGraphics
         virtual bool drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
-                                        const OUString& aCaption ) SAL_OVERRIDE;
+                                        const OUString& aCaption ) override;
 
         /** Check if the bounding regions match.
 
@@ -87,7 +87,7 @@ class KDESalGraphics : public X11SalGraphics
                                             const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
                                             const OUString& aCaption,
-                                            Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+                                            Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

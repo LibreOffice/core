@@ -48,12 +48,12 @@ public:
     X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ), mpXLib(NULL) {}
     virtual ~X11SalInstance();
 
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-    virtual void                DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual void                DestroyFrame( SalFrame* pFrame ) override;
 
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
-    virtual void                DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) override;
+    virtual void                DestroyObject( SalObject* pObject ) override;
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
     virtual SalVirtualDevice* CreateX11VirtualDevice(SalGraphics* pGraphics, long &nDX, long &nDY,
@@ -61,28 +61,28 @@ public:
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) SAL_OVERRIDE;
-    virtual void                PostPrintersChanged() SAL_OVERRIDE;
-    virtual GenPspGraphics     *CreatePrintGraphics() SAL_OVERRIDE;
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) override;
+    virtual void                PostPrintersChanged() override;
+    virtual GenPspGraphics     *CreatePrintGraphics() override;
 
-    virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
-    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
-    virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
-    virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
-    virtual SalSession*         CreateSalSession() SAL_OVERRIDE;
+    virtual SalTimer*           CreateSalTimer() override;
+    virtual SalI18NImeStatus*   CreateI18NImeStatus() override;
+    virtual SalSystem*          CreateSalSystem() override;
+    virtual SalBitmap*          CreateSalBitmap() override;
+    virtual SalSession*         CreateSalSession() override;
 
-    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
-    virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
+    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
+    virtual bool                AnyInput( VclInputFlags nType ) override;
 
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource() SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget() SAL_OVERRIDE;
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments ) override;
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource() override;
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget() override;
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALINST_H

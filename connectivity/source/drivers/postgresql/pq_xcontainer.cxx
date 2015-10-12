@@ -92,11 +92,11 @@ public:
         m_event( source, makeAny( name ), newElement, makeAny(oldElement) )
     {}
 
-    virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
+    virtual void fire( XEventListener * listener ) const override
     {
         static_cast<XContainerListener*>(listener)->elementReplaced( m_event );
     }
-    virtual Type getType() const SAL_OVERRIDE
+    virtual Type getType() const override
     {
         return cppu::UnoType<XContainerListener>::get();
     }
@@ -113,12 +113,12 @@ public:
         m_event( source, makeAny( name ), newElement, Any() )
     {}
 
-    virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
+    virtual void fire( XEventListener * listener ) const override
     {
         static_cast<XContainerListener*>(listener)->elementInserted( m_event );
     }
 
-    virtual Type getType() const SAL_OVERRIDE
+    virtual Type getType() const override
     {
         return cppu::UnoType<XContainerListener>::get();
     }
@@ -134,12 +134,12 @@ public:
         m_event( source, makeAny( name ), Any(), Any() )
     {}
 
-    virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
+    virtual void fire( XEventListener * listener ) const override
     {
         static_cast<XContainerListener*>(listener)->elementRemoved( m_event );
     }
 
-    virtual Type getType() const SAL_OVERRIDE
+    virtual Type getType() const override
     {
         return cppu::UnoType<XContainerListener>::get();
     }
@@ -248,11 +248,11 @@ public:
 public:
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 };
 

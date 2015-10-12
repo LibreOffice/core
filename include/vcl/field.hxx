@@ -117,7 +117,7 @@ protected:
 public:
     virtual                 ~PatternFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            Reformat() override;
 
     void SetMask(const OString& rEditMask, const OUString& rLiteralMask );
     const OString& GetEditMask() const { return m_aEditMask; }
@@ -172,7 +172,7 @@ protected:
 public:
     virtual                 ~NumericFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            Reformat() override;
 
     void                    SetMin( sal_Int64 nNewMin );
     sal_Int64               GetMin() const { return mnMin; }
@@ -234,7 +234,7 @@ public:
     virtual                 ~MetricFormatter();
 
     virtual void            CustomConvert() = 0;
-    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            Reformat() override;
 
     virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
@@ -254,12 +254,12 @@ public:
     sal_Int64               GetBaseValue( FieldUnit eOutUnit = FUNIT_NONE ) const;
 
     virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
-    virtual void            SetValue( sal_Int64 nValue ) SAL_OVERRIDE;
+    virtual void            SetValue( sal_Int64 nValue ) override;
     using NumericFormatter::SetUserValue;
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
-    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
+    virtual sal_Int64       GetValue() const override;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
     void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
@@ -282,13 +282,13 @@ protected:
 public:
     virtual                 ~CurrencyFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            Reformat() override;
 
     OUString                GetCurrencySymbol() const;
 
-    virtual void            SetValue( sal_Int64 nNewValue ) SAL_OVERRIDE;
-    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
+    virtual void            SetValue( sal_Int64 nNewValue ) override;
+    virtual sal_Int64       GetValue() const override;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
 };
 
 
@@ -330,10 +330,10 @@ protected:
 public:
     virtual                 ~DateFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            Reformat() override;
+    virtual void            ReformatAll() override;
 
-    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale ) SAL_OVERRIDE;
+    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale ) override;
 
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
@@ -422,8 +422,8 @@ public:
 
     virtual                 ~TimeFormatter();
 
-    virtual void            Reformat() SAL_OVERRIDE;
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            Reformat() override;
+    virtual void            ReformatAll() override;
 
     void                    SetMin( const tools::Time& rNewMin );
     const tools::Time&             GetMin() const { return maMin; }
@@ -473,10 +473,10 @@ class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
 public:
     explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            Modify() SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            Modify() override;
+    virtual void            dispose() override;
 };
 
 
@@ -493,20 +493,20 @@ public:
     explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
     explicit                NumericField( vcl::Window* pParent, const ResId& );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size            CalcMinimumSize() const override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            Up() SAL_OVERRIDE;
-    virtual void            Down() SAL_OVERRIDE;
-    virtual void            First() SAL_OVERRIDE;
-    virtual void            Last() SAL_OVERRIDE;
-    virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
+    virtual bool            set_property(const OString &rKey, const OString &rValue) override;
+    virtual void            dispose() override;
 };
 
 
@@ -523,21 +523,21 @@ public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
     explicit                MetricField( vcl::Window* pParent, const ResId& );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size            CalcMinimumSize() const override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            Up() SAL_OVERRIDE;
-    virtual void            Down() SAL_OVERRIDE;
-    virtual void            First() SAL_OVERRIDE;
-    virtual void            Last() SAL_OVERRIDE;
-    virtual void            CustomConvert() SAL_OVERRIDE;
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
+    virtual void            CustomConvert() override;
 
-    virtual void            SetUnit( FieldUnit meUnit ) SAL_OVERRIDE;
+    virtual void            SetUnit( FieldUnit meUnit ) override;
 
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
     inline void             SetFirst(sal_Int64 first) { SetFirst(first, FUNIT_NONE); }
@@ -576,8 +576,8 @@ public:
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
-    virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual bool            set_property(const OString &rKey, const OString &rValue) override;
+    virtual void            dispose() override;
 };
 
 
@@ -590,17 +590,17 @@ class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 public:
     CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            Up() SAL_OVERRIDE;
-    virtual void            Down() SAL_OVERRIDE;
-    virtual void            First() SAL_OVERRIDE;
-    virtual void            Last() SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
+    virtual void            dispose() override;
 };
 
 
@@ -620,22 +620,22 @@ protected:
 public:
     explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            Up() SAL_OVERRIDE;
-    virtual void            Down() SAL_OVERRIDE;
-    virtual void            First() SAL_OVERRIDE;
-    virtual void            Last() SAL_OVERRIDE;
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
 
     void                    SetFirst( const Date& rNewFirst )   { maFirst = rNewFirst; }
     Date                    GetFirst() const                    { return maFirst; }
     void                    SetLast( const Date& rNewLast )     { maLast = rNewLast; }
     Date                    GetLast() const                     { return maLast; }
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 };
 
 
@@ -654,16 +654,16 @@ protected:
 public:
     explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            Up() SAL_OVERRIDE;
-    virtual void            Down() SAL_OVERRIDE;
-    virtual void            First() SAL_OVERRIDE;
-    virtual void            Last() SAL_OVERRIDE;
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
 
     void                    SetFirst( const tools::Time& rNewFirst )   { maFirst = rNewFirst; }
     tools::Time             GetFirst() const                    { return maFirst; }
@@ -671,7 +671,7 @@ public:
     tools::Time             GetLast() const                     { return maLast; }
 
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 };
 
 
@@ -684,13 +684,13 @@ class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 public:
                             PatternBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            ReformatAll() SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            ReformatAll() override;
+    virtual void            dispose() override;
 };
 
 
@@ -703,18 +703,18 @@ class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 public:
     explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size            CalcMinimumSize() const override;
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            ReformatAll() override;
 
     void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 };
 
 
@@ -727,16 +727,16 @@ class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
 public:
     explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size            CalcMinimumSize() const override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            CustomConvert() SAL_OVERRIDE;
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            CustomConvert() override;
+    virtual void            ReformatAll() override;
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
                                          sal_Int32  nPos = COMBOBOX_APPEND );
@@ -745,10 +745,10 @@ public:
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
     // Needed, because GetValue() with nPos hide these functions
-    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const SAL_OVERRIDE;
-    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
+    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const override;
+    virtual sal_Int64       GetValue() const override;
 
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 };
 
 
@@ -761,16 +761,16 @@ class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
 public:
     explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            ReformatAll() override;
 
-    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual sal_Int64       GetValue() const override;
+    virtual void            dispose() override;
 };
 
 
@@ -782,14 +782,14 @@ class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
 public:
     explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            ReformatAll() SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            ReformatAll() override;
+    virtual void            dispose() override;
 };
 
 
@@ -802,14 +802,14 @@ class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
 public:
     explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            Modify() SAL_OVERRIDE;
+    virtual void            Modify() override;
 
-    virtual void            ReformatAll() SAL_OVERRIDE;
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            ReformatAll() override;
+    virtual void            dispose() override;
 };
 
 #endif // INCLUDED_VCL_FIELD_HXX

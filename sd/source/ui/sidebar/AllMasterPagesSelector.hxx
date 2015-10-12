@@ -46,10 +46,10 @@ public:
     /** Scan the set of templates for the ones whose first master pages are
         shown by this control and store them in the MasterPageContainer.
     */
-    virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
+    virtual void Fill (ItemList& rItemList) override;
 
 protected:
-    virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent) SAL_OVERRIDE;
+    virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent) override;
 
 private:
     /** The list of master pages displayed by this class.

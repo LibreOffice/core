@@ -74,7 +74,7 @@ class SwSortDlg : public SvxStandardDialog
     sal_uInt16 nX;
     sal_uInt16 nY;
 
-    virtual void        Apply() SAL_OVERRIDE;
+    virtual void        Apply() override;
     sal_Unicode         GetDelimChar() const;
 
     DECL_LINK_TYPED( CheckHdl, Button*, void );
@@ -86,7 +86,7 @@ class SwSortDlg : public SvxStandardDialog
 public:
     SwSortDlg(vcl::Window * pParent, SwWrtShell &rSh);
     virtual ~SwSortDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

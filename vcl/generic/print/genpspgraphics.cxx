@@ -81,12 +81,12 @@ private:
 
         explicit        SalPrinterBmp (BitmapBuffer* pBitmap);
         virtual         ~SalPrinterBmp ();
-        virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const SAL_OVERRIDE;
-        virtual sal_uInt32  GetPaletteEntryCount () const SAL_OVERRIDE;
-        virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
-        virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
-        virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
-        virtual sal_uInt32  GetDepth () const SAL_OVERRIDE;
+        virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const override;
+        virtual sal_uInt32  GetPaletteEntryCount () const override;
+        virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+        virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+        virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+        virtual sal_uInt32  GetDepth () const override;
 };
 
 SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
@@ -547,9 +547,9 @@ private:
 
 public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
-    virtual sal_IntPtr      GetFontId() const SAL_OVERRIDE { return mnFontId; }
-    virtual PhysicalFontFace*   Clone() const SAL_OVERRIDE { return new ImplPspFontData( *this ); }
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
+    virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
+    virtual PhysicalFontFace*   Clone() const override { return new ImplPspFontData( *this ); }
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
 };
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
@@ -567,9 +567,9 @@ class PspFontLayout : public GenericSalLayout
 {
 public:
     explicit            PspFontLayout( ::psp::PrinterGfx& );
-    virtual bool        LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void        InitFont() const SAL_OVERRIDE;
-    virtual void        DrawText( SalGraphics& ) const SAL_OVERRIDE;
+    virtual bool        LayoutText( ImplLayoutArgs& ) override;
+    virtual void        InitFont() const override;
+    virtual void        DrawText( SalGraphics& ) const override;
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
     sal_IntPtr          mnFontID;
@@ -655,7 +655,7 @@ class PspServerFontLayout : public ServerFontLayout
 public:
     PspServerFontLayout( psp::PrinterGfx&, ServerFont& rFont, const ImplLayoutArgs& rArgs );
 
-    virtual void        InitFont() const SAL_OVERRIDE;
+    virtual void        InitFont() const override;
     const sal_Unicode*  getTextPtr() const { return maText.getStr() - mnMinCharPos; }
     int                 getMinCharPos() const { return mnMinCharPos; }
     int                 getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }

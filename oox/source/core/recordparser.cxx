@@ -46,10 +46,10 @@ public:
 
     // com.sun.star.sax.XLocator interface
 
-    virtual sal_Int32 SAL_CALL getColumnNumber() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getLineNumber() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getPublicId() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSystemId() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getColumnNumber() throw( RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getLineNumber() throw( RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getPublicId() throw( RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getSystemId() throw( RuntimeException, std::exception ) override;
 
 private:
     RecordParser*           mpParser;

@@ -42,7 +42,7 @@ namespace dbaui
     public:
         OConnectionHelper( vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         VclPtr<FixedText>           m_pFT_Connection;
         VclPtr<OConnectionURLEdit>  m_pConnectionURL;
         VclPtr<PushButton>          m_pPB_Connection;
@@ -54,13 +54,13 @@ namespace dbaui
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
         ::dbaccess::ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
-        virtual bool    PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+        virtual bool    PreNotify( NotifyEvent& _rNEvt ) override;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void    fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void    fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void    fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void    implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+        virtual void    fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void    implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes

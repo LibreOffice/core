@@ -152,7 +152,7 @@ public:
 class SwIndexMarkFloatDlg : public SfxModelessDialog
 {
     SwIndexMarkPane m_aContent;
-    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    Activate() override;
     public:
         SwIndexMarkFloatDlg(       SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
@@ -168,7 +168,7 @@ class SwIndexMarkModalDlg : public SvxStandardDialog
 public:
     SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
-    virtual void        Apply() SAL_OVERRIDE;
+    virtual void        Apply() override;
 };
 
 class SwAuthMarkModalDlg;
@@ -227,7 +227,7 @@ public:
 class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
     SwAuthorMarkPane m_aContent;
-    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    Activate() override;
     public:
         SwAuthMarkFloatDlg(        SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
@@ -243,7 +243,7 @@ class SwAuthMarkModalDlg : public SvxStandardDialog
 public:
     SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh);
 
-    virtual void        Apply() SAL_OVERRIDE;
+    virtual void        Apply() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX

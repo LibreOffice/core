@@ -24,7 +24,7 @@
 class SwFieldRefTreeListBox : public SvTreeListBox
 {
 protected:
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
 public:
     SwFieldRefTreeListBox(vcl::Window* pParent, WinBits nStyle);

@@ -156,7 +156,7 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const css::uno::Any& _aDataSource,
             const OUString& _rObjectName
-        ) SAL_OVERRIDE;
+        ) override;
 
     public:
         QueryDesigner(
@@ -175,13 +175,13 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const css::uno::Any& _aDataSource,
             const OUString& _rObjectName
-        ) SAL_OVERRIDE;
+        ) override;
 
         virtual css::uno::Reference< css::lang::XComponent > doCreateView(
             const css::uno::Any& _rDataSource,
             const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
-        ) SAL_OVERRIDE;
+        ) override;
 
     public:
         TableDesigner(
@@ -214,7 +214,7 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const css::uno::Any& _aDataSource,
             const OUString& _rQualifiedName
-        ) SAL_OVERRIDE;
+        ) override;
 
     public:
         ResultSetBrowser(

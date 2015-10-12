@@ -80,19 +80,19 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControl : public Control
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        LoseFocus() override;
 
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const override;
+    virtual void        Resize() override;
 
     /** Returns true, if the control is not in "don't care" state. */
     bool                HasRotation() const;
@@ -170,11 +170,11 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControlWrapper : public sfx::SingleContr
 public:
     explicit            DialControlWrapper( DialControl& rDial );
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool bSet ) override;
 
-    virtual sal_Int32   GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( sal_Int32 nValue ) SAL_OVERRIDE;
+    virtual sal_Int32   GetControlValue() const override;
+    virtual void        SetControlValue( sal_Int32 nValue ) override;
 };
 
 /** An item<->control connection for a DialControl. */

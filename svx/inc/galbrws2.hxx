@@ -75,7 +75,7 @@ class GalleryToolBox : public ToolBox
 {
 private:
 
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
 
@@ -131,11 +131,11 @@ private:
     void                ImplSelectItemId( sal_uIntPtr nItemId );
 
     // Control
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        Resize() override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     // SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                         DECL_LINK_TYPED( SelectObjectHdl, GalleryListView*, void );
                         DECL_LINK_TYPED( SelectObjectValueSetHdl, ValueSet*, void );
@@ -154,7 +154,7 @@ public:
 
     GalleryBrowser2(vcl::Window* pParent, Gallery* pGallery);
     virtual ~GalleryBrowser2();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                SelectTheme( const OUString& rThemeName );
 

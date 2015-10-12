@@ -39,17 +39,17 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     // Return combo box specific services.
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     virtual ~VCLXAccessibleComboBox();
 
-    virtual bool IsValid() const SAL_OVERRIDE;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
+    virtual bool IsValid() const override;
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX

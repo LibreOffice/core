@@ -168,26 +168,26 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     void                            SetModified() {bModified = true;}
 
 protected:
-    virtual bool                    SeekRow( long nRow ) SAL_OVERRIDE;
-    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const SAL_OVERRIDE;
-    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
-    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
-    virtual bool                    SaveModified() SAL_OVERRIDE;
+    virtual bool                    SeekRow( long nRow ) override;
+    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const override;
+    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;
+    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
+    virtual bool                    SaveModified() override;
 
     std::vector<long>               GetOptimalColWidths() const;
 
 public:
     SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
     virtual ~SwEntryBrowseBox();
-    virtual void                    dispose() SAL_OVERRIDE;
+    virtual void                    dispose() override;
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
-    bool                            IsModified()const SAL_OVERRIDE;
+    bool                            IsModified()const override;
 
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const SAL_OVERRIDE;
-    virtual void                    Resize() SAL_OVERRIDE;
-    virtual Size                    GetOptimalSize() const SAL_OVERRIDE;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const override;
+    virtual void                    Resize() override;
+    virtual Size                    GetOptimalSize() const override;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
@@ -205,7 +205,7 @@ public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 };
 
@@ -539,9 +539,9 @@ class SwIndexTreeLB : public SvSimpleTable
 {
 public:
     SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = 0);
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void Resize() override;
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
     void setColSizes();
 };
 
@@ -645,7 +645,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 public:
     SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
     virtual ~SwAddStylesDlg_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
@@ -1541,10 +1541,10 @@ public:
     {
     }
     virtual ~SwTOXEdit() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); Edit::dispose(); }
+    virtual void dispose() override { m_pParent.clear(); Edit::dispose(); }
 
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
     bool    IsNextControl() const {return bNextControl;}
     void SetPrevNextLink( const Link<SwTOXEdit&,void>& rLink ) {aPrevNextControlLink = rLink;}
@@ -1628,10 +1628,10 @@ public:
     {
     }
     virtual ~SwTOXButton() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); PushButton::dispose(); }
+    virtual void dispose() override { m_pParent.clear(); PushButton::dispose(); }
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 
     bool IsNextControl() const          {return bNextControl;}
     void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {aPrevNextControlLink = rLink;}

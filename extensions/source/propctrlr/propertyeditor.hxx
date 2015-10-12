@@ -66,14 +66,14 @@ namespace pcr
         ::std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
 
     protected:
-        void                        Resize() SAL_OVERRIDE;
-        void                        GetFocus() SAL_OVERRIDE;
+        void                        Resize() override;
+        void                        GetFocus() override;
 
     public:
                                     OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
                                     virtual ~OPropertyEditor();
-        virtual void                dispose() SAL_OVERRIDE;
+        virtual void                dispose() override;
 
         void                        EnableUpdate();
         void                        DisableUpdate();

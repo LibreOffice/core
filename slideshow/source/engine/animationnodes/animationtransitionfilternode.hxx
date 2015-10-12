@@ -44,10 +44,10 @@ public:
 #endif
 
 protected:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
+    virtual AnimationActivitySharedPtr createActivity() const override;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XTransitionFilter> mxTransitionFilterNode;

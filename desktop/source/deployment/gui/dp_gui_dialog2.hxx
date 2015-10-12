@@ -143,21 +143,21 @@ class ExtMgrDialog : public ModelessDialog,
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
     virtual        ~ExtMgrDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    Close() override;
 
-    virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
+    virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
-                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
-    virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
+                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) override;
+    virtual void    updateProgress( const long nProgress ) override;
 
-    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
+    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 
     void            setGetExtensionsURL( const OUString &rURL );
     virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
-                                      bool bLicenseMissing = false ) SAL_OVERRIDE;
+                                      bool bLicenseMissing = false ) override;
     bool enablePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage,
                         bool bEnable );
     bool removePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
@@ -166,8 +166,8 @@ public:
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
-    virtual void    prepareChecking() SAL_OVERRIDE;
-    virtual void    checkEntries() SAL_OVERRIDE;
+    virtual void    prepareChecking() override;
+    virtual void    checkEntries() override;
 
     css::uno::Sequence< OUString > raiseAddPicker();
 };
@@ -212,24 +212,24 @@ class UpdateRequiredDialog : public ModalDialog,
 public:
                     UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual short   Execute() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual short   Execute() override;
+    virtual bool    Close() override;
 
-    virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
+    virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
-                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
-    virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
+                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) override;
+    virtual void    updateProgress( const long nProgress ) override;
 
-    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
+    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 
     virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
-                                      bool bLicenseMissing = false ) SAL_OVERRIDE;
+                                      bool bLicenseMissing = false ) override;
     bool            enablePackage( const css::uno::Reference< css::deployment::XPackage > &xPackage, bool bEnable );
 
-    virtual void    prepareChecking() SAL_OVERRIDE;
-    virtual void    checkEntries() SAL_OVERRIDE;
+    virtual void    prepareChecking() override;
+    virtual void    checkEntries() override;
 };
 
 
@@ -239,7 +239,7 @@ class ShowLicenseDialog : public ModalDialog
 public:
     ShowLicenseDialog(vcl::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
     virtual ~ShowLicenseDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 
@@ -252,8 +252,8 @@ public:
                                  css::uno::Reference< css::uno::XComponentContext> const & xComponentContext );
 
     // XExecutableDialog
-    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL    execute() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int16 SAL_CALL    execute() throw ( css::uno::RuntimeException, std::exception ) override;
 };
 
 } // namespace dp_gui

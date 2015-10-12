@@ -145,13 +145,13 @@ public:
     bool enableAnimations();
 
     // Disposable:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     // Activity:
-    virtual double calcTimeLag() const SAL_OVERRIDE;
-    virtual bool perform() SAL_OVERRIDE;
-    virtual bool isActive() const SAL_OVERRIDE;
-    virtual void dequeued() SAL_OVERRIDE;
-    virtual void end() SAL_OVERRIDE;
+    virtual double calcTimeLag() const override;
+    virtual bool perform() override;
+    virtual bool isActive() const override;
+    virtual void dequeued() override;
+    virtual void end() override;
 
 private:
     void updateShapeAttributes( double fTime,
@@ -255,8 +255,8 @@ public:
 
 private:
 
-    virtual bool enableAnimations() SAL_OVERRIDE { return mrActivity.enableAnimations(); }
-    virtual bool disableAnimations() SAL_OVERRIDE { mrActivity.end(); return true; }
+    virtual bool enableAnimations() override { return mrActivity.enableAnimations(); }
+    virtual bool disableAnimations() override { mrActivity.end(); return true; }
 
     ActivityImpl& mrActivity;
 };

@@ -47,7 +47,7 @@ public:
 
     virtual ~SdrHHCWrapper();
 
-    virtual bool ConvertNextDocument() SAL_OVERRIDE;
+    virtual bool ConvertNextDocument() override;
     void    StartTextConversion();
 };
 

@@ -35,7 +35,7 @@ public:
             sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
     virtual ~SwTextTOXMark();
 
-    virtual sal_Int32 *GetEnd() SAL_OVERRIDE;     // SwTextAttr
+    virtual sal_Int32 *GetEnd() override;     // SwTextAttr
 
     void CopyTOXMark( SwDoc* pDestDoc );
 

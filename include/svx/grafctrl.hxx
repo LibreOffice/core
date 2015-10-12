@@ -35,8 +35,8 @@ public:
                             TYPEINFO_OVERRIDE();
                             TbxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 };
 
 
@@ -49,8 +49,8 @@ public:
     SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxGrafToolBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 
@@ -141,8 +141,8 @@ public:
                         SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         virtual ~SvxGrafModeToolBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 

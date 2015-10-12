@@ -33,7 +33,7 @@ class TextBodyContext : public ::oox::core::ContextHandler2
 public:
     TextBodyContext( ::oox::core::ContextHandler2Helper& rParent, TextBody& rTextBody );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     TextBody&           mrTextBody;
@@ -46,9 +46,9 @@ class RegularTextRunContext : public ::oox::core::ContextHandler2
 public:
     RegularTextRunContext( ::oox::core::ContextHandler2Helper& rParent, TextRunPtr pRunPtr );
 
-    virtual void onEndElement() SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+    virtual void onEndElement() override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual void onCharacters( const OUString& aChars ) override;
 
 protected:
     TextRunPtr          mpRunPtr;

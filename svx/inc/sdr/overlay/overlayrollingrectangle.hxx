@@ -42,7 +42,7 @@ namespace sdr
             bool                                    mbShowBounds : 1;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
 
         public:
             OverlayRollingRectangleStriped(
@@ -63,7 +63,7 @@ namespace sdr
             bool getShowBounds() const { return mbShowBounds; }
 
             // react on stripe definition change
-            virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;
+            virtual void stripeDefinitionHasChanged() override;
         };
     } // end of namespace overlay
 } // end of namespace sdr

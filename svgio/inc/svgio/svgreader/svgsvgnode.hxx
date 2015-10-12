@@ -54,9 +54,9 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgSvgNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
-            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const SAL_OVERRIDE;
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const override;
 
             /// Seeks width and height of viewport, which is current before the new viewport is set.
             // needed for percentage unit in x, y, width or height
@@ -67,7 +67,7 @@ namespace svgio
             // The returned 'CurrentViewPort' is the viewport as it is set by this svg element
             // and as it is needed to resolve relative values in children
             // The method does not check for invalid width and height
-            virtual const basegfx::B2DRange getCurrentViewPort() const SAL_OVERRIDE;
+            virtual const basegfx::B2DRange getCurrentViewPort() const override;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }

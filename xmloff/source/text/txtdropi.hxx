@@ -48,7 +48,7 @@ public:
 
     virtual ~XMLTextDropCapImportContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     const OUString& GetStyleName() const { return sStyleName; }
 };

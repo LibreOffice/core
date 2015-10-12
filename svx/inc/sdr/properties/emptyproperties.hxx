@@ -35,19 +35,19 @@ namespace sdr
             SfxItemSet*                                     mpEmptyItemSet;
 
             // create a new itemset
-            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const SAL_OVERRIDE;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const override;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) override;
 
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
+            virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
+            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
         public:
             // basic constructor
@@ -60,32 +60,32 @@ namespace sdr
             virtual ~EmptyProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+            virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // get itemset
-            virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
+            virtual const SfxItemSet& GetObjectItemSet() const override;
 
             // set single item
-            virtual void SetObjectItem(const SfxPoolItem& rItem) SAL_OVERRIDE;
+            virtual void SetObjectItem(const SfxPoolItem& rItem) override;
 
             // set single item direct, do not do any notifies or things like that
-            virtual void SetObjectItemDirect(const SfxPoolItem& rItem) SAL_OVERRIDE;
+            virtual void SetObjectItemDirect(const SfxPoolItem& rItem) override;
 
             // clear single item
-            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
+            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
 
             // clear single item direct, do not do any notifies or things like that.
             // Also supports complete deleteion of items when default parameter 0 is used.
-            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
+            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) override;
 
             // set complete item set
-            virtual void SetObjectItemSet(const SfxItemSet& rSet) SAL_OVERRIDE;
+            virtual void SetObjectItemSet(const SfxItemSet& rSet) override;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
 
             // get the installed StyleSheet
-            virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
+            virtual SfxStyleSheet* GetStyleSheet() const override;
         };
     } // end of namespace properties
 } // end of namespace sdr

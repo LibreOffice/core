@@ -59,14 +59,14 @@ namespace dbaui
         void SetAppendDataRadio();
 
     public:
-        virtual void            Reset() SAL_OVERRIDE;
-        virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual bool            LeavePage() SAL_OVERRIDE;
-        virtual OUString        GetTitle() const SAL_OVERRIDE ;
+        virtual void            Reset() override;
+        virtual void            ActivatePage() override;
+        virtual bool            LeavePage() override;
+        virtual OUString        GetTitle() const override ;
 
         OCopyTable( vcl::Window * pParent );
         virtual ~OCopyTable();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
         bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }

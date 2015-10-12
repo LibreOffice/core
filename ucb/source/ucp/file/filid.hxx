@@ -45,39 +45,39 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         virtual void SAL_CALL
         release(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         // XTypeProvider
         virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
         getTypes(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XContentIdentifier
         virtual OUString SAL_CALL
         getContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL
         getContentProviderScheme(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     private:
         OUString m_aContentId;              // The URL string

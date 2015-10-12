@@ -93,10 +93,10 @@ public:
                     SvtDefaultOptions_Impl();
 
     OUString         GetDefaultPath( sal_uInt16 nId ) const;
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
 
 private:
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 };
 
 // global ----------------------------------------------------------------

@@ -181,8 +181,8 @@ public:
     virtual ~ScValidityRefChildWin();
     bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
     bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
-    void                Hide() SAL_OVERRIDE { if( !m_bVisibleLock) SfxChildWindow::Hide(); }
-    void                Show( ShowFlags nFlags ) SAL_OVERRIDE { if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
+    void                Hide() override { if( !m_bVisibleLock) SfxChildWindow::Hide(); }
+    void                Show( ShowFlags nFlags ) override { if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX

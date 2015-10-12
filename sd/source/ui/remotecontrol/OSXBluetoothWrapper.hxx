@@ -29,8 +29,8 @@ namespace sd
 
     public:
         OSXBluetoothWrapper( IOBluetoothRFCOMMChannel* channel );
-        virtual sal_Int32 readLine( OString& aLine ) SAL_OVERRIDE;
-        virtual sal_Int32 write( const void* pBuffer, sal_uInt32 len ) SAL_OVERRIDE;
+        virtual sal_Int32 readLine( OString& aLine ) override;
+        virtual sal_Int32 write( const void* pBuffer, sal_uInt32 len ) override;
         void appendData(void* pBuffer, size_t len );
         void channelClosed();
     };

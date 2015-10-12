@@ -52,10 +52,10 @@ public:
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            virtual ~NameOrIndex() {};
 
-    virtual bool         operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual bool         operator==(const SfxPoolItem& rItem) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
+    virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
             OUString     GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }
@@ -69,7 +69,7 @@ public:
     */
     static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif

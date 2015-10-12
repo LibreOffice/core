@@ -80,53 +80,53 @@ namespace XPath
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         // --- XXPathAPI ---
 
         virtual void SAL_CALL registerNS(const OUString& aPrefix, const OUString& aURI)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL unregisterNS(const OUString& aPrefix, const OUString& aURI)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Use an XPath string to select a nodelist.
         */
         virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeList(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
         /**
         Use an XPath string to select a nodelist.
         */
         virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeListNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
         /**
         Use an XPath string to select a single node.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNode(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
         /**
         Use an XPath string to select a single node.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNodeNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
         virtual css::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL eval(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
         virtual css::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL evalNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
-            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) override;
 
-        virtual void SAL_CALL registerExtension(const OUString& aName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL registerExtensionInstance(const css::uno::Reference< css::xml::xpath::XXPathExtension>& aExtension) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerExtension(const OUString& aName) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerExtensionInstance(const css::uno::Reference< css::xml::xpath::XXPathExtension>& aExtension) throw (css::uno::RuntimeException, std::exception) override;
 
     };
 }

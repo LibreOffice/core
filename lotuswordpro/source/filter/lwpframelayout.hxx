@@ -124,17 +124,17 @@ class LwpFrameLayout: public LwpPlacableLayout
 public:
     LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFrameLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FRAME_LAYOUT;}
-    virtual void RegisterStyle() SAL_OVERRIDE;
-    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FRAME_LAYOUT;}
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) override;
     OUString GetNextLinkName();
     bool HasPreviousLinkLayout();
-    bool IsForWaterMark() SAL_OVERRIDE;
-    double GetWidth() SAL_OVERRIDE;
+    bool IsForWaterMark() override;
+    double GetWidth() override;
     void ApplyGraphicSize(XFFrame* pXFFrame);
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     double GetMaxWidth();
 
@@ -152,12 +152,12 @@ class LwpGroupLayout: public LwpPlacableLayout
 public:
     LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGroupLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_GROUP_LAYOUT;}
-    virtual void RegisterStyle() SAL_OVERRIDE;
-    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_GROUP_LAYOUT;}
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) override;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     LwpFrame* m_pFrame;
 
@@ -172,10 +172,10 @@ class LwpGroupFrame: public LwpContent
 public:
     LwpGroupFrame(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGroupFrame();
-    virtual void RegisterStyle() SAL_OVERRIDE;
-    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 };
 
 class LwpStory;
@@ -185,17 +185,17 @@ class LwpDropcapLayout : public LwpFrameLayout
 public:
     LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDropcapLayout(){}
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_DROPCAP_LAYOUT;}
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_DROPCAP_LAYOUT;}
+    virtual void Parse(IXFStream* pOutputStream) override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
     sal_uInt16 GetLines(){return m_nLines;}
     void SetChars(sal_uInt32 nChars){ m_nChars += nChars;}
     sal_uInt32 GetChars() const {return m_nChars;}
     LwpStory* GetContentStory();
     void RegisterStyle(LwpFoundry* pFoundry);
-    void RegisterStyle() SAL_OVERRIDE;
+    void RegisterStyle() override;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     sal_uInt16 m_nLines;
     sal_uInt32 m_nChars;
@@ -209,7 +209,7 @@ public:
     LwpRubyMarker* GetMarker();
     void ConvertContentText();
     LwpStory* GetContentStory();
-    void RegisterStyle() SAL_OVERRIDE;
+    void RegisterStyle() override;
     enum{
         LEFT = 4,
         RIGHT = 5,
@@ -218,7 +218,7 @@ public:
         BOTTOM = 3
     };
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     sal_uInt8 m_nPlacement;
     sal_uInt8 m_nAlignment;

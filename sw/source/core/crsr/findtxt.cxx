@@ -637,8 +637,8 @@ struct SwFindParaText : public SwFindParas
     SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCrsr )
         : m_rSearchOpt( rOpt ), m_rCursor( rCrsr ), m_aSText( rOpt ), m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
-    virtual bool IsReplaceMode() const SAL_OVERRIDE;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
+    virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
 

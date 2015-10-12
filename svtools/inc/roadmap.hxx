@@ -45,13 +45,13 @@ class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
 protected:
     RoadmapImpl*    m_pImpl;
     // Window overridables
-    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) SAL_OVERRIDE;
+    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) override;
     void            implInit(vcl::RenderContext& rRenderContext);
 
 public:
     ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
     virtual ~ORoadmap( );
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
 
@@ -78,11 +78,11 @@ public:
 
     void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
     Link<LinkParamNone*,void> GetItemSelectHdl( ) const;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    GetFocus() override;
 
 protected:
-    bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    bool            PreNotify( NotifyEvent& rNEvt ) override;
 
 protected:
     /// called when an item has been selected by any means

@@ -52,8 +52,8 @@ namespace connectivity
             bool        m_bIsSearchable;
 
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
             virtual ~OParseColumn();
         public:
@@ -73,7 +73,7 @@ namespace connectivity
                     const OUString& _SchemaName,
                     const OUString& _TableName);
 
-            virtual void construct() SAL_OVERRIDE;
+            virtual void construct() override;
 
             void setRealName(const OUString& _rName)  { m_aRealName  = _rName; }
             void setLabel(const OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
@@ -119,8 +119,8 @@ namespace connectivity
             const   bool        m_bAscending;
 
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
             virtual ~OOrderColumn();
         public:
@@ -137,9 +137,9 @@ namespace connectivity
                 bool _bAscending
             );
 
-            virtual void construct() SAL_OVERRIDE;
+            virtual void construct() override;
 
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

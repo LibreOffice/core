@@ -60,13 +60,13 @@ public:
                             const OUString& rElementName );
     virtual             ~OleOutputStream();
 
-    virtual void SAL_CALL seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getPosition() throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getLength() throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getPosition() throw( IOException, RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getLength() throw( IOException, RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override;
 
 private:
     void                ensureSeekable() const throw( IOException );

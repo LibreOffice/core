@@ -34,13 +34,13 @@ class AxisPositionsTabPage : public SfxTabPage
 public:
     AxisPositionsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~AxisPositionsTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
-    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
+    virtual void Reset( const SfxItemSet* rInAttrs ) override;
     using TabPage::DeactivatePage;
-    virtual sfxpg DeactivatePage( SfxItemSet* pItemSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage( SfxItemSet* pItemSet = NULL ) override;
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
 

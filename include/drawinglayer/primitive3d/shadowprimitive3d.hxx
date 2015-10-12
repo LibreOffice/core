@@ -69,7 +69,7 @@ namespace drawinglayer
             bool getShadow3D() const { return mbShadow3D; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

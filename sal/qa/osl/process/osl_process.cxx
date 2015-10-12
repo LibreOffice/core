@@ -200,13 +200,13 @@ public:
         suExecutableFileURL = suCWD + "/" + EXECUTABLE_NAME;
     }
 
-    virtual void setUp() SAL_OVERRIDE
+    virtual void setUp() override
     {
         temp_file_path_ = create_temp_file(temp_file_url_);
         parameters_[1]  = temp_file_path_.pData;
     }
 
-    virtual void tearDown() SAL_OVERRIDE
+    virtual void tearDown() override
     {
         osl::File::remove(temp_file_url_);
     }

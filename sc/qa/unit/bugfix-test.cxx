@@ -75,8 +75,8 @@ public:
 
     ScFiltersTest();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testTdf64229();
     void testTdf36933();

@@ -92,9 +92,9 @@ public:
     virtual             ~ProgressBar();
 
     /** Returns the current position of the progress bar. */
-    virtual double      getPosition() const SAL_OVERRIDE;
+    virtual double      getPosition() const override;
     /** Sets the current position of the progress bar. */
-    virtual void        setPosition( double fPosition ) SAL_OVERRIDE;
+    virtual void        setPosition( double fPosition ) override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >
@@ -114,14 +114,14 @@ public:
                             const OUString& rText );
 
     /** Returns the current position of the progress bar segment. */
-    virtual double      getPosition() const SAL_OVERRIDE;
+    virtual double      getPosition() const override;
     /** Sets the current position of the progress bar segment. */
-    virtual void        setPosition( double fPosition ) SAL_OVERRIDE;
+    virtual void        setPosition( double fPosition ) override;
 
     /** Returns the length that is still free for creating sub segments. */
-    virtual double      getFreeLength() const SAL_OVERRIDE;
+    virtual double      getFreeLength() const override;
     /** Adds a new segment with the specified length. */
-    virtual ISegmentProgressBarRef createSegment( double fLength ) SAL_OVERRIDE;
+    virtual ISegmentProgressBarRef createSegment( double fLength ) override;
 
 private:
     ProgressBar         maProgress;

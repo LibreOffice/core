@@ -101,8 +101,8 @@ private:
 
 public:
     // From SwLinePortion
-    virtual SwLinePortion *Insert( SwLinePortion *pPortion ) SAL_OVERRIDE;
-    virtual SwLinePortion *Append( SwLinePortion *pPortion ) SAL_OVERRIDE;
+    virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
+    virtual SwLinePortion *Append( SwLinePortion *pPortion ) override;
     inline SwLinePortion *GetFirstPortion() const;
 
     // Flags
@@ -158,7 +158,7 @@ public:
         { return _GetHangingMargin(); }
 
     // For special treatment for empty lines
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Stuff for justified alignment
     inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }

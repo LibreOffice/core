@@ -21,8 +21,8 @@ namespace sd {
             : ZeroconfService(aname, aport){}
         virtual ~AvahiNetworkService(){}
 
-        void clear() SAL_OVERRIDE;
-        void setup() SAL_OVERRIDE;
+        void clear() override;
+        void setup() override;
     };
 }
 #endif

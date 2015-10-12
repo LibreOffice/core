@@ -59,7 +59,7 @@ public:
     typedef ::std::function<void (double)> ThumbMotionListener;
     virtual ~PresenterScrollBar();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     void SetVisible (const bool bIsVisible);
 
@@ -115,47 +115,47 @@ public:
     // XWindowListener
 
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XMouseListener
 
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
                 __AreaCount__ = None };
@@ -253,20 +253,20 @@ public:
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::std::function<void (double)>& rThumbMotionListener);
     virtual ~PresenterVerticalScrollBar();
-    virtual sal_Int32 GetSize() const SAL_OVERRIDE;
+    virtual sal_Int32 GetSize() const override;
 
 protected:
-    virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const SAL_OVERRIDE;
-    virtual void UpdateDragAnchor (const double nDragDistance) SAL_OVERRIDE;
-    virtual double GetMinor (const double nX, const double nY) const SAL_OVERRIDE;
-    virtual void UpdateBorders() SAL_OVERRIDE;
-    virtual void UpdateBitmaps() SAL_OVERRIDE;
+    virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const override;
+    virtual void UpdateDragAnchor (const double nDragDistance) override;
+    virtual double GetMinor (const double nX, const double nY) const override;
+    virtual void UpdateBorders() override;
+    virtual void UpdateBitmaps() override;
     virtual void PaintComposite(
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
         const SharedBitmapDescriptor& rpStartBitmaps,
         const SharedBitmapDescriptor& rpCenterBitmaps,
-        const SharedBitmapDescriptor& rpEndBitmaps) SAL_OVERRIDE;
+        const SharedBitmapDescriptor& rpEndBitmaps) override;
 
 private:
     sal_Int32 mnScrollBarWidth;

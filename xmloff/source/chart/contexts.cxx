@@ -45,7 +45,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
-                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(

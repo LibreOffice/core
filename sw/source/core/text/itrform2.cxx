@@ -814,7 +814,7 @@ class SwMetaPortion : public SwTextPortion
 {
 public:
     inline  SwMetaPortion() { SetWhichPor( POR_META ); }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 //    OUTPUT_OPERATOR
 };
 

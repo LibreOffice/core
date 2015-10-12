@@ -28,7 +28,7 @@ public:
     virtual ~SwWordCountStatusBarControl();
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState ) SAL_OVERRIDE;
+                               const SfxPoolItem* pState ) override;
 
 };
 

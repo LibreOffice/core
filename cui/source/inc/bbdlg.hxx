@@ -33,7 +33,7 @@ public:
         bool bEnableSelector = false,
         bool bEnableDrawingLayerFillStyles = false);
 protected:
-    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
+    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
 
 private:
     /// bitfield

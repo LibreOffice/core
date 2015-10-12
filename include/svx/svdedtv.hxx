@@ -410,8 +410,8 @@ public:
     void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
 
     // override SdrMarkView, for internal use
-    virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void ModelHasChanged() SAL_OVERRIDE;
+    virtual void MarkListHasChanged() override;
+    virtual void ModelHasChanged() override;
 };
 
 #endif // INCLUDED_SVX_SVDEDTV_HXX

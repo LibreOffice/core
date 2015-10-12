@@ -47,11 +47,11 @@ namespace sd
              * Returns whatever the last call of recv returned, i.e. 0 or less
              * if there was a problem in communications.
              */
-            virtual sal_Int32 readLine( OString& aLine ) SAL_OVERRIDE;
+            virtual sal_Int32 readLine( OString& aLine ) override;
 
-            virtual sal_Int32 write( const void* pBuffer, sal_uInt32 n ) SAL_OVERRIDE;
+            virtual sal_Int32 write( const void* pBuffer, sal_uInt32 n ) override;
 
-            virtual void close() SAL_OVERRIDE;
+            virtual void close() override;
 
             void getPeerAddr(osl::SocketAddr&);
         private:

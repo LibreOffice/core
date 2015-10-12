@@ -18,7 +18,7 @@
 class OpenGLWatchdogThread : private salhelper::Thread
 {
     OpenGLWatchdogThread();
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 public:
     using salhelper::Thread::acquire;
     using salhelper::Thread::release;

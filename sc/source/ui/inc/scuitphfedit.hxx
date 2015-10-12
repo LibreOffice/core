@@ -45,8 +45,8 @@ class EditEngine;
 class ScHFEditPage : public SfxTabPage
 {
 public:
-    virtual bool    FillItemSet ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet ( SfxItemSet* rCoreSet ) override;
+    virtual void        Reset       ( const SfxItemSet* rCoreSet ) override;
 
     void            SetNumType(SvxNumType eNumType);
     void            ClearTextAreas();
@@ -57,7 +57,7 @@ protected:
                               sal_uInt16        nWhich,
                               bool              bHeader );
     virtual     ~ScHFEditPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr<ScEditWindow>    m_pWndLeft;

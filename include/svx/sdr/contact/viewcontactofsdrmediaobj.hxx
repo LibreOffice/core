@@ -56,7 +56,7 @@ protected:
 
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // get notified if some properties have changed
     void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
@@ -64,7 +64,7 @@ protected:
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

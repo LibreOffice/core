@@ -36,7 +36,7 @@ private:
 public:
     ScShowTabDlg( vcl::Window* pParent );
     virtual ~ScShowTabDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(

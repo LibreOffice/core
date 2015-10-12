@@ -52,15 +52,15 @@ namespace svt { namespace table
         virtual ~UnoGridColumnFacade();
 
         // IColumnModel overridables
-        virtual OUString        getName() const SAL_OVERRIDE;
-        virtual OUString        getHelpText() const SAL_OVERRIDE;
-        virtual bool            isResizable() const SAL_OVERRIDE;
-        virtual sal_Int32       getFlexibility() const SAL_OVERRIDE;
-        virtual TableMetrics    getWidth() const SAL_OVERRIDE;
-        virtual void            setWidth( TableMetrics _nWidth ) SAL_OVERRIDE;
-        virtual TableMetrics    getMinWidth() const SAL_OVERRIDE;
-        virtual TableMetrics    getMaxWidth() const SAL_OVERRIDE;
-        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() SAL_OVERRIDE;
+        virtual OUString        getName() const override;
+        virtual OUString        getHelpText() const override;
+        virtual bool            isResizable() const override;
+        virtual sal_Int32       getFlexibility() const override;
+        virtual TableMetrics    getWidth() const override;
+        virtual void            setWidth( TableMetrics _nWidth ) override;
+        virtual TableMetrics    getMinWidth() const override;
+        virtual TableMetrics    getMaxWidth() const override;
+        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() override;
 
         /** disposes the column wrapper
 

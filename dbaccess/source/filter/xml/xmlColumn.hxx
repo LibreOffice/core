@@ -49,7 +49,7 @@ namespace dbaxml
                     ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn();
-        virtual void EndElement() SAL_OVERRIDE;
+        virtual void EndElement() override;
     };
 } // namespace dbaxml
 

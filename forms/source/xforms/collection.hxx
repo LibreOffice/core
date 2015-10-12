@@ -146,20 +146,20 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return hasItems();
     }
 
     // XIndexAccess : XElementAccess
     virtual sal_Int32 SAL_CALL getCount()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return countItems();
     }
@@ -167,7 +167,7 @@ public:
     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
         throw( css::lang::IndexOutOfBoundsException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception) override
     {
         if( isValidIndex( nIndex ) )
             return css::uno::makeAny( getItem( nIndex ) );
@@ -181,7 +181,7 @@ public:
         throw( css::lang::IllegalArgumentException,
                css::lang::IndexOutOfBoundsException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception) override
     {
         T t;
         if( isValidIndex( nIndex) )
@@ -195,7 +195,7 @@ public:
 
     // XEnumerationAccess : XElementAccess
     virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return new Enumeration( this );
     }
@@ -203,7 +203,7 @@ public:
 
     // XSet : XEnumerationAccess
     virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         T t;
         return ( aElement >>= t ) ? hasItem( t ) : sal_False;
@@ -212,7 +212,7 @@ public:
     virtual void SAL_CALL insert( const css::uno::Any& aElement )
         throw( css::lang::IllegalArgumentException,
                css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception ) override
     {
         T t;
         if( ( aElement >>= t )  &&  isValid( t ) )
@@ -227,7 +227,7 @@ public:
     virtual void SAL_CALL remove( const css::uno::Any& aElement )
         throw( css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception ) override
     {
         T t;
         if( aElement >>= t )
@@ -243,7 +243,7 @@ public:
     // XContainer
     virtual void SAL_CALL addContainerListener(
         const css::uno::Reference<css::container::XContainerListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         if( std::find( maListeners.begin(), maListeners.end(), xListener)
@@ -253,7 +253,7 @@ public:
 
     virtual void SAL_CALL removeContainerListener(
         const css::uno::Reference<css::container::XContainerListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         Listeners_t::iterator aIter =

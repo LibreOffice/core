@@ -181,7 +181,7 @@ public:
         return true;
     }
 
-    virtual bool operator()( double t ) SAL_OVERRIDE
+    virtual bool operator()( double t ) override
     {
         for( const auto& pTransition : maTransitions )
             pTransition->update( t );
@@ -194,7 +194,7 @@ public:
     }
 
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
+    virtual void viewAdded( const UnoViewSharedPtr& rView ) override
     {
         OSL_TRACE("PluginSlideChange viewAdded");
         SlideChangeBase::viewAdded( rView );
@@ -209,7 +209,7 @@ public:
         addTransition( rView );
     }
 
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
+    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override
     {
         OSL_TRACE("PluginSlideChange viewRemoved");
         SlideChangeBase::viewRemoved( rView );
@@ -229,7 +229,7 @@ public:
         }
     }
 
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
+    virtual void viewChanged( const UnoViewSharedPtr& rView ) override
     {
         OSL_TRACE("PluginSlideChange viewChanged");
         SlideChangeBase::viewChanged( rView );
@@ -248,7 +248,7 @@ public:
         }
     }
 
-    virtual void viewsChanged() SAL_OVERRIDE
+    virtual void viewsChanged() override
     {
         OSL_TRACE("PluginSlideChange viewsChanged");
         SlideChangeBase::viewsChanged();
@@ -311,13 +311,13 @@ public:
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
         const ViewEntry&                            rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t ) SAL_OVERRIDE;
+        double                                      t ) override;
 
     virtual void performOut(
         const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
         const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t ) SAL_OVERRIDE;
+        double                                     t ) override;
 
 private:
     ClippingFunctor             maClippingFunctor;
@@ -374,19 +374,19 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) SAL_OVERRIDE;
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) override;
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
         const ViewEntry&                            rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t ) SAL_OVERRIDE;
+        double                                      t ) override;
 
     virtual void performOut(
         const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
         const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t ) SAL_OVERRIDE;
+        double                                     t ) override;
 
 private:
     const boost::optional< RGBColor >               maFadeColor;
@@ -472,19 +472,19 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) SAL_OVERRIDE;
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) override;
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
         const ViewEntry&                            rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t ) SAL_OVERRIDE;
+        double                                      t ) override;
 
     virtual void performOut(
         const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
         const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t ) SAL_OVERRIDE;
+        double                                     t ) override;
 
 private:
     RGBColor maFadeColor;
@@ -586,19 +586,19 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) SAL_OVERRIDE;
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas ) override;
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
         const ViewEntry&                            rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t ) SAL_OVERRIDE;
+        double                                      t ) override;
 
     virtual void performOut(
         const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
         const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t ) SAL_OVERRIDE;
+        double                                     t ) override;
 };
 
 void MovingSlideChange::prepareForRun(

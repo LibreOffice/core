@@ -36,9 +36,9 @@ class EmptyPanel
 public:
     explicit EmptyPanel (vcl::Window* pParent);
     virtual ~EmptyPanel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
 private:
     VclPtr<FixedText> maMessageControl;

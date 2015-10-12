@@ -37,18 +37,18 @@ public:
     virtual ~SvpSalVirtualDevice();
 
     // SalVirtualDevice
-    virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual SalGraphics*    AcquireGraphics() override;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
-    virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
     virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                             const basebmp::RawMemorySharedArray &pBuffer,
                                             const bool bTopDown
-                                          ) SAL_OVERRIDE;
+                                          ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getX() : 0; }
-    virtual long GetHeight() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getY() : 0; }
+    virtual long GetWidth() const override { return m_aDevice.get() ? m_aDevice->getSize().getX() : 0; }
+    virtual long GetHeight() const override { return m_aDevice.get() ? m_aDevice->getSize().getY() : 0; }
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

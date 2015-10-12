@@ -46,12 +46,12 @@ private:
 public:
     SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXConnectionPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
     sal_uInt16   GetLineDeltaAnz();
@@ -59,7 +59,7 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 #endif // INCLUDED_SVX_CONNCTRL_HXX

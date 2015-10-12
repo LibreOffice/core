@@ -39,7 +39,7 @@ public:
                             ControlModelBase& rModel );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     ControlModelBase&   mrModel;
@@ -58,7 +58,7 @@ public:
                             EmbeddedControl& rControl );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     EmbeddedControl&    mrControl;

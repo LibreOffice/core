@@ -31,7 +31,7 @@ private:
     bool            bFixed;
 
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
 public:
                     ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle,
@@ -39,7 +39,7 @@ public:
                     virtual ~ScTabSplitter();
 
     void            SetFixed(bool bSet);
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect ) override;
 };
 
 #endif

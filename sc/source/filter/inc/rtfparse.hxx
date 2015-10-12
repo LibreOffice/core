@@ -72,7 +72,7 @@ private:
 public:
                         ScRTFParser( EditEngine* );
     virtual             ~ScRTFParser();
-    virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL ) SAL_OVERRIDE;
+    virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL ) override;
 };
 
 #endif

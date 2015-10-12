@@ -70,16 +70,16 @@ public:
                             vcl::Window* pParent ,
                             WinBits nBits);
     virtual             ~SfxTitleDockingWindow();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     vcl::Window*        GetWrappedWindow() const { return m_pWrappedWindow; }
     void                SetWrappedWindow(vcl::Window* const pWindow);
 
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual bool        Close() SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual void        Resize() override;
+    virtual void        Resizing( Size& rSize ) override;
+    virtual bool        Close() override;
 };
 
 namespace

@@ -32,25 +32,25 @@ class SwNodeIndex;
 class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
-    virtual bool SetStrmStgPtr() SAL_OVERRIDE;
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
-    virtual OUString GetTemplateName() const SAL_OVERRIDE;
+    virtual bool SetStrmStgPtr() override;
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual OUString GetTemplateName() const override;
 public:
     HTMLReader();
 };
 
 class XMLReader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
 public:
-    virtual int GetReaderType() SAL_OVERRIDE;
+    virtual int GetReaderType() override;
 
     XMLReader();
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<OUString*>& rStrings ) const SAL_OVERRIDE;
+                                   std::vector<OUString*>& rStrings ) const override;
 };
 
 // die speziellen Writer

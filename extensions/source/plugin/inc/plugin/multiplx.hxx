@@ -108,36 +108,36 @@ public:
     void unadvise(const Type& type, const Reference< XInterface > & listener);
 
     // css::lang::XEventListener
-    void SAL_CALL   disposing(const css::lang::EventObject& Source) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   disposing(const css::lang::EventObject& Source) throw(std::exception) override;
     // css::awt::XFocusListener
-    void SAL_CALL   focusGained(const css::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   focusLost(const css::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   focusGained(const css::awt::FocusEvent& e) throw(std::exception) override;
+    void SAL_CALL   focusLost(const css::awt::FocusEvent& e) throw(std::exception) override;
     // css::awt::XWindowListener
-    void SAL_CALL   windowResized(const css::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowMoved(const css::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowShown(const css::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowHidden(const css::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowResized(const css::awt::WindowEvent& e) throw(std::exception) override;
+    void SAL_CALL   windowMoved(const css::awt::WindowEvent& e) throw(std::exception) override;
+    void SAL_CALL   windowShown(const css::lang::EventObject& e) throw(std::exception) override;
+    void SAL_CALL   windowHidden(const css::lang::EventObject& e) throw(std::exception) override;
     // css::awt::XKeyListener
-    void SAL_CALL   keyPressed( const css::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   keyReleased( const css::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   keyPressed( const css::awt::KeyEvent& e ) throw(std::exception) override;
+    void SAL_CALL   keyReleased( const css::awt::KeyEvent& e ) throw(std::exception) override;
     // css::awt::XMouseListener
-    void SAL_CALL   mousePressed(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseReleased(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseEntered(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseExited(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mousePressed(const css::awt::MouseEvent& e) throw(std::exception) override;
+    void SAL_CALL   mouseReleased(const css::awt::MouseEvent& e) throw(std::exception) override;
+    void SAL_CALL   mouseEntered(const css::awt::MouseEvent& e) throw(std::exception) override;
+    void SAL_CALL   mouseExited(const css::awt::MouseEvent& e) throw(std::exception) override;
     // css::awt::XMouseMotionListener
-    void SAL_CALL   mouseDragged(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseMoved(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseDragged(const css::awt::MouseEvent& e) throw(std::exception) override;
+    void SAL_CALL   mouseMoved(const css::awt::MouseEvent& e) throw(std::exception) override;
     // css::awt::XPaintListener
-    void SAL_CALL   windowPaint(const css::awt::PaintEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowPaint(const css::awt::PaintEvent& e) throw(std::exception) override;
     // css::awt::XTopWindowListener
-    void SAL_CALL   windowOpened( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowClosing( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowClosed( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowMinimized( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowNormalized( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowActivated( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowDeactivated( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowOpened( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowClosing( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowClosed( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowMinimized( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowNormalized( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowActivated( const css::lang::EventObject& e ) throw(std::exception) override;
+    void SAL_CALL   windowDeactivated( const css::lang::EventObject& e ) throw(std::exception) override;
 protected:
     /**
      * Remove the listener with the uik rUik from the peer rPeer.

@@ -238,15 +238,15 @@ public:
     UpdateCheckThread( osl::Condition& rCondition,
         const uno::Reference<uno::XComponentContext>& xContext );
 
-    virtual void SAL_CALL join() SAL_OVERRIDE;
-    virtual void SAL_CALL terminate() SAL_OVERRIDE;
-    virtual void cancel() SAL_OVERRIDE;
+    virtual void SAL_CALL join() override;
+    virtual void SAL_CALL terminate() override;
+    virtual void cancel() override;
 
 protected:
     virtual ~UpdateCheckThread();
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
+    virtual void SAL_CALL onTerminated() override;
 
     /* Wrapper around checkForUpdates */
     bool runCheck( bool & rbExtensionsChecked );
@@ -297,7 +297,7 @@ public:
     ManualUpdateCheckThread( osl::Condition& rCondition, const uno::Reference<uno::XComponentContext>& xContext ) :
         UpdateCheckThread(rCondition, xContext) {};
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 };
 
 
@@ -308,7 +308,7 @@ public:
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
-        throw (lang::IllegalArgumentException, uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (lang::IllegalArgumentException, uno::Exception, std::exception) override;
 
 private:
     rtl::Reference< UpdateCheck > m_aUpdateCheck;
@@ -323,10 +323,10 @@ public:
         const rtl::Reference< DownloadInteractionHandler >& rHandler,
         const OUString& rURL );
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
-    virtual void cancel() SAL_OVERRIDE;
-    virtual void SAL_CALL suspend() SAL_OVERRIDE;
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
+    virtual void cancel() override;
+    virtual void SAL_CALL suspend() override;
+    virtual void SAL_CALL onTerminated() override;
 
 protected:
     virtual ~DownloadThread();
@@ -344,8 +344,8 @@ class ShutdownThread :  public osl::Thread
 public:
     ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext );
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
+    virtual void SAL_CALL onTerminated() override;
 
 protected:
     virtual ~ShutdownThread();

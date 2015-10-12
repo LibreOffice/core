@@ -64,7 +64,7 @@ namespace DOM
     {
     public:
         virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             InputSource is;
             is.sPublicId = sPublicId;

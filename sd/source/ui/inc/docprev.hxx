@@ -49,8 +49,8 @@ protected:
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual Size    GetOptimalSize() const override;
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
     void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
 
@@ -58,23 +58,23 @@ protected:
 
     svtools::ColorConfig maColorConfig;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     void updateViewSettings();
 
 public:
                     SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle );
                     virtual ~SdDocPreviewWin();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
     void            startPreview();
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
     void            SetClickHdl( const Link<SdDocPreviewWin&,void>& rLink ) { aClickHdl = rLink; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 };
 

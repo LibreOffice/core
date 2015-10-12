@@ -64,9 +64,9 @@ namespace
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
             virtual ~SwBreakDashedLine() { disposeOnce(); }
-            virtual void dispose() SAL_OVERRIDE { m_pWin.clear(); SwDashedLine::dispose(); }
+            virtual void dispose() override { m_pWin.clear(); SwDashedLine::dispose(); }
 
-            virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void MouseMove( const MouseEvent& rMEvt ) override;
     };
 
     void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )

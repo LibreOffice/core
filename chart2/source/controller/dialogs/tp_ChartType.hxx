@@ -55,13 +55,13 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext
                 , bool bDoLiveUpdate, bool bShowDescription = true );
     virtual ~ChartTypeTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        initializePage() SAL_OVERRIDE;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
+    virtual void        initializePage() override;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
     virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const SAL_OVERRIDE;
+                ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const override;
 
 protected:
     ChartTypeDialogController* getSelectedMainType();
@@ -69,7 +69,7 @@ protected:
     void fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList=true );
     ChartTypeParameter getCurrentParamter() const;
 
-    virtual void stateChanged( ChangingResource* pResource ) SAL_OVERRIDE;
+    virtual void stateChanged( ChangingResource* pResource ) override;
 
     void commitToModel( const ChartTypeParameter& rParameter );
     void selectMainType();

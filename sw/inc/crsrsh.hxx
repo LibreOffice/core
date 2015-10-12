@@ -296,7 +296,7 @@ protected:
     SAL_DLLPRIVATE void UpdateMarkedListLevel();
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -306,8 +306,8 @@ public:
     virtual ~SwCrsrShell();
 
     // create new cursor and append the old one
-    virtual SwPaM & CreateNewShellCursor() SAL_OVERRIDE;
-    virtual SwPaM & GetCurrentShellCursor() SAL_OVERRIDE;
+    virtual SwPaM & CreateNewShellCursor() override;
+    virtual SwPaM & GetCurrentShellCursor() override;
 
     SwPaM * CreateCrsr();
     ///< delete the current cursor and make the following into the current
@@ -398,12 +398,12 @@ public:
      * scrolling is done. The passed Rectangle lays on pixel borders to avoid
      * pixel errors.
      */
-    virtual void VisPortChgd( const SwRect & ) SAL_OVERRIDE;
+    virtual void VisPortChgd( const SwRect & ) override;
 
     /*
      * virtual paint method to make selection visible again after Paint
      */
-    void Paint(vcl::RenderContext& rRenderContext, const Rectangle & rRect) SAL_OVERRIDE;
+    void Paint(vcl::RenderContext& rRenderContext, const Rectangle & rRect) override;
 
     // Areas
     inline void SetMark();
@@ -846,7 +846,7 @@ public:
      */
     OUString GetCrsrDescr() const;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
     /// Implementation of lok::Document::getPartPageRectangles() for Writer.
     OUString getPageRectangles();
 };

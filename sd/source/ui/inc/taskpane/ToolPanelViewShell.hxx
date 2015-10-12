@@ -67,20 +67,20 @@ public:
 
     using sd::ViewShell::KeyInput;
 
-    virtual SdPage* GetActualPage() SAL_OVERRIDE;
-    virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
+    virtual SdPage* GetActualPage() override;
+    virtual SdPage* getCurrentPage() const override;
 
-    virtual void ArrangeGUIElements() SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() override;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
+        CreateAccessibleDocumentView (::sd::Window* pWindow) override;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     /** Relocate all toplevel controls to the given parent window.
     */
-    virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) SAL_OVERRIDE;
+    virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) override;
 
 private:
     std::unique_ptr< ToolPanelViewShell_Impl >   mpImpl;

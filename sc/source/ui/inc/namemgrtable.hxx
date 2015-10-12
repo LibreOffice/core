@@ -66,10 +66,10 @@ private:
 public:
     ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void StateChanged( StateChangedType nStateChange ) override;
 
     void setInitListener( InitListener* pListener );
 

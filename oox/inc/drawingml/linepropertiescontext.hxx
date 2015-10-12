@@ -37,7 +37,7 @@ public:
     virtual ~LinePropertiesContext();
 
     virtual ::oox::core::ContextHandlerRef
-        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     LineProperties& mrLineProperties;

@@ -50,13 +50,13 @@ public:
             cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(m_type) ); }
 
     // XInterface
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () override;
+    virtual void SAL_CALL release() throw () override;
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL select() throw (RuntimeException, std::exception) override;
 };
 
 // XInterface

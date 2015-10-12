@@ -36,14 +36,14 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         void DoBracketHilight(sal_uInt16 aKey);
 
     protected:
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
     public:
         MultiLineEditSyntaxHighlight( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
 
-        virtual void UpdateData() SAL_OVERRIDE;
-        virtual void SetText(const OUString& rNewText) SAL_OVERRIDE;
-        virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE
+        virtual void UpdateData() override;
+        virtual void SetText(const OUString& rNewText) override;
+        virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override
                     { SetText( rStr ); SetSelection( rNewSelection ); }
 
         Color GetColorValue(TokenTypes aToken);

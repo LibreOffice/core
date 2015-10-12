@@ -51,8 +51,8 @@ class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImp
 public:
     UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     SdrObjectWeakRef mxSdrObject;
@@ -63,8 +63,8 @@ class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 public:
     UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     SdrObjectWeakRef mxSdrObject;
@@ -75,8 +75,8 @@ class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectI
 public:
     UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     SdrObjectWeakRef mxSdrObject;
@@ -88,8 +88,8 @@ public:
     UndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
     virtual ~UndoObjectSetText();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     SfxUndoAction* mpUndoAnimation;
@@ -104,8 +104,8 @@ class UndoObjectUserCall : public SdrUndoObj
 public:
     UndoObjectUserCall(SdrObject& rNewObj);
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     SdrObjUserCall* mpOldUserCall;
@@ -120,8 +120,8 @@ class UndoObjectPresentationKind : public SdrUndoObj
 public:
     UndoObjectPresentationKind(SdrObject& rObject);
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     PresObjKind meOldKind;
@@ -138,8 +138,8 @@ class UndoAutoLayoutPosAndSize : public SfxUndoAction
 public:
     UndoAutoLayoutPosAndSize( SdPage& rPage );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     SdrPageWeakRef mxPage;
@@ -150,8 +150,8 @@ class UndoGeoObject : public SdrUndoGeoObj
 public:
     UndoGeoObject( SdrObject& rNewObj );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     SdrPageWeakRef mxPage;
@@ -163,8 +163,8 @@ class UndoAttrObject : public SdrUndoAttrObj
 public:
     UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText );
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     SdrPageWeakRef mxPage;

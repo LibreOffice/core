@@ -35,23 +35,23 @@ public:
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
-    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
+    virtual void DoExecute( SfxRequest& rReq ) override;
 
     // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() SAL_OVERRIDE;
+    virtual void Activate() override;
 
     void SetAttributes( SdrObject* pObj );
     OUString GetShapeType() const;
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
 
     // #i33136#
-    virtual bool doConstructOrthogonal() const SAL_OVERRIDE;
+    virtual bool doConstructOrthogonal() const override;
 
 protected:
     FuConstructCustomShape (

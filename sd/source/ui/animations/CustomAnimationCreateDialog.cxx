@@ -69,7 +69,7 @@ public:
     CategoryListBox( vcl::Window* pParent );
     virtual ~CategoryListBox();
 
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
@@ -78,7 +78,7 @@ public:
     DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
 
 private:
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
     Link<CategoryListBox&,void> maDoubleClickHdl;
 };
@@ -161,7 +161,7 @@ class CustomAnimationCreateTabPage : public TabPage
 public:
     CustomAnimationCreateTabPage( vcl::Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
     virtual ~CustomAnimationCreateTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;

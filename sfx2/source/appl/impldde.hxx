@@ -56,13 +56,13 @@ public:
 
     virtual bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const OUString & aMimeType,
-                                bool bSynchron = false ) SAL_OVERRIDE;
+                                bool bSynchron = false ) override;
 
-    virtual bool    Connect( SvBaseLink * ) SAL_OVERRIDE;
-    virtual void    Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl ) SAL_OVERRIDE;
+    virtual bool    Connect( SvBaseLink * ) override;
+    virtual void    Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl ) override;
 
-    virtual bool    IsPending() const SAL_OVERRIDE;
-    virtual bool    IsDataComplete() const SAL_OVERRIDE;
+    virtual bool    IsPending() const override;
+    virtual bool    IsDataComplete() const override;
 };
 
 }

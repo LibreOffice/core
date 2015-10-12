@@ -37,29 +37,29 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwSidebarItem& rSidebarItem,
                          SwFormatField* aField );
         virtual ~SwAnnotationWin();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void    UpdateData() SAL_OVERRIDE;
-        virtual void    SetPostItText() SAL_OVERRIDE;
-        virtual void    Delete() SAL_OVERRIDE;
-        virtual void    GotoPos() SAL_OVERRIDE;
+        virtual void    UpdateData() override;
+        virtual void    SetPostItText() override;
+        virtual void    Delete() override;
+        virtual void    GotoPos() override;
 
-        virtual OUString GetAuthor() SAL_OVERRIDE;
-        virtual Date    GetDate() SAL_OVERRIDE;
-        virtual tools::Time GetTime() SAL_OVERRIDE;
+        virtual OUString GetAuthor() override;
+        virtual Date    GetDate() override;
+        virtual tools::Time GetTime() override;
 
-        virtual sal_uInt32 MoveCaret() SAL_OVERRIDE;
+        virtual sal_uInt32 MoveCaret() override;
 
-        virtual bool    CalcFollow() SAL_OVERRIDE;
+        virtual bool    CalcFollow() override;
         void            InitAnswer(OutlinerParaObject* pText);
 
-        virtual bool    IsProtected() SAL_OVERRIDE;
+        virtual bool    IsProtected() override;
 
     protected:
-        virtual VclPtr<MenuButton> CreateMenuButton() SAL_OVERRIDE;
+        virtual VclPtr<MenuButton> CreateMenuButton() override;
 
     private:
-        virtual SvxLanguageItem GetLanguage() SAL_OVERRIDE;
+        virtual SvxLanguageItem GetLanguage() override;
         sal_uInt32 CountFollowing();
 
         SwFormatField*       mpFormatField;

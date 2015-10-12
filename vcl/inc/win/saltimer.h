@@ -28,8 +28,8 @@ public:
     WinSalTimer() {}
     virtual ~WinSalTimer();
 
-    virtual void Start(sal_uIntPtr nMS) SAL_OVERRIDE;
-    virtual void Stop() SAL_OVERRIDE;
+    virtual void Start(sal_uIntPtr nMS) override;
+    virtual void Stop() override;
 };
 
 #endif

@@ -84,7 +84,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XTypeProvider
 
@@ -97,7 +97,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XAggregation
 
@@ -106,7 +106,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XControl
 
@@ -116,34 +116,34 @@ public:
     virtual void SAL_CALL createPeer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XComponent
 
     /**_______________________________________________________________________________________________________
     */
 
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XEventListener
 
     /**_______________________________________________________________________________________________________
     */
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XControlContainer
 
@@ -153,41 +153,41 @@ public:
     virtual void SAL_CALL addControl(
         const OUString&                                   sName    ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >&    xControl
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception  ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception  ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual void SAL_CALL removeControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual void SAL_CALL setStatusText(
         const OUString& sStatusText
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
         const OUString& sName
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XWindow
 
     /**_______________________________________________________________________________________________________
     */
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
 //  protected methods
 
@@ -208,7 +208,7 @@ protected:
 
     virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
-    ) SAL_OVERRIDE;
+    ) override;
 
     /**_______________________________________________________________________________________________________
         @short
@@ -227,7 +227,7 @@ protected:
         sal_Int32                                           nX ,
         sal_Int32                                           nY ,
         const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&   xGraphics
-    ) SAL_OVERRIDE;
+    ) override;
 
 //  private methods
 

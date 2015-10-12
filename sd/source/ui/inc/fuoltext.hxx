@@ -43,18 +43,18 @@ public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void DoCut() SAL_OVERRIDE;
-    virtual void DoCopy() SAL_OVERRIDE;
-    virtual void DoPaste() SAL_OVERRIDE;
-    virtual void DoPasteUnformatted() SAL_OVERRIDE;
+    virtual void DoCut() override;
+    virtual void DoCopy() override;
+    virtual void DoPaste() override;
+    virtual void DoPasteUnformatted() override;
 
-    virtual void Activate() SAL_OVERRIDE;           // Function aktivieren
-    virtual void Deactivate() SAL_OVERRIDE;         // Function deaktivieren
+    virtual void Activate() override;           // Function aktivieren
+    virtual void Deactivate() override;         // Function deaktivieren
 
     /** Call this method when the text in the outliner (may) has changed.
         It will invalidate some slots of the view frame and update the

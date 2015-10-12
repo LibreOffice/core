@@ -353,7 +353,7 @@ private:
 public:
     SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName );
     virtual ~SdDesignNameDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetDesignName();
     DECL_LINK(ModifyHdl, void *);
 };

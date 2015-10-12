@@ -44,7 +44,7 @@ public:
           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual ~Panel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     PanelTitleBar* GetTitleBar() const;
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional;}
@@ -56,11 +56,11 @@ public:
     bool HasIdPredicate (const OUString& rsId) const;
     const OUString& GetId() const { return msPanelId;}
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual void Activate() SAL_OVERRIDE;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+    virtual void Resize() override;
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
+    virtual void Activate() override;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 private:
     const OUString msPanelId;

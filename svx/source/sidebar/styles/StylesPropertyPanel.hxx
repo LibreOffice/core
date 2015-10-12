@@ -20,13 +20,13 @@ class StylesPropertyPanel:
 {
 public:
     virtual ~StylesPropertyPanel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual void DataChanged( const DataChangedEvent& rEvent ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rEvent ) override;
 
     StylesPropertyPanel(
         vcl::Window* pParent,

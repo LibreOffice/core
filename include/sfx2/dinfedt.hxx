@@ -32,7 +32,7 @@ public:
     InfoEdit_Impl( vcl::Window* pParent, const ResId& rResId ) :
         Edit( pParent, rResId ) {}
 
-    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
 };
 
 #endif

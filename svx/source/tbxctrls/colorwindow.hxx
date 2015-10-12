@@ -60,8 +60,8 @@ private:
     DECL_LINK_TYPED( OpenPickerClickHdl, Button*, void );
 
 protected:
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual bool    Close() override;
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,
@@ -73,11 +73,11 @@ public:
                          vcl::Window* pParentWindow,
                          std::function<void(const OUString&, const Color&)> maColorSelectFunction);
     virtual ~SvxColorWindow_Impl();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     void                StartSelection();
 
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
 
     void SetSelectedHdl( const Link<const Color&, void>& rLink ) { maSelectedLink = rLink; }
 };

@@ -844,7 +844,7 @@ protected:
                         virtual ~EditEngineItemPool();
 public:
 
-    virtual SvStream&   Store( SvStream& rStream ) const SAL_OVERRIDE;
+    virtual SvStream&   Store( SvStream& rStream ) const override;
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX

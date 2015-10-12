@@ -65,7 +65,7 @@ namespace dbaui
         // Window overrides
         //  virtual bool PreNotify( NotifyEvent& rNEvt );
         // Edit
-        virtual void Modify() SAL_OVERRIDE;
+        virtual void Modify() override;
     };
 
     class OSQLNameComboBox : public ComboBox
@@ -85,7 +85,7 @@ namespace dbaui
 
         // Window overrides
         // Edit
-        virtual void Modify() SAL_OVERRIDE;
+        virtual void Modify() override;
     };
 
 }

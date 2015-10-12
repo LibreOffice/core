@@ -63,34 +63,34 @@ namespace slideshow
             virtual ~ExternalShapeBase();
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const SAL_OVERRIDE;
+                ::com::sun::star::drawing::XShape > getXShape() const override;
 
             // animation methods
 
 
-            virtual void play() SAL_OVERRIDE;
-            virtual void stop() SAL_OVERRIDE;
-            virtual void pause() SAL_OVERRIDE;
-            virtual bool isPlaying() const SAL_OVERRIDE;
-            virtual void setMediaTime(double) SAL_OVERRIDE;
+            virtual void play() override;
+            virtual void stop() override;
+            virtual void pause() override;
+            virtual bool isPlaying() const override;
+            virtual void setMediaTime(double) override;
 
             // render methods
 
 
-            virtual bool update() const SAL_OVERRIDE;
-            virtual bool render() const SAL_OVERRIDE;
-            virtual bool isContentChanged() const SAL_OVERRIDE;
+            virtual bool update() const override;
+            virtual bool render() const override;
+            virtual bool isContentChanged() const override;
 
 
             // Shape attributes
 
 
-            virtual ::basegfx::B2DRectangle getBounds() const SAL_OVERRIDE;
-            virtual ::basegfx::B2DRectangle getDomBounds() const SAL_OVERRIDE;
-            virtual ::basegfx::B2DRectangle getUpdateArea() const SAL_OVERRIDE;
-            virtual bool   isVisible() const SAL_OVERRIDE;
-            virtual double getPriority() const SAL_OVERRIDE;
-            virtual bool   isBackgroundDetached() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getBounds() const override;
+            virtual ::basegfx::B2DRectangle getDomBounds() const override;
+            virtual ::basegfx::B2DRectangle getUpdateArea() const override;
+            virtual bool   isVisible() const override;
+            virtual double getPriority() const override;
+            virtual bool   isBackgroundDetached() const override;
 
         protected:
             const ::com::sun::star::uno::Reference<

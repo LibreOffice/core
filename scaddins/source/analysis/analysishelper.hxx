@@ -346,7 +346,7 @@ class ScaDoubleListGT0 : public ScaDoubleList
 {
 public:
     virtual bool                CheckInsert( double fValue ) const
-                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) override;
 };
 
 
@@ -355,7 +355,7 @@ class ScaDoubleListGE0 : public ScaDoubleList
 {
 public:
     virtual bool                CheckInsert( double fValue ) const
-                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) override;
 };
 
 
@@ -496,11 +496,11 @@ public:
     virtual                 ~ConvertDataLinear();
 
     virtual double          Convert( double fVal, const ConvertData& rTo,
-                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
+                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) override;
                                     // for cases where f(x) = a + bx applies (e.g. Temperatures)
 
-    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const SAL_OVERRIDE;
-    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const SAL_OVERRIDE;
+    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const override;
+    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const override;
 };
 
 

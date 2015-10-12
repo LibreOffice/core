@@ -42,7 +42,7 @@ class FileViewContainer : public vcl::Window
         disposeOnce();
     }
 
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pFileView.clear();
         m_pTreeView.clear();
@@ -65,7 +65,7 @@ class FileViewContainer : public vcl::Window
         m_pFocusWidgets[FocusState::Next] = pNextSibling;
     }
 
-    virtual void Resize() SAL_OVERRIDE
+    virtual void Resize() override
     {
         Window::Resize();
 
@@ -115,7 +115,7 @@ class FileViewContainer : public vcl::Window
         }
     }
 
-    virtual void GetFocus() SAL_OVERRIDE
+    virtual void GetFocus() override
     {
         if( !m_pFileView || !m_pTreeView )
             return;
@@ -134,7 +134,7 @@ class FileViewContainer : public vcl::Window
         }
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
+    virtual bool Notify( NotifyEvent& rNEvt ) override
     {
         if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {

@@ -121,12 +121,12 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     int documentEndPageNumber( int document ) const;
 
 protected:
-        virtual bool    canAdvance() const SAL_OVERRIDE;
-        virtual void    ActivatePage() SAL_OVERRIDE;
+        virtual bool    canAdvance() const override;
+        virtual void    ActivatePage() override;
 public:
         SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeOutputPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 };
 
@@ -188,12 +188,12 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     SAL_DLLPRIVATE void        SendMails();
     SAL_DLLPRIVATE void        UpdateTransferStatus();
 
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
 
 public:
     SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
     virtual ~SwSendMailDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                AddDocument( SwMailDescriptor& rDesc );
     void                SetDocumentCount( sal_Int32 nAllDocuments );

@@ -58,7 +58,7 @@ public:
         : m_sNone(rNone)
     {
     }
-    virtual OUString filter(const OUString &rText) SAL_OVERRIDE;
+    virtual OUString filter(const OUString &rText) override;
 };
 
 class SwCaptionDialog : public SvxStandardDialog
@@ -100,7 +100,7 @@ class SwCaptionDialog : public SvxStandardDialog
     DECL_LINK_TYPED(OptionHdl, Button *, void);
     DECL_LINK_TYPED(CaptionHdl, Button *, void);
 
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
 
     void    DrawSample();
     void    ApplyCaptionOrder(); //#i61007# order of captions
@@ -109,7 +109,7 @@ class SwCaptionDialog : public SvxStandardDialog
 public:
      SwCaptionDialog( vcl::Window *pParent, SwView &rV );
     virtual ~SwCaptionDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

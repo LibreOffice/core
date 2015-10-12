@@ -142,7 +142,7 @@ public:
 
 protected:
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 };
 
 void RenderOneFrameThread::execute()
@@ -165,7 +165,7 @@ public:
 
 protected:
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
 private:
     glm::vec3 maStartPos;
@@ -206,7 +206,7 @@ public:
         osl_getSystemTime(&maClickFlyBackEndTime);
     }
 protected:
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 private:
     void ProcessMouseEvent();
     void MoveCamera();

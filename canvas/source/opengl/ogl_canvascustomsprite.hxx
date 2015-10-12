@@ -60,19 +60,19 @@ namespace oglcanvas
                             const SpriteCanvasRef&                          rRefDevice,
                             SpriteDeviceHelper&                             rDeviceHelper );
 
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos, const css::rendering::ViewState&  viewState, const css::rendering::RenderState& renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setPriority( double nPriority ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL show() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL hide() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setAlpha( double alpha ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos, const css::rendering::ViewState&  viewState, const css::rendering::RenderState& renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setPriority( double nPriority ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL show() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL hide() throw (css::uno::RuntimeException, std::exception) override;
 
         // XCustomSprite
-        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL getContentCanvas() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL getContentCanvas() throw (css::uno::RuntimeException, std::exception) override;
 
         double getPriority() const { return mfPriority; }
 

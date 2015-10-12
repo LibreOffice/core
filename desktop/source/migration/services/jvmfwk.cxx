@@ -87,30 +87,30 @@ class JavaMigration : public ::cppu::WeakImplHelper<
 public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     //XJob
     virtual css::uno::Any SAL_CALL execute(
         const css::uno::Sequence<css::beans::NamedValue >& Arguments )
         throw (css::lang::IllegalArgumentException, css::uno::Exception,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
         // XLayerHandler
     virtual void SAL_CALL startLayer()
-        throw(css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        throw(css::lang::WrappedTargetException, std::exception) override;
 
     virtual void SAL_CALL endLayer()
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL overrideNode(
             const OUString& aName,
@@ -118,14 +118,14 @@ public:
             sal_Bool bClear)
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL addOrReplaceNode(
             const OUString& aName,
             sal_Int16 aAttributes)
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  addOrReplaceNodeFromTemplate(
             const OUString& aName,
@@ -133,18 +133,18 @@ public:
             sal_Int16 aAttributes )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  endNode()
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  dropNode(
             const OUString& aName )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  overrideProperty(
             const OUString& aName,
@@ -153,25 +153,25 @@ public:
             sal_Bool bClear )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  setPropertyValue(
             const css::uno::Any& aValue )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL setPropertyValueForLocale(
             const css::uno::Any& aValue,
             const OUString& aLocale )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  endProperty()
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  addProperty(
             const OUString& aName,
@@ -179,7 +179,7 @@ public:
             const css::uno::Type& aType )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
     virtual void SAL_CALL  addPropertyWithValue(
             const OUString& aName,
@@ -187,7 +187,7 @@ public:
             const css::uno::Any& aValue )
         throw(
             css::configuration::backend::MalformedDataException,
-            css::lang::WrappedTargetException, std::exception ) SAL_OVERRIDE;
+            css::lang::WrappedTargetException, std::exception ) override;
 
 
 

@@ -43,7 +43,7 @@ namespace canvas
                       const PageManagerSharedPtr &pPageManager );
 
         // ISurfaceProxy interface
-        virtual void setColorBufferDirty() SAL_OVERRIDE;
+        virtual void setColorBufferDirty() override;
 
         /** Render the surface content to screen.
 
@@ -58,7 +58,7 @@ namespace canvas
         */
         virtual bool draw( double                         fAlpha,
                            const ::basegfx::B2DPoint&     rPos,
-                           const ::basegfx::B2DHomMatrix& rTransform ) SAL_OVERRIDE;
+                           const ::basegfx::B2DHomMatrix& rTransform ) override;
 
         /** Render the surface content to screen.
 
@@ -79,7 +79,7 @@ namespace canvas
         virtual bool draw( double                         fAlpha,
                            const ::basegfx::B2DPoint&     rPos,
                            const ::basegfx::B2DRange&     rArea,
-                           const ::basegfx::B2DHomMatrix& rTransform ) SAL_OVERRIDE;
+                           const ::basegfx::B2DHomMatrix& rTransform ) override;
 
         /** Render the surface content to screen.
 
@@ -99,7 +99,7 @@ namespace canvas
         virtual bool draw( double                           fAlpha,
                            const ::basegfx::B2DPoint&       rPos,
                            const ::basegfx::B2DPolyPolygon& rClipPoly,
-                           const ::basegfx::B2DHomMatrix&   rTransform ) SAL_OVERRIDE;
+                           const ::basegfx::B2DHomMatrix&   rTransform ) override;
 
     private:
         PageManagerSharedPtr          mpPageManager;

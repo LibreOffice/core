@@ -67,130 +67,130 @@ class XFFileName : public XFContent
 {
 public:
     void SetType(const OUString& sType);
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 private:
     OUString m_strType;
 };
 class XFWordCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFWordCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFWordCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFPageCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFPageCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFCharCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFCharCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFCharCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFDescription : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFDescriptionStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFDescriptionEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFKeywords : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFTotalEditTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFTotalEditTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFTotalEditTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFCreateTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFCreateTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFCreateTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFLastEditTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 class XFLastEditTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFLastEditTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFInitialCreator : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 #endif

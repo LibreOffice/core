@@ -36,18 +36,18 @@ public:
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
+    virtual void DoExecute( SfxRequest& rReq ) override;
 
                                        // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() SAL_OVERRIDE;
-    virtual void Deactivate() SAL_OVERRIDE;
+    virtual void Activate() override;
+    virtual void Deactivate() override;
 
-    virtual void SelectionHasChanged() SAL_OVERRIDE;
+    virtual void SelectionHasChanged() override;
 
     void    SetEditMode(sal_uInt16 nMode);
     sal_uInt16  GetEditMode() { return nEditMode; }
@@ -60,10 +60,10 @@ public:
 
         @returns true if a active function was aborted
     */
-    virtual bool cancel() SAL_OVERRIDE;
+    virtual bool cancel() override;
 
     //let mouse cursor move
-    virtual void ForcePointer(const MouseEvent* pMEvt = NULL) SAL_OVERRIDE;
+    virtual void ForcePointer(const MouseEvent* pMEvt = NULL) override;
 protected:
     FuSelection (ViewShell* pViewSh,
         ::sd::Window* pWin,

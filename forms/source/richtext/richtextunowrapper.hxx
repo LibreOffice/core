@@ -61,9 +61,9 @@ namespace frm
         RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener );
 
         // SvxEditSource
-        virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-        virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-        virtual void                UpdateData() SAL_OVERRIDE;
+        virtual SvxEditSource*      Clone() const override;
+        virtual SvxTextForwarder*   GetTextForwarder() override;
+        virtual void                UpdateData() override;
 
     protected:
         virtual ~RichTextEditSource();

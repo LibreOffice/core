@@ -56,21 +56,21 @@ namespace accessibility
         virtual ~AccessibleOutlineEditSource();
 
         /// This method is disabled and always returns NULL
-        virtual SvxEditSource*          Clone() const SAL_OVERRIDE;
-        virtual SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;
-        virtual SvxViewForwarder*       GetViewForwarder() SAL_OVERRIDE;
-        virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
-        virtual void                    UpdateData() SAL_OVERRIDE;
-        virtual SfxBroadcaster&         GetBroadcaster() const SAL_OVERRIDE;
+        virtual SvxEditSource*          Clone() const override;
+        virtual SvxTextForwarder*       GetTextForwarder() override;
+        virtual SvxViewForwarder*       GetViewForwarder() override;
+        virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) override;
+        virtual void                    UpdateData() override;
+        virtual SfxBroadcaster&         GetBroadcaster() const override;
 
         // the view forwarder
-        virtual bool        IsValid() const SAL_OVERRIDE;
-        virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-        virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-        virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+        virtual bool        IsValid() const override;
+        virtual Rectangle   GetVisArea() const override;
+        virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+        virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 
         // SfxListener
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     private:
         AccessibleOutlineEditSource( const AccessibleOutlineEditSource& ) = delete;

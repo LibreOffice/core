@@ -110,14 +110,14 @@ protected:
 public:
 
     SwClient() : pRegisteredIn(nullptr) {}
-    virtual ~SwClient() SAL_OVERRIDE;
+    virtual ~SwClient() override;
     // callbacks received from SwModify (friend class - so these methods can be private)
     // should be called only from SwModify the client is registered in
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
     virtual void Modify(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue);
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
@@ -155,7 +155,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
 
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override
         { NotifyClients( pOld, pNew ); };
 
     SwModify(SwModify&) = delete;
@@ -186,7 +186,7 @@ public:
     bool HasWriterListeners() const { return m_pWriterListeners; }
 
     // get information about attribute
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
 
     void LockModify()                   { m_bModifyLocked = true;  }
     void UnlockModify()                 { m_bModifyLocked = false; }
@@ -218,17 +218,17 @@ public:
     SwClient* GetToTell() { return m_pToTell; }
 
     /** get Client information */
-    virtual bool GetInfo( SfxPoolItem& rInfo) const SAL_OVERRIDE
+    virtual bool GetInfo( SfxPoolItem& rInfo) const override
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
 protected:
-    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) SAL_OVERRIDE
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
     {
         if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
             CheckRegistration(pOldValue,pNewValue);
         else if( m_pToTell )
             m_pToTell->ModifyNotification(pOldValue, pNewValue);
     }
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
         { if(m_pToTell) m_pToTell->SwClientNotifyCall(rModify, rHint); }
 };
 
@@ -264,7 +264,7 @@ namespace sw
                         m_pPosition = m_pPosition->m_pLeft;
                 return m_pCurrent = m_pPosition;
             }
-            ~ClientIteratorBase() SAL_OVERRIDE
+            ~ClientIteratorBase() override
             {
                 assert(our_pClientIters);
                 if(our_pClientIters == this)

@@ -75,8 +75,8 @@ namespace dbaccess
         }
 
         // IEventProcessor
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw () override;
+        virtual void SAL_CALL release() throw () override;
 
         void addLegacyEventListener( const Reference< document::XEventListener >& _Listener )
         {
@@ -122,7 +122,7 @@ namespace dbaccess
         }
 
         // IEventProcessor
-        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) SAL_OVERRIDE;
+        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
 
     private:
         void impl_notifyEvent_nothrow( const DocumentEvent& _rEvent );

@@ -80,21 +80,21 @@ friend class SfxStyleDialog;
     void    SetDescriptionText_Impl();
 
     virtual ~SfxManageStyleSheetPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 
 protected:
-    virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
-    virtual void        Reset(const SfxItemSet *) SAL_OVERRIDE;
+    virtual bool        FillItemSet(SfxItemSet *) override;
+    virtual void        Reset(const SfxItemSet *) override;
 
     static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                           const sal_uInt16* pModifier = NULL );
     using TabPage::ActivatePage;
-        virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;
+        virtual void        ActivatePage(const SfxItemSet &) override;
         using TabPage::DeactivatePage;
-    virtual sfxpg DeactivatePage(SfxItemSet * = 0) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage(SfxItemSet * = 0) override;
 
 public:
     SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );

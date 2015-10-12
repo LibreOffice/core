@@ -41,7 +41,7 @@ class RulerCtrlItem : public SfxControllerItem
 
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pItem ) SAL_OVERRIDE;
+                                const SfxPoolItem* pItem ) override;
 
  public:
     RulerCtrlItem(sal_uInt16 nId, Ruler& rRlr, SfxBindings& rBind);

@@ -33,12 +33,12 @@ class SwTableHeightDlg : public SvxStandardDialog
     SwWrtShell      &rSh;
 
 protected:
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
 
 public:
     SwTableHeightDlg( vcl::Window *pParent, SwWrtShell &rS );
     virtual ~SwTableHeightDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

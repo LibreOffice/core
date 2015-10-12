@@ -63,7 +63,7 @@ class ObservableThread : public osl::Thread,
             Otherwise, it's not guaranteed, that its ref-count is increased
             during the execution of the thread.
         */
-        virtual void SAL_CALL run() SAL_OVERRIDE;
+        virtual void SAL_CALL run() override;
 
         virtual void threadFunction() = 0;
 
@@ -75,7 +75,7 @@ class ObservableThread : public osl::Thread,
             the end of its execution and that the observer is notified, that
             the thread has finished its work.
         */
-        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+        virtual void SAL_CALL onTerminated() override;
 
     private:
 

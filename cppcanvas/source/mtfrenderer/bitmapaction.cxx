@@ -61,18 +61,18 @@ namespace cppcanvas
                               const OutDevState& );
 
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 using Action::render;
                 virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const SAL_OVERRIDE;
+                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 uno::Reference< rendering::XBitmap >                    mxBitmap;
                 CanvasSharedPtr                                         mpCanvas;

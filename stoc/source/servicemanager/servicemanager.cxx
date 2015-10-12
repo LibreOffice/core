@@ -161,9 +161,9 @@ public:
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     Any SAL_CALL nextElement()
-        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 private:
     Mutex                               aMutex;
     Sequence< Reference<XInterface > >  aFactories;
@@ -200,11 +200,11 @@ public:
 
     // XPropertySetInfo impl
     virtual Sequence< beans::Property > SAL_CALL getProperties()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual beans::Property SAL_CALL getPropertyByName( OUString const & name )
-        throw (beans::UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (beans::UnknownPropertyException, RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasPropertyByName( OUString const & name )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
@@ -253,9 +253,9 @@ public:
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements()
-         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+         throw(css::uno::RuntimeException, std::exception) override;
     virtual Any SAL_CALL nextElement()
-        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 private:
     Mutex                           aMutex;
@@ -324,7 +324,7 @@ public:
         {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject & rEvt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const EventObject & rEvt ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 void OServiceManager_Listener::disposing(const EventObject & rEvt )
@@ -373,73 +373,73 @@ public:
 
     // XInitialization
     void SAL_CALL initialize( Sequence< Any > const & args )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XMultiComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (Exception, RuntimeException, std::exception) override;
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         OUString const & rServiceSpecifier,
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (Exception, RuntimeException, std::exception) override;
 //      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
 //          throw (RuntimeException);
 
     // XMultiServiceFactory
-    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // The same as the getAvailableServiceNames, but only unique names
     Sequence< OUString > getUniqueAvailableServiceNames(
         HashSet_OWString & aNameSet );
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw(css::uno::RuntimeException, std::exception) override;
 
     // XSet
-    virtual sal_Bool SAL_CALL has( const Any & Element ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL insert( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL remove( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL has( const Any & Element ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insert( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL remove( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
     Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue)
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 protected:
     inline bool is_disposed() const;
     inline void check_undisposed() const;
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
@@ -508,7 +508,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
     }
 
 protected:
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 public:
     explicit OServiceManagerWrapper(
@@ -516,78 +516,78 @@ public:
     virtual ~OServiceManagerWrapper();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getImplementationName(); }
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (RuntimeException, std::exception) override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->supportsService( ServiceName ); }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getSupportedServiceNames(); }
 
     // XMultiComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (Exception, RuntimeException, std::exception) override
         { return getRoot()->createInstanceWithContext( rServiceSpecifier, xContext ); }
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         OUString const & rServiceSpecifier,
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (Exception, RuntimeException, std::exception) override
         { return getRoot()->createInstanceWithArgumentsAndContext( rServiceSpecifier, rArguments, xContext ); }
 //      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
 //          throw (RuntimeException);
 
     // XMultiServiceFactory
-    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (RuntimeException, std::exception) override
         { return getRoot()->getAvailableServiceNames(); }
-    virtual Reference<XInterface > SAL_CALL createInstance(const OUString & name) throw (Exception, std::exception) SAL_OVERRIDE
+    virtual Reference<XInterface > SAL_CALL createInstance(const OUString & name) throw (Exception, std::exception) override
         { return getRoot()->createInstanceWithContext( name, m_xContext ); }
-    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString & name, const Sequence<Any >& Arguments) throw (Exception, std::exception) SAL_OVERRIDE
+    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString & name, const Sequence<Any >& Arguments) throw (Exception, std::exception) override
         { return getRoot()->createInstanceWithArgumentsAndContext( name, Arguments, m_xContext ); }
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->hasElements(); }
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw (RuntimeException, std::exception) override
         { return Reference< XEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createEnumeration(); }
 
     // XSet
-    virtual sal_Bool SAL_CALL has( const Any & Element ) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL has( const Any & Element ) throw (RuntimeException, std::exception) override
         { return Reference< XSet >(getRoot(), UNO_QUERY_THROW)->has( Element ); }
-    virtual void SAL_CALL insert( const Any & Element ) throw (lang::IllegalArgumentException, container::ElementExistException, RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL insert( const Any & Element ) throw (lang::IllegalArgumentException, container::ElementExistException, RuntimeException, std::exception) override
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->insert( Element ); }
-    virtual void SAL_CALL remove( const Any & Element ) throw (lang::IllegalArgumentException, container::NoSuchElementException, RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL remove( const Any & Element ) throw (lang::IllegalArgumentException, container::NoSuchElementException, RuntimeException, std::exception) override
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->remove( Element ); }
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw (RuntimeException, std::exception) override
         { return Reference< XContentEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createContentEnumeration( aServiceName ); }
 
     // XPropertySet
-    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) SAL_OVERRIDE
+    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) override
         { return Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->getPropertySetInfo(); }
 
     void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue)
-        throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException, std::exception) override;
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) override;
 
     void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->addPropertyChangeListener( PropertyName, aListener ); }
     void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->removePropertyChangeListener( PropertyName, aListener ); }
     void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->addVetoableChangeListener( PropertyName, aListener ); }
     void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException, std::exception) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->removeVetoableChangeListener( PropertyName, aListener ); }
 };
 
@@ -1312,34 +1312,34 @@ public:
 
     // XInitialization
     void SAL_CALL initialize(const Sequence< Any >& Arguments)
-        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override
         { return OUString("com.sun.star.comp.stoc.ORegistryServiceManager"); }
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XMultiServiceFactory
-    Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) override;
 
     // XComponent
-    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
 
     // OServiceManager
     Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 protected:
     //OServiceManager
     Sequence< Reference< XInterface > > queryServiceFactories(
-        const OUString& aServiceName, Reference< XComponentContext > const & xContext ) SAL_OVERRIDE;
+        const OUString& aServiceName, Reference< XComponentContext > const & xContext ) override;
 private:
     Reference<XRegistryKey >        getRootKey();
     Reference<XInterface > loadWithImplementationName(

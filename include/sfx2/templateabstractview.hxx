@@ -84,7 +84,7 @@ public:
     TemplateAbstractView(vcl::Window* pParent);
 
     virtual ~TemplateAbstractView();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void insertItem (const TemplateItemProperties &rTemplate);
 
@@ -129,9 +129,9 @@ protected:
 
     DECL_LINK_TYPED(ShowRootRegionHdl, Button*, void);
 
-    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
 protected:
 

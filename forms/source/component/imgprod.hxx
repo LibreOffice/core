@@ -78,9 +78,9 @@ public:
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void                           SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }
-    void                           SAL_CALL release() throw() SAL_OVERRIDE  { OWeakObject::release(); }
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    void                           SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
+    void                           SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // MT: ???
     void            setImage( css::uno::Reference< css::io::XInputStream > & rStmRef );
@@ -88,12 +88,12 @@ public:
     // css::awt::XImageProducer
     void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
         throw(css::uno::RuntimeException,
-              std::exception) SAL_OVERRIDE;
-    void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL startProduction(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              std::exception) override;
+    void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL startProduction(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // css::lang::XInitialization
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 };
 

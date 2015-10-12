@@ -44,7 +44,7 @@ public:
         bool bLoadRefCounts = true);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
-    virtual SfxItemPool* Clone() const SAL_OVERRIDE;
+    virtual SfxItemPool* Clone() const override;
 protected:
     virtual ~XOutdevItemPool();
 };

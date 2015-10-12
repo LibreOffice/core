@@ -55,7 +55,7 @@ namespace dbaui
     public:
         MySQLNativeSettings( vcl::Window& _rParent, const Link<>& _rControlModificationLink );
         virtual ~MySQLNativeSettings();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 

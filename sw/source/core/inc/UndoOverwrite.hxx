@@ -45,9 +45,9 @@ public:
 
     virtual ~SwUndoOverwrite();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     /**
        Returns the rewriter of this undo object.
@@ -60,7 +60,7 @@ public:
 
        @return the rewriter of this undo object
      */
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
 
     bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
@@ -79,9 +79,9 @@ public:
 
     virtual ~SwUndoTransliterate();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void AddChanges( SwTextNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );

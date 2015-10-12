@@ -32,7 +32,7 @@ namespace sdr
         {
         protected:
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
+            virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
         public:
             // basic constructor
@@ -45,35 +45,35 @@ namespace sdr
             virtual ~E3dSceneProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+            virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // get itemset
-            virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
+            virtual const SfxItemSet& GetObjectItemSet() const override;
 
             // get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overridden e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
             // SfxItemState::DONTCARE which means there were several such items with different
             // values.
-            virtual const SfxItemSet& GetMergedItemSet() const SAL_OVERRIDE;
+            virtual const SfxItemSet& GetMergedItemSet() const override;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) SAL_OVERRIDE;
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) override;
 
             // Set a single item, iterate over hierarchies if necessary.
-            virtual void SetMergedItem(const SfxPoolItem& rItem) SAL_OVERRIDE;
+            virtual void SetMergedItem(const SfxPoolItem& rItem) override;
 
             // Clear a single item, iterate over hierarchies if necessary.
-            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
+            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0) override;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
 
             // get the installed StyleSheet
-            virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
+            virtual SfxStyleSheet* GetStyleSheet() const override;
 
             // Move properties to a new ItemPool. Default implementation does nothing.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) SAL_OVERRIDE;
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) override;
 
             // Special for scene:
             void SetSceneItemsFromCamera();

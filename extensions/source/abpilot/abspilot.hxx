@@ -63,15 +63,15 @@ namespace abp
 
     protected:
         // OWizardMachine overridables
-        virtual VclPtr<TabPage>     createPage( WizardState _nState ) SAL_OVERRIDE;
-        virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
-        virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) SAL_OVERRIDE;
-        virtual bool                onFinish() SAL_OVERRIDE;
+        virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
+        virtual void                enterState( WizardState _nState ) override;
+        virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) override;
+        virtual bool                onFinish() override;
 
         // RoadmapWizard
-        virtual OUString            getStateDisplayName( WizardState _nState ) const SAL_OVERRIDE;
+        virtual OUString            getStateDisplayName( WizardState _nState ) const override;
 
-        virtual bool    Close() SAL_OVERRIDE;
+        virtual bool    Close() override;
 
     private:
         DECL_LINK_TYPED( OnCancelClicked, Button*, void );

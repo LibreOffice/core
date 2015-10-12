@@ -52,22 +52,22 @@ public:
     // XHyphenatedWord
     virtual OUString SAL_CALL
         getWord()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL
         getHyphenationPos()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL
         getHyphenatedWord()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL
         getHyphenPos()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         isAlternativeSpelling()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     static com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
@@ -98,16 +98,16 @@ public:
     // XPossibleHyphens
     virtual OUString SAL_CALL
         getWord()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL
         getPossibleHyphens()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
         (const OUString &rWord, sal_Int16 nLang,

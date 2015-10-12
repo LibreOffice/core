@@ -33,10 +33,10 @@ public:
     TextFieldContext( ::oox::core::ContextHandler2Helper& rParent,
                         const ::oox::AttributeList& rAttributes,
                         TextField& rTextField);
-    virtual void onEndElement( ) SAL_OVERRIDE;
-    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+    virtual void onEndElement( ) override;
+    virtual void onCharacters( const OUString& aChars ) override;
     virtual ::oox::core::ContextHandlerRef onCreateContext(
-        sal_Int32 aElementToken, const ::oox::AttributeList& rAttributes ) SAL_OVERRIDE;
+        sal_Int32 aElementToken, const ::oox::AttributeList& rAttributes ) override;
 
 private:
     TextField& mrTextField;

@@ -43,18 +43,18 @@ class SvxRubyDialog;
 class RubyPreview : public vcl::Window
 {
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     VclPtr<SvxRubyDialog> m_pParentDlg;
 
 public:
     RubyPreview(vcl::Window *pParent);
     virtual ~RubyPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
         m_pParentDlg = pParentDlg;
     }
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 };
 
 class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
@@ -71,8 +71,8 @@ class RubyEdit  : public Edit
 {
     Link<sal_Int32,bool>  aScrollHdl;
     Link<sal_Int32,void>  aJumpHdl;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() override;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 public:
     RubyEdit(vcl::Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)
@@ -145,7 +145,7 @@ class SvxRubyDialog : public SfxModelessDialog
     void                AssertOneEntry();
 
     void                Update();
-    virtual bool        Close() SAL_OVERRIDE;
+    virtual bool        Close() override;
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
@@ -159,16 +159,16 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void                UpdateColors();
 protected:
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 public:
 
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
                                     vcl::Window* pParent);
     virtual             ~SvxRubyDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        Activate() SAL_OVERRIDE;
-    virtual void        Deactivate() SAL_OVERRIDE;
+    virtual void        Activate() override;
+    virtual void        Deactivate() override;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX

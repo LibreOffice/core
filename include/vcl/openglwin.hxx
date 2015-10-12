@@ -35,18 +35,18 @@ class VCL_DLLPUBLIC OpenGLWindow : public vcl::Window
 public:
                    OpenGLWindow(vcl::Window* pParent);
     virtual        ~OpenGLWindow();
-    virtual void   dispose() SAL_OVERRIDE;
+    virtual void   dispose() override;
 
     OpenGLContext& getContext();
 
     void setRenderer(IRenderer* pRenderer);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void Command( const CommandEvent& rCEvt ) override;
 
 private:
     std::unique_ptr<OpenGLWindowImpl> mxImpl;

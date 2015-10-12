@@ -60,7 +60,7 @@ namespace
             ,m_nIndexInParent(_nIndexInParent)
         {
         }
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 
@@ -112,10 +112,10 @@ namespace
         // OAccessibleWrapper
         virtual OAccessibleContextWrapper* createAccessibleContext(
                 const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
-            ) SAL_OVERRIDE;
+            ) override;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception) override;
         static Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 

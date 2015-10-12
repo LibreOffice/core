@@ -145,9 +145,9 @@ public:
 
     virtual ~Parser() {}
 
-    virtual boost::optional< OUString > getCwdUrl() SAL_OVERRIDE { return m_cwdUrl; }
+    virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
-    virtual bool next(OUString * argument) SAL_OVERRIDE { return next(argument, true); }
+    virtual bool next(OUString * argument) override { return next(argument, true); }
 
 private:
     bool next(OUString * argument, bool prefix) {

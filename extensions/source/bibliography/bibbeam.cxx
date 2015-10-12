@@ -81,13 +81,13 @@ namespace bib
 
     protected:
 
-            virtual void        Resize() SAL_OVERRIDE;
+            virtual void        Resize() override;
 
     public:
 
             BibGridwin(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
             virtual ~BibGridwin();
-            virtual void dispose() SAL_OVERRIDE;
+            virtual void dispose() override;
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
             void disposeGridWin();
@@ -95,7 +95,7 @@ namespace bib
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
             const Reference< frame::XDispatchProviderInterception>& getDispatchProviderInterception() const { return m_xDispatchProviderInterception; }
 
-            virtual void GetFocus() SAL_OVERRIDE;
+            virtual void GetFocus() override;
     };
 
     BibGridwin::BibGridwin( vcl::Window* _pParent, WinBits _nStyle ) : Window( _pParent, _nStyle )

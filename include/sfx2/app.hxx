@@ -98,9 +98,9 @@ public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem*, void>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
-    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
+    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const override
     {   return new SfxLinkItem( *this ); }
-    virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
+    virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
     const Link<SfxPoolItem*, void>&
                              GetValue() const { return aLink; }
@@ -183,7 +183,7 @@ public:
     // misc.
     bool                        GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
-    virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
+    virtual void                Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     bool                        IsDowning() const;
     void                        ResetLastDir();

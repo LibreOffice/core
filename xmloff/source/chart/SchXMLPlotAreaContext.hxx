@@ -103,12 +103,12 @@ public:
                            const ::com::sun::star::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
 
 private:
     SchXMLImportHelper& mrImportHelper;
@@ -159,7 +159,7 @@ public:
                                 bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLCoordinateRegionContext : public SvXMLImportContext
@@ -171,7 +171,7 @@ public:
             , const OUString& rLocalName
             , SchXMLPositonAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLPositonAttributesHelper& m_rPositioning;
@@ -199,7 +199,7 @@ public:
                             ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLStockContext : public SvXMLImportContext
@@ -225,7 +225,7 @@ public:
                         ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLStatisticsObjectContext : public SvXMLImportContext
@@ -252,11 +252,11 @@ public:
 
     virtual ~SchXMLStatisticsObjectContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLImportHelper &                           mrImportHelper;

@@ -77,7 +77,7 @@ namespace canvas
         {
         }
 
-        virtual void disposeThis() SAL_OVERRIDE
+        virtual void disposeThis() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -89,7 +89,7 @@ namespace canvas
 
         // XSpriteCanvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                           ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                                                                                                                                           ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(animation,
                               BOOST_CURRENT_FUNCTION,
@@ -103,7 +103,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                                                                                                  ::com::sun::star::rendering::VolatileContentDestroyedException,
-                                                                                                                                                                                                                                                                                 ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                                                                                                                                                                                 ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(animationBitmaps,
                               BOOST_CURRENT_FUNCTION,
@@ -118,7 +118,7 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifySpriteSize(spriteSize,
                                     BOOST_CURRENT_FUNCTION,
@@ -130,7 +130,7 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                        ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                                                                                                                        ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(original,
                               BOOST_CURRENT_FUNCTION,
@@ -142,7 +142,7 @@ namespace canvas
         }
 
         // SpriteSurface
-        virtual void showSprite( const Sprite::Reference& rSprite ) SAL_OVERRIDE
+        virtual void showSprite( const Sprite::Reference& rSprite ) override
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -151,7 +151,7 @@ namespace canvas
             maRedrawManager.showSprite( rSprite );
         }
 
-        virtual void hideSprite( const Sprite::Reference& rSprite ) SAL_OVERRIDE
+        virtual void hideSprite( const Sprite::Reference& rSprite ) override
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -163,7 +163,7 @@ namespace canvas
         virtual void moveSprite( const Sprite::Reference&       rSprite,
                                  const ::basegfx::B2DPoint&     rOldPos,
                                  const ::basegfx::B2DPoint&     rNewPos,
-                                 const ::basegfx::B2DVector&    rSpriteSize ) SAL_OVERRIDE
+                                 const ::basegfx::B2DVector&    rSpriteSize ) override
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -174,7 +174,7 @@ namespace canvas
 
         virtual void updateSprite( const Sprite::Reference&     rSprite,
                                    const ::basegfx::B2DPoint&   rPos,
-                                   const ::basegfx::B2DRange&   rUpdateArea ) SAL_OVERRIDE
+                                   const ::basegfx::B2DRange&   rUpdateArea ) override
         {
             OSL_ASSERT( rSprite.is() );
 

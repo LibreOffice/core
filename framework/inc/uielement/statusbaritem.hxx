@@ -44,28 +44,28 @@ public:
                             const rtl::OUString&   aCommand );
     virtual ~StatusbarItem();
 
-    void SAL_CALL disposing() SAL_OVERRIDE;
+    void SAL_CALL disposing() override;
 
     // com::sun::star::ui::XStatusbarItem Attributes
-    virtual ::rtl::OUString SAL_CALL getCommand() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_uInt16 SAL_CALL getItemId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_uInt32 SAL_CALL getWidth() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_uInt16 SAL_CALL getStyle() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL getOffset() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getItemRect() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getText() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHelpText( const rtl::OUString& rHelpText ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getQuickHelpText() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setQuickHelpText( const rtl::OUString& rQuickHelpText ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::rtl::OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAccessibleName( const rtl::OUString& rAccessibleName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getVisible() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::rtl::OUString SAL_CALL getCommand() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_uInt16 SAL_CALL getItemId() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_uInt32 SAL_CALL getWidth() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_uInt16 SAL_CALL getStyle() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getOffset() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getItemRect() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getText() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHelpText( const rtl::OUString& rHelpText ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getQuickHelpText() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setQuickHelpText( const rtl::OUString& rQuickHelpText ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAccessibleName( const rtl::OUString& rAccessibleName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getVisible() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // com::sun::star::ui::XStatusbarItem Methods
-    virtual void SAL_CALL repaint(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL repaint(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     VclPtr<StatusBar>       m_pStatusBar;

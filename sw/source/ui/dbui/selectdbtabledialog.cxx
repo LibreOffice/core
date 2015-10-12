@@ -47,7 +47,7 @@ class SwAddressTable : public SvSimpleTable
 public:
     SwAddressTable(SvSimpleTableContainer& rParent, WinBits nBits = 0);
     void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
     void setColSizes();
 };
 

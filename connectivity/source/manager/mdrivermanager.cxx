@@ -69,8 +69,8 @@ public:
     explicit ODriverEnumeration(const DriverArray& _rDriverSequence);
 
 // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements( ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Any SAL_CALL nextElement( ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements( ) throw(RuntimeException, std::exception) override;
+    virtual Any SAL_CALL nextElement( ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
 };
 
 

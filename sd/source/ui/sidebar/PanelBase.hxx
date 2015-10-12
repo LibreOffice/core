@@ -45,12 +45,12 @@ public:
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~PanelBase();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 protected:
     VclPtr<vcl::Window> mpWrappedControl;

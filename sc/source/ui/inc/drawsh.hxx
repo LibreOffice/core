@@ -44,7 +44,7 @@ class ScDrawShell : public SfxShell
     void SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk );
 
 protected:
-    virtual void    Activate(bool bMDI) SAL_OVERRIDE;
+    virtual void    Activate(bool bMDI) override;
     ScViewData* GetViewData()   { return pViewData; }
 
 public:

@@ -31,9 +31,9 @@ public:
     virtual ~JavaOptions() {}
 
     bool initOptions(int ac, char* av[], bool bCmdFile=false)
-            throw( IllegalArgument ) SAL_OVERRIDE;
+            throw( IllegalArgument ) override;
 
-    OString  prepareHelp() SAL_OVERRIDE;
+    OString  prepareHelp() override;
 
     OString  prepareVersion();
 

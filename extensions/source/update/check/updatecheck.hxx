@@ -92,13 +92,13 @@ public:
     bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
 
     // DownloadInteractionHandler
-    virtual bool downloadTargetExists(const OUString& rFileName) SAL_OVERRIDE;
-    virtual void downloadStalled(const OUString& rErrorMessage) SAL_OVERRIDE;
-    virtual void downloadProgressAt(sal_Int8 nProcent) SAL_OVERRIDE;
-    virtual void downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize) SAL_OVERRIDE;
-    virtual void downloadFinished(const OUString& rLocalFileName) SAL_OVERRIDE;
+    virtual bool downloadTargetExists(const OUString& rFileName) override;
+    virtual void downloadStalled(const OUString& rErrorMessage) override;
+    virtual void downloadProgressAt(sal_Int8 nProcent) override;
+    virtual void downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize) override;
+    virtual void downloadFinished(const OUString& rLocalFileName) override;
     // checks if the download target already exists and asks user what to do next
-    virtual bool checkDownloadDestination( const OUString& rFile ) SAL_OVERRIDE;
+    virtual bool checkDownloadDestination( const OUString& rFile ) override;
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();
@@ -107,16 +107,16 @@ public:
     css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
-    virtual void autoCheckStatusChanged(bool enabled) SAL_OVERRIDE;
-    virtual void autoCheckIntervalChanged() SAL_OVERRIDE;
+    virtual void autoCheckStatusChanged(bool enabled) override;
+    virtual void autoCheckIntervalChanged() override;
 
     // IActionListener
-    void cancel() SAL_OVERRIDE;
-    void download() SAL_OVERRIDE;
-    void install() SAL_OVERRIDE;
-    void pause() SAL_OVERRIDE;
-    void resume() SAL_OVERRIDE;
-    void closeAfterFailure() SAL_OVERRIDE;
+    void cancel() override;
+    void download() override;
+    void install() override;
+    void pause() override;
+    void resume() override;
+    void closeAfterFailure() override;
 
 private:
 

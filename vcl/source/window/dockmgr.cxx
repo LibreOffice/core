@@ -57,16 +57,16 @@ public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
     virtual ~ImplDockFloatWin2();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    Move() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    TitleButtonClick( TitleButton nButton ) SAL_OVERRIDE;
-    virtual void    Pin() SAL_OVERRIDE;
-    virtual void    Roll() SAL_OVERRIDE;
-    virtual void    PopupModeEnd() SAL_OVERRIDE;
-    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    Move() override;
+    virtual void    Resize() override;
+    virtual void    TitleButtonClick( TitleButton nButton ) override;
+    virtual void    Pin() override;
+    virtual void    Roll() override;
+    virtual void    PopupModeEnd() override;
+    virtual void    Resizing( Size& rSize ) override;
+    virtual bool    Close() override;
 };
 
 ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
@@ -479,16 +479,16 @@ private:
 public:
     ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     virtual ~ImplPopupFloatWin();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void        Resize() override;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
     Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;

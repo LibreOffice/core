@@ -38,11 +38,11 @@ private:
     bool            bInfoBox : 1;   // display info-box when ending
 
 protected:
-    virtual void SpellStart( SvxSpellArea eSpell ) SAL_OVERRIDE;
-    virtual bool SpellContinue() SAL_OVERRIDE;
-    virtual void SpellEnd( ) SAL_OVERRIDE;
-    virtual bool SpellMore() SAL_OVERRIDE;
-    virtual void InsertHyphen( const sal_Int32 nPos ) SAL_OVERRIDE; // insert hyphen
+    virtual void SpellStart( SvxSpellArea eSpell ) override;
+    virtual bool SpellContinue() override;
+    virtual void SpellEnd( ) override;
+    virtual bool SpellMore() override;
+    virtual void InsertHyphen( const sal_Int32 nPos ) override; // insert hyphen
 
 public:
     SwHyphWrapper( SwView* pVw,

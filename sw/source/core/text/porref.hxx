@@ -25,7 +25,7 @@ class SwRefPortion : public SwTextPortion
 {
 public:
     inline  SwRefPortion(){ SetWhichPor( POR_REF ); }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     OUTPUT_OPERATOR_OVERRIDE
 };
 
@@ -35,13 +35,13 @@ class SwIsoRefPortion : public SwRefPortion
 
 public:
             SwIsoRefPortion();
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual SwLinePortion *Compress() override;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };

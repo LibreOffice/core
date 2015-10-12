@@ -33,8 +33,8 @@ public:
     explicit OOXMLFootnoteHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFootnoteHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLEndnoteHandler : public Properties
@@ -44,8 +44,8 @@ public:
     explicit OOXMLEndnoteHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLEndnoteHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLFooterHandler : public Properties
@@ -57,8 +57,8 @@ public:
     explicit OOXMLFooterHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFooterHandler() {}
     void finalize();
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLHeaderHandler : public Properties
@@ -70,8 +70,8 @@ public:
     explicit OOXMLHeaderHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLHeaderHandler() {}
     void finalize();
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLCommentHandler : public Properties
@@ -80,8 +80,8 @@ class OOXMLCommentHandler : public Properties
 public:
     explicit OOXMLCommentHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLCommentHandler();
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLOLEHandler : public Properties
@@ -92,8 +92,8 @@ public:
     explicit OOXMLOLEHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLOLEHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLEmbeddedFontHandler : public Properties
@@ -104,8 +104,8 @@ public:
     explicit OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLEmbeddedFontHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLBreakHandler : public Properties
@@ -115,8 +115,8 @@ class OOXMLBreakHandler : public Properties
 public:
     explicit OOXMLBreakHandler(Stream & rStream);
     virtual ~OOXMLBreakHandler();
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLPictureHandler : public Properties
@@ -126,8 +126,8 @@ public:
     explicit OOXMLPictureHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLPictureHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 class OOXMLHyperlinkHandler : public Properties
@@ -140,8 +140,8 @@ public:
     explicit OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLHyperlinkHandler();
 
-    virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
-    virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
 };
 
 

@@ -61,7 +61,7 @@ public:
     virtual ~SdrMark();
 
     // Derived from ObjectUser
-    virtual void ObjectInDestruction(const SdrObject& rObject) SAL_OVERRIDE;
+    virtual void ObjectInDestruction(const SdrObject& rObject) override;
 
     SdrMark& operator=(const SdrMark& rMark);
     bool operator==(const SdrMark& rMark) const;

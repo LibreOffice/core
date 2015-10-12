@@ -22,8 +22,8 @@ public:
     explicit            XclExpTablesImpl5( const XclExpRoot& rRoot );
     virtual             ~XclExpTablesImpl5();
 
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 /** Implementation of table export for OOXML, so far dummy for BIFF8. */
@@ -33,8 +33,8 @@ public:
     explicit            XclExpTablesImpl8( const XclExpRoot& rRoot );
     virtual             ~XclExpTablesImpl8();
 
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 

@@ -50,23 +50,23 @@ namespace avmedia
         protected:
 
             // XKeyListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XMouseListener
-            virtual void SAL_CALL mousePressed( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL mouseReleased( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL mouseEntered( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL mouseExited( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL mousePressed( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL mouseReleased( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL mouseEntered( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL mouseExited( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XMouseMotionListener
-            virtual void SAL_CALL mouseDragged( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL mouseMoved( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL mouseDragged( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL mouseMoved( const css::awt::MouseEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XFocusListener
-            virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
 
         private:
 

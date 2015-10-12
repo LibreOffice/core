@@ -41,25 +41,25 @@ public:
 
     DocumentDeviceManager( SwDoc& i_rSwdoc );
 
-    SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
+    SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const override;
 
-    void setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) SAL_OVERRIDE;
+    void setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) override;
 
-    VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
+    VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const override;
 
-    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool ) SAL_OVERRIDE;
+    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool ) override;
 
-    OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
+    OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const override;
 
-    void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes ) SAL_OVERRIDE;
+    void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes ) override;
 
-    const JobSetup* getJobsetup() const SAL_OVERRIDE;
+    const JobSetup* getJobsetup() const override;
 
-    void setJobsetup(/*[in]*/ const JobSetup &rJobSetup ) SAL_OVERRIDE;
+    void setJobsetup(/*[in]*/ const JobSetup &rJobSetup ) override;
 
-    const SwPrintData & getPrintData() const SAL_OVERRIDE;
+    const SwPrintData & getPrintData() const override;
 
-    void setPrintData(/*[in]*/ const SwPrintData& rPrtData ) SAL_OVERRIDE;
+    void setPrintData(/*[in]*/ const SwPrintData& rPrtData ) override;
 
     virtual ~DocumentDeviceManager();
 

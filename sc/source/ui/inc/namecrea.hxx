@@ -35,7 +35,7 @@ protected:
 public:
     ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags );
     virtual ~ScNameCreateDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     sal_uInt16          GetFlags() const;
 };
 

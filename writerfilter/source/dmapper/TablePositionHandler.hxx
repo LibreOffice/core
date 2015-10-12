@@ -34,8 +34,8 @@ class TablePositionHandler
     sal_Int32 m_nBottomFromText;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value& val) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm& sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
 public:
     sal_Int32 getY()

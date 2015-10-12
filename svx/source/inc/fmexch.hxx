@@ -76,11 +76,11 @@ namespace svxform
 
     protected:
         // XClipboardOwner
-        virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& _rxClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTrans ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& _rxClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTrans ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // TransferableHelper
-        virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
+        virtual void        DragFinished( sal_Int8 nDropAction ) override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
     private:
         void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
@@ -216,8 +216,8 @@ namespace svxform
         inline static bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
 
     protected:
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual void        AddSupportedFormats() override;
     };
 
     class OControlExchangeHelper : public OLocalExchangeHelper
@@ -229,7 +229,7 @@ namespace svxform
         OControlExchange& operator*() const { return *static_cast< OControlExchange* >( m_pTransferable ); }
 
     protected:
-        virtual OLocalExchange* createExchange() const SAL_OVERRIDE;
+        virtual OLocalExchange* createExchange() const override;
     };
 
 

@@ -100,17 +100,17 @@ struct ErrorHandler
     ErrorHandler() : mnErrCount(0), mnFatalCount(0), mnWarnCount(0)
     {}
 
-    virtual void SAL_CALL error( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL error( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
         ++mnErrCount;
     }
 
-    virtual void SAL_CALL fatalError( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL fatalError( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
         ++mnFatalCount;
     }
 
-    virtual void SAL_CALL warning( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL warning( const uno::Any& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
         ++mnWarnCount;
     }
@@ -120,7 +120,7 @@ struct DocumentHandler
     : public ::cppu::WeakImplHelper< xml::sax::XFastDocumentHandler >
 {
     // XFastContextHandler
-    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
         SAL_INFO(
             "unoxml",
@@ -128,42 +128,42 @@ struct DocumentHandler
                 << (Element & 0xFFFF0000));
     }
 
-    virtual void SAL_CALL startUnknownElement( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL startUnknownElement( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL endFastElement( ::sal_Int32 ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
-    virtual void SAL_CALL endUnknownElement( const OUString&, const OUString& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL endUnknownElement( const OUString&, const OUString& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
-    {
-        return this;
-    }
-
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
         return this;
     }
 
-    virtual void SAL_CALL characters( const OUString& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) override
+    {
+        return this;
+    }
+
+    virtual void SAL_CALL characters( const OUString& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
     // XFastDocumentHandler
-    virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
-    virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 
-    virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
+    virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& ) throw (xml::sax::SAXException, uno::RuntimeException) override
     {
     }
 };
@@ -171,13 +171,13 @@ struct DocumentHandler
 struct TokenHandler
     : public ::cppu::WeakImplHelper< xml::sax::XFastTokenHandler >
 {
-    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException) SAL_OVERRIDE
+    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException) override
     {
         OSL_TRACE("getTokenFromUTF8() %s", reinterpret_cast<const char*>(Identifier.getConstArray()));
         return Identifier.getLength() ? Identifier[0] : 0;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) throw (uno::RuntimeException, std::exception) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getUTF8Identifier() unexpected call",
                                 false );
@@ -194,7 +194,7 @@ struct BasicTest : public test::BootstrapFixture
     rtl::Reference<SequenceInputStream> mxErrorInStream;
     rtl::Reference<SequenceInputStream> mxFatalInStream;
 
-    virtual void setUp() SAL_OVERRIDE
+    virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
 
@@ -268,7 +268,7 @@ struct SerializerTest : public test::BootstrapFixture
     rtl::Reference<TokenHandler>                             mxTokHandler;
     uno::Sequence< beans::Pair< OUString, sal_Int32 > > maRegisteredNamespaces;
 
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         test::BootstrapFixture::setUp();
 

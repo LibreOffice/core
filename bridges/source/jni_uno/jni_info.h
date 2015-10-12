@@ -82,7 +82,7 @@ struct JNI_interface_type_info : public JNI_type_info
     // sorted via typelib function index
     jmethodID *                                 m_methods;
 
-    virtual void destroy( JNIEnv * jni_env ) SAL_OVERRIDE;
+    virtual void destroy( JNIEnv * jni_env ) override;
     explicit JNI_interface_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
 
@@ -98,7 +98,7 @@ struct JNI_compound_type_info : public JNI_type_info
     // sorted via typelib member index
     jfieldID *                                  m_fields;
 
-    virtual void destroy( JNIEnv * jni_env ) SAL_OVERRIDE;
+    virtual void destroy( JNIEnv * jni_env ) override;
     explicit JNI_compound_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
 

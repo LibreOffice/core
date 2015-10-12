@@ -41,10 +41,10 @@ public:
     virtual ~ChartSidebarSelectionListener();
 
     virtual void SAL_CALL selectionChanged(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (::css::uno::RuntimeException, ::std::exception) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (::css::uno::RuntimeException, ::std::exception) override;
 
     void setAcceptedTypes(const std::vector<ObjectType>& aTypes);
 

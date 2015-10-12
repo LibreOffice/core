@@ -36,16 +36,16 @@ class ScTpUserLists : public SfxTabPage
 public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
-    virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
-    virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
+    virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) override;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
 
 private:
             ScTpUserLists( vcl::Window*              pParent,
                            const SfxItemSet&    rArgSet );
             virtual ~ScTpUserLists();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr<FixedText>          mpFtLists;

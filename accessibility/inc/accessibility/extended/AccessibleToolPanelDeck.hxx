@@ -48,21 +48,21 @@ namespace accessibility
         virtual ~AccessibleToolPanelDeck();
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XAccessibleComponent
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL grabFocus(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL grabFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
         // VCLXAccessibleComponent
-        virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent ) SAL_OVERRIDE;
-        virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent ) override;
+        virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet ) override;
 
     private:
         std::unique_ptr< AccessibleToolPanelDeck_Impl > m_xImpl;

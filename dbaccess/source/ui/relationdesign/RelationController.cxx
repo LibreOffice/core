@@ -302,8 +302,8 @@ namespace
         }
 
         /// Working method which should be overridden.
-        virtual void SAL_CALL run() SAL_OVERRIDE;
-        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+        virtual void SAL_CALL run() override;
+        virtual void SAL_CALL onTerminated() override;
     protected:
         virtual ~RelationLoader(){}
 

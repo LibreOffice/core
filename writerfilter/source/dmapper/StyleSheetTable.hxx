@@ -109,11 +109,11 @@ public:
 
 private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
     void applyDefaults(bool bParaProperties);
 };

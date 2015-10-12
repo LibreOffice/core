@@ -87,15 +87,15 @@ public:
     {
         disposeOnce();
     }
-    virtual void dispose() SAL_OVERRIDE;
-    void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    void Resize() SAL_OVERRIDE;
-    bool Close() SAL_OVERRIDE;
+    virtual void dispose() override;
+    void MouseMove( const MouseEvent& rMEvt ) override;
+    void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    void KeyInput( const KeyEvent& rKEvt ) override;
+    void KeyUp( const KeyEvent& rKEvt ) override;
+    void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    void Resize() override;
+    bool Close() override;
 };
 
 void Main()

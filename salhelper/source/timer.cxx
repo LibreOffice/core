@@ -54,13 +54,13 @@ public:
 protected:
 
     /// worker-function of thread
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 
     // Checking and triggering of a timer event
     void SAL_CALL checkForTimeout();
 
     // cleanup Method
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() override;
 
     // sorted-queue data
     salhelper::Timer*       m_pHead;

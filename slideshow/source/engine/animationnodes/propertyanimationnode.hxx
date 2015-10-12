@@ -35,12 +35,12 @@ public:
         : AnimationBaseNode( xNode, pParent, rContext ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const SAL_OVERRIDE
+    virtual const char* getDescription() const override
         { return "PropertyAnimationNode"; }
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
+    virtual AnimationActivitySharedPtr createActivity() const override;
 };
 
 } // namespace internal

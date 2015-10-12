@@ -71,7 +71,7 @@ public:
     LwpBreaksOverride();
     virtual ~LwpBreaksOverride();
 
-    virtual LwpBreaksOverride* clone() const SAL_OVERRIDE;
+    virtual LwpBreaksOverride* clone() const override;
 
     enum
     {
@@ -86,7 +86,7 @@ public:
         BO_NEXTSTYLE    = 0x100 // next style name
     };
 public:
-    virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE;
+    virtual void Read(LwpObjectStream *pStrm) override;
 
     void Override(LwpBreaksOverride* pOther);
 

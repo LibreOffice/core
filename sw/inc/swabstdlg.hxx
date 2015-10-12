@@ -107,7 +107,7 @@ public:
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) = 0;
     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
-    virtual void         EndDialog(long ) SAL_OVERRIDE = 0;
+    virtual void         EndDialog(long ) override = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog

@@ -43,10 +43,10 @@ public:
     ScVbaPropValue( PropListener* pListener );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) override;
 
-    OUString SAL_CALL getDefaultPropertyName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName() throw (css::uno::RuntimeException, std::exception) override { return OUString("Value"); }
 
 };
 #endif //SC_VBA_PROPVALULE_HXX

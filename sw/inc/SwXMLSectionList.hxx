@@ -30,7 +30,7 @@ protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 public:
     std::vector<OUString*> &rSectionList;
 
@@ -55,7 +55,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
     virtual ~SvXMLSectionListContext();
 };
 

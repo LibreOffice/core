@@ -31,16 +31,16 @@ class FuConstruct : public FuDraw
 
     virtual ~FuConstruct();
                                        // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt) override;
 
             bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
-    virtual void Activate() SAL_OVERRIDE;
-    virtual void Deactivate() SAL_OVERRIDE;
+    virtual void Activate() override;
+    virtual void Deactivate() override;
 
     // Returns grid sync offset for rInOutPos, additionally adjusts rInOutPos
     // by the offset

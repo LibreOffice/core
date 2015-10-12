@@ -67,7 +67,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~MacroSecurity();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     inline void EnableReset(bool _bEnable = true)
     {
@@ -83,7 +83,7 @@ public:
     MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
     virtual ~MacroSecurityTP();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void        ClosePage() = 0;
 };
@@ -104,9 +104,9 @@ protected:
 public:
                         MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
     virtual             ~MacroSecurityLevelTP();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        ClosePage() SAL_OVERRIDE;
+    virtual void        ClosePage() override;
 };
 
 
@@ -140,10 +140,10 @@ private:
 public:
     MacroSecurityTrustedSourcesTP(vcl::Window* pParent, MacroSecurity* _pDlg);
     virtual ~MacroSecurityTrustedSourcesTP();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual void        ClosePage() SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual void        ClosePage() override;
 };
 
 

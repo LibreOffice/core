@@ -41,7 +41,7 @@ namespace connectivity
     // Static data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_sql_SQLException_BASE();
         // A ctor that is needed for returning the object
         java_sql_SQLException_BASE( JNIEnv * pEnv, jobject myObj );

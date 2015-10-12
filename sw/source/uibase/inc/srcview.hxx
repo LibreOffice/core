@@ -41,7 +41,7 @@ class SwSrcView: public SfxViewShell
     void                Init();
 
     // for read-only switching
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 protected:
     sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
@@ -77,8 +77,8 @@ public:
 
     void            Load(SwDocShell* pDocShell);
 
-    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
-    virtual SfxPrinter* GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
+    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false ) override;
+    virtual SfxPrinter* GetPrinter( bool bCreate = false ) override;
 
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 

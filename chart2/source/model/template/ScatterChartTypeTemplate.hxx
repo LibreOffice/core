@@ -51,41 +51,41 @@ public:
 protected:
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
         getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL applyStyle(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ ChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
-                getChartTypeForIndex( sal_Int32 nChartTypeIndex ) SAL_OVERRIDE;
-    virtual sal_Int32 getDimension() const SAL_OVERRIDE;
-    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const SAL_OVERRIDE;
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
+    virtual sal_Int32 getDimension() const override;
+    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;
 
 private:
     bool               m_bHasSymbols;

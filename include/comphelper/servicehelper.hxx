@@ -53,7 +53,7 @@ public:
 #define UNO3_GETIMPLEMENTATION_DECL( classname ) \
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw(); \
     static classname* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt ); \
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
 namespace \

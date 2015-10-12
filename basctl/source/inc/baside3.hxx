@@ -62,28 +62,28 @@ private:
     OUString            aCurPath;
 
 protected:
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void        Resize() override;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        LoseFocus() override;
 
     DECL_STATIC_LINK_TYPED( DialogWindow, NotifyUndoActionHdl, SdrUndoAction *, void );
-    virtual void        DoInit() SAL_OVERRIDE;
-    virtual void        DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        DoInit() override;
+    virtual void        DoScroll( ScrollBar* pCurScrollBar ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     void                InitSettings(bool bFont, bool bForeground, bool bBackground);
 
 public:
     DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, css::uno::Reference<css::container::XNameContainer> const& xDialogModel);
     DialogWindow( DialogWindow* pCurView ); // never implemented
 
-    virtual void        ExecuteCommand( SfxRequest& rReq ) SAL_OVERRIDE;
-    virtual void        GetState( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        ExecuteCommand( SfxRequest& rReq ) override;
+    virtual void        GetState( SfxItemSet& ) override;
     DlgEditor&          GetEditor() const   { return *pEditor; }
     css::uno::Reference< css::container::XNameContainer > GetDialog() const;
     DlgEdModel&         GetModel() const;
@@ -95,28 +95,28 @@ public:
     bool                SaveDialog();
     bool                ImportDialog();
 
-    virtual OUString             GetTitle() SAL_OVERRIDE;
-    virtual EntryDescriptor      CreateEntryDescriptor() SAL_OVERRIDE;
-    virtual void        SetReadOnly (bool bReadOnly) SAL_OVERRIDE;
-    virtual bool        IsReadOnly() SAL_OVERRIDE;
+    virtual OUString             GetTitle() override;
+    virtual EntryDescriptor      CreateEntryDescriptor() override;
+    virtual void        SetReadOnly (bool bReadOnly) override;
+    virtual bool        IsReadOnly() override;
 
-    virtual void        StoreData() SAL_OVERRIDE;
-    virtual bool        IsModified() SAL_OVERRIDE;
-    virtual bool        IsPasteAllowed() SAL_OVERRIDE;
+    virtual void        StoreData() override;
+    virtual bool        IsModified() override;
+    virtual bool        IsPasteAllowed() override;
 
-    virtual svl::IUndoManager* GetUndoManager() SAL_OVERRIDE;
+    virtual svl::IUndoManager* GetUndoManager() override;
     // return number of pages to be printed
-    virtual sal_Int32 countPages( Printer* pPrinter ) SAL_OVERRIDE;
+    virtual sal_Int32 countPages( Printer* pPrinter ) override;
     // print page
-    virtual void        printPage (sal_Int32 nPage, Printer*) SAL_OVERRIDE;
+    virtual void        printPage (sal_Int32 nPage, Printer*) override;
 
-    virtual void        Activating () SAL_OVERRIDE;
-    virtual void        Deactivating () SAL_OVERRIDE;
+    virtual void        Activating () override;
+    virtual void        Deactivating () override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual char const* GetHid () const SAL_OVERRIDE;
-    virtual ItemType GetType () const SAL_OVERRIDE;
+    virtual char const* GetHid () const override;
+    virtual ItemType GetType () const override;
 };
 
 
@@ -127,21 +127,21 @@ class DialogWindowLayout : public Layout
 public:
     DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
     virtual ~DialogWindowLayout();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 public:
     void ShowPropertyBrowser ();
     void UpdatePropertyBrowser ();
     void DisablePropertyBrowser ();
 public:
     // Layout:
-    virtual void Activating (BaseWindow&) SAL_OVERRIDE;
-    virtual void Deactivating () SAL_OVERRIDE;
-    virtual void ExecuteGlobal (SfxRequest&) SAL_OVERRIDE;
-    virtual void GetState (SfxItemSet&, unsigned nWhich) SAL_OVERRIDE;
-    virtual void UpdateDebug (bool) SAL_OVERRIDE {};
+    virtual void Activating (BaseWindow&) override;
+    virtual void Deactivating () override;
+    virtual void ExecuteGlobal (SfxRequest&) override;
+    virtual void GetState (SfxItemSet&, unsigned nWhich) override;
+    virtual void UpdateDebug (bool) override {};
 protected:
     // Layout:
-    virtual void OnFirstSize (long nWidth, long nHeight) SAL_OVERRIDE;
+    virtual void OnFirstSize (long nWidth, long nHeight) override;
 
 private:
     // child window

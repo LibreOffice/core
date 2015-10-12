@@ -54,8 +54,8 @@ class SW_DLLPUBLIC SwFormatField
     SwFormatField& operator=(const SwFormatField& rField) = delete;
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -69,10 +69,10 @@ public:
     virtual ~SwFormatField();
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     void InvalidateField();
 

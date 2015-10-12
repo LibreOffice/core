@@ -46,11 +46,11 @@ public:
     explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, sal_Size nCount, sal_Size * pRead ) const SAL_OVERRIDE;
-    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, sal_Size nCount, sal_Size * pWritten ) SAL_OVERRIDE;
-    virtual ErrCode     Flush() const SAL_OVERRIDE;
-    virtual ErrCode     SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
-    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const SAL_OVERRIDE;
+    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, sal_Size nCount, sal_Size * pRead ) const override;
+    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, sal_Size nCount, sal_Size * pWritten ) override;
+    virtual ErrCode     Flush() const override;
+    virtual ErrCode     SetSize( sal_uInt64 nSize ) override;
+    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const override;
 };
 
 

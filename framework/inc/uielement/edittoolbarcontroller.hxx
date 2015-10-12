@@ -47,7 +47,7 @@ class EditToolbarController : public ComplexToolbarController
         virtual ~EditToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // called from EditControl
         void Modify();
@@ -57,8 +57,8 @@ class EditToolbarController : public ComplexToolbarController
         bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const SAL_OVERRIDE;
+        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) override;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
     private:
         VclPtr<EditControl>    m_pEditControl;

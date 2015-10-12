@@ -77,32 +77,32 @@ public:
     /**
      * @descr   get style name.
      */
-    virtual OUString   GetStyleName() SAL_OVERRIDE;
+    virtual OUString   GetStyleName() override;
 
     /**
      * @descr   set style name.
      */
-    virtual void            SetStyleName(const OUString& styleName) SAL_OVERRIDE;
+    virtual void            SetStyleName(const OUString& styleName) override;
 
     /**
      * @descr   set parent style name.
      */
-    virtual OUString   GetParentStyleName() SAL_OVERRIDE;
+    virtual OUString   GetParentStyleName() override;
 
     /**
      * @descr   return parent style name.
      */
-    virtual void            SetParentStyleName(const OUString& styleName) SAL_OVERRIDE;
+    virtual void            SetParentStyleName(const OUString& styleName) override;
 
     /**
      * @descr   get style family.
      */
-    virtual enumXFStyle     GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle     GetStyleFamily() override;
 
     /**
      * @descr   decide whether two style are equal.
      */
-    virtual bool             Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool             Equal(IXFStyle *pStyle) override;
 
 protected:
     OUString   m_strStyleName;

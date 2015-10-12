@@ -34,14 +34,14 @@ public:
 
     DocumentListItemsManager();
 
-    void addListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
-    void removeListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
+    void addListItem( const SwNodeNum& rNodeNum ) override;
+    void removeListItem( const SwNodeNum& rNodeNum ) override;
 
     OUString getListItemText( const SwNodeNum& rNodeNum,
                                     const bool bWithNumber = true,
-                                    const bool bWithSpacesForLevel = false ) const SAL_OVERRIDE;
+                                    const bool bWithSpacesForLevel = false ) const override;
 
-    void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
+    void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const override;
 
     virtual ~DocumentListItemsManager();
 

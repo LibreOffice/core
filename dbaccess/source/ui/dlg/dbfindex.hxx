@@ -113,7 +113,7 @@ protected:
 public:
     ODbaseIndexDialog( vcl::Window * pParent, const OUString& aDataSrcName );
     virtual ~ODbaseIndexDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 }   // namespace dbaui

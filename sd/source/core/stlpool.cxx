@@ -624,7 +624,7 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
     HasFamilyPredicate(SfxStyleFamily eFamily)
     : meFamily(eFamily) {;}
 
-    bool Check(const SfxStyleSheetBase& sheet) SAL_OVERRIDE
+    bool Check(const SfxStyleSheetBase& sheet) override
     {
         return sheet.GetFamily() == meFamily;
     }
@@ -934,7 +934,7 @@ struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
     StyleSheetIsUserDefinedPredicate()
     {;}
 
-    bool Check(const SfxStyleSheetBase& sheet) SAL_OVERRIDE
+    bool Check(const SfxStyleSheetBase& sheet) override
     {
         return sheet.IsUserDefined();
     }

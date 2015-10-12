@@ -65,25 +65,25 @@ namespace rptui
         void operator =(OReportSection&) = delete;
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
 
         // window overrides
-        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        virtual void        Resize() SAL_OVERRIDE;
+        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void        Command( const CommandEvent& rCEvt ) override;
+        virtual void        Resize() override;
 
         // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) override;
     public:
         OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // window overrides
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
 
         /** copies the current selection in this section
             @param  _rAllreadyCopiedObjects This is an out/in put param which contains all already copied objects.

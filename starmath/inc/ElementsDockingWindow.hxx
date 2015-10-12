@@ -63,7 +63,7 @@ class SmElementSeparator : public SmElement
 public:
     SmElementSeparator();
 
-    virtual bool isSeparator() SAL_OVERRIDE
+    virtual bool isSeparator() override
     {
         return true;
     }
@@ -81,9 +81,9 @@ class SmElementsControl : public Control
     static const sal_uInt16 aFormats[][2];
     static const sal_uInt16 aOthers[][2];
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
 
     typedef std::shared_ptr<SmElement>    SmElementPointer;
     typedef std::vector< SmElementPointer > SmElementList;
@@ -113,13 +113,13 @@ class SmElementsControl : public Control
 public:
     SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void setElementSetId(sal_uInt16 aSetId);
 
     void setVerticalMode(bool bVertical);
 
-    Size GetOptimalSize() const SAL_OVERRIDE;
+    Size GetOptimalSize() const override;
 
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     void DoScroll(long nDelta);
@@ -134,7 +134,7 @@ class SmElementsDockingWindow : public SfxDockingWindow
     VclPtr<SmElementsControl>  mpElementsControl;
     VclPtr<ListBox>            mpElementListBox;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
     SmViewShell* GetView();
 
     void SelectClickHandler(SmElement* pElement);
@@ -146,10 +146,10 @@ public:
                              SfxChildWindow* pChildWindow,
                              vcl::Window* pParent );
     virtual ~SmElementsDockingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
-    virtual void ToggleFloatingMode() SAL_OVERRIDE;
+    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) override;
+    virtual void ToggleFloatingMode() override;
 };
 
 class SmElementsDockingWindowWrapper : public SfxChildWindow

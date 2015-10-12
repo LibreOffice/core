@@ -37,11 +37,11 @@ public:
     explicit Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     virtual ~Manager();
 
-    css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) throw (css::uno::RuntimeException, std::exception) override;
 
-    rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;

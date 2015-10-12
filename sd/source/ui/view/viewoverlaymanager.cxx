@@ -107,18 +107,18 @@ public:
     virtual ~ChangePlaceholderTag();
 
     /** returns true if the SmartTag handled the event. */
-    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     BitmapEx createOverlayImage( int nHighlight = -1 );
 
 protected:
-    virtual void addCustomHandles( SdrHdlList& rHandlerList ) SAL_OVERRIDE;
-    virtual void disposing() SAL_OVERRIDE;
-    virtual void select() SAL_OVERRIDE;
-    virtual void deselect() SAL_OVERRIDE;
+    virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
+    virtual void disposing() override;
+    virtual void select() override;
+    virtual void deselect() override;
 
 private:
     SdrObjectWeakRef    mxPlaceholderObj;
@@ -129,13 +129,13 @@ class ImageButtonHdl : public SmartHdl
 public:
     ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
     virtual ~ImageButtonHdl();
-    virtual void CreateB2dIAObject() SAL_OVERRIDE;
-    virtual bool IsFocusHdl() const SAL_OVERRIDE;
-    virtual Pointer GetPointer() const SAL_OVERRIDE;
-    virtual bool isMarkable() const SAL_OVERRIDE;
+    virtual void CreateB2dIAObject() override;
+    virtual bool IsFocusHdl() const override;
+    virtual Pointer GetPointer() const override;
+    virtual bool isMarkable() const override;
 
-    virtual void onMouseEnter(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void onMouseLeave() SAL_OVERRIDE;
+    virtual void onMouseEnter(const MouseEvent& rMEvt) override;
+    virtual void onMouseLeave() override;
 
     int getHighlightId() const { return mnHighlightId; }
 

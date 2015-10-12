@@ -46,28 +46,28 @@ class ScDrawView: public FmFormView
     void            Construct();
 
 protected:
-    virtual void    ModelHasChanged() SAL_OVERRIDE;
+    virtual void    ModelHasChanged() override;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl() SAL_OVERRIDE;
+    virtual void AddCustomHdl() override;
 
     void ImplClearCalcDropMarker();
 
     // support enhanced text edit for draw objects
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const SAL_OVERRIDE;
+    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
     virtual         ~ScDrawView();
 
-    virtual void    MarkListHasChanged() SAL_OVERRIDE;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    MarkListHasChanged() override;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual void    DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
+    virtual void    DoConnect(SdrOle2Obj* pOleObj) override;
 
-    virtual void    MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
+    virtual void    MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) override;
 
-    virtual void    DeleteMarked() SAL_OVERRIDE;
+    virtual void    DeleteMarked() override;
 
     virtual bool    SdrBeginTextEdit(
                       SdrObject* pObj,
@@ -78,9 +78,9 @@ public:
                       OutlinerView* pGivenOutlinerView = 0L,
                       bool bDontDeleteOutliner = false,
                       bool bOnlyOneView = false,
-                      bool bGrabFocus = true) SAL_OVERRIDE;
+                      bool bGrabFocus = true) override;
 
-    virtual SdrEndTextEditKind SdrEndTextEdit( bool bDontDeleteReally = false ) SAL_OVERRIDE;
+    virtual SdrEndTextEditKind SdrEndTextEdit( bool bDontDeleteReally = false ) override;
 
     void            MarkDropObj( SdrObject* pObj );
 

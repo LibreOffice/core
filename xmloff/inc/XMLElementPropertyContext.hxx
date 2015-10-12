@@ -48,7 +48,7 @@ public:
 
     virtual ~XMLElementPropertyContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 

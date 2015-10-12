@@ -77,7 +77,7 @@ namespace cairocanvas
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -87,21 +87,21 @@ namespace cairocanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // SurfaceProvider
-        virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
-        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
-        virtual OutputDevice* getOutputDevice() SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr getSurface() override;
+        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) override;
+        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) override;
+        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) override;
+        virtual OutputDevice* getOutputDevice() override;
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
                               const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState ) SAL_OVERRIDE;
+                              const css::rendering::RenderState& renderState ) override;
 
         // XFastPropertySet
         // used to retrieve BitmapEx pointer or X Pixmap handles for this bitmap
@@ -113,8 +113,8 @@ namespace cairocanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle
         //     3rd the pixmap depth
-        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) override {}
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;

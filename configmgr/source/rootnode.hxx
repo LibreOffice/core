@@ -26,11 +26,11 @@ public:
 private:
     virtual ~RootNode();
 
-    virtual Kind kind() const SAL_OVERRIDE;
+    virtual Kind kind() const override;
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
-    virtual NodeMap & getMembers() SAL_OVERRIDE;
+    virtual NodeMap & getMembers() override;
 
     NodeMap members_;
 };

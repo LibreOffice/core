@@ -117,40 +117,40 @@ namespace
         GraphicsContext& getCurrentContext() { return m_aGCStack.back(); }
 
         // ContentSink interface implementation
-        virtual void setPageNum( sal_Int32 nNumPages ) SAL_OVERRIDE
+        virtual void setPageNum( sal_Int32 nNumPages ) override
         {
             m_nNumPages = nNumPages;
         }
 
-        virtual void startPage( const geometry::RealSize2D& rSize ) SAL_OVERRIDE
+        virtual void startPage( const geometry::RealSize2D& rSize ) override
         {
             m_aPageSize = rSize;
         }
 
-        virtual void endPage() SAL_OVERRIDE
+        virtual void endPage() override
         {
             m_bPageEnded = true;
         }
 
         virtual void hyperLink( const geometry::RealRectangle2D& rBounds,
-                                const OUString&             rURI ) SAL_OVERRIDE
+                                const OUString&             rURI ) override
         {
             m_aHyperlinkBounds = rBounds;
             m_aURI = rURI;
         }
 
-        virtual void pushState() SAL_OVERRIDE
+        virtual void pushState() override
         {
             GraphicsContextStack::value_type const a(m_aGCStack.back());
             m_aGCStack.push_back(a);
         }
 
-        virtual void popState() SAL_OVERRIDE
+        virtual void popState() override
         {
             m_aGCStack.pop_back();
         }
 
-        virtual void setTransformation( const geometry::AffineMatrix2D& rMatrix ) SAL_OVERRIDE
+        virtual void setTransformation( const geometry::AffineMatrix2D& rMatrix ) override
         {
             basegfx::unotools::homMatrixFromAffineMatrix(
                 getCurrentContext().Transformation,
@@ -158,7 +158,7 @@ namespace
         }
 
         virtual void setLineDash( const uno::Sequence<double>& dashes,
-                                  double                       start ) SAL_OVERRIDE
+                                  double                       start ) override
         {
             GraphicsContext& rContext( getCurrentContext() );
             if( dashes.getLength() )
@@ -166,42 +166,42 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "line dashing start offset", 0.0, start, 0.000000001 );
         }
 
-        virtual void setFlatness( double nFlatness ) SAL_OVERRIDE
+        virtual void setFlatness( double nFlatness ) override
         {
             getCurrentContext().Flatness = nFlatness;
         }
 
-        virtual void setLineJoin(sal_Int8 nJoin) SAL_OVERRIDE
+        virtual void setLineJoin(sal_Int8 nJoin) override
         {
             getCurrentContext().LineJoin = nJoin;
         }
 
-        virtual void setLineCap(sal_Int8 nCap) SAL_OVERRIDE
+        virtual void setLineCap(sal_Int8 nCap) override
         {
             getCurrentContext().LineCap = nCap;
         }
 
-        virtual void setMiterLimit(double nVal) SAL_OVERRIDE
+        virtual void setMiterLimit(double nVal) override
         {
             getCurrentContext().MiterLimit = nVal;
         }
 
-        virtual void setLineWidth(double nVal) SAL_OVERRIDE
+        virtual void setLineWidth(double nVal) override
         {
             getCurrentContext().LineWidth = nVal;
         }
 
-        virtual void setFillColor( const rendering::ARGBColor& rColor ) SAL_OVERRIDE
+        virtual void setFillColor( const rendering::ARGBColor& rColor ) override
         {
             getCurrentContext().FillColor = rColor;
         }
 
-        virtual void setStrokeColor( const rendering::ARGBColor& rColor ) SAL_OVERRIDE
+        virtual void setStrokeColor( const rendering::ARGBColor& rColor ) override
         {
             getCurrentContext().LineColor = rColor;
         }
 
-        virtual void setFont( const FontAttributes& rFont ) SAL_OVERRIDE
+        virtual void setFont( const FontAttributes& rFont ) override
         {
             FontToIdMap::const_iterator it = m_aFontToId.find( rFont );
             if( it != m_aFontToId.end() )
@@ -215,7 +215,7 @@ namespace
             }
         }
 
-        virtual void strokePath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) SAL_OVERRIDE
+        virtual void strokePath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) override
         {
             GraphicsContext& rContext( getCurrentContext() );
             basegfx::B2DPolyPolygon aPath = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
@@ -274,7 +274,7 @@ namespace
                                     (sal_Int32) 0, rContext.FontId );
         }
 
-        virtual void fillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) SAL_OVERRIDE
+        virtual void fillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) override
         {
             GraphicsContext& rContext( getCurrentContext() );
             basegfx::B2DPolyPolygon aPath = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
@@ -293,7 +293,7 @@ namespace
                                     (sal_Int32) 0, rContext.FontId );
         }
 
-        virtual void eoFillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) SAL_OVERRIDE
+        virtual void eoFillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) override
         {
             GraphicsContext& rContext( getCurrentContext() );
             basegfx::B2DPolyPolygon aPath = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
@@ -319,7 +319,7 @@ namespace
             m_bRedCircleSeen = true;
         }
 
-        virtual void intersectClip(const uno::Reference<rendering::XPolyPolygon2D>& rPath) SAL_OVERRIDE
+        virtual void intersectClip(const uno::Reference<rendering::XPolyPolygon2D>& rPath) override
         {
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
@@ -330,7 +330,7 @@ namespace
             getCurrentContext().Clip = aNewClip;
         }
 
-        virtual void intersectEoClip(const uno::Reference<rendering::XPolyPolygon2D>& rPath) SAL_OVERRIDE
+        virtual void intersectEoClip(const uno::Reference<rendering::XPolyPolygon2D>& rPath) override
         {
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
@@ -344,18 +344,18 @@ namespace
         virtual void drawGlyphs( const OUString&             rGlyphs,
                                  const geometry::RealRectangle2D& /*rRect*/,
                                  const geometry::Matrix2D&        /*rFontMatrix*/,
-                                 double /*fontSize*/) SAL_OVERRIDE
+                                 double /*fontSize*/) override
         {
             m_aTextOut.append(rGlyphs);
         }
 
-        virtual void endText() SAL_OVERRIDE
+        virtual void endText() override
         {
             m_aTextOut.append( "\n" );
         }
 
         virtual void drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
-                              bool                                       /*bInvert*/ ) SAL_OVERRIDE
+                              bool                                       /*bInvert*/ ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
@@ -365,7 +365,7 @@ namespace
                                     xBitmap[1].Name == "InputStream" );
         }
 
-        virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) SAL_OVERRIDE
+        virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
@@ -377,7 +377,7 @@ namespace
         }
 
         virtual void drawColorMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
-                                          const uno::Sequence<uno::Any>&             /*xMaskColors*/ ) SAL_OVERRIDE
+                                          const uno::Sequence<uno::Any>&             /*xMaskColors*/ ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
@@ -389,7 +389,7 @@ namespace
 
         virtual void drawMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
                                      const uno::Sequence<beans::PropertyValue>& xMask,
-                                     bool                                       /*bInvertMask*/) SAL_OVERRIDE
+                                     bool                                       /*bInvertMask*/) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
@@ -407,7 +407,7 @@ namespace
         }
 
         virtual void drawAlphaMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
-                                          const uno::Sequence<beans::PropertyValue>& xMask) SAL_OVERRIDE
+                                          const uno::Sequence<beans::PropertyValue>& xMask) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
@@ -424,7 +424,7 @@ namespace
                                     xMask[1].Name == "InputStream" );
         }
 
-        virtual void setTextRenderMode( sal_Int32 ) SAL_OVERRIDE
+        virtual void setTextRenderMode( sal_Int32 ) override
         {
         }
 

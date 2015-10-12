@@ -93,29 +93,29 @@ class testCollator : public cppu::WeakImplHelper< i18n::XCollator >
 public:
     virtual sal_Int32 SAL_CALL compareSubstring(
         const OUString& str1, sal_Int32 off1, sal_Int32 len1,
-        const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(uno::RuntimeException, std::exception) override
     {
         return str1.copy(off1, len1).compareTo(str2.copy(off2, len2));
     }
     virtual sal_Int32 SAL_CALL compareString(
         const OUString& str1,
-        const OUString& str2) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const OUString& str2) throw(uno::RuntimeException, std::exception) override
     {
         return str1.compareTo(str2);
     }
     virtual sal_Int32 SAL_CALL loadDefaultCollator(const lang::Locale&, sal_Int32)
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE {return 0;}
+        throw(uno::RuntimeException, std::exception) override {return 0;}
     virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(const OUString&,
-        const lang::Locale&, sal_Int32) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE {return 0;}
+        const lang::Locale&, sal_Int32) throw(uno::RuntimeException, std::exception) override {return 0;}
     virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption(const OUString&,
-        const lang::Locale&, const uno::Sequence< sal_Int32 >&) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        const lang::Locale&, const uno::Sequence< sal_Int32 >&) throw(uno::RuntimeException, std::exception) override {}
     virtual uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms(const lang::Locale&)
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(uno::RuntimeException, std::exception) override
     {
         return uno::Sequence< OUString >();
     }
     virtual uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions(const OUString&)
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(uno::RuntimeException, std::exception) override
     {
         return uno::Sequence< sal_Int32 >();
     }
@@ -128,63 +128,63 @@ class testBreakIterator : public cppu::WeakImplHelper< i18n::XBreakIterator >
 public:
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& )
-            throw(uno::RuntimeException, std::exception) SAL_OVERRIDE {return -1;}
+            throw(uno::RuntimeException, std::exception) override {return -1;}
     virtual sal_Int32 SAL_CALL previousCharacters( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& )
-            throw(uno::RuntimeException, std::exception) SAL_OVERRIDE {return -1;}
+            throw(uno::RuntimeException, std::exception) override {return -1;}
 
     virtual i18n::Boundary SAL_CALL previousWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale&, sal_Int16) throw(uno::RuntimeException, std::exception) override
         { return i18n::Boundary(); }
     virtual i18n::Boundary SAL_CALL nextWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale&, sal_Int16) throw(uno::RuntimeException, std::exception) override
         { return i18n::Boundary(); }
     virtual i18n::Boundary SAL_CALL getWordBoundary( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Bool )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(uno::RuntimeException, std::exception) override
         { return i18n::Boundary(); }
 
     virtual sal_Bool SAL_CALL isBeginWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) override
         { return false; }
     virtual sal_Bool SAL_CALL isEndWord( const OUString&, sal_Int32,
-        const lang::Locale& , sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale& , sal_Int16 ) throw(uno::RuntimeException, std::exception) override
         { return false; }
     virtual sal_Int16 SAL_CALL getWordType( const OUString&, sal_Int32,
-        const lang::Locale& ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale& ) throw(uno::RuntimeException, std::exception) override
         { return 0; }
 
     virtual sal_Int32 SAL_CALL beginOfSentence( const OUString&, sal_Int32,
-        const lang::Locale& ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale& ) throw(uno::RuntimeException, std::exception) override
         { return 0; }
     virtual sal_Int32 SAL_CALL endOfSentence( const OUString& rText, sal_Int32,
-        const lang::Locale& ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale& ) throw(uno::RuntimeException, std::exception) override
         { return rText.getLength(); }
 
     virtual i18n::LineBreakResults SAL_CALL getLineBreak( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int32,
         const i18n::LineBreakHyphenationOptions&,
         const i18n::LineBreakUserOptions&)
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(uno::RuntimeException, std::exception) override
     {
         return i18n::LineBreakResults();
     }
 
     virtual sal_Int16 SAL_CALL getScriptType( const OUString&, sal_Int32 )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL beginOfScript( const OUString&, sal_Int32,
-        sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL endOfScript( const OUString&, sal_Int32,
-        sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL previousScript( const OUString&, sal_Int32,
-        sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL nextScript( const OUString&, sal_Int32,
-        sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
 
     virtual sal_Int32 SAL_CALL beginOfCharBlock( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL endOfCharBlock( const OUString& rText, sal_Int32 nStartPos,
-        const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException, std::exception) override
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
         for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)
@@ -198,9 +198,9 @@ public:
         return -1;
     }
     virtual sal_Int32 SAL_CALL previousCharBlock( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE { return -1; }
+        const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException, std::exception) override { return -1; }
     virtual sal_Int32 SAL_CALL nextCharBlock( const OUString& rText, sal_Int32 nStartPos,
-        const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException, std::exception) override
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
         for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)

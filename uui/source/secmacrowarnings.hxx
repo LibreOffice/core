@@ -69,7 +69,7 @@ private:
 public:
     MacroWarning( vcl::Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
     virtual ~MacroWarning();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    SetDocumentURL( const OUString& rDocURL );
 

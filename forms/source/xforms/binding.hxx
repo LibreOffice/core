@@ -328,20 +328,20 @@ private:
 public:
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType )
         throw( css::form::binding::IncompatibleTypesException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setValue( const css::uno::Any& aValue )
         throw( css::form::binding::IncompatibleTypesException,
                css::form::binding::InvalidBindingStateException,
                css::lang::NoSupportException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -350,22 +350,22 @@ public:
 
 
     virtual sal_Int32 SAL_CALL getListEntryCount()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition )
         throw( css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getAllListEntries()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& )
         throw( css::lang::NullPointerException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&)
         throw( css::lang::NullPointerException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -375,21 +375,21 @@ public:
 
     virtual sal_Bool SAL_CALL isValid(
         const css::uno::Any& )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL explainInvalid(
         const css::uno::Any& )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addValidityConstraintListener(
         const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
         throw( css::lang::NullPointerException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeValidityConstraintListener(
         const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
         throw( css::lang::NullPointerException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -401,11 +401,11 @@ public:
 
     virtual void SAL_CALL addModifyListener(
         const css::uno::Reference<css::util::XModifyListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference<css::util::XModifyListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -418,10 +418,10 @@ public:
 public:
 
     virtual OUString SAL_CALL getName()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setName( const OUString& )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -432,7 +432,7 @@ public:
 
     virtual void SAL_CALL handleEvent(
         const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -441,7 +441,7 @@ public:
 
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
 
@@ -449,7 +449,7 @@ public:
 
 
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 

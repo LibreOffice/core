@@ -101,7 +101,7 @@ namespace sdr
             virtual ~TimerEventHandler();
 
             // The timer when it is triggered; from class Timer
-            virtual void Invoke() SAL_OVERRIDE;
+            virtual void Invoke() override;
 
             // reset the timer
             void Restart();

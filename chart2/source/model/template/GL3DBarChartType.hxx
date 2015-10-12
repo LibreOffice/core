@@ -26,16 +26,16 @@ public:
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedPropertyRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     static OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
@@ -44,22 +44,22 @@ protected:
     GL3DBarChartType( const GL3DBarChartType& rOther );
 
     virtual OUString SAL_CALL getChartType()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL
         createClone()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // OPropertySet
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException) override;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 }

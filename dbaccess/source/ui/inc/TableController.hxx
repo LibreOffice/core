@@ -70,15 +70,15 @@ namespace dbaui
         void reload();
 
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
+        virtual void            describeSupportedFeatures() override;
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
+        virtual FeatureState    GetState(sal_uInt16 nId) const override;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
-        virtual void losingConnection( ) SAL_OVERRIDE;
+        virtual void losingConnection( ) override;
 
-        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
+        virtual OUString getPrivateTitle( ) const override;
 
         void        doEditIndexes();
         bool        doSaveDoc(bool _bSaveAs);
@@ -97,7 +97,7 @@ namespace dbaui
         inline bool             isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
-        virtual void impl_onModifyChanged() SAL_OVERRIDE;
+        virtual void impl_onModifyChanged() override;
 
         inline ::std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
 
@@ -111,19 +111,19 @@ namespace dbaui
 
         inline TOTypeInfoSP                 getTypeInfoFallBack() const { return m_pTypeInfo; }
 
-        virtual bool                        Construct(vcl::Window* pParent) SAL_OVERRIDE;
+        virtual bool                        Construct(vcl::Window* pParent) override;
         // XEventListener
-        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::lang::XComponent
-        virtual void        SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void        SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
         // need by registration
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
@@ -133,7 +133,7 @@ namespace dbaui
     protected:
         void startTableListening();
         void stopTableListening();
-        virtual void impl_initialize() SAL_OVERRIDE;
+        virtual void impl_initialize() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX

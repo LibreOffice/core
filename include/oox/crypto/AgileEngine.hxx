@@ -61,17 +61,17 @@ public:
 
     virtual bool writeEncryptionInfo(
                     const OUString& rPassword,
-                    BinaryXOutputStream& rStream) SAL_OVERRIDE;
+                    BinaryXOutputStream& rStream) override;
 
-    virtual bool generateEncryptionKey(const OUString& rPassword) SAL_OVERRIDE;
+    virtual bool generateEncryptionKey(const OUString& rPassword) override;
 
     virtual bool decrypt(
                     BinaryXInputStream& aInputStream,
-                    BinaryXOutputStream& aOutputStream) SAL_OVERRIDE;
+                    BinaryXOutputStream& aOutputStream) override;
 
     virtual bool encrypt(
                     BinaryXInputStream& aInputStream,
-                    BinaryXOutputStream& aOutputStream) SAL_OVERRIDE;
+                    BinaryXOutputStream& aOutputStream) override;
 };
 
 } // namespace core

@@ -38,7 +38,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    bool GetString(sal_uLong nErrId, OUString &rStr) SAL_OVERRIDE;
+    bool GetString(sal_uLong nErrId, OUString &rStr) override;
 
 private:
     sal_uInt16 nCtxId;
@@ -66,7 +66,7 @@ private:
     ResMgr              *pFreeMgr;
 
     SVT_DLLPRIVATE bool   GetClassString(sal_uLong lErrId, OUString &) const;
-    virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const SAL_OVERRIDE;
+    virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const override;
 };
 
 #endif

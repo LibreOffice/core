@@ -60,7 +60,7 @@ class SwGlossDecideDlg : public ModalDialog
 public:
     explicit SwGlossDecideDlg(vcl::Window* pParent);
     virtual ~SwGlossDecideDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     ListBox&    GetListBox() {return *m_pListLB;}
 };

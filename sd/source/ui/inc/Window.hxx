@@ -46,7 +46,7 @@ class Window
 public:
     Window (vcl::Window* pParent);
     virtual ~Window ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    SetViewShell (ViewShell* pViewSh);
 
@@ -135,11 +135,11 @@ public:
     double  GetScrlPageWidth();
     double  GetScrlPageHeight();
     void GrabFocus();
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     /** The DropScroll() method is used by AcceptDrop() to scroll the
         content of the window while dragging and dropping.  With this method
@@ -147,7 +147,7 @@ public:
     */
     void SetUseDropScroll (bool bUseDropScroll);
     void DropScroll (const Point& rMousePos);
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
 protected:
     VclPtr< ::sd::Window> mpShareWin;
     Point maWinPos;
@@ -169,16 +169,16 @@ protected:
     ViewShell* mpViewShell;
     bool mbUseDropScroll;
 
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual void RequestHelp( const HelpEvent& rEvt ) SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+    virtual void RequestHelp( const HelpEvent& rEvt ) override;
+    virtual void LoseFocus() override;
+    virtual bool Notify( NotifyEvent& rNEvt ) override;
 
     /** Create an accessibility object that makes this window accessible.
 
@@ -188,12 +188,12 @@ protected:
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible() SAL_OVERRIDE;
+        CreateAccessible() override;
 
-    OUString GetSurroundingText() const SAL_OVERRIDE;
-    Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
+    OUString GetSurroundingText() const override;
+    Selection GetSurroundingTextSelection() const override;
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
+    void LogicInvalidate(const Rectangle* pRectangle) override;
 };
 
 } // end of namespace sd

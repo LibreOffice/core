@@ -32,16 +32,16 @@ public:
     TYPEINFO_OVERRIDE();
     SdrMeasureKindItem(SdrMeasureKind eKind=SDRMEASURE_STD): SfxEnumItem(SDRATTR_MEASUREKIND,sal::static_int_cast< sal_uInt16 >(eKind)) {}
     SdrMeasureKindItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_MEASUREKIND,rIn)    {}
-    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 2; }
+    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;
+    virtual sal_uInt16         GetValueCount() const override; // { return 2; }
             SdrMeasureKind GetValue() const { return (SdrMeasureKind)SfxEnumItem::GetValue(); }
 
-    virtual bool           QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool           PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool           QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool           PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
-    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;
 };
 
 #endif

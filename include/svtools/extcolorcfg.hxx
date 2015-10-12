@@ -69,7 +69,7 @@ public:
     ExtendedColorConfig();
     virtual ~ExtendedColorConfig();
 
-    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // get the configured value
     ExtendedColorConfigValue        GetColorValue(const OUString& _sComponentName,const OUString& _sName)const;

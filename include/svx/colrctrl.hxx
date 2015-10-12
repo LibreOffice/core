@@ -49,12 +49,12 @@ protected:
     void            DoDrag();
 
     // ValueSet
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command(const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    Command(const CommandEvent& rCEvt ) override;
 
     // DragSourceHelper
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) override;
 
                     DECL_LINK_TYPED(ExecDragHdl, void*, void);
 
@@ -92,23 +92,23 @@ private:
         the focus to the color value set so that it can be controlled with
         the keyboard.
     */
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
 
 protected:
-    virtual bool    Close() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual bool    Close() override;
+    virtual void    Resize() override;
+    virtual void    Resizing( Size& rSize ) override;
 
 public:
     SvxColorDockingWindow(SfxBindings* pBindings,
                           SfxChildWindow *pCW,
                           vcl::Window* pParent);
     virtual ~SvxColorDockingWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 };
 
 #endif

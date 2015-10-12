@@ -50,11 +50,11 @@ namespace dbaui
     public:
         OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >&);
         virtual ~OQueryContainerWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void Construct() SAL_OVERRIDE;
+        virtual void Construct() override;
 
-        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
         // show the beamer
         void    showPreview(const css::uno::Reference< css::frame::XFrame >& _xFrame);
@@ -82,21 +82,21 @@ namespace dbaui
         OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
-        void    initialize() SAL_OVERRIDE                                                { m_pViewSwitch->initialize(); }
+        void    initialize() override                                                { m_pViewSwitch->initialize(); }
         void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }
         bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void    forceInitialView();
 
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
 
     protected:
         // re-arrange the controls belonging to the document itself
-        virtual void resizeAll( const Rectangle& _rPlayground ) SAL_OVERRIDE;
+        virtual void resizeAll( const Rectangle& _rPlayground ) override;
 
         // arrange derived classes controls in the rectangle given
-        virtual void resizeDocumentView(Rectangle& _rPlayground) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& _rPlayground) override;
     };
     // end of temp classes
 

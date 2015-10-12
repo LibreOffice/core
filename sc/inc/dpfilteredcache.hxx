@@ -67,8 +67,8 @@ public:
         explicit SingleFilter(const ScDPItemData &rItem);
         virtual ~SingleFilter() {}
 
-        virtual bool match(const ScDPItemData& rCellData) const SAL_OVERRIDE;
-        virtual std::vector<ScDPItemData> getMatchValues() const SAL_OVERRIDE;
+        virtual bool match(const ScDPItemData& rCellData) const override;
+        virtual std::vector<ScDPItemData> getMatchValues() const override;
 
     private:
         explicit SingleFilter();
@@ -82,8 +82,8 @@ public:
     public:
         GroupFilter();
         virtual ~GroupFilter() {}
-        virtual bool match(const ScDPItemData& rCellData) const SAL_OVERRIDE;
-        virtual std::vector<ScDPItemData> getMatchValues() const SAL_OVERRIDE;
+        virtual bool match(const ScDPItemData& rCellData) const override;
+        virtual std::vector<ScDPItemData> getMatchValues() const override;
         void addMatchItem(const ScDPItemData& rItem);
         size_t getMatchItemCount() const;
 

@@ -86,31 +86,31 @@ public:
     explicit CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XMultiComponentFactory
     virtual Sequence<OUString> SAL_CALL getAvailableServiceNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
         OUString const & name,
-        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) SAL_OVERRIDE;
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) override;
     virtual Reference<XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
         OUString const & name,
         Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) SAL_OVERRIDE;
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) override;
 
     // XMultiServiceFactory
     virtual Reference<XInterface> SAL_CALL createInstance(
         OUString const & name )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
         OUString const & name, Sequence<Any> const & args )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
 };
 
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :

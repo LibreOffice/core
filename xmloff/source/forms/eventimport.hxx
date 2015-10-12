@@ -44,7 +44,7 @@ namespace xmloff
             IEventAttacher& _rEventAttacher);
 
     protected:
-        virtual void EndElement() SAL_OVERRIDE;
+        virtual void EndElement() override;
     };
 
     //= ODefaultEventAttacherManager
@@ -67,7 +67,7 @@ namespace xmloff
         virtual void registerEvents(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
-            ) SAL_OVERRIDE;
+            ) override;
 
     protected:
         void setEvents(

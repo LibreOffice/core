@@ -41,8 +41,8 @@ public:
     bool isVerbose() const { return m_bVerbose; }
 
 protected:
-    virtual void printUsage_Impl() const SAL_OVERRIDE;
-    virtual bool initOptions_Impl(std::vector< std::string > & rArgs) SAL_OVERRIDE;
+    virtual void printUsage_Impl() const override;
+    virtual bool initOptions_Impl(std::vector< std::string > & rArgs) override;
 };
 
 void Options_Impl::printUsage_Impl() const

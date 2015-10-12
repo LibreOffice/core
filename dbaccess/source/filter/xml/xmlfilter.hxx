@@ -100,7 +100,7 @@ protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual ~ODBFilter()  throw();
 public:
@@ -108,7 +108,7 @@ public:
     explicit ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) override;
 
     static OUString SAL_CALL getImplementationName_Static()
         throw (css::uno::RuntimeException);
@@ -120,8 +120,8 @@ public:
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
     // helper class
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
+    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 

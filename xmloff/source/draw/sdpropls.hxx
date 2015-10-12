@@ -63,7 +63,7 @@ public:
     XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLExport& rExport );
     XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLImport& rImport );
     virtual ~XMLSdPropHdlFactory();
-    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const SAL_OVERRIDE;
+    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
 
 class XMLShapePropertySetMapper : public XMLPropertySetMapper
@@ -84,7 +84,7 @@ protected:
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet > rPropSet ) const override;
 public:
     XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLShapeExportPropertyMapper();
@@ -95,7 +95,7 @@ public:
                             SvXmlExportFlags nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
-                            ) const SAL_OVERRIDE;
+                            ) const override;
 
     void SetAutoStyles( bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
 
@@ -105,7 +105,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties = 0,
-            sal_uInt32 nIdx = 0 ) const SAL_OVERRIDE;
+            sal_uInt32 nIdx = 0 ) const override;
 };
 
 class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -118,7 +118,7 @@ protected:
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet > rPropSet ) const override;
 public:
     XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLPageExportPropertyMapper();
@@ -129,7 +129,7 @@ public:
                             SvXmlExportFlags nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
-                            ) const SAL_OVERRIDE;
+                            ) const override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX

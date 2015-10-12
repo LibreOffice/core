@@ -53,11 +53,11 @@ namespace bib
 
     protected:
     // XLoadListener equivalents
-        virtual void _loaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _unloading( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _unloaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _reloading( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _reloaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _loaded( const css::lang::EventObject& _rEvent ) override;
+        virtual void _unloading( const css::lang::EventObject& _rEvent ) override;
+        virtual void _unloaded( const css::lang::EventObject& _rEvent ) override;
+        virtual void _reloading( const css::lang::EventObject& _rEvent ) override;
+        virtual void _reloaded( const css::lang::EventObject& _rEvent ) override;
 
     };
 

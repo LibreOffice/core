@@ -44,20 +44,20 @@ public:
 
     // XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     // XSingleComponentFactory:
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
         uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (uno::Exception, std::exception) override;
     virtual uno::Reference<uno::XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
     uno::Sequence<uno::Any> const& args,
     uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (uno::Exception, std::exception) override;
 
 private:
     virtual ~Factory();

@@ -32,7 +32,7 @@ public:
     ConstraintListContext( ContextHandler2Helper& rParent, const AttributeList& rAttributes, const LayoutAtomPtr &pNode );
     virtual ~ConstraintListContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;
 private:
     LayoutAtomPtr mpNode;
 };

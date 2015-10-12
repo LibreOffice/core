@@ -79,7 +79,7 @@ public:
 
     virtual             ~ImportLotus();
 
-    FltError            Read() SAL_OVERRIDE;
+    FltError            Read() override;
     FltError            Read( SvStream& );                  // special for *.fm3-Dateien
 };
 

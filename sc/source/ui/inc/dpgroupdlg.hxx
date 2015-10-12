@@ -63,8 +63,8 @@ public:
 
     virtual             ~ScDPNumGroupEditHelper() {}
 private:
-    virtual bool        ImplGetValue( double& rfValue ) const SAL_OVERRIDE;
-    virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
+    virtual bool        ImplGetValue( double& rfValue ) const override;
+    virtual void        ImplSetValue( double fValue ) override;
 
 private:
     VclPtr<ScDoubleField>      mpEdValue;
@@ -80,8 +80,8 @@ public:
     virtual ~ScDPDateGroupEditHelper() {}
 
 private:
-    virtual bool        ImplGetValue( double& rfValue ) const SAL_OVERRIDE;
-    virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
+    virtual bool        ImplGetValue( double& rfValue ) const override;
+    virtual void        ImplSetValue( double fValue ) override;
 
 private:
     VclPtr<DateField>          mpEdValue;
@@ -93,7 +93,7 @@ class ScDPNumGroupDlg : public ModalDialog
 public:
     explicit            ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo );
     virtual             ~ScDPNumGroupDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     ScDPNumGroupInfo    GetGroupInfo() const;
 
 private:
@@ -114,7 +114,7 @@ public:
     explicit            ScDPDateGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo,
                             sal_Int32 nDatePart, const Date& rNullDate );
     virtual             ~ScDPDateGroupDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     ScDPNumGroupInfo    GetGroupInfo() const;
     sal_Int32           GetDatePart() const;
 

@@ -103,13 +103,13 @@ class BibConfig : public utl::ConfigItem
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     BibConfig();
     virtual ~BibConfig();
 
-    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);

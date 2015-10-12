@@ -86,8 +86,8 @@ private:
     void Delete();
 
 protected:
-    virtual void            PopupModeEnd() SAL_OVERRIDE;
-    virtual bool            Close() SAL_OVERRIDE;
+    virtual void            PopupModeEnd() override;
+    virtual bool            Close() override;
     void                    DeleteFloatingWindow();
 
     sal_uInt16              GetId() const { return m_nId; }
@@ -119,9 +119,9 @@ public:
                                             vcl::Window* pParentWindow,
                                             WinBits nBits );
                             virtual ~SfxPopupWindow();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
-    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) override;
 
     void                    StartCascading();
     SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<SfxPopupWindow*,void>& rLink )
@@ -178,33 +178,33 @@ protected:
 public:
     // XEventListener
     using ::cppu::OPropertySetHelper::disposing;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // new controller API
     // XStatusListener
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL click()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL doubleClick()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL updateImage(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL opensSubToolbar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL updateImage(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
@@ -249,17 +249,17 @@ class SfxDragButton_Impl : public FixedImage
 public:
 
                     SfxDragButton_Impl( vcl::Window *pParent );
-    virtual void    Command ( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command ( const CommandEvent& rCEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 };
 
 class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 {
 public:
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
-    virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual void            Select(sal_uInt16 nSelectModifier) override;
 };
 
 
@@ -282,7 +282,7 @@ public:
     virtual ~SfxRecentFilesToolBoxControl();
 
 protected:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
 class SfxSaveAsToolBoxControl : public SfxToolBoxControl
@@ -297,13 +297,13 @@ public:
     virtual ~SfxSaveAsToolBoxControl();
 
 protected:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
 protected:
-        virtual void Select(sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
+        virtual void Select(sal_uInt16 nSelectModifier ) override;
 
 public:
         SfxReloadToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
@@ -324,9 +324,9 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
     bool        m_bShowMenuImages;
 
 protected:
-    virtual void            Click() SAL_OVERRIDE;
-    virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void            Click() override;
+    virtual void            Select(sal_uInt16 nSelectModifier) override;
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
 public:
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
                             virtual ~SfxAddonsToolBoxControl_Impl();

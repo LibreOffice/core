@@ -46,31 +46,31 @@ public:
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
-                ) throw (::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+                ) throw (::com::sun::star::uno::RuntimeException ) override;
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix ) SAL_OVERRIDE;
+    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix ) override;
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) SAL_OVERRIDE;
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException) override;
 
     virtual void initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
-                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) SAL_OVERRIDE;
+                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) override;
 
-    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() SAL_OVERRIDE;
+    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() override;
 
-    virtual void createMaximumLabels() SAL_OVERRIDE;
-    virtual void createLabels() SAL_OVERRIDE;
-    virtual void updatePositions() SAL_OVERRIDE;
+    virtual void createMaximumLabels() override;
+    virtual void createLabels() override;
+    virtual void updatePositions() override;
 
-    virtual void createShapes() SAL_OVERRIDE;
+    virtual void createShapes() override;
 
 protected: //methods
-    virtual bool prepareShapeCreation() SAL_OVERRIDE;
+    virtual bool prepareShapeCreation() override;
 
 private: //member
     std::unique_ptr<VCartesianAxis>  m_apAxisWithLabels;

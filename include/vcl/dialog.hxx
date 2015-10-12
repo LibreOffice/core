@@ -53,7 +53,7 @@ private:
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     SAL_DLLPRIVATE         Dialog (const Dialog &) = delete;
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) = delete;
@@ -66,13 +66,13 @@ protected:
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
-    virtual        void    doDeferredInit(WinBits nBits) SAL_OVERRIDE;
+    virtual        void    doDeferredInit(WinBits nBits) override;
 
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    settingOptimalLayoutSize(Window *pBox) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
 protected:
     friend class VclBuilder;
@@ -83,18 +83,18 @@ public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
     VclButtonBox* get_action_area() { return mpActionArea; }
     VclBox* get_content_area() { return mpContentArea; }
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }

@@ -130,7 +130,7 @@ class SwFntAccess : public SwCacheAccess
 {
     SwViewShell const *pShell;
 protected:
-    virtual SwCacheObj *NewObj( ) SAL_OVERRIDE;
+    virtual SwCacheObj *NewObj( ) override;
 
 public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,

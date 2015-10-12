@@ -54,11 +54,11 @@ namespace ftp {
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface( const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() override;
 
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() override;
 
         // XTypeProvider
 
@@ -68,14 +68,14 @@ namespace ftp {
         )
             throw(
                 com::sun::star::uno::RuntimeException, std::exception
-            ) SAL_OVERRIDE;
+            ) override;
 
         virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(
         )
             throw(
                 com::sun::star::uno::RuntimeException, std::exception
-            ) SAL_OVERRIDE;
+            ) override;
 
 
         // XContentIdentifier
@@ -85,14 +85,14 @@ namespace ftp {
         )
             throw (
                 com::sun::star::uno::RuntimeException, std::exception
-            ) SAL_OVERRIDE;
+            ) override;
 
         virtual OUString SAL_CALL
         getContentProviderScheme(
         )
             throw (
                 ::com::sun::star::uno::RuntimeException, std::exception
-            ) SAL_OVERRIDE;
+            ) override;
 
 
     private:

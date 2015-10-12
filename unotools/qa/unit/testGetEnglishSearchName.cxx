@@ -18,7 +18,7 @@
 class Test: public CppUnit::TestFixture
 {
 public:
-    virtual void setUp() SAL_OVERRIDE;
+    virtual void setUp() override;
     void testSingleElement();
 
     CPPUNIT_TEST_SUITE(Test);

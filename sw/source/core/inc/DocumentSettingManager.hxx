@@ -159,27 +159,27 @@ public:
     virtual ~DocumentSettingManager();
 
     // IDocumentSettingAccess
-    virtual bool get(/*[in]*/ DocumentSettingId id) const SAL_OVERRIDE;
-    virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) SAL_OVERRIDE;
-    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const SAL_OVERRIDE;
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) SAL_OVERRIDE;
-    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() SAL_OVERRIDE;
-    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const SAL_OVERRIDE;
-    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) SAL_OVERRIDE;
-    virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags eMode ) SAL_OVERRIDE;
-    virtual SwCharCompressType getCharacterCompressionType() const SAL_OVERRIDE;
-    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) SAL_OVERRIDE;
+    virtual bool get(/*[in]*/ DocumentSettingId id) const override;
+    virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) override;
+    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const override;
+    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) override;
+    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() override;
+    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const override;
+    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const override;
+    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) override;
+    virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const override;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags eMode ) override;
+    virtual SwCharCompressType getCharacterCompressionType() const override;
+    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) override;
 
 
 // Replace all compatibility options with those from rSource.
     void ReplaceCompatibilityOptions(const DocumentSettingManager& rSource);
 
-    sal_uInt32 Getn32DummyCompatibilityOptions1() const SAL_OVERRIDE;
-    void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) SAL_OVERRIDE;
-    sal_uInt32 Getn32DummyCompatibilityOptions2() const SAL_OVERRIDE;
-    void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) SAL_OVERRIDE;
+    sal_uInt32 Getn32DummyCompatibilityOptions1() const override;
+    void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) override;
+    sal_uInt32 Getn32DummyCompatibilityOptions2() const override;
+    void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) override;
 
 };
 

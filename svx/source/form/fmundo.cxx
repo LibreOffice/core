@@ -85,10 +85,10 @@ public:
 
     }
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
+    virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException, std::exception ) override {}
 
     // XScriptListener
-    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException, std::exception) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -97,7 +97,7 @@ public:
         }
     }
 
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException, std::exception) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )

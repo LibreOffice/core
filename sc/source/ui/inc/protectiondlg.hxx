@@ -35,9 +35,9 @@ class ScTableProtectionDlg : public ModalDialog
 public:
     explicit ScTableProtectionDlg(vcl::Window* pParent);
     virtual ~ScTableProtectionDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 
     void SetDialogData(const ScTableProtection& rData);
 

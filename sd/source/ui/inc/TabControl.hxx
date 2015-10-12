@@ -59,25 +59,25 @@ protected:
     bool                bInternalMove;
 
     // TabBar
-    virtual void        Select() SAL_OVERRIDE;
-    virtual void        DoubleClick() SAL_OVERRIDE;
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        Select() override;
+    virtual void        DoubleClick() override;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void        Command(const CommandEvent& rCEvt) override;
 
-    virtual bool        StartRenaming() SAL_OVERRIDE;
-    virtual TabBarAllowRenamingReturnCode  AllowRenaming() SAL_OVERRIDE;
-    virtual void        EndRenaming() SAL_OVERRIDE;
+    virtual bool        StartRenaming() override;
+    virtual TabBarAllowRenamingReturnCode  AllowRenaming() override;
+    virtual void        EndRenaming() override;
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual bool        DeactivatePage() SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual bool        DeactivatePage() override;
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 private:
     // nested class to implement the TransferableHelper
@@ -92,9 +92,9 @@ private:
 
         virtual             ~TabControlTransferable();
 
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-        virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
+        virtual void        AddSupportedFormats() override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
     };
 

@@ -37,7 +37,7 @@ private:
 public:
     ScSelEntryDlg(vcl::Window* pParent, const std::vector<OUString> &rEntryList);
     virtual ~ScSelEntryDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetSelectEntry() const;
 };

@@ -33,13 +33,13 @@ class SwTableWidthDlg : public SvxStandardDialog
     SwTableFUNC     &rFnc;
 
 protected:
-    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Apply() override;
     DECL_LINK(LoseFocusHdl, void * = 0);
 
 public:
     SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc );
     virtual ~SwTableWidthDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

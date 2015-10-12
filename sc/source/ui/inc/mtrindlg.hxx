@@ -39,7 +39,7 @@ public:
                       long           nFirst    = 1,
                       long           nLast     = 100 );
     virtual ~ScMetricInputDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 

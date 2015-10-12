@@ -133,7 +133,7 @@ class   LwpTabRack : public LwpObject
 public:
     LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm);
 public:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     sal_uInt16 GetNumTabs();
     LwpTab* Lookup(sal_uInt16 nIndex);
     LwpTabRack* GetNext();

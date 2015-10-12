@@ -1237,7 +1237,7 @@ private:
 public:
     SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
     virtual ~SwRTFWriter();
-    virtual sal_uLong WriteStream() SAL_OVERRIDE;
+    virtual sal_uLong WriteStream() override;
 };
 
 SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)

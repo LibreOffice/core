@@ -64,7 +64,7 @@ namespace dbaui
         virtual bool    isNameValid(
             const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
-        ) const SAL_OVERRIDE;
+        ) const override;
 
     private:
         HierarchicalNameCheck();                                            // never implemented
@@ -114,7 +114,7 @@ namespace dbaui
         virtual bool    isNameValid(
             const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
-        ) const SAL_OVERRIDE;
+        ) const override;
 
     private:
         DynamicTableOrQueryNameCheck();                                                // never implemented

@@ -227,18 +227,18 @@ class VerticalImplementation : public Layouter::Implementation
 public:
     explicit VerticalImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const override;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const SAL_OVERRIDE;
+        InsertPosition& rPosition) const override;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const SAL_OVERRIDE;
+        const Size& rPreviewModelSize) const override;
 };
 
 /** The horizontal layouter has one row and as many columns as there are
@@ -249,18 +249,18 @@ class HorizontalImplementation : public Layouter::Implementation
 public:
     explicit HorizontalImplementation(const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const override;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const SAL_OVERRIDE;
+        InsertPosition& rPosition) const override;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const SAL_OVERRIDE;
+        const Size& rPreviewModelSize) const override;
 };
 
 /** The number of columns of the grid layouter is defined via a control in
@@ -275,18 +275,18 @@ public:
         const std::shared_ptr<view::Theme>& rpTheme);
     explicit GridImplementation(const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
+    virtual Layouter::Orientation GetOrientation() const override;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const SAL_OVERRIDE;
+        InsertPosition& rPosition) const override;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const SAL_OVERRIDE;
+        const Size& rPreviewModelSize) const override;
 };
 
 //===== Layouter ==============================================================

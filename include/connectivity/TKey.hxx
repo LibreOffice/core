@@ -31,7 +31,7 @@ namespace connectivity
     {
         OTableHelper*   m_pTable;
     public:
-        virtual void refreshColumns() SAL_OVERRIDE;
+        virtual void refreshColumns() override;
     public:
         OTableKeyHelper(    OTableHelper* _pTable);
         OTableKeyHelper(    OTableHelper* _pTable

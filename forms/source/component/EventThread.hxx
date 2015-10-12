@@ -63,9 +63,9 @@ class OComponentEventThread
 protected:
 
     // XThread
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() override;
 
     // The following method is called to duplicate the Event while respecting it's type.
     virtual css::lang::EventObject* cloneEvent(const css::lang::EventObject* _pEvt) const = 0;
@@ -84,7 +84,7 @@ public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
     explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
@@ -94,7 +94,7 @@ public:
                    bool bFlag = false );
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Resolve ambiguity: both OWeakObject and OObject have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }

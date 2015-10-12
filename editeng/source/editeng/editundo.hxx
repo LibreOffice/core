@@ -42,8 +42,8 @@ public:
     EditUndoDelContent(EditEngine* pEE, ContentNode* pNode, sal_Int32 nPortion);
     virtual ~EditUndoDelContent();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -71,8 +71,8 @@ public:
                          const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, bool bBackward);
     virtual ~EditUndoConnectParas();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -88,8 +88,8 @@ public:
     EditUndoSplitPara(EditEngine* pEE, sal_Int32 nNode, sal_uInt16 nSepPos);
     virtual ~EditUndoSplitPara();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -104,10 +104,10 @@ private:
 public:
     EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 
-    virtual bool    Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
+    virtual bool    Merge( SfxUndoAction *pNextAction ) override;
 };
 
 
@@ -125,8 +125,8 @@ public:
     const EPaM&     GetEPaM() { return aEPaM; }
     OUString        GetStr() const { return aText; }
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -142,8 +142,8 @@ public:
     EditUndoInsertFeature(EditEngine* pEE, const EPaM& rEPaM, const SfxPoolItem& rFeature);
     virtual ~EditUndoInsertFeature();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -159,8 +159,8 @@ public:
     EditUndoMoveParagraphs(EditEngine* pEE, const Range& rParas, sal_Int32 nDest);
     virtual ~EditUndoMoveParagraphs();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -183,8 +183,8 @@ public:
         const SfxItemSet& rPrevParaAttribs);
     virtual ~EditUndoSetStyleSheet();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -201,8 +201,8 @@ public:
     EditUndoSetParaAttribs(EditEngine* pEE, sal_Int32 nPara, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems);
     virtual ~EditUndoSetParaAttribs();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 
@@ -236,8 +236,8 @@ public:
     void                SetRemoveParaAttribs( bool b )  { bRemoveParaAttribs = b; }
     void                SetRemoveWhich( sal_uInt16 n )      { nRemoveWhich = n; }
 
-    virtual void        Undo() SAL_OVERRIDE;
-    virtual void        Redo() SAL_OVERRIDE;
+    virtual void        Undo() override;
+    virtual void        Redo() override;
 
     void AppendContentInfo(ContentAttribsInfo* pNew);
 };
@@ -263,8 +263,8 @@ public:
     void                SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
     void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 
-    virtual void        Undo() SAL_OVERRIDE;
-    virtual void        Redo() SAL_OVERRIDE;
+    virtual void        Undo() override;
+    virtual void        Redo() override;
 };
 
 
@@ -279,8 +279,8 @@ public:
     EditUndoMarkSelection(EditEngine* pEE, const ESelection& rSel);
     virtual ~EditUndoMarkSelection();
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 

@@ -92,7 +92,7 @@ s     * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const SAL_OVERRIDE { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

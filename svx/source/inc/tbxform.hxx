@@ -33,8 +33,8 @@ class SvxFmAbsRecWin : public NumericField
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
 
-    virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
+    virtual void LoseFocus() override;
 
 protected:
     void FirePosition( bool _bForce );
@@ -50,10 +50,10 @@ public:
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlAbsRec();
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
 };
 
 
@@ -65,7 +65,7 @@ public:
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecText();
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
 
 
@@ -77,7 +77,7 @@ public:
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecFromText();
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
 
 
@@ -91,9 +91,9 @@ public:
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecTotal();
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
 };
 
 

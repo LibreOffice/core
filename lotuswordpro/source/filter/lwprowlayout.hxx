@@ -77,13 +77,13 @@ class LwpRowLayout : public LwpVirtualLayout
 public:
     LwpRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_ROW_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_LAYOUT;}
     sal_uInt16 GetRowID() { return crowid;}
-    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void RegisterStyle() override;
     inline LwpTableLayout * GetParentTableLayout(){return dynamic_cast<LwpTableLayout *>(GetParent().obj().get());}
     void SetRowMap();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     sal_uInt16 crowid;
     sal_Int32 cheight;              // Minimum height if height is automatic.
     sal_uInt8 cLeaderDotCount;  // dfb - # of cells with leader dots
@@ -119,9 +119,9 @@ class LwpRowHeadingLayout : public LwpRowLayout
 public:
     LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowHeadingLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_ROW_HEADING_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_HEADING_LAYOUT;}
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     LwpObjectID cRowLayout;
 };
 

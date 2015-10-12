@@ -64,15 +64,15 @@ public:
     SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     virtual ~SwLabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
             void FillItem(SwLabItem& rItem);
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 
     SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
 
@@ -112,7 +112,7 @@ class SwVisitingCardPage : public SfxTabPage
                                     const OUString* pValues );
 
     virtual ~SwVisitingCardPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -122,10 +122,10 @@ public:
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 };
 
 class SwPrivateDataPage : public SfxTabPage
@@ -157,14 +157,14 @@ class SwPrivateDataPage : public SfxTabPage
 public:
     SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 };
 
 class SwBusinessDataPage : public SfxTabPage
@@ -194,14 +194,14 @@ class SwBusinessDataPage : public SfxTabPage
 public:
     SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 };
 
 #endif

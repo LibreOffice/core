@@ -624,7 +624,7 @@ public:
 protected:
 
     /** This is intended to be used to clear any locally held references to other Window-subclass objects */
-    virtual void                        dispose() SAL_OVERRIDE;
+    virtual void                        dispose() override;
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 
@@ -789,7 +789,7 @@ private:
                                         ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
 public:
-    virtual vcl::Region                 GetActiveClipRegion() const SAL_OVERRIDE;
+    virtual vcl::Region                 GetActiveClipRegion() const override;
 
 protected:
     // Single argument ctors shall be explicit.
@@ -800,27 +800,27 @@ protected:
             void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
-    virtual bool                        AcquireGraphics() const SAL_OVERRIDE;
-    virtual void                        ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    virtual bool                        AcquireGraphics() const override;
+    virtual void                        ReleaseGraphics( bool bRelease = true ) override;
 
-    virtual void                        InitClipRegion() SAL_OVERRIDE;
+    virtual void                        InitClipRegion() override;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
-    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false) SAL_OVERRIDE;
-    virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
-    virtual bool                        UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
+    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false) override;
+    virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) override;
+    virtual bool                        UsePolyPolygonForComplexGradient() override;
 
     virtual void DrawGradientWallpaper(long nX, long nY, long nWidth, long nHeight,
-                                       const Wallpaper& rWallpaper) SAL_OVERRIDE
+                                       const Wallpaper& rWallpaper) override
     {
         OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
     }
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
-    bool                                HasMirroredGraphics() const SAL_OVERRIDE;
+    bool                                HasMirroredGraphics() const override;
 
 public:
     // Single argument ctors shall be explicit.
@@ -832,7 +832,7 @@ public:
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
-    virtual void                        EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
+    virtual void                        EnableRTL ( bool bEnable = true ) override;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
     virtual void                        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void                        MouseButtonUp( const MouseEvent& rMEvt );
@@ -843,12 +843,12 @@ public:
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
     void                                Erase(vcl::RenderContext& rRenderContext);
 
-    virtual void Erase() SAL_OVERRIDE
+    virtual void Erase() override
     {
         OutputDevice::Erase();
     }
 
-    virtual void Erase(const Rectangle& rRect) SAL_OVERRIDE
+    virtual void Erase(const Rectangle& rRect) override
     {
         OutputDevice::Erase(rRect);
     }
@@ -956,7 +956,7 @@ public:
     void                                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical = false );
 
     using                               ::OutputDevice::SetSettings;
-    virtual void                        SetSettings( const AllSettings& rSettings ) SAL_OVERRIDE;
+    virtual void                        SetSettings( const AllSettings& rSettings ) override;
     void                                SetSettings( const AllSettings& rSettings, bool bChild );
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );

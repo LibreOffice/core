@@ -72,8 +72,8 @@ public:
                                                 const ScAddress& rNS, const ScAddress& rNE );
                 virtual ~ScUndoObjData();
 
-    virtual void     Undo() SAL_OVERRIDE;
-    virtual void     Redo() SAL_OVERRIDE;
+    virtual void     Undo() override;
+    virtual void     Redo() override;
 };
 
 class ScUndoAnchorData : public SdrUndoObj
@@ -86,8 +86,8 @@ public:
                 ScUndoAnchorData( SdrObject* pObj, ScDocument* pDoc, SCTAB nTab );
                 virtual ~ScUndoAnchorData();
 
-    virtual void     Undo() SAL_OVERRIDE;
-    virtual void     Redo() SAL_OVERRIDE;
+    virtual void     Undo() override;
+    virtual void     Redo() override;
 };
 
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
@@ -111,9 +111,9 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );
     virtual         ~ScDrawLayer();
 
-    virtual SdrPage*  AllocPage(bool bMasterPage) SAL_OVERRIDE;
-    virtual SdrModel* AllocModel() const SAL_OVERRIDE;
-    virtual void    SetChanged( bool bFlg = true ) SAL_OVERRIDE;
+    virtual SdrPage*  AllocPage(bool bMasterPage) override;
+    virtual SdrModel* AllocModel() const override;
+    virtual void    SetChanged( bool bFlg = true ) override;
 
     bool            HasObjects() const;
 
@@ -206,14 +206,14 @@ public:
 
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
 
-    virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
+    virtual ImageMap* GetImageMapForObject(SdrObject* pObj) override;
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
 };
 
 #endif

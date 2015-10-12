@@ -35,8 +35,8 @@ namespace connectivity
         protected:
             OFileTable* m_pTable;
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
         public:
             OColumns(   OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,

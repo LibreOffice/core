@@ -124,7 +124,7 @@ protected:
 public:
                         ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg);
                         virtual ~ParaWin();
-        virtual void    dispose() SAL_OVERRIDE;
+        virtual void    dispose() override;
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);
         void            SetArgumentOffset(sal_uInt16 nOffset);

@@ -34,9 +34,9 @@ class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
 {
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual void    Paint( const UserDrawEvent& rUsrEvt ) SAL_OVERRIDE;
-    virtual void    Click() SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
+    virtual void    Paint( const UserDrawEvent& rUsrEvt ) override;
+    virtual void    Click() override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 

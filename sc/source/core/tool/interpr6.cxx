@@ -296,13 +296,13 @@ class FuncCount : public sc::ColumnSpanSet::ColumnAction
 public:
     FuncCount() : mpCol(0), mnCount(0), mnNumFmt(0) {}
 
-    virtual void startColumn(ScColumn* pCol) SAL_OVERRIDE
+    virtual void startColumn(ScColumn* pCol) override
     {
         mpCol = pCol;
         mpCol->InitBlockPosition(maPos);
     }
 
-    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) SAL_OVERRIDE
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) override
     {
         if (!bVal)
             return;
@@ -328,15 +328,15 @@ class FuncSum : public sc::ColumnSpanSet::ColumnAction
 public:
     FuncSum() : mpCol(0), mfSum(0.0), mnError(0), mnNumFmt(0) {}
 
-    virtual void startColumn(ScColumn* pCol) SAL_OVERRIDE
+    virtual void startColumn(ScColumn* pCol) override
     {
         mpCol = pCol;
         mpCol->InitBlockPosition(maPos);
     }
 
-    virtual void execute(SCROW, SCROW, bool) SAL_OVERRIDE { return; };
+    virtual void execute(SCROW, SCROW, bool) override { return; };
 
-    virtual void executeSum(SCROW nRow1, SCROW nRow2, bool bVal, double& fMem ) SAL_OVERRIDE
+    virtual void executeSum(SCROW nRow1, SCROW nRow2, bool bVal, double& fMem ) override
     {
         if (!bVal)
             return;

@@ -115,11 +115,11 @@ private:
 
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
     getProperties( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
-    virtual OUString getParentURL() SAL_OVERRIDE;
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual OUString getParentURL() override;
 
     static bool hasData( ContentProvider* pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
@@ -254,34 +254,34 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
-        throw() SAL_OVERRIDE;
+        throw() override;
     virtual void SAL_CALL release()
-        throw() SAL_OVERRIDE;
+        throw() override;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XContent
     virtual OUString SAL_CALL
     getContentType()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier > SAL_CALL
     getIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XCommandProcessor
     virtual com::sun::star::uno::Any SAL_CALL
@@ -291,10 +291,10 @@ public:
                 com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( com::sun::star::uno::Exception,
                com::sun::star::ucb::CommandAbortedException,
-               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+               com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     abort( sal_Int32 CommandId )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // Additional interfaces
@@ -304,11 +304,11 @@ public:
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::ucb::ContentInfo > SAL_CALL
     queryCreatableContentsInfo()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContent > SAL_CALL
     createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // Non-interface methods.

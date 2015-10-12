@@ -37,8 +37,8 @@ public:
 
     OUString getUndoDescription() const;
 
-    virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
-    virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
+    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual Pointer GetSdrDragPointer() const override;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getChartModel() const;

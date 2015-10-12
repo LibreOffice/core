@@ -25,12 +25,12 @@ class LimitBox: public NumericBox
     public:
         LimitBox( vcl::Window* pParent, WinBits nStyle );
 
-        virtual OUString    CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
+        virtual OUString    CreateFieldText( sal_Int64 nValue ) const override;
 
-        virtual void        Reformat() SAL_OVERRIDE;
-        virtual void        ReformatAll() SAL_OVERRIDE;
+        virtual void        Reformat() override;
+        virtual void        ReformatAll() override;
 
-        virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+        virtual Size        GetOptimalSize() const override;
 
     private:
         void LoadDefaultLimits();

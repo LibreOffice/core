@@ -74,7 +74,7 @@ namespace comphelper
     class ScalarPredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             SCALAR lhs(0), rhs(0);
             if  (   !( _lhs >>= lhs )
@@ -91,7 +91,7 @@ namespace comphelper
     class StringPredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -113,7 +113,7 @@ namespace comphelper
         {
         }
 
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -133,7 +133,7 @@ namespace comphelper
     class TypePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             ::com::sun::star::uno::Type lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -155,7 +155,7 @@ namespace comphelper
         {
         }
 
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             sal_Int32 lhs(0), rhs(0);
             if  (   !::cppu::enum2int( lhs, _lhs )
@@ -177,7 +177,7 @@ namespace comphelper
     class InterfacePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
         {
             if  (   ( _lhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )
                 ||  ( _rhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )

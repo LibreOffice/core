@@ -33,7 +33,7 @@ protected:
         const SfxItemSet& rCoreSet, const OUString& rPageStyle,
         const OUString& rID, const OUString& rUIXMLDescription );
 public:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) SAL_OVERRIDE;
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) override;
 };
 
 class ScHFEditHeaderDlg : public ScHFEditDlg

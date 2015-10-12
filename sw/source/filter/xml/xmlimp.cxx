@@ -130,7 +130,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
@@ -175,7 +175,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
@@ -266,7 +266,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
@@ -327,7 +327,7 @@ public:
 
     TYPEINFO_OVERRIDE();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(

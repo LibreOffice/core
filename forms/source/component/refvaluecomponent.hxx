@@ -60,26 +60,26 @@ namespace frm
         virtual ~OReferenceValueComponent();
 
         // OPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
-                    throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::Exception, std::exception) override;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                     css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-                    throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+                    throw (css::lang::IllegalArgumentException) override;
         virtual void describeFixedProperties(
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
-        ) const SAL_OVERRIDE;
+        ) const override;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
         virtual css::uno::Sequence< css::uno::Type >
-                                getSupportedBindingTypes() SAL_OVERRIDE;
-        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
-        virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+                                getSupportedBindingTypes() override;
+        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
+        virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
 
-        virtual css::uno::Any   translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateControlValueToValidatableValue( ) const override;
 
-        virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
+        virtual css::uno::Any   getDefaultForReset() const override;
     };
 
 

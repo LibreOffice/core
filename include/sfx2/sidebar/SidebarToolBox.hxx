@@ -41,18 +41,18 @@ class SFX2_DLLPUBLIC SidebarToolBox : public ToolBox
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
     virtual ~SidebarToolBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
             const css::uno::Reference<css::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
             const Size& rRequestedSize = Size(),
-            sal_uInt16 nPos = TOOLBOX_APPEND) SAL_OVERRIDE;
+            sal_uInt16 nPos = TOOLBOX_APPEND) override;
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
+    virtual bool Notify (NotifyEvent& rEvent) override;
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
     sal_uInt16 GetItemIdForSubToolbarName (const OUString& rsCOmmandName) const;

@@ -33,7 +33,7 @@ public:
     MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
+    GetComponentInterface(bool bCreate = true) override;
 };
 
 

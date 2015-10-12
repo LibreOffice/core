@@ -227,15 +227,15 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateParaContents_Impl(long lDiff, UpdateType = MOVE_ALL);
 
 protected:
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Click() SAL_OVERRIDE;
-    virtual bool    StartDrag() SAL_OVERRIDE;
-    virtual void    Drag() SAL_OVERRIDE;
-    virtual void    EndDrag() SAL_OVERRIDE;
-    virtual void    ExtraDown() SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    Click() override;
+    virtual bool    StartDrag() override;
+    virtual void    Drag() override;
+    virtual void    EndDrag() override;
+    virtual void    ExtraDown() override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     virtual void    Update();
 
@@ -262,7 +262,7 @@ public:
     SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, SvxRulerSupportFlags nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
     virtual ~SvxRuler();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetDefTabDist(long);
 

@@ -45,11 +45,11 @@ public:
 
     DocumentChartDataProviderManager( SwDoc& i_rSwdoc );
 
-    SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const SAL_OVERRIDE;
+    SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const override;
 
-    void CreateChartInternalDataProviders( const SwTable *pTable ) SAL_OVERRIDE;
+    void CreateChartInternalDataProviders( const SwTable *pTable ) override;
 
-    SwChartLockController_Helper & GetChartControllerHelper() SAL_OVERRIDE;
+    SwChartLockController_Helper & GetChartControllerHelper() override;
 
     virtual ~DocumentChartDataProviderManager();
 

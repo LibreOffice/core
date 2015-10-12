@@ -30,7 +30,7 @@ namespace connectivity
         class ODbasePreparedStatement : public file::OPreparedStatement
         {
         protected:
-            virtual file::OResultSet* createResultSet() SAL_OVERRIDE;
+            virtual file::OResultSet* createResultSet() override;
         public:
             ODbasePreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();

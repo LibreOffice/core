@@ -1203,29 +1203,29 @@ public:
     virtual ~ImplementationRegistration();
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) override;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
 
     // XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
         const OUString& implementationLoader,
         const OUString& location,
         const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL revokeImplementation(
         const OUString& location,
         const Reference < XSimpleRegistry >& xReg)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
     virtual Sequence< OUString > SAL_CALL getImplementations(
         const OUString& implementationLoader,
         const OUString& location)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
     virtual Sequence< OUString > SAL_CALL checkInstantiation(
         const OUString& implementationName)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
     // XImplementationRegistration2
     virtual void SAL_CALL registerImplementationWithLocation(
@@ -1233,12 +1233,12 @@ public:
         const OUString& location,
         const OUString& registeredLocation,
         const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(
         const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw(  css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(  css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 private: // helper methods
     void prepareRegister(

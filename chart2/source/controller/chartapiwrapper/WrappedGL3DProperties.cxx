@@ -59,7 +59,7 @@ public:
 
     virtual uno::Any getPropertyValue( const uno::Reference<beans::XPropertySet>& /*xInnerPS*/ ) const
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-               uno::RuntimeException) SAL_OVERRIDE
+               uno::RuntimeException) override
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -79,7 +79,7 @@ public:
         const uno::Any& rOutValue, const uno::Reference<beans::XPropertySet>& /*xInnerPS*/ ) const
             throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                    lang::IllegalArgumentException, lang::WrappedTargetException,
-                   uno::RuntimeException) SAL_OVERRIDE
+                   uno::RuntimeException) override
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -94,7 +94,7 @@ public:
     }
 
     virtual void setPropertyToDefault( const uno::Reference<beans::XPropertyState>& /*xInnerPropState*/ ) const
-        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, uno::RuntimeException) override
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -110,13 +110,13 @@ public:
 
     virtual uno::Any getPropertyDefault( const uno::Reference<beans::XPropertyState>& /*xInnerPS*/ ) const
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-               uno::RuntimeException) SAL_OVERRIDE
+               uno::RuntimeException) override
     {
         return maDefault;
     }
 
     virtual beans::PropertyState getPropertyState( const uno::Reference<beans::XPropertyState>& /*xInnerPS*/ ) const
-        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE
+        throw (beans::UnknownPropertyException, uno::RuntimeException) override
     {
         return beans::PropertyState_DIRECT_VALUE;
     }

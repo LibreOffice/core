@@ -34,14 +34,14 @@ namespace dbaui
     public:
         explicit OApplicationIconControl(vcl::Window* _pParent);
         virtual ~OApplicationIconControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
 
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX

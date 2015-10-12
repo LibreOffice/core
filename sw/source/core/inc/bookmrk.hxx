@@ -50,16 +50,16 @@ namespace sw {
         {
         public:
             //getters
-            virtual SwPosition& GetMarkPos() const SAL_OVERRIDE
+            virtual SwPosition& GetMarkPos() const override
                 { return *m_pPos1; }
-            virtual const OUString& GetName() const SAL_OVERRIDE
+            virtual const OUString& GetName() const override
                 { return m_aName; }
-            virtual SwPosition& GetOtherMarkPos() const SAL_OVERRIDE
+            virtual SwPosition& GetOtherMarkPos() const override
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
                 return *m_pPos2;
             }
-            virtual SwPosition& GetMarkStart() const SAL_OVERRIDE
+            virtual SwPosition& GetMarkStart() const override
             {
                 if( !IsExpanded() ) return GetMarkPos( );
                 if ( GetMarkPos( ) < GetOtherMarkPos( ) )
@@ -67,7 +67,7 @@ namespace sw {
                 else
                     return GetOtherMarkPos( );
             }
-            virtual SwPosition& GetMarkEnd() const SAL_OVERRIDE
+            virtual SwPosition& GetMarkEnd() const override
             {
                 if( !IsExpanded() ) return GetMarkPos();
                 if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
@@ -76,8 +76,8 @@ namespace sw {
                     return GetOtherMarkPos( );
             }
 
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const SAL_OVERRIDE;
-            virtual bool IsExpanded() const SAL_OVERRIDE
+            virtual bool IsCoveringPosition(const SwPosition& rPos) const override;
+            virtual bool IsExpanded() const override
                 { return static_cast< bool >(m_pPos2); }
 
             void SetName(const OUString& rName)
@@ -87,8 +87,8 @@ namespace sw {
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
-            virtual OUString ToString( ) const SAL_OVERRIDE;
-            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+            virtual OUString ToString( ) const override;
+            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
             void Swap()
             {
@@ -111,7 +111,7 @@ namespace sw {
 
         protected:
             // SwClient
-            virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
+            virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
             MarkBase(const SwPaM& rPaM, const OUString& rName);
             std::unique_ptr<SwPosition> m_pPos1;
@@ -170,26 +170,26 @@ namespace sw {
                 const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
-            virtual void InitDoc(SwDoc* const io_Doc) SAL_OVERRIDE;
+            virtual void InitDoc(SwDoc* const io_Doc) override;
 
-            virtual void DeregisterFromDoc(SwDoc* const io_pDoc) SAL_OVERRIDE;
+            virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
 
-            virtual const OUString& GetShortName() const SAL_OVERRIDE
+            virtual const OUString& GetShortName() const override
                 { return m_sShortName; }
-            virtual const vcl::KeyCode& GetKeyCode() const SAL_OVERRIDE
+            virtual const vcl::KeyCode& GetKeyCode() const override
                 { return m_aCode; }
-            virtual void SetShortName(const OUString& rShortName) SAL_OVERRIDE
+            virtual void SetShortName(const OUString& rShortName) override
                 { m_sShortName = rShortName; }
-            virtual void SetKeyCode(const vcl::KeyCode& rCode) SAL_OVERRIDE
+            virtual void SetKeyCode(const vcl::KeyCode& rCode) override
                 { m_aCode = rCode; }
 
             // ::sfx2::Metadatable
-            virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;
-            virtual bool IsInClipboard() const SAL_OVERRIDE;
-            virtual bool IsInUndo() const SAL_OVERRIDE;
-            virtual bool IsInContent() const SAL_OVERRIDE;
+            virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
+            virtual bool IsInClipboard() const override;
+            virtual bool IsInUndo() const override;
+            virtual bool IsInContent() const override;
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
+                ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
 
         private:
             vcl::KeyCode m_aCode;
@@ -203,20 +203,20 @@ namespace sw {
         public:
             Fieldmark(const SwPaM& rPaM);
 
-            virtual OUString GetFieldname() const SAL_OVERRIDE
+            virtual OUString GetFieldname() const override
                 { return m_aFieldname; }
-            virtual OUString GetFieldHelptext() const SAL_OVERRIDE
+            virtual OUString GetFieldHelptext() const override
                 { return m_aFieldHelptext; }
 
-            virtual IFieldmark::parameter_map_t* GetParameters() SAL_OVERRIDE
+            virtual IFieldmark::parameter_map_t* GetParameters() override
                 { return &m_vParams; }
 
-            virtual const IFieldmark::parameter_map_t* GetParameters() const SAL_OVERRIDE
+            virtual const IFieldmark::parameter_map_t* GetParameters() const override
                 { return &m_vParams; }
 
-            virtual void SetFieldname(const OUString& aFieldname) SAL_OVERRIDE
+            virtual void SetFieldname(const OUString& aFieldname) override
                 { m_aFieldname = aFieldname; }
-            virtual void SetFieldHelptext(const OUString& aFieldHelptext) SAL_OVERRIDE
+            virtual void SetFieldHelptext(const OUString& aFieldHelptext) override
                 { m_aFieldHelptext = aFieldHelptext; }
 
             virtual void ReleaseDoc(SwDoc* const) = 0;
@@ -224,9 +224,9 @@ namespace sw {
             void SetMarkStartPos( const SwPosition& rNewStartPos );
             void SetMarkEndPos( const SwPosition& rNewEndPos );
 
-            virtual void Invalidate() SAL_OVERRIDE;
-            virtual OUString ToString() const SAL_OVERRIDE;
-            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+            virtual void Invalidate() override;
+            virtual OUString ToString() const override;
+            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
         private:
             OUString m_aFieldname;
@@ -239,8 +239,8 @@ namespace sw {
         {
         public:
             TextFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc) SAL_OVERRIDE;
-            virtual void ReleaseDoc(SwDoc* const pDoc) SAL_OVERRIDE;
+            virtual void InitDoc(SwDoc* const io_pDoc) override;
+            virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
         class CheckboxFieldmark
@@ -249,10 +249,10 @@ namespace sw {
         {
         public:
             CheckboxFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc) SAL_OVERRIDE;
-            virtual void ReleaseDoc(SwDoc* const pDoc) SAL_OVERRIDE;
-            bool IsChecked() const SAL_OVERRIDE;
-            void SetChecked(bool checked) SAL_OVERRIDE;
+            virtual void InitDoc(SwDoc* const io_pDoc) override;
+            virtual void ReleaseDoc(SwDoc* const pDoc) override;
+            bool IsChecked() const override;
+            void SetChecked(bool checked) override;
         };
     }
 }

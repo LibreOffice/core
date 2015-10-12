@@ -34,7 +34,7 @@ public:
         : m_center(center), m_single(single),
           m_oppositeVertical(oppositeVertical), m_flipOnYAxis(flipOnYAxis)
         {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     const bool m_center, m_single, m_oppositeVertical, m_flipOnYAxis;
 };

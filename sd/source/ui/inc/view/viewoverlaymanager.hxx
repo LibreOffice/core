@@ -46,7 +46,7 @@ public:
     bool CreateTags();
     bool DisposeTags();
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 private:
     ViewShellBase& mrBase;

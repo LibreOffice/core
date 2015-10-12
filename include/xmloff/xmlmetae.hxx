@@ -84,34 +84,34 @@ public:
     // ::com::sun::star::xml::sax::XDocumentHandler:
     virtual void SAL_CALL startDocument()
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL endDocument()
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL startElement(const OUString & i_rName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttribs)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL endElement(const OUString & i_rName)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL characters(const OUString & i_rChars)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace(
         const OUString & i_rWhitespaces)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         const OUString & i_rTarget, const OUString & i_rData)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL setDocumentLocator(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XLocator > & i_xLocator)
         throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::xml::sax::SAXException, std::exception) override;
 
 };
 

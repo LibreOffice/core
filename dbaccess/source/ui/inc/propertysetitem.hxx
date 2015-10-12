@@ -40,8 +40,8 @@ namespace dbaui
             const css::uno::Reference< css::beans::XPropertySet >& _rxSet);
         OPropertySetItem(const OPropertySetItem& _rSource);
 
-        virtual bool             operator==(const SfxPoolItem& _rItem) const SAL_OVERRIDE;
-        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const SAL_OVERRIDE;
+        virtual bool             operator==(const SfxPoolItem& _rItem) const override;
+        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const override;
     };
 
 }   // namespace dbaui

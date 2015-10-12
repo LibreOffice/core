@@ -44,10 +44,10 @@ class ImageButtonToolbarController : public ComplexToolbarController
         virtual ~ImageButtonToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     protected:
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;
+        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) override;
 
     private:
         bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );

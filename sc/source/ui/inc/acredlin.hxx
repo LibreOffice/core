@@ -165,14 +165,14 @@ public:
                                ScViewData*      ptrViewData);
 
                     virtual ~ScAcceptChgDlg();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            ReInit(ScViewData* ptrViewData);
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     void            Initialize (SfxChildWinInfo* pInfo);
-    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
+    virtual void    FillInfo(SfxChildWinInfo&) const override;
 
 };
 

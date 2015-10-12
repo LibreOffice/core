@@ -26,14 +26,14 @@ public:
     virtual ~GtkSalSystem();
     static   GtkSalSystem *GetSingleton();
 
-    virtual bool          IsUnifiedDisplay() SAL_OVERRIDE;
-    virtual unsigned int  GetDisplayScreenCount() SAL_OVERRIDE;
-    virtual unsigned int  GetDisplayBuiltInScreen() SAL_OVERRIDE;
-    virtual Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen) SAL_OVERRIDE;
+    virtual bool          IsUnifiedDisplay() override;
+    virtual unsigned int  GetDisplayScreenCount() override;
+    virtual unsigned int  GetDisplayBuiltInScreen() override;
+    virtual Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen) override;
     virtual int           ShowNativeDialog (const OUString&              rTitle,
                                             const OUString&              rMessage,
                                             const std::list< OUString >& rButtons,
-                                            int                        nDefButton) SAL_OVERRIDE;
+                                            int                        nDefButton) override;
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     int               GetDisplayXScreenCount();

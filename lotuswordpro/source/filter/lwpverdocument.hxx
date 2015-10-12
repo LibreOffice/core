@@ -71,8 +71,8 @@ class LwpVerDocument : public LwpObject
 {
 public:
     LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    void Read() SAL_OVERRIDE;
-    virtual void RegisterStyle() SAL_OVERRIDE;
+    void Read() override;
+    virtual void RegisterStyle() override;
 private:
     virtual ~LwpVerDocument(){}
 

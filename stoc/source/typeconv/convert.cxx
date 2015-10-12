@@ -251,17 +251,17 @@ public:
     virtual ~TypeConverter_Impl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
     virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
     // XTypeConverter
     virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) override;
     virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) override;
 };
 
 TypeConverter_Impl::TypeConverter_Impl() {}

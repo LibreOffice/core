@@ -37,7 +37,7 @@ public:
     {
         create();
     }
-    virtual void SAL_CALL run() SAL_OVERRIDE
+    virtual void SAL_CALL run() override
     {
         TimeValue aWait;
         aWait.Seconds = mnSeconds;
@@ -110,7 +110,7 @@ public:
         Start();
         mrBool = false;
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         mrBool = true;
         Application::EndYield();
@@ -159,7 +159,7 @@ public:
         Start();
         mrBool = false;
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         mrBool = true;
         Application::EndYield();
@@ -194,7 +194,7 @@ public:
         Start();
         mrCount = 0;
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         mrCount++;
     }
@@ -314,7 +314,7 @@ public:
         SetTimeout( nMS );
         Start();
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         for (int i = 0; i < 100; i++)
             Application::Yield();
@@ -344,7 +344,7 @@ public:
         Start();
         mbSlow = false;
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         TimeValue aWait;
         aWait.Seconds = 1;

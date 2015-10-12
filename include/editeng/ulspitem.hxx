@@ -47,22 +47,22 @@ public:
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+                                    OUString &rText, const IntlWrapper * = 0 ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
-    virtual bool                 ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
-    virtual bool                 HasMetrics() const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
+    virtual bool                 ScaleMetrics( long nMult, long nDiv ) override;
+    virtual bool                 HasMetrics() const override;
 
     inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );
     inline void SetLower( const sal_uInt16 nL, const sal_uInt16 nProp = 100 );
@@ -78,7 +78,7 @@ public:
     bool GetContext() const { return bContext; }
     sal_uInt16 GetPropUpper() const { return nPropUpper; }
     sal_uInt16 GetPropLower() const { return nPropLower; }
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline SvxULSpaceItem &SvxULSpaceItem::operator=( const SvxULSpaceItem &rCpy )

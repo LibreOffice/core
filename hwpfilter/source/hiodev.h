@@ -85,53 +85,53 @@ class HStreamIODev : public HIODev
 /**
  * Check whether the stream is available
  */
-        virtual bool open() SAL_OVERRIDE;
+        virtual bool open() override;
 /**
  * Free stream object
  */
-        virtual void close() SAL_OVERRIDE;
+        virtual void close() override;
 /**
  * If the stream is gzipped, flush the stream.
  */
-        virtual void flush() SAL_OVERRIDE;
+        virtual void flush() override;
 /**
  * Not implemented.
  */
-        virtual int  state() const SAL_OVERRIDE;
+        virtual int  state() const override;
 /**
  * Set whether the stream is compressed or not
  */
-        virtual bool setCompressed( bool ) SAL_OVERRIDE;
+        virtual bool setCompressed( bool ) override;
 /**
  * Read one byte from stream
  */
         using HIODev::read1b;
-        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
-        virtual bool read1b(char &out) SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) override;
+        virtual bool read1b(char &out) override;
 /**
  * Read 2 bytes from stream
  */
         using HIODev::read2b;
-        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) override;
 /**
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
-        virtual bool read4b(int &out) SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) override;
+        virtual bool read4b(int &out) override;
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
-        virtual int readBlock( void *ptr, int size ) SAL_OVERRIDE;
+        virtual int readBlock( void *ptr, int size ) override;
 /**
  * Move current pointer of stream as amount of size
  */
-        virtual int skipBlock( int size ) SAL_OVERRIDE;
+        virtual int skipBlock( int size ) override;
     protected:
 /**
  * Initialize this object
  */
-        virtual void init() SAL_OVERRIDE;
+        virtual void init() override;
 };
 
 /* Memory, input and output devices */
@@ -147,24 +147,24 @@ class HMemIODev : public HIODev
         HMemIODev(char *s, int len);
         virtual ~HMemIODev();
 
-        virtual bool open() SAL_OVERRIDE;
-        virtual void close() SAL_OVERRIDE;
-        virtual void flush() SAL_OVERRIDE;
-        virtual int  state() const SAL_OVERRIDE;
+        virtual bool open() override;
+        virtual void close() override;
+        virtual void flush() override;
+        virtual int  state() const override;
 /* gzip routine wrapper */
-        virtual bool setCompressed( bool ) SAL_OVERRIDE;
+        virtual bool setCompressed( bool ) override;
         using HIODev::read1b;
-        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
-        virtual bool read1b(char &out) SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) override;
+        virtual bool read1b(char &out) override;
         using HIODev::read2b;
-        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) override;
         using HIODev::read4b;
-        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
-        virtual bool read4b(int &out) SAL_OVERRIDE;
-        virtual int readBlock( void *ptr, int size ) SAL_OVERRIDE;
-        virtual int skipBlock( int size ) SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) override;
+        virtual bool read4b(int &out) override;
+        virtual int readBlock( void *ptr, int size ) override;
+        virtual int skipBlock( int size ) override;
     protected:
-        virtual void init() SAL_OVERRIDE;
+        virtual void init() override;
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 

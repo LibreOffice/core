@@ -55,14 +55,14 @@ public:
     AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWinData );
     virtual ~AquaSalObject();
 
-    virtual void                    ResetClipRegion() SAL_OVERRIDE;
-    virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
-    virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
-    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
+    virtual void                    ResetClipRegion() override;
+    virtual sal_uInt16              GetClipRegionType() override;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) override;
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    EndSetClipRegion() override;
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    Show( bool bVisible ) override;
+    virtual const SystemEnvData*    GetSystemData() const override;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALOBJ_H

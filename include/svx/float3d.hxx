@@ -211,13 +211,13 @@ private:
     SVX_DLLPRIVATE void         SetUILightState( PushButton& aBtn, bool bState );
 
 protected:
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
 
 public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
                         vcl::Window* pParent );
             virtual ~Svx3DWin();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    InitColorLB( const SdrModel* pDoc );
     bool    IsUpdateMode() const { return bUpdate; }
@@ -239,7 +239,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                const SfxPoolItem* pState ) override;
 
  public:
     Svx3DCtrlItem( sal_uInt16, SfxBindings* );
@@ -257,7 +257,7 @@ class SvxConvertTo3DItem : public SfxControllerItem
     bool                        bState;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
 public:
     SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);

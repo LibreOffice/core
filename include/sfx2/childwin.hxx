@@ -273,7 +273,7 @@ public:
         static  SfxChildWindow* CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=NULL, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE); \
-        virtual SfxChildWinInfo GetInfo() const SAL_OVERRIDE
+        virtual SfxChildWinInfo GetInfo() const override
 
 #define SFX_DECL_CHILDWINDOW_WITHID(Class) \
         SFX_DECL_CHILDWINDOW(Class); \

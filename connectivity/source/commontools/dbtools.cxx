@@ -1648,24 +1648,24 @@ namespace
         OParameterWrapper(const ::std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
     private:
         // ::com::sun::star::container::XElementAccess
-        virtual Type SAL_CALL getElementType() throw(RuntimeException, std::exception) SAL_OVERRIDE
+        virtual Type SAL_CALL getElementType() throw(RuntimeException, std::exception) override
         {
             return m_xSource->getElementType();
         }
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();
             return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
         }
         // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getCount();
             return ::std::count(m_aSet.begin(),m_aSet.end(),false);
         }
-        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
+        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);

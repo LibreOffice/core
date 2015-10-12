@@ -40,11 +40,11 @@ public:
         return m_aMap;
     }
 
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
 
-    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) SAL_OVERRIDE;
-    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
 };
 #endif
 

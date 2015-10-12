@@ -48,8 +48,8 @@ class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceI
         explicit CertificateContainer(const css::uno::Reference< css::lang::XMultiServiceFactory >& ) {}
         virtual ~CertificateContainer() {}
 
-        virtual sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException, std::exception) override;
 
         // provide factory
         static OUString SAL_CALL impl_getStaticImplementationName( ) throw(css::uno::RuntimeException);
@@ -61,11 +61,11 @@ class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceI
                     impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
-                    getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
 };
 

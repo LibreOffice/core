@@ -43,11 +43,11 @@ public:
 
     DECL_LINK_TYPED( ClickHdl, Button *, void );
 
-    virtual bool IsHorizontal() const SAL_OVERRIDE;
-    virtual bool IsProportional() const SAL_OVERRIDE;
-    virtual long GetCount() const SAL_OVERRIDE;
+    virtual bool IsHorizontal() const override;
+    virtual bool IsProportional() const override;
+    virtual long GetCount() const override;
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 };
 
 #endif

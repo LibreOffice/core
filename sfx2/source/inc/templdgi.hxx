@@ -80,17 +80,17 @@ public:
         SetHighlightRange();
     }
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
     using SvTreeListBox::ExecuteDrop;
-    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 
     sal_uInt16 GetModifier() const
     {
         return nModifier;
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool Notify( NotifyEvent& rNEvt ) override;
 };
 
 typedef std::vector<OUString> ExpandedEntries_t;
@@ -107,14 +107,14 @@ private:
     OUString  aStyle;
 
 protected:
-    virtual void Command(const CommandEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual bool DoubleClickHdl() SAL_OVERRIDE;
-    virtual bool ExpandingHdl() SAL_OVERRIDE;
-    virtual void ExpandedHdl() SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rMEvt) override;
+    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual bool DoubleClickHdl() override;
+    virtual bool ExpandingHdl() override;
+    virtual void ExpandedHdl() override;
     virtual TriState NotifyMoving(
                 SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                SvTreeListEntry*& rpNewParent, sal_uIntPtr& rNewChildPos) SAL_OVERRIDE;
+                SvTreeListEntry*& rpNewParent, sal_uIntPtr& rNewChildPos) override;
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
 
@@ -141,7 +141,7 @@ public:
     }
     void MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
 };
 
 class SfxActionListBox : public DropListBox_Impl
@@ -150,7 +150,7 @@ protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
     void Recalc();
 };
 
@@ -280,7 +280,7 @@ protected:
     // information of the ith Family in the pStyleFamilies.
     sal_uInt16 StyleNrToInfoOffset( sal_uInt16 i );
 
-    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void FamilySelect( sal_uInt16 nId );
     void SetFamily( sal_uInt16 nId );
@@ -343,8 +343,8 @@ class DropToolBox_Impl : public ToolBox, public DropTargetHelper
 {
     SfxTemplateDialog_Impl&     rParent;
 protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 public:
     DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
 };
@@ -367,15 +367,15 @@ private:
     DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
 
 protected:
-    virtual void EnableEdit( bool = true ) SAL_OVERRIDE;
-    virtual void EnableItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
-    virtual void CheckItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
-    virtual bool IsCheckedItem( sal_uInt16 nMesId ) SAL_OVERRIDE;
-    virtual void LoadedFamilies() SAL_OVERRIDE;
-    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) SAL_OVERRIDE;
-    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) SAL_OVERRIDE;
-    virtual void ClearFamilyList() SAL_OVERRIDE;
-    virtual void ReplaceUpdateButtonByMenu() SAL_OVERRIDE;
+    virtual void EnableEdit( bool = true ) override;
+    virtual void EnableItem( sal_uInt16 nMesId, bool bCheck = true ) override;
+    virtual void CheckItem( sal_uInt16 nMesId, bool bCheck = true ) override;
+    virtual bool IsCheckedItem( sal_uInt16 nMesId ) override;
+    virtual void LoadedFamilies() override;
+    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) override;
+    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) override;
+    virtual void ClearFamilyList() override;
+    virtual void ReplaceUpdateButtonByMenu() override;
 
     void Resize();
     Size GetMinOutputSizePixel();

@@ -52,15 +52,15 @@ namespace dbaui
         void ImplInitSettings();
     protected:
         // Window
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     public:
         OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
         virtual ~OAppBorderWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void GetFocus() override;
+        virtual void Resize() override;
 
         OApplicationView*       getView() const { return m_pView;}
         OApplicationSwapWindow* getPanel() const;
@@ -91,13 +91,13 @@ namespace dbaui
     protected:
 
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
 
         // OEventListenerAdapter
-        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
         // Window
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     public:
         OApplicationView(   vcl::Window* pParent
                             ,const css::uno::Reference< css::uno::XComponentContext >&
@@ -105,7 +105,7 @@ namespace dbaui
                             ,PreviewMode _ePreviewMode
                             );
         virtual ~OApplicationView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// automatically creates mnemonics for the icon/texts in our left hand side panel
         void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
@@ -114,18 +114,18 @@ namespace dbaui
         void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
         // Window overrides
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
 
         inline OApplicationController&                  getAppController() const { return m_rAppController; }
 
         // IClipboardTest
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual bool isPasteAllowed() override;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
 
         /// get the left panel
         inline OApplicationSwapWindow*  getPanel()      const { return m_pWin->getPanel(); }

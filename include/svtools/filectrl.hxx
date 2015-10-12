@@ -67,24 +67,24 @@ private:
     SVT_DLLPRIVATE void     ImplBrowseFile( );
 
 protected:
-    SVT_DLLPRIVATE void     Resize() SAL_OVERRIDE;
-    SVT_DLLPRIVATE void     GetFocus() SAL_OVERRIDE;
-    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    SVT_DLLPRIVATE void     Resize() override;
+    SVT_DLLPRIVATE void     GetFocus() override;
+    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) override;
     SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     DECL_DLLPRIVATE_LINK_TYPED( ButtonHdl, Button*, void );
 
 public:
                     FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = FileControlMode::NONE );
     virtual         ~FileControl();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     Edit&           GetEdit() { return *maEdit.get(); }
     PushButton&     GetButton() { return *maButton.get(); }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
 
-    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
-    OUString        GetText() const SAL_OVERRIDE;
+    void            SetText( const OUString& rStr ) override;
+    OUString        GetText() const override;
 
     void            SetEditModifyHdl( const Link<>& rLink );
 };

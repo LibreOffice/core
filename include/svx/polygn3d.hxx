@@ -36,7 +36,7 @@ private:
     SVX_DLLPRIVATE void CreateDefaultTexture();
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
 public:
     void SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
@@ -57,10 +57,10 @@ public:
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dPolygonObj* Clone() const SAL_OVERRIDE;
+    virtual E3dPolygonObj* Clone() const override;
 
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }

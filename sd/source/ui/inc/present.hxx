@@ -89,7 +89,7 @@ public:
                                 const std::vector<OUString> &rPageNames,
                                 SdCustomShowList* pCSList );
     virtual             ~SdStartPresentationDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                GetAttr( SfxItemSet& rOutAttrs );
 };

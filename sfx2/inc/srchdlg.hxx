@@ -59,7 +59,7 @@ private:
 public:
     SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
     virtual ~SearchDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void         SetFindHdl( const Link<SearchDialog&,void>& rLink ) { m_aFindHdl = rLink; }
     void         SetCloseHdl( const Link<SearchDialog*,void>& rLink ) { m_aCloseHdl = rLink; }
@@ -73,9 +73,9 @@ public:
 
     void            SetFocusOnEdit();
 
-    virtual bool    Close() SAL_OVERRIDE;
-    virtual void    Move() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual bool    Close() override;
+    virtual void    Move() override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
 };
 
 

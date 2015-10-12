@@ -29,7 +29,7 @@ namespace connectivity
         class OFlatColumns : public file::OColumns
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         public:
             OFlatColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,

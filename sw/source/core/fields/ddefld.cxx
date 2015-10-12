@@ -48,13 +48,13 @@ public:
         rFieldType( rType )
     {}
 
-    virtual void Closed() SAL_OVERRIDE;
+    virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) override;
 
-    virtual const SwNode* GetAnchor() const SAL_OVERRIDE;
+    virtual const SwNode* GetAnchor() const override;
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
-                            sal_Int32 nEnd = -1 ) const SAL_OVERRIDE;
+                            sal_Int32 nEnd = -1 ) const override;
 };
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,

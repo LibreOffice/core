@@ -49,24 +49,24 @@ protected:
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 protected:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -75,11 +75,11 @@ protected:
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const css::awt::Point& rPoint )
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** Grabs the focus to the Grid Control. */
     virtual void SAL_CALL grabFocus()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo -----------------------------------------------------------
 
@@ -87,7 +87,7 @@ protected:
             The name of this class.
     */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
 public:
     // helper functions
@@ -119,10 +119,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
+    virtual Rectangle implGetBoundingBox() override;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
+    virtual Rectangle implGetBoundingBoxOnScreen() override;
 
     // internal helper methods ------------------------------------------------
 
@@ -192,35 +192,35 @@ protected:
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) override;
 
     // IAccessibleTable
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() SAL_OVERRIDE
+        getMyself() override
     {
         return this;
     }
-    void DisposeAccessImpl() SAL_OVERRIDE;
-    virtual bool isAlive() const SAL_OVERRIDE
+    void DisposeAccessImpl() override;
+    virtual bool isAlive() const override
     {
         return isContextAlive();
     }
     virtual void commitCellEvent( sal_Int16 nEventId,
-         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
+         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitCellEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
-         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
+         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
         AccessibleGridControl* pContext( getContext() );
         if ( pContext )

@@ -56,8 +56,8 @@ public:
         : Permission( ALL, next )
         {}
 
-    virtual bool implies( Permission const & ) const SAL_OVERRIDE;
-    virtual OUString toString() const SAL_OVERRIDE;
+    virtual bool implies( Permission const & ) const override;
+    virtual OUString toString() const override;
 };
 
 

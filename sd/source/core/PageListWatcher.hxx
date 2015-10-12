@@ -66,8 +66,8 @@ public:
 class ImpDrawPageListWatcher : public ImpPageListWatcher
 {
 protected:
-    virtual sal_uInt32 ImpGetPageCount() const SAL_OVERRIDE;
-    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 ImpGetPageCount() const override;
+    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const override;
 
 public:
     ImpDrawPageListWatcher(const SdrModel& rModel);
@@ -77,8 +77,8 @@ public:
 class ImpMasterPageListWatcher : public ImpPageListWatcher
 {
 protected:
-    virtual sal_uInt32 ImpGetPageCount() const SAL_OVERRIDE;
-    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 ImpGetPageCount() const override;
+    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const override;
 
 public:
     ImpMasterPageListWatcher(const SdrModel& rModel);

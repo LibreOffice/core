@@ -91,13 +91,13 @@ public:
 
 
     virtual css::uno::Type SAL_CALL getElementType()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return hasItems();
     }
@@ -111,7 +111,7 @@ public:
         const OUString& rName )
         throw( css::container::NoSuchElementException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception ) override
     {
         typename map_t::const_iterator aIter = findItem( rName );
         if( aIter == maItems.end() )
@@ -121,7 +121,7 @@ public:
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         css::uno::Sequence<OUString> aSequence( maItems.size() );
         typename map_t::const_iterator aIter = maItems.begin();
@@ -139,7 +139,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) override
     {
         return hasItem( rName );
     }
@@ -155,7 +155,7 @@ public:
         throw( css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception) override
     {
         T aItem;
         if( aElement >>= aItem )
@@ -178,7 +178,7 @@ public:
         throw( css::lang::IllegalArgumentException,
                css::container::ElementExistException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception ) override
     {
         T aItem;
         if( aElement >>= aItem )
@@ -194,7 +194,7 @@ public:
         const OUString& rName )
         throw( css::container::NoSuchElementException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               css::uno::RuntimeException, std::exception) override
     {
         if( hasByName( rName ) )
             remove( rName );

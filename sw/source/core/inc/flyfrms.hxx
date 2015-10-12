@@ -61,17 +61,17 @@ protected:
     // method <NotifyBackground>
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
-                                   const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
+                                   const SwRect& rRect, PrepareHint eHint) override;
     SwFlyFreeFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwFlyFreeFrm();
 
 public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     // #i37068# - accessors for member <mbNoMoveOnCheckClip>
     inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
@@ -118,7 +118,7 @@ public:
         format isn't possible, if Writer fly frame isn't registered at a page frame
         and its anchor frame isn't inside another Writer fly frame.
     */
-    virtual bool IsFormatPossible() const SAL_OVERRIDE;
+    virtual bool IsFormatPossible() const override;
 };
 
 // Flys that are bound to LayoutFrms and not to Content
@@ -131,25 +131,25 @@ public:
     SwFlyLayFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 };
 
 // Flys that are bound to Content but not in Content
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
 protected:
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     // #i28701#
-    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const SAL_OVERRIDE;
+    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const override;
 
     /** method to assure that anchored object is registered at the correct
         page frame
 
         #i28701#
     */
-    virtual void RegisterAtCorrectPage() SAL_OVERRIDE;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void RegisterAtCorrectPage() override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
     // #i28701#
@@ -160,7 +160,7 @@ public:
     void SetAbsPos( const Point &rNew );
 
     // #i26791#
-    virtual void MakeObjPos() SAL_OVERRIDE;
+    virtual void MakeObjPos() override;
 
     /** method to determine, if a format on the Writer fly frame is possible
 
@@ -169,7 +169,7 @@ public:
         <SwFlyFreeFrm::IsFormatPossible()> by:
         format isn't possible, if method <MakeAll()> is already in progress.
     */
-    virtual bool IsFormatPossible() const SAL_OVERRIDE;
+    virtual bool IsFormatPossible() const override;
 };
 
 // Flys that are bound to a character in Content
@@ -180,14 +180,14 @@ class SwFlyInCntFrm : public SwFlyFrm
     bool bInvalidLayout :1;
     bool bInvalidContent  :1;
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwFlyInCntFrm();
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
-                                   const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
-    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+                                   const SwRect& rRect, PrepareHint eHint) override;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
     // #i28701#
@@ -195,7 +195,7 @@ public:
 
     SwFlyInCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
-    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
@@ -217,11 +217,11 @@ public:
     void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
 
     // #i26791#
-    virtual void MakeObjPos() SAL_OVERRIDE;
+    virtual void MakeObjPos() override;
 
     // invalidate anchor frame on invalidation of the position, because the
     // position is calculated during the format of the anchor frame
-    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid ) SAL_OVERRIDE;
+    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid ) override;
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const

@@ -89,12 +89,12 @@ namespace sdbtools
         }
 
         // INameValidation
-        virtual bool validateName( const OUString& _rName ) SAL_OVERRIDE
+        virtual bool validateName( const OUString& _rName ) override
         {
             return !m_xContainer->hasByName( _rName );
         }
 
-        virtual void validateName_throw( const OUString& _rName ) SAL_OVERRIDE
+        virtual void validateName_throw( const OUString& _rName ) override
         {
             if ( validateName( _rName ) )
                 return;
@@ -126,7 +126,7 @@ namespace sdbtools
         {
         }
 
-        virtual bool validateName( const OUString& _rName ) SAL_OVERRIDE
+        virtual bool validateName( const OUString& _rName ) override
         {
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
             if  ( !aMeta.restrictIdentifiersToSQL92() )
@@ -146,7 +146,7 @@ namespace sdbtools
             return true;
         }
 
-        virtual void validateName_throw( const OUString& _rName ) SAL_OVERRIDE
+        virtual void validateName_throw( const OUString& _rName ) override
         {
             if ( validateName( _rName ) )
                 return;
@@ -186,14 +186,14 @@ namespace sdbtools
             return 0;
         }
 
-        virtual bool validateName( const OUString& _rName ) SAL_OVERRIDE
+        virtual bool validateName( const OUString& _rName ) override
         {
             if ( validateName_getErrorCondition( _rName ) != 0 )
                 return false;
             return true;
         }
 
-        virtual void validateName_throw( const OUString& _rName ) SAL_OVERRIDE
+        virtual void validateName_throw( const OUString& _rName ) override
         {
             ::connectivity::ErrorCondition nErrorCondition = validateName_getErrorCondition( _rName );
             if ( nErrorCondition != 0 )
@@ -220,12 +220,12 @@ namespace sdbtools
         }
 
         // INameValidation
-        virtual bool validateName( const OUString& _rName ) SAL_OVERRIDE
+        virtual bool validateName( const OUString& _rName ) override
         {
             return m_pPrimary->validateName( _rName ) && m_pSecondary->validateName( _rName );
         }
 
-        virtual void validateName_throw( const OUString& _rName ) SAL_OVERRIDE
+        virtual void validateName_throw( const OUString& _rName ) override
         {
             m_pPrimary->validateName_throw( _rName );
             m_pSecondary->validateName_throw( _rName );

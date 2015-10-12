@@ -41,8 +41,8 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > parseSvg(const char* aSource);
 
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testStyles);

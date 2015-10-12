@@ -75,7 +75,7 @@ public:
         , m_nType(0)
         {}
     virtual ~LwpFribCHBlock(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpCHBlkMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
@@ -90,12 +90,12 @@ class LwpFribBookMark : public LwpFrib
 public:
     explicit LwpFribBookMark( LwpPara* pPara );
     virtual ~LwpFribBookMark(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpObjectID GetMarkerID(){return m_objMarker;}
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
 private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;
@@ -108,12 +108,12 @@ class LwpFribField : public LwpFrib
 public:
     explicit LwpFribField( LwpPara* pPara );
     virtual ~LwpFribField(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpFieldMark* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
     enum{
         SUBFIELD_INVALID = 0,
         SUBFIELD_DATETIME = 1,
@@ -149,12 +149,12 @@ class LwpFribRubyMarker : public LwpFrib
 public:
     explicit LwpFribRubyMarker( LwpPara* pPara );
     virtual ~LwpFribRubyMarker(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
 private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;

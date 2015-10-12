@@ -84,7 +84,7 @@ namespace dbaui
                         const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const css::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgOrderCrit();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void            BuildOrderPart();
 

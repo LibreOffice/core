@@ -35,9 +35,9 @@ namespace dbaui
     public:
         SbaSbAttrDlg(vcl::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat, bool bRow = false);
         virtual ~SbaSbAttrDlg();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
+        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
     };
 }   // namespace dbaui
 

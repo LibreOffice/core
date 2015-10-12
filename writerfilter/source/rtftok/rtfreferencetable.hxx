@@ -26,7 +26,7 @@ public:
     typedef std::pair<int, writerfilter::Reference<Properties>::Pointer_t> Entry_t;
     RTFReferenceTable(Entries_t const& rEntries);
     virtual ~RTFReferenceTable();
-    virtual void resolve(Table& rHandler) SAL_OVERRIDE;
+    virtual void resolve(Table& rHandler) override;
 private:
     Entries_t m_aEntries;
 };

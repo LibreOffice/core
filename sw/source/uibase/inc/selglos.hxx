@@ -35,7 +35,7 @@ protected:
 public:
     SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName);
     virtual ~SwSelGlossaryDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void InsertGlos(const OUString &rRegion, const OUString &rGlosName)
     {

@@ -1928,7 +1928,7 @@ class ExitTimer : public Timer
         SetTimeout(500);
         Start();
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         exit(42);
     }

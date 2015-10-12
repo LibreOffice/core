@@ -37,7 +37,7 @@ protected:
 public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
                     virtual ~RscConst();
-    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed values
     ERRTYPE         SetConstant( Atom nVarName, sal_Int32 lValue );
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
@@ -55,29 +55,29 @@ class RscEnum : public RscConst
     sal_uInt32      nSize;
 public:
                     RscEnum( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
-    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    sal_uInt32      Size() override { return nSize; }
 
-    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
+    virtual void    SetToDefault( const RSCINST & rInst ) override
                     {
                         reinterpret_cast<RscEnumInst*>(rInst.pData)->bDflt = true;
                     }
-    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE
+    bool            IsDefault( const RSCINST & rInst ) override
                     {
                         return reinterpret_cast<RscEnumInst*>(rInst.pData)->bDflt;
                     };
                     // sets as default
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) override;
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              sal_Int32 nValue ) SAL_OVERRIDE;
-    ERRTYPE         SetNumber( const RSCINST & rInst, sal_Int32 nValue ) SAL_OVERRIDE;
-    ERRTYPE         GetConst( const RSCINST & rInst, Atom * ) SAL_OVERRIDE;
-    ERRTYPE         GetNumber( const RSCINST & rInst, sal_Int32 * nValue ) SAL_OVERRIDE;
+                              sal_Int32 nValue ) override;
+    ERRTYPE         SetNumber( const RSCINST & rInst, sal_Int32 nValue ) override;
+    ERRTYPE         GetConst( const RSCINST & rInst, Atom * ) override;
+    ERRTYPE         GetNumber( const RSCINST & rInst, sal_Int32 * nValue ) override;
     void            WriteSrc( const RSCINST &rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
 
 class RscNameTable;

@@ -37,8 +37,8 @@ namespace toolkit
     class UnoControlFormattedFieldModel : public UnoControlModel
     {
     protected:
-        ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const SAL_OVERRIDE;
-        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         ::com::sun::star::uno::Any      m_aCachedFormat;
         bool                            m_bRevokedAsClient;
         bool                            m_bSettingValueAndText;
@@ -51,12 +51,12 @@ namespace toolkit
                     ::com::sun::star::uno::Any& rOldValue,
                     sal_Int32 nPropId,
                     const ::com::sun::star::uno::Any& rValue
-                ) throw (::com::sun::star::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
+                ) throw (::com::sun::star::lang::IllegalArgumentException, std::exception) override;
 
         void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
                     const ::com::sun::star::uno::Any& rValue
-                ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                ) throw (::com::sun::star::uno::Exception, std::exception) override;
 
     public:
         UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
@@ -67,30 +67,30 @@ namespace toolkit
         {
         }
 
-        UnoControlModel*    Clone() const SAL_OVERRIDE { return new UnoControlFormattedFieldModel( *this ); }
+        UnoControlModel*    Clone() const override { return new UnoControlFormattedFieldModel( *this ); }
 
         // ::com::sun::star::io::XPersistObject
-        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // ::com::sun::star::beans::XMultiPropertySet
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // ::com::sun::star::lang::XServiceInfo
         OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual ~UnoControlFormattedFieldModel();
 
         // XComponent
-        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
@@ -98,7 +98,7 @@ namespace toolkit
                         sal_Int32*                      _pHandles,      /// the handles of the properties to set
                         ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
                         sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
-                    )   const SAL_OVERRIDE;
+                    )   const override;
     private:
         void    impl_updateTextFromValue_nothrow();
         void    impl_updateCachedFormatter_nothrow();
@@ -112,17 +112,17 @@ namespace toolkit
     {
     public:
                             UnoFormattedFieldControl();
-        OUString     GetComponentServiceName() SAL_OVERRIDE;
+        OUString     GetComponentServiceName() override;
 
         // ::com::sun::star::awt::XTextListener
-        void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // ::com::sun::star::lang::XServiceInfo
         OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
 

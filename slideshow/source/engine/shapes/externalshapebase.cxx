@@ -54,13 +54,13 @@ namespace slideshow
             // ViewEventHandler
 
 
-            virtual void viewAdded( const UnoViewSharedPtr& ) SAL_OVERRIDE {}
-            virtual void viewRemoved( const UnoViewSharedPtr& ) SAL_OVERRIDE {}
-            virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
+            virtual void viewAdded( const UnoViewSharedPtr& ) override {}
+            virtual void viewRemoved( const UnoViewSharedPtr& ) override {}
+            virtual void viewChanged( const UnoViewSharedPtr& rView ) override
             {
                 mrBase.implViewChanged(rView);
             }
-            virtual void viewsChanged() SAL_OVERRIDE
+            virtual void viewsChanged() override
             {
                 mrBase.implViewsChanged();
             }
@@ -69,11 +69,11 @@ namespace slideshow
             // IntrinsicAnimationEventHandler
 
 
-            virtual bool enableAnimations() SAL_OVERRIDE
+            virtual bool enableAnimations() override
             {
                 return mrBase.implStartIntrinsicAnimation();
             }
-            virtual bool disableAnimations() SAL_OVERRIDE
+            virtual bool disableAnimations() override
             {
                 return mrBase.implEndIntrinsicAnimation();
             }

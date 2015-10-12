@@ -261,7 +261,7 @@ protected:
     bool m_bChanged : 1;
     bool m_bParked : 1;       // Table-cursor was parked.
 
-    virtual bool IsSelOvrCheck(int eFlags) SAL_OVERRIDE;
+    virtual bool IsSelOvrCheck(int eFlags) override;
 
 public:
     SwTableCursor( const SwPosition &rPos, SwPaM* pRing = 0 );
@@ -269,8 +269,8 @@ public:
     virtual ~SwTableCursor();
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCrsr ) SAL_OVERRIDE;
-    virtual bool GotoTable( const OUString& rName ) SAL_OVERRIDE;
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCrsr ) override;
+    virtual bool GotoTable( const OUString& rName ) override;
 
     void InsertBox( const SwTableBox& rTableBox );
     void DeleteBox(size_t nPos);

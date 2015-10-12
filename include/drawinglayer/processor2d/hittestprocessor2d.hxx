@@ -65,7 +65,7 @@ namespace drawinglayer
             bool mbTiledRendering;
 
             /// tooling methods
-            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) SAL_OVERRIDE;
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
                 double fDiscreteHitTolerance);

@@ -72,9 +72,9 @@ public:
 
     virtual ~LwpCharacterBorderOverride();
 
-    virtual LwpCharacterBorderOverride* clone() const SAL_OVERRIDE;
+    virtual LwpCharacterBorderOverride* clone() const override;
 
-    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pStrm) override;
 
 protected:
     LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);

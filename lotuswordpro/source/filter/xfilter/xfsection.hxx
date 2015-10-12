@@ -81,7 +81,7 @@ public:
     /**
      * @descr   Output section object.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     OUString   m_strSectionName;

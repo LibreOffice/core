@@ -41,15 +41,15 @@ namespace svt
         virtual ~ToolPanelCollection();
 
         // IToolPanelDeck
-        virtual size_t      GetPanelCount() const SAL_OVERRIDE;
-        virtual PToolPanel  GetPanel( const size_t i_nPos ) const SAL_OVERRIDE;
+        virtual size_t      GetPanelCount() const override;
+        virtual PToolPanel  GetPanel( const size_t i_nPos ) const override;
         virtual ::boost::optional< size_t >
-                            GetActivePanel() const SAL_OVERRIDE;
-        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) SAL_OVERRIDE;
-        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void        AddListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
-        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
+                            GetActivePanel() const override;
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) override;
+        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) override;
+        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) override;
+        virtual void        AddListener( IToolPanelDeckListener& i_rListener ) override;
+        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) override;
 
     private:
         ::std::unique_ptr< ToolPanelCollection_Data > m_pData;

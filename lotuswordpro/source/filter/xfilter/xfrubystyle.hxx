@@ -73,10 +73,10 @@ public:
     {
     }
     virtual ~XFRubyStyle(){}
-    virtual void ToXml(IXFStream *strm) SAL_OVERRIDE;
+    virtual void ToXml(IXFStream *strm) override;
     void SetPosition(enumXFRubyPosition ePosition);
     void SetAlignment(enumXFRubyPosition eAlignment);
-    enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    enumXFStyle GetStyleFamily() override;
 
 private:
     enumXFRubyPosition m_ePos;

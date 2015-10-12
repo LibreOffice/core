@@ -31,16 +31,16 @@ class SwTabPortion : public SwFixPortion
     bool PreFormat( SwTextFormatInfo &rInf );
 public:
     SwTabPortion( const sal_uInt16 nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     bool PostFormat( SwTextFormatInfo &rInf );
     inline  bool IsFilled() const { return 0 != cFill; }
     inline  sal_uInt16 GetTabPos() const { return nTabPos; }
     inline  bool IsAutoTabStop() const { return bAutoTabStop; }
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -112,7 +112,7 @@ public:
                                     const sal_Unicode cFillChar = '\0' )
          : SwTabDecimalPortion( nTabPosVal, cTab, cFillChar )
     { SetLen( 0 ); }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 
 #endif

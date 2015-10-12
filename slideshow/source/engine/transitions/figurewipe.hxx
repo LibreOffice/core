@@ -35,7 +35,7 @@ public:
     static FigureWipe * createPentagonWipe();
     static FigureWipe * createHexagonWipe();
 
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     explicit FigureWipe( ::basegfx::B2DPolygon const & figure ) : m_figure(figure) {}
     const ::basegfx::B2DPolygon m_figure;

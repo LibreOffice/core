@@ -48,7 +48,7 @@ public:
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
     virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const SAL_OVERRIDE;
+            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
 };
 
 class ScXMLRowImportPropertyMapper : public SvXMLImportPropertyMapper
@@ -64,7 +64,7 @@ public:
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
     virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const SAL_OVERRIDE;
+            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
 };
 
 class XMLTableStyleContext : public XMLPropStyleContext
@@ -85,7 +85,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue ) SAL_OVERRIDE;
+                               const OUString& rValue ) override;
 
 public:
 
@@ -100,12 +100,12 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
 
-    virtual void SetDefaults() SAL_OVERRIDE;
+    virtual void SetDefaults() override;
 
       void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
@@ -156,13 +156,13 @@ protected:
             sal_uInt16 nFamily,
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
 public:
 
@@ -172,14 +172,14 @@ public:
             const bool bAutoStyles );
     virtual ~XMLTableStylesContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-                        sal_uInt16 nFamily ) const SAL_OVERRIDE;
+                        sal_uInt16 nFamily ) const override;
     virtual ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer >
-        GetStylesContainer( sal_uInt16 nFamily ) const SAL_OVERRIDE;
-    virtual OUString GetServiceName( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+        GetStylesContainer( sal_uInt16 nFamily ) const override;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const override;
 
     sal_Int32 GetIndex(const sal_Int16 nContextID);
 };
@@ -190,14 +190,14 @@ protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -208,7 +208,7 @@ public:
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
 
     virtual ~ScXMLMasterStylesContext();
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 namespace com { namespace sun { namespace star {
@@ -236,7 +236,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
@@ -244,9 +244,9 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
-            const bool bFirst ) SAL_OVERRIDE;
+            const bool bFirst ) override;
 
-    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
+    virtual void Finish( bool bOverwrite ) override;
 };
 
 class ScCellTextStyleContext : public XMLTextStyleContext
@@ -268,7 +268,7 @@ public:
     // override FillPropertySet to store style information
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
 };
 
 #endif

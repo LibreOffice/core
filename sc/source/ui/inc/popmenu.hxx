@@ -29,7 +29,7 @@ private:
     sal_uInt16  nSel;
     bool        bHit;
 protected:
-    virtual void Select() SAL_OVERRIDE;
+    virtual void Select() override;
 public:
     ScPopupMenu() : nSel(0),bHit(false) {}
 

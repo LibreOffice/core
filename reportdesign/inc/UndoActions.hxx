@@ -160,9 +160,9 @@ namespace rptui
                             ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();
 
-        virtual OUString GetComment() const SAL_OVERRIDE { return m_strComment; }
-        virtual void        Undo() SAL_OVERRIDE;
-        virtual void        Redo() SAL_OVERRIDE;
+        virtual OUString GetComment() const override { return m_strComment; }
+        virtual void        Undo() override;
+        virtual void        Redo() override;
     };
 
     // OUndoContainerAction
@@ -190,8 +190,8 @@ namespace rptui
                             ,sal_uInt16 _nCommentId);
         virtual ~OUndoContainerAction();
 
-        virtual void Undo() SAL_OVERRIDE;
-        virtual void Redo() SAL_OVERRIDE;
+        virtual void Undo() override;
+        virtual void Redo() override;
 
     protected:
         virtual void    implReInsert( );
@@ -216,8 +216,8 @@ namespace rptui
                             ,sal_uInt16 _nCommentId);
 
     protected:
-        virtual void    implReInsert( ) SAL_OVERRIDE;
-        virtual void    implReRemove( ) SAL_OVERRIDE;
+        virtual void    implReInsert( ) override;
+        virtual void    implReRemove( ) override;
     };
 
 
@@ -237,8 +237,8 @@ namespace rptui
                             ,sal_uInt16 _nCommentId);
 
     protected:
-        virtual void    implReInsert( ) SAL_OVERRIDE;
-        virtual void    implReRemove( ) SAL_OVERRIDE;
+        virtual void    implReInsert( ) override;
+        virtual void    implReRemove( ) override;
     };
 
     // ORptUndoPropertyAction
@@ -260,10 +260,10 @@ namespace rptui
     public:
         ORptUndoPropertyAction(SdrModel& rMod, const ::com::sun::star::beans::PropertyChangeEvent& evt);
 
-        virtual void Undo() SAL_OVERRIDE;
-        virtual void Redo() SAL_OVERRIDE;
+        virtual void Undo() override;
+        virtual void Redo() override;
 
-        virtual OUString GetComment() const SAL_OVERRIDE;
+        virtual OUString GetComment() const override;
     };
 
 
@@ -275,7 +275,7 @@ namespace rptui
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyReportSectionAction(SdrModel& rMod
                             ,const ::com::sun::star::beans::PropertyChangeEvent& evt
@@ -294,7 +294,7 @@ namespace rptui
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyGroupSectionAction(SdrModel& rMod
                             ,const ::com::sun::star::beans::PropertyChangeEvent& evt

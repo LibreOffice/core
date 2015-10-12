@@ -37,13 +37,13 @@ class ContourWindow : public GraphCtrl
 
 protected:
 
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void        MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
-    virtual void        InitSdrModel() SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void        MouseMove(const MouseEvent& rMEvt) override;
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void        SdrObjCreated( const SdrObject& rObj ) override;
+    virtual void        InitSdrModel() override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual Size        GetOptimalSize() const override;
 
 public:
 

@@ -35,10 +35,10 @@ class TabItem
 public:
     TabItem (vcl::Window* pParentWindow);
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
-    virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
-    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+    virtual void MouseMove (const MouseEvent& rEvent) override;
+    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) override;
+    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) override;
 
 private:
     bool mbIsLeftButtonDown;

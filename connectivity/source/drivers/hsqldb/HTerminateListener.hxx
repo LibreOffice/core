@@ -41,13 +41,13 @@ namespace connectivity
 
                 // XEventListener
                 virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                    throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
                 // XTerminateListener
                 virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                    throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                    throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
                 virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                    throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
         };
     }
 

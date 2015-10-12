@@ -114,7 +114,7 @@ public:
     ScDBData(const OUString& rName, const ScDBData& rData);
     virtual ~ScDBData();
 
-    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( const SfxHint& rHint ) override;
 
     ScDBData&   operator= (const ScDBData& rData) ;
 

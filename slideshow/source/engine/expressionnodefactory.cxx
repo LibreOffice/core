@@ -43,12 +43,12 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double /*t*/ ) const SAL_OVERRIDE
+                virtual double operator()( double /*t*/ ) const override
                 {
                     return maValue;
                 }
 
-                virtual bool isConstant() const SAL_OVERRIDE
+                virtual bool isConstant() const override
                 {
                     return true;
                 }
@@ -64,12 +64,12 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return t;
                 }
 
-                virtual bool isConstant() const SAL_OVERRIDE
+                virtual bool isConstant() const override
                 {
                     return false;
                 }
@@ -91,7 +91,7 @@ namespace slideshow
                 {
                 }
 
-                virtual bool isConstant() const SAL_OVERRIDE
+                virtual bool isConstant() const override
                 {
                     return
                         mpFirstArg->isConstant() &&
@@ -112,7 +112,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return (*mpFirstArg)(t) + (*mpSecondArg)(t);
                 }
@@ -127,7 +127,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return (*mpFirstArg)(t) - (*mpSecondArg)(t);
                 }
@@ -142,7 +142,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return (*mpFirstArg)(t) * (*mpSecondArg)(t);
                 }
@@ -157,7 +157,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return (*mpFirstArg)(t) / (*mpSecondArg)(t);
                 }
@@ -172,7 +172,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return ::std::min( (*mpFirstArg)(t), (*mpSecondArg)(t) );
                 }
@@ -187,7 +187,7 @@ namespace slideshow
                 {
                 }
 
-                virtual double operator()( double t ) const SAL_OVERRIDE
+                virtual double operator()( double t ) const override
                 {
                     return ::std::max( (*mpFirstArg)(t), (*mpSecondArg)(t) );
                 }

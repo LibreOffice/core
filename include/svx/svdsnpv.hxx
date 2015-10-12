@@ -97,12 +97,12 @@ protected:
     virtual ~SdrSnapView();
 
 public:
-    virtual bool IsAction() const SAL_OVERRIDE;
-    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
-    virtual void EndAction() SAL_OVERRIDE;
-    virtual void BckAction() SAL_OVERRIDE;
-    virtual void BrkAction() SAL_OVERRIDE; // break actions for derived classes e.g. interrupt dragging.
-    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
+    virtual bool IsAction() const override;
+    virtual void MovAction(const Point& rPnt) override;
+    virtual void EndAction() override;
+    virtual void BckAction() override;
+    virtual void BrkAction() override; // break actions for derived classes e.g. interrupt dragging.
+    virtual void TakeActionRect(Rectangle& rRect) const override;
 
     void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
     const Fraction& GetSnapGridWidthX() const { return aSnapWdtX; }

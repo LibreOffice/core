@@ -57,36 +57,36 @@ public:
     virtual ~SwVbaFind();
 
     // Attributes
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL getReplacement() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setReplacement( const css::uno::Any& _replacement ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getForward() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setForward( sal_Bool _forward ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL getWrap() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setWrap( ::sal_Int32 _wrap ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getFormat() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setFormat( sal_Bool _format ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMatchCase() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMatchCase( sal_Bool _matchcase ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMatchWholeWord() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMatchWholeWord( sal_Bool _matchwholeword ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMatchWildcards() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMatchWildcards( sal_Bool _matchwildcards ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMatchSoundsLike() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMatchSoundsLike( sal_Bool _matchsoundslike ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMatchAllWordForms() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMatchAllWordForms( sal_Bool _matchallwordforms ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setStyle( const css::uno::Any& _style ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getReplacement() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setReplacement( const css::uno::Any& _replacement ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getForward() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setForward( sal_Bool _forward ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getWrap() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setWrap( ::sal_Int32 _wrap ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getFormat() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFormat( sal_Bool _format ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMatchCase() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMatchCase( sal_Bool _matchcase ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMatchWholeWord() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMatchWholeWord( sal_Bool _matchwholeword ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMatchWildcards() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMatchWildcards( sal_Bool _matchwildcards ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMatchSoundsLike() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMatchSoundsLike( sal_Bool _matchsoundslike ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMatchAllWordForms() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMatchAllWordForms( sal_Bool _matchallwordforms ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStyle( const css::uno::Any& _style ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods
-    virtual sal_Bool SAL_CALL Execute( const css::uno::Any& FindText, const css::uno::Any& MatchCase, const css::uno::Any& MatchWholeWord, const css::uno::Any& MatchWildcards, const css::uno::Any& MatchSoundsLike, const css::uno::Any& MatchAllWordForms, const css::uno::Any& Forward, const css::uno::Any& Wrap, const css::uno::Any& Format, const css::uno::Any& ReplaceWith, const css::uno::Any& Replace, const css::uno::Any& MatchKashida, const css::uno::Any& MatchDiacritics, const css::uno::Any& MatchAlefHamza, const css::uno::Any& MatchControl, const css::uno::Any& MatchPrefix, const css::uno::Any& MatchSuffix, const css::uno::Any& MatchPhrase, const css::uno::Any& IgnoreSpace, const css::uno::Any& IgnorePunct ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL ClearFormatting(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL Execute( const css::uno::Any& FindText, const css::uno::Any& MatchCase, const css::uno::Any& MatchWholeWord, const css::uno::Any& MatchWildcards, const css::uno::Any& MatchSoundsLike, const css::uno::Any& MatchAllWordForms, const css::uno::Any& Forward, const css::uno::Any& Wrap, const css::uno::Any& Format, const css::uno::Any& ReplaceWith, const css::uno::Any& Replace, const css::uno::Any& MatchKashida, const css::uno::Any& MatchDiacritics, const css::uno::Any& MatchAlefHamza, const css::uno::Any& MatchControl, const css::uno::Any& MatchPrefix, const css::uno::Any& MatchSuffix, const css::uno::Any& MatchPhrase, const css::uno::Any& IgnoreSpace, const css::uno::Any& IgnorePunct ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL ClearFormatting(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XHelperInterface
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAFIND_HXX
 

@@ -50,15 +50,15 @@ namespace offapp
     public:
         ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:
-        virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+        virtual bool        Notify( NotifyEvent& _rNEvt ) override;
 
-        virtual bool        FillItemSet(SfxItemSet* _rSet) SAL_OVERRIDE;
-        virtual void        Reset(const SfxItemSet* _rSet) SAL_OVERRIDE;
-        virtual void        ActivatePage( const SfxItemSet& _rSet) SAL_OVERRIDE;
+        virtual bool        FillItemSet(SfxItemSet* _rSet) override;
+        virtual void        Reset(const SfxItemSet* _rSet) override;
+        virtual void        ActivatePage( const SfxItemSet& _rSet) override;
 
     protected:
         DECL_LINK_TYPED( OnEnabledDisabled, Button*, void );

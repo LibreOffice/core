@@ -79,14 +79,14 @@ public:
     /// parse attributes
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// for footnotes, also parse begin and end notices
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// get token map for attributes
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
@@ -95,7 +95,7 @@ public:
     /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
        at this time all styles it references have been set. (#i40579#)
     */
-    virtual void Finish( bool bOverwrite) SAL_OVERRIDE;
+    virtual void Finish( bool bOverwrite) override;
 
     /// set configuration at document
     void ProcessSettings(

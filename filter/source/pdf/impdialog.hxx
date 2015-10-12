@@ -63,7 +63,7 @@ class ImplErrorDialog : public MessageDialog
     public:
     explicit ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     virtual ~ImplErrorDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class ImpPDFTabSecurityPage;
@@ -172,7 +172,7 @@ public:
                      const css::uno::Reference< XComponent >& rDoc
                      );
     virtual ~ImpPDFTabDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     Sequence< PropertyValue >   GetFilterData();
 
@@ -182,8 +182,8 @@ public:
 
 protected:
     virtual void                PageCreated( sal_uInt16 _nId,
-                                             SfxTabPage& _rPage ) SAL_OVERRIDE;
-    virtual short               Ok() SAL_OVERRIDE;
+                                             SfxTabPage& _rPage ) override;
+    virtual short               Ok() override;
 };
 
 //class tab page general
@@ -245,7 +245,7 @@ public:
     ImpPDFTabGeneralPage( vcl::Window* pParent,
                           const SfxItemSet& rSet );
     virtual ~ImpPDFTabGeneralPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet);
@@ -287,7 +287,7 @@ public:
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabOpnFtrPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
@@ -321,7 +321,7 @@ public:
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabViewerPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
@@ -377,7 +377,7 @@ public:
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSecurityPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
@@ -409,7 +409,7 @@ public:
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabLinksPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
@@ -440,7 +440,7 @@ public:
                           const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSigningPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 

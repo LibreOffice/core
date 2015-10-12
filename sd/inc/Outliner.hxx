@@ -145,7 +145,7 @@ public:
     void EndSpelling();
 
     /** callback for textconversion */
-    bool ConvertNextDocument() SAL_OVERRIDE;
+    bool ConvertNextDocument() override;
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
@@ -519,7 +519,7 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual bool SpellNextDocument() SAL_OVERRIDE;
+    virtual bool SpellNextDocument() override;
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application

@@ -629,15 +629,15 @@ namespace cppcanvas
                             const OutDevState&              rState,
                             const ::basegfx::B2DHomMatrix&  rTextTransform );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 // TODO(P2): This is potentially a real mass object
@@ -795,19 +795,19 @@ namespace cppcanvas
                                   const OutDevState&                rState,
                                   const ::basegfx::B2DHomMatrix&    rTextTransform );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 /// Interface TextRenderer
-                virtual bool operator()( const rendering::RenderState& rRenderState ) const SAL_OVERRIDE;
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const override;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1025,15 +1025,15 @@ namespace cppcanvas
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 // TODO(P2): This is potentially a real mass object
@@ -1215,19 +1215,19 @@ namespace cppcanvas
                                        const OutDevState&               rState,
                                        const ::basegfx::B2DHomMatrix&   rTextTransform );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState ) const SAL_OVERRIDE;
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const override;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1379,7 +1379,7 @@ namespace cppcanvas
                 }
 
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState ) const SAL_OVERRIDE
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const override
                 {
                     mrCanvas->fillPolyPolygon( mrLinePolygon,
                                                mrViewState,
@@ -1553,19 +1553,19 @@ namespace cppcanvas
                                const OutDevState&                                   rState,
                                const ::basegfx::B2DHomMatrix&                       rTextTransform );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
+                                           const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
+                                                       const Subset&                    rSubset ) const override;
 
-                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
+                virtual sal_Int32 getActionCount() const override;
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const rendering::RenderState& rRenderState ) const SAL_OVERRIDE;
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const override;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),

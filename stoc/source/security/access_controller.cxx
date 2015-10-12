@@ -89,7 +89,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 inline acc_Intersection::acc_Intersection(
@@ -142,7 +142,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 inline acc_Union::acc_Union(
@@ -198,7 +198,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 acc_Policy::~acc_Policy()
@@ -226,7 +226,7 @@ public:
 
     // XCurrentContext impl
     virtual Any SAL_CALL getValueByName( OUString const & name )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 inline acc_CurrentContext::acc_CurrentContext(
@@ -336,7 +336,7 @@ class AccessController
         Any const & demanded_perm );
 
 protected:
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 public:
     explicit AccessController( Reference< XComponentContext > const & xComponentContext );
@@ -345,30 +345,30 @@ public:
     //  XInitialization impl
     virtual void SAL_CALL initialize(
         Sequence< Any > const & arguments )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
 
     // XAccessController impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Any SAL_CALL doRestricted(
         Reference< security::XAction > const & xAction,
         Reference< security::XAccessControlContext > const & xRestriction )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
     virtual Any SAL_CALL doPrivileged(
         Reference< security::XAction > const & xAction,
         Reference< security::XAccessControlContext > const & xRestriction )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
     virtual Reference< security::XAccessControlContext > SAL_CALL getContext()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )

@@ -38,13 +38,13 @@ private:
     std::vector<OUString> m_aManufacturers;
     std::map< OUString, std::map<OUString, SwLabelMeasure> > m_aLabels;
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwLabelConfig();
     virtual ~SwLabelConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     void    FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr);
     const std::vector<OUString>& GetManufacturers() const {return m_aManufacturers;}

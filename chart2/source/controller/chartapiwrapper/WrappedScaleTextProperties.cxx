@@ -41,11 +41,11 @@ public:
     virtual ~WrappedScaleTextProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
     virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

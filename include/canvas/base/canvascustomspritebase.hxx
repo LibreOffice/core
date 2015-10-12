@@ -94,7 +94,7 @@ namespace canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        virtual void disposeThis() SAL_OVERRIDE
+        virtual void disposeThis() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -105,7 +105,7 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException, std::exception) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -119,7 +119,7 @@ namespace canvas
             drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
                         const ::com::sun::star::rendering::ViewState&                                   viewState,
                         const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                             ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                             ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -144,7 +144,7 @@ namespace canvas
 
         // XSprite
         virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                              ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyRange( alpha, 0.0, 1.0 );
 
@@ -156,7 +156,7 @@ namespace canvas
         virtual void SAL_CALL move( const ::com::sun::star::geometry::RealPoint2D&  aNewPos,
                                     const ::com::sun::star::rendering::ViewState&   viewState,
                                     const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                         ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(aNewPos, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -168,7 +168,7 @@ namespace canvas
         }
 
         virtual void SAL_CALL transform( const ::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                    ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                    ::com::sun::star::uno::RuntimeException) override
         {
             tools::verifyArgs(aTransformation,
                               BOOST_CURRENT_FUNCTION,
@@ -179,7 +179,7 @@ namespace canvas
             maSpriteHelper.transform( this, aTransformation );
         }
 
-        virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException) override
         {
             // NULL xClip explicitly allowed here (to clear clipping)
 
@@ -188,21 +188,21 @@ namespace canvas
             maSpriteHelper.clip( this, aClip );
         }
 
-        virtual void SAL_CALL setPriority( double nPriority ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL setPriority( double nPriority ) throw (::com::sun::star::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.setPriority( this, nPriority );
         }
 
-        virtual void SAL_CALL show() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL show() throw (::com::sun::star::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.show( this );
         }
 
-        virtual void SAL_CALL hide() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL hide() throw (::com::sun::star::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -211,7 +211,7 @@ namespace canvas
 
         // XCustomSprite
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL
-            getContentCanvas() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+            getContentCanvas() throw (::com::sun::star::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -219,42 +219,42 @@ namespace canvas
         }
 
         // Sprite
-        virtual bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const SAL_OVERRIDE
+        virtual bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.isAreaUpdateOpaque( rUpdateArea );
         }
 
-        virtual bool isContentChanged() const SAL_OVERRIDE
+        virtual bool isContentChanged() const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::mbSurfaceDirty;
         }
 
-        virtual ::basegfx::B2DPoint getPosPixel() const SAL_OVERRIDE
+        virtual ::basegfx::B2DPoint getPosPixel() const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getPosPixel();
         }
 
-        virtual ::basegfx::B2DVector getSizePixel() const SAL_OVERRIDE
+        virtual ::basegfx::B2DVector getSizePixel() const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getSizePixel();
         }
 
-        virtual ::basegfx::B2DRange getUpdateArea() const SAL_OVERRIDE
+        virtual ::basegfx::B2DRange getUpdateArea() const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getUpdateArea();
         }
 
-        virtual double getPriority() const SAL_OVERRIDE
+        virtual double getPriority() const override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

@@ -42,13 +42,13 @@ class OfaMSFilterTabPage : public SfxTabPage
 public:
     OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 class OfaMSFilterTabPage2 : public SfxTabPage
@@ -63,9 +63,9 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         static SvButtonState GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol );
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
     protected:
-        virtual void    SetTabs() SAL_OVERRIDE;
-        virtual void    HBarClick() SAL_OVERRIDE;
-        virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void    SetTabs() override;
+        virtual void    HBarClick() override;
+        virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
     public:
         MSFltrSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = 0)
@@ -88,7 +88,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     VclPtr<RadioButton> aShadingRB;
 
     virtual ~OfaMSFilterTabPage2();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
@@ -99,8 +99,8 @@ public:
     OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 

@@ -205,7 +205,7 @@ public:
 
     bool            operator== ( const ScConditionEntry& r ) const;
 
-    virtual void SetParent( ScConditionalFormat* pNew ) SAL_OVERRIDE  { pCondFormat = pNew; }
+    virtual void SetParent( ScConditionalFormat* pNew ) override  { pCondFormat = pNew; }
 
     bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
@@ -229,23 +229,23 @@ public:
 
     void            CompileAll();
     void            CompileXML();
-    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
-    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
-    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
-    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) override;
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) override;
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
     void            SourceChanged( const ScAddress& rChanged );
 
     bool            MarkUsedExternalReferences() const;
 
-    virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE { return condformat::CONDITION; }
+    virtual condformat::ScFormatEntryType GetType() const override { return condformat::CONDITION; }
 
-    virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const SAL_OVERRIDE;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const override;
 
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
 
-    virtual void endRendering() SAL_OVERRIDE;
-    virtual void startRendering() SAL_OVERRIDE;
+    virtual void endRendering() override;
+    virtual void startRendering() override;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -311,10 +311,10 @@ public:
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
-    virtual ScFormatEntry* Clone(ScDocument* pDoc) const SAL_OVERRIDE;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
 protected:
-    virtual void    DataChanged( const ScRange* pModified ) const SAL_OVERRIDE;
+    virtual void    DataChanged( const ScRange* pModified ) const override;
 };
 
 namespace condformat {
@@ -352,20 +352,20 @@ public:
     const OUString& GetStyleName() const { return maStyleName;}
     void SetStyleName( const OUString& rStyleName );
 
-    virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE { return condformat::DATE; }
-    virtual void UpdateReference( sc::RefUpdateContext& ) SAL_OVERRIDE {}
-    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& ) SAL_OVERRIDE {}
-    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) SAL_OVERRIDE {}
-    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) SAL_OVERRIDE {}
+    virtual condformat::ScFormatEntryType GetType() const override { return condformat::DATE; }
+    virtual void UpdateReference( sc::RefUpdateContext& ) override {}
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& ) override {}
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) override {}
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) override {}
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const SAL_OVERRIDE;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const override;
 
-    virtual void SetParent( ScConditionalFormat* ) SAL_OVERRIDE {}
+    virtual void SetParent( ScConditionalFormat* ) override {}
 
     bool operator==( const ScFormatEntry& ) const;
 
-    virtual void startRendering() SAL_OVERRIDE;
-    virtual void endRendering() SAL_OVERRIDE;
+    virtual void startRendering() override;
+    virtual void endRendering() override;
 
 private:
     condformat::ScCondFormatDateType meType;

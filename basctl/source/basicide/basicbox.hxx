@@ -35,8 +35,8 @@ public:
                         LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+                                      const SfxPoolItem* pState ) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 /** base class for list boxes which need to update their content according to the list
@@ -48,22 +48,22 @@ class DocListenerBox    :public ListBox
 protected:
     DocListenerBox( vcl::Window* pParent );
     virtual ~DocListenerBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     virtual void    FillBox() = 0;
 
 private:
     // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
 
 private:
     DocumentEventNotifier m_aNotifier;
@@ -86,17 +86,17 @@ private:
     void            NotifyIDE();
 
     // DocListenerBox
-    virtual void    FillBox() SAL_OVERRIDE;
+    virtual void    FillBox() override;
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
                     LibBox( vcl::Window* pParent,
                             const css::uno::Reference< css::frame::XFrame >& rFrame );
     virtual         ~LibBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );
@@ -109,8 +109,8 @@ public:
 
                         LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 class LanguageBox : public DocListenerBox
@@ -126,16 +126,16 @@ private:
     void            SetLanguage();
 
     // DocListenerBox
-    virtual void    FillBox() SAL_OVERRIDE;
+    virtual void    FillBox() override;
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     LanguageBox( vcl::Window* pParent );
     virtual ~LanguageBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );

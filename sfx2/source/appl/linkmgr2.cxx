@@ -60,7 +60,7 @@ class SvxInternalLink : public sfx2::SvLinkSource
 public:
     SvxInternalLink() {}
 
-    virtual bool Connect( sfx2::SvBaseLink* ) SAL_OVERRIDE;
+    virtual bool Connect( sfx2::SvBaseLink* ) override;
 };
 
 

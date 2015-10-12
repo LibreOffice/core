@@ -1105,7 +1105,7 @@ public:
     }
 
     // XMaterialHolder
-    virtual uno::Any SAL_CALL getMaterial() throw(std::exception) SAL_OVERRIDE
+    virtual uno::Any SAL_CALL getMaterial() throw(std::exception) override
     {
         return uno::makeAny( sal_Int64(maID) );
     }

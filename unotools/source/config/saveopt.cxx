@@ -93,13 +93,13 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROUseSHA1InODF12,
                                         bROUseBlowfishInODF12;
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
                             SvtSaveOptions_Impl();
                             virtual ~SvtSaveOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
     bool                    IsUseUserData() const               { return bUseUserData; }
@@ -766,13 +766,13 @@ class SvtLoadOptions_Impl : public utl::ConfigItem
 private:
     bool                            bLoadUserDefinedSettings;
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
                             SvtLoadOptions_Impl();
                             virtual ~SvtLoadOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
     bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}

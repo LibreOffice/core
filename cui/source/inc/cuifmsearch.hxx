@@ -111,7 +111,7 @@ public:
         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /** The found-handler gets in the 'found'-case a pointer on a FmFoundRecordInformation-structure
         (which is only valid in the handler; so if one needs to memorize the data, don't copy the pointer but
@@ -132,7 +132,7 @@ public:
     inline void SetActiveField(const OUString& strField);
 
 protected:
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
     void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors

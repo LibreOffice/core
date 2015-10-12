@@ -61,11 +61,11 @@ private:
 public:
                         SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxJSearchOptionsPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
     bool                IsSaveOptions() const           { return bSaveOptions; }
     void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }

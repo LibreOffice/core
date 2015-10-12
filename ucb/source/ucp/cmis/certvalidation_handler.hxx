@@ -33,7 +33,7 @@ namespace cmis
                            const OUString& sHostname ):
                 m_xEnv( xEnv ), m_xContext( xContext ), m_sHostname( sHostname ) { }
 
-            bool validateCertificate( std::vector< std::string > certificates ) SAL_OVERRIDE;
+            bool validateCertificate( std::vector< std::string > certificates ) override;
     };
 }
 

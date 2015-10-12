@@ -60,14 +60,14 @@ private:
     static OUString GetLocaleString();
 
 protected:
-    virtual bool Close() SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual bool Close() override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
 
 public:
     AboutDialog(vcl::Window* pParent);
     virtual ~AboutDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED( HandleClick, Button*, void );
 };

@@ -131,7 +131,7 @@ private:
     virtual inline ~SingletonFactory() {}
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     static void dispose();
 

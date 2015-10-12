@@ -60,8 +60,8 @@ public:
 
 class IdNode : public NameNode
 {
-    virtual COMPARE Compare( const NameNode * ) const SAL_OVERRIDE;
-    virtual COMPARE Compare( const void * ) const SAL_OVERRIDE;
+    virtual COMPARE Compare( const NameNode * ) const override;
+    virtual COMPARE Compare( const void * ) const override;
 protected:
     using NameNode::Search;
 
@@ -73,8 +73,8 @@ public:
 
 class StringNode : public NameNode
 {
-    virtual COMPARE Compare( const NameNode * ) const SAL_OVERRIDE;
-    virtual COMPARE Compare( const void * ) const SAL_OVERRIDE;
+    virtual COMPARE Compare( const NameNode * ) const override;
+    virtual COMPARE Compare( const void * ) const override;
 
 protected:
     using NameNode::Search;

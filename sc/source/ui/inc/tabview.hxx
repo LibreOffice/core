@@ -69,15 +69,15 @@ private:
     bool            bAdd;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Resize() override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 public:
                     ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional );
                     virtual ~ScCornerButton();
 
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 class ScTabView : boost::noncopyable

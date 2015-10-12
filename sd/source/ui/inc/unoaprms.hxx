@@ -154,8 +154,8 @@ public:
             { bOldSecondPlayFull = bTheOldPlayFull; bNewSecondPlayFull = bTheNewPlayFull; }
 
     virtual ~SdAnimationPrmsUndoAction();
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNOAPRMS_HXX

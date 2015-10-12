@@ -90,9 +90,9 @@ public:
             DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return FADE_EFFECT_COUNT; }
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
+            sal_uInt16          GetValueCount() const override { return FADE_EFFECT_COUNT; }
 };
 
 class DiaSpeedItem : public SfxEnumItem
@@ -102,9 +102,9 @@ public:
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return FADE_SPEED_COUNT; }
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
+            sal_uInt16          GetValueCount() const override { return FADE_SPEED_COUNT; }
 };
 
 class DiaAutoItem : public SfxEnumItem
@@ -114,9 +114,9 @@ public:
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return PRESCHANGE_COUNT; }
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
+            sal_uInt16          GetValueCount() const override { return PRESCHANGE_COUNT; }
 };
 
 class DiaTimeItem : public SfxUInt32Item
@@ -125,8 +125,8 @@ public:
             TYPEINFO_OVERRIDE();
             DiaTimeItem( sal_uInt32 nValue = 0L );
 
-    virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool         operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual bool         operator==( const SfxPoolItem& ) const override;
 };
 
 #endif // INCLUDED_SD_INC_SDATTR_HXX

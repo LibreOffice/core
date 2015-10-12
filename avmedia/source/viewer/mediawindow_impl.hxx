@@ -52,8 +52,8 @@ public:
 
 protected:
 
-    void    update() SAL_OVERRIDE;
-    void    execute( const MediaItem& rItem ) SAL_OVERRIDE;
+    void    update() override;
+    void    execute( const MediaItem& rItem ) override;
 };
 
 class MediaChildWindow : public SystemChildWindow
@@ -65,12 +65,12 @@ public:
 
 protected:
 
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    KeyUp( const KeyEvent& rKEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 };
 
 class MediaEventListenersImpl;
@@ -81,7 +81,7 @@ public:
     MediaWindowImpl(vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl);
     virtual ~MediaWindowImpl();
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0);
 
@@ -105,23 +105,23 @@ public:
 private:
 
     // Window
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void StateChanged( StateChangedType ) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE; // const
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void KeyUp( const KeyEvent& rKEvt ) override;
+    virtual void Command( const CommandEvent& rCEvt ) override;
+    virtual void Resize() override;
+    virtual void StateChanged( StateChangedType ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override; // const
+    virtual void GetFocus() override;
 
     // DropTargetHelper
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     // DragSourceHelper
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
     bool setZoom(css::media::ZoomLevel eLevel);
     css::media::ZoomLevel getZoom() const;

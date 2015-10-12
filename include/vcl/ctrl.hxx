@@ -97,7 +97,7 @@ protected:
 
     void ImplInitSettings( const bool _bFont, const bool _bForeground );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;
@@ -125,20 +125,20 @@ public:
     explicit        Control( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        Control( vcl::Window* pParent, const ResId& );
     virtual         ~Control();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
+    virtual void    EnableRTL ( bool bEnable = true ) override;
 
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    Resize() override;
 
     // invalidates layout data
-    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void    SetText( const OUString& rStr ) override;
     // gets the displayed text
-    virtual OUString GetDisplayText() const SAL_OVERRIDE;
+    virtual OUString GetDisplayText() const override;
     // returns the bounding box for the character at index nIndex (in control coordinates)
     Rectangle GetCharacterBounds( long nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)
@@ -171,7 +171,7 @@ public:
 
     void            SetLayoutDataParent( const Control* pParent ) const;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
 
     /** sets a reference device used for rendering control text
         @see DrawControlText

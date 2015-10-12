@@ -255,7 +255,7 @@ public:
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 protected:
-    virtual Bitmap  CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap  CreateBitmapForUI(long nIndex) override;
 
 public:
     XColorList(const OUString& rPath, const OUString& rReferer)
@@ -267,8 +267,8 @@ public:
     XColorEntry* Replace(long nIndex, XColorEntry* pEntry);
     XColorEntry* Remove(long nIndex);
     XColorEntry* GetColor(long nIndex) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 
     static XColorListRef CreateStdColorList();
     static XColorListRef GetStdColorList(); // returns a singleton
@@ -277,7 +277,7 @@ public:
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
 public:
     XLineEndList(const OUString& rPath, const OUString& rReferer);
@@ -287,8 +287,8 @@ public:
     XLineEndEntry* Remove(long nIndex);
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 };
 
 class SVX_DLLPUBLIC XDashList : public XPropertyList
@@ -300,7 +300,7 @@ private:
 
 protected:
     static Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
-    virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
 public:
     XDashList(const OUString& rPath, const OUString& rReferer);
@@ -312,8 +312,8 @@ public:
     XDashEntry* Remove(long nIndex);
     XDashEntry* GetDash(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
@@ -329,7 +329,7 @@ public:
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
@@ -341,14 +341,14 @@ public:
     XHatchEntry* Remove(long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 };
 
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
 public:
     XGradientList(const OUString& rPath, const OUString& rReferer);
@@ -360,14 +360,14 @@ public:
     XGradientEntry* Remove(long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 };
 
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI(long nIndex) SAL_OVERRIDE;
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
 public:
     XBitmapList(const OUString& rPath, const OUString& rReferer)
@@ -378,8 +378,8 @@ public:
     XBitmapEntry* Remove(long nIndex);
     XBitmapEntry* GetBitmap(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
-    virtual bool Create() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
 };
 
 // FIXME: could add type checking too ...

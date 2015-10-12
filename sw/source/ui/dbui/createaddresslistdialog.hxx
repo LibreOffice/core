@@ -76,7 +76,7 @@ public:
     SwCreateAddressListDialog(
             vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
     virtual ~SwCreateAddressListDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     const OUString&         GetURL() const {    return m_sURL;    }
     void                    Find( const OUString& rSearch, sal_Int32 nColumn);
@@ -100,7 +100,7 @@ class SwFindEntryDialog : public ModelessDialog
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);
     virtual ~SwFindEntryDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     ListBox& GetFieldsListBox()
     {

@@ -86,7 +86,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
@@ -113,9 +113,9 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     const OUString& GetDisplayName() const { return msDisplayName; }
 
@@ -170,9 +170,9 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
     sal_uInt16 GetTypeId() const { return mnTypeId; }
 };
 
@@ -197,19 +197,19 @@ protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         sal_uInt16 nFamily,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 public:
     TYPEINFO_OVERRIDE();
 
@@ -221,9 +221,9 @@ public:
         bool bIsAutoStyle);
     virtual ~SdXMLStylesContext();
 
-    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
-    virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const override;
+    virtual void EndElement() override;
+    virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const override;
 
     void SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const;
 
@@ -251,7 +251,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 // <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>
@@ -263,9 +263,9 @@ public:
         const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual bool IsTransient() const SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual bool IsTransient() const override;
+    virtual void EndElement() override;
+    virtual void Characters( const OUString& rChars ) override;
 
 private:
     OUString maStrName;

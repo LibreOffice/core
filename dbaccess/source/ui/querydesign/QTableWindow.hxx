@@ -43,24 +43,24 @@ namespace dbaui
         }
 
         // late Constructor, the base class CREATES Listbox on first call
-        virtual bool         Init() SAL_OVERRIDE;
+        virtual bool         Init() override;
 
         bool                 ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo);
         bool                 ExistsAVisitedConn() const;
 
-        virtual OUString     GetName() const SAL_OVERRIDE { return GetWinName(); }
+        virtual OUString     GetName() const override { return GetWinName(); }
 
     protected:
-        virtual void    KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& rEvt ) override;
 
-        virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry) SAL_OVERRIDE;
+        virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry) override;
             // is called from DoubleClickHdl of the ListBox
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData
                 The user data store in the listbox entries. Created with a call to createUserData.
                 _pUserData may be <NULL/>.
         */
-        virtual void deleteUserData(void*& _pUserData) SAL_OVERRIDE;
+        virtual void deleteUserData(void*& _pUserData) override;
 
         /** creates user information that will be append at the ListBoxentry
             @param  _xColumn
@@ -72,7 +72,7 @@ namespace dbaui
         */
         virtual void* createUserData(const css::uno::Reference<
                                     css::beans::XPropertySet>& _xColumn,
-                                    bool _bPrimaryKey) SAL_OVERRIDE;
+                                    bool _bPrimaryKey) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOW_HXX

@@ -33,7 +33,7 @@ namespace {
     public:
         UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater, const bool bStartLocked);
         virtual ~UpdateLock();
-        virtual void Activate() SAL_OVERRIDE;
+        virtual void Activate() override;
     private:
         ::slideshow::internal::ScreenUpdater& mrUpdater;
         bool mbIsActivated;

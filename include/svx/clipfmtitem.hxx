@@ -31,8 +31,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipboardFormatItem : public SfxPoolItem
     SvxClipboardFormatItem_Impl* pImpl;
 protected:
 
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool             operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -40,8 +40,8 @@ public:
     SvxClipboardFormatItem( const SvxClipboardFormatItem& );
     virtual ~SvxClipboardFormatItem();
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const override;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     void AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos = USHRT_MAX );
     void AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,

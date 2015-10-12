@@ -48,20 +48,20 @@ class NetWMAdaptor : public WMAdaptor
 {
     void setNetWMState( X11SalFrame* pFrame ) const;
     void initAtoms();
-    virtual bool isValid() const SAL_OVERRIDE;
+    virtual bool isValid() const override;
 public:
     explicit NetWMAdaptor( SalDisplay* );
     virtual ~NetWMAdaptor();
 
-    virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const SAL_OVERRIDE;
-    virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const SAL_OVERRIDE;
-    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const SAL_OVERRIDE;
-    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const SAL_OVERRIDE;
-    virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const SAL_OVERRIDE;
-    virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const SAL_OVERRIDE;
-    virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const SAL_OVERRIDE;
-    virtual void frameIsMapping( X11SalFrame* pFrame ) const SAL_OVERRIDE;
-    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const SAL_OVERRIDE;
+    virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const override;
+    virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
+    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const override;
+    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const override;
+    virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
+    virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
+    virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const override;
+    virtual void frameIsMapping( X11SalFrame* pFrame ) const override;
+    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const override;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -70,15 +70,15 @@ class GnomeWMAdaptor : public WMAdaptor
 
     void setGnomeWMState( X11SalFrame* pFrame ) const;
     void initAtoms();
-    virtual bool isValid() const SAL_OVERRIDE;
+    virtual bool isValid() const override;
 public:
     explicit GnomeWMAdaptor( SalDisplay * );
     virtual ~GnomeWMAdaptor();
 
-    virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const SAL_OVERRIDE;
-    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const SAL_OVERRIDE;
-    virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const SAL_OVERRIDE;
-    virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const SAL_OVERRIDE;
+    virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
+    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const override;
+    virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
+    virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
 };
 
 }

@@ -30,10 +30,10 @@ private:
     bool    bEnabled;
 
 public:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                              const SfxPoolItem* pState ) override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 
@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
 {
     bool    bEnabled;
 public:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 
@@ -56,7 +56,7 @@ public:
 
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                              const SfxPoolItem* pState ) override;
 };
 
 

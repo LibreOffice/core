@@ -31,7 +31,7 @@ public:
     virtual ~RTFDocument() { }
 
     /// Resolves this document to a stream handler.
-    virtual void resolve(Stream& rHandler) SAL_OVERRIDE = 0;
+    virtual void resolve(Stream& rHandler) override = 0;
 };
 
 /// Interface to create an RTFDocument instance.

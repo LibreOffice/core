@@ -32,15 +32,15 @@ public:
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     virtual ~DragMethod_PieSegment();
 
-    virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
-    virtual bool BeginSdrDrag() SAL_OVERRIDE;
-    virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
-    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
+    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual bool BeginSdrDrag() override;
+    virtual void MoveSdrDrag(const Point& rPnt) override;
+    virtual bool EndSdrDrag(bool bCopy) override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() SAL_OVERRIDE;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
 
 protected:
-    virtual void createSdrDragEntries() SAL_OVERRIDE;
+    virtual void createSdrDragEntries() override;
 
 private:
     ::basegfx::B2DVector    m_aStartVector;

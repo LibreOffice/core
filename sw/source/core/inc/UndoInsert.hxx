@@ -64,9 +64,9 @@ public:
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     /**
        Returns rewriter for this undo object.
@@ -79,7 +79,7 @@ public:
 
        @return rewriter for this undo object
      */
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
 
     void SetWithRsid() { m_bWithRsid = true; }
 
@@ -99,8 +99,8 @@ public:
 
     virtual ~SwUndoReplace();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     /**
        Returns the rewriter of this undo object.
@@ -121,7 +121,7 @@ public:
 
        @return the rewriter of this undo object
     */
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
 
     void SetEnd( const SwPaM& rPam );
 
@@ -146,8 +146,8 @@ public:
 
     virtual ~SwUndoReRead();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
 class SwUndoInsertLabel : public SwUndo
@@ -188,9 +188,9 @@ public:
                         const bool bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     /**
        Returns the rewriter of this undo object.
@@ -204,7 +204,7 @@ public:
 
        @return the rewriter of this undo object
      */
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
     static SwRewriter CreateRewriter(const OUString &rStr);
 
     void SetNodePos( sal_uLong nNd )

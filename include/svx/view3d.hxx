@@ -82,25 +82,25 @@ public:
     virtual ~E3dView();
 
     // Output all marked Objects on the given OutputDevice.
-    virtual void DrawMarkedObj(OutputDevice& rOut) const SAL_OVERRIDE;
+    virtual void DrawMarkedObj(OutputDevice& rOut) const override;
 
     // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL) SAL_OVERRIDE;
-    virtual void CheckPossibilities() SAL_OVERRIDE;
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL) override;
+    virtual void CheckPossibilities() override;
 
     // Get/Set Event
     void SetMouseEvent(const MouseEvent& rNew) { aMouseEvent = rNew; }
     const MouseEvent& GetMouseEvent() { return aMouseEvent; }
 
     // Override getting the model, as we need to supply a Scene together with individual 3D Objects.
-    virtual SdrModel* GetMarkedObjModel() const SAL_OVERRIDE;
+    virtual SdrModel* GetMarkedObjModel() const override;
 
     // On Paste: We need to insert the objects of the Scene, but not the Scene itself
     using SdrView::Paste;
     virtual bool Paste(
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
-        const OUString& rSrcShellID, const OUString& rDestShellID ) SAL_OVERRIDE;
+        const OUString& rSrcShellID, const OUString& rDestShellID ) override;
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
     bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
@@ -117,7 +117,7 @@ public:
     // Migration of overlay
     bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
 
-    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
+    virtual void MovAction(const Point& rPnt) override;
     void End3DCreation(bool bUseDefaultValuesForMirrorAxes=false);
     void ResetCreationActive();
 

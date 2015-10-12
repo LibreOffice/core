@@ -33,7 +33,7 @@ public:
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
-    virtual sal_Int16           Execute() SAL_OVERRIDE;
+    virtual sal_Int16           Execute() override;
 
     /** Called before executing the dialog. If this method returns false, the dialog will not be opened. */
     virtual bool                IsDialogEnabled();
@@ -48,9 +48,9 @@ public:
                                 ScReplaceWarnBox( vcl::Window* pParent );
 
     /** Reads the configuration key "ReplaceCellsWarning". */
-    virtual bool                IsDialogEnabled() SAL_OVERRIDE;
+    virtual bool                IsDialogEnabled() override;
     /** Sets the configuration key "ReplaceCellsWarning" to false. */
-    virtual void                DisableDialog() SAL_OVERRIDE;
+    virtual void                DisableDialog() override;
 };
 
 #endif

@@ -49,15 +49,15 @@ class AutoFormatPreview : public vcl::Window
 public:
     AutoFormatPreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~AutoFormatPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void NotifyChange( const SwTableAutoFormat& rNewData );
 
     void DetectRTL(SwWrtShell* pWrtShell);
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 protected:
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
 private:
     SwTableAutoFormat          aCurData;
@@ -103,7 +103,7 @@ public:
     SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
                      const OUString& rEditTitle, const OUString& rDefault );
     virtual ~SwStringInputDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetInputString() const;
 

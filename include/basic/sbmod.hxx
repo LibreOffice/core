@@ -87,20 +87,20 @@ protected:
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
                                     bool bFollowJumps, const SbiImage* pImg=NULL ) const;
-    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
-    virtual bool LoadCompleted() SAL_OVERRIDE;
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) override;
+    virtual bool StoreData( SvStream& ) const override;
+    virtual bool LoadCompleted() override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO_OVERRIDE();
                     SbModule( const OUString&, bool bCompat = false );
-    virtual void    SetParent( SbxObject* ) SAL_OVERRIDE;
-    virtual void    Clear() SAL_OVERRIDE;
+    virtual void    SetParent( SbxObject* ) override;
+    virtual void    Clear() override;
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     const OUString&  GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
@@ -150,9 +150,9 @@ public:
     virtual ~SbClassModuleObject();
 
     // Overridden to support NameAccess etc.
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
-    virtual void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
     SbModule* getClassModule()
         { return mpClassModule; }

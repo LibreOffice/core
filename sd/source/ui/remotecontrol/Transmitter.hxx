@@ -32,7 +32,7 @@ public:
     void notifyFinished();
 
 private:
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 
     ::sd::IBluetoothSocket* pStreamSocket;
 

@@ -40,12 +40,12 @@ public:
 
     const SwFootnoteFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual void    Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual void    Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
-                                 const SwBorderAttrs & ) const SAL_OVERRIDE;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
+                                 const SwBorderAttrs & ) const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
             void    PaintLine( const SwRect &, const SwPageFrm * ) const;
 };
 
@@ -66,17 +66,17 @@ class SwFootnoteFrm: public SwLayoutFrm
     bool mbUnlockPosOfLowerObjs : 1;
 #ifdef DBG_UTIL
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #endif
 
 public:
     SwFootnoteFrm( SwFrameFormat*, SwFrm*, SwContentFrm*, SwTextFootnote* );
 
-    virtual void Cut() SAL_OVERRIDE;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
+    virtual void Cut() override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
 
     bool operator<( const SwTextFootnote* pTextFootnote ) const;
 

@@ -36,7 +36,7 @@ namespace sdr
             SdrHelpLineKind                             meKind;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
 
         public:
             explicit OverlayHelplineStriped(
@@ -48,7 +48,7 @@ namespace sdr
             SdrHelpLineKind getKind() const { return meKind; }
 
             // react on stripe definition change
-            virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;
+            virtual void stripeDefinitionHasChanged() override;
         };
     } // end of namespace overlay
 } // end of namespace sdr

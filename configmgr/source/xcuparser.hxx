@@ -59,15 +59,15 @@ public:
 private:
     virtual ~XcuParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode() SAL_OVERRIDE;
+    virtual xmlreader::XmlReader::Text getTextMode() override;
 
     virtual bool startElement(
         xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< OUString > const * existingDependencies) SAL_OVERRIDE;
+        std::set< OUString > const * existingDependencies) override;
 
-    virtual void endElement(xmlreader::XmlReader const & reader) SAL_OVERRIDE;
+    virtual void endElement(xmlreader::XmlReader const & reader) override;
 
-    virtual void characters(xmlreader::Span const & span) SAL_OVERRIDE;
+    virtual void characters(xmlreader::Span const & span) override;
 
     enum Operation {
         OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };

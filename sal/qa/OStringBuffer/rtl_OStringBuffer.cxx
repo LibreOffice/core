@@ -168,7 +168,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[6];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr1 );
             arrOUS[1] = new OString( kTestStr14 );
@@ -179,7 +179,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4]; delete arrOUS[5];
@@ -323,11 +323,11 @@ namespace rtl_OStringBuffer
     class  remove : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
         }
 
@@ -370,7 +370,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[6];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr1 );
             arrOUS[1] = new OString( "1" );
@@ -381,7 +381,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4]; delete arrOUS[5];
@@ -501,7 +501,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[6];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr1 );
             arrOUS[1] = new OString( "1" );
@@ -512,7 +512,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4]; delete arrOUS[5];
@@ -962,7 +962,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[6];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr1 );
             arrOUS[1] = new OString( "1" );
@@ -973,7 +973,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4]; delete arrOUS[5];
@@ -1532,7 +1532,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -1542,7 +1542,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -1939,7 +1939,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -1949,7 +1949,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -2325,7 +2325,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -2335,7 +2335,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -2710,7 +2710,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -2720,7 +2720,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -2945,7 +2945,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -2955,7 +2955,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -3178,7 +3178,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -3188,7 +3188,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -5164,7 +5164,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -5174,7 +5174,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -6175,7 +6175,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -6185,7 +6185,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -8225,7 +8225,7 @@ namespace rtl_OStringBuffer
         sal_Int32 intVal;
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -8236,7 +8236,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -8353,7 +8353,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -8363,7 +8363,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -8927,7 +8927,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -8937,7 +8937,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -10913,7 +10913,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -10923,7 +10923,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -11924,7 +11924,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -11934,7 +11934,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -13977,7 +13977,7 @@ namespace rtl_OStringBuffer
         sal_Int64 intVal;
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -13988,7 +13988,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -14102,7 +14102,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -14112,7 +14112,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -14685,7 +14685,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -14695,7 +14695,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -15262,7 +15262,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -15272,7 +15272,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -15853,7 +15853,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -15863,7 +15863,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];
@@ -15914,7 +15914,7 @@ namespace rtl_OStringBuffer
         OString* arrOUS[5];
 
     public:
-        void setUp() SAL_OVERRIDE
+        void setUp() override
         {
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
@@ -15924,7 +15924,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
         {
             delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
             delete arrOUS[3]; delete arrOUS[4];

@@ -55,26 +55,26 @@ public:
 
     virtual ~SvxTextEditSource();
 
-    virtual SvxEditSource*          Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;
-    virtual SvxViewForwarder*      GetViewForwarder() SAL_OVERRIDE;
-    virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
-    virtual void                    UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*          Clone() const override;
+    virtual SvxTextForwarder*       GetTextForwarder() override;
+    virtual SvxViewForwarder*      GetViewForwarder() override;
+    virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false ) override;
+    virtual void                    UpdateData() override;
 
-    virtual void addRange( SvxUnoTextRangeBase* pNewRange ) SAL_OVERRIDE;
-    virtual void removeRange( SvxUnoTextRangeBase* pOldRange ) SAL_OVERRIDE;
-    virtual const SvxUnoTextRangeBaseList& getRanges() const SAL_OVERRIDE;
+    virtual void addRange( SvxUnoTextRangeBase* pNewRange ) override;
+    virtual void removeRange( SvxUnoTextRangeBase* pOldRange ) override;
+    virtual const SvxUnoTextRangeBaseList& getRanges() const override;
 
-    virtual SfxBroadcaster&         GetBroadcaster() const SAL_OVERRIDE;
+    virtual SfxBroadcaster&         GetBroadcaster() const override;
 
     void lock();
     void unlock();
 
     // the SvxViewForwarder interface
-    virtual bool        IsValid() const SAL_OVERRIDE;
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-    virtual Point       LogicToPixel( const Point&, const MapMode& ) const SAL_OVERRIDE;
-    virtual Point       PixelToLogic( const Point&, const MapMode& ) const SAL_OVERRIDE;
+    virtual bool        IsValid() const override;
+    virtual Rectangle   GetVisArea() const override;
+    virtual Point       LogicToPixel( const Point&, const MapMode& ) const override;
+    virtual Point       PixelToLogic( const Point&, const MapMode& ) const override;
 
     void ChangeModel( SdrModel* pNewModel );
 

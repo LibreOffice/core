@@ -36,7 +36,7 @@ public:
                             TableStyleList& rTableStyleList );
     virtual             ~TableStyleListFragmentHandler();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;
 
 private:
 

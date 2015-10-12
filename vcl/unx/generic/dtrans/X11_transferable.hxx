@@ -45,13 +45,13 @@ namespace x11 {
             throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
                   ::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException, std::exception
-                  ) SAL_OVERRIDE;
+                  ) override;
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     };
 
 } // namespace

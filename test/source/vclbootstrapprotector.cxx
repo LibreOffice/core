@@ -53,7 +53,7 @@ private:
 
     virtual bool protect(
         CppUnit::Functor const & functor, CppUnit::ProtectorContext const &)
-        SAL_OVERRIDE
+        override
     { return functor(); }
 
     DECL_STATIC_LINK_TYPED(Protector, deinitHook, LinkParamNone*, void);

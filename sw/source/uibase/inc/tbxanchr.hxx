@@ -27,9 +27,9 @@ class SwTbxAnchor : public SfxToolBoxControl
 
 public:
 
-    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual void Click() SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void Click() override;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

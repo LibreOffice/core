@@ -64,8 +64,8 @@ public:
 protected:
     bool setRegName_Impl(char c, std::string const & param);
 
-    virtual void printUsage_Impl() const SAL_OVERRIDE;
-    virtual bool initOptions_Impl (std::vector< std::string > & rArgs) SAL_OVERRIDE;
+    virtual void printUsage_Impl() const override;
+    virtual bool initOptions_Impl (std::vector< std::string > & rArgs) override;
 
     std::string m_regName1;
     std::string m_regName2;

@@ -350,9 +350,9 @@ public:
     virtual ~SdrPageProperties();
 
     // Notify(...) from baseclass SfxListener
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    virtual bool isUsedByModel() const SAL_OVERRIDE;
+    virtual bool isUsedByModel() const override;
 
     // data read/write
     const SfxItemSet& GetItemSet() const { return *mpProperties;}
@@ -460,7 +460,7 @@ public:
     TYPEINFO_OVERRIDE();
     explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     virtual ~SdrPage();
-    virtual SdrPage* Clone() const SAL_OVERRIDE;
+    virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool             IsMasterPage() const       { return mbMaster; }
     void             SetInserted(bool bNew = true);
@@ -492,7 +492,7 @@ public:
     sal_Int32 GetRgtBorder() const;
     sal_Int32 GetLwrBorder() const;
 
-    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual void SetModel(SdrModel* pNewModel) override;
 
     // New MasterPage interface
     bool TRG_HasMasterPage() const { return (0L != mpMasterPageDescriptor); }
@@ -559,7 +559,7 @@ public:
     // different, override the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
-        const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
+        const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
 
 

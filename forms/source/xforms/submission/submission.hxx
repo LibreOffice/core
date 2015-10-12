@@ -62,11 +62,11 @@ protected:
     css::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
 
 public:
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) override
     {
         return m_aInteractionHandler;
     }
-    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception) override
     {
         return m_aProgressHandler;
     }
@@ -85,16 +85,16 @@ public:
     CProgressHandlerHelper()
         : m_count(0)
     {}
-    virtual void SAL_CALL push( const css::uno::Any& /*aStatus*/) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL push( const css::uno::Any& /*aStatus*/) throw(css::uno::RuntimeException, std::exception) override
     {
         m_mLock.acquire();
         m_count++;
         m_mLock.release();
     }
-    virtual void SAL_CALL update(const css::uno::Any& /*aStatus*/) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL update(const css::uno::Any& /*aStatus*/) throw(css::uno::RuntimeException, std::exception) override
     {
     }
-    virtual void SAL_CALL pop() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL pop() throw(css::uno::RuntimeException, std::exception) override
     {
         m_mLock.acquire();
         m_count--;

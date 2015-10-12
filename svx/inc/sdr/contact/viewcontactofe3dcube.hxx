@@ -43,7 +43,7 @@ namespace sdr
         protected:
             // This method is responsible for creating the graphical visualisation data which is
             // stored in the local primitive list. Default creates a yellow replacement rectangle.
-            virtual drawinglayer::primitive3d::Primitive3DSequence createViewIndependentPrimitive3DSequence() const SAL_OVERRIDE;
+            virtual drawinglayer::primitive3d::Primitive3DSequence createViewIndependentPrimitive3DSequence() const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

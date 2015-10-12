@@ -30,8 +30,8 @@ class LpSolverTest: public test::BootstrapFixture
     void testSolver(const uno::Reference<sheet::XSolver>& xSolver);
 
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(LpSolverTest);
     CPPUNIT_TEST(test);

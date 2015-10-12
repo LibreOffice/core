@@ -71,7 +71,7 @@ public:
     void        StateSearch(SfxItemSet &);
 
     virtual ::svl::IUndoManager*
-                GetUndoManager() SAL_OVERRIDE;
+                GetUndoManager() override;
 
     static SfxItemPool* GetAnnotationPool(SwView& rV);
 };

@@ -32,7 +32,7 @@ public:
         const ::std::function<void ()>& rDataChangeFunctor);
 
 protected:
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     ::std::function<void ()> maDataChangeFunctor;

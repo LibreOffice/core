@@ -35,17 +35,17 @@ public:
     SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
                          vcl::Window* pParent, WinBits nBits);
     virtual ~SidebarDockingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
 protected:
     // Window overridables
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,
-        SfxChildAlignment eRequestedAlignment) SAL_OVERRIDE;
+        SfxChildAlignment eRequestedAlignment) override;
 
 private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;

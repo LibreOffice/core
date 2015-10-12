@@ -50,10 +50,10 @@ struct MockedSortTab : public SwTOXSortTabBase {
     MockedSortTab()
     : SwTOXSortTabBase(TOX_SORT_INDEX,0,0,0) {;}
 
-    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE {
+    virtual TextAndReading GetText_Impl() const override {
         return TextAndReading();
     }
-    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE {
+    virtual sal_uInt16  GetLevel() const override {
         return 0;
     }
 };
@@ -108,7 +108,7 @@ class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrm *currentLayout) const SAL_OVERRIDE {
+            const SwRootFrm *currentLayout) const override {
         (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
         return HandledTabStopToken();
     }
@@ -128,7 +128,7 @@ public:
 private:
     SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const SAL_OVERRIDE {
+            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const override {
         // get rid of 'unused-parameters' warnings
         (void)(chapterFieldType);(void)(chapterToken);(void)(contentFrame);(void)(contentNode);
         return mChapterField;

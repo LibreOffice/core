@@ -36,31 +36,31 @@ class RscString : public RscTop
     sal_uInt32  nSize;
 public:
                     RscString( Atom nId, sal_uInt32 nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    virtual RSCCLASS_TYPE   GetClassType() const override;
 
     void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
                     // sets the allowed range
-    void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
-    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
-    void            SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
+    void            Destroy( const RSCINST & rInst ) override;
+    sal_uInt32      Size() override { return nSize; }
+    void            SetToDefault( const RSCINST & rInst ) override
                         {
                             reinterpret_cast<RscStringInst*>(rInst.pData)->bDflt = true;
                         }
-    bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
+    bool            IsDefault( const RSCINST & rInst) override
                         {
                             return reinterpret_cast<RscStringInst*>(rInst.pData)->bDflt;
                         }
                     // sets as default
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
-    ERRTYPE         SetString( const RSCINST &, const char * pStr ) SAL_OVERRIDE;
-    ERRTYPE         GetString( const RSCINST &, char ** ppStr ) SAL_OVERRIDE;
-    ERRTYPE         GetRef( const RSCINST & rInst, RscId * ) SAL_OVERRIDE;
-    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) SAL_OVERRIDE;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) override;
+    ERRTYPE         SetString( const RSCINST &, const char * pStr ) override;
+    ERRTYPE         GetString( const RSCINST &, char ** ppStr ) override;
+    ERRTYPE         GetRef( const RSCINST & rInst, RscId * ) override;
+    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) override;
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
 
 #endif // INCLUDED_RSC_INC_RSCSTR_HXX

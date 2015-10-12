@@ -37,10 +37,10 @@ public:
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLAutoCorrectExport() {}
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
-    void _ExportAutoStyles() SAL_OVERRIDE {}
-    void _ExportMasterStyles () SAL_OVERRIDE {}
-    void _ExportContent() SAL_OVERRIDE {}
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
+    void _ExportAutoStyles() override {}
+    void _ExportMasterStyles () override {}
+    void _ExportContent() override {}
 };
 
 class SvStringsISortDtor;
@@ -57,10 +57,10 @@ public:
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLExceptionListExport() {}
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
-    void _ExportAutoStyles() SAL_OVERRIDE {}
-    void _ExportMasterStyles () SAL_OVERRIDE {}
-    void _ExportContent() SAL_OVERRIDE {}
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
+    void _ExportAutoStyles() override {}
+    void _ExportMasterStyles () override {}
+    void _ExportContent() override {}
 };
 #endif
 

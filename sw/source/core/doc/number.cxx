@@ -1109,8 +1109,8 @@ namespace numfunc
             void InitFont();
 
             /** catches notification about changed default bullet configuration data */
-            virtual void Notify( const uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-            virtual void ImplCommit() SAL_OVERRIDE;
+            virtual void Notify( const uno::Sequence<OUString>& aPropertyNames ) override;
+            virtual void ImplCommit() override;
 
             // default bullet list configuration data
             OUString msFontname;
@@ -1324,8 +1324,8 @@ namespace numfunc
             void LoadConfig();
 
             /** catches notification about changed configuration data */
-            virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-            virtual void ImplCommit() SAL_OVERRIDE;
+            virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
+            virtual void ImplCommit() override;
 
             // configuration data
             bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;

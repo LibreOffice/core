@@ -37,7 +37,7 @@ namespace sd
             void setupSockets();
 
             static DiscoveryService *spService;
-            virtual void SAL_CALL run() SAL_OVERRIDE;
+            virtual void SAL_CALL run() override;
             int mSocket;
 
             ZeroconfService * zService;

@@ -153,7 +153,7 @@ public:
                 uno::RuntimeException, std::exception);
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
 
 };
 

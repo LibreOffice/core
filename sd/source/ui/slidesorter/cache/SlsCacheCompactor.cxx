@@ -45,10 +45,10 @@ public:
         : CacheCompactor(rCache, nMaximalCacheSize)
     {}
 
-    virtual void RequestCompaction() SAL_OVERRIDE { /* Ignored */ };
+    virtual void RequestCompaction() override { /* Ignored */ };
 
 protected:
-    virtual void Run() SAL_OVERRIDE { /* Do nothing */ };
+    virtual void Run() override { /* Do nothing */ };
 };
 
 /** This implementation of the CacheCompactor interface class uses one of
@@ -67,7 +67,7 @@ public:
         const std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
 
 protected:
-    virtual void Run() SAL_OVERRIDE;
+    virtual void Run() override;
 
 private:
     std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;

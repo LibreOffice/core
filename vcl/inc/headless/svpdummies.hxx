@@ -37,16 +37,16 @@ public:
     virtual ~SvpSalObject();
 
     // override all pure virtual methods
-     virtual void                   ResetClipRegion() SAL_OVERRIDE;
-    virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
-    virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
+     virtual void                   ResetClipRegion() override;
+    virtual sal_uInt16              GetClipRegionType() override;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) override;
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    EndSetClipRegion() override;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    Show( bool bVisible ) override;
 
-    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
+    virtual const SystemEnvData*    GetSystemData() const override;
 };
 
 class VCL_DLLPUBLIC SvpImeStatus : public SalI18NImeStatus
@@ -55,8 +55,8 @@ class VCL_DLLPUBLIC SvpImeStatus : public SalI18NImeStatus
         SvpImeStatus() {}
         virtual ~SvpImeStatus();
 
-        virtual bool canToggle() SAL_OVERRIDE;
-        virtual void toggle() SAL_OVERRIDE;
+        virtual bool canToggle() override;
+        virtual void toggle() override;
 };
 
 class VCL_DLLPUBLIC SvpSalSystem : public SalGenericSystem
@@ -65,13 +65,13 @@ public:
     SvpSalSystem() {}
     virtual ~SvpSalSystem();
     // get info about the display
-    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
+    virtual unsigned int GetDisplayScreenCount() override;
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
 
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,
-                                  int nDefButton ) SAL_OVERRIDE;
+                                  int nDefButton ) override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX

@@ -185,27 +185,27 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
 protected:
 
-    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
-    virtual void    PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& ) override;
+    virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
-    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
+    virtual void    MouseMove(const MouseEvent& rMEvt) override;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void    RequestHelp(const HelpEvent& rEvt) override;
 
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 
                                 // Drag & Drop Interface
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
-    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
+    virtual OUString GetSurroundingText() const override;
+    virtual Selection GetSurroundingTextSelection() const override;
 
     void    ShowAutoTextCorrectQuickHelp( const OUString& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, bool bFromIME = false );
@@ -216,7 +216,7 @@ protected:
     bool    IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly, bool& bPageAnchored ) const;
 public:
 
-    virtual void    KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
+    virtual void    KeyInput(const KeyEvent &rKEvt) override;
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
     bool            IsDrawSelMode();
@@ -263,7 +263,7 @@ public:
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
     static inline long GetDDStartPosX() { return m_nDDStartPosX; }
     static inline long GetDDStartPosY() { return m_nDDStartPosY; }
@@ -293,10 +293,10 @@ public:
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
+    void LogicInvalidate(const Rectangle* pRectangle) override;
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     /// Same as MouseButtonUp(), but coordinates are in logic unit.

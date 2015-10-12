@@ -84,7 +84,7 @@ namespace
         {
         }
 
-        virtual Image getImage() const SAL_OVERRIDE
+        virtual Image getImage() const override
         {
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
@@ -102,7 +102,7 @@ namespace
         {
         }
 
-        virtual OUString  getLabel() const SAL_OVERRIDE
+        virtual OUString  getLabel() const override
         {
             return m_label;
         }
@@ -303,7 +303,7 @@ class OExceptionChainDialog : public ModalDialog
 public:
     OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
     virtual ~OExceptionChainDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pExceptionList.clear();
         m_pExceptionText.clear();

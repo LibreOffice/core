@@ -49,7 +49,7 @@ public:
     virtual void HandleSelectionChangedEventNoArgs();
 
     //for state changed event
-    virtual void FireStatePropertyChange(short state, bool set) SAL_OVERRIDE;
+    virtual void FireStatePropertyChange(short state, bool set) override;
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCMENUEVENTLISTENER_HXX

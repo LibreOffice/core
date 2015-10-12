@@ -77,10 +77,10 @@ namespace drawinglayer
             const Primitive2DSequence& getChildren() const { return maChildren; }
 
             /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             /// local decomposition. Implementation will just return children
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

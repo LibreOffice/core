@@ -59,14 +59,14 @@ namespace
         virtual ~FrameActionListener()
         {
         }
-        virtual void SAL_CALL disposing() SAL_OVERRIDE
+        virtual void SAL_CALL disposing() override
         {
             SolarMutexGuard g;
             if (mxFrame.is())
                 mxFrame->removeFrameActionListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             (void)rEvent;
 
@@ -75,7 +75,7 @@ namespace
             mxFrame = NULL;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             SolarMutexGuard g;
             if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)

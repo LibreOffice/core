@@ -38,7 +38,7 @@ TYPEINIT0( SvLinkSource )
 class SvLinkSourceTimer : public Timer
 {
     SvLinkSource *  pOwner;
-    virtual void    Invoke() SAL_OVERRIDE;
+    virtual void    Invoke() override;
 public:
     explicit SvLinkSourceTimer( SvLinkSource * pOwn );
 };

@@ -49,32 +49,32 @@ public:
     bool isParsed() { return m_bIsParsed; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL endDocument()
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL startElement( const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs )
         throw ( css::xml::sax::SAXException,
-            css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL endElement( const OUString & aName )
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL characters( const OUString & aChars )
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL ignorableWhitespace( const OUString & aWhitespaces )
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL processingInstruction(
         const OUString & aTarget, const OUString & aData )
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setDocumentLocator(
         const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 };
 }
 }

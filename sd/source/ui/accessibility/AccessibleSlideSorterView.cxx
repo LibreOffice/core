@@ -79,7 +79,7 @@ public:
 
     void ConnectListeners();
     void ReleaseListeners();
-    void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
+    void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
     DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
     DECL_LINK_TYPED(SelectionChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);

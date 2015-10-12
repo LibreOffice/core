@@ -66,11 +66,11 @@ public:
 
     /** Override this method in order to have the layer mode always active.
     */
-    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) SAL_OVERRIDE;
+    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) override;
 
 protected:
     void ConstructGraphicViewShell();
-    virtual void ArrangeGUIElements() SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() override;
 };
 
 } // end of namespace sd

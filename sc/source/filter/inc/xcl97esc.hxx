@@ -38,7 +38,7 @@ public:
 
 private:
     /** Override to create a new temporary file and return its stream. */
-    virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
+    virtual SvStream*   ImplQueryPictureStream() override;
 
 private:
     ::std::unique_ptr< ::utl::TempFile > mxPicTempFile;
@@ -93,9 +93,9 @@ public:
 
     virtual EscherExHostAppData* StartShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
-                            const Rectangle* pChildAnchor ) SAL_OVERRIDE;
-    virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID ) SAL_OVERRIDE;
-    virtual EscherExHostAppData*    EnterAdditionalTextGroup() SAL_OVERRIDE;
+                            const Rectangle* pChildAnchor ) override;
+    virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID ) override;
+    virtual EscherExHostAppData*    EnterAdditionalTextGroup() override;
 
                                 /// Flush and merge PicStream into EscherStream
             void                EndDocument();
@@ -153,7 +153,7 @@ class XclEscherClientData : public EscherExClientRecord_Base
 {
 public:
                         XclEscherClientData() {}
-    virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
+    virtual void        WriteData( EscherEx& rEx ) const override;
 };
 
 // --- class XclEscherClientTextbox ----------------------------------
@@ -175,7 +175,7 @@ public:
                                 //! ONLY for the AdditionalText mimic
     inline  void        SetXclObj( XclObj* p )  { pXclObj = p; }
 
-    virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
+    virtual void        WriteData( EscherEx& rEx ) const override;
 };
 
 #endif // _XCL97ESC_HXX

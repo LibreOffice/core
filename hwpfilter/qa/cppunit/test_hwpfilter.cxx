@@ -24,11 +24,11 @@ namespace
         , public test::BootstrapFixture
     {
     public:
-        virtual void setUp() SAL_OVERRIDE;
+        virtual void setUp() override;
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+            SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
 
         void test();
 

@@ -17,7 +17,7 @@ class RecentDocsViewItem : public ThumbnailViewItem
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
         const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, long nThumbnailSize = 256);
-    virtual void setEditTitle (bool edit, bool bChangeFocus = true) SAL_OVERRIDE;
+    virtual void setEditTitle (bool edit, bool bChangeFocus = true) override;
 
     /** Updates own highlight status based on the aPoint position.
 
@@ -25,15 +25,15 @@ public:
 
         Returns rectangle that needs to be invalidated.
     */
-    virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint) SAL_OVERRIDE;
+    virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint) override;
 
     /// Text to be used for the tooltip.
-    virtual OUString getHelpText() const SAL_OVERRIDE;
+    virtual OUString getHelpText() const override;
 
     virtual void Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
-                       const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
+                       const ThumbnailItemAttributes *pAttrs) override;
 
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
 
     /// Called when the user clicks a document - it will open it.
     void OpenDocument();

@@ -40,7 +40,7 @@ public:
 
     DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
     virtual ~DummyReplacement() {}
-    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
+    virtual sal_Int32 GetMemorySize() const override { return maPreview.GetSizeBytes(); }
 };
 
 std::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
@@ -88,7 +88,7 @@ public:
     Size maOriginalSize;
 
     virtual ~ResolutionReducedReplacement();
-    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE;
+    virtual sal_Int32 GetMemorySize() const override;
 };
 
 ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement()
@@ -155,7 +155,7 @@ public:
     {
         delete [] static_cast<char*>(mpData);
     }
-    virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE
+    virtual sal_Int32 GetMemorySize() const override
     {
         return mnDataSize;
     }

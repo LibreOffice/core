@@ -84,8 +84,8 @@ private:
     friend class SdrGraphicLink;
 
 private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     void ImpSetAttrToGrafInfo(); // Copy values from the pool
     GraphicAttr aGrafInfo;
@@ -158,44 +158,44 @@ public:
 
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
 
-    virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
-    virtual sal_uInt16          GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual sal_uInt16          GetObjIdentifier() const override;
 
-    virtual OUString        TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString        TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString        TakeObjNameSingul() const override;
+    virtual OUString        TakeObjNamePlural() const override;
 
     // #i25616#
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
-    virtual SdrGrafObj* Clone() const SAL_OVERRIDE;
+    virtual SdrGrafObj* Clone() const override;
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
-    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
-    virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetHdlCount() const override;
+    virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const override;
 
-    virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void            NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
-    virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void            NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
-    virtual void            NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void            NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual SdrObjGeoData*  NewGeoData() const SAL_OVERRIDE;
-    virtual void            SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
-    virtual void            RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
+    virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void            NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
+    virtual void            NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void            NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void            NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual SdrObjGeoData*  NewGeoData() const override;
+    virtual void            SaveGeoData(SdrObjGeoData& rGeo) const override;
+    virtual void            RestGeoData(const SdrObjGeoData& rGeo) override;
 
     bool                    HasGDIMetaFile() const;
 
-    virtual void            SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
-    virtual void            SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual void            SetPage(SdrPage* pNewPage) override;
+    virtual void            SetModel(SdrModel* pNewModel) override;
 
     bool isEmbeddedSvg() const;
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
 
-    virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) SAL_OVERRIDE;
+    virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     bool IsMirrored() const { return bMirrored;}
     void SetMirrored( bool _bMirrored );
@@ -206,10 +206,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
 
     // #i103116# FullDrag support
-    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
+    virtual SdrObject* getFullDragClone() const override;
 
     // add handles for crop mode when selected
-    virtual void addCropHandles(SdrHdlList& rTarget) const SAL_OVERRIDE;
+    virtual void addCropHandles(SdrHdlList& rTarget) const override;
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX

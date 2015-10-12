@@ -42,13 +42,13 @@ public:
     virtual ~PowerPointImport();
 
     // from FilterBase
-    virtual bool importDocument() SAL_OVERRIDE;
-    virtual bool exportDocument() throw() SAL_OVERRIDE;
+    virtual bool importDocument() override;
+    virtual bool exportDocument() throw() override;
 
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
-    virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;
+    virtual ::oox::vml::Drawing* getVmlDrawing() override;
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override;
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
     SlidePersistPtr                                         getActualSlidePersist() const { return mpActualSlidePersist; };
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
@@ -58,7 +58,7 @@ public:
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
@@ -67,9 +67,9 @@ public:
 #endif
 
 private:
-    virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual GraphicHelper* implCreateGraphicHelper() const override;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     OUString                                       maTableStyleListPath;

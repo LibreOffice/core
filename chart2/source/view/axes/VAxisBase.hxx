@@ -57,7 +57,7 @@ public:
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException) override;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos );

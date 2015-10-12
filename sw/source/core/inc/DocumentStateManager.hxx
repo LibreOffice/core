@@ -35,15 +35,15 @@ class DocumentStateManager : public IDocumentState,
 public:
     DocumentStateManager( SwDoc& i_rSwdoc );
 
-    void SetModified() SAL_OVERRIDE;
-    void ResetModified() SAL_OVERRIDE;
-    bool IsModified() const SAL_OVERRIDE;
-    bool IsInCallModified() const SAL_OVERRIDE;
-    bool IsUpdateExpField() const SAL_OVERRIDE;
-    bool IsNewDoc() const SAL_OVERRIDE;
-    void SetNewDoc(bool b) SAL_OVERRIDE;
-    void SetUpdateExpFieldStat(bool b) SAL_OVERRIDE;
-    void SetLoaded(bool b) SAL_OVERRIDE;
+    void SetModified() override;
+    void ResetModified() override;
+    bool IsModified() const override;
+    bool IsInCallModified() const override;
+    bool IsUpdateExpField() const override;
+    bool IsNewDoc() const override;
+    void SetNewDoc(bool b) override;
+    void SetUpdateExpFieldStat(bool b) override;
+    void SetLoaded(bool b) override;
 
 private:
     SwDoc& m_rDoc;

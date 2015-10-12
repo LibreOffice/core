@@ -52,7 +52,7 @@ public:
     {
     }
 
-    virtual void Invalidate (const Rectangle& rInvalidationBox) SAL_OVERRIDE
+    virtual void Invalidate (const Rectangle& rInvalidationBox) override
     {
         mpLayeredDevice->Invalidate(rInvalidationBox, mnLayer);
         mpTargetWindow->Invalidate(rInvalidationBox);

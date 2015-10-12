@@ -25,7 +25,7 @@ public:
     explicit WpgContext(oox::core::ContextHandler2Helper& rParent);
     virtual ~WpgContext();
 
-    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) SAL_OVERRIDE;
+    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
 
     oox::drawingml::ShapePtr getShape()
     {

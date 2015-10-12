@@ -156,7 +156,7 @@ private:
             bool const bHidden, bool const bCondition);
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     TYPEINFO_OVERRIDE();     // rtti
@@ -290,20 +290,20 @@ class SW_DLLPUBLIC SwSectionFormat
 
 protected:
     SwSectionFormat( SwFrameFormat* pDrvdFrm, SwDoc *pDoc );
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     TYPEINFO_OVERRIDE();     // Already contained in base class client.
     virtual ~SwSectionFormat();
 
     // Deletes all Frms in aDepend (Frms are recognized via dynamic_cast).
-    virtual void DelFrms() SAL_OVERRIDE;
+    virtual void DelFrms() override;
 
     // Creates views.
-    virtual void MakeFrms() SAL_OVERRIDE;
+    virtual void MakeFrms() override;
 
     // Get information from Format.
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
 
     SwSection* GetSection() const;
     inline SwSectionFormat* GetParent() const;
@@ -335,12 +335,12 @@ public:
             { m_wXTextSection = xTextSection; }
 
     // sfx2::Metadatable
-    virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;
-    virtual bool IsInClipboard() const SAL_OVERRIDE;
-    virtual bool IsInUndo() const SAL_OVERRIDE;
-    virtual bool IsInContent() const SAL_OVERRIDE;
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
+    virtual bool IsInClipboard() const override;
+    virtual bool IsInUndo() const override;
+    virtual bool IsInContent() const override;
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 };

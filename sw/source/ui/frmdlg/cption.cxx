@@ -67,8 +67,8 @@ public:
     SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
                             const OUString& rSeqFieldType );
     virtual ~SwSequenceOptionDialog();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual void Apply() override;
 
     bool IsApplyBorderAndShadow() { return m_pApplyBorderAndShadowCB->IsChecked(); }
     void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }

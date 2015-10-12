@@ -157,8 +157,8 @@ public:
                                 SfxAllItemSet( const SfxItemSet & );
                                 SfxAllItemSet( const SfxAllItemSet & );
 
-    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = 0 ) const SAL_OVERRIDE;
-    virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich ) SAL_OVERRIDE;
+    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = 0 ) const override;
+    virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich ) override;
     using SfxItemSet::Put;
 };
 

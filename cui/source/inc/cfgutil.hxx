@@ -104,12 +104,12 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     SfxGroupInfoArr_Impl aArr;
     SfxStylesInfo_Impl*  pStylesInfo;
 
-    virtual void  MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void  MouseMove( const MouseEvent& rMEvt ) override;
 
 public:
     SfxConfigFunctionListBox(vcl::Window*, WinBits nStyle);
     virtual ~SfxConfigFunctionListBox();
-    virtual void  dispose() SAL_OVERRIDE;
+    virtual void  dispose() override;
 
     void          ClearAll();
     using Window::GetHelpText;
@@ -152,13 +152,13 @@ class SfxConfigGroupListBox : public SvTreeListBox
     SfxStylesInfo_Impl* pStylesInfo;
 
 protected:
-    virtual void        RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
-    virtual bool        Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
+    virtual void        RequestingChildren( SvTreeListEntry *pEntry) override;
+    virtual bool        Expand( SvTreeListEntry* pParent ) override;
 
 public:
     SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SfxConfigGroupListBox();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     void                ClearAll();
 
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,

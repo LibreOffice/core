@@ -168,7 +168,7 @@ public:
 
 //  override methods of baseclass
 
-    virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
 
 
 //  public interface
@@ -221,7 +221,7 @@ public:
 
 private:
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
     static Sequence< OUString > impl_GetPropertyNames();
 

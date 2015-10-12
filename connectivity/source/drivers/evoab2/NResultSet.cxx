@@ -395,7 +395,7 @@ public:
         freeContacts();
     }
 
-    virtual EBook* openBook(const char *abname) SAL_OVERRIDE
+    virtual EBook* openBook(const char *abname) override
     {
         //It would be better if here we had id to begin with, see
         //NDatabaseMetaData.cxx
@@ -428,23 +428,23 @@ public:
         return pBook;
     }
 
-    virtual bool isLDAP( EBook *pBook ) SAL_OVERRIDE
+    virtual bool isLDAP( EBook *pBook ) override
     {
         return isBookBackend(pBook, "ldap");
     }
 
-    virtual bool isLocal( EBook *pBook ) SAL_OVERRIDE
+    virtual bool isLocal( EBook *pBook ) override
     {
         return isBookBackend(pBook, "local");
     }
 
-    virtual void freeContacts() SAL_OVERRIDE
+    virtual void freeContacts() override
     {
         e_client_util_free_object_slist(m_pContacts);
         m_pContacts = NULL;
     }
 
-    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) SAL_OVERRIDE
+    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) override
     {
         freeContacts();
         char *sexp = e_book_query_to_string( pQuery );
@@ -453,23 +453,23 @@ public:
         return bSuccess;
     }
 
-    virtual EContact *getContact(sal_Int32 nIndex) SAL_OVERRIDE
+    virtual EContact *getContact(sal_Int32 nIndex) override
     {
         gpointer pData = g_slist_nth_data (m_pContacts, nIndex);
         return pData ? E_CONTACT (pData) : NULL;
     }
 
-    virtual sal_Int32 getNumContacts() SAL_OVERRIDE
+    virtual sal_Int32 getNumContacts() override
     {
         return g_slist_length( m_pContacts );
     }
 
-    virtual bool hasContacts() SAL_OVERRIDE
+    virtual bool hasContacts() override
     {
         return m_pContacts != NULL;
     }
 
-    virtual void sortContacts( const ComparisonData& _rCompData ) SAL_OVERRIDE
+    virtual void sortContacts( const ComparisonData& _rCompData ) override
     {
         OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
         ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
@@ -488,7 +488,7 @@ protected:
 class OEvoabVersion38Helper : public OEvoabVersion36Helper
 {
 protected:
-    virtual EBookClient * createClient( ESource *pSource ) SAL_OVERRIDE
+    virtual EBookClient * createClient( ESource *pSource ) override
     {
         return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, NULL, NULL);
     }
@@ -541,7 +541,7 @@ public:
         freeContacts();
     }
 
-    virtual EBook* openBook(const char *abname) SAL_OVERRIDE
+    virtual EBook* openBook(const char *abname) override
     {
         ESource *pSource = findSource (abname);
         EBook *pBook = pSource ? e_book_new (pSource, NULL) : NULL;
@@ -553,24 +553,24 @@ public:
         return pBook;
     }
 
-    virtual bool isLDAP( EBook *pBook ) SAL_OVERRIDE
+    virtual bool isLDAP( EBook *pBook ) override
     {
         return pBook && !strncmp( "ldap://", e_book_get_uri( pBook ), 6 );
     }
 
-    virtual bool isLocal( EBook *pBook ) SAL_OVERRIDE
+    virtual bool isLocal( EBook *pBook ) override
     {
         return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
                           !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
     }
 
-    virtual void freeContacts() SAL_OVERRIDE
+    virtual void freeContacts() override
     {
         g_list_free(m_pContacts);
         m_pContacts = NULL;
     }
 
-    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) SAL_OVERRIDE
+    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) override
     {
         freeContacts();
 
@@ -591,23 +591,23 @@ public:
         return bSuccess;
     }
 
-    virtual EContact *getContact(sal_Int32 nIndex) SAL_OVERRIDE
+    virtual EContact *getContact(sal_Int32 nIndex) override
     {
         gpointer pData = g_list_nth_data (m_pContacts, nIndex);
         return pData ? E_CONTACT (pData) : NULL;
     }
 
-    virtual sal_Int32 getNumContacts() SAL_OVERRIDE
+    virtual sal_Int32 getNumContacts() override
     {
         return g_list_length( m_pContacts );
     }
 
-    virtual bool hasContacts() SAL_OVERRIDE
+    virtual bool hasContacts() override
     {
         return m_pContacts != NULL;
     }
 
-    virtual void sortContacts( const ComparisonData& _rCompData ) SAL_OVERRIDE
+    virtual void sortContacts( const ComparisonData& _rCompData ) override
     {
         OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
         ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );

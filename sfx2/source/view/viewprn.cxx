@@ -84,13 +84,13 @@ public:
                         );
 
     virtual ~SfxPrinterController();
-    virtual void Notify( SfxBroadcaster&, const SfxHint& ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster&, const SfxHint& ) override;
 
-    virtual int  getPageCount() const SAL_OVERRIDE;
-    virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const SAL_OVERRIDE;
-    virtual void printPage( int i_nPage ) const SAL_OVERRIDE;
-    virtual void jobStarted() SAL_OVERRIDE;
-    virtual void jobFinished( com::sun::star::view::PrintableState ) SAL_OVERRIDE;
+    virtual int  getPageCount() const override;
+    virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const override;
+    virtual void printPage( int i_nPage ) const override;
+    virtual void jobStarted() override;
+    virtual void jobFinished( com::sun::star::view::PrintableState ) override;
 };
 
 SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,

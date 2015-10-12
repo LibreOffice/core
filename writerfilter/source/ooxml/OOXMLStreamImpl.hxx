@@ -72,14 +72,14 @@ public:
 
     virtual ~OOXMLStreamImpl();
 
-    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::uno::XComponentContext> getContext() SAL_OVERRIDE;
-    virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
-    virtual const OUString & getTarget() const SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
+    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() override;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() override;
+    virtual css::uno::Reference<css::uno::XComponentContext> getContext() override;
+    virtual OUString getTargetForId(const OUString & rId) override;
+    virtual const OUString & getTarget() const override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() override;
 
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
     css::uno::Reference<css::io::XStream> accessDocumentStream() { return mxDocumentStream;}

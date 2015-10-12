@@ -49,20 +49,20 @@ namespace dbaui
         VclPtr<OTableSubscriptionDialog> m_pTablesDlg;
 
     public:
-        virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
-        virtual sfxpg           DeactivatePage(SfxItemSet* _pSet) SAL_OVERRIDE;
+        virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) override;
+        virtual sfxpg           DeactivatePage(SfxItemSet* _pSet) override;
         using OGenericAdministrationPage::DeactivatePage;
 
-        virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void            StateChanged( StateChangedType nStateChange ) override;
+        virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
         DECL_LINK( OnTreeEntryChecked, Control* );
@@ -84,7 +84,7 @@ namespace dbaui
         /// (un)check all entries
         void CheckAll( bool bCheck = true );
 
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...

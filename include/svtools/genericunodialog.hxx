@@ -98,27 +98,27 @@ namespace svt
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase)
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
-        virtual com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException) override;
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
 
     protected:
         /** create the concret dialog instance. note that m_aMutex is not locked when this method get's called,

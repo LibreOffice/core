@@ -49,7 +49,7 @@ public:
     virtual ~RewinderEventHandler() {}
 private:
     const Action maAction;
-    virtual bool handleEvent() SAL_OVERRIDE { return maAction(); }
+    virtual bool handleEvent() override { return maAction(); }
 };
 
 
@@ -62,7 +62,7 @@ public:
     virtual ~RewinderAnimationEventHandler() {}
 private:
     const Action maAction;
-    virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) SAL_OVERRIDE
+    virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) override
         { return maAction(rpNode); }
 };
 

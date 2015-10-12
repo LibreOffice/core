@@ -256,19 +256,19 @@ public:
         FormulaTreeNodeRef ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         ss << "unsigned " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         ss << GenSlidingWindowDeclRef();
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         GenDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
         if (GetFormulaToken()->GetType() != formula::svString)
@@ -277,12 +277,12 @@ public:
         ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
         return ss.str();
     }
-    virtual size_t GetWindowSize() const SAL_OVERRIDE
+    virtual size_t GetWindowSize() const override
     {
         return 1;
     }
     /// Pass the 32-bit hash of the string to the kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
         FormulaToken* ref = mFormulaTree->GetFormulaToken();
         cl_uint hashCode = 0;
@@ -313,25 +313,25 @@ public:
         FormulaTreeNodeRef ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         ss << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         GenDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         if (GetFormulaToken()->GetType() != formula::svDouble)
             throw Unhandled();
         return mSymName;
     }
-    virtual size_t GetWindowSize() const SAL_OVERRIDE
+    virtual size_t GetWindowSize() const override
     {
         return 1;
     }
@@ -343,7 +343,7 @@ public:
         return Tok->GetDouble();
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
         double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
@@ -362,28 +362,28 @@ public:
         FormulaTreeNodeRef ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         ss << "3.14159265358979";
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         GenDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         return mSymName;
     }
-    virtual size_t GetWindowSize() const SAL_OVERRIDE
+    virtual size_t GetWindowSize() const override
     {
         return 1;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
@@ -402,23 +402,23 @@ public:
         FormulaTreeNodeRef ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         ss << "double " << mSymName;
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         ss << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         ss << "int " << mSymName;
     }
-    virtual std::string GenSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         return mSymName + "_Random(" + mSymName + ")";
     }
-    virtual void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
+    virtual void GenSlidingWindowFunction( std::stringstream& ss ) override
     {
         // This string is from the pi_opencl_kernel.i file as
         // generated when building the Random123 examples. Unused
@@ -743,12 +743,12 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
 }\n\
 ";
     }
-    virtual size_t GetWindowSize() const SAL_OVERRIDE
+    virtual size_t GetWindowSize() const override
     {
         return 1;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
         cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
@@ -768,17 +768,17 @@ public:
         FormulaTreeNodeRef ft, int index = 0 ) :
         VectorRef(config, s, ft, index) { }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
+    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         ss << "__global unsigned int *" << mSymName;
     }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         DynamicKernelStringArgument::GenDecl(ss);
     }
-    virtual size_t Marshal( cl_kernel, int, int, cl_program ) SAL_OVERRIDE;
+    virtual size_t Marshal( cl_kernel, int, int, cl_program ) override;
 };
 
 /// Marshal a string vector reference
@@ -877,36 +877,36 @@ public:
     DynamicKernelMixedArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
         VectorRef(config, s, ft), mStringArgument(config, s + "s", ft) { }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         VectorRef::GenSlidingWindowDecl(ss);
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual bool IsMixedArgument() const SAL_OVERRIDE { return true;}
-    virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
+    virtual bool IsMixedArgument() const override { return true;}
+    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         VectorRef::GenDecl(ss);
         ss << ", ";
         mStringArgument.GenDecl(ss);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         VectorRef::GenDeclRef(ss);
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
-    virtual void GenNumDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenNumDeclRef( std::stringstream& ss ) const override
     {
         VectorRef::GenSlidingWindowDecl(ss);
     }
-    virtual void GenStringDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenStringDeclRef( std::stringstream& ss ) const override
     {
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef( bool nested ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         std::stringstream ss;
         ss << "(!isNan(" << VectorRef::GenSlidingWindowDeclRef();
@@ -915,19 +915,19 @@ public:
         ss << ")";
         return ss.str();
     }
-    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
         ss << VectorRef::GenSlidingWindowDeclRef();
         return ss.str();
     }
-    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
-    virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) override
     {
         int i = VectorRef::Marshal(k, argno, vw, p);
         i += mStringArgument.Marshal(k, argno + i, vw, p);
@@ -1140,27 +1140,27 @@ public:
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
         mStringArgument(mCalcConfig, s + "s", ft, CodeGen, index) { }
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         mDoubleArgument.GenSlidingWindowDecl(ss);
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
+    virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
     /// Generate declaration
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         mDoubleArgument.GenDecl(ss);
         ss << ", ";
         mStringArgument.GenDecl(ss);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         mDoubleArgument.GenDeclRef(ss);
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef( bool nested ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         std::stringstream ss;
         ss << "(!isNan(" << mDoubleArgument.GenSlidingWindowDeclRef();
@@ -1169,28 +1169,28 @@ public:
         ss << ")";
         return ss.str();
     }
-    virtual bool IsMixedArgument() const SAL_OVERRIDE { return true;}
-    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual bool IsMixedArgument() const override { return true;}
+    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
         ss << mDoubleArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
-    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
+    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
     }
-    virtual void GenNumDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenNumDeclRef( std::stringstream& ss ) const override
     {
         mDoubleArgument.GenDeclRef(ss);
     }
-    virtual void GenStringDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenStringDeclRef( std::stringstream& ss ) const override
     {
         mStringArgument.GenDeclRef(ss);
     }
-    virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) override
     {
         int i = mDoubleArgument.Marshal(k, argno, vw, p);
         i += mStringArgument.Marshal(k, argno + i, vw, p);
@@ -1683,7 +1683,7 @@ public:
     }
 
     virtual void GenSlidingWindowFunction( std::stringstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) SAL_OVERRIDE
+        const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
@@ -1790,8 +1790,8 @@ public:
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
-    virtual bool takeString() const SAL_OVERRIDE { return false; }
-    virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
+    virtual bool takeString() const override { return false; }
+    virtual bool takeNumeric() const override { return true; }
 };
 
 // Strictly binary operators
@@ -1799,7 +1799,7 @@ class Binary : public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction( std::stringstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) SAL_OVERRIDE
+        const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
@@ -1817,15 +1817,15 @@ public:
             vSubArguments[1]->GenSlidingWindowDeclRef()) << ";\n\t";
         ss << "return tmp;\n}";
     }
-    virtual bool takeString() const SAL_OVERRIDE { return true; }
-    virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
+    virtual bool takeString() const override { return true; }
+    virtual bool takeNumeric() const override { return true; }
 };
 
 class SumOfProduct : public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction( std::stringstream& ss,
-        const std::string& sSymName, SubArguments& vSubArguments ) SAL_OVERRIDE
+        const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         size_t nCurWindowSize = 0;
         FormulaToken* tmpCur = NULL;
@@ -2020,8 +2020,8 @@ public:
         ss << "return tmp;\n";
         ss << "}";
     }
-    virtual bool takeString() const SAL_OVERRIDE { return false; }
-    virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
+    virtual bool takeString() const override { return false; }
+    virtual bool takeNumeric() const override { return true; }
 };
 
 /// operator traits
@@ -2030,12 +2030,12 @@ class OpNop : public Reduction
 public:
     OpNop( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& ) const override
     {
         return lhs;
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "nop"; }
+    virtual std::string BinFuncName() const override { return "nop"; }
 };
 
 class OpCount : public Reduction
@@ -2043,66 +2043,66 @@ class OpCount : public Reduction
 public:
     OpCount( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "(isNan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fcount"; }
+    virtual std::string BinFuncName() const override { return "fcount"; }
 };
 
 class OpEqual : public Binary
 {
 public:
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "strequal(" << lhs << "," << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "eq"; }
+    virtual std::string BinFuncName() const override { return "eq"; }
 };
 
 class OpLessEqual : public Binary
 {
 public:
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "(" << lhs << "<=" << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "leq"; }
+    virtual std::string BinFuncName() const override { return "leq"; }
 };
 
 class OpLess : public Binary
 {
 public:
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "(" << lhs << "<" << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "less"; }
+    virtual std::string BinFuncName() const override { return "less"; }
 };
 
 class OpGreater : public Binary
 {
 public:
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "(" << lhs << ">" << rhs << ")";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "gt"; }
+    virtual std::string BinFuncName() const override { return "gt"; }
 };
 
 class OpSum : public Reduction
@@ -2110,14 +2110,14 @@ class OpSum : public Reduction
 public:
     OpSum( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "((" << lhs << ")+(" << rhs << "))";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fsum"; }
+    virtual std::string BinFuncName() const override { return "fsum"; }
 };
 
 class OpAverage : public Reduction
@@ -2125,15 +2125,15 @@ class OpAverage : public Reduction
 public:
     OpAverage( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
         ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fsum"; }
-    virtual bool isAverage() const SAL_OVERRIDE { return true; }
+    virtual std::string BinFuncName() const override { return "fsum"; }
+    virtual bool isAverage() const override { return true; }
 };
 
 class OpSub : public Reduction
@@ -2141,12 +2141,12 @@ class OpSub : public Reduction
 public:
     OpSub( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return lhs + "-" + rhs;
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fsub"; }
+    virtual std::string BinFuncName() const override { return "fsub"; }
 };
 
 class OpMul : public Reduction
@@ -2154,13 +2154,13 @@ class OpMul : public Reduction
 public:
     OpMul( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "1"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "1"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return lhs + "*" + rhs;
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fmul"; }
-    virtual bool ZeroReturnZero() SAL_OVERRIDE { return true; }
+    virtual std::string BinFuncName() const override { return "fmul"; }
+    virtual bool ZeroReturnZero() override { return true; }
 };
 
 /// Technically not a reduction, but fits the framework.
@@ -2169,14 +2169,14 @@ class OpDiv : public Reduction
 public:
     OpDiv( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "1.0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "1.0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return "(" + rhs + "==0 ? CreateDoubleError(errDivisionByZero) : (" + lhs + "/" + rhs + ") )";
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fdiv"; }
+    virtual std::string BinFuncName() const override { return "fdiv"; }
 
-    virtual bool HandleNaNArgument( std::stringstream& ss, unsigned argno, SubArguments& vSubArguments ) const SAL_OVERRIDE
+    virtual bool HandleNaNArgument( std::stringstream& ss, unsigned argno, SubArguments& vSubArguments ) const override
     {
         if (argno == 1)
         {
@@ -2208,12 +2208,12 @@ class OpMin : public Reduction
 public:
     OpMin( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "MAXFLOAT"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "MAXFLOAT"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return "fmin(" + lhs + "," + rhs + ")";
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "min"; }
+    virtual std::string BinFuncName() const override { return "min"; }
 };
 
 class OpMax : public Reduction
@@ -2221,23 +2221,23 @@ class OpMax : public Reduction
 public:
     OpMax( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "-MAXFLOAT"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "-MAXFLOAT"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return "fmax(" + lhs + "," + rhs + ")";
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "max"; }
+    virtual std::string BinFuncName() const override { return "max"; }
 };
 
 class OpSumProduct : public SumOfProduct
 {
 public:
-    virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
-    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
+    virtual std::string GetBottom() override { return "0"; }
+    virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         return lhs + "*" + rhs;
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fsop"; }
+    virtual std::string BinFuncName() const override { return "fsop"; }
 };
 namespace {
 struct SumIfsArgs
@@ -2260,7 +2260,7 @@ public:
         SlidingFunctionBase* pCodeGen, int nResultSize );
 
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) SAL_OVERRIDE
+    virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) override
     {
         unsigned i = 0;
         for (SubArgumentsType::iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
@@ -2427,13 +2427,13 @@ public:
         return i;
     }
 
-    virtual void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
+    virtual void GenSlidingWindowFunction( std::stringstream& ss ) override
     {
         for (size_t i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
         mpCodeGen->GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
-    virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDeclRef( std::stringstream& ss ) const override
     {
         for (size_t i = 0; i < mvSubArguments.size(); i++)
         {
@@ -2442,7 +2442,7 @@ public:
             mvSubArguments[i]->GenDeclRef(ss);
         }
     }
-    virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenDecl( std::stringstream& ss ) const override
     {
         for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
             ++it)
@@ -2453,7 +2453,7 @@ public:
         }
     }
 
-    virtual size_t GetWindowSize() const SAL_OVERRIDE
+    virtual size_t GetWindowSize() const override
     {
         size_t nCurWindowSize = 0;
         for (size_t i = 0; i < mvSubArguments.size(); i++)
@@ -2466,7 +2466,7 @@ public:
     }
 
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
+    virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
         for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e = mvSubArguments.end(); it != e;
             ++it)
@@ -2478,7 +2478,7 @@ public:
     }
     /// Generate either a function call to each children
     /// or directly inline it if we are already inside a loop
-    virtual std::string GenSlidingWindowDeclRef( bool nested = false ) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef( bool nested = false ) const override
     {
         std::stringstream ss;
         if (!nested)
@@ -2512,7 +2512,7 @@ public:
         }
         return ss.str();
     }
-    virtual std::string DumpOpName() const SAL_OVERRIDE
+    virtual std::string DumpOpName() const override
     {
         std::string t = "_" + mpCodeGen->BinFuncName();
         for (size_t i = 0; i < mvSubArguments.size(); i++)
@@ -2520,7 +2520,7 @@ public:
         return t;
     }
     virtual void DumpInlineFun( std::set<std::string>& decls,
-        std::set<std::string>& funs ) const SAL_OVERRIDE
+        std::set<std::string>& funs ) const override
     {
         mpCodeGen->BinInlineFun(decls, funs);
         for (size_t i = 0; i < mvSubArguments.size(); i++)

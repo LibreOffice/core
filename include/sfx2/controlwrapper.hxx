@@ -200,7 +200,7 @@ public:
 
     /** Enables, disables, shows, or hides the control.
         @descr  Does nothing, if the corresponding parameter is TRISTATE_INDET. */
-    virtual void        ModifyControl( TriState eEnable, TriState eShow ) SAL_OVERRIDE;
+    virtual void        ModifyControl( TriState eEnable, TriState eShow ) override;
 
     /** Derived classes return the value the control contains. */
     virtual ValueT      GetControlValue() const = 0;
@@ -225,11 +225,11 @@ class SFX2_DLLPUBLIC DummyWindowWrapper:
 public:
     explicit            DummyWindowWrapper( vcl::Window& rWindow );
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool ) SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool ) override;
 
-    virtual void*       GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( void* ) SAL_OVERRIDE;
+    virtual void*       GetControlValue() const override;
+    virtual void        SetControlValue( void* ) override;
 };
 
 
@@ -241,11 +241,11 @@ class SFX2_DLLPUBLIC CheckBoxWrapper:
 public:
     explicit            CheckBoxWrapper( CheckBox& rCheckBox );
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool bSet ) override;
 
-    virtual bool        GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( bool bValue ) SAL_OVERRIDE;
+    virtual bool        GetControlValue() const override;
+    virtual void        SetControlValue( bool bValue ) override;
 };
 
 
@@ -262,11 +262,11 @@ public:
 
     virtual ~ColorListBoxWrapper();
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool bSet ) override;
 
-    virtual Color       GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( Color aColor ) SAL_OVERRIDE;
+    virtual Color       GetControlValue() const override;
+    virtual void        SetControlValue( Color aColor ) override;
 };
 
 
@@ -436,12 +436,12 @@ public:
     void                RegisterControlWrapper( ControlWrapperBase& rWrapper );
 
     /** Enables, disables, shows, or hides the registered controls. */
-    virtual void        ModifyControl( TriState eEnable, TriState eShow ) SAL_OVERRIDE;
+    virtual void        ModifyControl( TriState eEnable, TriState eShow ) override;
 
     /** Returns true if all registered controls are in "don't know" state. */
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
     /** Sets all registered controls to "don't know" state. */
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
+    virtual void        SetControlDontKnow( bool bSet ) override;
 
 private:
     std::unique_ptr< MultiControlWrapperHelper_Impl > mxImpl;

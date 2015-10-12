@@ -44,10 +44,10 @@ private:
 protected:
 
     DECL_LINK_TYPED( ImpUpdateDataHdl, Timer*, void );
-    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    void            StateChanged( StateChangedType nType ) override;
+    void            DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
     using Control::ImplInitSettings;
     void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     static WinBits  ImplInitStyle( WinBits nStyle );
@@ -56,51 +56,51 @@ protected:
     ExtTextView*    GetTextView() const;
     ScrollBar*      GetVScrollBar() const;
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
                                       WinBits nWinStyle = WB_LEFT | WB_BORDER );
     virtual         ~VclMultiLineEdit();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SelectionChanged();
     void            CaretChanged();
-    virtual void    Modify() SAL_OVERRIDE;
-    virtual void    UpdateData() SAL_OVERRIDE;
+    virtual void    Modify() override;
+    virtual void    UpdateData() override;
 
-    virtual void    SetModifyFlag() SAL_OVERRIDE;
-    virtual void    ClearModifyFlag() SAL_OVERRIDE;
-    virtual bool    IsModified() const SAL_OVERRIDE;
+    virtual void    SetModifyFlag() override;
+    virtual void    ClearModifyFlag() override;
+    virtual bool    IsModified() const override;
 
-    virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT ) SAL_OVERRIDE;
-    virtual void    DisableUpdateData() SAL_OVERRIDE { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
+    virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT ) override;
+    virtual void    DisableUpdateData() override { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
 
-    virtual void    SetReadOnly( bool bReadOnly = true ) SAL_OVERRIDE;
-    virtual bool    IsReadOnly() const SAL_OVERRIDE;
+    virtual void    SetReadOnly( bool bReadOnly = true ) override;
+    virtual bool    IsReadOnly() const override;
 
     void            EnableFocusSelectionHide( bool bHide );
 
-    virtual void    SetMaxTextLen(sal_Int32 nMaxLen = 0) SAL_OVERRIDE;
-    virtual sal_Int32 GetMaxTextLen() const SAL_OVERRIDE;
+    virtual void    SetMaxTextLen(sal_Int32 nMaxLen = 0) override;
+    virtual sal_Int32 GetMaxTextLen() const override;
 
     void            SetMaxTextWidth( sal_uLong nMaxWidth );
 
-    virtual void    SetSelection( const Selection& rSelection ) SAL_OVERRIDE;
-    virtual const Selection& GetSelection() const SAL_OVERRIDE;
+    virtual void    SetSelection( const Selection& rSelection ) override;
+    virtual const Selection& GetSelection() const override;
 
-    virtual void        ReplaceSelected( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void        DeleteSelected() SAL_OVERRIDE;
-    virtual OUString    GetSelected() const SAL_OVERRIDE;
+    virtual void        ReplaceSelected( const OUString& rStr ) override;
+    virtual void        DeleteSelected() override;
+    virtual OUString    GetSelected() const override;
     OUString            GetSelected( LineEnd aSeparator ) const;
 
-    virtual void    Cut() SAL_OVERRIDE;
-    virtual void    Copy() SAL_OVERRIDE;
-    virtual void    Paste() SAL_OVERRIDE;
+    virtual void    Cut() override;
+    virtual void    Copy() override;
+    virtual void    Paste() override;
 
-    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE
+    virtual void    SetText( const OUString& rStr ) override;
+    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override
                     { SetText( rStr ); SetSelection( rNewSelection ); }
-    OUString        GetText() const SAL_OVERRIDE;
+    OUString        GetText() const override;
     OUString        GetText( LineEnd aSeparator ) const;
     OUString        GetTextLines( LineEnd aSeparator ) const;
 
@@ -109,20 +109,20 @@ public:
     void            SaveValue()                         { aSaveValue = GetText(); }
     const OUString&    GetSavedValue() const            { return aSaveValue; }
 
-    void            SetModifyHdl( const Link<>& rLink ) SAL_OVERRIDE { aModifyHdlLink = rLink; }
-    const Link<>&   GetModifyHdl() const SAL_OVERRIDE                { return aModifyHdlLink; }
+    void            SetModifyHdl( const Link<>& rLink ) override { aModifyHdlLink = rLink; }
+    const Link<>&   GetModifyHdl() const override                { return aModifyHdlLink; }
 
-    void            SetUpdateDataHdl( const Link<>& rLink ) SAL_OVERRIDE { aUpdateDataHdlLink = rLink; }
+    void            SetUpdateDataHdl( const Link<>& rLink ) override { aUpdateDataHdlLink = rLink; }
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
 
-    virtual Size    CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size    CalcMinimumSize() const override;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
 
     void            SetLeftMargin( sal_uInt16 n );
 
@@ -130,7 +130,7 @@ public:
 
     void            EnableCursor( bool bEnable );
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 };
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX

@@ -39,7 +39,7 @@ namespace oox { namespace ppt {
                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
                      const TimeNodePtr & pNode, AnimationCondition & aCond );
         virtual ~CondContext( ) throw( );
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
         ::com::sun::star::animations::Event  maEvent;
@@ -57,7 +57,7 @@ namespace oox { namespace ppt {
              const TimeNodePtr & pNode, AnimationConditionList & aCondList );
         virtual ~CondListContext( ) throw( );
 
-       virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+       virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
         AnimationConditionList     & maConditions;

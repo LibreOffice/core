@@ -41,19 +41,19 @@ public:
                             XFillHatchItem(const XFillHatchItem& rItem);
                             XFillHatchItem(SvStream& rIn);
 
-    virtual bool            operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual bool            operator==(const SfxPoolItem& rItem) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
+    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
-    virtual bool            HasMetrics() const SAL_OVERRIDE;
-    virtual bool            ScaleMetrics(long nMul, long nDiv) SAL_OVERRIDE;
+                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+    virtual bool            HasMetrics() const override;
+    virtual bool            ScaleMetrics(long nMul, long nDiv) override;
 
     const XHatch&           GetHatchValue() const { return aHatch;} // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue

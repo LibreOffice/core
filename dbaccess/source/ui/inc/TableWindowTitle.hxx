@@ -29,21 +29,21 @@ namespace dbaui
         VclPtr<OTableWindow> m_pTabWin;
 
     protected:
-        virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
+        virtual void Command(const CommandEvent& rEvt) override;
         //  virtual void Paint( const Rectangle& rRect );
-        virtual void MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
+        virtual void KeyInput( const KeyEvent& rEvt ) override;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     public:
         OTableWindowTitle( OTableWindow* pParent );
         virtual ~OTableWindowTitle();
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void LoseFocus() override;
+        virtual void GetFocus() override;
+        virtual void RequestHelp( const HelpEvent& rHEvt ) override;
         // window override
-        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nStateChange ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWTITLE_HXX

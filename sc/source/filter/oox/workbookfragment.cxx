@@ -226,7 +226,7 @@ public:
     {
     }
 
-    virtual void doWork() SAL_OVERRIDE
+    virtual void doWork() override
     {
         // We hold the solar mutex in all threads except for
         // the small safe section of the inner loop in
@@ -264,11 +264,11 @@ class ProgressBarTimer : Timer
         }
         virtual ~ProgressWrapper() {}
         // IProgressBar
-        virtual double getPosition() const SAL_OVERRIDE { return mfPosition; }
-        virtual void   setPosition( double fPosition ) SAL_OVERRIDE { mfPosition = fPosition; }
+        virtual double getPosition() const override { return mfPosition; }
+        virtual void   setPosition( double fPosition ) override { mfPosition = fPosition; }
         // ISegmentProgressBar
-        virtual double getFreeLength() const SAL_OVERRIDE { return 0.0; }
-        virtual ISegmentProgressBarRef createSegment( double /* fLength */ ) SAL_OVERRIDE
+        virtual double getFreeLength() const override { return 0.0; }
+        virtual ISegmentProgressBarRef createSegment( double /* fLength */ ) override
         {
             return ISegmentProgressBarRef();
         }
@@ -292,7 +292,7 @@ public:
         aSegments.push_back( ISegmentProgressBarRef( new ProgressWrapper( xProgress ) ) );
         return aSegments.back();
     }
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         for( size_t i = 0; i < aSegments.size(); i++)
             static_cast< ProgressWrapper *>( aSegments[ i ].get() )->UpdateBar();

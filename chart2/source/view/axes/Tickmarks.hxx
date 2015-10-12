@@ -74,8 +74,8 @@ class PureTickIter : public TickIter
 public:
     explicit PureTickIter( TickInfoArrayType& rTickInfoVector );
     virtual ~PureTickIter();
-    virtual TickInfo* firstInfo() SAL_OVERRIDE;
-    virtual TickInfo* nextInfo() SAL_OVERRIDE;
+    virtual TickInfo* firstInfo() override;
+    virtual TickInfo* nextInfo() override;
 
 private:
     TickInfoArrayType& m_rTickVector;
@@ -134,7 +134,7 @@ public:
         , bool bIncludeFarAwayDistanceIfSo = false
         , bool bIncludeSpaceBetweenTickAndText = true ) const;
 
-    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const SAL_OVERRIDE;
+    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const override;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;

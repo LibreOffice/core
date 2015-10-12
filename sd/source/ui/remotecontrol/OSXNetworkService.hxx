@@ -33,10 +33,10 @@ namespace sd {
         OSXNetworkService(const std::string& aname = "", unsigned int aport = 1599)
             : ZeroconfService(aname, aport){}
 
-        void clear() SAL_OVERRIDE {
+        void clear() override {
             [osxservice dealloc];
         }
-        void setup() SAL_OVERRIDE {
+        void setup() override {
             osxservice = [[OSXBonjourService alloc] init];
             [osxservice publishImpressRemoteServiceOnLocalNetworkWithName: @""];
         };

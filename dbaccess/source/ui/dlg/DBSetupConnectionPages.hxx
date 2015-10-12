@@ -39,19 +39,19 @@ namespace dbaui
     class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         VclPtr<CheckBox> m_pPasswordrequired;
 
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     };
 
@@ -61,17 +61,17 @@ namespace dbaui
     public:
         VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
 
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OTextConnectionPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     protected:
-        virtual bool prepareLeave() SAL_OVERRIDE;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        bool    checkTestConnection() SAL_OVERRIDE;
+        virtual bool prepareLeave() override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        bool    checkTestConnection() override;
 
     private:
         DECL_LINK_TYPED(ImplGetExtensionHdl, OTextConnectionHelper*, void);
@@ -81,17 +81,17 @@ namespace dbaui
     class OLDAPConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
-        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
+        virtual void dispose() override;
+        virtual Link<> getControlModifiedLink() override { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
 
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         DECL_LINK(OnEditModified,Edit*);
 
     private:
@@ -116,18 +116,18 @@ namespace dbaui
     public:
         MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~MySQLNativeSetupPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList ) SAL_OVERRIDE;
-        virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList ) SAL_OVERRIDE;
+        virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList ) override;
+        virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList ) override;
 
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
-        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK( this, MySQLNativeSetupPage, OnModified ); }
+        virtual Link<> getControlModifiedLink() override { return LINK( this, MySQLNativeSetupPage, OnModified ); }
 
     private:
         DECL_LINK( OnModified, Edit* );
@@ -145,16 +145,16 @@ namespace dbaui
                                         , sal_uInt16 _nHeaderTextResId
                                         , sal_uInt16 _nDriverClassId );
         virtual ~OGeneralSpecialJDBCConnectionPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
     static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual Link<> getControlModifiedLink() override { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified,Edit*);
@@ -182,16 +182,16 @@ namespace dbaui
     public:
                 OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OJDBCConnectionPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual bool checkTestConnection() SAL_OVERRIDE;
+        virtual bool checkTestConnection() override;
 
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified,Edit*);
@@ -213,17 +213,17 @@ namespace dbaui
 
         OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OMySQLIntroPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
     protected:
-        virtual bool FillItemSet(SfxItemSet* _rSet) SAL_OVERRIDE;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual bool FillItemSet(SfxItemSet* _rSet) override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     private:
         VclPtr<RadioButton>         m_pODBCDatabase;
@@ -239,11 +239,11 @@ namespace dbaui
     class OAuthentificationPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OAuthentificationPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         VclPtr<FixedText>  m_pFTHelpText;
@@ -253,16 +253,16 @@ namespace dbaui
         VclPtr<PushButton> m_pPBTestConnection;
 
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
     // OFinalDBPageSetup
     class OFinalDBPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
         VclPtr<FixedText>   m_pFTFinalHeader;
@@ -276,20 +276,20 @@ namespace dbaui
 
         OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         bool IsDatabaseDocumentToBeRegistered();
         bool IsDatabaseDocumentToBeOpened();
         bool IsTableWizardToBeStarted();
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+        Link<> getControlModifiedLink() override { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
         DECL_LINK_TYPED(OnOpenSelected, Button*, void);
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
 }   // namespace dbaui

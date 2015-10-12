@@ -42,27 +42,27 @@ public:
     virtual             ~ShapeFilterBase();
 
     /** Has to be implemented by each filter, returns the current theme. */
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;
 
     void setCurrentTheme(::oox::drawingml::ThemePtr pTheme);
 
     /** Has to be implemented by each filter to return the collection of VML shapes. */
-    virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
+    virtual ::oox::vml::Drawing* getVmlDrawing() override;
 
     /** Has to be implemented by each filter to return TableStyles. */
-    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() override;
 
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
-    virtual bool importDocument() SAL_OVERRIDE { return true; }
-    virtual bool exportDocument() SAL_OVERRIDE { return true; }
+    virtual bool importDocument() override { return true; }
+    virtual bool exportDocument() override { return true; }
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
 private:
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual GraphicHelper* implCreateGraphicHelper() const override;
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;

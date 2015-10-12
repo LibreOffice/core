@@ -85,11 +85,11 @@ public:
         std::vector< dp_gui::UpdateData > * updateData);
 
     virtual ~UpdateDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
@@ -118,9 +118,9 @@ private:
         explicit CheckListBox(UpdateDialog::CheckListBox &) = delete;
         void operator =(UpdateDialog::CheckListBox &) = delete;
 
-        virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;
-        virtual void MouseButtonUp(MouseEvent const & event) SAL_OVERRIDE;
-        virtual void KeyInput(KeyEvent const & event) SAL_OVERRIDE;
+        virtual void MouseButtonDown(MouseEvent const & event) override;
+        virtual void MouseButtonUp(MouseEvent const & event) override;
+        virtual void KeyInput(KeyEvent const & event) override;
 
         void handlePopupMenu( const Point &rPos );
 

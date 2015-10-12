@@ -582,7 +582,7 @@ public:
 
     inline bool IsSelected() const { return bSelected; }
 
-    virtual void Unselect( sal_Int32, sal_Int32 ) SAL_OVERRIDE;
+    virtual void Unselect( sal_Int32, sal_Int32 ) override;
 };
 
 inline SwAccSingleTableSelHander_Impl::SwAccSingleTableSelHander_Impl() :
@@ -610,7 +610,7 @@ public:
 
     uno::Sequence < sal_Int32 > GetSelSequence();
 
-    virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) SAL_OVERRIDE;
+    virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) override;
     virtual ~SwAccAllTableSelHander_Impl();
 };
 

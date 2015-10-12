@@ -22,14 +22,14 @@ public:
 
     static  VclPtr<SfxTabPage> Create (vcl::Window* pParent, const SfxItemSet* rCoreSet);
 
-    virtual bool FillItemSet(SfxItemSet* rCoreSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rCoreSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
+    virtual void Reset(const SfxItemSet* rCoreSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = NULL) override;
 
 private:
     explicit ScTpDefaultsOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpDefaultsOptions();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void CheckNumSheets();
     void CheckPrefix(Edit* pEdit);

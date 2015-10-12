@@ -49,7 +49,7 @@ public:
             const com::sun::star::awt::Rectangle* pShapeRect = 0,
             ::oox::drawingml::ShapeIdMap* pShapeMap = 0 );
 
-    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true ) SAL_OVERRIDE;
+    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true ) override;
 
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };

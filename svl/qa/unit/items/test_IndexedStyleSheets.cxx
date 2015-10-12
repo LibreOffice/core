@@ -30,7 +30,7 @@ class MockedStyleSheet : public SfxStyleSheetBase
 };
 
 struct DummyPredicate : public StyleSheetPredicate {
-    bool Check(const SfxStyleSheetBase& styleSheet) SAL_OVERRIDE {
+    bool Check(const SfxStyleSheetBase& styleSheet) override {
         (void)styleSheet; // fix compiler warning
         return true;
     }

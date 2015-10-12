@@ -185,7 +185,7 @@ namespace utl
 
     protected:
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) override;
 
     protected:
         enum NAMEORIGIN
@@ -297,7 +297,7 @@ namespace utl
         bool commit() const throw();
 
         /// invalidate the object
-        virtual void clear() throw() SAL_OVERRIDE;
+        virtual void clear() throw() override;
     };
 
 }   // namespace utl

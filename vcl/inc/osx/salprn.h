@@ -68,20 +68,20 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     void                        SetupPrinterGraphics( CGContextRef i_xContext ) const;
 
-    virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
-    virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) SAL_OVERRIDE;
-    virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
-    virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
+    virtual SalGraphics*        AcquireGraphics() override;
+    virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) override;
+    virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) override;
+    virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
+    virtual bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
                                              long& o_rPageOffX, long& o_rPageOffY,
-                                             long& o_rPageWidth, long& o_rPageHeight ) SAL_OVERRIDE;
-    virtual sal_uLong           GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) SAL_OVERRIDE;
-    virtual sal_uLong           GetPaperBinCount( const ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
-    virtual OUString            GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin ) SAL_OVERRIDE;
-    virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
+                                             long& o_rPageWidth, long& o_rPageHeight ) override;
+    virtual sal_uLong           GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;
+    virtual sal_uLong           GetPaperBinCount( const ImplJobSetup* i_pSetupData ) override;
+    virtual OUString            GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin ) override;
+    virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData ) override;
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData ) override;
 
     // the artificial separation between InfoPrinter and Printer
     // is not really useful for us
@@ -128,18 +128,18 @@ class AquaSalPrinter : public SalPrinter
                                               sal_uLong i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
-                                              ImplJobSetup* i_pSetupData ) SAL_OVERRIDE;
+                                              ImplJobSetup* i_pSetupData ) override;
     // implement pull model print system
     virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& rJobName,
                                               const OUString& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
-                                              vcl::PrinterController& i_rListener ) SAL_OVERRIDE;
+                                              vcl::PrinterController& i_rListener ) override;
 
-    virtual bool                    EndJob() SAL_OVERRIDE;
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) SAL_OVERRIDE;
-    virtual bool                    EndPage() SAL_OVERRIDE;
-    virtual sal_uLong               GetErrorCode() SAL_OVERRIDE;
+    virtual bool                    EndJob() override;
+    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
+    virtual bool                    EndPage() override;
+    virtual sal_uLong               GetErrorCode() override;
 
     private:
     AquaSalPrinter( const AquaSalPrinter& ) = delete;

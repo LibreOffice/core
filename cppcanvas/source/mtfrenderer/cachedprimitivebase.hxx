@@ -65,7 +65,7 @@ namespace cppcanvas
                                  bool                   bOnlyRedrawWithSameTransform );
             virtual ~CachedPrimitiveBase() {}
 
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
 
         protected:
             using Action::render;

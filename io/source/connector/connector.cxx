@@ -57,12 +57,12 @@ namespace stoc_connector
         // Methods
         virtual Reference< XConnection > SAL_CALL connect(
             const OUString& sConnectionDescription )
-            throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception) override;
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
+                virtual OUString              SAL_CALL getImplementationName() throw(std::exception) override;
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) override;
     };
 
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)

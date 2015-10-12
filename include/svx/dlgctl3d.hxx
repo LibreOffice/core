@@ -50,12 +50,12 @@ protected:
 public:
     Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~Svx3DPreviewControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
     virtual void SetObjectType(SvxPreviewObjectType nType);
     SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
@@ -102,12 +102,12 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewContr
 public:
     Svx3DLightControl(vcl::Window* pParent, WinBits nStyle = 0);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void Resize() override;
 
-    virtual void SetObjectType(SvxPreviewObjectType nType) SAL_OVERRIDE;
+    virtual void SetObjectType(SvxPreviewObjectType nType) override;
 
     // register user callback
     void SetChangeCallback(Link<Svx3DLightControl*,void> aNew) { maChangeCallback = aNew; }
@@ -126,7 +126,7 @@ public:
     void GetRotation(double& rRotX, double& rRotY, double& rRotZ);
 
     void SelectLight(sal_uInt32 nLightNumber);
-    virtual void Set3DAttributes(const SfxItemSet& rAttr) SAL_OVERRIDE;
+    virtual void Set3DAttributes(const SfxItemSet& rAttr) override;
     sal_uInt32 GetSelectedLight() { return maSelectedLight; }
 
     // light data access
@@ -151,10 +151,10 @@ private:
 public:
     SvxLightCtl3D(vcl::Window* pParent);
     virtual ~SvxLightCtl3D();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // react to size changes
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
     void NewLayout();
 
     // check the selection for validity
@@ -167,11 +167,11 @@ public:
     void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
     void SetUserSelectionChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 
 protected:
 

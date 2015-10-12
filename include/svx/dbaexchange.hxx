@@ -156,8 +156,8 @@ namespace svx
 
     protected:
         // TransferableHelper overridables
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
+        virtual void        AddSupportedFormats() override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
         static SotClipboardFormatId  getDescriptorFormatId();
 
@@ -234,9 +234,9 @@ namespace svx
                         extractObjectDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-        virtual void        ObjectReleased() SAL_OVERRIDE;
+        virtual void        AddSupportedFormats() override;
+        virtual bool GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual void        ObjectReleased() override;
 
     protected:
         const   ODataAccessDescriptor&  getDescriptor() const   { return m_aDescriptor; }
@@ -284,9 +284,9 @@ namespace svx
         static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-        virtual void        ObjectReleased() SAL_OVERRIDE;
+        virtual void        AddSupportedFormats() override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual void        ObjectReleased() override;
         static SotClipboardFormatId  getDescriptorFormatId();
     };
 

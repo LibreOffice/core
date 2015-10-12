@@ -42,15 +42,15 @@ public:
     SvxShowText(vcl::Window* pParent, bool bCenter = false);
 
     void            SetFont( const vcl::Font& rFont );
-    void            SetText( const OUString& rText ) SAL_OVERRIDE;
+    void            SetText( const OUString& rText ) override;
     void            SetCentered(bool bCenter) { mbCenter = bCenter; }
 
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
 
 protected:
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
 
 private:
     long            mnY;
@@ -94,7 +94,7 @@ private:
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
     virtual         ~SvxCharacterMap();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            DisableFontSelection();
 
@@ -106,7 +106,7 @@ public:
 
     OUString        GetCharacters() const;
 
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual short   Execute() override;
 };
 
 #endif

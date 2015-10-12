@@ -81,8 +81,8 @@ public:
 
     uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 protected:
     Reference< lang::XComponent > mxComponent;

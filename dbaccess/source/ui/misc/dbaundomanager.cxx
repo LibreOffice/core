@@ -76,8 +76,8 @@ namespace dbaui
         ::framework::UndoManagerHelper  aUndoHelper;
 
         // IUndoManagerImplementation
-        virtual ::svl::IUndoManager&        getImplUndoManager() SAL_OVERRIDE;
-        virtual Reference< XUndoManager >   getThis() SAL_OVERRIDE;
+        virtual ::svl::IUndoManager&        getImplUndoManager() override;
+        virtual Reference< XUndoManager >   getThis() override;
     };
 
     ::svl::IUndoManager& UndoManager_Impl::getImplUndoManager()
@@ -101,8 +101,8 @@ namespace dbaui
 
         virtual ~OslMutexFacade() {}
 
-        virtual void acquire() SAL_OVERRIDE;
-        virtual void release() SAL_OVERRIDE;
+        virtual void acquire() override;
+        virtual void release() override;
 
     private:
         ::osl::Mutex&   m_rMutex;
@@ -137,8 +137,8 @@ namespace dbaui
         }
 
         // IMutexGuard
-        virtual void clear() SAL_OVERRIDE;
-        virtual ::framework::IMutex& getGuardedMutex() SAL_OVERRIDE;
+        virtual void clear() override;
+        virtual ::framework::IMutex& getGuardedMutex() override;
 
     private:
         ::osl::ResettableMutexGuard m_aGuard;

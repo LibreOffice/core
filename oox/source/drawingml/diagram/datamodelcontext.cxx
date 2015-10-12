@@ -44,7 +44,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElementToken )
             {
@@ -90,7 +90,7 @@ public:
     }
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
     {
         switch( aElementToken )
         {
@@ -175,7 +175,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& ) SAL_OVERRIDE
+                     const AttributeList& ) override
         {
             switch( aElementToken )
             {
@@ -218,7 +218,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElementToken )
             {
@@ -262,7 +262,7 @@ public:
     {}
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElementToken )
             {
@@ -296,7 +296,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElementToken )
             {

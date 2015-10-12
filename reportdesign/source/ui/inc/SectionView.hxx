@@ -46,9 +46,9 @@ public:
     OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
     virtual ~OSectionView();
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
-    virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    virtual void MarkListHasChanged() override;
+    virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) override;
 
     inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
 

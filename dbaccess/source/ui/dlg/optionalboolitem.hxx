@@ -37,8 +37,8 @@ namespace dbaui
         explicit OptionalBoolItem( sal_Int16 nWhich );
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 
-        virtual bool             operator==( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = NULL ) const SAL_OVERRIDE;
+        virtual bool             operator==( const SfxPoolItem& _rItem ) const override;
+        virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = NULL ) const override;
 
         bool    HasValue() const                { return !!m_aValue; }
         void    ClearValue()                    { m_aValue.reset(); }

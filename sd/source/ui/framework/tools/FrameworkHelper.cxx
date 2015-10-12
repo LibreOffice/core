@@ -94,13 +94,13 @@ public:
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
     virtual ~CallbackCaller();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
 private:
     OUString msEventType;
@@ -129,17 +129,17 @@ public:
     explicit LifetimeController (::sd::ViewShellBase& rBase);
     virtual ~LifetimeController();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     /** XEventListener.  This method is called when the frame::XController
         is being destroyed.
     */
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     /** This method is called when the ViewShellBase is being destroyed.
     */
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 
 private:
     ::sd::ViewShellBase& mrBase;
@@ -299,10 +299,10 @@ public:
     DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
     virtual ~DisposeListener();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     virtual void SAL_CALL disposing (const lang::EventObject& rEventObject)
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
 private:
     ::std::shared_ptr<FrameworkHelper> mpHelper;

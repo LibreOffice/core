@@ -41,7 +41,7 @@ private:
     double mfRotation;
 
 protected:
-    virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+    virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
     OverlayStaticRectanglePrimitive(
@@ -53,7 +53,7 @@ public:
         double fRotation);
 
     // compare operator
-    virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+    virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
     DeclPrimitive2DIDBlock()
 };
@@ -87,7 +87,7 @@ namespace drawinglayer
             double                                  mfRotation;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayBitmapExPrimitive(
@@ -107,7 +107,7 @@ namespace drawinglayer
             double getRotation() const { return mfRotation; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             DeclPrimitive2DIDBlock()
         };
@@ -132,7 +132,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayCrosshairPrimitive(
@@ -148,7 +148,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             DeclPrimitive2DIDBlock()
         };
@@ -180,7 +180,7 @@ namespace drawinglayer
             double                          mfRotation;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayRectanglePrimitive(
@@ -200,7 +200,7 @@ namespace drawinglayer
             double getRotation() const { return mfRotation; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             DeclPrimitive2DIDBlock()
         };
@@ -236,7 +236,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayHelplineStripedPrimitive(
@@ -254,7 +254,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             DeclPrimitive2DIDBlock()
         };
@@ -281,7 +281,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             OverlayRollingRectanglePrimitive(
@@ -297,7 +297,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             DeclPrimitive2DIDBlock()
         };

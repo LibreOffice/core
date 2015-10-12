@@ -48,27 +48,27 @@ public:
     virtual ~UnxPluginComm();
 
     using PluginComm::NPP_Destroy;
-    virtual NPError NPP_Destroy( NPP instance, NPSavedData** save ) SAL_OVERRIDE;
+    virtual NPError NPP_Destroy( NPP instance, NPSavedData** save ) override;
     virtual NPError NPP_DestroyStream( NPP instance, NPStream* stream,
-                                       NPError reason ) SAL_OVERRIDE;
-    virtual NPError NPP_Initialize() SAL_OVERRIDE;
+                                       NPError reason ) override;
+    virtual NPError NPP_Initialize() override;
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
                              uint16_t mode, int16_t argc,
-                             char* argn[], char* argv[], NPSavedData *saved ) SAL_OVERRIDE;
+                             char* argn[], char* argv[], NPSavedData *saved ) override;
     virtual NPError NPP_NewStream( NPP instance, NPMIMEType type,
                                    NPStream* stream,
-                                   NPBool seekable, uint16_t* stype ) SAL_OVERRIDE;
+                                   NPBool seekable, uint16_t* stype ) override;
 
     using PluginComm::NPP_SetWindow;
-    virtual NPError NPP_SetWindow( NPP instance, NPWindow* window ) SAL_OVERRIDE;
-    virtual void NPP_Shutdown() SAL_OVERRIDE;
+    virtual NPError NPP_SetWindow( NPP instance, NPWindow* window ) override;
+    virtual void NPP_Shutdown() override;
     virtual void NPP_StreamAsFile( NPP instance, NPStream* stream,
-                                   const char* fname ) SAL_OVERRIDE;
+                                   const char* fname ) override;
     virtual void NPP_URLNotify( NPP instance, const char* url, NPReason reason,
-                                void* notifyData ) SAL_OVERRIDE;
+                                void* notifyData ) override;
     virtual int32_t NPP_Write( NPP instance, NPStream* stream, int32_t offset,
-                               int32_t len, void* buffer ) SAL_OVERRIDE;
-    virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream ) SAL_OVERRIDE;
+                               int32_t len, void* buffer ) override;
+    virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream ) override;
 
     static bool getPluginappPath(OString * path);
 };

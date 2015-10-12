@@ -44,13 +44,13 @@ public:
         );
     virtual ~DragMethod_RotateDiagram();
 
-    virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
+    virtual void TakeSdrDragComment(OUString& rStr) const override;
 
-    virtual bool BeginSdrDrag() SAL_OVERRIDE;
-    virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
-    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
+    virtual bool BeginSdrDrag() override;
+    virtual void MoveSdrDrag(const Point& rPnt) override;
+    virtual bool EndSdrDrag(bool bCopy) override;
 
-    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
+    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager) override;
 
 private:
     E3dScene*   m_pScene;

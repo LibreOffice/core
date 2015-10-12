@@ -50,7 +50,7 @@ public:
     GridDialog(double* pXValues, double* pYValues, int nValues,
                 vcl::Window* pParent, bool bCutValues = true);
     virtual ~GridDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
     double* getNewYValues();
 };

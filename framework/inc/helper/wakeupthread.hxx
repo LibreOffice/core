@@ -42,7 +42,7 @@ class WakeUpThread: public salhelper::Thread {
     osl::Mutex mutex_;
     bool terminate_;
 
-    void execute() SAL_OVERRIDE;
+    void execute() override;
 
 public:
     WakeUpThread(css::uno::Reference<css::util::XUpdatable> const & updatable);

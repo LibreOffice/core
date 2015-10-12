@@ -51,17 +51,17 @@ public:
                 WinBits nBits );
 
     virtual ~ToolbarMenu();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
     void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = MenuItemBits::NONE );
     void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits = MenuItemBits::NONE );
@@ -89,7 +89,7 @@ public:
     void            highlightFirstEntry();
 
 protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     // todo: move to new base class that will replace SfxPopupWindow
     void AddStatusListener( const OUString& rCommandURL );
@@ -101,8 +101,8 @@ protected:
     // the status updates):
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
 
-    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    void            StateChanged( StateChangedType nType ) override;
+    void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     DECL_LINK_TYPED( HighlightHdl, ValueSet*, void );

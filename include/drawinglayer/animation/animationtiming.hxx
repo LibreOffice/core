@@ -60,12 +60,12 @@ namespace drawinglayer
         public:
             AnimationEntryFixed(double fDuration, double fState = 0.0);
             virtual ~AnimationEntryFixed();
-            virtual AnimationEntry* clone() const SAL_OVERRIDE;
+            virtual AnimationEntry* clone() const override;
 
-            virtual bool operator==(const AnimationEntry& rCandidate) const SAL_OVERRIDE;
-            virtual double getDuration() const SAL_OVERRIDE;
-            virtual double getStateAtTime(double fTime) const SAL_OVERRIDE;
-            virtual double getNextEventTime(double fTime) const SAL_OVERRIDE;
+            virtual bool operator==(const AnimationEntry& rCandidate) const override;
+            virtual double getDuration() const override;
+            virtual double getStateAtTime(double fTime) const override;
+            virtual double getNextEventTime(double fTime) const override;
         };
 
 
@@ -81,12 +81,12 @@ namespace drawinglayer
         public:
             AnimationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
             virtual ~AnimationEntryLinear();
-            virtual AnimationEntry* clone() const SAL_OVERRIDE;
+            virtual AnimationEntry* clone() const override;
 
-            virtual bool operator==(const AnimationEntry& rCandidate) const SAL_OVERRIDE;
-            virtual double getDuration() const SAL_OVERRIDE;
-            virtual double getStateAtTime(double fTime) const SAL_OVERRIDE;
-            virtual double getNextEventTime(double fTime) const SAL_OVERRIDE;
+            virtual bool operator==(const AnimationEntry& rCandidate) const override;
+            virtual double getDuration() const override;
+            virtual double getStateAtTime(double fTime) const override;
+            virtual double getNextEventTime(double fTime) const override;
         };
 
 
@@ -103,13 +103,13 @@ namespace drawinglayer
         public:
             AnimationEntryList();
             virtual ~AnimationEntryList();
-            virtual AnimationEntry* clone() const SAL_OVERRIDE;
+            virtual AnimationEntry* clone() const override;
 
-            virtual bool operator==(const AnimationEntry& rCandidate) const SAL_OVERRIDE;
+            virtual bool operator==(const AnimationEntry& rCandidate) const override;
             void append(const AnimationEntry& rCandidate);
-            virtual double getDuration() const SAL_OVERRIDE;
-            virtual double getStateAtTime(double fTime) const SAL_OVERRIDE;
-            virtual double getNextEventTime(double fTime) const SAL_OVERRIDE;
+            virtual double getDuration() const override;
+            virtual double getStateAtTime(double fTime) const override;
+            virtual double getNextEventTime(double fTime) const override;
         };
 
 
@@ -122,12 +122,12 @@ namespace drawinglayer
         public:
             AnimationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
             virtual ~AnimationEntryLoop();
-            virtual AnimationEntry* clone() const SAL_OVERRIDE;
+            virtual AnimationEntry* clone() const override;
 
-            virtual bool operator==(const AnimationEntry& rCandidate) const SAL_OVERRIDE;
-            virtual double getDuration() const SAL_OVERRIDE;
-            virtual double getStateAtTime(double fTime) const SAL_OVERRIDE;
-            virtual double getNextEventTime(double fTime) const SAL_OVERRIDE;
+            virtual bool operator==(const AnimationEntry& rCandidate) const override;
+            virtual double getDuration() const override;
+            virtual double getStateAtTime(double fTime) const override;
+            virtual double getNextEventTime(double fTime) const override;
         };
 
 

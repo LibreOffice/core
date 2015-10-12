@@ -62,15 +62,15 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+        OUString SAL_CALL getImplementationName() throw(std::exception) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
         // need by registration
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
@@ -78,17 +78,17 @@ namespace dbaui
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) throw( css::uno::RuntimeException, std::exception ) override;
 
     protected:
-        virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) SAL_OVERRIDE;
+        virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) override;
     };
 
     // SbaXGridPeer
@@ -105,29 +105,29 @@ namespace dbaui
         virtual ~SbaXGridPeer();
 
         // UNO
-        virtual void SAL_CALL  acquire() throw() SAL_OVERRIDE { FmXGridPeer::acquire(); }
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE { FmXGridPeer::release(); }
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL  acquire() throw() override { FmXGridPeer::acquire(); }
+        virtual void SAL_CALL release() throw() override { FmXGridPeer::release(); }
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) throw (css::uno::RuntimeException, std::exception) override;
         static SbaXGridPeer* getImplementation(const css::uno::Reference< css::uno::XInterface>& _rxIFace);
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     protected:
-        virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) SAL_OVERRIDE;
+        virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;
 #ifdef _MSC_VER
         typedef css::frame::XStatusListener xstlist_type;
         typedef css::uno::Reference< xstlist_type > xlistener_type;
@@ -174,15 +174,15 @@ namespace dbaui
     protected:
 
         // FmGridHeader overridables
-        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu) SAL_OVERRIDE;
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) SAL_OVERRIDE;
+        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu) override;
+        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
 
     private:
         // DragSourceHelper overridables
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
         // Window overridables
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
         bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
 
@@ -228,15 +228,15 @@ namespace dbaui
     public:
         SbaGridControl(css::uno::Reference< css::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        virtual void Select() SAL_OVERRIDE;
+        virtual void Command( const CommandEvent& rCEvt ) override;
+        virtual void Select() override;
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) SAL_OVERRIDE;
-        virtual void DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
+        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) override;
+        virtual void DeactivateCell(bool bUpdate = true) override;
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
         bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
@@ -251,9 +251,9 @@ namespace dbaui
             @return
                 The description of the specified object.
         */
-        virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
+        virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
-        virtual void DeleteSelectedRows() SAL_OVERRIDE;
+        virtual void DeleteSelectedRows() override;
         /** copies the currently selected rows to the clipboard
             @precond
                 at least one row is selected
@@ -262,25 +262,25 @@ namespace dbaui
 
     protected:
         // DragSourceHelper overridables
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
         // BrowseBox overridables
-        virtual void    CursorMoved() SAL_OVERRIDE;
-        virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual void    CursorMoved() override;
+        virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
+        virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) override;
+        virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt) override;
 
         // EditBrowseBox overridables
-        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
-        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
+        virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) override;
+        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) override;
 
         // DbGridControl overridables
-        virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu) SAL_OVERRIDE;
-        virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) SAL_OVERRIDE;
+        virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu) override;
+        virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
 
         // DbGridControl overridables
-        virtual void onRowChange() SAL_OVERRIDE;
-        virtual void onColumnChange() SAL_OVERRIDE;
+        virtual void onRowChange() override;
+        virtual void onColumnChange() override;
 
         // my own overridables
         void BeforeDrop();

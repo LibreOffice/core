@@ -55,7 +55,7 @@ public:
 
        @return the rewriter for this undo object
      */
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
 };
 
 class SwUndoInsBookmark : public SwUndoBookmark
@@ -63,8 +63,8 @@ class SwUndoInsBookmark : public SwUndoBookmark
 public:
     SwUndoInsBookmark( const ::sw::mark::IMark& );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
 class SwUndoDeleteBookmark : public SwUndoBookmark
@@ -72,8 +72,8 @@ class SwUndoDeleteBookmark : public SwUndoBookmark
 public:
     SwUndoDeleteBookmark( const ::sw::mark::IMark& );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
 class SwUndoRenameBookmark : public SwUndo
@@ -86,10 +86,10 @@ public:
     virtual ~SwUndoRenameBookmark();
 
 private:
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
     static void Rename( ::sw::UndoRedoContext &, const OUString& sFrom, const OUString& sTo );
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX

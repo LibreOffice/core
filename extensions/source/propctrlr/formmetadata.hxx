@@ -45,12 +45,12 @@ namespace pcr
 
     public:
         // IPropertyInfoService
-        virtual sal_Int32                      getPropertyId(const OUString& _rName) const SAL_OVERRIDE;
-        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const SAL_OVERRIDE;
-        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const SAL_OVERRIDE;
-        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const SAL_OVERRIDE;
-        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const SAL_OVERRIDE;
-        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual sal_Int32                      getPropertyId(const OUString& _rName) const override;
+        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const override;
+        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const override;
+        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const override;
+        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const override;
+        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const override;
 
         bool                                   isComposeable( const OUString& _rPropertyName ) const;
 
@@ -90,9 +90,9 @@ namespace pcr
     protected:
         // IPropertyEnumRepresentation implementqation
         virtual ::std::vector< OUString >
-                                    SAL_CALL getDescriptions() const SAL_OVERRIDE;
-        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const SAL_OVERRIDE;
-        virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
+                                    SAL_CALL getDescriptions() const override;
+        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
+        virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
 
     private:
         DefaultEnumRepresentation( const DefaultEnumRepresentation& ) = delete;

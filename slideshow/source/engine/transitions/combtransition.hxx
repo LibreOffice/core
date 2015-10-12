@@ -49,7 +49,7 @@ public:
                     sal_Int32                                 nNumStripes );
 
     // NumberAnimation
-    virtual bool operator()( double x ) SAL_OVERRIDE;
+    virtual bool operator()( double x ) override;
 
 private:
     const ::basegfx::B2DVector maPushDirectionUnit;

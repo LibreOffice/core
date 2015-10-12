@@ -35,11 +35,11 @@ namespace connectivity
 
         public:
             // implementation of the pure virtual methods
-            virtual void refreshTables() SAL_OVERRIDE;
-            virtual void refreshViews() SAL_OVERRIDE ;
-            virtual void refreshGroups() SAL_OVERRIDE;
-            virtual void refreshUsers() SAL_OVERRIDE ;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void refreshTables() override;
+            virtual void refreshViews() override ;
+            virtual void refreshGroups() override;
+            virtual void refreshUsers() override ;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
         public:
             explicit OCatalog(OConnection* _pCon);
 

@@ -36,7 +36,7 @@ namespace sw { namespace mark
 
         virtual ~AnnotationMark();
 
-        virtual void InitDoc(SwDoc* const io_Doc) SAL_OVERRIDE;
+        virtual void InitDoc(SwDoc* const io_Doc) override;
 
         const SwFormatField* GetAnnotationFormatField() const;
     };

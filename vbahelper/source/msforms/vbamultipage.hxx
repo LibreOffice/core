@@ -41,13 +41,13 @@ public:
         ov::AbstractGeometryAttributes* pGeomHelper);
 
    // Attributes
-    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) override;
 
     //XHelperInterface
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX

@@ -30,7 +30,7 @@ class LineWidthValueSet
 public:
     LineWidthValueSet (vcl::Window* pParent, const ResId& rResId);
     virtual ~LineWidthValueSet();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetUnit(OUString* str);
     void SetSelItem(sal_uInt16 nSel);
@@ -38,7 +38,7 @@ public:
     void SetImage(Image img);
     void SetCusEnable(bool bEnable);
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
 protected:
     VclPtr<VirtualDevice> pVDev;

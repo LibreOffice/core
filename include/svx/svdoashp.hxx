@@ -91,11 +91,11 @@ private:
     double fObjectRotation;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual void impl_setUnoShape(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxUnoShape) SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual void impl_setUnoShape(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxUnoShape) override;
 
 public:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;
@@ -143,7 +143,7 @@ protected:
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
     // SdrTextMinFrameWidthItem and SdrTextMinFrameHeightItem based on all settings, necessities
     // and object sizes
-    virtual void AdaptTextMinSize() SAL_OVERRIDE;
+    virtual void AdaptTextMinSize() override;
 
     OUString      aName;
     Size          m_aSuggestedTextFrameSize;
@@ -185,43 +185,43 @@ public:
     };
     bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
 
-    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual void SetModel(SdrModel* pNewModel) override;
 
-    virtual void RecalcSnapRect() SAL_OVERRIDE;
+    virtual void RecalcSnapRect() override;
 
-    virtual const Rectangle& GetSnapRect()  const SAL_OVERRIDE;
-    virtual const Rectangle& GetCurrentBoundRect() const SAL_OVERRIDE;
-    virtual const Rectangle& GetLogicRect() const SAL_OVERRIDE;
+    virtual const Rectangle& GetSnapRect()  const override;
+    virtual const Rectangle& GetCurrentBoundRect() const override;
+    virtual const Rectangle& GetLogicRect() const override;
 
-    virtual void Move(const Size& rSiz) SAL_OVERRIDE;
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
-    virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
-    virtual void SetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void SetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Move(const Size& rSiz) override;
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) override;
+    virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void SetSnapRect(const Rectangle& rRect) override;
+    virtual void SetLogicRect(const Rectangle& rRect) override;
 
-    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcMove(const Size& rSiz) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
+    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
 
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const SAL_OVERRIDE;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
 
-    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr ) SAL_OVERRIDE;
+    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr ) override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
+    virtual bool hasSpecialDrag() const override;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
 
-    virtual bool BegCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
-    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE; // #i37448#
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual bool BegCreate( SdrDragStat& rStat ) override;
+    virtual bool MovCreate(SdrDragStat& rStat) override; // #i37448#
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
     /**
      * Allows suggesting the text frame size: in case the application has its
@@ -229,49 +229,49 @@ public:
      * text.
      */
     void SuggestTextFrameSize(Size aSuggestedTextFrameSize);
-    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const SAL_OVERRIDE;
-    virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) SAL_OVERRIDE;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) SAL_OVERRIDE;
-    virtual bool IsAutoGrowHeight() const SAL_OVERRIDE;
-    virtual bool IsAutoGrowWidth() const SAL_OVERRIDE;
-    virtual void SetVerticalWriting( bool bVertical ) SAL_OVERRIDE;
-    virtual bool BegTextEdit( SdrOutliner& rOutl ) SAL_OVERRIDE;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const SAL_OVERRIDE;
-    virtual void EndTextEdit( SdrOutliner& rOutl ) SAL_OVERRIDE;
-    virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
+    virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) override;
+    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) override;
+    virtual bool IsAutoGrowHeight() const override;
+    virtual bool IsAutoGrowWidth() const override;
+    virtual void SetVerticalWriting( bool bVertical ) override;
+    virtual bool BegTextEdit( SdrOutliner& rOutl ) override;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
+    virtual void EndTextEdit( SdrOutliner& rOutl ) override;
+    virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const override;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const SAL_OVERRIDE;
-    virtual SdrObjCustomShape* Clone() const SAL_OVERRIDE;
+        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const override;
+    virtual SdrObjCustomShape* Clone() const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const override;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeContour() const SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    virtual basegfx::B2DPolyPolygon TakeContour() const override;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) SAL_OVERRIDE;
+    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual void SetPage( SdrPage* pNewPage ) SAL_OVERRIDE;
+    virtual void SetPage( SdrPage* pNewPage ) override;
 
-    virtual SdrObjGeoData *NewGeoData() const SAL_OVERRIDE;
-    virtual void          SaveGeoData(SdrObjGeoData &rGeo) const SAL_OVERRIDE;
-    virtual void          RestGeoData(const SdrObjGeoData &rGeo) SAL_OVERRIDE;
+    virtual SdrObjGeoData *NewGeoData() const override;
+    virtual void          SaveGeoData(SdrObjGeoData &rGeo) const override;
+    virtual void          RestGeoData(const SdrObjGeoData &rGeo) override;
 
     // need to take fObjectRotation instead of aGeo.nAngle, replace it temporary
-    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const SAL_OVERRIDE;
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) SAL_OVERRIDE;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 
-    virtual const SdrGluePointList* GetGluePointList() const SAL_OVERRIDE;
+    virtual const SdrGluePointList* GetGluePointList() const override;
     //virtual SdrGluePointList* GetGluePointList();
-    virtual SdrGluePointList* ForceGluePointList() SAL_OVERRIDE;
+    virtual SdrGluePointList* ForceGluePointList() override;
 
-    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
-    virtual SdrHdl* GetHdl( sal_uInt32 nHdlNum ) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetHdlCount() const override;
+    virtual SdrHdl* GetHdl( sal_uInt32 nHdlNum ) const override;
 
     // #i33136#
     static bool doConstructOrthogonal(const OUString& rName);

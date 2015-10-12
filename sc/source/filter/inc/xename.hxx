@@ -64,8 +64,8 @@ public:
     bool                IsVolatile( sal_uInt16 nNameIdx ) const;
 
     /** Writes the entire list of NAME records. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     typedef std::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;

@@ -43,11 +43,11 @@ public:
 
     SwFieldEditDlg(SwView& rVw);
     virtual ~SwFieldEditDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED(OKHdl, Button*, void);
 
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual short   Execute() override;
 
     void            EnableInsert(bool bEnable);
     void            InsertHdl();

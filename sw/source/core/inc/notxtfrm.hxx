@@ -34,24 +34,24 @@ class SwNoTextFrm: public SwContentFrm
 
     void InitCtor();
 
-    void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwNoTextFrm();
 
 protected:
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 public:
     SwNoTextFrm( SwNoTextNode * const, SwFrm* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+                        SwPrintData const*const pPrintData = NULL ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
-                              SwCrsrMoveState* = 0) const SAL_OVERRIDE;
+                              SwCrsrMoveState* = 0) const override;
     virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                     SwCrsrMoveState* = 0, bool bTestBackground = false) const SAL_OVERRIDE;
+                     SwCrsrMoveState* = 0, bool bTestBackground = false) const override;
 
     void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;
 

@@ -52,10 +52,10 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // local decomposition.
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()

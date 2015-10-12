@@ -31,17 +31,17 @@ public:
     {}
 
 private:
-    bool mustCalcLayoutOf(const char* filename) SAL_OVERRIDE
+    bool mustCalcLayoutOf(const char* filename) override
     {
         return OString(filename) != "fdo62336.docx";
     }
 
-    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE
+    bool mustTestImportOf(const char* filename) const override
     {
         return OString(filename) != "fdo62336.docx";
     }
 
-    void preTest(const char* filename) SAL_OVERRIDE
+    void preTest(const char* filename) override
     {
         if (getTestName().indexOf("SkipImage") != -1)
             setFilterOptions("SkipImages");
@@ -58,7 +58,7 @@ private:
         }
     }
 
-    void postTest(const char* filename) SAL_OVERRIDE
+    void postTest(const char* filename) override
     {
         if (OString(filename) == "charborder.odt")
         {

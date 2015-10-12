@@ -57,10 +57,10 @@ public:
 private:
     virtual ~IceSalSession() {}
 
-    virtual void queryInteraction() SAL_OVERRIDE;
-    virtual void interactionDone() SAL_OVERRIDE;
-    virtual void saveDone() SAL_OVERRIDE;
-    virtual bool cancelShutdown() SAL_OVERRIDE;
+    virtual void queryInteraction() override;
+    virtual void interactionDone() override;
+    virtual void saveDone() override;
+    virtual bool cancelShutdown() override;
 };
 
 }

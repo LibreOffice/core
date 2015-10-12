@@ -78,16 +78,16 @@ public:
     // XService info
     static OUString impl_getImplementationName();
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     static css::uno::Sequence<OUString> impl_getSupportedServiceNames();
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw ( css::uno::Exception, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::Exception, std::exception ) override;
 
     static css::uno::Reference<css::uno::XInterface> impl_getInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
 };
@@ -105,7 +105,7 @@ public:
 
     // XInstanceProvider
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getInstance (const OUString& aName )
-        throw ( css::container::NoSuchElementException, std::exception ) SAL_OVERRIDE;
+        throw ( css::container::NoSuchElementException, std::exception ) override;
 };
 
 

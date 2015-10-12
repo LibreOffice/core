@@ -78,9 +78,9 @@ public:
 
     void    SetMinRowHeight(double height);
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void ToXml(IXFStream *pStrm) override;
 
 private:
     double  m_fHeight;

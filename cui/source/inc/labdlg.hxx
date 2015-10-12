@@ -76,18 +76,18 @@ private:
 public:
     SvxCaptionTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxCaptionTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pCaptionRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet * ) override;
     void                Construct();
     void                SetView( const SdrView* pSdrView )
                             { pView = pSdrView; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     void FillValueSet();
 };
 
@@ -104,7 +104,7 @@ private:
 
     Link<SvxSwFrameValidation&,void> aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
 public:
     SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pView,

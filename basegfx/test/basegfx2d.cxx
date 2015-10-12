@@ -62,7 +62,7 @@ private:
 
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         // simple rectangle
         aPath0 = "M 10 10-10 10-10-10 10-10Z";
@@ -132,7 +132,7 @@ public:
             "31-24 33-22 34-20 35-18 36-16 37-15 39-12 40-11z";
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -326,7 +326,7 @@ private:
 
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         // setup some test matrices
         maIdentity.identity(); // force compact layout
@@ -369,7 +369,7 @@ public:
         maPerspective.set(2,2, 9.0);
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 

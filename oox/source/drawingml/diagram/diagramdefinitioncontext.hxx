@@ -31,7 +31,7 @@ public:
     DiagramDefinitionContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, const DiagramLayoutPtr &pLayout );
     virtual ~DiagramDefinitionContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
     DiagramLayoutPtr mpLayout;

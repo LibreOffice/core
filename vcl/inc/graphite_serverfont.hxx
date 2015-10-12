@@ -39,7 +39,7 @@ public:
                        ServerFont & rServerFont) throw()
     : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
     virtual ~GraphiteLayoutImpl() throw() {};
-    virtual sal_GlyphId getKashidaGlyph(int & width) SAL_OVERRIDE;
+    virtual sal_GlyphId getKashidaGlyph(int & width) override;
 private:
     ServerFont & mrServerFont;
 };
@@ -56,31 +56,31 @@ private:
 public:
         GraphiteServerFontLayout(ServerFont& pServerFont) throw();
 
-        virtual bool  LayoutText( ImplLayoutArgs& rArgs) SAL_OVERRIDE
+        virtual bool  LayoutText( ImplLayoutArgs& rArgs) override
         {
             SalLayout::AdjustLayout(rArgs);
             return maImpl.LayoutText(rArgs);
         };    // first step of layout
-        virtual void  AdjustLayout( ImplLayoutArgs& rArgs) SAL_OVERRIDE
+        virtual void  AdjustLayout( ImplLayoutArgs& rArgs) override
         {
             SalLayout::AdjustLayout(rArgs);
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;
             maImpl.AdjustLayout(rArgs);
         };
-        virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE
+        virtual DeviceCoordinate GetTextWidth() const override
         {
             return maImpl.GetTextWidth();
         }
-        virtual DeviceCoordinate FillDXArray( DeviceCoordinate* dxa ) const SAL_OVERRIDE
+        virtual DeviceCoordinate FillDXArray( DeviceCoordinate* dxa ) const override
         {
             return maImpl.FillDXArray(dxa);
         }
-        virtual sal_Int32 GetTextBreak(DeviceCoordinate max_width, DeviceCoordinate extra, int factor) const SAL_OVERRIDE
+        virtual sal_Int32 GetTextBreak(DeviceCoordinate max_width, DeviceCoordinate extra, int factor) const override
         {
             return maImpl.GetTextBreak(max_width, extra, factor);
         }
-        virtual void    GetCaretPositions( int as, long* cxa ) const SAL_OVERRIDE
+        virtual void    GetCaretPositions( int as, long* cxa ) const override
         {
             maImpl.GetCaretPositions(as, cxa);
         }
@@ -88,16 +88,16 @@ public:
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
                         long* gaa = NULL, int* cpa = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const override
         {
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;
             return maImpl.GetNextGlyphs(l, gia, p, s, gaa, cpa, pFallbackFonts);
         }
 
-        virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE { maImpl.MoveGlyph(nStart, nNewXPos); };
-        virtual void    DropGlyph( int nStart ) SAL_OVERRIDE { maImpl.DropGlyph(nStart); };
-        virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE { maImpl.Simplify(bIsBase); };
+        virtual void    MoveGlyph( int nStart, long nNewXPos ) override { maImpl.MoveGlyph(nStart, nNewXPos); };
+        virtual void    DropGlyph( int nStart ) override { maImpl.DropGlyph(nStart); };
+        virtual void    Simplify( bool bIsBase ) override { maImpl.Simplify(bIsBase); };
 
         virtual ~GraphiteServerFontLayout() throw();
 

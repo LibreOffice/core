@@ -35,9 +35,9 @@ public:
     explicit LocalizedValueNode(int layer);
     LocalizedValueNode(int layer, css::uno::Any const & value);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
-    virtual OUString getTemplateName() const SAL_OVERRIDE;
+    virtual OUString getTemplateName() const override;
 
     css::uno::Any  getValue() const { return value_;}
     css::uno::Any *getValuePtr(int layer)
@@ -53,7 +53,7 @@ private:
 
     virtual ~LocalizedValueNode();
 
-    virtual Kind kind() const SAL_OVERRIDE;
+    virtual Kind kind() const override;
 
     css::uno::Any value_;
 };

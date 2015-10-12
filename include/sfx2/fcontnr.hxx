@@ -48,9 +48,9 @@ class SfxRefItem : public SfxPoolItem
 public:
     SfxRefItem( sal_uInt16 nWhichId, const tools::SvRef<SvRefBase>& rValue ) : SfxPoolItem( nWhichId )
     {   maRef = rValue; }
-    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
+    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const override
     {   return new SfxRefItem( *this ); }
-    virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
+    virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxRefItem&>(rL).maRef == maRef; }
 };
 

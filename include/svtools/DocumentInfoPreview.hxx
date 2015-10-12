@@ -43,9 +43,9 @@ public:
     ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits);
 
     virtual ~ODocumentInfoPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     void clear();
 

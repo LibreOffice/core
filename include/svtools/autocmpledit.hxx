@@ -25,7 +25,7 @@ private:
 
     void AutoCompleteHandler( Edit* );
     bool Match( const OUString& rText );
-    bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    bool PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     AutocompleteEdit( vcl::Window* pParent );

@@ -66,8 +66,8 @@ private:
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 
 protected:
-    virtual bool AcquireGraphics() const SAL_OVERRIDE;
-    virtual void ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    virtual bool AcquireGraphics() const override;
+    virtual void ReleaseGraphics( bool bRelease = true ) override;
 
 public:
 
@@ -118,9 +118,9 @@ public:
                                       sal_uInt16 nBitCount);
 
     virtual             ~VirtualDevice();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        EnableRTL( bool bEnable = true ) SAL_OVERRIDE;
+    virtual void        EnableRTL( bool bEnable = true ) override;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize,
@@ -146,15 +146,15 @@ public:
 
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
-    virtual sal_uInt16  GetBitCount() const SAL_OVERRIDE;
+    virtual sal_uInt16  GetBitCount() const override;
 
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
 protected:
-    virtual bool        UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
+    virtual bool        UsePolyPolygonForComplexGradient() override;
 
-    virtual long        GetFontExtLeading() const SAL_OVERRIDE;
+    virtual long        GetFontExtLeading() const override;
 
 };
 

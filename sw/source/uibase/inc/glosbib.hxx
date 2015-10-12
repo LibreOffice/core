@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual void KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvent ) override;
 };
 
 struct GlosBibUserData
@@ -65,7 +65,7 @@ public:
     {
     }
 
-    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 };
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
@@ -90,7 +90,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     bool            IsDeleteAllowed(const OUString &rGroup);
 
 protected:
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
     DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED(NewHdl, Button *, void);
     DECL_LINK_TYPED( DeleteHdl, Button*, void  );
@@ -103,7 +103,7 @@ public:
                         std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
     virtual ~SwGlossaryGroupDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
 };

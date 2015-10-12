@@ -91,9 +91,9 @@ public:
                             bool bOleSupport );
     virtual             ~ChartDrawingFragment();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual void        onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

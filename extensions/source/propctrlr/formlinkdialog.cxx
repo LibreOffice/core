@@ -74,7 +74,7 @@ namespace pcr
     public:
         FieldLinkRow( vcl::Window* _pParent );
         virtual ~FieldLinkRow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         inline void         SetLinkChangeHandler( const Link<>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 

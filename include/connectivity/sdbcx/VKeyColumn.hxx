@@ -35,8 +35,8 @@ namespace connectivity
         {
         protected:
             OUString m_ReferencedColumn;
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
-            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
             OKeyColumn(bool _bCase);
             OKeyColumn( const OUString& _ReferencedColumn,
@@ -57,7 +57,7 @@ namespace connectivity
             // just to make it not inline
             virtual ~OKeyColumn();
 
-            virtual void construct() SAL_OVERRIDE;
+            virtual void construct() override;
             DECLARE_SERVICE_INFO();
         };
     }

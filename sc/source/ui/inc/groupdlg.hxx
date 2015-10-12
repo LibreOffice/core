@@ -29,7 +29,7 @@ class ScGroupDlg : public ModalDialog
 public:
     ScGroupDlg(vcl::Window* pParent, bool bUnGroup = false, bool bRows = true);
     virtual ~ScGroupDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     bool GetColsChecked() const;
 
 private:

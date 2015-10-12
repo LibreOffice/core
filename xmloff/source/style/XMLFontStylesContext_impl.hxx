@@ -54,7 +54,7 @@ public:
     virtual ~XMLFontStyleContextFontFace();
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-                       const OUString& rValue ) SAL_OVERRIDE;
+                       const OUString& rValue ) override;
 
     void FillProperties( ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
@@ -68,7 +68,7 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <style:font-face-src>
@@ -86,7 +86,7 @@ public:
     virtual SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <style:font-face-uri>
@@ -111,13 +111,13 @@ public:
             const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue ) SAL_OVERRIDE;
+        const OUString& rValue ) override;
     void SetFormat( const OUString& rFormat );
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <svg:font-face-format>
@@ -134,7 +134,7 @@ public:
             XMLFontStyleContextFontFaceUri& uri );
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue ) SAL_OVERRIDE;
+        const OUString& rValue ) override;
 };
 
 #endif

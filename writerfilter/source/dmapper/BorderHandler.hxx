@@ -61,8 +61,8 @@ private:
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
 
 public:
     explicit BorderHandler( bool bOOXML );

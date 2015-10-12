@@ -252,11 +252,11 @@ public:
 
 protected:
     /** Actions according to current flags for the control. */
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
     /** Resets the control according to the item contents. */
-    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rItemSet ) override;
     /** Fills the item set according to the control's state. */
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
     ItemWrapperType     maItemWrp;
     ControlWrapperRef   mxCtrlWrp;
@@ -281,9 +281,9 @@ public:
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
+    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
 private:
     sal_uInt16              mnSlot;
@@ -432,9 +432,9 @@ public:
     void                AddConnection( ItemConnectionBase* pConnection );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
+    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
 private:
     std::unique_ptr< ItemConnectionArrayImpl > mxImpl;

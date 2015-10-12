@@ -48,7 +48,7 @@ public:
 
     sal_Int32 GetValidDragOffset( const SdrDragStat& rDrag ) const;
 
-    virtual Pointer GetPointer() const SAL_OVERRIDE;
+    virtual Pointer GetPointer() const override;
 
     void SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, TableEdgeState nState );
 
@@ -59,7 +59,7 @@ public:
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject() SAL_OVERRIDE;
+    virtual void CreateB2dIAObject() override;
 
 private:
     bool mbHorizontal;
@@ -74,12 +74,12 @@ public:
         const Rectangle& rRect,
         bool bAnimate);
 
-    virtual Pointer GetPointer() const SAL_OVERRIDE;
+    virtual Pointer GetPointer() const override;
     bool getAnimate() const { return mbAnimate; }
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject() SAL_OVERRIDE;
+    virtual void CreateB2dIAObject() override;
 
 private:
     Rectangle maRectangle;

@@ -37,8 +37,8 @@ namespace sdr
             ViewObjectContactOfPageSubObject(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageSubObject();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
-            virtual bool isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
+            virtual bool isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -50,13 +50,13 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageBackground : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageBackground(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageBackground();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -72,7 +72,7 @@ namespace sdr
             ViewObjectContactOfMasterPage(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfMasterPage();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -84,13 +84,13 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageFill : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageFill(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageFill();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -105,7 +105,7 @@ namespace sdr
             ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageShadow();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -120,7 +120,7 @@ namespace sdr
             ViewObjectContactOfOuterPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfOuterPageBorder();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -135,7 +135,7 @@ namespace sdr
             ViewObjectContactOfInnerPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfInnerPageBorder();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -150,7 +150,7 @@ namespace sdr
             ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageHierarchy();
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -162,13 +162,13 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageGrid : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageGrid();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -180,13 +180,13 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageHelplines : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageHelplines();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -201,7 +201,7 @@ namespace sdr
             ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfSdrPage();
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

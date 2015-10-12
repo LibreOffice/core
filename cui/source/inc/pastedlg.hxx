@@ -56,7 +56,7 @@ class SvPasteObjectDialog : public ModalDialog
 public:
                 SvPasteObjectDialog( vcl::Window* pParent );
     virtual     ~SvPasteObjectDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void        Insert( SotClipboardFormatId nFormat, const OUString & rFormatName );
     void        SetObjName( const SvGlobalName & rClass, const OUString & rObjName );

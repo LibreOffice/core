@@ -39,12 +39,12 @@ public:
         DrawViewShell* pShell);
     virtual ~ClientView();
 
-    virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) override;
 
     /* if the view should not do a Invalidate() on the windows, you have to
        override the following two methods and do something different */
-    virtual void InvalidateOneWin(vcl::Window& rWin) SAL_OVERRIDE;
-    virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void InvalidateOneWin(vcl::Window& rWin) override;
+    virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect) override;
 };
 
 } // end of namespace sd

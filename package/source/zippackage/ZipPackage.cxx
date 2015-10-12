@@ -110,34 +110,34 @@ class ActiveDataStreamer : public ::cppu::WeakImplHelper< XActiveDataStreamer >
 public:
 
     virtual uno::Reference< XStream > SAL_CALL getStream()
-            throw( RuntimeException, std::exception ) SAL_OVERRIDE
+            throw( RuntimeException, std::exception ) override
             { return mStream; }
 
     virtual void SAL_CALL setStream( const uno::Reference< XStream >& stream )
-            throw( RuntimeException, std::exception ) SAL_OVERRIDE
+            throw( RuntimeException, std::exception ) override
             { mStream = stream; }
 };
 
 class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
     virtual sal_Int32 SAL_CALL readBytes( uno::Sequence< sal_Int8 >&, sal_Int32 )
-            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override
         { return 0; }
 
     virtual sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< sal_Int8 >&, sal_Int32 )
-            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override
         { return 0; }
 
     virtual void SAL_CALL skipBytes( sal_Int32 )
-            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override
         {}
 
     virtual sal_Int32 SAL_CALL available()
-            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override
         { return 0; }
 
     virtual void SAL_CALL closeInput()
-            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override
         {}
 };
 

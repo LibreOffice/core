@@ -32,8 +32,8 @@ public:
     explicit            IndexedColorsContext( WorkbookFragmentBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 };
 
 class FontContext : public WorkbookContextBase
@@ -44,7 +44,7 @@ public:
                             WorkbookContextBase( rParent ), mxFont( rxFont ) {}
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     FontRef             mxFont;
@@ -58,8 +58,8 @@ public:
                             WorkbookContextBase( rParent ), mxBorder( rxBorder ) {}
 
 protected:
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     BorderRef           mxBorder;
@@ -73,7 +73,7 @@ public:
                             WorkbookContextBase( rParent ), mxFill( rxFill ), mfGradPos( -1.0 ) {}
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     FillRef             mxFill;
@@ -88,8 +88,8 @@ public:
                             WorkbookContextBase( rParent ), mxXf( rxXf ), mbCellXf( bCellXf ) {}
 
 protected:
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     XfRef               mxXf;
@@ -104,7 +104,7 @@ public:
                             WorkbookContextBase( rParent ), mxDxf( rxDxf ) {}
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     DxfRef              mxDxf;
@@ -118,11 +118,11 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
-    virtual void        finalizeImport() SAL_OVERRIDE;
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
+    virtual void        finalizeImport() override;
 };
 
 } // namespace xls

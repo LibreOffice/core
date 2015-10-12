@@ -31,7 +31,7 @@ namespace {
         NoApplyDialog(vcl::Window *pParent, const OUString &rId, const OUString &rXML) :
             SvxStandardDialog(pParent, rId, rXML) { }
     protected:
-        virtual void Apply() SAL_OVERRIDE {}
+        virtual void Apply() override {}
     };
 }
 

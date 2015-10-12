@@ -34,16 +34,16 @@ class ScPrintAreasDlg : public ScAnyRefDlg
 public:
                     ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent );
                     virtual ~ScPrintAreasDlg();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual void    AddRefEntry() SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void    AddRefEntry() override;
 
-    virtual bool    IsTableLocked() const SAL_OVERRIDE;
+    virtual bool    IsTableLocked() const override;
 
-    virtual void    SetActive() SAL_OVERRIDE;
-    virtual void    Deactivate() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    SetActive() override;
+    virtual void    Deactivate() override;
+    virtual bool    Close() override;
 
 private:
     VclPtr<ListBox>                 pLbPrintArea;

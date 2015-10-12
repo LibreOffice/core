@@ -41,8 +41,8 @@ class Lanczos3Kernel : public Kernel
 public:
     Lanczos3Kernel() : Kernel () {}
 
-    virtual double  GetWidth() const SAL_OVERRIDE { return 3.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const override { return 3.0; }
+    virtual double  Calculate (double x) const override
     {
         return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
     }
@@ -68,8 +68,8 @@ public:
     BicubicKernel() : Kernel () {}
 
 private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 2.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const override { return 2.0; }
+    virtual double  Calculate (double x) const override
     {
         if (x < 0.0)
         {
@@ -94,8 +94,8 @@ public:
     BilinearKernel() : Kernel () {}
 
 private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 1.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const override { return 1.0; }
+    virtual double  Calculate (double x) const override
     {
         if (x < 0.0)
         {
@@ -115,8 +115,8 @@ public:
     BoxKernel() : Kernel () {}
 
 private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 0.5; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const override { return 0.5; }
+    virtual double  Calculate (double x) const override
     {
         if (-0.5 <= x && x < 0.5)
             return 1.0;

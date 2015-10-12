@@ -84,13 +84,13 @@ public:
     {
     }
 
-    virtual void preTest(const char* filename) SAL_OVERRIDE
+    virtual void preTest(const char* filename) override
     {
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(true);
     }
 
-    virtual void postTest(const char* filename) SAL_OVERRIDE
+    virtual void postTest(const char* filename) override
     {
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);

@@ -56,14 +56,14 @@ protected:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    virtual svx::SpellPortions GetNextWrongSentence( bool bRecheck ) SAL_OVERRIDE;
+    virtual svx::SpellPortions GetNextWrongSentence( bool bRecheck ) override;
 
     /** This method is responsible for merging corrections made in the
         spelling dialog back into the document.
     */
-    virtual void        ApplyChangedSentence( const svx::SpellPortions& rChanged, bool bRecheck ) SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        ApplyChangedSentence( const svx::SpellPortions& rChanged, bool bRecheck ) override;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
 
 private:
     void                Reset();

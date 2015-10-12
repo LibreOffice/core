@@ -233,7 +233,7 @@ class SfxViewNotificatedFrameList_Impl :
 {
 public:
 
-    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

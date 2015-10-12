@@ -111,9 +111,9 @@ private:
     std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
 
 public:
-    void Read() SAL_OVERRIDE;
-    virtual void XFConvert (XFContentContainer* pCont) SAL_OVERRIDE;
-    void RegisterStyle() SAL_OVERRIDE;
+    void Read() override;
+    virtual void XFConvert (XFContentContainer* pCont) override;
+    void RegisterStyle() override;
 
     void CreateDrawObjects();
     void CreateGrafObject();
@@ -121,7 +121,7 @@ public:
     sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }
-    void GetGrafOrgSize(double& rWidth, double& rHeight) SAL_OVERRIDE;
+    void GetGrafOrgSize(double& rWidth, double& rHeight) override;
 
     sal_Int16 IsLinked(){ return m_bIsLinked;}
     OUString GetLinkedFilePath(){ return m_LinkedFilePath;}

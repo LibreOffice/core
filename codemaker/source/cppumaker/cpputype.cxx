@@ -1025,13 +1025,13 @@ public:
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity,
         OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
 
-    virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream& o) override;
+    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     void        dumpAttributes(FileStream& o);
     void        dumpMethods(FileStream& o);
-    void        dumpNormalGetCppuType(FileStream& o) SAL_OVERRIDE;
-    void        dumpComprehensiveGetCppuType(FileStream& o) SAL_OVERRIDE;
+    void        dumpNormalGetCppuType(FileStream& o) override;
+    void        dumpComprehensiveGetCppuType(FileStream& o) override;
     void        dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index);
     void        dumpCppuMethodRefs(FileStream& o, sal_uInt32& index);
     void        dumpCppuAttributes(FileStream& o, sal_uInt32& index);
@@ -1041,9 +1041,9 @@ public:
 
 private:
     virtual void addComprehensiveGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
-    virtual sal_uInt32 checkInheritedMemberCount() const SAL_OVERRIDE
+    virtual sal_uInt32 checkInheritedMemberCount() const override
     { return BaseOffset(m_typeMgr, entity_).get(); }
 
     static void dumpExceptionSpecification(
@@ -1634,12 +1634,12 @@ public:
 
 private:
     virtual void dumpHFile(
-        FileStream & out, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+        FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
     virtual void dumpHxxFile(
-        FileStream & out, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+        FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
-    virtual void dumpDeclaration(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream & out) override;
 
     rtl::Reference< unoidl::ConstantGroupEntity > entity_;
 };
@@ -1780,27 +1780,27 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual sal_uInt32 checkInheritedMemberCount() const SAL_OVERRIDE
+    virtual sal_uInt32 checkInheritedMemberCount() const override
     { return getTotalMemberCount(entity_->getDirectBase()); }
 
-    virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    virtual void dumpLightGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpLightGetCppuType(FileStream & out) override;
 
-    virtual void dumpNormalGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpNormalGetCppuType(FileStream & out) override;
 
-    virtual void dumpComprehensiveGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpComprehensiveGetCppuType(FileStream & out) override;
 
     virtual void addLightGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
     virtual void addNormalGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
     virtual void addComprehensiveGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
     bool dumpBaseMembers(
         FileStream & out, OUString const & base, bool withType);
@@ -2167,30 +2167,30 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    virtual void dumpLightGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpLightGetCppuType(FileStream & out) override;
 
-    virtual void dumpNormalGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpNormalGetCppuType(FileStream & out) override;
 
-    virtual void dumpComprehensiveGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpComprehensiveGetCppuType(FileStream & out) override;
 
     virtual void addLightGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
     virtual void addNormalGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
     virtual void addComprehensiveGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
-    virtual bool isPolymorphic() const SAL_OVERRIDE { return true; }
+    virtual bool isPolymorphic() const override { return true; }
 
-    virtual void dumpTemplateHead(FileStream & out) const SAL_OVERRIDE;
+    virtual void dumpTemplateHead(FileStream & out) const override;
 
-    virtual void dumpTemplateParameters(FileStream & out) const SAL_OVERRIDE;
+    virtual void dumpTemplateParameters(FileStream & out) const override;
 
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > entity_;
 };
@@ -2664,21 +2664,21 @@ public:
 
 private:
     virtual void dumpHxxFile(
-        FileStream & out, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+        FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
     virtual void addComprehensiveGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
-    virtual void dumpLightGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpLightGetCppuType(FileStream & out) override;
 
-    virtual void dumpNormalGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpNormalGetCppuType(FileStream & out) override;
 
-    virtual void dumpComprehensiveGetCppuType(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpComprehensiveGetCppuType(FileStream & out) override;
 
-    virtual sal_uInt32 checkInheritedMemberCount() const SAL_OVERRIDE
+    virtual sal_uInt32 checkInheritedMemberCount() const override
     { return getTotalMemberCount(entity_->getDirectBase()); }
 
-    virtual void dumpDeclaration(FileStream & out) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream & out) override;
 
     bool dumpBaseMembers(
         FileStream & out, OUString const & base, bool withType,
@@ -3105,15 +3105,15 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream& o) override;
 
     virtual void addComprehensiveGetCppuTypeIncludes(
-        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+        codemaker::cppumaker::Includes & includes) const override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    void        dumpNormalGetCppuType(FileStream& o) SAL_OVERRIDE;
-    void        dumpComprehensiveGetCppuType(FileStream& o) SAL_OVERRIDE;
+    void        dumpNormalGetCppuType(FileStream& o) override;
+    void        dumpComprehensiveGetCppuType(FileStream& o) override;
 
     rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
@@ -3273,11 +3273,11 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
+    virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    void dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     rtl::Reference< unoidl::TypedefEntity > entity_;
 };
@@ -3332,10 +3332,10 @@ public:
         CppuType(name, manager) {}
 
 private:
-    virtual void dumpHFile(FileStream &, codemaker::cppumaker::Includes &) SAL_OVERRIDE
+    virtual void dumpHFile(FileStream &, codemaker::cppumaker::Includes &) override
     { assert(false); } // this cannot happen
 
-    virtual void dumpFiles(OUString const & uri, CppuOptions const & options) SAL_OVERRIDE
+    virtual void dumpFiles(OUString const & uri, CppuOptions const & options) override
     { dumpFile(uri, name_, true, options); }
 };
 
@@ -3373,7 +3373,7 @@ public:
 
 private:
     virtual void dumpHxxFile(
-        FileStream & o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+        FileStream & o, codemaker::cppumaker::Includes & includes) override;
 
     void dumpCatchClauses(
         FileStream & out, codemaker::ExceptionTreeNode const * node);
@@ -3751,7 +3751,7 @@ public:
 
 private:
     virtual void dumpHxxFile(
-        FileStream & o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
+        FileStream & o, codemaker::cppumaker::Includes & includes) override;
 
     rtl::Reference< unoidl::InterfaceBasedSingletonEntity > entity_;
 };

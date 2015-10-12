@@ -30,7 +30,7 @@
 class RtfWriter : public Writer
 {
 protected:
-    sal_uLong WriteStream() SAL_OVERRIDE { return 0; }
+    sal_uLong WriteStream() override { return 0; }
 };
 
 /// The physical access to the RTF document (for writing).
@@ -48,12 +48,12 @@ public:
     virtual ~RtfExportFilter();
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancel() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancel() throw(css::uno::RuntimeException, std::exception) override;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc)
-    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     RtfWriter m_aWriter;
 };

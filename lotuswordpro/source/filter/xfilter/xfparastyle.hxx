@@ -208,11 +208,11 @@ public:
 
     XFMargins& GetMargins(){return m_aMargin;}
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
-    virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool Equal(IXFStyle *pStyle) override;
 
-    virtual void    ToXml(IXFStream *strm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *strm) override;
 
     void SetNumberRight(bool bFlag){m_bNumberRight = bFlag;}
     bool GetNumberRight(){return m_bNumberRight;}
@@ -292,8 +292,8 @@ class XFDefaultParaStyle : public XFStyle
 public:
     XFDefaultParaStyle();
     void SetTabDistance(double len);
-    enumXFStyle GetStyleFamily() SAL_OVERRIDE;
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    enumXFStyle GetStyleFamily() override;
+    virtual void    ToXml(IXFStream *pStrm) override;
 private:
     double m_fTabDistance;
 };

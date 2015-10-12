@@ -155,9 +155,9 @@ private:
 public:
                             ImplFTSFontData( FtFontInfo*, const ImplDevFontAttributes& );
 
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
-    virtual PhysicalFontFace* Clone() const SAL_OVERRIDE   { return new ImplFTSFontData( *this ); }
-    virtual sal_IntPtr      GetFontId() const SAL_OVERRIDE { return mpFtFontInfo->GetFontId(); }
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual PhysicalFontFace* Clone() const override   { return new ImplFTSFontData( *this ); }
+    virtual sal_IntPtr      GetFontId() const override { return mpFtFontInfo->GetFontId(); }
 };
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX

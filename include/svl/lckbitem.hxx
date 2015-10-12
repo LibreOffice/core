@@ -35,17 +35,17 @@ public:
                             SfxLockBytesItem( const SfxLockBytesItem& );
                             virtual ~SfxLockBytesItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const override;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
     SvLockBytes*            GetValue() const { return _xVal; }
 
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId ) SAL_OVERRIDE;
+                                        sal_uInt8 nMemberId ) override;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+                                        sal_uInt8 nMemberId = 0 ) const override;
 };
 
 #endif

@@ -58,9 +58,9 @@ public:
                         SalYieldMutex();
                         virtual ~SalYieldMutex();
 
-    virtual void        acquire() SAL_OVERRIDE;
-    virtual void        release() SAL_OVERRIDE;
-    virtual bool        tryToAcquire() SAL_OVERRIDE;
+    virtual void        acquire() override;
+    virtual void        release() override;
+    virtual bool        tryToAcquire() override;
 
     sal_uIntPtr GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
@@ -83,25 +83,25 @@ public:
     virtual ~SalGenericInstance();
 
     // Yield mutex
-    virtual comphelper::SolarMutex* GetYieldMutex() SAL_OVERRIDE;
-    virtual sal_uIntPtr         ReleaseYieldMutex() SAL_OVERRIDE;
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) SAL_OVERRIDE;
-    virtual bool                CheckYieldMutex() SAL_OVERRIDE;
+    virtual comphelper::SolarMutex* GetYieldMutex() override;
+    virtual sal_uIntPtr         ReleaseYieldMutex() override;
+    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) override;
+    virtual bool                CheckYieldMutex() override;
 
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
-                                                         ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual SalPrinter*         CreatePrinter          ( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
-    virtual void                DestroyPrinter         ( SalPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) SAL_OVERRIDE;
-    virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual void                DeletePrinterQueueInfo ( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual OUString            GetDefaultPrinter() SAL_OVERRIDE;
+                                                         ImplJobSetup* pSetupData ) override;
+    virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) override;
+    virtual SalPrinter*         CreatePrinter          ( SalInfoPrinter* pInfoPrinter ) override;
+    virtual void                DestroyPrinter         ( SalPrinter* pPrinter ) override;
+    virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) override;
+    virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo ) override;
+    virtual void                DeletePrinterQueueInfo ( SalPrinterQueueInfo* pInfo ) override;
+    virtual OUString            GetDefaultPrinter() override;
     virtual void                PostPrintersChanged() = 0;
-    virtual void                updatePrinterUpdate() SAL_OVERRIDE;
-    virtual void                jobStartedPrinterUpdate() SAL_OVERRIDE;
-    virtual void                jobEndedPrinterUpdate() SAL_OVERRIDE;
+    virtual void                updatePrinterUpdate() override;
+    virtual void                jobStartedPrinterUpdate() override;
+    virtual void                jobEndedPrinterUpdate() override;
     bool isPrinterInit() const { return mbPrinterInit; }
     virtual GenPspGraphics     *CreatePrintGraphics() = 0;
 

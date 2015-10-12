@@ -336,25 +336,25 @@ public:
     virtual ~RTFDocumentImpl();
 
     // RTFDocument
-    virtual void resolve(Stream& rHandler) SAL_OVERRIDE;
+    virtual void resolve(Stream& rHandler) override;
 
     // RTFListener
-    virtual RTFError dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual RTFError dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
-    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
-    virtual RTFError resolveChars(char ch) SAL_OVERRIDE;
-    virtual RTFError pushState() SAL_OVERRIDE;
-    virtual RTFError popState() SAL_OVERRIDE;
-    virtual Destination getDestination() SAL_OVERRIDE;
-    virtual void setDestination(Destination eDestination) SAL_OVERRIDE;
-    virtual RTFInternalState getInternalState() SAL_OVERRIDE;
-    virtual void setInternalState(RTFInternalState nInternalState) SAL_OVERRIDE;
-    virtual bool getSkipUnknown() SAL_OVERRIDE;
-    virtual void setSkipUnknown(bool bSkipUnknown) SAL_OVERRIDE;
-    virtual void finishSubstream() SAL_OVERRIDE;
-    virtual bool isSubstream() const SAL_OVERRIDE;
+    virtual RTFError dispatchDestination(RTFKeyword nKeyword) override;
+    virtual RTFError dispatchFlag(RTFKeyword nKeyword) override;
+    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) override;
+    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
+    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
+    virtual RTFError resolveChars(char ch) override;
+    virtual RTFError pushState() override;
+    virtual RTFError popState() override;
+    virtual Destination getDestination() override;
+    virtual void setDestination(Destination eDestination) override;
+    virtual RTFInternalState getInternalState() override;
+    virtual void setInternalState(RTFInternalState nInternalState) override;
+    virtual bool getSkipUnknown() override;
+    virtual void setSkipUnknown(bool bSkipUnknown) override;
+    virtual void finishSubstream() override;
+    virtual bool isSubstream() const override;
 
     Stream& Mapper()
     {

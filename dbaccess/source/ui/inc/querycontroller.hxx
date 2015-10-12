@@ -115,14 +115,14 @@ namespace dbaui
 
     protected:
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
+        virtual void            describeSupportedFeatures() override;
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
+        virtual FeatureState    GetState(sal_uInt16 nId) const override;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
-        virtual void            reconnect( bool _bUI ) SAL_OVERRIDE;
-        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
+        virtual void            reconnect( bool _bUI ) override;
+        virtual OUString getPrivateTitle( ) const override;
 
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
@@ -135,7 +135,7 @@ namespace dbaui
 
         void            clearFields();
 
-        virtual void impl_onModifyChanged() SAL_OVERRIDE;
+        virtual void impl_onModifyChanged() override;
 
         // should the statement be parsed by our own sql parser
         bool        isEscapeProcessing()    const { return m_bEscapeProcessing; }
@@ -160,22 +160,22 @@ namespace dbaui
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
 
-        virtual bool Construct(vcl::Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(vcl::Window* pParent) override;
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // css::lang::XComponent
-        virtual void        SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void        SAL_CALL disposing() override;
 
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
         // need by registration
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
@@ -183,13 +183,13 @@ namespace dbaui
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XController
-        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        virtual void    onLoadedMenu(const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager) SAL_OVERRIDE;
+        virtual void    onLoadedMenu(const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager) override;
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OPropertySetHelper
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -197,21 +197,21 @@ namespace dbaui
                                     css::uno::Any& rOldValue,
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
-                                ) throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                ) throw (css::lang::IllegalArgumentException) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
-                                ) throw (css::uno::Exception, std::exception ) SAL_OVERRIDE;
+                                ) throw (css::uno::Exception, std::exception ) override;
         virtual void SAL_CALL getFastPropertyValue(
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
-                                ) const SAL_OVERRIDE;
+                                ) const override;
 
-        virtual OJoinDesignView*  getJoinView() SAL_OVERRIDE;
+        virtual OJoinDesignView*  getJoinView() override;
         // ask the user if the design should be saved when it is modified
-        virtual short saveModified() SAL_OVERRIDE;
-        virtual void reset() SAL_OVERRIDE;
-        virtual void impl_initialize() SAL_OVERRIDE;
+        virtual short saveModified() override;
+        virtual void reset() override;
+        virtual void impl_initialize() override;
 
         void    impl_reset( const bool i_bIgnoreQuerySettings = false );
         /// tells the user that we needed to switch to SQL view automatically
@@ -227,8 +227,8 @@ namespace dbaui
         void    setEscapeProcessing_fireEvent( const bool _bEscapeProcessing );
 
         // OJoinController overridables
-        virtual bool allowViews() const SAL_OVERRIDE;
-        virtual bool allowQueries() const SAL_OVERRIDE;
+        virtual bool allowViews() const override;
+        virtual bool allowQueries() const override;
 
     private:
         DECL_LINK_TYPED( OnExecuteAddTable, void*, void );

@@ -36,19 +36,19 @@ public:
 
     OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
             const com::sun::star::lang::Locale& rLocale, const OUString& rAlgorithm )
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, std::exception) override;
     OUString SAL_CALL getIndexKey( const OUString& rIndexEntry,
             const OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, std::exception) override;
     sal_Int16 SAL_CALL compareIndexEntry(
             const OUString& rIndexEntry1, const OUString& rPhoneticEntry1,
             const com::sun::star::lang::Locale& rLocale1,
             const OUString& rIndexEntry2, const OUString& rPhoneticEntry2,
             const com::sun::star::lang::Locale& rLocale2 )
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, std::exception) override;
     OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
             const com::sun::star::lang::Locale& rLocale )
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, std::exception) override;
 #ifndef DISABLE_DYNLOADING
 private:
     oslModule hModule;

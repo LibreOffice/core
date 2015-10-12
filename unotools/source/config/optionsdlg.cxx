@@ -52,12 +52,12 @@ private:
     void            ReadNode( const OUString& _rNode, NodeType _eType );
     bool        IsHidden( const OUString& _rPath ) const;
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
                     SvtOptionsDlgOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     static ::osl::Mutex & getInitMutex();
 

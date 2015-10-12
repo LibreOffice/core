@@ -120,10 +120,10 @@ protected:
         : SwVectorModifyBase<Value>(policy) {}
 
 public:
-    virtual size_t GetFormatCount() const SAL_OVERRIDE
+    virtual size_t GetFormatCount() const override
         { return std::vector<Value>::size(); }
 
-    virtual Value GetFormat(size_t idx) const SAL_OVERRIDE
+    virtual Value GetFormat(size_t idx) const override
         { return std::vector<Value>::operator[](idx); }
 
     inline size_t GetPos(const SwFormat *p) const

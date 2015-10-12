@@ -142,10 +142,10 @@ public:
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
     virtual ~SelectionIteratorImpl();
 
-    virtual void GotoNextText() SAL_OVERRIDE;
-    virtual const IteratorPosition& GetPosition() SAL_OVERRIDE;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
-    virtual bool operator== (const IteratorImplBase& rIterator) const SAL_OVERRIDE;
+    virtual void GotoNextText() override;
+    virtual const IteratorPosition& GetPosition() override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
+    virtual bool operator== (const IteratorImplBase& rIterator) const override;
 
 private:
     const ::std::vector<SdrObjectWeakRef>& mrObjectList;
@@ -160,7 +160,7 @@ private:
         @return
             Returns <TRUE/> when both iterators point to the same object.
     */
-    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const SAL_OVERRIDE;
+    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const override;
 
     IteratorImplBase& operator= (const IteratorImplBase& rIterator);
 };
@@ -190,9 +190,9 @@ public:
         EditMode eEditMode);
     virtual ~ViewIteratorImpl();
 
-    virtual void GotoNextText() SAL_OVERRIDE;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
-    virtual void Reverse() SAL_OVERRIDE;
+    virtual void GotoNextText() override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
+    virtual void Reverse() override;
 
 protected:
     /** Set up page pointer and object list iterator for the specified
@@ -233,8 +233,8 @@ public:
         bool bDirectionIsForward);
     virtual ~DocumentIteratorImpl();
 
-    virtual void GotoNextText() SAL_OVERRIDE;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
+    virtual void GotoNextText() override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
 
 private:
     /// Number of pages in the view that is specified by <member>maPosition</member>.

@@ -52,8 +52,8 @@ namespace dbaui
         void SetAdditionalModifyHdl(const Link<>& _rHdl);
 
     protected:
-        virtual bool WantMouseEvent() const SAL_OVERRIDE { return true; }
-        virtual void SetModifyHdl(const Link<>& _rHdl) SAL_OVERRIDE;
+        virtual bool WantMouseEvent() const override { return true; }
+        virtual void SetModifyHdl(const Link<>& _rHdl) override;
 
     private:
         void implCheckLinks();

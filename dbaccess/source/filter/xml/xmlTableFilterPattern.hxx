@@ -37,7 +37,7 @@ namespace dbaxml
 
         virtual ~OXMLTableFilterPattern();
 
-        virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+        virtual void Characters( const OUString& rChars ) override;
     };
 } // namespace dbaxml
 

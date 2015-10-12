@@ -49,22 +49,22 @@ public:
                 , Dialog * pParentDialog
                 , bool bHideDescription = false );
     virtual ~RangeChooserTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     //RangeSelectionListenerParent
-    virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
-    virtual void disposingRangeSelection() SAL_OVERRIDE;
+    virtual void listeningFinished( const OUString & rNewRange ) override;
+    virtual void disposingRangeSelection() override;
 
     void commitPage();
 
 protected: //methods
 
     //OWizardPage
-    virtual void ActivatePage() SAL_OVERRIDE;
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
+    virtual void ActivatePage() override;
+    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
-    virtual void DeactivatePage() SAL_OVERRIDE;
+    virtual void DeactivatePage() override;
 
     void initControlsFromModel();
     void changeDialogModelAccordingToControls();

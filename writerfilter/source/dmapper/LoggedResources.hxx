@@ -52,23 +52,23 @@ public:
     explicit LoggedStream(const std::string & sPrefix);
     virtual ~LoggedStream();
 
-    void startSectionGroup() SAL_OVERRIDE;
-    void endSectionGroup() SAL_OVERRIDE;
-    void startParagraphGroup() SAL_OVERRIDE;
-    void endParagraphGroup() SAL_OVERRIDE;
-    void startCharacterGroup() SAL_OVERRIDE;
-    void endCharacterGroup() SAL_OVERRIDE;
-    void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) SAL_OVERRIDE;
-    void endShape() SAL_OVERRIDE;
-    void text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
-    void utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
-    void positionOffset(const OUString& rText, bool bVertical) SAL_OVERRIDE;
-    void align(const OUString& rText, bool bVertical) SAL_OVERRIDE;
-    void positivePercentage(const OUString& rText) SAL_OVERRIDE;
-    void props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
-    void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
-    void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
-    void info(const std::string & info) SAL_OVERRIDE;
+    void startSectionGroup() override;
+    void endSectionGroup() override;
+    void startParagraphGroup() override;
+    void endParagraphGroup() override;
+    void startCharacterGroup() override;
+    void endCharacterGroup() override;
+    void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    void endShape() override;
+    void text(const sal_uInt8 * data, size_t len) override;
+    void utext(const sal_uInt8 * data, size_t len) override;
+    void positionOffset(const OUString& rText, bool bVertical) override;
+    void align(const OUString& rText, bool bVertical) override;
+    void positivePercentage(const OUString& rText) override;
+    void props(writerfilter::Reference<Properties>::Pointer_t ref) override;
+    void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) override;
+    void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) override;
+    void info(const std::string & info) override;
 
 protected:
     virtual void lcl_startSectionGroup() = 0;
@@ -82,7 +82,7 @@ protected:
     virtual void lcl_text(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_positionOffset(const OUString& /*rText*/, bool /*bVertical*/) { }
-    virtual css::awt::Point getPositionOffset() SAL_OVERRIDE { return css::awt::Point(); }
+    virtual css::awt::Point getPositionOffset() override { return css::awt::Point(); }
     virtual void lcl_align(const OUString& /*rText*/, bool /*bVertical*/) { }
     virtual void lcl_positivePercentage(const OUString& /*rText*/) { }
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
@@ -101,8 +101,8 @@ public:
     explicit LoggedProperties(const std::string & sPrefix);
     virtual ~LoggedProperties();
 
-    void attribute(Id name, Value & val) SAL_OVERRIDE;
-    void sprm(Sprm & sprm) SAL_OVERRIDE;
+    void attribute(Id name, Value & val) override;
+    void sprm(Sprm & sprm) override;
 
 protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
@@ -119,7 +119,7 @@ public:
     explicit LoggedTable(const std::string & sPrefix);
     virtual ~LoggedTable();
 
-    void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;

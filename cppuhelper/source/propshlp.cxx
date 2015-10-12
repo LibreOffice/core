@@ -79,9 +79,9 @@ public:
     explicit OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-methods
-    virtual Sequence< Property > SAL_CALL getProperties() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< Property > SAL_CALL getProperties() throw(css::uno::RuntimeException, std::exception) override;
+    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 

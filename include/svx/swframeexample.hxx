@@ -66,10 +66,10 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
     void CalcBoundRect_Impl(Rectangle &rRect);
     Rectangle DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual Size GetOptimalSize() const override;
 protected:
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 public:
 
     SvxSwFrameExample(vcl::Window* pParent, WinBits nStyle);

@@ -94,17 +94,17 @@ public:
     virtual ~SmXMLImport() throw ();
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     void SAL_CALL endDocument()
         throw( ::com::sun::star::xml::sax::SAXException,
-        ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const OUString &rLocalName,
         const com::sun::star::uno::Reference <
-        com::sun::star::xml::sax::XAttributeList> &xAttrList) SAL_OVERRIDE;
+        com::sun::star::xml::sax::XAttributeList> &xAttrList) override;
     SvXMLImportContext *CreateRowContext(sal_uInt16 nPrefix,
         const OUString &rLocalName,
         const com::sun::star::uno::Reference <
@@ -251,8 +251,8 @@ public:
     SAL_WARN_UNUSED_RESULT OUString GetText() { return aText; }
     void SetText(const OUString &rStr) { aText = rStr; }
 
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
 };
 
 

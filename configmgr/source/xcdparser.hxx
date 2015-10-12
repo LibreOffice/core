@@ -45,15 +45,15 @@ public:
 private:
     virtual ~XcdParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode() SAL_OVERRIDE;
+    virtual xmlreader::XmlReader::Text getTextMode() override;
 
     virtual bool startElement(
         xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< OUString > const * existingDependencies) SAL_OVERRIDE;
+        std::set< OUString > const * existingDependencies) override;
 
-    virtual void endElement(xmlreader::XmlReader const & reader) SAL_OVERRIDE;
+    virtual void endElement(xmlreader::XmlReader const & reader) override;
 
-    virtual void characters(xmlreader::Span const & text) SAL_OVERRIDE;
+    virtual void characters(xmlreader::Span const & text) override;
 
     enum State {
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };

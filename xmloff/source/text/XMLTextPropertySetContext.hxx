@@ -47,7 +47,7 @@ public:
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp) SAL_OVERRIDE;
+                                   const XMLPropertyState& rProp) override;
 };
 
 

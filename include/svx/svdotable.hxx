@@ -157,108 +157,108 @@ public:
      // text stuff
 
     /** returns the currently active text. */
-    virtual SdrText* getActiveText() const SAL_OVERRIDE;
+    virtual SdrText* getActiveText() const override;
 
     /** returns the nth available text. */
-    virtual SdrText* getText( sal_Int32 nIndex ) const SAL_OVERRIDE;
+    virtual SdrText* getText( sal_Int32 nIndex ) const override;
 
     /** returns the number of texts available for this object. */
-    virtual sal_Int32 getTextCount() const SAL_OVERRIDE;
+    virtual sal_Int32 getTextCount() const override;
 
     /** changes the current active text */
-    virtual void setActiveText( sal_Int32 nIndex ) SAL_OVERRIDE;
+    virtual void setActiveText( sal_Int32 nIndex ) override;
 
     /** returns the index of the text that contains the given point or -1 */
-    virtual sal_Int32 CheckTextHit(const Point& rPnt) const SAL_OVERRIDE;
+    virtual sal_Int32 CheckTextHit(const Point& rPnt) const override;
 
     // #i121917#
-    virtual bool HasText() const SAL_OVERRIDE;
+    virtual bool HasText() const override;
 
     bool IsTextEditActive() const { return (pEdtOutl != 0L); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** returns true only if we are in edit mode and the user actually changed anything */
-    virtual bool IsReallyEdited() const SAL_OVERRIDE;
+    virtual bool IsReallyEdited() const override;
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
     void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const SAL_OVERRIDE;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const override;
     void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
-    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const SAL_OVERRIDE;
+    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const override;
 
-    virtual bool IsAutoGrowHeight() const SAL_OVERRIDE;
-    virtual bool IsAutoGrowWidth() const SAL_OVERRIDE;
+    virtual bool IsAutoGrowHeight() const override;
+    virtual bool IsAutoGrowWidth() const override;
 
-    virtual bool IsFontwork() const SAL_OVERRIDE;
+    virtual bool IsFontwork() const override;
 
-    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
-    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual void SetChanged() SAL_OVERRIDE;
+    virtual void SetPage(SdrPage* pNewPage) override;
+    virtual void SetModel(SdrModel* pNewModel) override;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual void SetChanged() override;
 
-    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const SAL_OVERRIDE;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) SAL_OVERRIDE;
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
-    virtual SdrTableObj* Clone() const SAL_OVERRIDE;
+    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
+    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) override;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
+    virtual SdrTableObj* Clone() const override;
     SdrTableObj& operator=(const SdrTableObj& rObj);
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeContour() const SAL_OVERRIDE;
-    virtual void RecalcSnapRect() SAL_OVERRIDE;
-    virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    virtual basegfx::B2DPolyPolygon TakeContour() const override;
+    virtual void RecalcSnapRect() override;
+    virtual const Rectangle& GetSnapRect() const override;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
 
-    virtual const Rectangle& GetLogicRect() const SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) SAL_OVERRIDE;
+    virtual const Rectangle& GetLogicRect() const override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
-    virtual sal_uInt32 GetSnapPointCount() const SAL_OVERRIDE;
-    virtual Point GetSnapPoint(sal_uInt32 i) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetSnapPointCount() const override;
+    virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
-    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetHdlCount() const override;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool hasSpecialDrag() const override;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
-    virtual bool BckCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual void BrkCreate(SdrDragStat& rStat) SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
-    virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
+    virtual bool BegCreate(SdrDragStat& rStat) override;
+    virtual bool MovCreate(SdrDragStat& rStat) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+    virtual bool BckCreate(SdrDragStat& rStat) override;
+    virtual void BrkCreate(SdrDragStat& rStat) override;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
+    virtual Pointer GetCreatePointer() const override;
 
-    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcMove(const Size& rSiz) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
 
-    virtual bool BegTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;
-    virtual void EndTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const SAL_OVERRIDE;
+    virtual bool BegTextEdit(SdrOutliner& rOutl) override;
+    virtual void EndTextEdit(SdrOutliner& rOutl) override;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
     void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) SAL_OVERRIDE;
+    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
 
-    virtual OutlinerParaObject* GetOutlinerParaObject() const SAL_OVERRIDE;
-    virtual OutlinerParaObject* GetEditOutlinerParaObject() const SAL_OVERRIDE;
+    virtual OutlinerParaObject* GetOutlinerParaObject() const override;
+    virtual OutlinerParaObject* GetEditOutlinerParaObject() const override;
 
-    virtual void NbcReformatText() SAL_OVERRIDE;
-    virtual void ReformatText() SAL_OVERRIDE;
+    virtual void NbcReformatText() override;
+    virtual void ReformatText() override;
 
-    virtual bool IsVerticalWriting() const SAL_OVERRIDE;
-    virtual void SetVerticalWriting(bool bVertical) SAL_OVERRIDE;
+    virtual bool IsVerticalWriting() const override;
+    virtual void SetVerticalWriting(bool bVertical) override;
 
     com::sun::star::text::WritingMode GetWritingMode() const;
 
-    virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) SAL_OVERRIDE;
+    virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 
 
 
@@ -271,12 +271,12 @@ public:
 
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const SAL_OVERRIDE;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
 
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) SAL_OVERRIDE;
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
     //          hard set character attributes with the which ids contained in the
@@ -291,12 +291,12 @@ private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
-    virtual SdrObjGeoData* NewGeoData() const SAL_OVERRIDE;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
+    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 private:
     SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;

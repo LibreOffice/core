@@ -39,13 +39,13 @@ public:
     virtual ~SwFormatContent();
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
 
     const SwNodeIndex *GetContentIdx() const { return pStartNode; }
     void SetNewContentIdx( const SwNodeIndex *pIdx );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline const SwFormatContent &SwAttrSet::GetContent(bool bInP) const

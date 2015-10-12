@@ -22,9 +22,9 @@ class UndoFormulaToValue : public ScSimpleUndo
 public:
     UndoFormulaToValue( ScDocShell* pDocSh, TableValues& rUndoValues );
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     void Execute();

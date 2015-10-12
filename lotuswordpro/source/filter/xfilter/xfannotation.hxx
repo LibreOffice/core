@@ -71,7 +71,7 @@ public:
 
     void SetAuthor(const OUString& author);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     OUString   m_strDate;

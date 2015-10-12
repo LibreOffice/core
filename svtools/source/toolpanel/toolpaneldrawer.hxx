@@ -44,7 +44,7 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox) override;
 
     private:
         ToolPanelDrawer& m_rDrawer;
@@ -55,7 +55,7 @@ namespace svt
     public:
         ToolPanelDrawer(vcl::Window& i_rParent, const OUString& i_rTitle);
         virtual ~ToolPanelDrawer();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         long GetPreferredHeightPixel() const;
         void SetExpanded(const bool i_bExpanded);
@@ -68,16 +68,16 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& i_rEvent ) SAL_OVERRIDE;
-        virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
+        virtual void Resize() override;
+        virtual void DataChanged( const DataChangedEvent& i_rEvent ) override;
+        virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent ) override;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
+                     GetComponentInterface( bool i_bCreate ) override;
 
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     private:
         Rectangle   impl_calcTextBoundingBox() const;

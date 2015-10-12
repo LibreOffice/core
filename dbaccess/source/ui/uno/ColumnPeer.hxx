@@ -40,8 +40,8 @@ namespace dbaui
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
         void setEditWidth(sal_Int32 _nWidth);
         // VCLXWindow
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
     };
 }   // namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNPEER_HXX

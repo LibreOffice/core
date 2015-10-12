@@ -51,7 +51,7 @@ public:
     TimeNodeListContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aList ) throw();
 
     virtual ~TimeNodeListContext() throw();
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 
 private:

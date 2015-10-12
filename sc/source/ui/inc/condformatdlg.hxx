@@ -74,14 +74,14 @@ private:
 public:
     ScCondFormatList(vcl::Window* pParent, WinBits nStyle);
     virtual ~ScCondFormatList();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
+    virtual void Resize() override;
 
     ScConditionalFormat* GetConditionalFormat() const;
     void RecalcAll();
@@ -122,7 +122,7 @@ private:
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
 
-    virtual void RefInputDone( bool bForced = false ) SAL_OVERRIDE;
+    virtual void RefInputDone( bool bForced = false ) override;
     void OkPressed();
     void CancelPressed();
 
@@ -132,18 +132,18 @@ public:
                                  const ScRangeList& rRange, const ScAddress& rPos,
                                  condformat::dialog::ScCondFormatDialogType eType, bool bManaged);
     virtual ~ScCondFormatDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 
     static OUString GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, bool bManaged);
     static bool ParseXmlString(const OUString& sXMLString, sal_uInt32& nIndex,
                                sal_uInt8& nType, bool& bManaged);
-    virtual void SetReference(const ScRange&, ScDocument*) SAL_OVERRIDE;
-    virtual bool IsRefInputMode() const SAL_OVERRIDE;
-    virtual void SetActive() SAL_OVERRIDE;
-    virtual bool IsTableLocked() const SAL_OVERRIDE;
-    virtual bool Close() SAL_OVERRIDE;
+    virtual void SetReference(const ScRange&, ScDocument*) override;
+    virtual bool IsRefInputMode() const override;
+    virtual void SetActive() override;
+    virtual bool IsTableLocked() const override;
+    virtual bool Close() override;
 
     void InvalidateRefData();
 

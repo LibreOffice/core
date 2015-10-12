@@ -38,12 +38,12 @@ public:
 
 
     virtual void onStartElement(
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     Color&              mrColor;
@@ -61,7 +61,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     Color&              mrColor;

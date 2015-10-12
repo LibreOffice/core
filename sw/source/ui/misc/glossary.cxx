@@ -132,7 +132,7 @@ public:
                       const OUString& rOldName,
                       const OUString& rOldShort );
     virtual ~SwNewGlosNameDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetNewName()  const { return m_pNewName->GetText(); }
     OUString GetNewShort() const { return m_pNewShort->GetText(); }

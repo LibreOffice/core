@@ -38,8 +38,8 @@ public:
     explicit            TextContext(  ::oox::core::ContextHandler2Helper& rParent, TextModel& rModel );
     virtual             ~TextContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
 };
 
 
@@ -54,7 +54,7 @@ public:
     explicit            TitleContext( ::oox::core::ContextHandler2Helper& rParent, TitleModel& rModel );
     virtual             ~TitleContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
 
@@ -69,7 +69,7 @@ public:
     explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent, LegendModel& rModel );
     virtual             ~LegendContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
 

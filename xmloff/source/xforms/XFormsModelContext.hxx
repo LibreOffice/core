@@ -47,18 +47,18 @@ public:
 
     // implement SvXMLImportContext & TokenContext methods:
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
 protected:
     virtual void HandleAttribute(
         sal_uInt16 nToken,
-        const OUString& rValue ) SAL_OVERRIDE;
+        const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
         sal_uInt16 nToken,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

@@ -41,10 +41,10 @@ public:
     void stopListening();
 
     //XModifyListener
-    virtual void SAL_CALL modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException, std::exception) override;
 
     //XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
 
     using ::cppu::WeakComponentImplHelperBase::disposing;
 

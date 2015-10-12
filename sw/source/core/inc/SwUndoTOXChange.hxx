@@ -34,9 +34,9 @@ public:
     SwUndoTOXChange(SwTOXBase * pTOX, const SwTOXBase & rNew);
     virtual ~SwUndoTOXChange();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SWUNDOTOXCHANGE_HXX

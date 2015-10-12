@@ -34,11 +34,11 @@ namespace dbaui
         bool            m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
+        virtual void            describeSupportedFeatures() override;
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
+        virtual FeatureState    GetState(sal_uInt16 nId) const override;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         void loadData();
         TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,bool _bCase) const;
@@ -52,11 +52,11 @@ namespace dbaui
 
         void mergeData(const TTableConnectionData& _aConnectionData);
 
-        virtual bool Construct(vcl::Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(vcl::Window* pParent) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
         // need by registration
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
@@ -64,15 +64,15 @@ namespace dbaui
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // OJoinController overridables
-        virtual bool allowViews() const SAL_OVERRIDE;
-        virtual bool allowQueries() const SAL_OVERRIDE;
+        virtual bool allowViews() const override;
+        virtual bool allowQueries() const override;
 
     private:
         // ask the user if the design should be saved when it is modified
-        virtual short saveModified() SAL_OVERRIDE;
-        virtual void reset() SAL_OVERRIDE;
-        virtual void impl_initialize() SAL_OVERRIDE;
-        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
+        virtual short saveModified() override;
+        virtual void reset() override;
+        virtual void impl_initialize() override;
+        virtual OUString getPrivateTitle( ) const override;
         DECL_LINK_TYPED( OnThreadFinished, void*, void );
     };
 }

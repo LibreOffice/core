@@ -37,7 +37,7 @@ namespace cppcanvas
                                css::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 
-            virtual css::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const SAL_OVERRIDE;
+            virtual css::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const override;
 
         private:
             css::uno::Reference< css::rendering::XGraphicDevice > mxDevice;

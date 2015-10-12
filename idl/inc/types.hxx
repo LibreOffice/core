@@ -46,7 +46,7 @@ class SvMetaAttribute : public SvMetaReference
 
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm ) SAL_OVERRIDE;
+                                      SvTokenStream & rInStm ) override;
 public:
             TYPEINFO_OVERRIDE();
                         SvMetaAttribute();
@@ -70,8 +70,8 @@ public:
     virtual OString     GetMangleName( bool bVariable ) const;
 
 
-    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
@@ -108,8 +108,8 @@ class SvMetaType : public SvMetaExtern
 protected:
     bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
                                          SvTokenStream & rInStm );
-    virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
@@ -159,10 +159,10 @@ public:
     const OString& GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL ) SAL_OVERRIDE;
+    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL ) override;
 
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
@@ -188,7 +188,7 @@ public:
     TYPEINFO_OVERRIDE();
     SvMetaEnumValue();
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaEnumValueMemberList : public SvRefMemberList<SvMetaEnumValue *> {};
@@ -198,7 +198,7 @@ class SvMetaTypeEnum : public SvMetaType
     SvMetaEnumValueMemberList   aEnumValueList;
     OString aPrefix;
 protected:
-    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
             TYPEINFO_OVERRIDE();
             SvMetaTypeEnum();
@@ -208,7 +208,7 @@ public:
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList[n]; }
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaTypeEnumMemberList : public SvRefMemberList<SvMetaTypeEnum *> {};

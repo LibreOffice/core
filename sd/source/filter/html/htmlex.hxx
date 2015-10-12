@@ -69,7 +69,7 @@ public:
                     HtmlErrorContext(vcl::Window *pWin=0);
                     virtual ~HtmlErrorContext() {};
 
-    virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) SAL_OVERRIDE;
+    virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) override;
 
     void            SetContext( sal_uInt16 nResId, const OUString& rURL );
     void            SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 );

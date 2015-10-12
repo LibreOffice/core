@@ -58,9 +58,9 @@ public:
     explicit DlgEdFuncInsert (DlgEditor& rParent);
     virtual ~DlgEdFuncInsert ();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 
@@ -76,9 +76,9 @@ public:
     explicit DlgEdFuncSelect (DlgEditor& rParent);
     virtual ~DlgEdFuncSelect ();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 

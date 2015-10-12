@@ -207,7 +207,7 @@ class FieldDeletionModify : public SwModify
             }
         }
 
-        void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) SAL_OVERRIDE
+        void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) override
         {
             // Input field has been deleted: better to close the dialog
             if (pOld)

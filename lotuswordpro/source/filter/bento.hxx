@@ -184,11 +184,11 @@ public: // Overridden methods
     sal_uLong GetSize() { return m_ulValueLength; };
 protected: // Overridden methods
 
-    virtual sal_uLong   GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong   PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64   SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
-    virtual void    SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
-    virtual void    FlushData() SAL_OVERRIDE;
+    virtual sal_uLong   GetData( void* pData, sal_uLong nSize ) override;
+    virtual sal_uLong   PutData( const void* pData, sal_uLong nSize ) override;
+    virtual sal_uInt64   SeekPos( sal_uInt64 nPos ) override;
+    virtual void    SetSize( sal_uInt64 nSize ) override;
+    virtual void    FlushData() override;
 
 private: // Data
     pCBenValue cpValue;
@@ -383,7 +383,7 @@ public: // Internal methods
     pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
-    virtual bool IsPropertyName() SAL_OVERRIDE;
+    virtual bool IsPropertyName() override;
 };
 
 class CBenTypeName : public CBenNamedObject

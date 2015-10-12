@@ -323,14 +323,14 @@ public:
     virtual bool exportDocument()
         throw (css::uno::RuntimeException,
                css::ucb::ContentCreationException,
-               std::exception) SAL_OVERRIDE;
+               std::exception) override;
 
     // only needed for import; ignore
-    virtual bool importDocument() throw() SAL_OVERRIDE;
-    virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
-    virtual const oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
+    virtual bool importDocument() throw() override;
+    virtual oox::vml::Drawing* getVmlDrawing() override;
+    virtual const oox::drawingml::Theme* getCurrentTheme() const override;
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override;
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
     /*
       Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads
@@ -362,8 +362,8 @@ public:
     #undef SAX_ARGS_FUNC
 
 private:
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
     ScDocShell *getDocShell();
     sax_fastparser::FSHelperPtr&    WriteAttributesInternal( sal_Int32 nAttribute, ... );
 

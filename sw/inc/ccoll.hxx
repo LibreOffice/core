@@ -58,8 +58,8 @@ public:
 
                                 TYPEINFO_OVERRIDE();
 
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool                operator==( const SfxPoolItem& ) const override;
 
     static inline const CommandStruct* GetCmds() { return aCmds; }
 

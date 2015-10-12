@@ -43,11 +43,11 @@ namespace objectpositioning
             const SwRect* mpToCharRect;
             SwTwips       mnToCharTopOfLine;
 
-            virtual bool IsAnchoredToChar() const SAL_OVERRIDE;
-            virtual const SwFrm* ToCharOrientFrm() const SAL_OVERRIDE;
-            virtual const SwRect* ToCharRect() const SAL_OVERRIDE;
+            virtual bool IsAnchoredToChar() const override;
+            virtual const SwFrm* ToCharOrientFrm() const override;
+            virtual const SwRect* ToCharRect() const override;
             // #i22341#
-            virtual SwTwips ToCharTopOfLine() const SAL_OVERRIDE;
+            virtual SwTwips ToCharTopOfLine() const override;
 
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to
             // the needed type
@@ -76,7 +76,7 @@ namespace objectpositioning
 
             /** calculate position of object
             */
-            virtual void CalcPosition() SAL_OVERRIDE;
+            virtual void CalcPosition() override;
 
             /** frame, at which the vertical position is oriented at
             */

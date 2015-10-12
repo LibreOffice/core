@@ -52,8 +52,8 @@ public:
     TYPEINFO_OVERRIDE();
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool=NULL);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const override;
+    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const override;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog
@@ -129,7 +129,7 @@ public:
                  const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = 0, bool bEditFmt = false);
     virtual ~SfxTabDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0
@@ -194,8 +194,8 @@ public:
     void                RemoveResetButton();
     void                RemoveStandardButton();
 
-    short               Execute() SAL_OVERRIDE;
-    void                StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
+    short               Execute() override;
+    void                StartExecuteModal( const Link<>& rEndDialogHdl ) override;
     void                Start( bool bShow = true );
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
@@ -233,7 +233,7 @@ protected:
 
 public:
     virtual             ~SfxTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 

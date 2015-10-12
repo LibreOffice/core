@@ -44,15 +44,15 @@ namespace dbaui
                         OJoinController& _rController,
                         const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OJoinDesignView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // set the view readonly or not
         virtual void setReadOnly(bool _bReadOnly);
         // set the statement for representation
         /// late construction
-        virtual void Construct() SAL_OVERRIDE;
-        virtual void initialize() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+        virtual void Construct() override;
+        virtual void initialize() override;
+        virtual void KeyInput( const KeyEvent& rEvt ) override;
 
         void SaveTabWinUIConfig(OTableWindow* pWin);
         OJoinController& getController() const { return m_rController; }
@@ -62,7 +62,7 @@ namespace dbaui
         OScrollWindowHelper* getScrollHelper() const { return m_pScrollWindow; }
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX

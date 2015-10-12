@@ -73,7 +73,7 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void Dispose();
 
@@ -83,15 +83,15 @@ public:
     AutoLayout GetSelectedAutoLayout();
 
     // From ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
     // From vcl::Window
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
 
     /** Show a context menu when the right mouse button is pressed.
     */
-    virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown (const MouseEvent& rEvent) override;
 
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemble this set according to the current
@@ -100,20 +100,20 @@ public:
     void InvalidateContent();
 
     // DragSourceHelper
-    virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel) SAL_OVERRIDE;
+    virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel) override;
 
     // DropTargetHelper
-    virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent) override;
+    virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent) override;
 
     /** The context menu is requested over this Command() method.
     */
-    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
+    virtual void Command (const CommandEvent& rEvent) override;
 
     /** Call Fill() when switching to or from high contrast mode so that the
         correct set of icons is displayed.
     */
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     using Window::GetWindow;
     using ValueSet::StartDrag;

@@ -32,7 +32,7 @@ private:
 public:
                  IntroWindow();
     virtual      ~IntroWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 };
 

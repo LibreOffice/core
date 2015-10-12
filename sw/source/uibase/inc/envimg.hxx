@@ -60,11 +60,11 @@ public:
 
     SwEnvItem& operator =(const SwEnvItem& rItem);
 
-    virtual bool operator ==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
+    virtual bool operator ==(const SfxPoolItem& rItem) const override;
 
-    virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const override;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SwEnvCfgItem : public utl::ConfigItem
@@ -74,7 +74,7 @@ private:
 
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwEnvCfgItem();
@@ -82,7 +82,7 @@ public:
 
     SwEnvItem& GetItem() {return aEnvItem;}
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

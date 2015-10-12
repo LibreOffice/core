@@ -33,7 +33,7 @@ public:
     virtual ~SbxProperty();
     SbxProperty& operator=( const SbxProperty& r )
         { SbxVariable::operator=( r ); return *this; }
-    virtual SbxClassType GetClass() const SAL_OVERRIDE;
+    virtual SbxClassType GetClass() const override;
 };
 
 

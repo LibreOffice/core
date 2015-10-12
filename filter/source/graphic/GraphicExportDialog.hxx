@@ -57,21 +57,21 @@ public:
     virtual ~GraphicExportDialog();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw (Exception, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw (Exception, RuntimeException, std::exception ) override;
 
     // XPropertyAccess
-    virtual Sequence<PropertyValue> SAL_CALL getPropertyValues() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence<PropertyValue> SAL_CALL getPropertyValues() throw ( RuntimeException, std::exception ) override;
     virtual void SAL_CALL setPropertyValues( const Sequence<PropertyValue>& aProps )
         throw ( UnknownPropertyException, PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                RuntimeException, std::exception ) SAL_OVERRIDE;
+                RuntimeException, std::exception ) override;
 
     // XExecuteDialog
-    virtual sal_Int16 SAL_CALL execute() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL execute() throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw ( RuntimeException, std::exception ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference<lang::XComponent>& xDocument ) throw ( lang::IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument( const Reference<lang::XComponent>& xDocument ) throw ( lang::IllegalArgumentException, RuntimeException, std::exception ) override;
 };
 
 

@@ -125,7 +125,7 @@ public:
 
        @param rStream     stream handler to resolve this document to
      */
-    virtual void resolve(Stream & rStream) SAL_OVERRIDE = 0;
+    virtual void resolve(Stream & rStream) override = 0;
 
     /**
        Resolves a footnote to a stream handler.

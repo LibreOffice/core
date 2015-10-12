@@ -67,7 +67,7 @@ namespace dbp
     public:
         OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription );
         virtual ~OControlWizardPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         static void fillListBox(
@@ -84,7 +84,7 @@ namespace dbp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage() SAL_OVERRIDE;
+        virtual void        initializePage() override;
     };
 
     struct OAccessRegulator;
@@ -138,7 +138,7 @@ namespace dbp
         virtual bool approveControl(sal_Int16 _nClassId) = 0;
 
         // ModalDialog overridables
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
 
     private:
         bool initContext();
@@ -149,7 +149,7 @@ namespace dbp
         void implDetermineShape();
 
         // made private. Not to be used by derived (or external) classes
-        virtual void ActivatePage() SAL_OVERRIDE;
+        virtual void ActivatePage() override;
     };
 
 

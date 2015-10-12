@@ -53,7 +53,7 @@ public:
     SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                         SvStream* pStream );
     virtual ~SwAsciiFilterDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void FillOptions( SwAsciiOptions& rOptions );
 };

@@ -57,11 +57,11 @@ namespace dbaui
 
     public:
         virtual ~OConnectionTabPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
-        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
+        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not
@@ -74,7 +74,7 @@ namespace dbaui
     private:
         /** enables the test connection button, if allowed
         */
-        virtual bool checkTestConnection() SAL_OVERRIDE;
+        virtual bool checkTestConnection() override;
     };
 }   // namespace dbaui
 

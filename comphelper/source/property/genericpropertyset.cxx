@@ -58,31 +58,31 @@ namespace comphelper
         cppu::OMultiTypeInterfaceContainerHelperVar<OUString> m_aListener;
 
     protected:
-        virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException ) SAL_OVERRIDE;
-        virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) throw( UnknownPropertyException,  WrappedTargetException ) SAL_OVERRIDE;
+        virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException ) override;
+        virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) throw( UnknownPropertyException,  WrappedTargetException ) override;
 
     public:
         explicit GenericPropertySet( PropertySetInfo* pInfo ) throw();
         virtual ~GenericPropertySet() throw();
 
         // XInterface
-        virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception) override;
+        virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException, std::exception) override;
+        virtual void SAL_CALL acquire() throw() override;
+        virtual void SAL_CALL release() throw() override;
 
         // XTypeProvider
-        virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException, std::exception) override;
+        virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException, std::exception) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException, std::exception ) override;
+        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException, std::exception ) override;
 
         // XPropertySet
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     };
 
 }

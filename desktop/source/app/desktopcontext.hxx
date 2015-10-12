@@ -32,7 +32,7 @@ namespace desktop
 
         // XCurrentContext
         virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     private:
             css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;

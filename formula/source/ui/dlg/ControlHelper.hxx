@@ -38,17 +38,17 @@ private:
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     void            SelectionChanged();
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
 
 
 public:
                     EditBox( vcl::Window* pParent, WinBits nBits );
 
                     virtual ~EditBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     MultiLineEdit*  GetEdit() {return pMEdit;}
 
@@ -65,13 +65,13 @@ class ArgEdit : public RefEdit
 public:
             ArgEdit( vcl::Window* pParent, WinBits nBits );
     virtual ~ArgEdit();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                   ScrollBar& rArgSlider, sal_uInt16 nArgCount );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
 private:
     VclPtr<ArgEdit>    pEdPrev;

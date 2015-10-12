@@ -28,12 +28,12 @@ public:
     ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor);
     virtual ~ScOverlayDashedBorder();
 
-    virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
+    virtual void Trigger(sal_uInt32 nTime) override;
 
-    virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;
+    virtual void stripeDefinitionHasChanged() override;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
 
 private:
     ::basegfx::B2DRange maRange;

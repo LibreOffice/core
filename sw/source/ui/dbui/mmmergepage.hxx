@@ -48,7 +48,7 @@ class SwMailMergeMergePage : public svt::OWizardPage
 public:
     SwMailMergeMergePage( SwMailMergeWizard* _pParent);
     virtual ~SwMailMergeMergePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 };
 

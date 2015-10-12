@@ -36,14 +36,14 @@ namespace abp
     public:
         explicit AdminDialogInvokationPage(OAddessBookSourcePilot* _pParent);
         virtual ~AdminDialogInvokationPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     protected:
         // TabDialog overridables
-        virtual void        ActivatePage() SAL_OVERRIDE;
-        virtual void        initializePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() override;
+        virtual void        initializePage() override;
 
         // OImportPage overridables
-        virtual bool        canAdvance() const SAL_OVERRIDE;
+        virtual bool        canAdvance() const override;
 
     private:
         DECL_LINK_TYPED( OnInvokeAdminDialog, Button*, void );

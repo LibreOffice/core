@@ -45,9 +45,9 @@ public:
 
     AstDeclaration const * findTypeParameter(OString const & name) const;
 
-    virtual bool isType() const SAL_OVERRIDE;
+    virtual bool isType() const override;
 
-    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
+    virtual bool dump(RegistryKey& rKey) override;
 private:
     AstStruct const* m_pBaseType;
     DeclList m_typeParameters;

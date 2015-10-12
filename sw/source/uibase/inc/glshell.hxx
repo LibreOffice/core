@@ -27,7 +27,7 @@ class SwGlosDocShell : public SwDocShell
     OUString          aGroupName;
 
 protected:
-    virtual bool Save() SAL_OVERRIDE;
+    virtual bool Save() override;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -58,7 +58,7 @@ class SwWebGlosDocShell : public SwWebDocShell
     OUString          aGroupName;
 
 protected:
-    virtual bool Save() SAL_OVERRIDE;
+    virtual bool Save() override;
 
 public:
     TYPEINFO_OVERRIDE();

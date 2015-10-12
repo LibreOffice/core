@@ -63,7 +63,7 @@ class OPasswordDialog : public ModalDialog
 public:
     OPasswordDialog( vcl::Window* pParent,const OUString& _sUserName);
     virtual ~OPasswordDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pUser.clear();
         m_pEDOldPassword.clear();

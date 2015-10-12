@@ -38,25 +38,25 @@ namespace dbaui
     {
     protected:
         VclPtr<vcl::Window> m_pParentTabPage;
-        virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
-        virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
+        virtual void        ActivateAggregate( EControlType eType ) override;
+        virtual void        DeactivateAggregate( EControlType eType ) override;
 
-        virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual void        CellModified(long nRow, sal_uInt16 nColId ) override;
 
-        virtual css::lang::Locale  GetLocale() const SAL_OVERRIDE;
-        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
-        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
-        virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
-        virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
-        virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
+        virtual css::lang::Locale  GetLocale() const override;
+        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
+        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) override;
+        virtual const OTypeInfoMap* getTypeInfo() const override;
+        virtual bool                isAutoIncrementValueEnabled() const override;
+        virtual OUString            getAutoIncrementValue() const override;
 
     public:
         OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
-        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
     };
 
     // Wizard Page: OWizTypeSelectList
@@ -69,7 +69,7 @@ namespace dbaui
                                                 sal_uInt16 _nPos,
                                                 bool _bSet = false);
     protected:
-        virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         VclPtr<vcl::Window>     m_pParentTabPage;
     public:
         OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
@@ -78,7 +78,7 @@ namespace dbaui
             , m_pParentTabPage(NULL)
             {}
         virtual ~OWizTypeSelectList();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
         void                    SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
     };
@@ -114,14 +114,14 @@ namespace dbaui
 
         void                    EnableAuto(bool bEnable);
     public:
-        virtual void            Reset ( ) SAL_OVERRIDE;
-        virtual void            ActivatePage( ) SAL_OVERRIDE;
-        virtual bool            LeavePage() SAL_OVERRIDE;
-        virtual OUString        GetTitle() const SAL_OVERRIDE;
+        virtual void            Reset ( ) override;
+        virtual void            ActivatePage( ) override;
+        virtual bool            LeavePage() override;
+        virtual OUString        GetTitle() const override;
 
         OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }

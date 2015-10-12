@@ -48,17 +48,17 @@ class SwLayoutFrm: public SwFrm
 
 protected:
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwLayoutFrm();
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     SwFrm * m_pLower;
     std::vector<SwAnchoredObject*> m_VertPosOrientFrmsFor;
 
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
     long CalcRel( const SwFormatFrmSize &rSz, bool bWidth ) const;
 
@@ -82,13 +82,13 @@ public:
     void PaintColLines( const SwRect &, const SwFormatCol &,
                         const SwPageFrm * ) const;
 
-    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
+    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
+                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
 
-    virtual void Cut() SAL_OVERRIDE;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
+    virtual void Cut() override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
 
     /**
      * Finds the closest Content for the SPoint
@@ -103,7 +103,7 @@ public:
     SwLayoutFrm( SwFrameFormat*, SwFrm* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+                        SwPrintData const*const pPrintData = NULL ) const override;
     const SwFrm *Lower() const { return m_pLower; }
           SwFrm *Lower()       { return m_pLower; }
     const SwContentFrm *ContainsContent() const;

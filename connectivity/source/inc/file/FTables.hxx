@@ -34,18 +34,18 @@ namespace connectivity
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
             {}
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
             // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() SAL_OVERRIDE;
+            virtual void SAL_CALL disposing() override;
         };
     }
 }

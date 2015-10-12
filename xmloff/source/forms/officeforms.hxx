@@ -43,9 +43,9 @@ namespace xmloff
 
         // SvXMLImportContext overriabled
         virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
-        virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) SAL_OVERRIDE;
-        virtual void EndElement() SAL_OVERRIDE;
+            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;
+        virtual void EndElement() override;
 
     protected:
         void implImportBool(

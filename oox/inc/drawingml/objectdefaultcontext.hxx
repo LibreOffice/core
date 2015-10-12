@@ -30,7 +30,7 @@ class objectDefaultContext : public oox::core::ContextHandler2
 {
 public:
     objectDefaultContext( ::oox::core::ContextHandler2Helper& rParent, Theme& rTheme );
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     Theme& mrTheme;

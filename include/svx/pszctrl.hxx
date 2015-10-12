@@ -40,9 +40,9 @@ public:
     SvxPosSizeStatusBarControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     virtual ~SvxPosSizeStatusBarControl();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void    Paint( const UserDrawEvent& rEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 };
 
 

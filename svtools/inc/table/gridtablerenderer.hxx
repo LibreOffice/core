@@ -68,31 +68,31 @@ namespace svt { namespace table
         virtual void    PaintHeaderArea(
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
-                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
+                            const StyleSettings& _rStyle ) override;
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
+                            const StyleSettings& _rStyle ) override;
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
-                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
+                            const StyleSettings& _rStyle ) override;
         virtual void    PaintRowHeader(
                             bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
+                            const StyleSettings& _rStyle ) override;
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
-        virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
-        virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
+                            const StyleSettings& _rStyle ) override;
+        virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) override;
+        virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) override;
         virtual bool    FitsIntoCell(
                             ::com::sun::star::uno::Any const & i_cellContent,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
-                        ) const SAL_OVERRIDE;
+                        ) const override;
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
                             OUString & o_cellString
-                        ) const SAL_OVERRIDE;
+                        ) const override;
 
     private:
         struct CellRenderContext;

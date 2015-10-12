@@ -35,16 +35,16 @@ class ScTpCalcOptions : public SfxTabPage
 public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
-    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
-    virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
+    virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
 
 private:
                 ScTpCalcOptions( vcl::Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
                 virtual ~ScTpCalcOptions();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr<CheckBox>       m_pBtnIterate;

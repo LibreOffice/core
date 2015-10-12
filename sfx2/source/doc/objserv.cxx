@@ -136,11 +136,11 @@ public:
     void SetPreventClose( bool bPrevent ) { m_bPreventClose = bPrevent; }
 
     virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( uno::RuntimeException, util::CloseVetoException, std::exception ) SAL_OVERRIDE;
+        throw ( uno::RuntimeException, util::CloseVetoException, std::exception ) override;
 
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException, std::exception ) override ;
 
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException, std::exception ) override ;
 
 } ;
 

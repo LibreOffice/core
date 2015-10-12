@@ -135,10 +135,10 @@ public:
     ColumnOrBarChartDialogController_Base();
     virtual ~ColumnOrBarChartDialogController_Base();
 
-    virtual bool    shouldShow_3DLookControl() const SAL_OVERRIDE;
-    virtual bool    shouldShow_GeometryControl() const SAL_OVERRIDE;
+    virtual bool    shouldShow_3DLookControl() const override;
+    virtual bool    shouldShow_GeometryControl() const override;
 
-    virtual void    adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual void    adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter ) override;
 };
 
 class ColumnChartDialogController : public ColumnOrBarChartDialogController_Base
@@ -147,10 +147,10 @@ public:
     ColumnChartDialogController();
     virtual ~ColumnChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
 };
 
 class BarChartDialogController : public ColumnOrBarChartDialogController_Base
@@ -159,10 +159,10 @@ public:
     BarChartDialogController();
     virtual ~BarChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
 };
 
 class PieChartDialogController : public ChartTypeDialogController
@@ -171,13 +171,13 @@ public:
     PieChartDialogController();
     virtual ~PieChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 
-    virtual bool    shouldShow_3DLookControl() const SAL_OVERRIDE;
+    virtual bool    shouldShow_3DLookControl() const override;
 };
 
 class LineChartDialogController : public ChartTypeDialogController
@@ -186,16 +186,16 @@ public:
     LineChartDialogController();
     virtual ~LineChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToMainType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToMainType( ChartTypeParameter& rParameter ) override;
 
-    virtual bool    shouldShow_StackingControl() const SAL_OVERRIDE;
-    virtual bool    shouldShow_DeepStackingControl() const SAL_OVERRIDE;
-    virtual bool    shouldShow_SplineControl() const SAL_OVERRIDE;
+    virtual bool    shouldShow_StackingControl() const override;
+    virtual bool    shouldShow_DeepStackingControl() const override;
+    virtual bool    shouldShow_SplineControl() const override;
 };
 
 class XYChartDialogController : public ChartTypeDialogController
@@ -204,14 +204,14 @@ public:
     XYChartDialogController();
     virtual ~XYChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 
-    virtual bool    shouldShow_SplineControl() const SAL_OVERRIDE;
-    virtual bool    shouldShow_SortByXValuesResourceGroup() const SAL_OVERRIDE;
+    virtual bool    shouldShow_SplineControl() const override;
+    virtual bool    shouldShow_SortByXValuesResourceGroup() const override;
 };
 
 class AreaChartDialogController : public ChartTypeDialogController
@@ -220,14 +220,14 @@ public:
     AreaChartDialogController();
     virtual ~AreaChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToMainType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToMainType( ChartTypeParameter& rParameter ) override;
 
-    virtual bool    shouldShow_3DLookControl() const SAL_OVERRIDE;
+    virtual bool    shouldShow_3DLookControl() const override;
 };
 
 class NetChartDialogController : public ChartTypeDialogController
@@ -236,13 +236,13 @@ public:
     NetChartDialogController();
     virtual ~NetChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 
-    virtual bool    shouldShow_StackingControl() const SAL_OVERRIDE;
+    virtual bool    shouldShow_StackingControl() const override;
 };
 
 class StockChartDialogController : public ChartTypeDialogController
@@ -251,11 +251,11 @@ public:
     StockChartDialogController();
     virtual ~StockChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 };
 
 class CombiColumnLineChartDialogController : public ChartTypeDialogController
@@ -263,19 +263,19 @@ class CombiColumnLineChartDialogController : public ChartTypeDialogController
 public:
     CombiColumnLineChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 
-    virtual void    showExtraControls(VclBuilderContainer* pParent) SAL_OVERRIDE;
-    virtual void    hideExtraControls() const SAL_OVERRIDE;
+    virtual void    showExtraControls(VclBuilderContainer* pParent) override;
+    virtual void    hideExtraControls() const override;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const SAL_OVERRIDE;
+                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const override;
 
-    virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException) override;
 
 private:
     DECL_LINK( ChangeLineCountHdl, void* );
@@ -291,11 +291,11 @@ public:
     BubbleChartDialogController();
     virtual ~BubbleChartDialogController();
 
-    virtual OUString  getName() SAL_OVERRIDE;
-    virtual Image   getImage() SAL_OVERRIDE;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
-    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
+    virtual OUString  getName() override;
+    virtual Image   getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) override;
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) override;
 };
 
 } //namespace chart

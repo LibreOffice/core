@@ -70,7 +70,7 @@ protected:
     virtual SwRewriter GetRewriter() const;
 
     // return type is sal_uInt16 because this overrides SfxUndoAction::GetId()
-    virtual sal_uInt16 GetId() const SAL_OVERRIDE { return static_cast<sal_uInt16>(m_nId); }
+    virtual sal_uInt16 GetId() const override { return static_cast<sal_uInt16>(m_nId); }
 
     // the 4 methods that derived classes have to override
     // base implementation does nothing
@@ -82,12 +82,12 @@ public: // should not be public, but ran into trouble in untbl.cxx
 
 private:
     // SfxUndoAction
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
-    virtual void UndoWithContext(SfxUndoContext &) SAL_OVERRIDE;
-    virtual void RedoWithContext(SfxUndoContext &) SAL_OVERRIDE;
-    virtual void Repeat(SfxRepeatTarget &) SAL_OVERRIDE;
-    virtual bool CanRepeat(SfxRepeatTarget &) const SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void UndoWithContext(SfxUndoContext &) override;
+    virtual void RedoWithContext(SfxUndoContext &) override;
+    virtual void Repeat(SfxRepeatTarget &) override;
+    virtual bool CanRepeat(SfxRepeatTarget &) const override;
 
 public:
     SwUndo(SwUndoId const nId);
@@ -102,7 +102,7 @@ public:
 
        @return textual comment for this undo object
     */
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 
     // UndoObject remembers which mode was turned on.
     // In Undo/Redo/Repeat this remembered mode is switched on.
@@ -234,9 +234,9 @@ protected:
 public:
     virtual ~SwUndoInserts();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     // Set destination range after reading.
     void SetInsertRange( const SwPaM&, bool bScanFlys = true,
@@ -286,11 +286,11 @@ public:
 
     virtual ~SwUndoInsLayFormat();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 
 };
 
@@ -300,14 +300,14 @@ class SwUndoDelLayFormat : public SwUndoFlyBase
 public:
     SwUndoDelLayFormat( SwFrameFormat* pFormat );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void RedoForRollback();
 
     void ChgShowSel( bool bNew ) { bShowSelFrm = bNew; }
 
-    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    virtual SwRewriter GetRewriter() const override;
 
 };
 

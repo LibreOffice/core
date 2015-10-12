@@ -37,16 +37,16 @@ private:
 public:
     SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXMeasurePreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual Size GetOptimalSize() const override;
 
     void SetAttributes(const SfxItemSet& rInAttrs);
 
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 };
 
 #endif

@@ -51,9 +51,9 @@ private:
     VclPtr<BibGeneralPage> mpBibGeneralPage;
 public:
     explicit BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
-    virtual void SAL_CALL       focusGained( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL       focusLost( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       focusGained( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       focusLost( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
 
 };
 
@@ -145,7 +145,7 @@ protected:
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
     virtual                     ~BibGeneralPage();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     inline const OUString&      GetErrorString() const;
 
@@ -160,9 +160,9 @@ public:
 
     void                        RemoveListeners();
 
-    virtual void                GetFocus() SAL_OVERRIDE;
+    virtual void                GetFocus() override;
 
-    virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
+    virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) override; // returns true, if key was handled
 
     inline rtl::Reference<BibGeneralPageFocusListener> GetFocusListener() { return mxBibGeneralPageFocusListener; }
 

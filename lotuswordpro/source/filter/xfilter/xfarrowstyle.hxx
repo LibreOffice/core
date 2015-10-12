@@ -74,9 +74,9 @@ public:
 
     void    SetSVGPath(const OUString& path);
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     OUString   m_strName;

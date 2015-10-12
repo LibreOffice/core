@@ -68,7 +68,7 @@ namespace sfx2
         SFX_DECL_CHILDWINDOW( TaskPaneWrapper );
 
         // ITaskPaneToolPanelAccess
-        virtual void ActivateToolPanel( const OUString& i_rPanelURL ) SAL_OVERRIDE;
+        virtual void ActivateToolPanel( const OUString& i_rPanelURL ) override;
     };
 
 
@@ -121,8 +121,8 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void GetFocus() override;
 
     private:
         std::unique_ptr<ModuleTaskPane_Impl>  m_xImpl;
@@ -164,17 +164,17 @@ namespace sfx2
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
             vcl::Window* i_pParent, WinBits i_nBits );
         virtual ~TaskPaneDockingWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // ITaskPaneToolPanelAccess
-        virtual void    ActivateToolPanel( const OUString& i_rPanelURL ) SAL_OVERRIDE;
+        virtual void    ActivateToolPanel( const OUString& i_rPanelURL ) override;
 
     protected:
         // Window overridables
-        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        GetFocus() override;
 
         // TitledDockingWindow overridables
-        virtual void onLayoutDone() SAL_OVERRIDE;
+        virtual void onLayoutDone() override;
 
     private:
         VclPtr<ModuleTaskPane>  m_aTaskPane;

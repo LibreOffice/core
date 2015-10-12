@@ -93,20 +93,20 @@ namespace rptui
             ::rptui::OReportController& _rController
         );
         virtual ~ConditionalFormattingDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         // Dialog overridables
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
 
         // IConditionalFormatAction overridables
-        virtual void addCondition( size_t _nAddAfterIndex ) SAL_OVERRIDE;
-        virtual void deleteCondition( size_t _nCondIndex ) SAL_OVERRIDE;
-        virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color& rColor ) SAL_OVERRIDE;
-        virtual void moveConditionUp( size_t _nCondIndex ) SAL_OVERRIDE;
-        virtual void moveConditionDown( size_t _nCondIndex ) SAL_OVERRIDE;
-        virtual OUString getDataField() const SAL_OVERRIDE;
+        virtual void addCondition( size_t _nAddAfterIndex ) override;
+        virtual void deleteCondition( size_t _nCondIndex ) override;
+        virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color& rColor ) override;
+        virtual void moveConditionUp( size_t _nCondIndex ) override;
+        virtual void moveConditionDown( size_t _nCondIndex ) override;
+        virtual OUString getDataField() const override;
 
     protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     private:
         DECL_LINK_TYPED( OnScroll, ScrollBar*, void );

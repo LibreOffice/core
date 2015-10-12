@@ -39,7 +39,7 @@ class TextParagraphContext : public ContextHandler2
 public:
     TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara );
 
-    virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 protected:
     TextParagraph& mrParagraph;

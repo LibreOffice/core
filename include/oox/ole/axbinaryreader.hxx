@@ -45,24 +45,24 @@ public:
 
     /** Returns the size of the data this stream represents, if the wrapped
         stream supports the size() operation. */
-    virtual sal_Int64   size() const SAL_OVERRIDE;
+    virtual sal_Int64   size() const override;
     /** Return the current relative stream position (relative to position of
         the wrapped stream at construction time). */
-    virtual sal_Int64   tell() const SAL_OVERRIDE;
+    virtual sal_Int64   tell() const override;
     /** Seeks the stream to the passed relative position, if it is behind the
         current position. */
-    virtual void        seek( sal_Int64 nPos ) SAL_OVERRIDE;
+    virtual void        seek( sal_Int64 nPos ) override;
     /** Closes the input stream but not the wrapped stream. */
-    virtual void        close() SAL_OVERRIDE;
+    virtual void        close() override;
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
     /** Reads nBytes bytes to the (existing) buffer opMem.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
     /** Seeks the stream forward by the passed number of bytes. */
-    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
 
     /** Aligns the stream to a multiple of the passed size (relative to the
         position of the wrapped stream at construction time). */
@@ -171,7 +171,7 @@ private:
 
         explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     /** Complex property for a string value. */
@@ -182,7 +182,7 @@ private:
 
         explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     /** Complex property for an array of strings. */
@@ -192,7 +192,7 @@ private:
         sal_uInt32          mnSize;
         explicit            ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
                                 mrArray( rArray ), mnSize( nSize ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     /** Complex property for a GUID value. */
@@ -202,7 +202,7 @@ private:
 
         explicit            GuidProperty( OUString& rGuid ) :
                                 mrGuid( rGuid ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     /** Stream property for a font structure. */
@@ -212,7 +212,7 @@ private:
 
         explicit            FontProperty( AxFontData& rFontData ) :
                                 mrFontData( rFontData ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     /** Stream property for a picture or mouse icon. */
@@ -222,7 +222,7 @@ private:
 
         explicit            PictureProperty( StreamDataSequence& rPicData ) :
                                 mrPicData( rPicData ) {}
-        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) SAL_OVERRIDE;
+        virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;
     };
 
     typedef RefVector< ComplexProperty > ComplexPropVector;

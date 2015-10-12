@@ -81,7 +81,7 @@ protected:
 
 public:
     virtual ~SfxModalDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
@@ -103,16 +103,16 @@ protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
         vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~SfxModelessDialog();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual bool            Close() SAL_OVERRIDE;
-    virtual void            Resize() SAL_OVERRIDE;
-    virtual void            Move() SAL_OVERRIDE;
-    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual bool            Close() override;
+    virtual void            Resize() override;
+    virtual void            Move() override;
+    virtual void            StateChanged( StateChangedType nStateChange ) override;
 
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -142,13 +142,13 @@ protected:
                                               const OString& rID, const OUString& rUIXMLDescription,
                                               const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
-    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual bool            Close() SAL_OVERRIDE;
-    virtual void            Resize() SAL_OVERRIDE;
-    virtual void            Move() SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            StateChanged( StateChangedType nStateChange ) override;
+    virtual bool            Close() override;
+    virtual void            Resize() override;
+    virtual void            Move() override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -184,7 +184,7 @@ public:
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
     virtual             ~SfxSingleTabDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }

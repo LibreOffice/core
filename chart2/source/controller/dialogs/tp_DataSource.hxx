@@ -59,19 +59,19 @@ public:
         Dialog * pParentDialog,
         bool bHideDescription = false );
     virtual ~DataSourceTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void commitPage();
 
 protected:
     // OWizardPage
-    virtual void ActivatePage() SAL_OVERRIDE;
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
+    virtual void ActivatePage() override;
+    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
-    virtual void DeactivatePage() SAL_OVERRIDE;
+    virtual void DeactivatePage() override;
 
-    virtual void        initializePage() SAL_OVERRIDE;
+    virtual void        initializePage() override;
 
     DECL_LINK_TYPED( SeriesSelectionChangedHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( RoleSelectionChangedHdl, SvTreeListBox*, void );
@@ -85,8 +85,8 @@ protected:
     DECL_LINK_TYPED( DownButtonClickedHdl, Button*, void );
 
     // ____ RangeSelectionListenerParent ____
-    virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
-    virtual void disposingRangeSelection() SAL_OVERRIDE;
+    virtual void listeningFinished( const OUString & rNewRange ) override;
+    virtual void disposingRangeSelection() override;
 
     void updateControlState();
 

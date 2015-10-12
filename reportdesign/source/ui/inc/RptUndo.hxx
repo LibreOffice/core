@@ -58,8 +58,8 @@ namespace rptui
                         ,sal_uInt16 nCommentID);
         virtual ~OSectionUndo();
 
-        virtual void        Undo() SAL_OVERRIDE;
-        virtual void        Redo() SAL_OVERRIDE;
+        virtual void        Undo() override;
+        virtual void        Redo() override;
     };
 
     /** Undo action for the group header, footer, page header, footer
@@ -70,8 +70,8 @@ namespace rptui
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
 
-        void    implReInsert( ) SAL_OVERRIDE;
-        void    implReRemove( ) SAL_OVERRIDE;
+        void    implReInsert( ) override;
+        void    implReRemove( ) override;
         OReportSectionUndo(const OReportSectionUndo&) = delete;
         void operator =(const OReportSectionUndo&) = delete;
     public:
@@ -97,8 +97,8 @@ namespace rptui
 
         mutable OUString                     m_sName;
 
-        void    implReInsert( ) SAL_OVERRIDE;
-        void    implReRemove( ) SAL_OVERRIDE;
+        void    implReInsert( ) override;
+        void    implReRemove( ) override;
         OGroupSectionUndo(const OGroupSectionUndo&) = delete;
         void operator =(const OGroupSectionUndo&) = delete;
     public:
@@ -112,7 +112,7 @@ namespace rptui
                             ,Action _eAction
                             ,sal_uInt16 nCommentID);
 
-        virtual OUString GetComment() const SAL_OVERRIDE;
+        virtual OUString GetComment() const override;
     };
 
     /** /class OGroupUndo
@@ -134,8 +134,8 @@ namespace rptui
                     ,Action _eAction
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
-        virtual void        Undo() SAL_OVERRIDE;
-        virtual void        Redo() SAL_OVERRIDE;
+        virtual void        Undo() override;
+        virtual void        Redo() override;
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX

@@ -50,7 +50,7 @@ private:
 public:
     SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
     virtual ~SdModifyFieldDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SvxFieldData*       GetField();
     SfxItemSet          GetItemSet();

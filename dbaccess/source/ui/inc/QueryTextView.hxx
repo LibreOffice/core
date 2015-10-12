@@ -32,9 +32,9 @@ namespace dbaui
     public:
         OQueryTextView( OQueryContainerWindow* pParent );
         virtual ~OQueryTextView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
 
         bool isCutAllowed();
         void copy();
@@ -50,7 +50,7 @@ namespace dbaui
 
         OQueryContainerWindow*  getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
     protected:
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTEXTVIEW_HXX

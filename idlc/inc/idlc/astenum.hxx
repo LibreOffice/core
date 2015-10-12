@@ -36,9 +36,9 @@ public:
 
     AstConstant* checkValue(AstExpression* pExpr);
 
-    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
+    virtual bool dump(RegistryKey& rKey) override;
 
-    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl) SAL_OVERRIDE;
+    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl) override;
 private:
     sal_Int32   m_enumValueCount;
 };

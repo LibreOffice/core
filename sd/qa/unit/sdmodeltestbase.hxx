@@ -86,7 +86,7 @@ public:
     SdModelTestBase()
     {}
 
-    virtual void setUp() SAL_OVERRIDE
+    virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
 
@@ -96,7 +96,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("no impress component!", mxDrawComponent.is());
     }
 
-    virtual void tearDown() SAL_OVERRIDE
+    virtual void tearDown() override
     {
         uno::Reference<lang::XComponent>(mxDrawComponent, uno::UNO_QUERY_THROW)->dispose();
         test::BootstrapFixture::tearDown();

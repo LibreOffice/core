@@ -41,13 +41,13 @@ namespace help {
 class HelpBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual OUString getDbNSName() SAL_OVERRIDE;
+    virtual OUString getDbNSName() override;
 
-    virtual OUString getNSPrefix() SAL_OVERRIDE;
+    virtual OUString getNSPrefix() override;
 
-    virtual OUString getRootElementName() SAL_OVERRIDE;
+    virtual OUString getRootElementName() override;
 
-    virtual OUString getKeyElementName() SAL_OVERRIDE;
+    virtual OUString getKeyElementName() override;
 
 public:
     struct Data

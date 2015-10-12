@@ -32,10 +32,10 @@ namespace connectivity
         {
             ODbaseIndex* m_pIndex;
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() SAL_OVERRIDE;
-            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) override;
         public:
             ODbaseIndexColumns( ODbaseIndex* _pIndex,
                                 ::osl::Mutex& _rMutex,

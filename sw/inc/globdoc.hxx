@@ -37,7 +37,7 @@ public:
                                    OUString * pLongUserName,
                                    OUString * pUserName,
                                    sal_Int32 nFileFormat,
-                                   bool bTemplate = false ) const SAL_OVERRIDE;
+                                   bool bTemplate = false ) const override;
 };
 
 #endif

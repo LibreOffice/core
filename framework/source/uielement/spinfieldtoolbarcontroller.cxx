@@ -58,19 +58,19 @@ class SpinfieldControl : public SpinField
     public:
         SpinfieldControl( vcl::Window* pParent, WinBits nStyle, SpinfieldToolbarController* pSpinfieldToolbarController );
         virtual ~SpinfieldControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void Up() SAL_OVERRIDE;
-        virtual void Down() SAL_OVERRIDE;
-        virtual void First() SAL_OVERRIDE;
-        virtual void Last() SAL_OVERRIDE;
-        virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void Modify() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void Up() override;
+        virtual void Down() override;
+        virtual void First() override;
+        virtual void Last() override;
+        virtual void KeyInput( const ::KeyEvent& rKEvt ) override;
+        virtual void Modify() override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
+        virtual void StateChanged( StateChangedType nType ) override;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
     private:
         SpinfieldToolbarController* m_pSpinfieldToolbarController;

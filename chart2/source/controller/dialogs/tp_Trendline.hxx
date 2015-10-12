@@ -32,10 +32,10 @@ public:
     TrendlineTabPage ( vcl::Window* pParent, const SfxItemSet& rInAttrs );
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
-    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
+    virtual void Reset( const SfxItemSet* rInAttrs ) override;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     void SetNumFormatter( SvNumberFormatter* pFormatter );
     void SetNbPoints( sal_Int32 nNbPoints );
 

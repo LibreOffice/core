@@ -50,22 +50,22 @@ namespace xforms
         virtual ~ODataTypeRepository( );
 
         // XDataTypeRepository
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL cloneDataType( const OUString& sourceName, const OUString& newName ) throw (css::container::NoSuchElementException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL revokeDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::util::VetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL cloneDataType( const OUString& sourceName, const OUString& newName ) throw (css::container::NoSuchElementException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::util::VetoException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
         // XEnumerationAccess (base of XDataTypeRepository)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XNameAccess (base of XDataTypeRepository)
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess (base of XEnumerationAccess and XNameAccess)
-        virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         ODataTypeRepository( const ODataTypeRepository& ) = delete;

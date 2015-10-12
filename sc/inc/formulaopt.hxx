@@ -87,8 +87,8 @@ public:
     ScTpFormulaItem( const ScTpFormulaItem& rItem );
     virtual ~ScTpFormulaItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
     const ScFormulaOptions& GetFormulaOptions() const { return theOptions; }
 
@@ -105,14 +105,14 @@ class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
     static ScFormulaCfg::PropsToIds GetPropNamesToId();
     void UpdateFromProperties( const com::sun::star::uno::Sequence<OUString>& rNames );
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     ScFormulaCfg();
 
     void SetOptions( const ScFormulaOptions& rNew );
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

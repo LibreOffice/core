@@ -32,17 +32,17 @@ namespace dbaui
         bool        m_bShift;
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
         virtual ~OTitleWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void GetFocus() override;
 
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
         /** sets the child window which should be displayed below the title. It will be destroyed at the end.
             @param  _pChild

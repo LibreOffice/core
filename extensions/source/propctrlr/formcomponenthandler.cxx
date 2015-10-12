@@ -3015,13 +3015,13 @@ namespace pcr
             FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
 
             // ISQLCommandAdapter
-            virtual OUString        getSQLCommand() const SAL_OVERRIDE;
-            virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
-            virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
-            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const SAL_OVERRIDE;
+            virtual OUString        getSQLCommand() const override;
+            virtual bool            getEscapeProcessing() const override;
+            virtual void            setSQLCommand( const OUString& _rCommand ) const override;
+            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const override;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
+            virtual OUString*    getPropertiesToDisable() override;
         };
 
 
@@ -3082,13 +3082,13 @@ namespace pcr
             ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
 
             // ISQLCommandAdapter
-            virtual OUString        getSQLCommand() const SAL_OVERRIDE;
-            virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
-            virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
-            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const SAL_OVERRIDE;
+            virtual OUString        getSQLCommand() const override;
+            virtual bool            getEscapeProcessing() const override;
+            virtual void            setSQLCommand( const OUString& _rCommand ) const override;
+            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const override;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
+            virtual OUString*    getPropertiesToDisable() override;
         private:
             mutable bool    m_bPropertyValueIsList;
         };

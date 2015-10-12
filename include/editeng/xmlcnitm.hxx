@@ -40,21 +40,21 @@ public:
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );
     virtual ~SvXMLAttrContainerItem();
 
-    virtual bool operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation(
                                 SfxItemPresentation ePresentation,
                                 SfxMapUnit eCoreMetric,
                                 SfxMapUnit ePresentationMetric,
                                 OUString &rText,
-                                const IntlWrapper *pIntlWrapper = 0 ) const SAL_OVERRIDE;
+                                const IntlWrapper *pIntlWrapper = 0 ) const override;
 
-    virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem *Clone( SfxItemPool * = 0) const SAL_OVERRIDE
+    virtual SfxPoolItem *Clone( SfxItemPool * = 0) const override
     { return new SvXMLAttrContainerItem( *this ); }
 
     bool AddAttr( const OUString& rLName,

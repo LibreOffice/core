@@ -1360,13 +1360,13 @@ public:
     virtual ~OutlineNumbering();
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override;
     virtual Any SAL_CALL getByIndex( sal_Int32 Index )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) override;
 
     //XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Type SAL_CALL getElementType(  ) throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception) override;
 };
 
 Sequence< Reference<container::XIndexAccess> > SAL_CALL

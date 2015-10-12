@@ -40,9 +40,9 @@ namespace dbaccess
                         const OUString& i_sLabel,
                         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception ) override;
     };
 
 }

@@ -53,7 +53,7 @@ public:
     bool                EqualsBool( bool bValue ) const;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     sal_uInt16          mnTypeFlag;         /// Data type flag.
@@ -94,7 +94,7 @@ public:
     void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 
     /** Writes the pivot cache field and all items and other related records. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
     typedef XclExpRecordList< XclExpPCItem >    XclExpPCItemList;
@@ -147,7 +147,7 @@ private:
     void                WriteSxgroupinfo( XclExpStream& rStrm );
 
     /** Writes the contents of the SXFIELD record for this field. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     XclExpPCItemList    maOrigItemList;     /// List with original items.
@@ -247,7 +247,7 @@ public:
 
 private:
     /** Writes the SXVI record body describing the pivot table item. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     const XclExpPCItem* mpCacheItem;        /// The referred pivot cache item.
@@ -293,7 +293,7 @@ public:
     void                WriteSxdi( XclExpStream& rStrm, sal_uInt16 nDataInfoIdx ) const;
 
     /** Writes the entire pivot table field. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
     /** Returns an item by its name. */
@@ -342,7 +342,7 @@ public:
     sal_uInt16          GetDataFieldIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const;
 
     /** Writes the entire pivot table. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
     /** Returns a pivot table field by its name. */

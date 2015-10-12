@@ -148,7 +148,7 @@ public:
         @param nBytes
             Size of the passed data block.
     */
-    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) SAL_OVERRIDE;
+    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) override;
 };
 
 /** Encodes and decodes data from protected MSO Word 95- documents.
@@ -169,7 +169,7 @@ public:
         @param nBytes
             Size of the passed data block.
     */
-    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) SAL_OVERRIDE;
+    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) override;
 };
 
 

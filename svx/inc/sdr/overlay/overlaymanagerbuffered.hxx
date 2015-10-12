@@ -74,16 +74,16 @@ namespace sdr
                 bool bRefreshWithPreRendering = false);
 
             // complete redraw
-            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const SAL_OVERRIDE;
+            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const override;
 
             // flush. Do buffered updates.
-            virtual void flush() SAL_OVERRIDE;
+            virtual void flush() override;
 
             // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const vcl::Region& rRegion) const SAL_OVERRIDE;
+            virtual void restoreBackground(const vcl::Region& rRegion) const override;
 
             // invalidate the given range at local OutputDevice
-            virtual void invalidateRange(const basegfx::B2DRange& rRange) SAL_OVERRIDE;
+            virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
 
             // access to RefreshWithPreRendering Flag
             bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }

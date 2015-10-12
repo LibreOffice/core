@@ -65,8 +65,8 @@ public:
                                 /// close groups and DgContainer opened in ctor
     void                EndSheet();
 
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
     static void        ResetCounters();
 
@@ -108,7 +108,7 @@ protected:
     void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
-    virtual void                WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                WriteBody( XclExpStream& rStrm ) override;
     virtual void                WriteSubRecs( XclExpStream& rStrm );
             void                SaveTextRecs( XclExpStream& rStrm );
 
@@ -149,7 +149,7 @@ public:
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
 };
 
 // --- class XclObjComment -------------------------------------------
@@ -173,8 +173,8 @@ public:
     void                        ProcessEscherObj( const XclExpRoot& rRoot,
                                     const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 // --- class XclObjDropDown ------------------------------------------
@@ -184,7 +184,7 @@ class XclObjDropDown : public XclObj
 private:
     bool                        bIsFiltered;
 
-    virtual void                WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                WriteSubRecs( XclExpStream& rStrm ) override;
 
 protected:
 public:
@@ -206,13 +206,13 @@ public:
     inline void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
     inline void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 
 private:
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 private:
     XclExpStringRef             mpString;       /// Text and formatting data.
@@ -230,13 +230,13 @@ private:
         const SdrObject&    rOleObj;
         SotStorage*         pRootStorage;
 
-    virtual void                WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                WriteSubRecs( XclExpStream& rStrm ) override;
 
 public:
                                 XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
 };
 
 // --- class XclObjAny -----------------------------------------------
@@ -244,7 +244,7 @@ public:
 class XclObjAny : public XclObj
 {
 protected:
-    virtual void                WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                WriteSubRecs( XclExpStream& rStrm ) override;
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
@@ -255,8 +255,8 @@ public:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
                                 GetShape() const { return mxShape; }
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, SCTAB nTab );
 
@@ -274,13 +274,13 @@ protected:
         sal_uInt32              nFileHistory;       // bfh
         sal_uInt32              nLowestBiffVer;     // sfo
 
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
                                 ExcBof8_Base();
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 };
 
 // --- class ExcBofW8 ------------------------------------------------
@@ -309,15 +309,15 @@ private:
     OUString                    sUnicodeName;
     XclExpString                GetName() const { return XclExpString( sUnicodeName, EXC_STR_8BITLENGTH );}
 
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const OUString& rString );
 
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_Size            GetLen() const override;
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 // --- class XclObproj -----------------------------------------------
@@ -325,8 +325,8 @@ public:
 class XclObproj : public ExcRecord
 {
 public:
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 };
 
 // ---- class XclCodename --------------------------------------------
@@ -335,12 +335,12 @@ class XclCodename : public ExcRecord
 {
 private:
     XclExpString                aName;
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 public:
                                 XclCodename( const OUString& );
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 };
 
 // ---- Scenarios ----------------------------------------------------
@@ -381,17 +381,17 @@ private:
 
     bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt );
 
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 protected:
 public:
                                 ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class ExcEScenarioManager : public ExcRecord
@@ -400,18 +400,18 @@ private:
     sal_uInt16                      nActive;
     std::vector<ExcEScenario*> aScenes;
 
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 protected:
 public:
                                 ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenarioManager();
 
-    virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                Save( XclExpStream& rStrm ) override;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 };
 
 /** Represents a FEATHDR (SHEETPROTECTION) record that stores sheet protection
@@ -423,7 +423,7 @@ public:
     explicit            XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     sal_uInt16      mnOptions;      /// Encoded sheet protection options.
@@ -437,7 +437,7 @@ public:
     explicit            XclExpSheetEnhancedProtection( const XclExpRoot& rRoot, const ScEnhancedProtection& rProt );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     const XclExpRoot&       mrRoot;
@@ -449,14 +449,14 @@ class XclCalccount : public ExcRecord
 private:
     sal_uInt16                      nCount;
 protected:
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 public:
                                 XclCalccount( const ScDocument& );
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class XclIteration : public ExcRecord
@@ -464,14 +464,14 @@ class XclIteration : public ExcRecord
 private:
     sal_uInt16                      nIter;
 protected:
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 public:
                                 XclIteration( const ScDocument& );
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class XclDelta : public ExcRecord
@@ -479,14 +479,14 @@ class XclDelta : public ExcRecord
 private:
     double                      fDelta;
 protected:
-    virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveCont( XclExpStream& rStrm ) override;
 public:
                                 XclDelta( const ScDocument& );
 
-    virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
-    virtual sal_Size            GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16              GetNum() const override;
+    virtual sal_Size            GetLen() const override;
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class XclRefmode : public XclExpBoolRecord
@@ -494,7 +494,7 @@ class XclRefmode : public XclExpBoolRecord
 public:
                                 XclRefmode( const ScDocument& );
 
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class XclExpFileEncryption : public XclExpRecord
@@ -504,7 +504,7 @@ public:
     virtual ~XclExpFileEncryption();
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void WriteBody( XclExpStream& rStrm ) override;
 
 private:
     const XclExpRoot& mrRoot;
@@ -517,7 +517,7 @@ public:
     explicit            XclExpInterfaceHdr( sal_uInt16 nCodePage );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 };
 
 /** End of User Interface Records */
@@ -528,7 +528,7 @@ public:
     virtual ~XclExpInterfaceEnd();
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void WriteBody( XclExpStream& rStrm ) override;
 };
 
 /** Write Access User Name - This record contains the user name, which is
@@ -540,7 +540,7 @@ public:
     virtual ~XclExpWriteAccess();
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void WriteBody( XclExpStream& rStrm ) override;
 };
 
 class XclExpFileSharing : public XclExpRecord
@@ -548,10 +548,10 @@ class XclExpFileSharing : public XclExpRecord
 public:
     explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly );
 
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     XclExpString        maUserName;
@@ -566,7 +566,7 @@ public:
     virtual ~XclExpProt4Rev();
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void WriteBody( XclExpStream& rStrm ) override;
 };
 
 class XclExpProt4RevPass : public XclExpRecord
@@ -576,7 +576,7 @@ public:
     virtual ~XclExpProt4RevPass();
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void WriteBody( XclExpStream& rStrm ) override;
 };
 
 class XclExpRecalcId : public XclExpDummyRecord

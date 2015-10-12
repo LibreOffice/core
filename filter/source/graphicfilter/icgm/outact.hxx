@@ -113,22 +113,22 @@ class CGMImpressOutAct : public CGMOutAct
 public:
                                 CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & ) ;
                                 virtual ~CGMImpressOutAct() {} ;
-    virtual void                InsertPage() SAL_OVERRIDE ;
-    virtual void                BeginGroup() SAL_OVERRIDE ;
-    virtual void                EndGroup() SAL_OVERRIDE ;
-    virtual void                EndGrouping() SAL_OVERRIDE ;
-    virtual void                DrawRectangle( FloatRect& ) SAL_OVERRIDE ;
-    virtual void                DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation ) SAL_OVERRIDE ;
+    virtual void                InsertPage() override ;
+    virtual void                BeginGroup() override ;
+    virtual void                EndGroup() override ;
+    virtual void                EndGrouping() override ;
+    virtual void                DrawRectangle( FloatRect& ) override ;
+    virtual void                DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation ) override ;
     virtual void                DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
-                                    sal_uInt32 etype, double& startangle, double& endangle ) SAL_OVERRIDE ;
-    virtual void                DrawBitmap( CGMBitmapDescriptor* ) SAL_OVERRIDE ;
-    virtual void                DrawPolygon( tools::Polygon& ) SAL_OVERRIDE ;
-    virtual void                DrawPolyLine( tools::Polygon& ) SAL_OVERRIDE ;
-    virtual void                DrawPolybezier( tools::Polygon& ) SAL_OVERRIDE ;
-    virtual void                DrawPolyPolygon( tools::PolyPolygon& ) SAL_OVERRIDE ;
-    virtual void                DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
-    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
-    virtual void                DrawChart() SAL_OVERRIDE;
+                                    sal_uInt32 etype, double& startangle, double& endangle ) override ;
+    virtual void                DrawBitmap( CGMBitmapDescriptor* ) override ;
+    virtual void                DrawPolygon( tools::Polygon& ) override ;
+    virtual void                DrawPolyLine( tools::Polygon& ) override ;
+    virtual void                DrawPolybezier( tools::Polygon& ) override ;
+    virtual void                DrawPolyPolygon( tools::PolyPolygon& ) override ;
+    virtual void                DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) override ;
+    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) override ;
+    virtual void                DrawChart() override;
 };
 
 

@@ -60,7 +60,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<com::sun::star:
         }
 
         virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent &rEvent )
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw(com::sun::star::uno::RuntimeException, std::exception) override
         {
             com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -71,7 +71,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<com::sun::star:
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw(com::sun::star::uno::RuntimeException, std::exception) override
         {
             com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);

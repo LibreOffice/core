@@ -31,8 +31,8 @@ class DocumentExternalDataManager : public IDocumentExternalData,
 {
 
 public:
-    void setExternalData( ::sw::tExternalDataType eType, ::sw::tExternalDataPointer pPayload) SAL_OVERRIDE;
-    ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) SAL_OVERRIDE;
+    void setExternalData( ::sw::tExternalDataType eType, ::sw::tExternalDataPointer pPayload) override;
+    ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) override;
 
     virtual ~DocumentExternalDataManager() {};
 };

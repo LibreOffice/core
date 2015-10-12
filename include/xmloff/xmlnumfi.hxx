@@ -173,9 +173,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
-    virtual void CreateAndInsert(bool bOverwrite) SAL_OVERRIDE;
-    virtual void Finish(bool bOverwrite) SAL_OVERRIDE;
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void CreateAndInsert(bool bOverwrite) override;
+    virtual void Finish(bool bOverwrite) override;
 
     SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();

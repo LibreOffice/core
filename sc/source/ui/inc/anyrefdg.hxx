@@ -130,8 +130,8 @@ protected:
 
     static void         SetDispatcherLock( bool bLock );
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
-    virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE;
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
+    virtual void        RefInputDone( bool bForced = false ) override;
 
     bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
 
@@ -142,23 +142,23 @@ public:
                         ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler();
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE = 0;
-    virtual void        AddRefEntry() SAL_OVERRIDE;
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override = 0;
+    virtual void        AddRefEntry() override;
 
-    virtual bool        IsRefInputMode() const SAL_OVERRIDE;
-    virtual bool        IsTableLocked() const SAL_OVERRIDE;
-    virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const SAL_OVERRIDE;
+    virtual bool        IsRefInputMode() const override;
+    virtual bool        IsTableLocked() const override;
+    virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const override;
 
-    virtual void        ShowReference(const OUString& rStr) SAL_OVERRIDE;
-    virtual void        HideReference( bool bDoneRefMode = true ) SAL_OVERRIDE;
+    virtual void        ShowReference(const OUString& rStr) override;
+    virtual void        HideReference( bool bDoneRefMode = true ) override;
 
-    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
-    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
+    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
+    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
 
-    virtual void        ViewShellChanged() SAL_OVERRIDE;
+    virtual void        ViewShellChanged() override;
     void                SwitchToDocument();
 
-    virtual void        SetActive() SAL_OVERRIDE = 0;
+    virtual void        SetActive() override = 0;
 
 public:
     bool                EnterRefMode();
@@ -246,7 +246,7 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
         SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
     }
 
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
         ScRefHdlrImplBase<TBase, bBindRef >::disposeRefHandler();

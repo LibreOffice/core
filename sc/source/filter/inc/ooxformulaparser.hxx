@@ -48,26 +48,26 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual ::rtl::OUString SAL_CALL
-                        getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                        getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
                         supportsService( const ::rtl::OUString& rService )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-                        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.sheet.XFilterFormulaParser interface ----------------------
 
     virtual ::rtl::OUString SAL_CALL
                         getSupportedNamespace()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.sheet.XFormulaParser interface ----------------------------
 
@@ -75,13 +75,13 @@ public:
                         parseFormula(
                             const ::rtl::OUString& rFormula,
                             const ::com::sun::star::table::CellAddress& rReferencePos )
-                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::rtl::OUString SAL_CALL
                         printFormula(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& rTokens,
                             const ::com::sun::star::table::CellAddress& rReferencePos )
-                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
 private:
     typedef std::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;

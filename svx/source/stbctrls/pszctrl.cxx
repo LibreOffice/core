@@ -101,7 +101,7 @@ public:
 private:
     sal_uInt16          nSelected;
 
-    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Select() override;
 };
 
 

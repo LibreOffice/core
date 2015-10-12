@@ -71,7 +71,7 @@ public:
 
 protected:
     virtual oox::core::ContextHandlerRef onCreateContext(
-        sal_Int32 nElement, const AttributeList& /*rAttribs*/ ) SAL_OVERRIDE
+        sal_Int32 nElement, const AttributeList& /*rAttribs*/ ) override
     {
         if (nElement == XLS_TOKEN(is))
         {
@@ -82,7 +82,7 @@ protected:
         return this;
     }
 
-    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE
+    virtual void onStartElement( const AttributeList& rAttribs ) override
     {
         switch (getCurrentElement())
         {
@@ -95,7 +95,7 @@ protected:
         }
     }
 
-    virtual void onCharacters( const OUString& rChars ) SAL_OVERRIDE
+    virtual void onCharacters( const OUString& rChars ) override
     {
         switch (getCurrentElement())
         {
@@ -133,7 +133,7 @@ protected:
         }
     }
 
-    virtual void onEndElement() SAL_OVERRIDE
+    virtual void onEndElement() override
     {
         switch (getCurrentElement())
         {

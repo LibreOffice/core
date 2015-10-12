@@ -2249,9 +2249,9 @@ public:
     explicit                            ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
-    virtual PhysicalFontFace*           Clone() const SAL_OVERRIDE { return new ImplPdfBuiltinFontData(*this); }
-    virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
-    virtual sal_IntPtr                  GetFontId() const SAL_OVERRIDE { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
+    virtual PhysicalFontFace*           Clone() const override { return new ImplPdfBuiltinFontData(*this); }
+    virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const override;
+    virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 
 inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFontData )
@@ -8246,9 +8246,9 @@ class PDFStreamIf :
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
     virtual ~PDFStreamIf();
 
-    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) override;
+    virtual void SAL_CALL flush() throw(std::exception) override;
+    virtual void SAL_CALL closeOutput() throw(std::exception) override;
 };
 }
 

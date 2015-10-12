@@ -48,14 +48,14 @@ class FilterDialog : public ModalDialog
     public:
         explicit FilterDialog(vcl::Window* pParentWindow);
         virtual ~FilterDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );
 
     // helper (or hided functions!)
     private:
-        short Execute() SAL_OVERRIDE { return RET_CANCEL; };
+        short Execute() override { return RET_CANCEL; };
         OUString impl_buildUIFileName( const OUString& sURL );
 
     // member

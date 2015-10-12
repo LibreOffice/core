@@ -52,12 +52,12 @@ protected:
 
 public:
     virtual ~SvxCharBasePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 
 };
 
@@ -140,19 +140,19 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 public:
                         virtual ~SvxCharNamePage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pNameRanges; }
 
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        ChangesApplied() override;
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
@@ -161,7 +161,7 @@ public:
     void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( sal_uInt16 nDisable );
-    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 // class SvxCharEffectsPage ----------------------------------------------
@@ -225,24 +225,24 @@ private:
 
 public:
     virtual ~SvxCharEffectsPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pEffectsRanges; }
 
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        ChangesApplied() override;
 
     void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 // class SvxCharPositionPage ---------------------------------------------
@@ -306,25 +306,25 @@ private:
 
 public:
     virtual ~SvxCharPositionPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges() { return pPositionRanges; }
 
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
-    virtual void        FillUserData() SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        ChangesApplied() override;
+    virtual void        FillUserData() override;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -354,22 +354,22 @@ private:
 
 public:
     virtual ~SvxCharTwoLinesPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX

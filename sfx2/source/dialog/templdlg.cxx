@@ -95,11 +95,11 @@ public:
                        SvTreeListBox& rDevice,
                        vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
-                       const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvTreeListEntry& rEntry) override;
 
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+                              SvViewDataItem* pViewData) override;
 };
 
 

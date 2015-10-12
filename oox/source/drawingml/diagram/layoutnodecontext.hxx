@@ -32,7 +32,7 @@ public:
     LayoutNodeContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, const LayoutAtomPtr &pNode );
     virtual ~LayoutNodeContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
     static ::sal_Int32 tagToVarIdx( ::sal_Int32 aTag );
 private:

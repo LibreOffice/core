@@ -87,7 +87,7 @@ namespace {
             mpRestarter->Restart(bForce);
         }
 
-        virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE
+        virtual void DataChanged (const DataChangedEvent& rEvent) override
         {
             if (rEvent.GetType() == DataChangedEventType::DISPLAY)
                 Restart(false);

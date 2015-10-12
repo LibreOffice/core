@@ -35,9 +35,9 @@ class SvxCropExample : public vcl::Window
 public:
     SvxCropExample( vcl::Window* pPar, WinBits nStyle );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
     void SetTop( long nVal )                { aTopLeft.X() = nVal; }
     void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
@@ -93,7 +93,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     SvxGrfCropPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxGrfCropPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK( ZoomHdl, MetricField * );
     DECL_LINK( SizeHdl, MetricField * );
@@ -106,15 +106,15 @@ class SvxGrfCropPage : public SfxTabPage
     void            CalcZoom();
     void            CalcMinMaxBorder();
     void            GraphicHasChanged(bool bFound);
-    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void    ActivatePage(const SfxItemSet& rSet) override;
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
     static VclPtr<SfxTabPage> Create( vcl::Window *pParent, const SfxItemSet *rSet );
 
-    virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage( SfxItemSet *pSet ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet *rSet ) override;
+    virtual void Reset( const SfxItemSet *rSet ) override;
+    virtual sfxpg DeactivatePage( SfxItemSet *pSet ) override;
 };
 
 

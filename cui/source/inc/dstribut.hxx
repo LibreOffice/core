@@ -45,11 +45,11 @@ public:
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
     virtual ~SvxDistributePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
-    virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet*) override;
+    virtual void Reset(const SfxItemSet*) override;
+    virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) override;
 
     SvxDistributeHorizontal GetDistributeHor() const { return m_eDistributeHor; }
     SvxDistributeVertical GetDistributeVer() const { return m_eDistributeVer; }
@@ -64,7 +64,7 @@ public:
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
     virtual ~SvxDistributeDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SvxDistributeHorizontal GetDistributeHor() const { return mpPage->GetDistributeHor(); }
     SvxDistributeVertical GetDistributeVer() const { return mpPage->GetDistributeVer(); }

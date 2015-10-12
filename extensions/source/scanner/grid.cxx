@@ -110,18 +110,18 @@ class GridWindow : public vcl::Window
     void computeNew();
     static double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
 
-    virtual void MouseMove( const MouseEvent& ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& ) override;
+    virtual void MouseButtonDown( const MouseEvent& ) override;
+    virtual void MouseButtonUp( const MouseEvent& ) override;
     void onResize();
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
     void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
     GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
 
@@ -129,7 +129,7 @@ public:
 
     void ChangeMode(int nType);
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
 };
 
 GridWindow::GridWindow(vcl::Window* pParent)

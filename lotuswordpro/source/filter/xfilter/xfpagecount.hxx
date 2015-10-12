@@ -71,7 +71,7 @@
 class XFPageCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 inline void XFPageCount::ToXml(IXFStream *pStrm)

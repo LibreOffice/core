@@ -99,11 +99,11 @@ class HelpOnStartup : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XSe
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,
                   css::uno::Exception                ,
-                  css::uno::RuntimeException, std::exception         ) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception         ) override;
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // helper
     private:

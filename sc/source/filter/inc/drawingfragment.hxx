@@ -49,7 +49,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
 
 private:
-    virtual void        attachMacro( const OUString& rMacroUrl ) SAL_OVERRIDE;
+    virtual void        attachMacro( const OUString& rMacroUrl ) override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
@@ -66,7 +66,7 @@ public:
 protected:
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) SAL_OVERRIDE;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) override;
 
 private:
     OUString     maMacroName;
@@ -95,7 +95,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 };
 
 /** Fragment handler for a complete sheet drawing. */
@@ -107,9 +107,9 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual void        onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 
 private:
     typedef ::std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
@@ -130,7 +130,7 @@ public:
                             sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle );
 
 private:
-    virtual void        attachMacro( const OUString& rMacroUrl ) SAL_OVERRIDE;
+    virtual void        attachMacro( const OUString& rMacroUrl ) override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxCtrlFormIC;
@@ -148,28 +148,28 @@ public:
     const ::oox::vml::ShapeBase* getNoteShape( const ::com::sun::star::table::CellAddress& rPos ) const;
 
     /** Filters cell note shapes. */
-    virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const SAL_OVERRIDE;
+    virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const override;
 
     /** Returns additional base names for automatic shape name creation. */
-    virtual OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const SAL_OVERRIDE;
+    virtual OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const override;
 
     /** Calculates the shape rectangle from a cell anchor string. */
     virtual bool        convertClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
-                            const OUString& rShapeAnchor ) const SAL_OVERRIDE;
+                            const OUString& rShapeAnchor ) const override;
 
     /** Creates a UNO control shape for legacy drawing controls. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsertClientXShape(
                             const ::oox::vml::ShapeBase& rShape,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 
     /** Updates the bounding box covering all shapes of this drawing. */
     virtual void        notifyXShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect,
-                            const ::oox::vml::ShapeBase& rShape, bool bGroupChild ) SAL_OVERRIDE;
+                            const ::oox::vml::ShapeBase& rShape, bool bGroupChild ) override;
 
 private:
     /** Converts the passed VML textbox text color to an OLE color. */
@@ -201,7 +201,7 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual void        finalizeImport() SAL_OVERRIDE;
+    virtual void        finalizeImport() override;
 };
 
 } // namespace xls

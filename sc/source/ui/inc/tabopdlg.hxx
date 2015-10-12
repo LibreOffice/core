@@ -44,13 +44,13 @@ public:
                                 ScDocument*     pDocument,
                                 const ScRefAddress& rCursorPos );
                     virtual ~ScTabOpDlg();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual bool    IsRefInputMode() const SAL_OVERRIDE { return true; }
-    virtual void    SetActive() SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual bool    IsRefInputMode() const override { return true; }
+    virtual void    SetActive() override;
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
 private:
     VclPtr<FixedText> m_pFtFormulaRange;

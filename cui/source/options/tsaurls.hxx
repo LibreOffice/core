@@ -32,7 +32,7 @@ private:
 public:
     explicit TSAURLsDialog(vcl::Window* pParent);
     virtual ~TSAURLsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

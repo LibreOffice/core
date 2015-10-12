@@ -75,9 +75,9 @@ public:
     explicit        WorkWindow( vcl::Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
     explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
     virtual         ~WorkWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
     void            ShowFullScreenMode( bool bFullScreenMode,
                                         sal_Int32 nDisplayScreen );

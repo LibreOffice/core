@@ -43,7 +43,7 @@ public:
     X11OpenGLDeviceInfo();
     virtual ~X11OpenGLDeviceInfo();
 
-    virtual bool isDeviceBlocked() SAL_OVERRIDE;
+    virtual bool isDeviceBlocked() override;
 
     const OString& GetVendor() const
     {

@@ -66,11 +66,11 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
     void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Resize() override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void StateChanged( StateChangedType nStateChange ) override;
     void UpdateScrollBar();
 
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*,void);
@@ -78,7 +78,7 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 public:
     SwAddressPreview(vcl::Window* pParent, WinBits nStyle=WB_BORDER);
     virtual ~SwAddressPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void positionScrollBar();
 
@@ -155,8 +155,8 @@ public:
     {}
     virtual ~SwAuthenticator();
 
-    virtual OUString SAL_CALL getUserName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getPassword() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getUserName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getPassword() throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
@@ -171,7 +171,7 @@ public:
     virtual ~SwConnectionContext();
 
     virtual css::uno::Any SAL_CALL getValueByName(const OUString& Name)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class SwMutexBase
@@ -193,13 +193,13 @@ public:
     virtual ~SwConnectionListener();
 
     virtual void SAL_CALL connected(const css::lang::EventObject& aEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL disconnected(const css::lang::EventObject& aEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 
 class SW_DLLPUBLIC SwMailTransferable :
@@ -218,40 +218,40 @@ class SW_DLLPUBLIC SwMailTransferable :
     virtual ~SwMailTransferable();
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor)
                 throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException,
-                       css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                       css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
-                            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor)
-                            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     //XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
-                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const css::uno::Any& aValue)
                 throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
                       css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName)
                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
                                                     const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener)
                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,
                                                        const css::uno::Reference<css::beans::XPropertyChangeListener >& aListener)
                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName,
                                                     const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener)
                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,
                                                        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener)
                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                      css::uno::RuntimeException, std::exception) override;
 
 };
 
@@ -277,37 +277,37 @@ public:
     virtual ~SwMailMessage();
 
     // attributes
-    virtual OUString SAL_CALL getSenderName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSenderAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getReplyToAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSenderName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSenderAddress() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getReplyToAddress() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setReplyToAddress( const OUString& _replytoaddress )
-                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSubject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubject() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setSubject(const OUString& _subject)
-                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getBody()
-                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setBody(const css::uno::Reference<css::datatransfer::XTransferable>& _body)
-                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (css::uno::RuntimeException, std::exception) override;
 
     // methods
     virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress )
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addCcRecipient( const OUString& sRecipientAddress )
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addBccRecipient( const OUString& sRecipientAddress )
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getRecipients()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getCcRecipients()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getBccRecipients()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addAttachment(const css::mail::MailAttachment& aMailAttachment)
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<css::mail::MailAttachment> SAL_CALL getAttachments()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) override;
     void SetSenderName(const OUString& rSenderName)
     {
         m_sSenderName = rSenderName;

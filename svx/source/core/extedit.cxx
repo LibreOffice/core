@@ -76,7 +76,7 @@ class ExternalToolEditThread
 private:
     OUString const m_aFileName;
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
 public:
     explicit ExternalToolEditThread(OUString const& rFileName)

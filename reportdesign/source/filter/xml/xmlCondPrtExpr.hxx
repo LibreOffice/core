@@ -41,7 +41,7 @@ namespace rptxml
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.
-        virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+        virtual void Characters( const OUString& rChars ) override;
     };
 
 } // namespace rptxml

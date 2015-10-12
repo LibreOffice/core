@@ -74,12 +74,12 @@ public:
         m_event( source )
     {}
 
-    virtual void fire( com::sun::star::lang::XEventListener * listener ) const SAL_OVERRIDE
+    virtual void fire( com::sun::star::lang::XEventListener * listener ) const override
     {
         static_cast<com::sun::star::util::XRefreshListener*>(listener)->refreshed( m_event );
     }
 
-    virtual com::sun::star::uno::Type getType() const SAL_OVERRIDE
+    virtual com::sun::star::uno::Type getType() const override
     {
         return cppu::UnoType<
             com::sun::star::util::XRefreshListener>::get();
@@ -126,30 +126,30 @@ public:
 
 public: // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public: // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-    SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public: // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     // Methods
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 
 public: // XAppend
@@ -159,7 +159,7 @@ public: // XAppend
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // helper method !
     void append(
@@ -172,36 +172,36 @@ public: // XDrop
     virtual void SAL_CALL dropByName( const OUString& elementName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL dropByIndex( sal_Int32 index )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL addRefreshListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeRefreshListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public:
     // Methods
     virtual void SAL_CALL addContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public:
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 public:
     void rename( const OUString & oldName, const OUString &newName );

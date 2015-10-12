@@ -67,7 +67,7 @@ protected:
     SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const sal_uInt16* pWhichRanges,
             SwFormat *pDrvdFrm, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
     TYPEINFO_OVERRIDE();     ///< Already in base class Client.
@@ -79,7 +79,7 @@ public:
     sal_uInt16 Which() const { return m_nWhichId; }
 
     /// Query format information.
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Copy attributes even among documents.
     void CopyAttrs( const SwFormat&, bool bReplace=true );

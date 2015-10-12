@@ -90,7 +90,7 @@ private:
     bool        m_bMacroRecorderMode;
     bool        m_bIconThemeWasSetAutomatically;
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
 public:
 
@@ -108,7 +108,7 @@ public:
             @param      "seqPropertyNames" is the list of properties which should be updated.
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) override;
 
         /** loads required data from the configuration. It's called in the constructor to
          read all entries and form ::Notify to re-read changed settings

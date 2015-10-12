@@ -44,73 +44,73 @@ public:
     SvxSearchItem*          GetSearchItem() const       { return pSearchItem; }
 
                             // XReplaceDescriptor
-    virtual OUString SAL_CALL getReplaceString() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getReplaceString() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setReplaceString( const OUString& aReplaceString )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                             // XSearchDescriptor
-    virtual OUString SAL_CALL getSearchString() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSearchString() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setSearchString( const OUString& aString )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                             // search/replace should be called from outside (from XSearchable)...
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
                                     ::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
 
                                 // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScCellSearchObj* getImplementation(const css::uno::Reference<css::util::XSearchDescriptor>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 #endif

@@ -51,28 +51,28 @@ public:
     // LazyInvalidate request. Supported here to not automatically
     // invalidate the second interaction state all the time at the
     // original OC
-    virtual void setLazyInvalidate(ViewObjectContact& rVOC) SAL_OVERRIDE;
+    virtual void setLazyInvalidate(ViewObjectContact& rVOC) override;
 
     // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
-    virtual void Invoke() SAL_OVERRIDE;
+    virtual void Invoke() override;
 
     // get primitive visualization
     drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
 
     // Own reaction on changes which will be forwarded to the OC of the owner-VOC
-    virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const SAL_OVERRIDE;
+    virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const override;
 
     // forward access to SdrPageView of ViewObjectContactOfPageObj
-    virtual bool isOutputToPrinter() const SAL_OVERRIDE;
-    virtual bool isOutputToWindow() const SAL_OVERRIDE;
-    virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
-    virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
-    virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
-    virtual bool isDrawModeGray() const SAL_OVERRIDE;
-    virtual bool isDrawModeBlackWhite() const SAL_OVERRIDE;
-    virtual bool isDrawModeHighContrast() const SAL_OVERRIDE;
-    virtual SdrPageView* TryToGetSdrPageView() const SAL_OVERRIDE;
-    virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
+    virtual bool isOutputToPrinter() const override;
+    virtual bool isOutputToWindow() const override;
+    virtual bool isOutputToVirtualDevice() const override;
+    virtual bool isOutputToRecordingMetaFile() const override;
+    virtual bool isOutputToPDFFile() const override;
+    virtual bool isDrawModeGray() const override;
+    virtual bool isDrawModeBlackWhite() const override;
+    virtual bool isDrawModeHighContrast() const override;
+    virtual SdrPageView* TryToGetSdrPageView() const override;
+    virtual OutputDevice* TryToGetOutputDevice() const override;
 };
 
 PagePrimitiveExtractor::PagePrimitiveExtractor(

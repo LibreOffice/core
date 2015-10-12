@@ -145,11 +145,11 @@ class FixedTextField : public TextField
 public:
     OUString text;
 
-    virtual OUString getClassName() const SAL_OVERRIDE
+    virtual OUString getClassName() const override
     {
         return OUString( "FixedTextField" );
     }
-    virtual bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
+    virtual bool equalTo( const TextField & aTextField ) const override
     {
         if( const FixedTextField* aFixedTextField = dynamic_cast< const FixedTextField* >( &aTextField ) )
         {
@@ -157,7 +157,7 @@ public:
         }
         return false;
     }
-    virtual void elementExport( SVGExport* pSVGExport ) const SAL_OVERRIDE
+    virtual void elementExport( SVGExport* pSVGExport ) const override
     {
         TextField::elementExport( pSVGExport );
         SvXMLElementExport aExp( *pSVGExport, XML_NAMESPACE_NONE, "g", true, true );
@@ -170,11 +170,11 @@ class FixedDateTimeField : public FixedTextField
 {
 public:
     FixedDateTimeField() {}
-    virtual OUString getClassName() const SAL_OVERRIDE
+    virtual OUString getClassName() const override
     {
         return OUString( "FixedDateTimeField" );
     }
-    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const SAL_OVERRIDE
+    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
         implGrowCharSet( aTextFieldCharSets, text, aOOOAttrDateTimeField );
     }
@@ -185,11 +185,11 @@ class FooterField : public FixedTextField
 {
 public:
     FooterField() {}
-    virtual OUString getClassName() const SAL_OVERRIDE
+    virtual OUString getClassName() const override
     {
         return OUString( "FooterField" );
     }
-    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const SAL_OVERRIDE
+    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
         static const OUString sFieldId = aOOOAttrFooterField;
         implGrowCharSet( aTextFieldCharSets, text, sFieldId );
@@ -200,7 +200,7 @@ public:
 class VariableTextField : public TextField
 {
 public:
-    virtual OUString getClassName() const SAL_OVERRIDE
+    virtual OUString getClassName() const override
     {
         return OUString( "VariableTextField" );
     }
@@ -216,11 +216,11 @@ public:
         : format(0)
     {
     }
-    virtual OUString getClassName() const SAL_OVERRIDE
+    virtual OUString getClassName() const override
     {
         return OUString( "VariableDateTimeField" );
     }
-    virtual bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
+    virtual bool equalTo( const TextField & aTextField ) const override
     {
         if( const VariableDateTimeField* aField = dynamic_cast< const VariableDateTimeField* >( &aTextField ) )
         {
@@ -228,7 +228,7 @@ public:
         }
         return false;
     }
-    virtual void elementExport( SVGExport* pSVGExport ) const SAL_OVERRIDE
+    virtual void elementExport( SVGExport* pSVGExport ) const override
     {
         VariableTextField::elementExport( pSVGExport );
         OUString sDateFormat, sTimeFormat;
@@ -291,7 +291,7 @@ public:
         pSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeFormat, sDateTimeFormat );
         SvXMLElementExport aExp( *pSVGExport, XML_NAMESPACE_NONE, "g", true, true );
     }
-    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const SAL_OVERRIDE
+    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
         // we use the unicode char set in an improper way: we put in the date/time format
         // in order to pass it to the CalcFieldValue method

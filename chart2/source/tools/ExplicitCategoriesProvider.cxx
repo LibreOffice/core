@@ -232,8 +232,8 @@ public:
     virtual ~SplitCategoriesProvider_ForLabeledDataSequences()
     {}
 
-    virtual sal_Int32 getLevelCount() const SAL_OVERRIDE;
-    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const SAL_OVERRIDE;
+    virtual sal_Int32 getLevelCount() const override;
+    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<

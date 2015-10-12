@@ -31,7 +31,7 @@ class VCLKDEApplication : public KApplication
 {
     public:
         VCLKDEApplication();
-        virtual bool x11EventFilter(XEvent* event) SAL_OVERRIDE;
+        virtual bool x11EventFilter(XEvent* event) override;
         static void preDialogSetup();
         static void postDialogCleanup();
 };

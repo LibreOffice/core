@@ -89,7 +89,7 @@ public:
 
     void LockNotifyContentChange();
     void UnlockNotifyContentChange();
-    virtual void NotifyContentChange( SwFormatField& rFormatField ) SAL_OVERRIDE;
+    virtual void NotifyContentChange( SwFormatField& rFormatField ) override;
 
     void UpdateTextNodeContent( const OUString& rNewContent );
 

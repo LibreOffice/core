@@ -61,8 +61,8 @@ public:
                 ScTpPrintItem( const ScTpPrintItem& rItem );
                 virtual ~ScTpPrintItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
     const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
 
@@ -77,14 +77,14 @@ class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
 private:
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
             ScPrintCfg();
 
     void            SetOptions( const ScPrintOptions& rNew );
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

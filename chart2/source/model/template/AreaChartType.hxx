@@ -34,13 +34,13 @@ public:
 
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     static OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
@@ -50,11 +50,11 @@ protected:
 
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 } //  namespace chart

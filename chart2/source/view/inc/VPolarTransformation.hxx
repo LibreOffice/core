@@ -39,13 +39,13 @@ public:
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
         const ::com::sun::star::uno::Sequence< double >& rSourceValues )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getSourceDimension()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getTargetDimension()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     PolarPlottingPositionHelper     m_aPositionHelper;

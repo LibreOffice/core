@@ -139,13 +139,13 @@ private:
     void operator =(OGroupsSortingDialog&) = delete;
 protected:
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
 public:
     OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /* updates the current view
     */

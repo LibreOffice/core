@@ -47,7 +47,7 @@ class TextPropertyPanel
 {
 public:
     virtual ~TextPropertyPanel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
@@ -55,7 +55,7 @@ public:
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
 
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     ::sfx2::sidebar::ControllerItem& GetSpaceController() { return maSpacingControl;}
     long GetSelFontSize();
@@ -65,14 +65,14 @@ public:
 
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext& rContext) SAL_OVERRIDE;
+        const ::sfx2::sidebar::EnumContext& rContext) override;
 
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled) SAL_OVERRIDE;
+        const bool bIsEnabled) override;
 
     TextPropertyPanel (
         vcl::Window* pParent,

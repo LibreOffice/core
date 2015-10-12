@@ -249,7 +249,7 @@ public:
     explicit WW8_WrPlcSepx( MSWordExportBase& rExport );
     virtual ~WW8_WrPlcSepx();
 
-    virtual bool HeaderFooterWritten() SAL_OVERRIDE; // override
+    virtual bool HeaderFooterWritten() override; // override
 
     void AppendSep( WW8_CP nStartCp,
                     const SwPageDesc* pPd,
@@ -386,8 +386,8 @@ public:
     MainTextPlcDrawObj() {}
 private:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
-        sal_uInt32 nLen) const SAL_OVERRIDE;
-    virtual WW8_CP GetCpOffset(const WW8Fib &) const SAL_OVERRIDE;
+        sal_uInt32 nLen) const override;
+    virtual WW8_CP GetCpOffset(const WW8Fib &) const override;
 private:
     MainTextPlcDrawObj(const MainTextPlcDrawObj&) = delete;
     MainTextPlcDrawObj& operator=(const MainTextPlcDrawObj&) = delete;
@@ -399,8 +399,8 @@ public:
     HdFtPlcDrawObj() {}
 private:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
-        sal_uInt32 nLen) const SAL_OVERRIDE;
-    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const SAL_OVERRIDE;
+        sal_uInt32 nLen) const override;
+    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const override;
 private:
     HdFtPlcDrawObj(const HdFtPlcDrawObj&) = delete;
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&) = delete;
@@ -411,7 +411,7 @@ typedef ::std::pair<OUString, sal_uLong> aBookmarkPair;
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {
     public:
-    virtual void Write(Writer &rWrt) SAL_OVERRIDE;
+    virtual void Write(Writer &rWrt) override;
 };
 
 /** Structure that is used to save some of the WW8Export/DocxExport data.
@@ -897,8 +897,8 @@ public:
     SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL);
     virtual ~SwWW8Writer();
 
-    virtual sal_uLong WriteStorage() SAL_OVERRIDE;
-    virtual sal_uLong WriteMedium( SfxMedium& ) SAL_OVERRIDE;
+    virtual sal_uLong WriteStorage() override;
+    virtual sal_uLong WriteMedium( SfxMedium& ) override;
 
     // TODO most probably we want to be able to get these in
     // MSExportFilterBase
@@ -930,7 +930,7 @@ public:
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 ) SAL_OVERRIDE;
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 ) override;
     //Seems not an expected to provide method to access the private member
     SfxMedium* GetMedia() { return mpMedium; }
 
@@ -964,21 +964,21 @@ private:
 
 public:
     /// Access to the attribute output class.
-    virtual AttributeOutputBase& AttrOutput() const SAL_OVERRIDE;
+    virtual AttributeOutputBase& AttrOutput() const override;
 
     /// Access to the sections/headers/footres.
-    virtual MSWordSections& Sections() const SAL_OVERRIDE;
+    virtual MSWordSections& Sections() const override;
 
-    virtual bool PreferPageBreakBefore() const SAL_OVERRIDE { return true; }
+    virtual bool PreferPageBreakBefore() const override { return true; }
 
-    virtual bool SupportsOneColumnBreak() const SAL_OVERRIDE { return false; }
+    virtual bool SupportsOneColumnBreak() const override { return false; }
 
-    virtual bool FieldsQuoted() const SAL_OVERRIDE { return false; }
+    virtual bool FieldsQuoted() const override { return false; }
 
-    virtual bool AddSectionBreaksForTOX() const SAL_OVERRIDE { return false; }
+    virtual bool AddSectionBreaksForTOX() const override { return false; }
 private:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl() SAL_OVERRIDE;
+    virtual void ExportDocument_Impl() override;
 
     void PrepareStorage();
     void WriteFkpPlcUsw();
@@ -986,7 +986,7 @@ private:
     void StoreDoc1();
 
     /// Output the numbering table.
-    virtual void WriteNumbering() SAL_OVERRIDE;
+    virtual void WriteNumbering() override;
 
     void OutOverrideListTab();
     void OutListNamesTab();
@@ -999,7 +999,7 @@ private:
 public:
 
     /// Setup the pA's info.
-    virtual void SetupSectionPositions( WW8_PdAttrDesc* pA ) SAL_OVERRIDE;
+    virtual void SetupSectionPositions( WW8_PdAttrDesc* pA ) override;
 
     bool MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat);
 
@@ -1025,7 +1025,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
-            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) SAL_OVERRIDE;
+            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) override;
 
     void StartCommentOutput( const OUString& rName );
     void EndCommentOutput(   const OUString& rName );
@@ -1033,12 +1033,12 @@ public:
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> xOleStg,
         tools::SvRef<SotStorage> xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
-    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
-    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) SAL_OVERRIDE;
+    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) override;
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
+    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
-    virtual void ExportGrfBullet(const SwTextNode& rNd) SAL_OVERRIDE;
+    virtual void ExportGrfBullet(const SwTextNode& rNd) override;
     void OutGrfBullets(const sw::Frame &rFrame);
 
     void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
@@ -1046,10 +1046,10 @@ public:
     void WriteAsStringTable(const ::std::vector<OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) SAL_OVERRIDE;
+    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
 
-    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() ) SAL_OVERRIDE;
-    void WriteChar( sal_Unicode c ) SAL_OVERRIDE;
+    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() ) override;
+    void WriteChar( sal_Unicode c ) override;
 
     void OutSwString(const OUString&, sal_Int32 nStt, sal_Int32 nLen);
 
@@ -1060,14 +1060,14 @@ public:
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
                                 { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
 
-    virtual void SectionBreaksAndFrames( const SwTextNode& rNode ) SAL_OVERRIDE;
+    virtual void SectionBreaksAndFrames( const SwTextNode& rNode ) override;
 
     /// Helper method for OutputSectionBreaks() and OutputFollowPageDesc().
     // #i76300#
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat = 0,
-                                     const SwPageDesc* pNewPgDesc = 0 ) SAL_OVERRIDE;
+                                     const SwPageDesc* pNewPgDesc = 0 ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
@@ -1082,7 +1082,7 @@ public:
         sal_uInt16 nDist, bool bShadow);
 
     // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
-    virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) SAL_OVERRIDE;
+    virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) override;
 
     unsigned int GetHdFtIndex() const { return m_nHdFtIndex; }
     void SetHdFtIndex(unsigned int nHdFtIndex) { m_nHdFtIndex = nHdFtIndex; }
@@ -1092,7 +1092,7 @@ public:
     static sal_uInt8 GetNumId( sal_uInt16 eNumType );
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) SAL_OVERRIDE;
+    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) override;
 
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
 
@@ -1114,15 +1114,15 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    com::sun::star::uno::Sequence<OUString> &rListItems) SAL_OVERRIDE;
+                    com::sun::star::uno::Sequence<OUString> &rListItems) override;
 
-    virtual void DoFormText(const SwInputField * pField) SAL_OVERRIDE;
+    virtual void DoFormText(const SwInputField * pField) override;
 
     void GetCurrentItems(ww::bytes &rItems) const;
 
     /// Write the data of the form field
-    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) SAL_OVERRIDE;
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) SAL_OVERRIDE;
+    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) override;
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) override;
 
     /// Fields.
     WW8_WrPlcField* CurrentFieldPlc() const;
@@ -1131,26 +1131,26 @@ public:
     SvStream& Strm() const { return m_pWriter->Strm(); }
 
     /// Remember some of the memebers so that we can recurse in WriteText().
-    virtual void SaveData( sal_uLong nStt, sal_uLong nEnd ) SAL_OVERRIDE;
+    virtual void SaveData( sal_uLong nStt, sal_uLong nEnd ) override;
 
     /// Restore what was saved in SaveData().
-    virtual void RestoreData() SAL_OVERRIDE;
+    virtual void RestoreData() override;
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
             const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat,
-        sal_uInt8 nBreakCode) SAL_OVERRIDE;
+        sal_uInt8 nBreakCode) override;
 
 protected:
     /// Output SwGrfNode
-    virtual void OutputGrfNode( const SwGrfNode& ) SAL_OVERRIDE;
+    virtual void OutputGrfNode( const SwGrfNode& ) override;
 
     /// Output SwOLENode
-    virtual void OutputOLENode( const SwOLENode& ) SAL_OVERRIDE;
+    virtual void OutputOLENode( const SwOLENode& ) override;
 
-    virtual void OutputLinkedOLE( const OUString& ) SAL_OVERRIDE;
+    virtual void OutputLinkedOLE( const OUString& ) override;
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) SAL_OVERRIDE;
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) override;
 
 private:
     WW8Export(const WW8Export&) = delete;
@@ -1232,7 +1232,7 @@ class WW8_WrPlcTextBoxes : public WW8_WrPlcSubDoc // double Plc for Textboxes
 private:
     sal_uInt8 nTyp;
     std::vector<sal_uInt32> aShapeIds;        // VARARR of ShapeIds for the SwFrameFormats
-    virtual const std::vector<sal_uInt32>* GetShapeIdArr() const SAL_OVERRIDE;
+    virtual const std::vector<sal_uInt32>* GetShapeIdArr() const override;
 
     WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) = delete;
     WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes&) = delete;
@@ -1432,8 +1432,8 @@ public:
     void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( sal_Int32 nSwPos );
-    virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
-    virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
+    virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
     sal_Int32 WhereNext() const                { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
@@ -1488,8 +1488,8 @@ public:
     void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( sal_Int32 nSwPos, bool bRuby = false );
-    virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
-    virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
+    virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
     int OutAttrWithRange(sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );

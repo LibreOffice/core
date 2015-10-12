@@ -90,7 +90,7 @@ namespace vclcanvas
         virtual ~Canvas();
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -100,7 +100,7 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
@@ -108,7 +108,7 @@ namespace vclcanvas
                               const css::rendering::RenderState&            renderState,
                               const ::Point&                                rPt,
                               const ::Size&                                 rSz,
-                              const GraphicAttr&                            rAttr ) const SAL_OVERRIDE;
+                              const GraphicAttr&                            rAttr ) const override;
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;

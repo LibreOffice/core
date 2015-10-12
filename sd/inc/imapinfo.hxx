@@ -45,7 +45,7 @@ public:
 
     virtual         ~SdIMapInfo() {};
 
-    virtual SdrObjUserData* Clone( SdrObject* ) const SAL_OVERRIDE { return new SdIMapInfo( *this ); }
+    virtual SdrObjUserData* Clone( SdrObject* ) const override { return new SdIMapInfo( *this ); }
 
     void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }

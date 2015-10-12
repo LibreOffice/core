@@ -39,20 +39,20 @@ private:
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
-    virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
 public:
     explicit        GroupBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 #endif // INCLUDED_VCL_GROUP_HXX

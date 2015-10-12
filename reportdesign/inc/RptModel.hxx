@@ -47,7 +47,7 @@ private:
     ::dbaui::DBSubComponentController*  m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
 
     OReportModel( const OReportModel& ) = delete;
     void operator=(const OReportModel& rSrcModel) = delete;
@@ -58,11 +58,11 @@ public:
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();
 
-    virtual void        SetChanged(bool bFlg = true) SAL_OVERRIDE;
-    virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE;
-    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    virtual void        SetChanged(bool bFlg = true) override;
+    virtual SdrPage*    AllocPage(bool bMasterPage) override;
+    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum) override;
     /** @returns the numbering type that is used to format page fields in drawing shapes */
-    virtual SvxNumType  GetPageNumType() const SAL_OVERRIDE;
+    virtual SvxNumType  GetPageNumType() const override;
 
     OXUndoEnvironment&  GetUndoEnv() { return *m_pUndoEnv;}
     void                SetModified(bool _bModified);

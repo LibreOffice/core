@@ -88,10 +88,10 @@ public:
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         hasLocale( const css::lang::Locale& rLocale )
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XThesaurus
     virtual css::uno::Sequence<
@@ -100,7 +100,7 @@ public:
                 const css::lang::Locale& rLocale,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -213,22 +213,22 @@ public:
     // XSupportedLanguages (for XSpellChecker1)
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL
         getLanguages()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         hasLanguage( sal_Int16 nLanguage )
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
         isValid( const OUString& rWord, sal_Int16 nLanguage,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
         spell( const OUString& rWord, sal_Int16 nLanguage,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -310,10 +310,10 @@ public:
     virtual css::uno::Sequence<
             css::lang::Locale > SAL_CALL
         getLocales()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         hasLocale( const css::lang::Locale& rLocale )
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XHyphenator
     virtual css::uno::Reference<
@@ -323,7 +323,7 @@ public:
                 sal_Int16 nMaxLeading,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference<
             css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& rWord,
@@ -331,7 +331,7 @@ public:
                 sal_Int16 nIndex,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference<
             css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
@@ -339,7 +339,7 @@ public:
                 const css::lang::Locale& rLocale,
                 const css::beans::PropertyValues& rProperties )
             throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -438,7 +438,7 @@ public:
 
     // lang::XEventListener
     virtual void    SAL_CALL disposing(const EventObject& rSource)
-            throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( RuntimeException, std::exception ) override;
 };
 
 LinguMgrExitLstnr::LinguMgrExitLstnr()

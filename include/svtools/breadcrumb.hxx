@@ -52,7 +52,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         Breadcrumb( vcl::Window* pParent, WinBits nWinStyle = 0 );
         virtual ~Breadcrumb();
 
-        void dispose() SAL_OVERRIDE;
+        void dispose() override;
         void EnableFields( bool bEnable );
 
         void SetClickHdl( const Link<Breadcrumb*,void>& rLink );

@@ -28,7 +28,7 @@ public:
                     const ScAutoFormatData* pSelFormatData,
                     ScViewData *pViewData);
     virtual ~ScAutoFormatDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt16 GetIndex() const { return nIndex; }
     OUString GetCurrFormatName();

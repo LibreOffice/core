@@ -32,8 +32,8 @@ public:
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline const SwFormatNoBalancedColumns &SwAttrSet::GetBalancedColumns(bool bInP) const

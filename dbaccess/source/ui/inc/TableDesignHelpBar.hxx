@@ -35,25 +35,25 @@ namespace dbaui
         VclPtr<MultiLineEdit>  m_pTextWin;
 
     protected:
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
     public:
         OTableDesignHelpBar( vcl::Window* pParent );
         virtual ~OTableDesignHelpBar();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void SetHelpText( const OUString& rText );
 
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
         // IClipboardTest
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual bool isPasteAllowed() override;
 
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
     };
 }
 #endif

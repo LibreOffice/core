@@ -24,23 +24,23 @@ public:
 
     virtual ~SfxInt64Item();
 
-    virtual bool operator== ( const SfxPoolItem& rItem ) const SAL_OVERRIDE;
+    virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 
     virtual bool GetPresentation(
         SfxItemPresentation, SfxMapUnit, SfxMapUnit,
-        OUString& rText, const IntlWrapper* pIntlWrapper = NULL ) const SAL_OVERRIDE;
+        OUString& rText, const IntlWrapper* pIntlWrapper = NULL ) const override;
 
     virtual bool QueryValue(
-        com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+        com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     virtual bool PutValue(
-        const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+        const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem* Create( SvStream& rStream, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
 
-    virtual SvStream& Store( SvStream& rStream, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SvStream& Store( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool* pOther = NULL ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone( SfxItemPool* pOther = NULL ) const override;
 
     sal_Int64 GetValue() const { return mnValue;}
 

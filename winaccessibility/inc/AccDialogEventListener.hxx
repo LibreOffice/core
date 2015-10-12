@@ -45,7 +45,7 @@ public:
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
-    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
+    virtual void SetComponentState(short state, bool enable) override;
 
 };
 

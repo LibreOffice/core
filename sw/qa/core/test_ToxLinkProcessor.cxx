@@ -43,7 +43,7 @@ class ToxLinkProcessorTest : public test::BootstrapFixture
     CPPUNIT_TEST(StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed);
     CPPUNIT_TEST_SUITE_END();
 public:
-    void setUp() SAL_OVERRIDE {
+    void setUp() override {
         BootstrapFixture::setUp();
         SwGlobals::ensure();
     }
@@ -100,7 +100,7 @@ ToxLinkProcessorTest::AddingAndClosingTwoLinksResultsInTwoClosedLinks()
 class ToxLinkProcessorWithOverriddenObtainPoolId : public ToxLinkProcessor {
 public:
     virtual sal_uInt16
-    ObtainPoolId(const OUString& characterStyle) const SAL_OVERRIDE {
+    ObtainPoolId(const OUString& characterStyle) const override {
         if (characterStyle == ToxLinkProcessorTest::STYLE_NAME_1) {
             return ToxLinkProcessorTest::POOL_ID_1;
         }

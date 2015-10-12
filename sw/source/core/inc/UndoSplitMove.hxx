@@ -37,9 +37,9 @@ public:
 
     virtual ~SwUndoSplitNode();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void SetTableFlag()       { bTableFlag = true; }
 };
@@ -66,8 +66,8 @@ public:
     SwUndoMove( const SwPaM&, const SwPosition& );
     SwUndoMove( SwDoc* pDoc, const SwNodeRange&, const SwNodeIndex& );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     /// set the destination range after the move
     void SetDestRange( const SwPaM&, const SwPosition&, bool, bool );

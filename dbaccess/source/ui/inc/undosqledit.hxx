@@ -33,8 +33,8 @@ namespace dbaui
         VclPtr<OSqlEdit>   m_pOwner;
         OUString    m_strNextText;
 
-        virtual void    Undo() SAL_OVERRIDE { ToggleText(); }
-        virtual void    Redo() SAL_OVERRIDE { ToggleText(); }
+        virtual void    Undo() override { ToggleText(); }
+        virtual void    Redo() override { ToggleText(); }
 
         void ToggleText();
     public:

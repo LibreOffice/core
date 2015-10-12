@@ -63,7 +63,7 @@ namespace webdav_ucp
                                   const OUString & inHostName,
                                   OUString & inoutUserName,
                                   OUString & outPassWord,
-                                  bool bCanUseSystemCredentials ) SAL_OVERRIDE;
+                                  bool bCanUseSystemCredentials ) override;
     private:
 
         const com::sun::star::uno::Reference<

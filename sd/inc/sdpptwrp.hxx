@@ -34,7 +34,7 @@ public:
 
     /// these methods are necessary for the export to PowerPoint
     bool        Import();
-    bool        Export() SAL_OVERRIDE;
+    bool        Export() override;
 
     /// restores the original basic storage
     void                    PreSaveBasic();

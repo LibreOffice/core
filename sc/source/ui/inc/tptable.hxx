@@ -33,14 +33,14 @@ public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*           pParent,
                                           const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
-    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
-    virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
+    virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
-    virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
+    virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) override;
 
     virtual         ~ScTablePage();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 private:
                     ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     void            ShowImage();

@@ -54,8 +54,8 @@ namespace cppu_threadpool {
         { SimpleReferenceObject::operator delete(pointer); }
 
     private:
-        virtual void SAL_CALL run() SAL_OVERRIDE;
-        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
+        virtual void SAL_CALL run() override;
+        virtual void SAL_CALL onTerminated() override;
 
         ThreadPoolHolder m_aThreadPool;
         JobQueue *m_pQueue;

@@ -114,7 +114,7 @@ public:
         throw(css::datatransfer::UnsupportedFlavorException,
               css::io::IOException,
               css::uno::RuntimeException, std::exception
-              ) SAL_OVERRIDE
+              ) override
     {
         GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
@@ -213,13 +213,13 @@ public:
     }
 
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(css::uno::RuntimeException, std::exception) override
     {
         return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
     }
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(css::uno::RuntimeException, std::exception) override
     {
         const std::vector<css::datatransfer::DataFlavor> aAll =
             getTransferDataFlavorsAsVector();
@@ -296,9 +296,9 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) override;
 
     static OUString getImplementationName_static();
     static Sequence< OUString > getSupportedServiceNames_static();
@@ -308,33 +308,33 @@ public:
      */
 
     virtual Reference< css::datatransfer::XTransferable > SAL_CALL getContents()
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getName()
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     /*
      * XClipboardEx
      */
 
     virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     /*
      * XClipboardNotifier
      */
     virtual void SAL_CALL addClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
     void ClipboardClear(GtkClipboard *clipboard);

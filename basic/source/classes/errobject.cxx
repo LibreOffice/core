@@ -40,22 +40,22 @@ public:
     ErrObject();
     virtual ~ErrObject();
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getNumber() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL getHelpContext() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHelpContext( ::sal_Int32 _helpcontext ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getHelpFile() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHelpFile( const OUString& _helpfile ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getDescription() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDescription( const OUString& _description ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSource() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setSource( const OUString& _source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getNumber() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getHelpContext() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHelpContext( ::sal_Int32 _helpcontext ) throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getHelpFile() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHelpFile( const OUString& _helpfile ) throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDescription() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDescription( const OUString& _description ) throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSource() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSource( const OUString& _source ) throw (uno::RuntimeException, std::exception) override;
 
     // Methods
-    virtual void SAL_CALL Clear(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Clear(  ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException, std::exception) override;
     // XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException, std::exception) override;
 
     // Helper method
     void setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description,

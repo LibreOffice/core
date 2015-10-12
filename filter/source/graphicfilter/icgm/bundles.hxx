@@ -64,7 +64,7 @@ public:
         , nLineWidth(0)
     {}
 
-    virtual Bundle* Clone() SAL_OVERRIDE { return new LineBundle( *this ); }
+    virtual Bundle* Clone() override { return new LineBundle( *this ); }
     LineBundle& operator=( LineBundle& rLineBundle );
 };
 
@@ -82,7 +82,7 @@ public:
         , nMarkerSize( 0.0 )
         {};
 
-    virtual Bundle*     Clone() SAL_OVERRIDE { return new MarkerBundle( *this ); } ;
+    virtual Bundle*     Clone() override { return new MarkerBundle( *this ); } ;
             MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
     virtual             ~MarkerBundle() {};
 };
@@ -100,7 +100,7 @@ public:
         : eEdgeType(ET_NONE)
         , nEdgeWidth(0)
     {}
-    virtual Bundle*     Clone() SAL_OVERRIDE { return new EdgeBundle( *this ); }
+    virtual Bundle*     Clone() override { return new EdgeBundle( *this ); }
     EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
 };
 
@@ -122,7 +122,7 @@ public:
         , nCharacterSpacing( 0.0 )
         {};
 
-    virtual Bundle*     Clone() SAL_OVERRIDE { return new TextBundle( *this ); } ;
+    virtual Bundle*     Clone() override { return new TextBundle( *this ); } ;
             TextBundle& operator=( TextBundle& rTextBundle );
     virtual             ~TextBundle() {};
 };
@@ -142,7 +142,7 @@ public:
         , nFillPatternIndex(0)
         , nFillHatchIndex(0)
     {}
-    virtual Bundle*     Clone() SAL_OVERRIDE { return new FillBundle( *this ); }
+    virtual Bundle*     Clone() override { return new FillBundle( *this ); }
     FillBundle& operator=( FillBundle& rFillBundle );
 };
 

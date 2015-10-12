@@ -75,7 +75,7 @@ class SwHTMLWrtTable : public SwWriteTable
                         const SvxBrushItem *pBrushItem ) const;
 
     virtual bool ShouldExpandSub( const SwTableBox *pBox,
-                            bool bExpandedBefore, sal_uInt16 nDepth ) const SAL_OVERRIDE;
+                            bool bExpandedBefore, sal_uInt16 nDepth ) const override;
 
     static bool HasTabBackground( const SwTableLine& rLine,
                         bool bTop, bool bBottom, bool bLeft, bool bRight );

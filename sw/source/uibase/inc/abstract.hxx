@@ -31,7 +31,7 @@ class SwInsertAbstractDlg : public SfxModalDialog
 public:
     SwInsertAbstractDlg( vcl::Window* pParent );
     virtual ~SwInsertAbstractDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt8   GetLevel() const;
     sal_uInt8   GetPara() const;

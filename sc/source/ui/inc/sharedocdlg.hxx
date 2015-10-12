@@ -49,7 +49,7 @@ private:
 public:
                         ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
                         virtual ~ScShareDocumentDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     bool                IsShareDocumentChecked() const;
     void                UpdateView();

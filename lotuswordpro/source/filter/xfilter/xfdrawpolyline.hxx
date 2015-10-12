@@ -77,7 +77,7 @@ public:
 
     XFRect  CalcViewBox();
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 protected:
     std::vector<XFPoint>    m_aPoints;

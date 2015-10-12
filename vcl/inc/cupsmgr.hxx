@@ -78,7 +78,7 @@ class CUPSManager : public PrinterInfoManager
     CUPSManager();
     virtual ~CUPSManager();
 
-    virtual void initialize() SAL_OVERRIDE;
+    virtual void initialize() override;
 
     static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions );
     void runDests();
@@ -96,26 +96,26 @@ public:
 
     const char* authenticateUser( const char* );
 
-    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) SAL_OVERRIDE;
-    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) SAL_OVERRIDE;
-    virtual void setupJobContextData( JobData& rData ) SAL_OVERRIDE;
+    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) override;
+    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;
+    virtual void setupJobContextData( JobData& rData ) override;
 
-    virtual bool startBatchPrint() SAL_OVERRIDE;
-    virtual bool flushBatchPrint() SAL_OVERRIDE;
-    virtual bool supportsBatchPrint() const SAL_OVERRIDE;
+    virtual bool startBatchPrint() override;
+    virtual bool flushBatchPrint() override;
+    virtual bool supportsBatchPrint() const override;
 
     /// changes the info about a named printer
-    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo ) SAL_OVERRIDE;
+    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo ) override;
 
     /// check if the printer configuration has changed
-    virtual bool checkPrintersChanged( bool bWait ) SAL_OVERRIDE;
+    virtual bool checkPrintersChanged( bool bWait ) override;
 
     // members for administration
     // disable for CUPS
-    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) SAL_OVERRIDE;
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false ) SAL_OVERRIDE;
-    virtual bool writePrinterConfig() SAL_OVERRIDE;
-    virtual bool setDefaultPrinter( const OUString& rPrinterName ) SAL_OVERRIDE;
+    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) override;
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false ) override;
+    virtual bool writePrinterConfig() override;
+    virtual bool setDefaultPrinter( const OUString& rPrinterName ) override;
 };
 
 } // namespace psp

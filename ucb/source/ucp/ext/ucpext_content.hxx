@@ -77,7 +77,7 @@ namespace ucb { namespace ucp { namespace ext
         static OUString
             decodeIdentifier( const OUString& i_rIdentifier );
 
-        virtual OUString getParentURL() SAL_OVERRIDE;
+        virtual OUString getParentURL() override;
 
         ExtensionContentType getExtensionContentType() const { return m_eExtContentType; }
 
@@ -90,11 +90,11 @@ namespace ucb { namespace ucp { namespace ext
         virtual ~Content();
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XContent
-        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XCommandProcessor
         virtual com::sun::star::uno::Any SAL_CALL
@@ -106,18 +106,18 @@ namespace ucb { namespace ucp { namespace ext
                 throw   (   ::com::sun::star::uno::Exception
                         ,   ::com::sun::star::ucb::CommandAbortedException
                         ,   ::com::sun::star::uno::RuntimeException, std::exception
-                        ) SAL_OVERRIDE;
+                        ) override;
 
         virtual void SAL_CALL
                 abort(
                     sal_Int32 CommandId
                 )
                 throw   (   ::com::sun::star::uno::RuntimeException, std::exception
-                        ) SAL_OVERRIDE;
+                        ) override;
 
     private:
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > getProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::CommandInfo > getCommands( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > getProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::CommandInfo > getCommands( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) override;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
             setPropertyValues(

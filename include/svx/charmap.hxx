@@ -41,8 +41,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxShowCharSet : public Control
 public:
                     SvxShowCharSet( vcl::Window* pParent );
                     virtual ~SvxShowCharSet();
-    virtual void    dispose() SAL_OVERRIDE;
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void    dispose() override;
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
@@ -72,21 +72,21 @@ public:
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;
 
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;

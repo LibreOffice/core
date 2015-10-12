@@ -126,9 +126,9 @@ public:
     DlgEdFuncInsert( OReportSection* pParent );
     virtual ~DlgEdFuncInsert();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 
@@ -141,9 +141,9 @@ public:
     DlgEdFuncSelect( OReportSection* pParent );
     virtual ~DlgEdFuncSelect();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 }

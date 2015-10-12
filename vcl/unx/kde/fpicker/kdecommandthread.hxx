@@ -92,7 +92,7 @@ public:
     KDECommandThread( QWidget *pObject );
     virtual ~KDECommandThread();
 
-    virtual void                run() SAL_OVERRIDE;
+    virtual void                run() override;
 
 protected:
     void                        handleCommand( const QString &rString, bool &bQuit );

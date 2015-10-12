@@ -56,7 +56,7 @@ namespace sdr
             bool                                mbBorder : 1;
 
             // geometry creation for OverlayObject, can use local *Last* values
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
 
         public:
             OverlaySelection(
@@ -71,7 +71,7 @@ namespace sdr
             bool getBorder() const { return mbBorder; }
 
             /// override to check conditions for last createOverlayObjectPrimitive2DSequence
-            virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const override;
 
             // data write access
             void setRanges(const std::vector< basegfx::B2DRange >& rNew);

@@ -74,7 +74,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
 
 
     void Notify(            SfxBroadcaster& aBC     ,
-                    const   SfxHint&        aHint   ) SAL_OVERRIDE ;
+                    const   SfxHint&        aHint   ) override ;
 };
 
 awt::Size impl_Size_Object2Struct( const Size& aSize )
@@ -102,10 +102,10 @@ class SfxPrintJob_Impl : public cppu::WeakImplHelper
 
 public:
     explicit SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData );
-    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancelJob() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) override;
+    virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancelJob() throw (RuntimeException, std::exception) override;
 };
 
 SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData )
@@ -494,7 +494,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
            Note: Starting of the job is done outside this thread!
            But we have to free some of the given resources on heap!
          */
-        void SAL_CALL run() SAL_OVERRIDE
+        void SAL_CALL run() override
         {
             osl_setThreadName("ImplUCBPrintWatcher");
 
@@ -517,7 +517,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
         /* nobody wait for this thread. We must kill ourself ...
          */
-        void SAL_CALL onTerminated() SAL_OVERRIDE
+        void SAL_CALL onTerminated() override
         {
             delete this;
         }

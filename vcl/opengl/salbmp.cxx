@@ -263,7 +263,7 @@ public:
     : mrPalette( rPalette )
     {
     }
-    virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
+    virtual const BitmapColor& ReadPixel() override
     {
         assert( mrPalette.GetEntryCount() > *mpData );
         return mrPalette[ *mpData++ ];
@@ -284,13 +284,13 @@ public:
         , mnShift(4)
     {
     }
-    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
+    virtual void StartLine( sal_uInt8* pLine ) override
     {
         mpData = pLine;
         mnX = 0;
         mnShift = 4;
     }
-    virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
+    virtual const BitmapColor& ReadPixel() override
     {
         sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
         assert( mrPalette.GetEntryCount() > nIdx );
@@ -313,12 +313,12 @@ public:
         , mnX(0)
     {
     }
-    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
+    virtual void StartLine( sal_uInt8* pLine ) override
     {
         mpData = pLine;
         mnX = 0;
     }
-    virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
+    virtual const BitmapColor& ReadPixel() override
     {
         const BitmapColor& rColor = mrPalette[ (mpData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
         mnX++;

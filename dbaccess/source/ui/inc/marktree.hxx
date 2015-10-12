@@ -40,17 +40,17 @@ class OMarkableTreeListBox : public DBTreeListBox
 public:
     OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
     virtual ~OMarkableTreeListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    CheckButtonHdl() SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    CheckButtonHdl() override;
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
     /// the handler given is called whenever the check state of one or more items changed
     void SetCheckHandler(const Link<>& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) override;
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
     SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);

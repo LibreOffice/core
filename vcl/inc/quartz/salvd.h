@@ -56,12 +56,12 @@ public:
     AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
 
-    virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
-    virtual bool                    SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual SalGraphics*            AcquireGraphics() override;
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
+    virtual bool                    SetSize( long nNewDX, long nNewDY ) override;
 
-    virtual long GetWidth() const SAL_OVERRIDE;
-    virtual long GetHeight() const SAL_OVERRIDE;
+    virtual long GetWidth() const override;
+    virtual long GetHeight() const override;
 };
 
 #endif // INCLUDED_VCL_INC_QUARTZ_SALVD_H

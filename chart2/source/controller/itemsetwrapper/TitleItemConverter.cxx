@@ -62,7 +62,7 @@ public:
     virtual ~FormattedStringsConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
+    virtual const sal_uInt16 * GetWhichPairs() const override;
 };
 
 FormattedStringsConverter::FormattedStringsConverter(

@@ -42,7 +42,7 @@ public:
         vcl::Window* pParent,
         AreaPropertyPanelBase& rPanel);
     virtual ~AreaTransparencyGradientControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);

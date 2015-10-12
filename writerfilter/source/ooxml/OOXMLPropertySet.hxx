@@ -32,12 +32,12 @@ public:
 
     virtual ~OOXMLProperty();
 
-    virtual sal_uInt32 getId() const SAL_OVERRIDE = 0;
-    virtual Value::Pointer_t getValue() SAL_OVERRIDE = 0;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE = 0;
+    virtual sal_uInt32 getId() const override = 0;
+    virtual Value::Pointer_t getValue() override = 0;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps() override = 0;
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string getName() const SAL_OVERRIDE = 0;
-    virtual std::string toString() const SAL_OVERRIDE = 0;
+    virtual std::string getName() const override = 0;
+    virtual std::string toString() const override = 0;
 #endif
     virtual void resolve(Properties & rProperties) = 0;
 };
@@ -49,7 +49,7 @@ public:
 
     virtual ~OOXMLPropertySet();
 
-    virtual void resolve(Properties & rHandler) SAL_OVERRIDE = 0;
+    virtual void resolve(Properties & rHandler) override = 0;
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) = 0;
     virtual OOXMLPropertySet * clone() const = 0;
@@ -64,7 +64,7 @@ class OOXMLTable : public writerfilter::Reference<Table>
 public:
     virtual ~OOXMLTable();
 
-    virtual void resolve(Table & rTable) SAL_OVERRIDE = 0;
+    virtual void resolve(Table & rTable) override = 0;
     virtual OOXMLTable * clone() const = 0;
 };
 }}

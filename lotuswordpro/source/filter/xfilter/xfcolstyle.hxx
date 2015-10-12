@@ -84,12 +84,12 @@ public:
      */
     double  GetWidth();
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
     /**
      * @descr   output column style as an xml node.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     double      m_fWidth;

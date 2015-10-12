@@ -59,7 +59,7 @@ class AquaBlinker : public Timer
 
     static void Blink( AquaSalFrame*, const Rectangle&, int nTimeout = 80 );
 
-    virtual void Invoke() SAL_OVERRIDE
+    virtual void Invoke() override
     {
         Stop();
         if( AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbShown )

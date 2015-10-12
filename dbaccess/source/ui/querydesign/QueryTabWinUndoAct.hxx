@@ -44,8 +44,8 @@ namespace dbaui
 
         void SetOwnership(bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
 
-        virtual void Undo() SAL_OVERRIDE = 0;
-        virtual void Redo() SAL_OVERRIDE = 0;
+        virtual void Undo() override = 0;
+        virtual void Redo() override = 0;
 
         // access to the TabWin
         void SetTabWin(OQueryTableWindow* pTW) { m_pTabWin = pTW; }

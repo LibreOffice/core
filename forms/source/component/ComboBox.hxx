@@ -65,78 +65,78 @@ class OComboBoxModel
 
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OComboBoxModel );
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
-                throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+                throw (css::uno::Exception, std::exception) override;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-                throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+                throw (css::lang::IllegalArgumentException) override;
 
     // XLoadListener
-    virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.OComboBoxModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getServiceName() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
-    ) const SAL_OVERRIDE;
+    ) const override;
     virtual void describeAggregateProperties(
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
-    ) const SAL_OVERRIDE;
+    ) const override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) override;
 
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
 
 protected:
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
-    virtual void            onDisconnectedDbColumn() SAL_OVERRIDE;
+    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
+    virtual void            onDisconnectedDbColumn() override;
 
-    virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
+    virtual css::uno::Any   getDefaultForReset() const override;
 
-    virtual void            resetNoBroadcast() SAL_OVERRIDE;
+    virtual void            resetNoBroadcast() override;
 
     // OEntryListHelper overridables
-    virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) SAL_OVERRIDE;
-    virtual void    connectedExternalListSource( ) SAL_OVERRIDE;
-    virtual void    disconnectedExternalListSource( ) SAL_OVERRIDE;
-    virtual void    refreshInternalEntryList() SAL_OVERRIDE;
+    virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
+    virtual void    connectedExternalListSource( ) override;
+    virtual void    disconnectedExternalListSource( ) override;
+    virtual void    refreshInternalEntryList() override;
 
 protected:
     void loadData( bool _bForce );
 
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class OComboBoxControl : public OBoundControl
@@ -146,10 +146,10 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.OComboBoxControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 

@@ -50,16 +50,16 @@ class StringEmitContext : public EmitContext
     public:
     StringEmitContext() : EmitContext(), m_aBuf(256) {}
     virtual ~StringEmitContext() {}
-    virtual bool write( const void* pBuf, unsigned int nLen ) throw() SAL_OVERRIDE
+    virtual bool write( const void* pBuf, unsigned int nLen ) throw() override
     {
         m_aBuf.append( static_cast<const sal_Char*>(pBuf), nLen );
         return true;
     }
-    virtual unsigned int getCurPos() throw() SAL_OVERRIDE { return m_aBuf.getLength(); }
-    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() SAL_OVERRIDE
+    virtual unsigned int getCurPos() throw() override { return m_aBuf.getLength(); }
+    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() override
     { return (nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) ) &&
              write( m_aBuf.getStr() + nOrigOffset, nLen ); }
-    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() SAL_OVERRIDE
+    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() override
     {
         if( nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) )
         {

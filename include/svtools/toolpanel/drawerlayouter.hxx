@@ -47,22 +47,22 @@ namespace svt
         virtual ~DrawerDeckLayouter();
 
         // IDeckLayouter
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) SAL_OVERRIDE;
-        virtual void        Destroy() SAL_OVERRIDE;
-        virtual void        SetFocusToPanelSelector() SAL_OVERRIDE;
-        virtual size_t      GetAccessibleChildCount() const SAL_OVERRIDE;
+        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) override;
+        virtual void        Destroy() override;
+        virtual void        SetFocusToPanelSelector() override;
+        virtual size_t      GetAccessibleChildCount() const override;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                             GetAccessibleChild(
                                 const size_t i_nChildIndex,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                            ) SAL_OVERRIDE;
+                            ) override;
 
         // IToolPanelDeckListener
-        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
-        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
-        virtual void Dying() SAL_OVERRIDE;
+        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) override;
+        virtual void PanelRemoved( const size_t i_nPosition ) override;
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) override;
+        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter ) override;
+        virtual void Dying() override;
 
     private:
         // triggers a re-arrange of the panel deck elements

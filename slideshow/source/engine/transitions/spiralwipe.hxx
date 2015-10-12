@@ -34,7 +34,7 @@ class SpiralWipe : public ParametricPolyPolygon
 {
 public:
     SpiralWipe( sal_Int32 nElements, bool flipOnYAxis = false );
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 protected:
     ::basegfx::B2DPolyPolygon calcNegSpiral( double t ) const;
 
@@ -49,7 +49,7 @@ class BoxSnakesWipe : public SpiralWipe
 public:
     BoxSnakesWipe( sal_Int32 nElements, bool fourBox = false )
         : SpiralWipe(nElements), m_fourBox(fourBox) {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     const bool m_fourBox;
 };

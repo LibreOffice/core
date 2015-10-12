@@ -37,7 +37,7 @@ class SwForm;
 // insert marker for index entry
 class SwIdxFormDlg : public SvxStandardDialog
 {
-    void            Apply() SAL_OVERRIDE;
+    void            Apply() override;
 
     VclPtr<ListBox>         aEntryLB;
     VclPtr<OKButton>        aOKBtn;
@@ -65,7 +65,7 @@ class SwIdxFormDlg : public SvxStandardDialog
 public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

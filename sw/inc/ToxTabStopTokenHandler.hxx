@@ -84,7 +84,7 @@ public:
      */
     ToxTabStopTokenHandler::HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrm *currentLayout) const SAL_OVERRIDE;
+            const SwRootFrm *currentLayout) const override;
 
 private:
     /** Test whether the page layout can be obtained by a layout rectangle.

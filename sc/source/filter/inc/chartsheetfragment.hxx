@@ -33,14 +33,14 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
-    virtual void        initializeImport() SAL_OVERRIDE;
-    virtual void        finalizeImport() SAL_OVERRIDE;
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
+    virtual void        initializeImport() override;
+    virtual void        finalizeImport() override;
 
 private:
     /** Imports the relation identifier for the DrawingML part. */

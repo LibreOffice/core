@@ -67,16 +67,16 @@ class OAddFieldWindowListBox: public SvTreeListBox
 public:
     explicit OAddFieldWindowListBox( OAddFieldWindow* _pParent );
     virtual ~OAddFieldWindowListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     uno::Sequence< beans::PropertyValue > getSelectedFieldDescriptors();
 
 protected:
     // DragSourceHelper
-    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
 private:
     using SvTreeListBox::ExecuteDrop;

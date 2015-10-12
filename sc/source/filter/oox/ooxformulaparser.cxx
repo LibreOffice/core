@@ -43,7 +43,7 @@ public:
     Sequence< FormulaToken > parseFormula( const OUString& rFormula, const CellAddress& rReferencePos );
 
 protected:
-    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const SAL_OVERRIDE;
+    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const override;
 
 private:
     ApiParserWrapper    maApiParser;

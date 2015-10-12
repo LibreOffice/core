@@ -95,20 +95,20 @@ public:
     virtual void SAL_CALL
         statusChanged (
             const ::com::sun::star::frame::FeatureStateEvent& rState)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
         disposing(const com::sun::star::lang::EventObject& rEvent)
-        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
 protected:
     /** This method is called by the WeakComponentImplHelper base class in
         reaction to a XComponent::dispose() call.  It releases all currently
         active listeners.
     */
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 private:
     Link<const OUString&,void> maCallback;

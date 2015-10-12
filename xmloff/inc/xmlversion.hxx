@@ -44,10 +44,10 @@ public:
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler );
     virtual     ~XMLVersionListExport() {}
 
-    sal_uInt32  exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
-    void        _ExportAutoStyles() SAL_OVERRIDE {}
-    void        _ExportMasterStyles () SAL_OVERRIDE {}
-    void        _ExportContent() SAL_OVERRIDE {}
+    sal_uInt32  exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
+    void        _ExportAutoStyles() override {}
+    void        _ExportMasterStyles () override {}
+    void        _ExportContent() override {}
 };
 
 class XMLVersionListImport : public SvXMLImport
@@ -62,7 +62,7 @@ protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
 public:
 
@@ -93,7 +93,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
 };
 
@@ -120,17 +120,17 @@ public:
 class XMLVersionListPersistence : public ::cppu::WeakImplHelper< ::com::sun::star::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
 {
 public:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::RevisionTag > SAL_CALL load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL store( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::com::sun::star::uno::Sequence< ::com::sun::star::util::RevisionTag >& List ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::RevisionTag > SAL_CALL load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL store( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::com::sun::star::uno::Sequence< ::com::sun::star::util::RevisionTag >& List ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

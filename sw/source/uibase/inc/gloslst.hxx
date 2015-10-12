@@ -70,7 +70,7 @@ public:
 
     void            Update();
 
-    virtual void    Invoke() SAL_OVERRIDE;
+    virtual void    Invoke() override;
 
     void            ClearGroups();
 };

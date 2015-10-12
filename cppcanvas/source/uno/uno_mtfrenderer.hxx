@@ -26,13 +26,13 @@ public:
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL setMetafile (const css::uno::Sequence< sal_Int8 >& rMtf) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL draw (double fScaleX, double fScaleY) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setMetafile (const css::uno::Sequence< sal_Int8 >& rMtf) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL draw (double fScaleX, double fScaleY) throw (css::uno::RuntimeException, std::exception) override;
 
     // XFastPropertySet
     // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return css::uno::Any(); }
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (css::uno::RuntimeException, std::exception) override { return css::uno::Any(); }
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     GDIMetaFile* mpMetafile;

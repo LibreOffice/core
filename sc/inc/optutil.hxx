@@ -44,8 +44,8 @@ public:
             ScLinkConfigItem( const OUString& rSubTree, ConfigItemMode nMode );
     void    SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink );
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    ImplCommit() override;
 
     void    SetModified()   { ConfigItem::SetModified(); }
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>

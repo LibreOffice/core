@@ -84,12 +84,12 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
     virtual                     ~ScTPValidationValue();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
     static VclPtr<SfxTabPage>          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
-    virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual bool                FillItemSet( SfxItemSet* rArgSet ) override;
+    virtual void                Reset( const SfxItemSet* rArgSet ) override;
 
 private:
     void                        Init();
@@ -132,7 +132,7 @@ public:
     class ScRefButtonEx : public ::formula::RefButton
     {
         VclPtr<ScTPValidationValue> m_pPage;
-        virtual void Click() SAL_OVERRIDE;
+        virtual void Click() override;
     public:
         ScRefButtonEx(vcl::Window* pParent, WinBits nStyle)
             : ::formula::RefButton(pParent, nStyle)
@@ -140,7 +140,7 @@ public:
         {
         }
         virtual ~ScRefButtonEx();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         void SetParentPage(ScTPValidationValue *pPage)
         {
             m_pPage = pPage;
@@ -183,7 +183,7 @@ class ScValidationDlg
 public:
     explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
     virtual                     ~ScValidationDlg() { disposeOnce(); }
-    virtual void                dispose() SAL_OVERRIDE
+    virtual void                dispose() override
     {
         if( m_bOwnRefHdlr )
             RemoveRefDlg( false );
@@ -204,13 +204,13 @@ public:
 
     void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
-    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE
+    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) override
     {
         if ( m_pHandler && m_pSetReferenceHdl )
             (m_pHandler->*m_pSetReferenceHdl)( rRef, pDoc );
     }
 
-    virtual void            SetActive() SAL_OVERRIDE
+    virtual void            SetActive() override
     {
         if ( m_pHandler && m_pSetActiveHdl )
             (m_pHandler->*m_pSetActiveHdl)();
@@ -219,7 +219,7 @@ public:
     bool IsRefInputting(){  return m_bRefInputting; }
     vcl::Window*             get_refinput_shrink_parent() { return m_pHBox; }
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override
     {
         if( !CanInputStart( pEdit ) )
             return;
@@ -232,7 +232,7 @@ public:
             (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
-    virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE
+    virtual void        RefInputDone( bool bForced = false ) override
     {
         if( !CanInputDone( bForced ) )
             return;
@@ -251,7 +251,7 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    bool Close() SAL_OVERRIDE
+    bool Close() override
     {
         if( m_bOwnRefHdlr )
         {
@@ -275,11 +275,11 @@ private:
 public:
             ScTPValidationHelp( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationHelp();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
 class ScTPValidationError : public SfxTabPage
@@ -301,11 +301,11 @@ private:
 public:
             ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationError();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX

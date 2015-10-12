@@ -48,7 +48,7 @@ public:
     }
 
     virtual Any SAL_CALL queryInterface(const Type & _type)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE
+        throw (RuntimeException, std::exception) override
     {
         Any aInterface;
         if (_type == cppu::UnoType<XInterface>::get())
@@ -65,12 +65,12 @@ public:
         return Any();
     }
 
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
+    virtual void SAL_CALL acquire() throw () override
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE
+    virtual void SAL_CALL release() throw () override
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;

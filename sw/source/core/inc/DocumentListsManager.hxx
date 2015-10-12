@@ -39,17 +39,17 @@ class DocumentListsManager : public IDocumentListsAccess,
         DocumentListsManager( SwDoc& i_rSwdoc );
 
         SwList* createList( const OUString& rListId,
-                                    const OUString& rDefaultListStyleName ) SAL_OVERRIDE;
-        void deleteList( const OUString& rListId ) SAL_OVERRIDE;
-        SwList* getListByName( const OUString& rListId ) const SAL_OVERRIDE;
+                                    const OUString& rDefaultListStyleName ) override;
+        void deleteList( const OUString& rListId ) override;
+        SwList* getListByName( const OUString& rListId ) const override;
 
-        SwList* createListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
-        SwList* getListForListStyle( const OUString& rListStyleName ) const SAL_OVERRIDE;
-        void deleteListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
-        void deleteListsByDefaultListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
+        SwList* createListForListStyle( const OUString& rListStyleName ) override;
+        SwList* getListForListStyle( const OUString& rListStyleName ) const override;
+        void deleteListForListStyle( const OUString& rListStyleName ) override;
+        void deleteListsByDefaultListStyle( const OUString& rListStyleName ) override;
         // #i91400#
         void trackChangeOfListStyleName( const OUString& rListStyleName,
-                                                 const OUString& rNewListStyleName ) SAL_OVERRIDE;
+                                                 const OUString& rNewListStyleName ) override;
         virtual ~DocumentListsManager();
 
     private:

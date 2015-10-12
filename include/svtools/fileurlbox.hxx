@@ -40,8 +40,8 @@ namespace svt
         FileURLBox( vcl::Window* _pParent, WinBits _nStyle );
 
     protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
+        virtual bool        Notify( NotifyEvent& rNEvt ) override;
 
     public:
         /** transforms the given URL content into a system-dependent notation, if possible, and

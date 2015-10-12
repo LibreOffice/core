@@ -79,7 +79,7 @@ public:
         m_list=list;
     }
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 private:
     OUString m_strName;
     std::vector<OUString> m_list;

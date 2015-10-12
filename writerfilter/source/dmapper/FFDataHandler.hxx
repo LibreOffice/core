@@ -78,10 +78,10 @@ private:
     OUString m_sTextDefault;
 
     // sprm
-    void lcl_sprm(Sprm & r_sprm) SAL_OVERRIDE;
+    void lcl_sprm(Sprm & r_sprm) override;
 
     // attribute
-    void lcl_attribute(Id name, Value & val) SAL_OVERRIDE;
+    void lcl_attribute(Id name, Value & val) override;
 };
 
 

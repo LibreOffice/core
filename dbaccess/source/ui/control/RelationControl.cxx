@@ -101,23 +101,23 @@ namespace dbaui
 
     protected:
         virtual ~ORelationControl() { disposeOnce(); }
-        virtual void dispose() SAL_OVERRIDE { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
-        virtual void Resize() SAL_OVERRIDE;
-        virtual Size GetOptimalSize() const SAL_OVERRIDE;
-        virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void dispose() override { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
+        virtual void Resize() override;
+        virtual Size GetOptimalSize() const override;
+        virtual bool PreNotify(NotifyEvent& rNEvt ) override;
 
-        virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
+        virtual bool IsTabAllowed(bool bForward) const override;
 
         void Init(const TTableConnectionData::value_type& _pConnData);
-        virtual void Init() SAL_OVERRIDE { ORelationControl_Base::Init(); }
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
-        virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
-        virtual bool SaveModified() SAL_OVERRIDE;
-        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
+        virtual void Init() override { ORelationControl_Base::Init(); }
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
+        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const override;
+        virtual bool SeekRow( long nRow ) override;
+        virtual bool SaveModified() override;
+        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
 
-        virtual void CellModified() SAL_OVERRIDE;
+        virtual void CellModified() override;
 
         DECL_LINK_TYPED( AsynchDeactivate, void*, void );
     private:

@@ -120,7 +120,7 @@ private:
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
 
     Link<Button*,void> m_aOriginalOKClickHdl;
     DECL_LINK_TYPED( OKPressed, Button*, void );
@@ -132,7 +132,7 @@ public:
                     const ::com::sun::star::uno::Reference<
                             ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected

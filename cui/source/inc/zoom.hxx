@@ -58,7 +58,7 @@ private:
 public:
     SvxZoomDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxZoomDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     const SfxItemSet* GetOutputItemSet() const;
 

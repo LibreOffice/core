@@ -79,8 +79,8 @@ namespace frm
         explicit ParaAlignmentHandler( AttributeId _nAttributeId );
 
     public:
-        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const override;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class LineSpacingHandler : public AttributeHandler
@@ -92,8 +92,8 @@ namespace frm
         explicit LineSpacingHandler( AttributeId _nAttributeId );
 
     public:
-        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const override;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class EscapementHandler : public AttributeHandler
@@ -105,8 +105,8 @@ namespace frm
         explicit EscapementHandler( AttributeId _nAttributeId );
 
     public:
-        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const override;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class SlotHandler : public AttributeHandler
@@ -118,8 +118,8 @@ namespace frm
         SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId );
 
     public:
-        virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const override;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class BooleanHandler : public AttributeHandler
@@ -128,8 +128,8 @@ namespace frm
         BooleanHandler( AttributeId _nAttributeId, WhichId _nWhichId );
 
     public:
-        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const override;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class FontSizeHandler : public AttributeHandler
@@ -138,8 +138,8 @@ namespace frm
         FontSizeHandler( AttributeId _nAttributeId, WhichId _nWhichId );
 
     public:
-        virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
-        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const override;
+        virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
     class ParagraphDirectionHandler : public AttributeHandler
@@ -153,8 +153,8 @@ namespace frm
         explicit ParagraphDirectionHandler( AttributeId _nAttributeId );
 
     public:
-        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
-        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const SAL_OVERRIDE;
+        virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const override;
+        virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const override;
     };
 
 

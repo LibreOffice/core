@@ -47,21 +47,21 @@ class SvxBorderTabPage : public SfxTabPage
 
 public:
     virtual ~SvxBorderTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
     static const sal_uInt16*      GetRanges() { return pRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rCoreAttrs ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
+    virtual void        ChangesApplied() override;
 
     void                HideShadowControls();
-    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
     void                SetTableMode();
 protected:
-    virtual sfxpg        DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual sfxpg        DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     SvxBorderTabPage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs );

@@ -212,7 +212,7 @@ public:
 private:
     virtual ~Thread();
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
     void handleSpecificError(
         uno::Reference< deployment::XPackage > const & package,

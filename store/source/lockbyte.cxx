@@ -291,18 +291,18 @@ class FileLockBytes :
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) override;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) override;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) override;
 
-    virtual storeError readAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError readAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) override;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes) override;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
-    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) override;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) override;
 
-    virtual storeError flush_Impl() SAL_OVERRIDE;
+    virtual storeError flush_Impl() override;
 
 public:
     /** Construction.
@@ -511,23 +511,23 @@ class MappedLockBytes :
 
     /** PageData::Allocator implementation.
      */
-    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) SAL_OVERRIDE;
-    virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
+    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) override;
+    virtual void deallocate_Impl (void * pPage) override;
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) override;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) override;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) override;
 
-    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) override;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) override;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
-    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) override;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) override;
 
-    virtual storeError flush_Impl() SAL_OVERRIDE;
+    virtual storeError flush_Impl() override;
 
 public:
     /** Construction.
@@ -649,18 +649,18 @@ class MemoryLockBytes :
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) override;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) override;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) override;
 
-    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) override;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) override;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
-    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) override;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) override;
 
-    virtual storeError flush_Impl() SAL_OVERRIDE;
+    virtual storeError flush_Impl() override;
 
 public:
     /** Construction.

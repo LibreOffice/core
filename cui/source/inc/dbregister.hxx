@@ -87,13 +87,13 @@ namespace svx
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
         virtual ~DbRegistrationOptionsPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
-        virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-        virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-        virtual void        FillUserData() SAL_OVERRIDE;
+        virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+        virtual void        Reset( const SfxItemSet* rSet ) override;
+        virtual void        FillUserData() override;
     };
 
     /** helper for DatabaseRegistrationDialog
@@ -120,7 +120,7 @@ namespace svx
     public:
         DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rAttr );
 
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
     };
 
 

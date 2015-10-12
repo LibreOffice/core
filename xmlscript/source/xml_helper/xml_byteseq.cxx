@@ -46,17 +46,17 @@ public:
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(
         Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL readSomeBytes(
         Sequence< sal_Int8 > & rData, sal_Int32 nMaxBytesToRead )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes(
         sal_Int32 nBytesToSkip )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available()
-        throw (io::NotConnectedException, io::IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput()
-        throw (io::NotConnectedException, io::IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::IOException, RuntimeException, std::exception) override;
 };
 
 sal_Int32 BSeqInputStream::readBytes(
@@ -110,11 +110,11 @@ public:
     // XOutputStream
     virtual void SAL_CALL writeBytes(
         Sequence< sal_Int8 > const & rData )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) override;
     virtual void SAL_CALL flush()
-        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) override;
     virtual void SAL_CALL closeOutput()
-        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception) override;
 };
 
 void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )

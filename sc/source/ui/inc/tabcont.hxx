@@ -46,22 +46,22 @@ private:
 
     void SwitchToPageId(sal_uInt16 nId);
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    virtual bool    StartRenaming() SAL_OVERRIDE;
-    virtual TabBarAllowRenamingReturnCode    AllowRenaming() SAL_OVERRIDE;
-    virtual void    EndRenaming() SAL_OVERRIDE;
-    virtual void    Mirror() SAL_OVERRIDE;
+    virtual bool    StartRenaming() override;
+    virtual TabBarAllowRenamingReturnCode    AllowRenaming() override;
+    virtual void    EndRenaming() override;
+    virtual void    Mirror() override;
 
-    virtual void    AddTabClick() SAL_OVERRIDE;
+    virtual void    AddTabClick() override;
 
 public:
                     ScTabControl( vcl::Window* pParent, ScViewData* pData );

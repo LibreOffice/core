@@ -53,13 +53,13 @@ class UnsafeBridge : public cppu::Enterable
 public:
     explicit UnsafeBridge();
 
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) override;
 
-    virtual void v_enter() SAL_OVERRIDE;
-    virtual void v_leave() SAL_OVERRIDE;
+    virtual void v_enter() override;
+    virtual void v_leave() override;
 
-    virtual bool v_isValid(rtl::OUString * pReason) SAL_OVERRIDE;
+    virtual bool v_isValid(rtl::OUString * pReason) override;
 };
 
 UnsafeBridge::UnsafeBridge()

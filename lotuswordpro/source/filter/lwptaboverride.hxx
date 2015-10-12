@@ -74,9 +74,9 @@ public:
     {
     }
 
-    virtual LwpTabOverride* clone() const SAL_OVERRIDE;
+    virtual LwpTabOverride* clone() const override;
 
-    virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE
+    virtual void Read(LwpObjectStream *pStrm) override
     {
         if (pStrm->QuickReadBool())
         {

@@ -111,7 +111,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK_TYPED( SaveTypeHdl, Button*, void );
 
-    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Apply() override;
     bool            ExecQryShell();
 
 public:
@@ -122,7 +122,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
     virtual ~SwMailMergeDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     inline DBManagerOptions GetMergeType() { return nMergeType; }
 
@@ -143,7 +143,7 @@ class SwMailMergeCreateFromDlg : public ModalDialog
 public:
     SwMailMergeCreateFromDlg(vcl::Window* pParent);
     virtual ~SwMailMergeCreateFromDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     bool IsThisDocument() const
     {
         return m_pThisDocRB->IsChecked();
@@ -156,7 +156,7 @@ class SwMailMergeFieldConnectionsDlg : public ModalDialog
 public:
     SwMailMergeFieldConnectionsDlg(vcl::Window* pParent);
     virtual ~SwMailMergeFieldConnectionsDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool IsUseExistingConnections() const
     {

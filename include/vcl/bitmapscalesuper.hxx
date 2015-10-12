@@ -28,7 +28,7 @@ public:
                     BitmapScaleSuper(const double& rScaleX, const double& rScaleY);
     virtual         ~BitmapScaleSuper();
 
-    virtual bool    filter(Bitmap& rBitmap) SAL_OVERRIDE;
+    virtual bool    filter(Bitmap& rBitmap) override;
 
 private:
     double          mrScaleX;

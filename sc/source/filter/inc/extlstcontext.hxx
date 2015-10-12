@@ -29,8 +29,8 @@ class ExtCfRuleContext : public WorksheetContextBase
 public:
     explicit ExtCfRuleContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pDataBar );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
     ScDataBarFormatData* mpTarget;
@@ -43,10 +43,10 @@ class ExtConditionalFormattingContext : public WorksheetContextBase
 public:
     explicit ExtConditionalFormattingContext(WorksheetContextBase& rFragment);
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters(const OUString& rCharacters) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void onStartElement( const AttributeList& rAttribs ) override;
+    virtual void onCharacters(const OUString& rCharacters) override;
+    virtual void onEndElement() override;
 
 private:
     OUString aChars;
@@ -68,9 +68,9 @@ public:
     explicit ExtLstLocalContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ); // until now a ExtLst always extends an existing entry
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
 
 private:
     ScDataBarFormatData* mpTarget;
@@ -85,8 +85,8 @@ public:
     explicit ExtGlobalContext( WorksheetContextBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
 };
@@ -101,7 +101,7 @@ public:
     explicit ExtLstGlobalContext( WorksheetFragment& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
 class ExtGlobalWorkbookContext : public WorkbookContextBase
@@ -110,8 +110,8 @@ public:
     explicit ExtGlobalWorkbookContext( WorkbookContextBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
 };
@@ -122,7 +122,7 @@ public:
     explicit ExtLstGlobalWorkbookContext( WorkbookFragment& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
 } //namespace xls

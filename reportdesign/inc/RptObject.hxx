@@ -141,26 +141,26 @@ protected:
     OCustomShape(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
     OCustomShape(const OUString& _sComponentName);
 
-    virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual void NbcMove( const Size& rSize ) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
-    virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
+    virtual SdrPage* GetImplPage() const override;
 
 public:
     TYPEINFO_OVERRIDE();
 
     virtual ~OCustomShape();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual sal_uInt32 GetObjInventor() const override;
 
 private:
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) SAL_OVERRIDE;
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
 };
 
 
@@ -174,7 +174,7 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     sal_uInt16 m_nType;
     bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) SAL_OVERRIDE;
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
 
 public:
     static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
@@ -186,26 +186,26 @@ protected:
     OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
 
 
-    virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual void NbcMove( const Size& rSize ) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
-    virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
+    virtual SdrPage* GetImplPage() const override;
 
 public:
     TYPEINFO_OVERRIDE();
 
     virtual ~OOle2Obj();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual sal_uInt32 GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
-    virtual OOle2Obj* Clone() const SAL_OVERRIDE;
-    virtual void initializeOle() SAL_OVERRIDE;
+    virtual OOle2Obj* Clone() const override;
+    virtual void initializeOle() override;
 
     OOle2Obj& operator=(const OOle2Obj& rObj);
 
@@ -232,36 +232,36 @@ protected:
 
     virtual ~OUnoObject();
 
-    virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual void NbcMove( const Size& rSize ) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
-    virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
+    virtual SdrPage* GetImplPage() const override;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException) override;
 
     /** creates the m_xMediator when it doesn't already exist.
         @param  _bReverse   when set to <TRUE/> then the properties from the uno control will be copied into report control
     */
     void CreateMediator(bool _bReverse = false);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
 
     static OUString GetDefaultName(const OUnoObject* _pObj);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
-    virtual OUnoObject* Clone() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual sal_uInt32 GetObjInventor() const override;
+    virtual OUnoObject* Clone() const override;
 
     OUnoObject& operator=(const OUnoObject& rObj);
 
 private:
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) SAL_OVERRIDE;
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
     void    impl_setReportComponent_nothrow();
     void    impl_initializeModel_nothrow();
 };

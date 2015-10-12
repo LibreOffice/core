@@ -49,7 +49,7 @@ public:
     ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true );
 
     virtual ~ScNamePasteDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     std::vector<OUString> GetSelectedNames() const;
 };

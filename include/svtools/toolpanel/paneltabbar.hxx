@@ -52,7 +52,7 @@ namespace svt
     public:
         PanelTabBar( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
         virtual ~PanelTabBar();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // attribute access
         TabItemContent  GetTabItemContent() const;
@@ -66,23 +66,23 @@ namespace svt
         PushButton&                 GetScrollButton( const bool i_bForward );
 
         // Window overridables
-        virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+        virtual Size    GetOptimalSize() const override;
 
     protected:
         // Window overridables
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rRect ) SAL_OVERRIDE;
-        virtual void    Resize() SAL_OVERRIDE;
-        virtual void    MouseMove( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
-        virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
-        virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
-        virtual void    RequestHelp( const HelpEvent& i_rHelpEvent ) SAL_OVERRIDE;
-        virtual void    GetFocus() SAL_OVERRIDE;
-        virtual void    LoseFocus() SAL_OVERRIDE;
-        virtual void    KeyInput( const KeyEvent& i_rKeyEvent ) SAL_OVERRIDE;
-        virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent ) SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rRect ) override;
+        virtual void    Resize() override;
+        virtual void    MouseMove( const MouseEvent& i_rMouseEvent ) override;
+        virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent ) override;
+        virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent ) override;
+        virtual void    RequestHelp( const HelpEvent& i_rHelpEvent ) override;
+        virtual void    GetFocus() override;
+        virtual void    LoseFocus() override;
+        virtual void    KeyInput( const KeyEvent& i_rKeyEvent ) override;
+        virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent ) override;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                        GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
+                        GetComponentInterface( bool i_bCreate ) override;
 
     private:
         ::std::unique_ptr< PanelTabBar_Impl > m_pImpl;

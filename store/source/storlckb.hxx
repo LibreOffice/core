@@ -105,7 +105,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual bool isKindOf (sal_uInt32 nMagic) SAL_OVERRIDE;
+    virtual bool isKindOf (sal_uInt32 nMagic) override;
 
 protected:
     /** Destruction (OReference).

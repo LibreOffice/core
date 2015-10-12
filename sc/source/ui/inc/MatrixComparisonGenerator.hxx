@@ -32,8 +32,8 @@ public:
     virtual ~ScMatrixComparisonGenerator();
 
 protected:
-    virtual sal_Int16 GetUndoNameId() SAL_OVERRIDE;
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) SAL_OVERRIDE;
+    virtual sal_Int16 GetUndoNameId() override;
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 
     virtual const OUString getLabel() = 0;
     virtual const OUString getTemplate() = 0;

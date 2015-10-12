@@ -149,7 +149,7 @@ public:
     }
 
 protected:
-    virtual void getCurrentValue( Any& _out_rCurrentValue ) const SAL_OVERRIDE
+    virtual void getCurrentValue( Any& _out_rCurrentValue ) const override
     {
         _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getPosition();
     }
@@ -165,7 +165,7 @@ public:
     }
 
 protected:
-    virtual void getCurrentValue( Any& _out_rCurrentValue ) const SAL_OVERRIDE
+    virtual void getCurrentValue( Any& _out_rCurrentValue ) const override
     {
         _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
     }

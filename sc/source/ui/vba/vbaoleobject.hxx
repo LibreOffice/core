@@ -31,30 +31,30 @@ class ScVbaOLEObject : public OLEObjectImpl_BASE
 {
 protected:
     css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
     css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
     ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape );
 
     // XOLEObject Attributes
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
 

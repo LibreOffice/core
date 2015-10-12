@@ -102,20 +102,20 @@ public:
                             css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
-    virtual void        ConvertAll( EditView& rEditView ) SAL_OVERRIDE;
+    virtual void        ConvertAll( EditView& rEditView ) override;
 
 protected:
     /** Callback from edit engine to check the next cell. */
-    virtual bool        SpellNextDocument() SAL_OVERRIDE;
+    virtual bool        SpellNextDocument() override;
 
     /** Returns true, if the current text contains a spelling error. */
-    virtual bool        NeedsConversion() SAL_OVERRIDE;
+    virtual bool        NeedsConversion() override;
 
     /** Show a query box that asks whether to restart at top of the sheet.
         @return  true = Restart at top, false = Stop the conversion. */
-    virtual bool        ShowTableWrapDialog() SAL_OVERRIDE;
+    virtual bool        ShowTableWrapDialog() override;
     /** Show a message box stating that spell checking is finished. */
-    virtual void        ShowFinishDialog() SAL_OVERRIDE;
+    virtual void        ShowFinishDialog() override;
 
 private:
     /** Returns the spelling dialog if it is open. */
@@ -134,14 +134,14 @@ public:
                             ScDocument* pRedoDoc );
 
     /** Converts all cells in the selection or sheet according to set language. */
-    virtual void        ConvertAll( EditView& rEditView ) SAL_OVERRIDE;
+    virtual void        ConvertAll( EditView& rEditView ) override;
 
 protected:
     /** Callback from edit engine to convert the next cell. */
-    virtual bool        ConvertNextDocument() SAL_OVERRIDE;
+    virtual bool        ConvertNextDocument() override;
 
     /** Returns true, if the current text contains text to convert. */
-    virtual bool        NeedsConversion() SAL_OVERRIDE;
+    virtual bool        NeedsConversion() override;
 
 private:
     ScConversionParam   maConvParam;        /// Conversion parameters.

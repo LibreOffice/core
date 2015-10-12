@@ -43,7 +43,7 @@ namespace svt { namespace table
     public:
         explicit TableDataWindow( TableControl_Impl& _rTableControl );
         virtual ~TableDataWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         inline void SetSelectHdl(const Link<LinkParamNone*,void>& rLink)
         {
@@ -51,12 +51,12 @@ namespace svt { namespace table
         }
 
         // Window overridables
-        virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-        virtual void        MouseMove( const MouseEvent& rMEvt) SAL_OVERRIDE;
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt) SAL_OVERRIDE;
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
-        virtual bool        Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-        virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void        MouseMove( const MouseEvent& rMEvt) override;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt) override;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt) override;
+        virtual bool        Notify(NotifyEvent& rNEvt) override;
+        virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
         void                SetBackground(const Wallpaper& rColor);
 

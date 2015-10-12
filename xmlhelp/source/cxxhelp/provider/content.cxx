@@ -195,7 +195,7 @@ public:
     {
     }
 
-    ResultSetBase* createResultSet() SAL_OVERRIDE
+    ResultSetBase* createResultSet() override
     {
         return new ResultSetForRoot( m_xContext,
                                      m_xProvider,
@@ -240,7 +240,7 @@ public:
     {
     }
 
-    ResultSetBase* createResultSet() SAL_OVERRIDE
+    ResultSetBase* createResultSet() override
     {
         return new ResultSetForQuery( m_xContext,
                                       m_xProvider,

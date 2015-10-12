@@ -35,7 +35,7 @@ class SwScrollbar: public ScrollBar
 
 public:
     void    ExtendedShow( bool bVisible = true );
-    void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
+    void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
     bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 
         // changing of document size

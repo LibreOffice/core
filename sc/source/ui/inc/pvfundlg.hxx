@@ -61,7 +61,7 @@ public:
     explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
     virtual ~ScDPFunctionDlg();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
     sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
@@ -103,7 +103,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
     virtual             ~ScDPSubtotalDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     sal_uInt16          GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
@@ -139,7 +139,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
     virtual              ~ScDPSubtotalOptDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
@@ -191,8 +191,8 @@ class ScDPShowDetailDlg : public ModalDialog
 public:
     explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
     virtual             ~ScDPShowDetailDlg();
-    virtual void        dispose() SAL_OVERRIDE;
-    virtual short       Execute() SAL_OVERRIDE;
+    virtual void        dispose() override;
+    virtual short       Execute() override;
 
     /**
      * @return String internal name of the selected field.  Note that this may

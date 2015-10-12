@@ -35,13 +35,13 @@ class SchXMLListItemContext : public SvXMLImportContext
 public:
     SchXMLListItemContext( SvXMLImport& rImport, const OUString& rLocalName, OUString& rText );
     virtual ~SchXMLListItemContext();
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     OUString& m_rText;

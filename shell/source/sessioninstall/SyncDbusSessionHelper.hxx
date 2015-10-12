@@ -24,31 +24,31 @@ namespace shell { namespace sessioninstall
             virtual ~SyncDbusSessionHelper() {}
 
             // XModify Methods
-            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& packages, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& packages, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* types */, const ::com::sun::star::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* types */, const ::com::sun::star::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
 
-            virtual void SAL_CALL RemovePackageByFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL RemovePackageByFiles( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 xid, const ::com::sun::star::uno::Sequence< OUString >& files, const OUString& interaction ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
             // XQuery Methods
-            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
 
         private:

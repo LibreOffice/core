@@ -51,8 +51,8 @@ public:
     css::uno::Reference< css::xforms::XModel > getModel() { return m_aModel;}
     css::uno::Reference< css::xml::dom::XNode > getContextNode() { return m_aContextNode;}
 
-    virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& aSequence) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& aSequence) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

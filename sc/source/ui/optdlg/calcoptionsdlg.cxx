@@ -383,14 +383,14 @@ struct UnOp : Op
     {
     }
 
-    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
     {
         pDoc->SetString(ScAddress(0,0,nTab), "arg");
         pDoc->SetString(ScAddress(1,0,nTab), msOp + "(arg)");
         pDoc->SetString(ScAddress(2,0,nTab), "expected");
     }
 
-    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
     {
         double nArg;
 
@@ -426,7 +426,7 @@ struct UnOp : Op
         }
     }
 
-    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
     {
         return "=SUM(" +
             ScRange(ScAddress(3,1,nTab),
@@ -456,7 +456,7 @@ struct BinOp : Op
     {
     }
 
-    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
     {
         pDoc->SetString(ScAddress(0,0,nTab), "lhs");
         pDoc->SetString(ScAddress(1,0,nTab), "rhs");
@@ -464,7 +464,7 @@ struct BinOp : Op
         pDoc->SetString(ScAddress(3,0,nTab), "expected");
     }
 
-    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
     {
         double nLhs, nRhs;
 
@@ -489,7 +489,7 @@ struct BinOp : Op
                         ",0,1)");
     }
 
-    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
     {
         return "=SUM(" +
             ScRange(ScAddress(4,1,nTab),
@@ -509,7 +509,7 @@ struct Round : Area
     {
     }
 
-    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
     {
         pDoc->SetString(ScAddress(0,0,nTab), "x");
         pDoc->SetString(ScAddress(1,0,nTab), "n");
@@ -517,7 +517,7 @@ struct Round : Area
         pDoc->SetString(ScAddress(3,0,nTab), "expected");
     }
 
-    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
     {
         const double nX(comphelper::rng::uniform_real_distribution(0, 100));
         const int nN(comphelper::rng::uniform_int_distribution(1, 10));
@@ -539,7 +539,7 @@ struct Round : Area
                         ",0,1)");
     }
 
-    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
     {
         return "=SUM(" +
             ScRange(ScAddress(4,1,nTab),
@@ -560,7 +560,7 @@ struct Normdist : Area
     {
     }
 
-    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
     {
         pDoc->SetString(ScAddress(0,0,nTab), "num");
         pDoc->SetString(ScAddress(1,0,nTab), "avg");
@@ -570,7 +570,7 @@ struct Normdist : Area
         pDoc->SetString(ScAddress(5,0,nTab), "expected");
     }
 
-    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
     {
         const double nNum(comphelper::rng::uniform_real_distribution(0, 100));
         const double nAvg(comphelper::rng::uniform_real_distribution(0, 100));
@@ -601,7 +601,7 @@ struct Normdist : Area
                         ",0,1)");
     }
 
-    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
     {
         return "=SUM(" +
             ScRange(ScAddress(6,1,nTab),
@@ -635,14 +635,14 @@ struct Reduction : Op
     {
     }
 
-    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
     {
         pDoc->SetString(ScAddress(0,0,nTab), "x");
         pDoc->SetString(ScAddress(1,0,nTab), msOp);
         pDoc->SetString(ScAddress(2,0,nTab), "expected");
     }
 
-    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
     {
         double nArg;
 
@@ -680,7 +680,7 @@ struct Reduction : Op
         }
     }
 
-    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
     {
         return "=SUM(" +
             ScRange(ScAddress(3,1+0,nTab),

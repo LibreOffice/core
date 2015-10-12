@@ -46,28 +46,28 @@ public:
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OWeakObject::release(); }
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire() throw () override { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override { OWeakObject::release(); }
 
     // XOutputStream
    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData )
            throw( com::sun::star::io::NotConnectedException,
                   com::sun::star::io::BufferSizeExceededException,
                   com::sun::star::io::IOException,
-                  com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  com::sun::star::uno::RuntimeException, std::exception) override;
 
    virtual void SAL_CALL flush()
            throw( com::sun::star::io::NotConnectedException,
                   com::sun::star::io::BufferSizeExceededException,
                   com::sun::star::io::IOException,
-                  com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  com::sun::star::uno::RuntimeException, std::exception) override;
 
 
     virtual void SAL_CALL closeOutput()
            throw( com::sun::star::io::NotConnectedException,
                   com::sun::star::io::IOException,
-                  com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                  com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 } // namespace gio

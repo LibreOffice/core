@@ -59,29 +59,29 @@ private:
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return read_write_access::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override
     { return read_write_access::getSupportedServiceNames(); }
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName)
         throw (
-            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override
     { return getRoot()->getByHierarchicalName(aName); }
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return getRoot()->hasByHierarchicalName(aName); }
 
     virtual void SAL_CALL replaceByHierarchicalName(
@@ -89,19 +89,19 @@ private:
         throw (
             css::lang::IllegalArgumentException,
             css::container::NoSuchElementException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     { getRoot()->replaceByHierarchicalName(aName, aElement); }
 
     virtual void SAL_CALL commitChanges()
-        throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     { getRoot()->commitChanges(); }
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return getRoot()->hasPendingChanges(); }
 
     virtual css::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return getRoot()->getPendingChanges(); }
 
     css::beans::Property SAL_CALL getPropertyByHierarchicalName(
@@ -109,12 +109,12 @@ private:
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException,
             std::exception)
-        SAL_OVERRIDE
+        override
     { return getRoot()->getPropertyByHierarchicalName(aHierarchicalName); }
 
     sal_Bool SAL_CALL hasPropertyByHierarchicalName(
         OUString const & aHierarchicalName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return getRoot()->hasPropertyByHierarchicalName(aHierarchicalName); }
 
     rtl::Reference< RootAccess > getRoot();

@@ -64,27 +64,27 @@ public:
 
     virtual ~ChartLinePanel();
 
-    virtual void updateData() SAL_OVERRIDE;
-    virtual void modelInvalid() SAL_OVERRIDE;
+    virtual void updateData() override;
+    virtual void modelInvalid() override;
 
-    virtual void selectionChanged(bool bCorrectType) SAL_OVERRIDE;
-    virtual void SelectionInvalid() SAL_OVERRIDE;
+    virtual void selectionChanged(bool bCorrectType) override;
+    virtual void SelectionInvalid() override;
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 
-    virtual void setLineWidth(const XLineWidthItem& rItem) SAL_OVERRIDE;
+    virtual void setLineWidth(const XLineWidthItem& rItem) override;
 
 protected:
 
-    virtual void setLineStyle(const XLineStyleItem& rItem) SAL_OVERRIDE;
-    virtual void setLineDash(const XLineDashItem& rItem) SAL_OVERRIDE;
-    virtual void setLineEndStyle(const XLineEndItem* pItem) SAL_OVERRIDE;
-    virtual void setLineStartStyle(const XLineStartItem* pItem) SAL_OVERRIDE;
-    virtual void setLineTransparency(const XLineTransparenceItem& rItem) SAL_OVERRIDE;
-    virtual void setLineJoint(const XLineJointItem* pItem) SAL_OVERRIDE;
-    virtual void setLineCap(const XLineCapItem* pItem) SAL_OVERRIDE;
+    virtual void setLineStyle(const XLineStyleItem& rItem) override;
+    virtual void setLineDash(const XLineDashItem& rItem) override;
+    virtual void setLineEndStyle(const XLineEndItem* pItem) override;
+    virtual void setLineStartStyle(const XLineStartItem* pItem) override;
+    virtual void setLineTransparency(const XLineTransparenceItem& rItem) override;
+    virtual void setLineJoint(const XLineJointItem* pItem) override;
+    virtual void setLineCap(const XLineCapItem* pItem) override;
 
 private:
 

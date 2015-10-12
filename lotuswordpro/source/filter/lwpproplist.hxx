@@ -69,7 +69,7 @@ class LwpPropListElement : public LwpDLVList
 {
 public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
     LwpAtomHolder GetValue(){return m_Value;}

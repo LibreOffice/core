@@ -170,8 +170,8 @@ public:
         pBrowse(pBrowse_)
     {}
     virtual ~ImpItemEdit() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { pBrowse.clear(); Edit::dispose(); }
-    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+    virtual void dispose() override { pBrowse.clear(); Edit::dispose(); }
+    virtual void KeyInput(const KeyEvent& rEvt) override;
 };
 
 void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)

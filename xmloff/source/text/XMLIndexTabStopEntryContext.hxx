@@ -60,12 +60,12 @@ protected:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(
         ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues) SAL_OVERRIDE;
+            ::com::sun::star::beans::PropertyValue> & rValues) override;
 };
 
 #endif

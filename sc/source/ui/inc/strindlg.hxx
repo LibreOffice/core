@@ -33,7 +33,7 @@ public:
         const OUString& rDefault,
         const OString& sHelpId, const OString& sEditHelpId);
     virtual ~ScStringInputDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetInputString() const
     {
         return m_pEdInput->GetText();

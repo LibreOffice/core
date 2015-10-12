@@ -542,8 +542,8 @@ public:
     }
 
     virtual void TCharacters(const OUString & /*rChars*/);
-    virtual void Characters(const OUString &rChars) SAL_OVERRIDE;
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) SAL_OVERRIDE;
+    virtual void Characters(const OUString &rChars) override;
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) override;
 };
 
 void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
@@ -754,9 +754,9 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrfx,rLName) {}
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -773,13 +773,13 @@ public:
         : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
         { nElementCount = GetSmImport().GetNodeStack().size(); }
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
     SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -793,7 +793,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLEncloseContext_Impl::EndElement()
@@ -817,7 +817,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -829,7 +829,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -841,7 +841,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -857,8 +857,8 @@ public:
         const OUString& rLName) : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
         aStyleHelper(*this) {}
 
-    void EndElement() SAL_OVERRIDE;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) SAL_OVERRIDE;
+    void EndElement() override;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
 };
 
 void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
@@ -891,7 +891,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLPaddedContext_Impl::EndElement()
@@ -915,7 +915,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLPhantomContext_Impl::EndElement()
@@ -953,8 +953,8 @@ public:
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
         cBegin('('), cEnd(')') {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    void EndElement() SAL_OVERRIDE;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    void EndElement() override;
 };
 
 
@@ -1044,7 +1044,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLErrorContext_Impl::EndElement()
@@ -1080,9 +1080,9 @@ public:
         aToken.eType = TNUMBER;
     }
 
-    virtual void TCharacters(const OUString &rChars) SAL_OVERRIDE;
+    virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
@@ -1106,9 +1106,9 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(false) {}
 
-    virtual void Characters(const OUString &rChars) SAL_OVERRIDE;
+    virtual void Characters(const OUString &rChars) override;
 
-    void StartElement(const uno::Reference<xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    void StartElement(const uno::Reference<xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
@@ -1159,9 +1159,9 @@ public:
         aToken.eType = TTEXT;
     }
 
-    virtual void TCharacters(const OUString &rChars) SAL_OVERRIDE;
+    virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
@@ -1191,9 +1191,9 @@ public:
         aToken.eType = TTEXT;
     }
 
-    virtual void TCharacters(const OUString &rChars) SAL_OVERRIDE;
+    virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
@@ -1234,12 +1234,12 @@ public:
         aToken.eType = TIDENT;
     }
 
-    void TCharacters(const OUString &rChars) SAL_OVERRIDE;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE
+    void TCharacters(const OUString &rChars) override;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override
     {
         aStyleHelper.RetrieveAttrs(xAttrList);
     };
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 void SmXMLIdentifierContext_Impl::EndElement()
@@ -1298,9 +1298,9 @@ public:
         aToken.nLevel = 5;
     }
 
-    void TCharacters(const OUString &rChars) SAL_OVERRIDE;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) SAL_OVERRIDE;
-    void EndElement() SAL_OVERRIDE;
+    void TCharacters(const OUString &rChars) override;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
+    void EndElement() override;
 };
 
 void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
@@ -1357,7 +1357,7 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 void SmXMLSpaceContext_Impl::StartElement(
@@ -1386,7 +1386,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE
+    void EndElement() override
     {
         GenericEndElement(TRSUB,RSUB);
     }
@@ -1428,7 +1428,7 @@ public:
         const OUString& rLName)
         : SmXMLSubContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE
+    void EndElement() override
     {
         GenericEndElement(TRSUP,RSUP);
     }
@@ -1446,7 +1446,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE
+    void EndElement() override
     {
         GenericEndElement(TRSUB,RSUB,RSUP);
     }
@@ -1494,8 +1494,8 @@ public:
         , nAttrCount( 0 )
         {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) SAL_OVERRIDE;
-    void EndElement() SAL_OVERRIDE;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
+    void EndElement() override;
     void HandleAccent();
 };
 
@@ -1559,8 +1559,8 @@ public:
         const OUString& rLName)
         : SmXMLSubContext_Impl(rImport,nPrefix,rLName), nAttrCount(0) {}
 
-    void EndElement() SAL_OVERRIDE;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) SAL_OVERRIDE;
+    void EndElement() override;
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
     void HandleAccent();
 };
 
@@ -1614,7 +1614,7 @@ public:
         const OUString& rLName)
         : SmXMLSubSupContext_Impl(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE
+    void EndElement() override
     {
         GenericEndElement(TCSUB,CSUB,CSUP);
     }
@@ -1634,10 +1634,10 @@ public:
         SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
         bHasPrescripts(false) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
 
 
@@ -1649,7 +1649,7 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 };
 
 
@@ -1686,7 +1686,7 @@ public:
 
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
 
 
@@ -1700,10 +1700,10 @@ public:
         SmXMLTableRowContext_Impl(rImport,nPrefix,rLName)
         {}
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
 
 
@@ -1729,7 +1729,7 @@ public:
         {}
 
     /*Don't do anything with alignment for now*/
-    void EndElement() SAL_OVERRIDE
+    void EndElement() override
     {
     }
 };
@@ -1747,8 +1747,8 @@ public:
       , mnSelection(1)
         {}
 
-    void StartElement(const uno::Reference<xml::sax::XAttributeList> &xAttrList) SAL_OVERRIDE;
-    void EndElement() SAL_OVERRIDE;
+    void StartElement(const uno::Reference<xml::sax::XAttributeList> &xAttrList) override;
+    void EndElement() override;
 };
 
 
@@ -1762,7 +1762,7 @@ public:
         const OUString& rLName)
         : SvXMLImportContext(rImport,nPrfx,rLName) {}
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
 
 SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
@@ -1801,7 +1801,7 @@ public:
 
     virtual ~SmXMLFlatDocContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 };
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,

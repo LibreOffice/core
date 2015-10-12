@@ -46,7 +46,7 @@ namespace connectivity
         public:
             MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, bool bAscending);
 
-            virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const SAL_OVERRIDE;
+            virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const override;
         };
 
         class MacabComplexOrder : public MacabOrder
@@ -58,7 +58,7 @@ namespace connectivity
             virtual ~MacabComplexOrder();
 
             void addOrder(MacabOrder *pOrder);
-            virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const SAL_OVERRIDE;
+            virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const override;
         };
     }
 }

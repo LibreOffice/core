@@ -100,8 +100,8 @@ public:
         {}
     virtual ~SdPageFormatUndoAction();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 };
 
 /************************************************************************/
@@ -129,8 +129,8 @@ public:
         {}
     virtual ~SdPageLRUndoAction();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 };
 
 /************************************************************************/
@@ -158,8 +158,8 @@ public:
         {}
     virtual ~SdPageULUndoAction();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNDOPAGE_HXX

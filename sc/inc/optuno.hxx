@@ -71,12 +71,12 @@ public:
                                     ::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException,
-                                    std::exception) SAL_OVERRIDE;
+                                    std::exception) override;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 #endif

@@ -93,7 +93,7 @@ public:
                             virtual ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception) override;
 
     void                    ParentDestroyed() { mpParent = NULL; }
 };

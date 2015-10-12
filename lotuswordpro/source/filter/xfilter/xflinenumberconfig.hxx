@@ -78,7 +78,7 @@ public:
 
     void    SetCountEmptyLines(bool empty = true);
 
-    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void ToXml(IXFStream *pStrm) override;
 
 private:
     enumXFLineNumberPos m_ePosition;

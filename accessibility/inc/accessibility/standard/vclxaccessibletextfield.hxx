@@ -52,27 +52,27 @@ public:
     // XAccessible
     css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
     sal_Int16 SAL_CALL getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent(  )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     // Return text field specific services.
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     virtual ~VCLXAccessibleTextField();
@@ -80,7 +80,7 @@ protected:
     /** With this method the text of the currently selected item is made
         available to the <type>VCLXAccessibleTextComponent</type> base class.
     */
-    OUString implGetText() SAL_OVERRIDE;
+    OUString implGetText() override;
 
 private:
     /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,

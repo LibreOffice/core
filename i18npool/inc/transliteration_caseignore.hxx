@@ -29,29 +29,29 @@ public:
     Transliteration_caseignore();
 
     // Methods which are shared.
-    sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     void SAL_CALL loadModule( TransliterationModules modName, const com::sun::star::lang::Locale& rLocale )
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     com::sun::star::uno::Sequence< OUString > SAL_CALL transliterateRange(
         const OUString& str1, const OUString& str2 )
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& src2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     sal_Int32 SAL_CALL compareSubstring(
         const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2)
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     sal_Int32 SAL_CALL compareString(
         const OUString& s1,
         const OUString& s2)
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
 protected:
     TransliterationModules moduleLoaded;

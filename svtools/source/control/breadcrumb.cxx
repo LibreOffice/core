@@ -21,7 +21,7 @@ public:
     }
 
 protected:
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE
+    virtual void MouseMove( const MouseEvent& rMEvt ) override
     {
         // changes the style if the control is enabled
         if ( !rMEvt.IsLeaveWindow() && IsEnabled() )

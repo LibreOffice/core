@@ -62,62 +62,62 @@ namespace toolkit
     public:
         // IAccessibleFactory
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXButton* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXButton* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXCheckBox* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXCheckBox* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXRadioButton* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXRadioButton* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXListBox* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXListBox* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXFixedHyperlink* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXFixedHyperlink* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXFixedText* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXFixedText* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXScrollBar* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXScrollBar* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXEdit* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXEdit* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXComboBox* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXComboBox* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXToolBox* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXToolBox* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXWindow* /*_pXWindow*/ ) SAL_OVERRIDE
+                createAccessibleContext( VCLXWindow* /*_pXWindow*/ ) override
         {
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                createAccessible( Menu* /*_pMenu*/, bool /*_bIsMenuBar*/ ) SAL_OVERRIDE
+                createAccessible( Menu* /*_pMenu*/, bool /*_bIsMenuBar*/ ) override
         {
             return NULL;
         }

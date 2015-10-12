@@ -37,8 +37,8 @@ class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 protected:
 
     // Binaer-Im-/Export
-    virtual void        WriteIMapObject( SvStream& rOStm ) const SAL_OVERRIDE;
-    virtual void        ReadIMapObject(  SvStream& rIStm ) SAL_OVERRIDE;
+    virtual void        WriteIMapObject( SvStream& rOStm ) const override;
+    virtual void        ReadIMapObject(  SvStream& rIStm ) override;
 
 public:
                         IMapPolygonObject() : bEllipse(false) {}
@@ -52,8 +52,8 @@ public:
                                            bool bPixelCoords = true );
     virtual             ~IMapPolygonObject() {}
 
-    virtual sal_uInt16      GetType() const SAL_OVERRIDE;
-    virtual bool        IsHit( const Point& rPoint ) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetType() const override;
+    virtual bool        IsHit( const Point& rPoint ) const override;
 
     tools::Polygon      GetPolygon( bool bPixelCoords = true ) const;
 

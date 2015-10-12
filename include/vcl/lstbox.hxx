@@ -77,33 +77,33 @@ protected:
 protected:
     explicit            ListBox( WindowType nType );
 
-    virtual void        FillLayoutData() const SAL_OVERRIDE;
+    virtual void        FillLayoutData() const override;
 
 public:
     explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            ListBox( vcl::Window* pParent, const ResId& );
     virtual             ~ListBox();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void        Resize() override;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        Select();
     virtual void        DoubleClick();
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
-    virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
+    virtual const Wallpaper& GetDisplayBackground() const override;
 
     virtual void        setPosSizePixel( long nX, long nY,
-                                         long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
-    void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
+                                         long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
 
     Rectangle           GetDropDownPosSizePixel() const;
@@ -198,7 +198,7 @@ public:
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const override;
     Size                CalcAdjustedSize( const Size& rPrefSize ) const;
     Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
@@ -233,7 +233,7 @@ public:
 
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 
     void EnableQuickSelection( const bool& b );
 

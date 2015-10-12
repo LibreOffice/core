@@ -43,7 +43,7 @@ public:
         oox::drawingml::ShapePtr pGroupShapePtr );
 
     virtual ::oox::core::ContextHandlerRef
-        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
     void importExtDrawings();
 

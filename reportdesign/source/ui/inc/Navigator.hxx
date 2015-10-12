@@ -37,7 +37,7 @@ namespace rptui
                     ,OReportController& _rController);
 
         // window
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
     };
 
 } // namespace rptui

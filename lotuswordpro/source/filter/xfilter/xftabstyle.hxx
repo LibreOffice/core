@@ -78,7 +78,7 @@ public:
 
     void    SetLeaderChar(sal_Unicode leader);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     enumXFTab   m_eType;

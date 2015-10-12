@@ -87,7 +87,7 @@ namespace dbaui
         inline css::uno::Reference< css::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
 
         // OEventListenerAdapter
-        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
     };
 
     typedef ::std::vector< std::shared_ptr<OTableWindowData> >      TTableWindowData;

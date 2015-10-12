@@ -72,28 +72,28 @@ public:
         bool bOwnsModel = true);
     virtual ~SdrUnoObj();
 
-    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
-    virtual void SetModel(SdrModel* pModel) SAL_OVERRIDE;
+    virtual void SetPage(SdrPage* pNewPage) override;
+    virtual void SetModel(SdrModel* pModel) override;
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual SdrUnoObj* Clone() const SAL_OVERRIDE;
+    virtual SdrUnoObj* Clone() const override;
     SdrUnoObj& operator= (const SdrUnoObj& rObj);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
     // SpecialDrag support
-    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
+    virtual bool hasSpecialDrag() const override;
 
     // FullDrag support
-    virtual bool supportsFullDrag() const SAL_OVERRIDE;
-    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
+    virtual bool supportsFullDrag() const override;
+    virtual SdrObject* getFullDragClone() const override;
 
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 
-    virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode ) SAL_OVERRIDE;
+    virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode ) override;
 
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
@@ -134,7 +134,7 @@ public:
 
 protected:
     // SdrObject overridables
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
 private:
     /** retrieves the typed ViewContact for the object

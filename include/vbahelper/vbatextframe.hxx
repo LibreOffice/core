@@ -31,8 +31,8 @@ protected:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
     void setAsMSObehavior();
     sal_Int32 getMargin( const OUString& sMarginType );
     void setMargin( const OUString& sMarginType, float fMargin );
@@ -40,19 +40,19 @@ public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     virtual ~VbaTextFrame() {}
     // Attributes
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getMarginBottom() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMarginBottom( float _marginbottom ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getMarginTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMarginTop( float _margintop ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getMarginLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMarginLeft( float _marginleft ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getMarginRight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getMarginBottom() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMarginBottom( float _marginbottom ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getMarginTop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMarginTop( float _margintop ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getMarginLeft() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMarginLeft( float _marginleft ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getMarginRight() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Characters(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Characters(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

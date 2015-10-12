@@ -54,7 +54,7 @@ public:
 
     virtual ~SwCharDlg();
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 };
 
 class SwCharURLPage : public SfxTabPage
@@ -82,12 +82,12 @@ public:
                                            const SfxItemSet& rSet );
 
                         virtual ~SwCharURLPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 #endif

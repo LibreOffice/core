@@ -33,7 +33,7 @@ public:
     SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName,
                           const OUString& _rDefaultExtension, bool rDefaultIsAlien);
     virtual ~SfxAlienWarningDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX

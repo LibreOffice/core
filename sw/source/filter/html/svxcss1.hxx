@@ -232,13 +232,13 @@ protected:
     /// the content of the aItemSet will be copied into all recently
     /// created Styles.
     /// Derived classes should not override this method!
-    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst ) SAL_OVERRIDE;
+    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst ) override;
 
     /// Will be called for every parsed Property.  Adds the item to the
     /// pItemSet.
     /// Derived classes should not override this method!
     virtual bool DeclarationParsed( const OUString& rProperty,
-                                    const CSS1Expression *pExpr ) SAL_OVERRIDE;
+                                    const CSS1Expression *pExpr ) override;
 
 public:
 

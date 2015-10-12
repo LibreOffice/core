@@ -41,7 +41,7 @@ public:
 
 protected:
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 };
 
 } // namespace http_dav_ucp

@@ -186,7 +186,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat ) SAL_OVERRIDE;
+        virtual void append( const Int8Sequence &rWhat ) override;
         void postpone( const Int8Sequence &rWhat );
 
     protected:
@@ -208,16 +208,16 @@ private:
             , maOrder( rOrder )
         {}
 
-        void setCurrentElement( ::sal_Int32 nToken ) SAL_OVERRIDE;
+        void setCurrentElement( ::sal_Int32 nToken ) override;
 
-        virtual Int8Sequence& getData() SAL_OVERRIDE;
+        virtual Int8Sequence& getData() override;
 
 #if OSL_DEBUG_LEVEL > 0
-        virtual void print() SAL_OVERRIDE;
+        virtual void print() override;
 #endif
 
-        virtual void prepend( const Int8Sequence &rWhat ) SAL_OVERRIDE;
-        virtual void append( const Int8Sequence &rWhat ) SAL_OVERRIDE;
+        virtual void prepend( const Int8Sequence &rWhat ) override;
+        virtual void append( const Int8Sequence &rWhat ) override;
     private:
         void sort();
     };

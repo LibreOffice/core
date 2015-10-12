@@ -57,8 +57,8 @@ namespace dbaccess
 class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
-    virtual void impl_refresh() throw(RuntimeException) SAL_OVERRIDE;
-    virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+    virtual void impl_refresh() throw(RuntimeException) override;
+    virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, ::std::vector< OUString>()){}
 };

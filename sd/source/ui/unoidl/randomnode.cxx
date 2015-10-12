@@ -78,64 +78,64 @@ public:
     void init( sal_Int16 nPresetClass );
 
     // XInitialization
-    void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
 
     // XChild
-    Reference< XInterface > SAL_CALL getParent(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException, std::exception) SAL_OVERRIDE;
+    Reference< XInterface > SAL_CALL getParent(  ) throw (RuntimeException, std::exception) override;
+    void SAL_CALL setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException, std::exception) override;
 
     // XCloneable
-    virtual Reference< XCloneable > SAL_CALL createClone() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XCloneable > SAL_CALL createClone() throw (RuntimeException, std::exception) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
+    OUString SAL_CALL getImplementationName() throw(std::exception) override;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) override;
 
     // XAnimationNode
-    ::sal_Int16 SAL_CALL getType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getBegin() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setBegin( const Any& _begin ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getDuration() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setDuration( const Any& _duration ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getEnd() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setEnd( const Any& _end ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getEndSync() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setEndSync( const Any& _endsync ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getRepeatCount() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRepeatCount( const Any& _repeatcount ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Any SAL_CALL getRepeatDuration() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRepeatDuration( const Any& _repeatduration ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Int16 SAL_CALL getFill() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setFill( ::sal_Int16 _fill ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Int16 SAL_CALL getFillDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setFillDefault( ::sal_Int16 _filldefault ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Int16 SAL_CALL getRestart() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRestart( ::sal_Int16 _restart ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Int16 SAL_CALL getRestartDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRestartDefault( ::sal_Int16 _restartdefault ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    double SAL_CALL getAcceleration() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setAcceleration( double _acceleration ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    double SAL_CALL getDecelerate() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setDecelerate( double _decelerate ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL getAutoReverse() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    Sequence< NamedValue > SAL_CALL getUserData() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    ::sal_Int16 SAL_CALL getType() throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getBegin() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setBegin( const Any& _begin ) throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getDuration() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setDuration( const Any& _duration ) throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getEnd() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setEnd( const Any& _end ) throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getEndSync() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setEndSync( const Any& _endsync ) throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getRepeatCount() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setRepeatCount( const Any& _repeatcount ) throw (RuntimeException, std::exception) override;
+    Any SAL_CALL getRepeatDuration() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setRepeatDuration( const Any& _repeatduration ) throw (RuntimeException, std::exception) override;
+    ::sal_Int16 SAL_CALL getFill() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setFill( ::sal_Int16 _fill ) throw (RuntimeException, std::exception) override;
+    ::sal_Int16 SAL_CALL getFillDefault() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setFillDefault( ::sal_Int16 _filldefault ) throw (RuntimeException, std::exception) override;
+    ::sal_Int16 SAL_CALL getRestart() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setRestart( ::sal_Int16 _restart ) throw (RuntimeException, std::exception) override;
+    ::sal_Int16 SAL_CALL getRestartDefault() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setRestartDefault( ::sal_Int16 _restartdefault ) throw (RuntimeException, std::exception) override;
+    double SAL_CALL getAcceleration() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setAcceleration( double _acceleration ) throw (RuntimeException, std::exception) override;
+    double SAL_CALL getDecelerate() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setDecelerate( double _decelerate ) throw (RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL getAutoReverse() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException, std::exception) override;
+    Sequence< NamedValue > SAL_CALL getUserData() throw (RuntimeException, std::exception) override;
+    void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) throw (RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual Reference< XEnumeration > SAL_CALL createEnumeration() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEnumeration > SAL_CALL createEnumeration() throw (RuntimeException, std::exception) override;
 
     // XTimeContainer
-    Reference< XAnimationNode > SAL_CALL insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
-    Reference< XAnimationNode > SAL_CALL insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
-    Reference< XAnimationNode > SAL_CALL replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
-    Reference< XAnimationNode > SAL_CALL removeChild( const Reference< XAnimationNode >& oldChild ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
-    Reference< XAnimationNode > SAL_CALL appendChild( const Reference< XAnimationNode >& newChild ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    Reference< XAnimationNode > SAL_CALL insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) override;
+    Reference< XAnimationNode > SAL_CALL insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) override;
+    Reference< XAnimationNode > SAL_CALL replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild ) throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) override;
+    Reference< XAnimationNode > SAL_CALL removeChild( const Reference< XAnimationNode >& oldChild ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
+    Reference< XAnimationNode > SAL_CALL appendChild( const Reference< XAnimationNode >& newChild ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception) override;
 
 private:
     // our first, last and only protection from mutli-threads!

@@ -198,10 +198,10 @@ public:
                             const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     /** Writes the entire Link table. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
     /** Writes the entire Link table to OOXML. */
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     typedef std::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;

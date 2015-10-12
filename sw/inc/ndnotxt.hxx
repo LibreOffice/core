@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
 
     // Creates for all derivations an AttrSet with ranges for frame- and
     // graphics-attributes (only called by SwContentNode).
-    virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
+    virtual void NewAttrSet( SwAttrPool& ) override;
 
     SwNoTextNode( const SwNoTextNode& ) = delete;
     SwNoTextNode &operator=( const SwNoTextNode& ) = delete;
@@ -51,7 +51,7 @@ protected:
 public:
     virtual ~SwNoTextNode();
 
-    virtual SwContentFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
+    virtual SwContentFrm *MakeFrm( SwFrm* ) override;
 
     inline SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
 

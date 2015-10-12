@@ -45,7 +45,7 @@ public:
 private:
     sal_uInt16          nCurId;
 
-    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Select() override;
 };
 
 SdTemplatePopup_Impl::SdTemplatePopup_Impl() :

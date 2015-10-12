@@ -66,7 +66,7 @@ public:
 
     virtual bool protect(
         CppUnit::Functor const & functor,
-        CppUnit::ProtectorContext const & context) SAL_OVERRIDE;
+        CppUnit::ProtectorContext const & context) override;
 private:
     uno::Reference<uno::XComponentContext> m_xContext;
 };

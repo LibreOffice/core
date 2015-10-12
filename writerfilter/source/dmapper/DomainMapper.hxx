@@ -85,12 +85,12 @@ public:
     virtual ~DomainMapper();
 
     // Stream
-    virtual void markLastParagraphInSection() SAL_OVERRIDE;
-    virtual void markLastSectionGroup() SAL_OVERRIDE;
+    virtual void markLastParagraphInSection() override;
+    virtual void markLastSectionGroup() override;
 
     // BinaryObj
     virtual void data(const sal_uInt8* buf, size_t len,
-                      writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+                      writerfilter::Reference<Properties>::Pointer_t ref) override;
 
     void sprmWithProps( Sprm& sprm, ::std::shared_ptr<PropertyMap> pContext );
 
@@ -132,34 +132,34 @@ public:
 
 private:
     // Stream
-    virtual void lcl_startSectionGroup() SAL_OVERRIDE;
-    virtual void lcl_endSectionGroup() SAL_OVERRIDE;
-    virtual void lcl_startParagraphGroup() SAL_OVERRIDE;
-    virtual void lcl_endParagraphGroup() SAL_OVERRIDE;
-    virtual void lcl_startCharacterGroup() SAL_OVERRIDE;
-    virtual void lcl_endCharacterGroup() SAL_OVERRIDE;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) SAL_OVERRIDE;
-    virtual void lcl_endShape( ) SAL_OVERRIDE;
+    virtual void lcl_startSectionGroup() override;
+    virtual void lcl_endSectionGroup() override;
+    virtual void lcl_startParagraphGroup() override;
+    virtual void lcl_endParagraphGroup() override;
+    virtual void lcl_startCharacterGroup() override;
+    virtual void lcl_endCharacterGroup() override;
+    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    virtual void lcl_endShape( ) override;
 
-    virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
-    virtual void lcl_positionOffset(const OUString& rText, bool bVertical) SAL_OVERRIDE;
-    virtual css::awt::Point getPositionOffset() SAL_OVERRIDE;
-    virtual void lcl_align(const OUString& rText, bool bVertical) SAL_OVERRIDE;
-    virtual void lcl_positivePercentage(const OUString& rText) SAL_OVERRIDE;
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_text(const sal_uInt8 * data, size_t len) override;
+    virtual void lcl_utext(const sal_uInt8 * data, size_t len) override;
+    virtual void lcl_positionOffset(const OUString& rText, bool bVertical) override;
+    virtual css::awt::Point getPositionOffset() override;
+    virtual void lcl_align(const OUString& rText, bool bVertical) override;
+    virtual void lcl_positivePercentage(const OUString& rText) override;
+    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) override;
     virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
+                           writerfilter::Reference<Table>::Pointer_t ref) override;
     virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
-    virtual void lcl_info(const std::string & info) SAL_OVERRIDE;
+                               ::writerfilter::Reference<Stream>::Pointer_t ref) override;
+    virtual void lcl_info(const std::string & info) override;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
     static void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight);

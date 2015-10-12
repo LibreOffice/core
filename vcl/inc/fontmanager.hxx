@@ -228,7 +228,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
         Type1FontFile() : PrintFont( fonttype::Type1 ), m_nDirectory( 0 ) {}
         virtual ~Type1FontFile();
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) SAL_OVERRIDE;
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
     };
 
     struct TrueTypeFontFile : public PrintFont
@@ -240,7 +240,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
         TrueTypeFontFile();
         virtual ~TrueTypeFontFile();
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) SAL_OVERRIDE;
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
     };
 
     fontID                                      m_nNextFontID;

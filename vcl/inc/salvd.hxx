@@ -35,7 +35,7 @@ public:
     virtual ~SalVirtualDevice();
 
     // SalGeometryProvider
-    virtual bool IsOffScreen() const SAL_OVERRIDE { return true; }
+    virtual bool IsOffScreen() const override { return true; }
 
     // SalGraphics or NULL, but two Graphics for all SalVirtualDevices
     // must be returned

@@ -211,8 +211,8 @@ public:
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine );
 
-    virtual TickInfo*   firstInfo() SAL_OVERRIDE;
-    virtual TickInfo*   nextInfo() SAL_OVERRIDE;
+    virtual TickInfo*   firstInfo() override;
+    virtual TickInfo*   nextInfo() override;
 
 private: //member
     PureTickIter m_aPureTickIter;
@@ -425,8 +425,8 @@ public:
     MaxLabelTickIter( TickInfoArrayType& rTickInfoVector, size_t nLongestLabelIndex );
     virtual ~MaxLabelTickIter();
 
-    virtual TickInfo* firstInfo() SAL_OVERRIDE;
-    virtual TickInfo* nextInfo() SAL_OVERRIDE;
+    virtual TickInfo* firstInfo() override;
+    virtual TickInfo* nextInfo() override;
 
 private:
     TickInfoArrayType& m_rTickInfoVector;

@@ -124,7 +124,7 @@ public:
      */
     void    ClosePath(bool absPosition = true);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     std::vector<XFSvgPathEntry> m_aPaths;

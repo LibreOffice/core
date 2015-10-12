@@ -36,7 +36,7 @@ class ScServerObjectSvtListenerForwarder : public SvtListener
 public:
                     ScServerObjectSvtListenerForwarder( ScServerObject* pObjP);
     virtual         ~ScServerObjectSvtListenerForwarder();
-    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( const SfxHint& rHint ) override;
 };
 
 class ScServerObject : public ::sfx2::SvLinkSource, public SfxListener
@@ -56,9 +56,9 @@ public:
 
     virtual bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                              const OUString & rMimeType,
-                             bool bSynchron = false ) SAL_OVERRIDE;
+                             bool bSynchron = false ) override;
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
             void    EndListeningAll();
 };
 

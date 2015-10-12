@@ -69,7 +69,7 @@ public:
     explicit        HexEncoder (osl::File* pFile);
     virtual         ~HexEncoder ();
     void            WriteAscii (sal_uInt8 nByte);
-    virtual void    EncodeByte (sal_uInt8 nByte) SAL_OVERRIDE;
+    virtual void    EncodeByte (sal_uInt8 nByte) override;
     void            FlushLine ();
 };
 
@@ -142,7 +142,7 @@ public:
 
     explicit        Ascii85Encoder (osl::File* pFile);
     virtual         ~Ascii85Encoder ();
-    virtual void    EncodeByte (sal_uInt8 nByte) SAL_OVERRIDE;
+    virtual void    EncodeByte (sal_uInt8 nByte) override;
     void            WriteAscii (sal_uInt8 nByte);
 };
 
@@ -289,7 +289,7 @@ public:
     explicit LZWEncoder (osl::File* pOutputFile);
     virtual ~LZWEncoder ();
 
-    virtual void    EncodeByte (sal_uInt8 nByte) SAL_OVERRIDE;
+    virtual void    EncodeByte (sal_uInt8 nByte) override;
 };
 
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :

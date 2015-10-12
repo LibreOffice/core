@@ -33,7 +33,7 @@ namespace sdr
         {
         protected:
             // 2d primitive creator
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             // basic constructor.
@@ -42,7 +42,7 @@ namespace sdr
 
             // process this primitive: Eventually also recursively travel an existing hierarchy,
             // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

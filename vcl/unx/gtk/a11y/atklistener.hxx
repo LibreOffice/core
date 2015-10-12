@@ -34,11 +34,11 @@ public:
 
     // XEventListener
     virtual void disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XAccessibleEventListener
     virtual void notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     AtkObjectWrapper *mpWrapper;
     std::vector< css::uno::Reference< css::accessibility::XAccessible > >

@@ -30,9 +30,9 @@ protected:
     sal_uInt64      mnTimeout;
     bool            mbAuto;
 
-    virtual void SetDeletionFlags() SAL_OVERRIDE;
-    virtual bool ReadyForSchedule( bool bTimer ) const SAL_OVERRIDE;
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const SAL_OVERRIDE;
+    virtual void SetDeletionFlags() override;
+    virtual bool ReadyForSchedule( bool bTimer ) const override;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const override;
 
 public:
     Timer( const sal_Char *pDebugName = NULL );
@@ -44,10 +44,10 @@ public:
     const Link<Timer *, void>& GetTimeoutHdl() const { return maTimeoutHdl; }
     void            SetTimeout( sal_uInt64 nTimeoutMs );
     sal_uInt64      GetTimeout() const { return mnTimeout; }
-    virtual void    Invoke() SAL_OVERRIDE;
+    virtual void    Invoke() override;
     void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
-    virtual void    Start() SAL_OVERRIDE;
+    virtual void    Start() override;
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

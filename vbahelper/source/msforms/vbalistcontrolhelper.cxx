@@ -34,8 +34,8 @@ private:
 public:
     ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn );
     virtual ~ListPropListener() { };
-    virtual void setValueEvent( const css::uno::Any& value ) SAL_OVERRIDE;
-    virtual css::uno::Any getValueEvent() SAL_OVERRIDE;
+    virtual void setValueEvent( const css::uno::Any& value ) override;
+    virtual css::uno::Any getValueEvent() override;
 };
 
 ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn ) : m_xProps( xProps ), m_pvargIndex( pvargIndex ), m_pvarColumn( pvarColumn )

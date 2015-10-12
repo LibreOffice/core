@@ -67,7 +67,7 @@ class LayoutToolbarMenu : public svtools::ToolbarMenu
 public:
     LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage );
     virtual ~LayoutToolbarMenu();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );

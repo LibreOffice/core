@@ -29,11 +29,11 @@ class ScNamedRangeObj : public CalcUnoApiTest, apitest::XNamedRange, apitest::XN
 public:
     ScNamedRangeObj();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
-    virtual uno::Reference< sheet::XNamedRange > getNamedRange(const OUString& rRangeName) SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< sheet::XNamedRange > getNamedRange(const OUString& rRangeName) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangeObj);
     CPPUNIT_TEST(testGetContent);

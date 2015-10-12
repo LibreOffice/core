@@ -37,7 +37,7 @@ public:
                         bool                    bImport = true );
 
     virtual ~ScImportOptionsDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
 

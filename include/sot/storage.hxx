@@ -45,10 +45,10 @@ class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 friend class SotStorage;
     BaseStorageStream * pOwnStm; // pointer to the own stream
 protected:
-    virtual sal_uLong       GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong       PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64      SeekPos(sal_uInt64 nPos) SAL_OVERRIDE;
-    virtual void        FlushData() SAL_OVERRIDE;
+    virtual sal_uLong       GetData( void* pData, sal_uLong nSize ) override;
+    virtual sal_uLong       PutData( const void* pData, sal_uLong nSize ) override;
+    virtual sal_uInt64      SeekPos(sal_uInt64 nPos) override;
+    virtual void        FlushData() override;
                         virtual ~SotStorageStream();
 public:
                         SotStorageStream( const OUString &,
@@ -61,16 +61,16 @@ private:
                               { return &(SOTDATA()->pSotStorageStreamFactory); }
 public:
     static SotFactory *        ClassFactory();
-    virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
+    virtual void *             Cast( const SotFactory * ) override;
 
-    virtual void        ResetError() SAL_OVERRIDE;
+    virtual void        ResetError() override;
 
-    virtual void        SetSize( sal_uInt64 nNewSize ) SAL_OVERRIDE;
+    virtual void        SetSize( sal_uInt64 nNewSize ) override;
     sal_uInt32          GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
     bool                Commit();
     bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
-    virtual sal_uInt64 remainingSize() SAL_OVERRIDE;
+    virtual sal_uInt64 remainingSize() override;
 };
 
 namespace ucbhelper
@@ -113,7 +113,7 @@ private:
                               { return &(SOTDATA()->pSotStorageFactory); }
 public:
     static SotFactory *        ClassFactory();
-    virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
+    virtual void *             Cast( const SotFactory * ) override;
 
     SvMemoryStream *    CreateMemoryStream();
 

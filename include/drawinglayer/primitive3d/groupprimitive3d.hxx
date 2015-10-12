@@ -63,10 +63,10 @@ namespace drawinglayer
             Primitive3DSequence getChildren() const { return maChildren; }
 
             /// compare operator
-            virtual bool operator==( const BasePrimitive3D& rPrimitive ) const SAL_OVERRIDE;
+            virtual bool operator==( const BasePrimitive3D& rPrimitive ) const override;
 
             /// local decomposition. Implementation will just return children
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

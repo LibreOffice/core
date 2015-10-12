@@ -43,13 +43,13 @@ class TextViewOutWin : public vcl::Window
     ExtTextView*    pTextView;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    DataChanged( const DataChangedEvent& ) override;
 
 public:
         TextViewOutWin(vcl::Window* pParent, WinBits nBits) :
@@ -102,22 +102,22 @@ private:
 
 protected:
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    DataChanged( const DataChangedEvent& ) override;
+    virtual void    GetFocus() override;
 //  virtual void    LoseFocus();
 
     void            CreateTextEngine();
     void            DoSyntaxHighlight( sal_uInt16 nPara );
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );
                     virtual ~SwSrcEditWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SetScrollBarRanges();
     void            InitScrollBars();
@@ -132,7 +132,7 @@ public:
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
 
-    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
 
     void            ClearModifyFlag()
                         { pTextEngine->SetModified(false); }
@@ -146,7 +146,7 @@ public:
 
     void            SetStartLine(sal_uInt16 nLine){nStartLine = nLine;}
 
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
     void            HandleWheelCommand( const CommandEvent& rCEvt );
 
     void            SetTextEncoding(rtl_TextEncoding eEncoding);

@@ -43,15 +43,15 @@ namespace dbp
     public:
         explicit OTableSelectionPage(OControlWizard* _pParent);
         virtual ~OTableSelectionPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         // TabPage overridables
-        void ActivatePage() SAL_OVERRIDE;
+        void ActivatePage() override;
 
         // OWizardPage overridables
-        virtual void        initializePage() SAL_OVERRIDE;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual void        initializePage() override;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
         DECL_LINK_TYPED( OnListboxSelection, ListBox&, void );
@@ -63,7 +63,7 @@ namespace dbp
                         _rxConn = css::uno::Reference< css::sdbc::XConnection >());
 
         // OControlWizardPage overridables
-        virtual bool    canAdvance() const SAL_OVERRIDE;
+        virtual bool    canAdvance() const override;
     };
 
     class OMaybeListSelectionPage : public OControlWizardPage
@@ -76,13 +76,13 @@ namespace dbp
     public:
         OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
         virtual ~OMaybeListSelectionPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         DECL_LINK_TYPED( OnRadioSelected, Button*, void );
 
         // TabPage overridables
-        void ActivatePage() SAL_OVERRIDE;
+        void ActivatePage() override;
 
         // own helper
         void    announceControls(
@@ -107,14 +107,14 @@ namespace dbp
     public:
         explicit ODBFieldPage( OControlWizard* _pParent );
         virtual ~ODBFieldPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         void setDescriptionText(const OUString& _rDesc) { m_pDescription->SetText(_rDesc); }
 
         // OWizardPage overridables
-        virtual void initializePage() SAL_OVERRIDE;
-        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual void initializePage() override;
+        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
         // own overridables
         virtual OUString& getDBFieldSetting() = 0;

@@ -84,7 +84,7 @@ public:
     /**
      * @descr   Add content for table cell.
      */
-    void    Add(XFContent *pContent) SAL_OVERRIDE;
+    void    Add(XFContent *pContent) override;
 
     /**
      * @descr   If cell spans more the one column, then set column span.
@@ -139,7 +139,7 @@ public:
     /**
      * @descr   Output cell as xml element.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     XFRow          *m_pOwnerRow;

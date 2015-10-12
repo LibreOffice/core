@@ -81,20 +81,20 @@ namespace framework
         }
 
         // XUndoManagerListener
-        virtual void SAL_CALL undoActionAdded( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL actionUndone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL actionRedone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL allActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL redoActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL resetAll( const EventObject& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enteredContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enteredHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL leftContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL leftHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL cancelledContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL undoActionAdded( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL actionUndone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL actionRedone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL allActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL redoActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL resetAll( const EventObject& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL enteredContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL enteredHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL leftContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL leftHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL cancelledContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& i_event ) throw (RuntimeException, std::exception) override;
 
     private:
         Reference< XUndoManager > const m_xUndoManager;

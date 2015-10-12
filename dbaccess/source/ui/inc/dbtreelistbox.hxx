@@ -83,7 +83,7 @@ namespace dbaui
             ,WinBits nWinStyle=0
             ,bool _bHandleEnterKey = false);
         virtual ~DBTreeListBox();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }
@@ -100,40 +100,40 @@ namespace dbaui
         void            EnableExpandHandler(SvTreeListEntry* _pEntry);
 
         SvTreeListEntry*    GetEntryPosByName( const OUString& aName, SvTreeListEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
-        virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
-        virtual void    SelectHdl() SAL_OVERRIDE;
-        virtual void    DeselectHdl() SAL_OVERRIDE;
+        virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
+        virtual void    SelectHdl() override;
+        virtual void    DeselectHdl() override;
         // Window
-        virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
-        virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
+        virtual void    StateChanged( StateChangedType nStateChange ) override;
+        virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind) override;
 
         // enable editing for tables/views and queries
-        virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
-        virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
+        virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) override;
+        virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-        virtual bool    DoubleClickHdl() SAL_OVERRIDE;
+        virtual bool    DoubleClickHdl() override;
 
-        virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
-        virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
+        virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+        virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
         void            SetEnterKeyHdl(const Link<DBTreeListBox*,void>& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}
 
         void            clearCurrentSelection() { m_aSelectedEntries.clear(); }
 
     protected:
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
         // DragSourceHelper overridables
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
 
-        virtual void        ModelHasRemoved( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
-        virtual void        ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+        virtual void        ModelHasRemoved( SvTreeListEntry* pEntry ) override;
+        virtual void        ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) override;
 
         void                implStopSelectionTimer();
         void                implStartSelectionTimer();

@@ -46,7 +46,7 @@ public:
                                 const OUString& rTarget, const OUString& rName,
                                 TargetList& rTargetList );
     virtual             ~URLDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     OUString            GetURL() const { return m_pEdtURL->GetText(); }
     OUString            GetAltText() const { return m_pEdtAlternativeText->GetText(); }

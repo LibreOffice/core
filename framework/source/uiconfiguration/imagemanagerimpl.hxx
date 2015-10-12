@@ -85,9 +85,9 @@ namespace framework
             GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~GlobalImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
-            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
-            virtual ::std::vector< OUString >& getImageCommandNames() SAL_OVERRIDE;
+            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) override;
+            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) override;
+            virtual ::std::vector< OUString >& getImageCommandNames() override;
     };
 
     class ImageManagerImpl

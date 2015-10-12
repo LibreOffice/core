@@ -64,23 +64,23 @@ public:
 
     virtual ~ChartAreaPanel();
 
-    virtual void setFillTransparence(const XFillTransparenceItem& rItem) SAL_OVERRIDE;
-    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) SAL_OVERRIDE;
-    virtual void setFillStyle(const XFillStyleItem& rItem) SAL_OVERRIDE;
-    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& rColorItem) SAL_OVERRIDE;
-    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& rGradientItem) SAL_OVERRIDE;
-    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& rHatchItem) SAL_OVERRIDE;
-    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem) SAL_OVERRIDE;
+    virtual void setFillTransparence(const XFillTransparenceItem& rItem) override;
+    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) override;
+    virtual void setFillStyle(const XFillStyleItem& rItem) override;
+    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& rColorItem) override;
+    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& rGradientItem) override;
+    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& rHatchItem) override;
+    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem) override;
 
-    virtual void updateData() SAL_OVERRIDE;
-    virtual void modelInvalid() SAL_OVERRIDE;
+    virtual void updateData() override;
+    virtual void modelInvalid() override;
 
-    virtual void selectionChanged(bool bCorrectType) SAL_OVERRIDE;
-    virtual void SelectionInvalid() SAL_OVERRIDE;
+    virtual void selectionChanged(bool bCorrectType) override;
+    virtual void SelectionInvalid() override;
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
 

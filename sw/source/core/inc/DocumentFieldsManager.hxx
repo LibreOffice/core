@@ -36,32 +36,32 @@ public:
 
     DocumentFieldsManager( SwDoc& i_rSwdoc );
 
-    virtual const SwFieldTypes *GetFieldTypes() const SAL_OVERRIDE;
-    virtual SwFieldType *InsertFieldType(const SwFieldType &) SAL_OVERRIDE;
-    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
-    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
-    virtual void RemoveFieldType(size_t nField) SAL_OVERRIDE;
-    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
-    virtual void InsDeletedFieldType(SwFieldType &) SAL_OVERRIDE;
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) SAL_OVERRIDE;
-    virtual void UpdateRefFields(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateTableFields(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) SAL_OVERRIDE;
-    virtual void UpdateUsrFields() SAL_OVERRIDE;
-    virtual void UpdatePageFields(SfxPoolItem*) SAL_OVERRIDE;
-    virtual void LockExpFields() SAL_OVERRIDE;
-    virtual void UnlockExpFields() SAL_OVERRIDE;
-    virtual bool IsExpFieldsLocked() const SAL_OVERRIDE;
-    virtual SwDocUpdateField& GetUpdateFields() const SAL_OVERRIDE;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) SAL_OVERRIDE;
-    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) SAL_OVERRIDE;
-    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) SAL_OVERRIDE;
-    virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) SAL_OVERRIDE;
-    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) SAL_OVERRIDE;
-    virtual bool IsNewFieldLst() const SAL_OVERRIDE;
-    virtual void SetNewFieldLst( bool bFlag) SAL_OVERRIDE;
-    virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) SAL_OVERRIDE;
+    virtual const SwFieldTypes *GetFieldTypes() const override;
+    virtual SwFieldType *InsertFieldType(const SwFieldType &) override;
+    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const override;
+    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const override;
+    virtual void RemoveFieldType(size_t nField) override;
+    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) override;
+    virtual void InsDeletedFieldType(SwFieldType &) override;
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) override;
+    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) override;
+    virtual void UpdateRefFields(SfxPoolItem* pHt) override;
+    virtual void UpdateTableFields(SfxPoolItem* pHt) override;
+    virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) override;
+    virtual void UpdateUsrFields() override;
+    virtual void UpdatePageFields(SfxPoolItem*) override;
+    virtual void LockExpFields() override;
+    virtual void UnlockExpFields() override;
+    virtual bool IsExpFieldsLocked() const override;
+    virtual SwDocUpdateField& GetUpdateFields() const override;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) override;
+    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) override;
+    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) override;
+    virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) override;
+    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) override;
+    virtual bool IsNewFieldLst() const override;
+    virtual void SetNewFieldLst( bool bFlag) override;
+    virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) override;
 
     //Non Interface methods
 

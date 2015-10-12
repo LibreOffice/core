@@ -40,39 +40,39 @@ namespace dbaui
         {
         }
         virtual ~ORowUpdateHelper() {}
-        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) SAL_OVERRIDE
+        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) override
         {
             m_xRowUpdate->updateString(_nPos, _sValue);
         }
-        virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) SAL_OVERRIDE
+        virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) override
         {
             m_xRowUpdate->updateDouble(_nPos, _nValue);
         }
-        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) SAL_OVERRIDE
+        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) override
         {
             m_xRowUpdate->updateDate(_nPos, _nValue);
         }
-        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) SAL_OVERRIDE
+        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) override
         {
             m_xRowUpdate->updateTime(_nPos, _nValue);
         }
-        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) SAL_OVERRIDE
+        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) override
         {
             m_xRowUpdate->updateTimestamp(_nPos, _nValue);
         }
-        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) SAL_OVERRIDE
+        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) override
         {
             m_xRowUpdate->updateInt(_nPos, _nValue);
         }
-        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32) SAL_OVERRIDE
+        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32) override
         {
             m_xRowUpdate->updateNull(_nPos);
         }
-        virtual void moveToInsertRow() SAL_OVERRIDE
+        virtual void moveToInsertRow() override
         {
             m_xResultSetUpdate->moveToInsertRow();
         }
-        virtual void insertRow() SAL_OVERRIDE
+        virtual void insertRow() override
         {
             m_xResultSetUpdate->insertRow();
         }
@@ -90,38 +90,38 @@ namespace dbaui
         {
         }
         virtual ~OParameterUpdateHelper() {}
-        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) SAL_OVERRIDE
+        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) override
         {
             m_xParameters->setString(_nPos, _sValue);
         }
-        virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) SAL_OVERRIDE
+        virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) override
         {
             m_xParameters->setDouble(_nPos, _nValue);
         }
-        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) SAL_OVERRIDE
+        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) override
         {
             m_xParameters->setDate(_nPos, _nValue);
         }
-        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) SAL_OVERRIDE
+        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) override
         {
             m_xParameters->setTime(_nPos, _nValue);
         }
-        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) SAL_OVERRIDE
+        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) override
         {
             m_xParameters->setTimestamp(_nPos, _nValue);
         }
-        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) SAL_OVERRIDE
+        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) override
         {
             m_xParameters->setInt(_nPos, _nValue);
         }
-        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType) SAL_OVERRIDE
+        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType) override
         {
             m_xParameters->setNull(_nPos,sqlType);
         }
-        virtual void moveToInsertRow() SAL_OVERRIDE
+        virtual void moveToInsertRow() override
         {
         }
-        virtual void insertRow() SAL_OVERRIDE
+        virtual void insertRow() override
         {
             m_xPrepared->executeUpdate();
         }

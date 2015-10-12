@@ -591,7 +591,7 @@ public:
     virtual ~SvxDoGetCapitalSize() {}
 
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
-                     const sal_Int32 nLen, const bool bUpper ) SAL_OVERRIDE;
+                     const sal_Int32 nLen, const bool bUpper ) override;
 
     const Size &GetSize() const { return aTxtSize; };
 };
@@ -654,10 +654,10 @@ public:
           aSpacePos( rPos ),
           nKern( nKrn )
         { }
-    virtual void DoSpace( const bool bDraw ) SAL_OVERRIDE;
-    virtual void SetSpace() SAL_OVERRIDE;
+    virtual void DoSpace( const bool bDraw ) override;
+    virtual void SetSpace() override;
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
-                     const sal_Int32 nLen, const bool bUpper ) SAL_OVERRIDE;
+                     const sal_Int32 nLen, const bool bUpper ) override;
 };
 
 void SvxDoDrawCapital::DoSpace( const bool bDraw )

@@ -165,71 +165,71 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID )
-        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getCurrentLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getDefaultLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceManager
     virtual sal_Bool SAL_CALL isReadOnly()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeId( const OUString& ResourceID )
         throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL removeIdForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-                   ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+                   ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL newLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getUniqueNumericId(  )
         throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
  };
 
 typedef ::cppu::ImplInheritanceHelper<
@@ -252,12 +252,12 @@ protected:
     virtual void implScanLocales();
 
     // Method to load a locale if necessary, returns true if loading was successful
-    virtual bool loadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
+    virtual bool loadLocale( LocaleItem* pLocaleItem ) override;
 
     // does the actual loading
     virtual bool implLoadLocale( LocaleItem* pLocaleItem );
 
-    virtual void implLoadAllLocales() SAL_OVERRIDE;
+    virtual void implLoadAllLocales() override;
 
     void implScanLocaleNames( const ::com::sun::star::uno::Sequence< OUString >& aContentSeq );
     static OUString implGetFileNameForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase );
@@ -317,93 +317,93 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID )
-        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getCurrentLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getDefaultLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceManager
     virtual sal_Bool SAL_CALL isReadOnly()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeId( const OUString& ResourceID )
         throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL removeIdForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-                   ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+                   ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL newLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getUniqueNumericId(  )
         throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isModified(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setComment( const OUString& Comment )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToStorage
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -417,8 +417,8 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >       m_xStorage;
     bool                                                                        m_bStorageChanged;
 
-    virtual void implScanLocales() SAL_OVERRIDE;
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
+    virtual void implScanLocales() override;
+    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:
     StringResourceWithStorageImpl(
@@ -427,105 +427,105 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID )
-        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getCurrentLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getDefaultLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceManager
     virtual sal_Bool SAL_CALL isReadOnly()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeId( const OUString& ResourceID )
         throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL removeIdForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-                   ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+                   ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL newLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getUniqueNumericId(  )
         throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isModified(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setComment( const OUString& Comment )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToStorage
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceWithStorage
     virtual void SAL_CALL storeAsStorage
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setStorage
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -543,8 +543,8 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > getFileAccess();
 
-    virtual void implScanLocales() SAL_OVERRIDE;
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) SAL_OVERRIDE;
+    virtual void implScanLocales() override;
+    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:
     StringResourceWithLocationImpl(
@@ -553,104 +553,104 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID )
-        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getCurrentLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::lang::Locale SAL_CALL getDefaultLocale(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceManager
     virtual sal_Bool SAL_CALL isReadOnly()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
         const ::com::sun::star::lang::Locale& locale )
-            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeId( const OUString& ResourceID )
         throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL removeIdForLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException,
-                   ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+                   ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual void SAL_CALL newLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::NoSupportException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::lang::NoSupportException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getUniqueNumericId(  )
         throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isModified(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setComment( const OUString& Comment )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToStorage
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XStringResourceWithLocation
     virtual void SAL_CALL storeAsURL( const OUString& URL )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setURL( const OUString& URL )
         throw (css::lang::IllegalArgumentException, css::lang::NoSupportException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 };
 
 

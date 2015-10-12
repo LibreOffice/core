@@ -119,11 +119,11 @@ namespace svt
 
     protected:
         // IToolPanelDeckListener
-        virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void        PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void        ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
-        virtual void        LayouterChanged( const PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
-        virtual void        Dying() SAL_OVERRIDE;
+        virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) override;
+        virtual void        PanelRemoved( const size_t i_nPosition ) override;
+        virtual void        ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) override;
+        virtual void        LayouterChanged( const PDeckLayouter& i_rNewLayouter ) override;
+        virtual void        Dying() override;
 
     private:
         void                ImplDoLayout();

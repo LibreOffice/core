@@ -82,7 +82,7 @@ public:
 
     void    SetMessageFrom(const OUString& message);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 protected:
     OUString   m_strBodyStyle;

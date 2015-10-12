@@ -37,19 +37,19 @@ public:
                             SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact );
                             virtual ~SdrMediaWindow();
 
-        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-        virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void        KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+        virtual void        KeyUp( const KeyEvent& rKEvt ) override;
 
-        virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual void        Command( const CommandEvent& rCEvt ) override;
 
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
 private:
 

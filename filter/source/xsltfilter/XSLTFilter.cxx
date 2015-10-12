@@ -130,32 +130,32 @@ namespace XSLT
 
         // XStreamListener
         virtual void SAL_CALL
-        error(const Any& a) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        error(const Any& a) throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL
-        closed() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        closed() throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL
-        terminated() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        terminated() throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL
-        started() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        started() throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL
-        disposing(const EventObject& e) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        disposing(const EventObject& e) throw (RuntimeException, std::exception) override;
 
         // XImportFilter
         virtual sal_Bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
-                const Sequence<OUString>& msUserData) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+                const Sequence<OUString>& msUserData) throw (RuntimeException, std::exception) override;
 
         // XExportFilter
         virtual sal_Bool SAL_CALL
         exporter(const Sequence<PropertyValue>& aSourceData, const Sequence<
-                OUString>& msUserData) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+                OUString>& msUserData) throw (RuntimeException, std::exception) override;
 
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument() throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        startDocument() throw (SAXException, RuntimeException, std::exception) override;
         virtual void SAL_CALL
-        endDocument() throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        endDocument() throw (SAXException, RuntimeException, std::exception) override;
     };
 
     XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):

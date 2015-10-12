@@ -33,17 +33,17 @@ public:
               vcl::Window* pParentWindow,
               const sidebar::Paint& rInitialBackgroundPaint);
     virtual ~TitleBar();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetTitle (const OUString& rsTitle);
     const OUString GetTitle() {return msTitle; }
 
     void SetIcon (const Image& rIcon);
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual void setPosSizePixel (long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
+    virtual void setPosSizePixel (long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
 
     ToolBox& GetToolBox()
     {
@@ -63,7 +63,7 @@ protected:
     void PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
     Image maIcon;

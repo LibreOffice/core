@@ -37,29 +37,29 @@ class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
 protected:
     VclPtr<vcl::Window>     m_pWindow;
 
-    virtual bool            IsFocused() SAL_OVERRIDE;
+    virtual bool            IsFocused() override;
 
     DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
-    virtual void SAL_CALL   disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL   disposing() override;
 
 public:
     VCLXAccessibleMenuBar( Menu* pMenu );
     virtual ~VCLXAccessibleMenuBar();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleExtendedComponent
-    virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENUBAR_HXX

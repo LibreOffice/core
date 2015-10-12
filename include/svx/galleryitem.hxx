@@ -56,14 +56,14 @@ public:
     const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem
-    virtual bool         operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool         operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const override;
     // bridge to UNO
-    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     // not implemented
-    virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&    Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const override;
+    virtual SvStream&    Store(SvStream &, sal_uInt16 nItemVersion) const override;
 };
 
 #endif

@@ -63,7 +63,7 @@ class Bar : public Renderable3DObject
 public:
     Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 nColor, sal_uInt32 nId);
 
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 private:
     bool mbRoundedCorners;
     glm::mat4 maPos;
@@ -75,7 +75,7 @@ class Line : public Renderable3DObject
 public:
     Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
 
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 
     void setPosition(const glm::vec3& rBegin, const glm::vec3& rEnd);
     void setLineColor(const Color& rColor);
@@ -90,7 +90,7 @@ class Text : public Renderable3DObject
 {
 public:
     Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
 
@@ -107,7 +107,7 @@ public:
     ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
         const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId, bool bIs3dText = false);
 
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
     void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight,
             const glm::vec3& r3DPos = glm::vec3(0.0, 0.0, 0.0));
 
@@ -123,7 +123,7 @@ class Rectangle : public Renderable3DObject
 {
 public:
     Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
     void setFillColor(const Color& rColor);
@@ -141,7 +141,7 @@ class Camera : public Renderable3DObject
 {
 public:
     Camera(OpenGL3DRenderer* pRenderer);
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 
     void setPosition(const glm::vec3& rPos);
     void setDirection(const glm::vec3& rPos);

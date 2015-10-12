@@ -228,48 +228,48 @@ public:
 
     /* XSAXEventKeeper */
     virtual sal_Int32 SAL_CALL addElementCollector(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeElementCollector( sal_Int32 id )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL addBlocker(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeBlocker( sal_Int32 id )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isBlocking(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL
         getElement( sal_Int32 id )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setElement(
         sal_Int32 id,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::wrapper::XXMLElementWrapper >&
             aElement )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > SAL_CALL
         setNextHandler( const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xNewHandler )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL printBufferNodeTree()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL
         getCurrentBlockingNode()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XSecuritySAXEventKeeper */
     virtual sal_Int32 SAL_CALL addSecurityElementCollector(
         com::sun::star::xml::crypto::sax::ElementMarkPriority priority,
         sal_Bool modifyElement )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL cloneElementCollector(
         sal_Int32 referenceId,
         com::sun::star::xml::crypto::sax::ElementMarkPriority priority )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setSecurityId( sal_Int32 id, sal_Int32 securityId )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XReferenceResolvedBroadcaster */
     virtual void SAL_CALL addReferenceResolvedListener(
@@ -277,61 +277,61 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
             listener )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeReferenceResolvedListener(
         sal_Int32 referenceId,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
             listener )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XSAXEventKeeperStatusChangeBroadcaster */
     virtual void SAL_CALL addSAXEventKeeperStatusChangeListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >&
             listener )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeSAXEventKeeperStatusChangeListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >&
             listener )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XDocumentHandler */
     virtual void SAL_CALL startDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL startElement(
         const OUString& aName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&
         xAttribs )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement( const OUString& aName )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL characters( const OUString& aChars )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         const OUString& aTarget, const OUString& aData )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDocumentLocator(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 OUString SAXEventKeeperImpl_getImplementationName()

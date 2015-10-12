@@ -145,11 +145,11 @@ public:
 
     // XChangesListener
     virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event )
-        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( uno::RuntimeException, std::exception ) override;
 
     // XEventListener ( base of XChangesLisetenr )
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
-        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( uno::RuntimeException, std::exception ) override;
 
 private:
     void setNoProxyList( const OUString & rNoProxyList );

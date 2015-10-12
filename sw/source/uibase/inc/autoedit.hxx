@@ -27,7 +27,7 @@ public:
     AutoEdit( vcl::Window* pParent, ResId aResId ) : Edit( pParent, aResId ){}
 
 protected:
-    virtual void KeyInput( const KeyEvent& rEvent ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rEvent ) override;
 };
 
 // Implementation in autocorr.cxx

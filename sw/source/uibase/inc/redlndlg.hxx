@@ -140,10 +140,10 @@ class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, vcl::Window *pParent);
     virtual ~SwModelessRedlineAcceptDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    Activate() SAL_OVERRIDE;
-    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
+    virtual void    Activate() override;
+    virtual void    FillInfo(SfxChildWinInfo&) const override;
     void            Initialize (SfxChildWinInfo* pInfo);
 };
 
@@ -157,7 +157,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 
-    virtual bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
+    virtual bool    ReInitDlg(SwDocShell *pDocSh) override;
 };
 
 /// Redline (Manage Changes) panel for the sidebar.
@@ -167,11 +167,11 @@ class SwRedlineAcceptPanel : public PanelLayout, public SfxListener
 public:
     SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual ~SwRedlineAcceptPanel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /// We need to be a SfxListener to be able to update the list of changes when we get SFX_HINT_DOCCHANGED.
     using Control::Notify;
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 
 #endif

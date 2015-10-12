@@ -29,8 +29,8 @@ using namespace ::com::sun::star;
 class TestBreakIterator : public test::BootstrapFixtureBase
 {
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testLineBreaking();
     void testWordBoundaries();

@@ -66,7 +66,7 @@ public:
     {
     }
 
-    virtual void preTest(const char* filename) SAL_OVERRIDE
+    virtual void preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
         if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf")
@@ -83,7 +83,7 @@ public:
         }
     }
 
-    virtual void postTest(const char* filename) SAL_OVERRIDE
+    virtual void postTest(const char* filename) override
     {
         if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf" || OString(filename) == "fdo44211.rtf")
             Application::SetSettings(m_aSavedSettings);

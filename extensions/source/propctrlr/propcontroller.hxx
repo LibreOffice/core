@@ -144,42 +144,42 @@ namespace pcr
         DECLARE_XINTERFACE()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XController
-        virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Any SAL_CALL getViewData(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL restoreViewData( const css::uno::Any& Data ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getViewData(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL restoreViewData( const css::uno::Any& Data ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XFocusListener
-        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XLayoutConstrains
-        virtual css::awt::Size SAL_CALL getMinimumSize(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::awt::Size SAL_CALL getPreferredSize(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::awt::Size SAL_CALL getMinimumSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL getPreferredSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         /** XPropertyControlFactory
         */
-        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     public:
         OPropertyBrowserController(
@@ -197,40 +197,40 @@ namespace pcr
 
     protected:
         // IPropertyLineListener
-        virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) SAL_OVERRIDE;
-        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) SAL_OVERRIDE;
+        virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) override;
+        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) override;
 
         // IPropertyControlObserver
-        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
-        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
+        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) override;
+        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) override;
 
         // IPropertyExistenceCheck
-        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (css::uno::RuntimeException) override;
 
         // XObjectInspectorUI
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
         // XObjectInspector
-        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL inspect( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) throw (css::util::VetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL inspect( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) throw (css::util::VetoException, css::uno::RuntimeException, std::exception) override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     private:
         void UpdateUI();

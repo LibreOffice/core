@@ -81,15 +81,15 @@ namespace cairo {
         X11Surface( const X11SysData& rSysData, const BitmapSystemData& rBmpData );
 
         // Surface interface
-        virtual CairoSharedPtr getCairo() const SAL_OVERRIDE;
-        virtual CairoSurfaceSharedPtr getCairoSurface() const SAL_OVERRIDE { return mpSurface; }
-        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const SAL_OVERRIDE;
+        virtual CairoSharedPtr getCairo() const override;
+        virtual CairoSurfaceSharedPtr getCairoSurface() const override { return mpSurface; }
+        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const override;
 
-        virtual VclPtr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
+        virtual VclPtr<VirtualDevice> createVirtualDevice() const override;
 
-        virtual bool Resize( int width, int height ) SAL_OVERRIDE;
+        virtual bool Resize( int width, int height ) override;
 
-        virtual void flush() const SAL_OVERRIDE;
+        virtual void flush() const override;
 
         int getDepth() const;
         X11PixmapSharedPtr getPixmap() const { return mpPixmap; }

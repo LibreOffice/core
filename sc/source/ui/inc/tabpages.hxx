@@ -32,15 +32,15 @@ public:
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
     static  const sal_uInt16* GetRanges () { return pProtectionRanges; }
-    virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
-    virtual void        Reset           ( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
+    virtual void        Reset           ( const SfxItemSet* ) override;
 
     virtual ~ScTabPageProtection();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
 
 private:
                 ScTabPageProtection( vcl::Window*            pParent,

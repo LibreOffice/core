@@ -66,7 +66,7 @@ class SvDDELinkEditDialog : public ModalDialog
 public:
     SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
     virtual ~SvDDELinkEditDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetCmd() const;
 };
 

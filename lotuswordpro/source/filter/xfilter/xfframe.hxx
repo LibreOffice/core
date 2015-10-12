@@ -90,7 +90,7 @@ public:
     /**
      * @descr   override the add function to adjust z-index.
      */
-    virtual void    Add(XFContent *pContent) SAL_OVERRIDE;
+    virtual void    Add(XFContent *pContent) override;
 
     /**
      * @descr:  Set the anchor type for the frame object.
@@ -159,12 +159,12 @@ public:
     /**
      * @descr   Get content type, enumXFContentFrame.
      */
-    virtual enumXFContent   GetContentType() SAL_OVERRIDE;
+    virtual enumXFContent   GetContentType() override;
 
     /**
      * @descr   serialize.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     void    StartFrame(IXFStream *pStrm);

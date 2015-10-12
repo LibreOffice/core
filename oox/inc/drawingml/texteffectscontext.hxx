@@ -28,10 +28,10 @@ public:
                        std::vector<css::beans::PropertyValue>& rTextEffectsProperties);
     virtual ~TextEffectsContext();
 
-    virtual void onStartElement(const oox::AttributeList& rAttribs) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual void onStartElement(const oox::AttributeList& rAttribs) override;
+    virtual void onEndElement() override;
 
-    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const oox::AttributeList& rAttribs) SAL_OVERRIDE;
+    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const oox::AttributeList& rAttribs) override;
 
 protected:
     std::vector<css::beans::PropertyValue>& mrTextEffectsProperties;

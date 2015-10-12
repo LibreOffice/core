@@ -116,7 +116,7 @@ namespace sdr
             virtual ~Scheduler();
 
             // From baseclass Timer, the timeout call
-            virtual void Invoke() SAL_OVERRIDE;
+            virtual void Invoke() override;
 
             // get time
             SAL_DLLPRIVATE sal_uInt32 GetTime() {  return mnTime; }

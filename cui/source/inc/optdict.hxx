@@ -67,7 +67,7 @@ public:
             css::uno::Reference<
                 css::linguistic2::XSpellChecker1 >  &xSpl );
     virtual ~SvxNewDictionaryDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     css::uno::Reference<
         css::linguistic2::XDictionary >
@@ -93,7 +93,7 @@ class SvxDictEdit : public Edit
     void            SetSpaces(bool bSet)
                                 {bSpaces = bSet;}
 
-    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
 };
 
 // class SvxEditDictionaryDialog -----------------------------------------
@@ -153,7 +153,7 @@ public:
             css::uno::Reference<
                 css::linguistic2::XSpellChecker1> &xSpl );
     virtual ~SvxEditDictionaryDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

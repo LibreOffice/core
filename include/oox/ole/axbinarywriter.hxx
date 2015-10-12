@@ -33,22 +33,22 @@ public:
 
     /** Returns the size of the data this stream represents, if the wrapped
         stream supports the size() operation. */
-    virtual sal_Int64   size() const SAL_OVERRIDE;
+    virtual sal_Int64   size() const override;
     /** Return the current relative stream position (relative to position of
         the wrapped stream at construction time). */
-    virtual sal_Int64   tell() const SAL_OVERRIDE;
+    virtual sal_Int64   tell() const override;
     /** Seeks the stream to the passed relative position, if it is behind the
         current position. */
-    virtual void        seek( sal_Int64 nPos ) SAL_OVERRIDE;
+    virtual void        seek( sal_Int64 nPos ) override;
     /** Closes the input stream but not the wrapped stream. */
-    virtual void        close() SAL_OVERRIDE;
+    virtual void        close() override;
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual void writeData( const StreamDataSequence& orData, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual void writeData( const StreamDataSequence& orData, size_t nAtomSize = 1 ) override;
     /** Reads nBytes bytes to the (existing) buffer opMem.
         @return  Number of bytes really read. */
-    virtual void   writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
+    virtual void   writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
 
     /** Aligns the stream to a multiple of the passed size (relative to the
         position of the wrapped stream at construction time). */
@@ -121,7 +121,7 @@ private:
 
         explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
-        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) SAL_OVERRIDE;
+        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 
     /** Complex property for a string value. */
@@ -132,7 +132,7 @@ private:
 
         explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
-        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) SAL_OVERRIDE;
+        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 
     /** Stream property for a picture or mouse icon. */
@@ -142,7 +142,7 @@ private:
 
         explicit            PictureProperty( StreamDataSequence& rPicData ) :
                                 mrPicData( rPicData ) {}
-        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) SAL_OVERRIDE;
+        virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 
     typedef RefVector< ComplexProperty > ComplexPropVector;

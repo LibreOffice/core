@@ -32,18 +32,18 @@ private:
     VclPtr<SvSimpleTable>     m_pTable;
 
 protected:
-    virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     SvSimpleTableContainer( vcl::Window* pParent, WinBits nBits = WB_BORDER );
     virtual ~SvSimpleTableContainer();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetTable(SvSimpleTable* pTable);
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
 };
 
 class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
@@ -71,24 +71,24 @@ private:
 
 protected:
 
-    virtual void            NotifyScrolled() SAL_OVERRIDE;
+    virtual void            NotifyScrolled() override;
 
-    virtual void            SetTabs() SAL_OVERRIDE;
-    virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void            SetTabs() override;
+    virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
     virtual void            HBarClick();
     void                    HBarStartDrag();
     void                    HBarDrag();
     void                    HBarEndDrag();
 
-    virtual void            Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void            Command( const CommandEvent& rCEvt ) override;
 
     virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvSimpleTable();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void UpdateViewSize();
 

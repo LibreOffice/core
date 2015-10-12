@@ -43,8 +43,8 @@ public:
 
                             MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl );
 
-    void                    update() SAL_OVERRIDE;
-    void                    execute( const MediaItem& rItem ) SAL_OVERRIDE;
+    void                    update() override;
+    void                    execute( const MediaItem& rItem ) override;
 
 private:
 

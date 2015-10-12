@@ -146,7 +146,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
@@ -183,7 +183,7 @@ public:
     const SwStartNode *InsertTableSection(const SwStartNode *pPrevSttNd = 0,
                                   OUString const* pStringValueStyleName = 0);
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     void SetHasSubTables( bool bNew ) { bHasSubTables = bNew; }
 };

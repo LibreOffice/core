@@ -121,12 +121,12 @@ friend class SvxJSearchOptionsDialog;
 public:
     SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     virtual ~SvxSearchDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
     // Window
-    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    Activate() override;
 
     const SearchAttrItemList*   GetSearchItemList() const
                                     { return pSearchList; }
@@ -140,7 +140,7 @@ public:
     void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-        GetComponentInterface( bool bCreate ) SAL_OVERRIDE;
+        GetComponentInterface( bool bCreate ) override;
 
     void            SetSaveToModule(bool b);
 

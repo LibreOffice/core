@@ -298,16 +298,16 @@ public:
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem();
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
-    sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const override;
+    sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const override;
+    virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const override;
+    virtual bool             operator==( const SfxPoolItem& ) const override;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SvxNodeNum

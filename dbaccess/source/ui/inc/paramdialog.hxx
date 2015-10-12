@@ -84,7 +84,7 @@ namespace dbaui
             const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         css::uno::Sequence< css::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }

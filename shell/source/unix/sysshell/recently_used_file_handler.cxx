@@ -232,13 +232,13 @@ namespace /* private */ {
         virtual void start_element(
             const string_t& /*raw_name*/,
             const string_t& local_name,
-            const xml_tag_attribute_container_t& /*attributes*/) SAL_OVERRIDE
+            const xml_tag_attribute_container_t& /*attributes*/) override
         {
             if ((local_name == TAG_RECENT_ITEM) && (NULL == item_))
                 item_ = new recently_used_item;
         }
 
-        virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name) SAL_OVERRIDE
+        virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name) override
         {
             // check for end tags w/o start tag
             if( local_name != TAG_RECENT_FILES && NULL == item_ )
@@ -260,16 +260,16 @@ namespace /* private */ {
             current_element_.clear();
         }
 
-        virtual void characters(const string_t& character) SAL_OVERRIDE
+        virtual void characters(const string_t& character) override
         {
             if (character != "\n")
                 current_element_ += character;
         }
 
-        virtual void ignore_whitespace(const string_t& /*whitespaces*/) SAL_OVERRIDE
+        virtual void ignore_whitespace(const string_t& /*whitespaces*/) override
         {}
 
-        virtual void comment(const string_t& /*comment*/) SAL_OVERRIDE
+        virtual void comment(const string_t& /*comment*/) override
         {}
     private:
         recently_used_item* item_;

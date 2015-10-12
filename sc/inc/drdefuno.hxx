@@ -34,10 +34,10 @@ public:
                             ScDrawDefaultsObj(ScDocShell* pDocSh);
     virtual                 ~ScDrawDefaultsObj() throw ();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // from SvxUnoDrawPool
-    virtual SfxItemPool*    getModelPool( bool bReadOnly ) throw() SAL_OVERRIDE;
+    virtual SfxItemPool*    getModelPool( bool bReadOnly ) throw() override;
 };
 
 #endif

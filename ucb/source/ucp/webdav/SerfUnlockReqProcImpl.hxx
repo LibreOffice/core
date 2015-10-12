@@ -32,17 +32,17 @@ public:
                            const DAVRequestHeaders& inRequestHeaders,
                            const OUString& sToken);
 
-    virtual ~SerfUnlockReqProcImpl() SAL_OVERRIDE;
+    virtual ~SerfUnlockReqProcImpl() override;
 
     virtual serf_bucket_t *createSerfRequestBucket(
-            serf_request_t * inSerfRequest ) SAL_OVERRIDE;
+            serf_request_t * inSerfRequest ) override;
 
 private:
     virtual void processChunkOfResponseData(
-            const char* data, apr_size_t len ) SAL_OVERRIDE;
+            const char* data, apr_size_t len ) override;
 
     virtual void handleEndOfResponseData(
-            serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
+            serf_bucket_t * inSerfResponseBucket ) override;
 
     OUString m_sToken;
 };

@@ -55,8 +55,8 @@ private:
     std::vector<_PgBorder> m_aBorders;
 
     // Properties
-    virtual void lcl_attribute( Id eName, Value& rVal ) SAL_OVERRIDE;
-    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
+    virtual void lcl_attribute( Id eName, Value& rVal ) override;
+    virtual void lcl_sprm( Sprm& rSprm ) override;
 
 public:
     PageBordersHandler( );

@@ -178,14 +178,14 @@ private:
     DocumentEventNotifier m_aNotifier;
     void            Init();
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
 protected:
-    virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
-    virtual void            ExpandedHdl() SAL_OVERRIDE;
-    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) SAL_OVERRIDE;
-    virtual bool            ExpandingHdl() SAL_OVERRIDE;
-    virtual void            KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+    virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
+    virtual void            ExpandedHdl() override;
+    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) override;
+    virtual bool            ExpandingHdl() override;
+    virtual void            KeyInput( const KeyEvent& rEvt ) override;
 
     bool                    OpenCurrent();
     void                    ImpCreateLibEntries( SvTreeListEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
@@ -195,21 +195,21 @@ protected:
     SvTreeListEntry*            ImpFindEntry( SvTreeListEntry* pParent, const OUString& rText );
 
     // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
 
 public:
     TreeListBox(vcl::Window* pParent, const ResId& rRes);
     TreeListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~TreeListBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();

@@ -34,13 +34,13 @@ public:
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~SwCommentRuler ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /**
      * Paint the ruler.
      * \param rRect ignored
      */
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
 protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
@@ -55,26 +55,26 @@ protected:
      *
      * When on comment control, it toggles the comment panel visibility.
      */
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     /**
      * Callback function to handle a mouse move event.
      *
      * When on comment control, it let the control responsive by highlighting.
      */
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
     /**
      * Callback function to handle a context menu call (mouse right button click).
      *
      * When on comment control, it does not do anything.
      */
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) override;
     /**
      * Update the view.
      *
      * Update the ruler appearance according to the document view and
      * current cursor position.
      */
-    virtual void Update() SAL_OVERRIDE;
+    virtual void Update() override;
 
     /**
      * Get the rectangle area that should be used to draw the comment control.

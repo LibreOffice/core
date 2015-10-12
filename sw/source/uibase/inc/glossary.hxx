@@ -58,18 +58,18 @@ class SwGlTreeListBox : public SvTreeListBox
     SvTreeListEntry*  pDragEntry;
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
-                                            SvTreeListEntry* ) SAL_OVERRIDE;
-    virtual bool         NotifyAcceptDrop( SvTreeListEntry* ) SAL_OVERRIDE;
+                                            SvTreeListEntry* ) override;
+    virtual bool         NotifyAcceptDrop( SvTreeListEntry* ) override;
 
     virtual TriState     NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
-                                ) SAL_OVERRIDE;
+                                ) override;
     virtual TriState     NotifyCopying(  SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos) SAL_OVERRIDE;
+                                    sal_uLong&        rNewChildPos) override;
 
     TriState NotifyCopyingOrMoving( SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
@@ -77,8 +77,8 @@ class SwGlTreeListBox : public SvTreeListBox
 public:
     SwGlTreeListBox(vcl::Window* pParent, WinBits nBits);
 
-    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual Size GetOptimalSize() const override;
     void Clear();
 };
 
@@ -135,7 +135,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
     DECL_LINK_TYPED( PreviewLoadedHdl, SwOneExampleFrame&, void );
 
-    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Apply() override;
     void            Init();
     SvTreeListEntry*    DoesBlockExist(const OUString& sBlock, const OUString& rShort);
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
@@ -149,7 +149,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetCurrGrpName() const;
     OUString GetCurrShortName() const
     {

@@ -75,9 +75,9 @@ class HostDetailsContainer : public DetailsContainer
         HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
         virtual ~HostDetailsContainer( ) { };
 
-        virtual void show( bool bShow = true ) SAL_OVERRIDE;
-        virtual INetURLObject getUrl( ) SAL_OVERRIDE;
-        virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
+        virtual void show( bool bShow = true ) override;
+        virtual INetURLObject getUrl( ) override;
+        virtual bool setUrl( const INetURLObject& rUrl ) override;
 
     protected:
         void setScheme( const OUString& sScheme ) { m_sScheme = sScheme; }
@@ -97,10 +97,10 @@ class DavDetailsContainer : public HostDetailsContainer
         DavDetailsContainer( VclBuilderContainer* pBuilder );
         virtual ~DavDetailsContainer( ) { };
 
-        virtual void show( bool bShow = true ) SAL_OVERRIDE;
+        virtual void show( bool bShow = true ) override;
 
     protected:
-        virtual bool verifyScheme( const OUString& rScheme ) SAL_OVERRIDE;
+        virtual bool verifyScheme( const OUString& rScheme ) override;
 
     private:
         DECL_LINK_TYPED( ToggledDavsHdl, CheckBox&, void );
@@ -116,9 +116,9 @@ class SmbDetailsContainer : public DetailsContainer
         SmbDetailsContainer( VclBuilderContainer* pBuilder );
         virtual ~SmbDetailsContainer( ) { };
 
-        virtual INetURLObject getUrl( ) SAL_OVERRIDE;
-        virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
-        virtual void show( bool bShow = true ) SAL_OVERRIDE;
+        virtual INetURLObject getUrl( ) override;
+        virtual bool setUrl( const INetURLObject& rUrl ) override;
+        virtual void show( bool bShow = true ) override;
 };
 
 class CmisDetailsContainer : public DetailsContainer
@@ -140,11 +140,11 @@ class CmisDetailsContainer : public DetailsContainer
         CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding );
         virtual ~CmisDetailsContainer( ) { };
 
-        virtual void show( bool bShow = true ) SAL_OVERRIDE;
-        virtual INetURLObject getUrl( ) SAL_OVERRIDE;
-        virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
-        virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
-        virtual void setPassword( const OUString& rPass ) SAL_OVERRIDE;
+        virtual void show( bool bShow = true ) override;
+        virtual INetURLObject getUrl( ) override;
+        virtual bool setUrl( const INetURLObject& rUrl ) override;
+        virtual void setUsername( const OUString& rUsername ) override;
+        virtual void setPassword( const OUString& rPass ) override;
 
     private:
         void selectRepository( );

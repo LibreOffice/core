@@ -51,21 +51,21 @@ public:
     bool isClosable() { /*@todo*/ return m_bIsClosable;}
 
     // TabPageNotifiable
-    virtual void setInvalidPage( TabPage * pTabPage ) SAL_OVERRIDE;
-    virtual void setValidPage( TabPage * pTabPage ) SAL_OVERRIDE;
+    virtual void setInvalidPage( TabPage * pTabPage ) override;
+    virtual void setValidPage( TabPage * pTabPage ) override;
 
 protected:
-    virtual bool            leaveState( WizardState _nState ) SAL_OVERRIDE;
-    virtual WizardState     determineNextState(WizardState nCurrentState) const SAL_OVERRIDE;
-    virtual void            enterState(WizardState nState) SAL_OVERRIDE;
+    virtual bool            leaveState( WizardState _nState ) override;
+    virtual WizardState     determineNextState(WizardState nCurrentState) const override;
+    virtual void            enterState(WizardState nState) override;
 
-    virtual OUString        getStateDisplayName( WizardState nState ) const SAL_OVERRIDE;
+    virtual OUString        getStateDisplayName( WizardState nState ) const override;
 
 private:
     //no default constructor
     CreationWizard();
 
-    virtual VclPtr<TabPage> createPage(WizardState nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState nState) override;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

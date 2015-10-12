@@ -49,9 +49,9 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element.
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) override;
 
-    virtual void ExportContent() SAL_OVERRIDE;
+    virtual void ExportContent() override;
 
     const OUString& GetTextContent() const { return m_aCharacters; }
 };

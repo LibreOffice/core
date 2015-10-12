@@ -57,34 +57,34 @@ public:
     SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, sal_Unicode cIns = 0 );
     virtual ~SwAutoCorrDoc();
 
-    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
-    virtual bool Insert( sal_Int32 nPos, const OUString& rText ) SAL_OVERRIDE;
-    virtual bool Replace( sal_Int32 nPos, const OUString& rText ) SAL_OVERRIDE;
-    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rText ) SAL_OVERRIDE;
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) override;
+    virtual bool Insert( sal_Int32 nPos, const OUString& rText ) override;
+    virtual bool Replace( sal_Int32 nPos, const OUString& rText ) override;
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rText ) override;
 
     virtual bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
-                            SfxPoolItem& ) SAL_OVERRIDE;
+                            SfxPoolItem& ) override;
 
-    virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) SAL_OVERRIDE;
+    virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) override;
 
     // return text of a previous paragraph
     // If it does not exist or if there is nothing before, return blank.
     //  - true:  paragraph before "normal" insertion position
     //  - false: paragraph in that the corrected word was inserted
     //               (does not need to be the same paragraph)
-    virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
+    virtual OUString const* GetPrevPara(bool bAtNormalPos) override;
 
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
-                                  OUString* pPara ) SAL_OVERRIDE;
+                                  OUString* pPara ) override;
 
     // Will be called after swapping characters by the functions
     //  - FnCapitalStartWord and
     //  - FnCapitalStartSentence.
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
-                                    const OUString& rExceptWord, sal_Unicode cChar ) SAL_OVERRIDE;
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const SAL_OVERRIDE;
+                                    const OUString& rExceptWord, sal_Unicode cChar ) override;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const override;
 };
 
 class SwAutoCorrExceptWord

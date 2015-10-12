@@ -45,7 +45,7 @@ public:
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     virtual ~TextCharacterSpacingControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void Rearrange(bool bLBAvailable,bool bAvailable, long nKerning);
     //virtual void Paint(const Rectangle& rect);
 

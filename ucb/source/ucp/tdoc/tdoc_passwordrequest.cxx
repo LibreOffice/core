@@ -45,27 +45,27 @@ namespace tdoc_ucp
 
         // XInterface
         virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL acquire()
-            throw () SAL_OVERRIDE;
+            throw () override;
         virtual void SAL_CALL release()
-            throw () SAL_OVERRIDE;
+            throw () override;
 
         // XTypeProvider
         virtual uno::Sequence< uno::Type > SAL_CALL getTypes()
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
         virtual uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
 
         // XInteractionContinuation
         virtual void SAL_CALL select()
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
 
         // XInteractionPassword
         virtual void SAL_CALL setPassword( const OUString & aPasswd )
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
         virtual OUString SAL_CALL getPassword()
-            throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( uno::RuntimeException, std::exception ) override;
 
     private:
         osl::Mutex m_aMutex;

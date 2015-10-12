@@ -90,10 +90,10 @@ namespace svxform
         explicit FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
-        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) throw (InvocationTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception) override;
+        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) throw (InvocationTargetException, RuntimeException, std::exception) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
 
         // lifetime control
         void SAL_CALL dispose();
@@ -159,9 +159,9 @@ namespace svxform
         void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult );
 
         // IFormScriptingEnvironment
-        virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
-        virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) override;
+        virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) override;
+        virtual void dispose() override;
 
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
@@ -873,7 +873,7 @@ namespace svxform
             }
 
             // IScript
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult ) SAL_OVERRIDE;
+            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult ) override;
         };
 
 

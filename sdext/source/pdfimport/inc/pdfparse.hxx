@@ -73,8 +73,8 @@ struct PDFComment : public PDFEntry
     explicit PDFComment( const OString& rComment )
     : PDFEntry(), m_aComment( rComment ) {}
     virtual ~PDFComment();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFValue : public PDFEntry
@@ -91,8 +91,8 @@ struct PDFName : public PDFValue
     explicit PDFName( const OString& rName )
     : PDFValue(), m_aName( rName ) {}
     virtual ~PDFName();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     OUString getFilteredName() const;
 };
@@ -104,8 +104,8 @@ struct PDFString : public PDFValue
     explicit PDFString( const OString& rString )
     : PDFValue(), m_aString( rString ) {}
     virtual ~PDFString();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     OString getFilteredString() const;
 };
@@ -117,8 +117,8 @@ struct PDFNumber : public PDFValue
     explicit PDFNumber( double fVal )
     : PDFValue(), m_fValue( fVal ) {}
     virtual ~PDFNumber();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFBool : public PDFValue
@@ -128,8 +128,8 @@ struct PDFBool : public PDFValue
     explicit PDFBool( bool bVal )
     : PDFValue(), m_bValue( bVal ) {}
     virtual ~PDFBool();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFObjectRef : public PDFValue
@@ -140,16 +140,16 @@ struct PDFObjectRef : public PDFValue
     PDFObjectRef( unsigned int nNr, unsigned int nGen )
     : PDFValue(), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObjectRef();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFNull : public PDFValue
 {
     PDFNull() {}
     virtual ~PDFNull();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFObject;
@@ -174,8 +174,8 @@ struct PDFArray : public PDFContainer
 {
     PDFArray() {}
     virtual ~PDFArray();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFDict : public PDFContainer
@@ -185,8 +185,8 @@ struct PDFDict : public PDFContainer
 
     PDFDict() {}
     virtual ~PDFDict();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     // inserting a value of NULL will remove rName and the previous value
     // from the dictionary
@@ -207,8 +207,8 @@ struct PDFStream : public PDFEntry
     PDFStream( unsigned int nBegin, unsigned int nEnd, PDFDict* pStreamDict )
     : PDFEntry(), m_nBeginOffset( nBegin ), m_nEndOffset( nEnd ), m_pDict( pStreamDict ) {}
     virtual ~PDFStream();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     unsigned int getDictLength( const PDFContainer* pObjectContainer = NULL ) const; // get contents of the "Length" entry of the dict
 };
@@ -219,8 +219,8 @@ struct PDFTrailer : public PDFContainer
 
     PDFTrailer() : PDFContainer(), m_pDict( NULL ) {}
     virtual ~PDFTrailer();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 struct PDFFileImplData;
@@ -240,8 +240,8 @@ public:
     {}
     virtual ~PDFFile();
 
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     bool isEncrypted() const;
 
@@ -269,8 +269,8 @@ struct PDFObject : public PDFContainer
     PDFObject( unsigned int nNr, unsigned int nGen )
     : m_pObject( NULL ), m_pStream( NULL ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObject();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 
     // writes only the contained stream, deflated if necessary
     bool writeStream( EmitContext& rContext, const PDFFile* pPDFFile ) const;
@@ -287,8 +287,8 @@ struct PDFPart : public PDFContainer
 {
     PDFPart() : PDFContainer() {}
     virtual ~PDFPart();
-    virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
-    virtual PDFEntry* clone() const SAL_OVERRIDE;
+    virtual bool emit( EmitContext& rWriteContext ) const override;
+    virtual PDFEntry* clone() const override;
 };
 
 class PDFReader

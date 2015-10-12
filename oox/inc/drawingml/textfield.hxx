@@ -45,7 +45,7 @@ public:
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
                         const TextCharacterProperties& rTextCharacterStyle,
-                        float nDefaultCharHeight) const SAL_OVERRIDE;
+                        float nDefaultCharHeight) const override;
 
 private:
     TextParagraphProperties  maTextParagraphProperties;

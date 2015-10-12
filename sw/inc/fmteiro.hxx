@@ -33,13 +33,13 @@ public:
                      bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
 
     /// "pure virtual methos" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+                                    const IntlWrapper*    pIntl = 0 ) const override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline const SwFormatEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const

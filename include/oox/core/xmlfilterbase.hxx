@@ -239,18 +239,18 @@ public:
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-        implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const SAL_OVERRIDE;
+        implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
-        implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const SAL_OVERRIDE;
+        implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const override;
 
-    virtual bool implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor ) SAL_OVERRIDE;
+    virtual bool implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor ) override;
 
 private:
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const SAL_OVERRIDE;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const override;
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const SAL_OVERRIDE;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const override;
 
 private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;

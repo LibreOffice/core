@@ -57,7 +57,7 @@ public:
     explicit PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PanelFactory();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // XUIElementFactory
 
@@ -67,7 +67,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 };
 
 } } // end of namespace sd::sidebar

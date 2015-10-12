@@ -42,7 +42,7 @@ public:
     ScCollection(const ScCollection& rCollection);
     virtual                 ~ScCollection();
 
-    virtual ScDataObject*   Clone() const SAL_OVERRIDE;
+    virtual ScDataObject*   Clone() const override;
 
     bool                    AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject);
     bool                    Insert(ScDataObject* pScDataObject);

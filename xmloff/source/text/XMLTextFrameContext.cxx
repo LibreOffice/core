@@ -124,7 +124,7 @@ public:
                                          OUString& rTitleOrDesc );
     virtual ~XMLTextFrameTitleOrDescContext_Impl();
 
-    virtual void Characters( const OUString& rText ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rText ) override;
 };
 
 TYPEINIT1( XMLTextFrameTitleOrDescContext_Impl, SvXMLImportContext );
@@ -446,14 +446,14 @@ public:
                 ::com::sun::star::xml::sax::XAttributeList > & rFrameAttrList );
     virtual ~XMLTextFrameContext_Impl();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,

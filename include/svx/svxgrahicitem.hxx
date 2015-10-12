@@ -36,8 +36,8 @@ public:
                             SvxGraphicItem( const SvxGraphicItem& );
 
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
     Graphic             GetGraphic() const { return aGraphic; }
 

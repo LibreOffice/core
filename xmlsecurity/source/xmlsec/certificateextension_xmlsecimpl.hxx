@@ -41,11 +41,11 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper<
         virtual ~CertificateExtension_XmlSecImpl() ;
 
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        virtual sal_Bool SAL_CALL isCritical() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
         void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) ;
 } ;

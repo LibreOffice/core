@@ -51,12 +51,12 @@ public:
     virtual ~SwFormatRefMark( );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
 
     // SwClient
     virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
-        SAL_OVERRIDE;
+        override;
 
     void InvalidateRefMark();
 

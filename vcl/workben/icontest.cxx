@@ -75,11 +75,11 @@ public:
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
     virtual ~MyWorkWindow() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { mpFixedBitmap.clear(); WorkWindow::dispose(); }
+    virtual void dispose() override { mpFixedBitmap.clear(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void Resize() override;
 };
 
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
@@ -140,8 +140,8 @@ void MyWorkWindow::Resize()
 class IconTestApp : public Application
 {
 public:
-    virtual void Init() SAL_OVERRIDE;
-    virtual int Main() SAL_OVERRIDE;
+    virtual void Init() override;
+    virtual int Main() override;
 
     IconTestApp() : nRet(EXIT_SUCCESS) {};
 

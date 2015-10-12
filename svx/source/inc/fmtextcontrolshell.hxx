@@ -138,14 +138,14 @@ namespace svx
 
     protected:
         // IFocusObserver
-        virtual void    focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
-        virtual void    focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
+        virtual void    focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) override;
+        virtual void    focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) override;
 
         // IContextRequestObserver
-        virtual void    contextMenuRequested( const ::com::sun::star::awt::MouseEvent& _rEvent ) SAL_OVERRIDE;
+        virtual void    contextMenuRequested( const ::com::sun::star::awt::MouseEvent& _rEvent ) override;
 
         // ISlotInvalidator
-        virtual void    Invalidate( SfxSlotId _nSlot ) SAL_OVERRIDE;
+        virtual void    Invalidate( SfxSlotId _nSlot ) override;
 
     protected:
         enum AttributeSet { eCharAttribs, eParaAttribs };

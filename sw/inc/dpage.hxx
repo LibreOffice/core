@@ -37,20 +37,20 @@ public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage=false);
     virtual ~SwDPage();
 
-    virtual SwDPage* Clone() const SAL_OVERRIDE;
-    virtual SwDPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;
+    virtual SwDPage* Clone() const override;
+    virtual SwDPage* Clone(SdrModel* pNewModel) const override;
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
     // virtual Point GetOffset() const;
-    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, size_t nObjNum ) SAL_OVERRIDE;
+    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, size_t nObjNum ) override;
 
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
-                                    const Rectangle *pRect) const SAL_OVERRIDE;
+                                    const Rectangle *pRect) const override;
 
     bool RequestHelp( vcl::Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() override;
 
 protected:
     void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel = 0);

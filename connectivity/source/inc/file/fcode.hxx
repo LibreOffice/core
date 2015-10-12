@@ -91,8 +91,8 @@ namespace connectivity
 
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
-            virtual const ORowSetValue& getValue() const SAL_OVERRIDE;
-            virtual void setValue(const ORowSetValue& _rVal) SAL_OVERRIDE;
+            virtual const ORowSetValue& getValue() const override;
+            virtual void setValue(const ORowSetValue& _rVal) override;
             void bindValue(const OValueRefRow& _pRow); // Bind to the value that the operand represents
 
             TYPEINFO_OVERRIDE();
@@ -134,8 +134,8 @@ namespace connectivity
 
             OOperandValue(sal_Int32 eDbType) :OOperand(eDbType){}
         public:
-            virtual const ORowSetValue& getValue() const SAL_OVERRIDE;
-            virtual void setValue(const ORowSetValue& _rVal) SAL_OVERRIDE;
+            virtual const ORowSetValue& getValue() const override;
+            virtual void setValue(const ORowSetValue& _rVal) override;
 
             TYPEINFO_OVERRIDE();
         };
@@ -210,7 +210,7 @@ namespace connectivity
         {
         public:
             TYPEINFO_OVERRIDE();
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
             virtual bool operate(const OOperand*, const OOperand*) const;
         };
 
@@ -220,8 +220,8 @@ namespace connectivity
             TYPEINFO_OVERRIDE();
 
         protected:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
+            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
         };
 
         class OOp_AND : public OBoolOperator
@@ -230,7 +230,7 @@ namespace connectivity
             TYPEINFO_OVERRIDE();
 
         protected:
-            virtual bool operate(const OOperand*, const OOperand*) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
         class OOp_OR : public OBoolOperator
@@ -238,7 +238,7 @@ namespace connectivity
         public:
             TYPEINFO_OVERRIDE();
         protected:
-            virtual bool operate(const OOperand*, const OOperand*) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_ISNULL : public OBoolOperator
@@ -246,15 +246,15 @@ namespace connectivity
         public:
             TYPEINFO_OVERRIDE();
         public:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
+            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_ISNOTNULL : public OOp_ISNULL
         {
         public:
             TYPEINFO_OVERRIDE();
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator
@@ -267,7 +267,7 @@ namespace connectivity
         public:
             OOp_LIKE(const sal_Unicode cEsc = L'\0'):cEscape(cEsc){};
 
-            virtual bool operate(const OOperand*, const OOperand*) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
         class OOp_NOTLIKE : public OOp_LIKE
@@ -277,7 +277,7 @@ namespace connectivity
         public:
             OOp_NOTLIKE(const sal_Unicode cEsc = L'\0'):OOp_LIKE(cEsc){};
 
-            virtual bool operate(const OOperand*, const OOperand*) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_COMPARE : public OBoolOperator
@@ -290,14 +290,14 @@ namespace connectivity
                          :aPredicateType(aPType) {}
 
             inline sal_Int32 getPredicateType() const { return aPredicateType; }
-            virtual bool operate(const OOperand*, const OOperand*) const SAL_OVERRIDE;
+            virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
         // Numerical operators
         class ONumOperator : public OOperator
         {
         public:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
 
             TYPEINFO_OVERRIDE();
 
@@ -308,25 +308,25 @@ namespace connectivity
         class OOp_ADD : public ONumOperator
         {
         protected:
-            virtual double operate(const double& fLeft,const double& fRight) const SAL_OVERRIDE;
+            virtual double operate(const double& fLeft,const double& fRight) const override;
         };
 
         class OOp_SUB : public ONumOperator
         {
         protected:
-            virtual double operate(const double& fLeft,const double& fRight) const SAL_OVERRIDE;
+            virtual double operate(const double& fLeft,const double& fRight) const override;
         };
 
         class OOp_MUL : public ONumOperator
         {
         protected:
-            virtual double operate(const double& fLeft,const double& fRight) const SAL_OVERRIDE;
+            virtual double operate(const double& fLeft,const double& fRight) const override;
         };
 
         class OOp_DIV : public ONumOperator
         {
         protected:
-            virtual double operate(const double& fLeft,const double& fRight) const SAL_OVERRIDE;
+            virtual double operate(const double& fLeft,const double& fRight) const override;
         };
 
         inline bool OOperand::isValid() const
@@ -338,7 +338,7 @@ namespace connectivity
         class ONthOperator : public OOperator
         {
         public:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
 
             TYPEINFO_OVERRIDE();
 
@@ -349,7 +349,7 @@ namespace connectivity
         class OBinaryOperator : public OOperator
         {
         public:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
 
             TYPEINFO_OVERRIDE();
 
@@ -360,7 +360,7 @@ namespace connectivity
         class OUnaryOperator : public OOperator
         {
         public:
-            virtual void Exec(OCodeStack&) SAL_OVERRIDE;
+            virtual void Exec(OCodeStack&) override;
             virtual ORowSetValue operate(const ORowSetValue& lhs) const = 0;
 
             TYPEINFO_OVERRIDE();

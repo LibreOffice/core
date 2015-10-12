@@ -56,7 +56,7 @@ namespace dbaui
 
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 
@@ -70,7 +70,7 @@ namespace dbaui
 
     private:
         // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
     };
 
     // RowsetFilterDialog
@@ -89,12 +89,12 @@ namespace dbaui
             vcl::Window* _pParent,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::container::XNameAccess >& _rxColumns
-        ) SAL_OVERRIDE;
+        ) override;
 
         // OGenericUnoDialog overridables
-        virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
+        virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     };
 
@@ -114,12 +114,12 @@ namespace dbaui
             vcl::Window* _pParent,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::container::XNameAccess >& _rxColumns
-        ) SAL_OVERRIDE;
+        ) override;
 
         // OGenericUnoDialog overridables
-        virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
+        virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     };
 
 }   // namespace dbaui

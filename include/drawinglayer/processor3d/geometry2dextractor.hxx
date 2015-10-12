@@ -55,7 +55,7 @@ namespace drawinglayer
             /*  as tooling, the process() implementation takes over API handling and calls this
                 virtual render method when the primitive implementation is BasePrimitive3D-based.
              */
-            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate) SAL_OVERRIDE;
+            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate) override;
 
         public:
             Geometry2DExtractingProcessor(

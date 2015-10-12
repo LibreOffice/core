@@ -31,7 +31,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
     SvxAutocorrWordList     *pAutocorr_List;
@@ -57,7 +57,7 @@ public:
 
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
     virtual ~SvXMLWordListContext();
 };
@@ -81,7 +81,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element, const css::uno::Reference<
-            css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
+            css::xml::sax::XFastAttributeList > & xAttrList ) override;
 public:
     SvStringsISortDtor  &rList;
 
@@ -102,7 +102,7 @@ public:
 
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
     virtual ~SvXMLExceptionListContext();
 };

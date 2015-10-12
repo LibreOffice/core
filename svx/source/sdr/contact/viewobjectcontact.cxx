@@ -67,7 +67,7 @@ protected:
 
     // as tooling, the process() implementation takes over API handling and calls this
     // virtual render method when the primitive implementation is BasePrimitive2D-based.
-    virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate) SAL_OVERRIDE;
+    virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate) override;
 
 public:
     AnimatedExtractingProcessor2D(

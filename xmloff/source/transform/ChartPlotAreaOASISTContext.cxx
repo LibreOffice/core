@@ -44,10 +44,10 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
-        const Reference< xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const Reference< xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) override;
+    virtual void EndElement() override;
 
     bool IsCategoryAxis() const { return m_bHasCategories;}
 

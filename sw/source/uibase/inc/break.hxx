@@ -60,12 +60,12 @@ class SwBreakDlg: public SvxStandardDialog
     void CheckEnable();
 
 protected:
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
 
 public:
     SwBreakDlg( vcl::Window *pParent, SwWrtShell &rSh );
     virtual ~SwBreakDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString    GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }

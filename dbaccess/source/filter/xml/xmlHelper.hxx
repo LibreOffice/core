@@ -44,7 +44,7 @@ namespace dbaxml
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();
 
-        virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 _nType) const SAL_OVERRIDE;
+        virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 _nType) const override;
     };
 
     class OXMLHelper

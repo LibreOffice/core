@@ -34,11 +34,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
+            const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
+            const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 #endif

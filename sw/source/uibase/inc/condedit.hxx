@@ -27,8 +27,8 @@ class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {
     bool bBrackets, bEnableDrop;
 
-    SAL_DLLPRIVATE virtual sal_Int8  AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_Int8  AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    SAL_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
     ConditionEdit(vcl::Window* pParent, WinBits nStyle);

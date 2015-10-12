@@ -44,17 +44,17 @@ private:
     sal_uInt8               nLastAction;
 
 protected:
-    virtual void        InsertPara() SAL_OVERRIDE;
-    virtual void        InsertText() SAL_OVERRIDE;
-    virtual void        MovePos( bool bForward = true ) SAL_OVERRIDE;
+    virtual void        InsertPara() override;
+    virtual void        InsertText() override;
+    virtual void        MovePos( bool bForward = true ) override;
     virtual void        SetEndPrevPara( EditNodeIdx*& rpNodePos,
-                                        sal_Int32& rCntPos ) SAL_OVERRIDE;
+                                        sal_Int32& rCntPos ) override;
 
-    virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void        NextToken( int nToken ) SAL_OVERRIDE;
-    virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet ) SAL_OVERRIDE;
-    virtual bool        IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const SAL_OVERRIDE;
-    virtual void        CalcValue() SAL_OVERRIDE;
+    virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet ) override;
+    virtual void        NextToken( int nToken ) override;
+    virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet ) override;
+    virtual bool        IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const override;
+    virtual void        CalcValue() override;
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
     SvxRTFStyleType*    FindStyleSheet( const OUString& rName );
@@ -66,7 +66,7 @@ public:
     EditRTFParser(SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine);
     virtual ~EditRTFParser();
 
-    virtual SvParserState   CallParser() SAL_OVERRIDE;
+    virtual SvParserState   CallParser() override;
 
     vcl::Font       GetDefFont()                        { return GetFont( nDefFont ); }
 

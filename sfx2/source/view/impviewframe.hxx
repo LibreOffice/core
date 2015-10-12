@@ -91,8 +91,8 @@ public:
                             p->GetFrame().GetWindow().SetBorderStyle( WindowBorderStyle::NOBORDER );
                         }
 
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        Resize() override;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_VIEW_IMPVIEWFRAME_HXX

@@ -39,27 +39,27 @@ public:
 
     DocumentLinksAdministrationManager( SwDoc& i_rSwdoc );
 
-    bool IsVisibleLinks() const SAL_OVERRIDE;
+    bool IsVisibleLinks() const override;
 
-    void SetVisibleLinks(bool bFlag) SAL_OVERRIDE;
+    void SetVisibleLinks(bool bFlag) override;
 
-    sfx2::LinkManager& GetLinkManager() SAL_OVERRIDE;
+    sfx2::LinkManager& GetLinkManager() override;
 
-    const sfx2::LinkManager& GetLinkManager() const SAL_OVERRIDE;
+    const sfx2::LinkManager& GetLinkManager() const override;
 
-    void UpdateLinks(bool bUI) SAL_OVERRIDE;
+    void UpdateLinks(bool bUI) override;
 
-    bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const SAL_OVERRIDE;
+    bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const override;
 
-    bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) SAL_OVERRIDE;
+    bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) override;
 
-    ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) SAL_OVERRIDE;
+    ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) override;
 
-    bool EmbedAllLinks() SAL_OVERRIDE;
+    bool EmbedAllLinks() override;
 
-    void SetLinksUpdated(const bool bNewLinksUpdated) SAL_OVERRIDE;
+    void SetLinksUpdated(const bool bNewLinksUpdated) override;
 
-    bool LinksUpdated() const SAL_OVERRIDE;
+    bool LinksUpdated() const override;
 
     //Non-Interface method
     bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const;

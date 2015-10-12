@@ -107,8 +107,8 @@ private:
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
 
-    virtual void SAL_CALL run() SAL_OVERRIDE;
-    virtual void SAL_CALL onTerminated() SAL_OVERRIDE { mpLateDestroy.reset(); }
+    virtual void SAL_CALL run() override;
+    virtual void SAL_CALL onTerminated() override { mpLateDestroy.reset(); }
 };
 
 } // end of anonymous namespace

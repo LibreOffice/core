@@ -30,14 +30,14 @@ public:
                              SalGeometryProvider *mpProvider);
 
 protected:
-    virtual rtl::Reference<OpenGLContext> CreateWinContext() SAL_OVERRIDE;
-    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) SAL_OVERRIDE;
+    virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
+    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) override;
 
     bool RenderTextureCombo(TextureCombo& rCombo, int nX, int nY);
 
 public:
-    virtual void Init() SAL_OVERRIDE;
-    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+    virtual void Init() override;
+    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
 
 
     bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);

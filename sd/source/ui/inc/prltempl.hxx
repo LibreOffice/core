@@ -72,7 +72,7 @@ private:
 
     PresentationObjects ePO;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
     // for mapping with the new SvxNumBulletItem
     SfxItemSet aInputSet;
@@ -86,7 +86,7 @@ private:
 public:
     SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     virtual ~SdPresLayoutTemplateDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     const SfxItemSet* GetOutputItemSet() const;
 };

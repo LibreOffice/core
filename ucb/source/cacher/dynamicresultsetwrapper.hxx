@@ -112,20 +112,20 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // XDynamicResultSet
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet > SAL_CALL
     getStaticResultSet()
         throw( com::sun::star::ucb::ListenerAlreadySetException
-        , com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        , com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     setListener( const com::sun::star::uno::Reference<
         com::sun::star::ucb::XDynamicResultSetListener > & Listener )
         throw( com::sun::star::ucb::ListenerAlreadySetException
-            , com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            , com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     connectToCache( const com::sun::star::uno::Reference<
@@ -133,25 +133,25 @@ public:
         throw( com::sun::star::ucb::ListenerAlreadySetException
             , com::sun::star::ucb::AlreadyInitializedException
             , com::sun::star::ucb::ServiceNotFoundException
-            , com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            , com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int16 SAL_CALL
-    getCapabilities() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    getCapabilities() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // XComponent ( base of XDynamicResultSet )
     virtual void SAL_CALL
-    dispose() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    dispose() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
         com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
         com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // XSourceInitialization
@@ -160,7 +160,7 @@ public:
     setSource(  const com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > & Source )
          throw( com::sun::star::ucb::AlreadyInitializedException
-                , com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                , com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // own methods:
@@ -191,22 +191,22 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
-        throw() SAL_OVERRIDE;
+        throw() override;
     virtual void SAL_CALL release()
-        throw() SAL_OVERRIDE;
+        throw() override;
 
     // XEventListener ( base of XDynamicResultSetListener )
 
     virtual void SAL_CALL
     disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XDynamicResultSetListener
     virtual void SAL_CALL
     notify( const ::com::sun::star::ucb::ListEvent& Changes )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     // own methods:

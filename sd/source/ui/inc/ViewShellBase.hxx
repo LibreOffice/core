@@ -116,35 +116,35 @@ public:
     void GetState (SfxItemSet& rSet);
 
     /* override these from SfxViewShell */
-    virtual OUString GetSelectionText(bool) SAL_OVERRIDE;
-    virtual bool HasSelection(bool) const SAL_OVERRIDE;
+    virtual OUString GetSelectionText(bool) override;
+    virtual bool HasSelection(bool) const override;
 
     SvBorder GetBorder (bool bOuterResize);
-    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize) SAL_OVERRIDE;
-    virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize) SAL_OVERRIDE;
+    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize) override;
+    virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize) override;
 
     /** This call is forwarded to the main sub-shell.
     */
-    virtual ErrCode DoVerb (long nVerb) SAL_OVERRIDE;
+    virtual ErrCode DoVerb (long nVerb) override;
 
     /** Return a new renderer that can be used for example for printing the
         document.
     */
-    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable() SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable() override;
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (bool bCreate = false) SAL_OVERRIDE;
+    virtual SfxPrinter* GetPrinter (bool bCreate = false) override;
 
     /// Forwarded to the print manager.
     virtual sal_uInt16 SetPrinter (
         SfxPrinter* pNewPrinter,
-        SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false) SAL_OVERRIDE;
+        SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false) override;
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
         ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        bool bBrowse = false) SAL_OVERRIDE;
+        bool bBrowse = false) override;
 
     /** Pass the given properties to the main view shell.  After that we
         ensure that the right view shell type is displayed in the center
@@ -153,20 +153,20 @@ public:
     virtual void ReadUserDataSequence (
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        bool bBrowse = false) SAL_OVERRIDE;
+        bool bBrowse = false) override;
 
-    virtual void UIActivating( SfxInPlaceClient* ) SAL_OVERRIDE;
-    virtual void UIDeactivated( SfxInPlaceClient* ) SAL_OVERRIDE;
-    virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
-    virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void UIActivating( SfxInPlaceClient* ) override;
+    virtual void UIDeactivated( SfxInPlaceClient* ) override;
+    virtual void Activate (bool IsMDIActivate) override;
+    virtual void Deactivate (bool IsMDIActivate) override;
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
-        const Fraction &rZoomY) SAL_OVERRIDE;
-    virtual bool PrepareClose (bool bUI = true) SAL_OVERRIDE;
-    virtual void WriteUserData (OUString&, bool bBrowse = false) SAL_OVERRIDE;
-    virtual void ReadUserData (const OUString&, bool bBrowse = false) SAL_OVERRIDE;
-    virtual SdrView* GetDrawView() const SAL_OVERRIDE;
-    virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize) SAL_OVERRIDE;
+        const Fraction &rZoomY) override;
+    virtual bool PrepareClose (bool bUI = true) override;
+    virtual void WriteUserData (OUString&, bool bBrowse = false) override;
+    virtual void ReadUserData (const OUString&, bool bBrowse = false) override;
+    virtual SdrView* GetDrawView() const override;
+    virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize) override;
 
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)
@@ -228,7 +228,7 @@ public:
 protected:
     osl::Mutex maMutex;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     virtual void InitializeFramework();
 

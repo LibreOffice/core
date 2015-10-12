@@ -80,7 +80,7 @@ class NoHelpErrorBox : public MessageDialog
 public:
     explicit NoHelpErrorBox( vcl::Window* _pParent );
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 };
 
 NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )

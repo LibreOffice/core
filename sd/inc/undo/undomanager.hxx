@@ -31,9 +31,9 @@ class UndoManager : public SdrUndoManager
 public:
     UndoManager( sal_uInt16 nMaxUndoActionCount = 20 );
 
-    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0) SAL_OVERRIDE;
+    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0) override;
 
-    virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) SAL_OVERRIDE;
+    virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) override;
 
     /** Set or reset the undo manager linked with the called undo manager.
     */

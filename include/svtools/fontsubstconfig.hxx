@@ -39,13 +39,13 @@ private:
     bool                        bIsEnabled;
     SvtFontSubstConfig_Impl*    pImpl;
 
-    virtual void                ImplCommit() SAL_OVERRIDE;
+    virtual void                ImplCommit() override;
 
 public:
     SvtFontSubstConfig();
     virtual ~SvtFontSubstConfig();
 
-    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) override;
 
     bool                        IsEnabled() const {return bIsEnabled;}
     void                        Enable(bool bSet)  {bIsEnabled = bSet; SetModified();}

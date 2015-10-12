@@ -45,13 +45,13 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     DECL_LINK(MoveHdl_Impl, void*);
     DECL_LINK_TYPED(MoveClickHdl_Impl, Button*, void);
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
 public:
     SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);
     virtual ~SwMailMergePrepareMergePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

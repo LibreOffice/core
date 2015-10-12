@@ -355,7 +355,7 @@ public:
     void SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int nOffset = 1 );
 
     /// Show current selection (frame / draw object as required).
-    virtual void MakeSelVisible() SAL_OVERRIDE;
+    virtual void MakeSelVisible() override;
 
     /** @return FrameFormat of object that may be under Point.
      Object does not become selected! */

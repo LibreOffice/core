@@ -46,8 +46,8 @@ public:
     virtual ~ScVbaNames();
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
 
     // Methods
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& aName ,
@@ -62,13 +62,13 @@ public:
                     const css::uno::Any& aRefersToR1C1,
                     const css::uno::Any& aRefersToR1C1Local )
         throw (css::uno::RuntimeException,
-               std::exception) SAL_OVERRIDE;
+               std::exception) override;
 
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) SAL_OVERRIDE;
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 
     // ScVbaNames_BASE
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBANAMES_HXX

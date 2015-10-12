@@ -202,8 +202,8 @@ public:
     virtual ~SwFltAnchor();
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
     void SetFrameFormat(SwFrameFormat * _pFrameFormat);
     const SwFrameFormat* GetFrameFormat() const { return pFrameFormat;}
           SwFrameFormat* GetFrameFormat() { return pFrameFormat;}
@@ -216,7 +216,7 @@ class SwFltAnchorClient : public SwClient
 public:
     SwFltAnchorClient(SwFltAnchor * pFltAnchor);
 
-    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
 };
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
@@ -254,8 +254,8 @@ public:
         nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem& rItem) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
 };
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
@@ -275,8 +275,8 @@ public:
     SwFltBookmark( const SwFltBookmark& );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
 
     long GetHandle() const              { return mnHandle; }
     const OUString& GetName() const       { return maName; }
@@ -297,8 +297,8 @@ public:
     SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
     SwTOXBase* GetBase()            { return pTOXBase; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }

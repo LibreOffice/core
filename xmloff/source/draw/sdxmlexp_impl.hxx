@@ -117,12 +117,12 @@ class SdXMLExport : public SvXMLExport
 
     const OUString         msPageLayoutNames;
 
-    virtual void _ExportStyles(bool bUsed) SAL_OVERRIDE;
-    virtual void _ExportAutoStyles() SAL_OVERRIDE;
-    virtual void _ExportFontDecls() SAL_OVERRIDE;
-    virtual void _ExportMasterStyles() SAL_OVERRIDE;
-    virtual void _ExportContent() SAL_OVERRIDE;
-    virtual void _ExportMeta() SAL_OVERRIDE;
+    virtual void _ExportStyles(bool bUsed) override;
+    virtual void _ExportAutoStyles() override;
+    virtual void _ExportFontDecls() override;
+    virtual void _ExportMasterStyles() override;
+    virtual void _ExportContent() override;
+    virtual void _ExportMeta() override;
 
     ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage );
     void ImpPrepPageMasterInfos();
@@ -154,9 +154,9 @@ class SdXMLExport : public SvXMLExport
     void exportAnnotations( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
 
 protected:
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
-    virtual XMLFontAutoStylePool* CreateFontAutoStylePool() SAL_OVERRIDE;
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
+    virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
 
 public:
     SdXMLExport(
@@ -168,7 +168,7 @@ public:
     void SetProgress(sal_Int32 nProg);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // get factories and mappers
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
@@ -177,10 +177,10 @@ public:
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }
 
-    virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) SAL_OVERRIDE;
-    virtual void exportDataStyles() SAL_OVERRIDE;
-    virtual void exportAutoDataStyles() SAL_OVERRIDE;
-    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const SAL_OVERRIDE;
+    virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) override;
+    virtual void exportDataStyles() override;
+    virtual void exportAutoDataStyles() override;
+    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const override;
 };
 
 #endif  //  _SDXMLEXP_HXX

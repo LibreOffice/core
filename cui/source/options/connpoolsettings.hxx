@@ -77,8 +77,8 @@ namespace offapp
 
         DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
 
-        virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+        virtual bool             operator==( const SfxPoolItem& ) const override;
+        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
 
         const DriverPoolingSettings& getSettings() const    { return m_aSettings; }
     };

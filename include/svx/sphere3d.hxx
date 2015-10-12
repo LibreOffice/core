@@ -34,8 +34,8 @@ private:
     basegfx::B3DVector              aSize;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
 public:
@@ -55,10 +55,10 @@ public:
     sal_uInt32 GetVerticalSegments() const
         { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dSphereObj* Clone() const SAL_OVERRIDE;
+    virtual E3dSphereObj* Clone() const override;
 
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }
@@ -68,8 +68,8 @@ public:
     void SetSize(const basegfx::B3DVector& rNew);
 
     // TakeObjName...() is for displaying in the UI, eg "3 selected frames."
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 };
 
 #endif // INCLUDED_SVX_SPHERE3D_HXX

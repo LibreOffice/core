@@ -72,22 +72,22 @@ public:
     virtual ~GL3DBarChart();
 
     virtual void create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeries,
-        ExplicitCategoriesProvider& rCatProvider) SAL_OVERRIDE;
+        ExplicitCategoriesProvider& rCatProvider) override;
 
-    virtual void render() SAL_OVERRIDE;
+    virtual void render() override;
 
     /// Render one frame of the 3D bar chart.
     void renderFrame();
 
-    virtual void update() SAL_OVERRIDE;
+    virtual void update() override;
 
     /// Draw to the framebuffer context, and provide the ID of the bar that the user has clicked.
     sal_uInt32 barIdAtPosition(const Point& rPos);
-    virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) SAL_OVERRIDE;
+    virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) override;
 
-    virtual void mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons) SAL_OVERRIDE;
-    virtual void scroll(long nDelta) SAL_OVERRIDE;
-    virtual void contextDestroyed() SAL_OVERRIDE;
+    virtual void mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons) override;
+    virtual void scroll(long nDelta) override;
+    virtual void contextDestroyed() override;
 
     void setOpenGLWindow(OpenGLWindow* pWindow);
 

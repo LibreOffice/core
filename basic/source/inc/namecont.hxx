@@ -107,49 +107,49 @@ public:
 
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
         throw(css::lang::IllegalArgumentException,
               css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
         throw(css::lang::IllegalArgumentException,
               css::container::ElementExistException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods XChangesNotifier
     virtual void SAL_CALL addChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -198,7 +198,7 @@ private:
     virtual bool implTypedNotify(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& rxListener,
         const css::script::vba::VBAScriptEvent& rEvent )
-        throw (css::uno::Exception) SAL_OVERRIDE;
+        throw (css::uno::Exception) override;
 };
 
 
@@ -362,10 +362,10 @@ protected:
     void SAL_CALL initializeFromDocument( const css::uno::Reference< css::document::XStorageBasedDocument >& _rxDocument );
 
     // OEventListenerAdapter
-    virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
+    virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 private:
     void init_Impl( const OUString& rInitialDocumentURL,
@@ -390,145 +390,145 @@ public:
 
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Members XStorageBasedLibraryContainer
-    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getRootStorage() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRootStorage( const css::uno::Reference< css::embed::XStorage >& _rootstorage ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL storeLibrariesToStorage( const css::uno::Reference< css::embed::XStorage >& RootStorage ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getRootStorage() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRootStorage( const css::uno::Reference< css::embed::XStorage >& _rootstorage ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL storeLibrariesToStorage( const css::uno::Reference< css::embed::XStorage >& RootStorage ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // Methods XModifiable (base of XPersistentLibraryContainer)
-    virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setModified( sal_Bool bModified ) throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
-    virtual css::uno::Any SAL_CALL getRootLocation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getContainerLocationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL storeLibraries(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getRootLocation() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getContainerLocationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL storeLibraries(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     //Methods XLibraryContainer3
     virtual OUString SAL_CALL getOriginalLibraryLinkURL( const OUString& Name )
         throw (css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
     virtual sal_Bool SAL_CALL isLibraryLink( const OUString& Name )
         throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getLibraryLinkURL( const OUString& Name )
         throw (css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isLibraryReadOnly( const OUString& Name )
         throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
         throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL renameLibrary( const OUString& Name, const OUString& NewName )
         throw (css::container::NoSuchElementException,
                css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
     // Methods XLibraryContainer (base of XLibraryContainer2)
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL
         createLibrary( const OUString& Name )
             throw(css::lang::IllegalArgumentException,
                   css::container::ElementExistException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL createLibraryLink
         ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
             throw(css::lang::IllegalArgumentException,
                   css::container::ElementExistException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeLibrary( const OUString& Name )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isLibraryLoaded( const OUString& Name )
         throw(css::container::NoSuchElementException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL loadLibrary( const OUString& Name )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence<
         css::uno::Any >& aArguments )
             throw (css::uno::Exception,
-                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   css::uno::RuntimeException, std::exception) override;
 
     // Methods XLibraryContainerPassword
     virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
         throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
         throw (css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
         throw (css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword )
         throw (css::lang::IllegalArgumentException,
                css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods XLibraryContainerExport
     virtual void SAL_CALL exportLibrary( const OUString& Name, const OUString& URL,
         const css::uno::Reference< css::task::XInteractionHandler >& Handler )
             throw (css::uno::Exception,
                    css::container::NoSuchElementException,
-                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   css::uno::RuntimeException, std::exception) override;
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (css::uno::RuntimeException, std::exception) override = 0;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (css::uno::RuntimeException, std::exception) override = 0;
     // Methods XVBACompatibility
-    virtual sal_Bool SAL_CALL getVBACompatibilityMode() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getProjectName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getVBACompatibilityMode() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getProjectName() throw (css::uno::RuntimeException, std::exception) override { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getRunningVBAScripts()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addVBAScriptListener(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeVBAScriptListener(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -636,65 +636,65 @@ public:
     );
 
     // Methods XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire() throw() override { OComponentHelper::acquire(); }
+    virtual void SAL_CALL release() throw() override { OComponentHelper::release(); }
 
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
         throw(css::lang::IllegalArgumentException,
               css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
         throw(css::lang::IllegalArgumentException,
               css::container::ElementExistException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException,
-              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              css::uno::RuntimeException, std::exception) override;
 
     // XTypeProvider
     css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods XChangesNotifier
     virtual void SAL_CALL addChangesListener( const css::uno::Reference<
         css::util::XChangesListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeChangesListener( const css::uno::Reference<
         css::util::XChangesListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };

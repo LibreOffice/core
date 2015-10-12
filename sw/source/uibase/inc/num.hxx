@@ -114,12 +114,12 @@ public:
     SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg       DeactivatePage(SfxItemSet *pSet) override;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet);
@@ -149,8 +149,8 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     sal_uInt16 m_nPositionPageId;
 
     protected:
-        virtual short   Ok() SAL_OVERRIDE;
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
+        virtual short   Ok() override;
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
         DECL_LINK_TYPED(RemoveNumberingHdl, Button*, void);
     public:
         SwSvxNumBulletTabDialog(vcl::Window* pParent,

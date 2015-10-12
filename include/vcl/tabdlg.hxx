@@ -42,9 +42,9 @@ public:
                                    WinBits nStyle = WB_STDTABDIALOG );
                         TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual             ~TabDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
 
     void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
     vcl::Window*        GetViewWindow() const { return mpViewWindow; }

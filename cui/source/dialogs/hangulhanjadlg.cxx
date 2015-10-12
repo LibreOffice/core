@@ -213,10 +213,10 @@ namespace svx
     public:
         RubyRadioButton( vcl::Window* _pParent, WinBits nBits );
         void init( const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition );
-        virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+        virtual Size    GetOptimalSize() const override;
 
     protected:
-        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect ) SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect ) override;
 
     private:
         PseudoRubyText m_aRubyText;

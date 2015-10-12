@@ -61,30 +61,30 @@ public:
     void SAL_CALL setScale( float factor );
     void SAL_CALL setWindowID( const intptr_t windowID );
 
-    void SAL_CALL start() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL stop() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    sal_Bool SAL_CALL isPlaying() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    double SAL_CALL getDuration() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL setMediaTime( double fTime ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    double SAL_CALL getMediaTime() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    sal_Bool SAL_CALL isPlaybackLoop() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    ::sal_Int16 SAL_CALL getVolumeDB() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL setMute( sal_Bool bSet ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    sal_Bool SAL_CALL isMute() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    void SAL_CALL start() throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL stop() throw ( css::uno::RuntimeException, std::exception ) override;
+    sal_Bool SAL_CALL isPlaying() throw ( css::uno::RuntimeException, std::exception ) override;
+    double SAL_CALL getDuration() throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL setMediaTime( double fTime ) throw ( css::uno::RuntimeException, std::exception ) override;
+    double SAL_CALL getMediaTime() throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw ( css::uno::RuntimeException, std::exception ) override;
+    sal_Bool SAL_CALL isPlaybackLoop() throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( css::uno::RuntimeException, std::exception ) override;
+    ::sal_Int16 SAL_CALL getVolumeDB() throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL setMute( sal_Bool bSet ) throw ( css::uno::RuntimeException, std::exception ) override;
+    sal_Bool SAL_CALL isMute() throw ( css::uno::RuntimeException, std::exception ) override;
+    css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( css::uno::RuntimeException, std::exception ) override;
     css::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
     css::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber()
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
     ::rtl::OUString SAL_CALL getImplementationName()
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;;
+            throw ( css::uno::RuntimeException, std::exception ) override;;
     css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;;
+            throw ( css::uno::RuntimeException, std::exception ) override;;
 
 private:
     void replay();

@@ -77,9 +77,9 @@ public:
     SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
     void init(NumberingPageType eType);
     virtual ~SvxNumValueSet();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
     void            SetNumberingSettings(
         const css::uno::Sequence<
@@ -107,9 +107,9 @@ protected:
 public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
     virtual ~SvxBmpNumValueSet();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
 };
 

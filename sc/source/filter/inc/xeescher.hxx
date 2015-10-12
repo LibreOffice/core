@@ -54,7 +54,7 @@ public:
 
     /** Called from SVX DFF converter.
         @param rRect  The object anchor rectangle to be exported (in twips). */
-    virtual void        WriteData( EscherEx& rEscherEx, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        WriteData( EscherEx& rEscherEx, const Rectangle& rRect ) override;
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj );
@@ -72,8 +72,8 @@ public:
     explicit            XclExpDffSheetAnchor( const XclExpRoot& rRoot );
 
 private:
-    virtual void        ImplSetFlags( const SdrObject& rSdrObj ) SAL_OVERRIDE;
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) SAL_OVERRIDE;
+    virtual void        ImplSetFlags( const SdrObject& rSdrObj ) override;
+    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) override;
 
 private:
     SCTAB               mnScTab;        /// Calc sheet index.
@@ -87,8 +87,8 @@ public:
                             const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY );
 
 private:
-    virtual void        ImplSetFlags( const SdrObject& rSdrObj ) SAL_OVERRIDE;
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) SAL_OVERRIDE;
+    virtual void        ImplSetFlags( const SdrObject& rSdrObj ) override;
+    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) override;
 
 private:
     Size                maPageSize;
@@ -119,7 +119,7 @@ public:
     explicit            XclExpMsoDrawingBase( XclEscherEx& rEscherEx, sal_uInt16 nRecId );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 protected:
     XclEscherEx&        mrEscherEx;         /// Reference to the DFF converter containing the DFF stream.
@@ -151,8 +151,8 @@ public:
     explicit            XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId );
 
     /** Writes the BITMAP record. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     Graphic             maGraphic;      /// The VCL graphic.
@@ -214,7 +214,7 @@ public:
     explicit            XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj();
 private:
-    virtual void        WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 };
 
 //delete for exporting OCX
@@ -232,7 +232,7 @@ public:
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
 private:
-    virtual void        WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 
 private:
     OUString            maClassName;        /// Class name of the control.
@@ -256,7 +256,7 @@ public:
     bool                SetMacroLink( const ::com::sun::star::script::ScriptEventDescriptor& rEvent );
 
 private:
-    virtual void        WriteSubRecs( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 
     /** Writes a subrecord containing a cell link, or nothing, if no link present. */
     void                WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId );
@@ -296,8 +296,8 @@ public:
     virtual             ~XclExpChartObj();
 
     /** Writes the OBJ record and the entire chart substream. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
     const css::uno::Reference<css::chart::XChartDocument>& GetChartDoc() const;
 
@@ -333,14 +333,14 @@ public:
                             const OUString& rAddText );
 
     /** Writes the NOTE record, if the respective Escher object is present. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 
     void                WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm );
 
     const XclExpString& GetAuthor() const { return maAuthor; }
 private:
     /** Writes the body of the NOTE record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     XclExpString        maAuthor;       /// Name of the author.
@@ -370,7 +370,7 @@ public:
 
                         XclExpComments( SCTAB nTab, XclExpNoteList& rNotes );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     SCTAB               mnTab;
@@ -435,7 +435,7 @@ public:
 
     /** Creates a new DFF client anchor object for embedded objects according
         to the scaling data passed to the constructor. Caller takes ownership! */
-    virtual XclExpDffAnchorBase* CreateDffAnchor() const SAL_OVERRIDE;
+    virtual XclExpDffAnchorBase* CreateDffAnchor() const override;
 
 private:
     Size                maPageSize;

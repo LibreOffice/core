@@ -74,18 +74,18 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 protected:
     virtual void    GetNextPortion( OUString& /* [out] */ rNextPortion,
                         LanguageType& /* [out] */ rLangOfPortion,
-                        bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) SAL_OVERRIDE;
+                        bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) override;
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
-                                   const sal_Int32 nUnitEnd ) SAL_OVERRIDE;
+                                   const sal_Int32 nUnitEnd ) override;
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
                         const css::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
-                        LanguageType *pNewUnitLanguage ) SAL_OVERRIDE;
+                        LanguageType *pNewUnitLanguage ) override;
 
-    virtual bool    HasRubySupport() const SAL_OVERRIDE;
+    virtual bool    HasRubySupport() const override;
 
     void SetLanguageAndFont( const ESelection &rESel,
                             LanguageType nLang, sal_uInt16 nLangWhichId,

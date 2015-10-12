@@ -33,7 +33,7 @@ class OOX_DLLPUBLIC GraphicShapeContext : public ShapeContext
 public:
     GraphicShapeContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
 
 
@@ -43,8 +43,8 @@ class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
 public:
     GraphicalObjectFrameContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual void onEndElement() override;
 
 private:
     bool                mbEmbedShapesInChart;
@@ -58,7 +58,7 @@ class OleObjectGraphicDataContext : public ShapeContext
 public:
     OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
     virtual ~OleObjectGraphicDataContext();
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
     ::oox::vml::OleObjectInfo& mrOleObjectInfo;
@@ -74,7 +74,7 @@ class DiagramGraphicDataContext
 public:
     DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
     virtual ~DiagramGraphicDataContext();
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
     OUString msDm;
@@ -95,7 +95,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs) override;
 
 private:
     ChartShapeInfo&     mrChartShapeInfo;

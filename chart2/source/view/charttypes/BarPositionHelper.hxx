@@ -36,12 +36,12 @@ public:
     BarPositionHelper( const BarPositionHelper& rSource );
     virtual ~BarPositionHelper();
 
-    virtual PlottingPositionHelper* clone() const SAL_OVERRIDE;
+    virtual PlottingPositionHelper* clone() const override;
 
     void                updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
 
-    virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const SAL_OVERRIDE;
-    virtual void setScaledCategoryWidth( double fScaledCategoryWidth ) SAL_OVERRIDE;
+    virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const override;
+    virtual void setScaledCategoryWidth( double fScaledCategoryWidth ) override;
 };
 
 } //namespace chart

@@ -42,11 +42,11 @@ class SwFiltersTest
 public:
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) override;
     virtual bool save( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
-    virtual void setUp() SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) override;
+    virtual void setUp() override;
 
     // Ensure CVEs remain unbroken
     void testCVEs();

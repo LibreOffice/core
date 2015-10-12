@@ -59,7 +59,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 };
 
@@ -73,7 +73,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 };
 

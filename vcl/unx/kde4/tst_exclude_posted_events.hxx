@@ -35,7 +35,7 @@ class TestExcludePostedEvents
     Q_OBJECT
     public:
         TestExcludePostedEvents();
-        virtual bool event( QEvent* e ) SAL_OVERRIDE;
+        virtual bool event( QEvent* e ) override;
         bool processed;
 };
 

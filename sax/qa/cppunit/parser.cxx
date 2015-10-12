@@ -30,12 +30,12 @@ public:
     virtual ~DummyTokenHandler() {}
 
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& )
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (uno::RuntimeException, std::exception) override
     {
         return FastToken::DONTKNOW;
     }
     virtual uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 )
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (uno::RuntimeException, std::exception) override
     {
         CPPUNIT_ASSERT_MESSAGE( "getUTF8Identifier: unexpected call", false );
         return uno::Sequence<sal_Int8>();
@@ -50,8 +50,8 @@ class ParserTest: public test::BootstrapFixture
     uno::Reference< DummyTokenHandler > mxTokenHandler;
 
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void parse();
 

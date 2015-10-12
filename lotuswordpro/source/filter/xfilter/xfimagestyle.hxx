@@ -75,7 +75,7 @@ public:
 
     void    SetClip(double left, double right, double top, double bottom);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     sal_Int32   m_nBrightness;

@@ -111,23 +111,23 @@ private:
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
 
 protected:
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 public:
                         StatusBar( vcl::Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
     virtual             ~StatusBar();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                AdjustItemWidthsForHiDPI(bool bAdjustHiDPI);
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Move() SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Move() override;
+    virtual void        Resize() override;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void                Click();
     void                DoubleClick();
@@ -187,7 +187,7 @@ public:
     void                EndProgressMode();
     bool                IsProgressMode() const { return mbProgressMode; }
 
-    void                SetText( const OUString& rText ) SAL_OVERRIDE;
+    void                SetText( const OUString& rText ) override;
 
     Size                CalcWindowSizePixel() const;
 

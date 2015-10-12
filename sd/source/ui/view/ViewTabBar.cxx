@@ -67,8 +67,8 @@ class TabBarControl : public ::TabControl
 {
 public:
     TabBarControl (vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void ActivatePage() SAL_OVERRIDE;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void ActivatePage() override;
 private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 };

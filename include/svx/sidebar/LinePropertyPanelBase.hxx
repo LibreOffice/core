@@ -72,10 +72,10 @@ class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
     virtual ~LinePropertyPanelBase();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void DataChanged(
-        const DataChangedEvent& rEvent) SAL_OVERRIDE;
+        const DataChangedEvent& rEvent) override;
 
     void SetWidth(long nWidth);
     void SetWidthIcon(int n);

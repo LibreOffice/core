@@ -43,7 +43,7 @@ private:
 public:
     AssistentDlg(vcl::Window* pParent, bool bAutoPilot);
     virtual ~AssistentDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED( FinishHdl, Button*, void );
     DECL_LINK_TYPED( FinishHdl2, ListBox&, void );

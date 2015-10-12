@@ -52,19 +52,19 @@ namespace abp
     public:
         explicit FinalPage(OAddessBookSourcePilot* _pParent);
         virtual ~FinalPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage() SAL_OVERRIDE;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual void        initializePage() override;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
         // TabDialog overridables
-        virtual void        ActivatePage() SAL_OVERRIDE;
-        virtual void        DeactivatePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() override;
+        virtual void        DeactivatePage() override;
 
         // OImportPage overridables
-        virtual bool        canAdvance() const SAL_OVERRIDE;
+        virtual bool        canAdvance() const override;
 
     private:
         DECL_LINK( OnNameModified, Edit* );

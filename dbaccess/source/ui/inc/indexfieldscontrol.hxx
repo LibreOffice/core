@@ -52,31 +52,31 @@ namespace dbaui
     public:
         IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle);
         virtual ~IndexFieldsControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void Init(const css::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
 
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);
 
-        bool SaveModified() SAL_OVERRIDE;
-        bool IsModified() const SAL_OVERRIDE;
+        bool SaveModified() override;
+        bool IsModified() const override;
 
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
 
         void SetModifyHdl(const Link<>& _rHdl) { m_aModifyHdl = _rHdl; }
-        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const SAL_OVERRIDE;
+        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const override;
 
     protected:
         // EditBrowseBox overridables
-        virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const SAL_OVERRIDE;
-        virtual bool SeekRow(long nRow) SAL_OVERRIDE;
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
-        virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
+        virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const override;
+        virtual bool SeekRow(long nRow) override;
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
+        virtual bool IsTabAllowed(bool bForward) const override;
 
-        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId) SAL_OVERRIDE;
-        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId) SAL_OVERRIDE;
+        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId) override;
+        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId) override;
 
     protected:
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;

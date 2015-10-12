@@ -41,10 +41,10 @@ public:
                          const SfxItemSet* pTheNewItemSet);
 
     virtual ~StyleSheetUndoAction();
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNCHSS_HXX

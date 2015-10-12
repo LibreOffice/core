@@ -85,7 +85,7 @@ private:
 class Impl1: public Interface1, private Base {
 public:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -99,11 +99,11 @@ public:
         }
     }
 
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL acquire() throw () override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL release() throw () override {
         Base::release();
     }
 };
@@ -111,7 +111,7 @@ public:
 class Impl2: public Interface2a, public Interface3, private Base {
 public:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -132,11 +132,11 @@ public:
         }
     }
 
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL acquire() throw () override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL release() throw () override {
         Base::release();
     }
 };
@@ -144,7 +144,7 @@ public:
 class Impl2b: public Interface2b, private Base {
 public:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -165,11 +165,11 @@ public:
         }
     }
 
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL acquire() throw () override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE {
+    virtual void SAL_CALL release() throw () override {
         Base::release();
     }
 };

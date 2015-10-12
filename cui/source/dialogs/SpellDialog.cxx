@@ -122,8 +122,8 @@ public:
 
     virtual ~SpellUndoAction_Impl();
 
-    virtual void            Undo() SAL_OVERRIDE;
-    virtual sal_uInt16          GetId() const SAL_OVERRIDE;
+    virtual void            Undo() override;
+    virtual sal_uInt16          GetId() const override;
 
     void                    SetEnableChangePB(){m_bEnableChangePB = true;}
     bool                    IsEnableChangePB(){return m_bEnableChangePB;}

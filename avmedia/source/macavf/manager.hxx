@@ -40,12 +40,12 @@ public:
     virtual ~Manager();
 
     // XManager
-    virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const ::rtl::OUString& aURL ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const ::rtl::OUString& aURL ) throw (css::uno::RuntimeException) override;
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) override;
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override;
 private:
 
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;

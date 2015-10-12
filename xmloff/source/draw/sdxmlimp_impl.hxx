@@ -212,7 +212,7 @@ protected:
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
       const OUString& rLocalName,
       const com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+        com::sun::star::xml::sax::XAttributeList>& xAttrList) override;
 
 public:
     SdXMLImport(
@@ -222,13 +222,13 @@ public:
     virtual ~SdXMLImport() throw ();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -281,7 +281,7 @@ public:
     bool IsImpress() const { return !mbIsDraw; }
 
     virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) override;
 
     bool IsPreview() const { return mbPreview; }
 
@@ -293,7 +293,7 @@ public:
     OUString GetFooterDecl( const OUString& rName ) const;
     OUString GetDateTimeDecl( const OUString& rName, bool& rbFixed, OUString& rDateTimeFormat );
 
-    virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
+    virtual void NotifyEmbeddedFontRead() override;
 };
 
 #endif  //  _SDXMLIMP_HXX

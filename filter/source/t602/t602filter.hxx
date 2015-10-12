@@ -108,34 +108,34 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
 
     // XExecutableDialog
        virtual void SAL_CALL setTitle( const OUString& aTitle )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
        virtual sal_Int16 SAL_CALL execute()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // XLocalizable
         virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale )
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
         virtual css::lang::Locale SAL_CALL getLocale()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // XPropertyAccess
         virtual css::uno::Sequence< css::beans::PropertyValue >
-                            SAL_CALL getPropertyValues() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            SAL_CALL getPropertyValues() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence<
                                     css::beans::PropertyValue >& aProps )
                                 throw (css::beans::UnknownPropertyException,
                                         css::beans::PropertyVetoException,
                                         css::lang::IllegalArgumentException,
                                         css::lang::WrappedTargetException,
-                                        css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                        css::uno::RuntimeException, std::exception) override;
 
 public:
     explicit T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
@@ -260,30 +260,30 @@ private:
 
     // XFilter
         virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL cancel(  )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {};
+            throw (css::uno::RuntimeException, std::exception) override {};
 
     // XImporter
         virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XExtendedTypeDetection
         virtual OUString SAL_CALL detect(
             css::uno::Sequence< css::beans::PropertyValue >& Descriptor )
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         bool SAL_CALL test();
 };

@@ -42,7 +42,7 @@ template< typename uno_type > class ConfigurationListenerProperty : public Confi
 {
     uno_type maValue;
 protected:
-    virtual void setProperty(const css::uno::Any &aProperty) SAL_OVERRIDE
+    virtual void setProperty(const css::uno::Any &aProperty) override
     {
         aProperty >>= maValue;
     }
@@ -91,12 +91,12 @@ public:
 
     // XPropertyChangeListener implementation
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// Notify of the property change
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &rEvt )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 template< typename uno_type > ConfigurationListenerProperty< uno_type >::ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener, const OUString &rProp )

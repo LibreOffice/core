@@ -51,44 +51,44 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
         //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >  getIdlClasses();
 
         //  static css::uno::Reference< css::reflection::XIdlClass >  getStaticIdlClass();
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) throw(css::uno::RuntimeException, std::exception) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::util::XModifyListener
-        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::util::XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
         // css::form::XLoadListener
-        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
 
         // css::lang::XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual ~SbaExternalSourceBrowser();
 
-        virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm() SAL_OVERRIDE;
-        virtual bool InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm() override;
+        virtual bool InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
 
-        virtual bool LoadForm() SAL_OVERRIDE;
+        virtual bool LoadForm() override;
 
         void Attach(const css::uno::Reference< css::sdbc::XRowSet > & xMaster);
 

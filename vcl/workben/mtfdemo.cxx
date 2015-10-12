@@ -55,7 +55,7 @@ public:
         }
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)  SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)  override;
 };
 
 void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
@@ -84,7 +84,7 @@ public:
     {
     }
 
-    virtual int Main() SAL_OVERRIDE
+    virtual int Main() override
     {
         try
         {
@@ -110,7 +110,7 @@ public:
 
 protected:
     uno::Reference<lang::XMultiServiceFactory> xMSF;
-    void Init() SAL_OVERRIDE
+    void Init() override
     {
         try
         {
@@ -143,7 +143,7 @@ protected:
         }
     }
 
-    void DeInit() SAL_OVERRIDE
+    void DeInit() override
     {
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),

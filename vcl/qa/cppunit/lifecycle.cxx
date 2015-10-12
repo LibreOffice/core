@@ -162,19 +162,19 @@ public:
         TabControl(pParent, 0)
     {
     }
-    virtual bool PreNotify( NotifyEvent& ) SAL_OVERRIDE
+    virtual bool PreNotify( NotifyEvent& ) override
     {
         return false;
     }
-    virtual bool Notify( NotifyEvent& ) SAL_OVERRIDE
+    virtual bool Notify( NotifyEvent& ) override
     {
         return false;
     }
-    virtual void GetFocus() SAL_OVERRIDE
+    virtual void GetFocus() override
     {
         CPPUNIT_FAIL("get focus");
     }
-    virtual void LoseFocus() SAL_OVERRIDE
+    virtual void LoseFocus() override
     {
         CPPUNIT_FAIL("this should never be called");
     }

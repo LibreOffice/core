@@ -183,9 +183,9 @@ public:
     ThumbnailView(vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false);
 
     virtual ~ThumbnailView();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
 
     void AppendItem(ThumbnailViewItem *pItem);
 
@@ -233,7 +233,7 @@ public:
 
     void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
@@ -241,25 +241,25 @@ public:
 
 protected:
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
 
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() override;
 
-    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nStateChange ) override;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
 protected:
 
@@ -280,7 +280,7 @@ protected:
 
     SFX2_DLLPRIVATE void         ImplInit();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     SFX2_DLLPRIVATE void         ImplInitScrollBar();
     SFX2_DLLPRIVATE void         ImplDeleteItems();

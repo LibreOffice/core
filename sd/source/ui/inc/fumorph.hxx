@@ -40,7 +40,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
+    virtual void DoExecute( SfxRequest& rReq ) override;
 
 private:
     typedef ::std::vector< ::basegfx::B2DPolyPolygon* > B2DPolyPolygonList_impl;

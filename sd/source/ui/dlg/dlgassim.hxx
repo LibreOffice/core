@@ -37,7 +37,7 @@ private:
 public:
     SdPageListControl( vcl::Window* pParent, const WinBits nStyle );
     virtual ~SdPageListControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void Fill( SdDrawDocument* pDoc );
     void Clear();
@@ -47,7 +47,7 @@ public:
 
     DECL_LINK_TYPED( CheckButtonClickHdl, SvTreeListBox*, void );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 };
 

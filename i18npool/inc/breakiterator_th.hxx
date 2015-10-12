@@ -32,7 +32,7 @@ public:
     virtual ~BreakIterator_th();
 
 protected:
-    void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException) override;
 };
 
 } } } }

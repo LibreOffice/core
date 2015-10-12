@@ -296,33 +296,33 @@ public:
     virtual Any SAL_CALL
     queryInterface(
         const Type& aType )
-        throw( RuntimeException, std::exception) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
     acquire(
         void )
-        throw() SAL_OVERRIDE;
+        throw() override;
 
     virtual void SAL_CALL
     release(
         void )
-        throw() SAL_OVERRIDE;
+        throw() override;
 
 
     virtual Sequence< Property > SAL_CALL
     getProperties(
         void )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
     virtual Property SAL_CALL
     getPropertyByName(
         const OUString& aName )
         throw( UnknownPropertyException,
-               RuntimeException, std::exception) SAL_OVERRIDE;
+               RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
 
 private:

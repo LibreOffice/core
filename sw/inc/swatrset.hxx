@@ -176,7 +176,7 @@ class SW_DLLPUBLIC SwAttrSet : public SfxItemSet
     SwAttrSet *pOldSet, *pNewSet;
 
     // Notification-Callback
-    virtual void Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew ) SAL_OVERRIDE;
+    virtual void Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew ) override;
 
     void PutChgd( const SfxPoolItem& rI ) { SfxItemSet::PutDirect( rI ); }
 public:
@@ -184,7 +184,7 @@ public:
     SwAttrSet( SwAttrPool&, const sal_uInt16* nWhichPairTable );
     SwAttrSet( const SwAttrSet& );
 
-    virtual SfxItemSet* Clone(bool bItems = true, SfxItemPool *pToPool = 0) const SAL_OVERRIDE;
+    virtual SfxItemSet* Clone(bool bItems = true, SfxItemPool *pToPool = 0) const override;
 
     bool Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     bool Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );

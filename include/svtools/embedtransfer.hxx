@@ -37,9 +37,9 @@ private:
 
 protected:
 
-    virtual void        AddSupportedFormats() SAL_OVERRIDE;
-    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual void        ObjectReleased() SAL_OVERRIDE;
+    virtual void        AddSupportedFormats() override;
+    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual void        ObjectReleased() override;
 
 public:
     // object, replacement image, and the aspect

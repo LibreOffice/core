@@ -134,8 +134,8 @@ class WaitWindow_Impl : public WorkWindow
 public:
     WaitWindow_Impl();
     virtual ~WaitWindow_Impl();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 };
 
 #define X_OFFSET 15
@@ -166,10 +166,10 @@ public:
                                 : m_xInteractionHandler( rxInteractionHandler )
                             {}
 
-    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() throw (uno::RuntimeException, std::exception) override
     { return m_xInteractionHandler; }
 
-    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() throw (uno::RuntimeException, std::exception) override
     { return m_xProgressHandler; }
 };
 
@@ -319,8 +319,8 @@ public:
     explicit                Updater_Impl( SfxDocTplService_Impl* pTemplates );
     virtual                 ~Updater_Impl();
 
-    virtual void SAL_CALL   run() SAL_OVERRIDE;
-    virtual void SAL_CALL   onTerminated() SAL_OVERRIDE;
+    virtual void SAL_CALL   run() override;
+    virtual void SAL_CALL   onTerminated() override;
 };
 
 
@@ -2214,19 +2214,19 @@ public:
     virtual ~SfxDocTplService();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         return OUString("com.sun.star.comp.sfx2.DocumentTemplates");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = "com.sun.star.frame.DocumentTemplates";
@@ -2235,27 +2235,27 @@ public:
 
 
     // --- XLocalizable ---
-    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    css::lang::Locale SAL_CALL              getLocale() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) throw( css::uno::RuntimeException, std::exception ) override;
+    css::lang::Locale SAL_CALL              getLocale() throw( css::uno::RuntimeException, std::exception ) override;
 
     // --- XDocumentTemplates ---
-    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL               storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
-                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL               addTemplate( const OUString& GroupName,
                                                  const OUString& TemplateName,
-                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL               removeTemplate( const OUString& GroupName,
-                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL               renameTemplate( const OUString& GroupName,
                                                     const OUString& OldTemplateName,
-                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException, std::exception ) override;
+    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception ) override;
+    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL               renameGroup( const OUString& OldGroupName,
-                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL                   update() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL                   update() throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 

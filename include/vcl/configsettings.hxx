@@ -39,12 +39,12 @@ namespace vcl
     private:
         std::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
 
-        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
 
         void getValues();
         SettingsConfigItem();
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
     public:
         virtual ~SettingsConfigItem();

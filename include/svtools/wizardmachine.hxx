@@ -107,16 +107,16 @@ namespace svt
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~OWizardPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // IWizardPageController overridables
-        virtual void        initializePage() SAL_OVERRIDE;
-        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
-        virtual bool        canAdvance() const SAL_OVERRIDE;
+        virtual void        initializePage() override;
+        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        canAdvance() const override;
 
     protected:
         // TabPage overridables
-        virtual void        ActivatePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() override;
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
@@ -175,7 +175,7 @@ namespace svt
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
         virtual ~OWizardMachine();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// enable (or disable) buttons
         void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
@@ -200,8 +200,8 @@ namespace svt
 
     protected:
         // WizardDialog overridables
-        virtual void        ActivatePage() SAL_OVERRIDE;
-        virtual bool        DeactivatePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() override;
+        virtual bool        DeactivatePage() override;
 
         // our own overridables
 

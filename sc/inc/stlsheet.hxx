@@ -49,18 +49,18 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual bool        SetParent        ( const OUString& rParentName ) SAL_OVERRIDE;
+    virtual bool        SetParent        ( const OUString& rParentName ) override;
     SC_DLLPUBLIC void ResetParent();
-    virtual SfxItemSet& GetItemSet       () SAL_OVERRIDE;
-    virtual bool        IsUsed           () const SAL_OVERRIDE;
-    virtual bool        HasFollowSupport () const SAL_OVERRIDE;
-    virtual bool        HasParentSupport () const SAL_OVERRIDE;
+    virtual SfxItemSet& GetItemSet       () override;
+    virtual bool        IsUsed           () const override;
+    virtual bool        HasFollowSupport () const override;
+    virtual bool        HasParentSupport () const override;
 
-    virtual const OUString& GetName() const SAL_OVERRIDE;
-    virtual const OUString& GetParent() const SAL_OVERRIDE;
-    virtual const OUString& GetFollow() const SAL_OVERRIDE;
+    virtual const OUString& GetName() const override;
+    virtual const OUString& GetParent() const override;
+    virtual const OUString& GetFollow() const override;
 
-    virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) SAL_OVERRIDE;
+    virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) override;
 
     void                SetUsage( ScStyleSheet::Usage eUse ) const { eUsage = eUse; }
     ScStyleSheet::Usage GetUsage() const { return eUsage; }
@@ -73,7 +73,7 @@ protected:
                               SfxStyleFamily    eFamily,
                               sal_uInt16        nMask );
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 #endif // INCLUDED_SC_INC_STLSHEET_HXX

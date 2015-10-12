@@ -55,28 +55,28 @@ public:
     virtual ~NestedRegistryImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-        throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(Exception, RuntimeException, std::exception) override;
 
     // XSimpleRegistry
-    virtual OUString SAL_CALL getURL() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL close(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL destroy(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XRegistryKey > SAL_CALL getRootKey(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL mergeKey( const OUString& aKeyName, const OUString& aUrl ) throw(InvalidRegistryException, MergeConflictException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getURL() throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL close(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL destroy(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Reference< XRegistryKey > SAL_CALL getRootKey(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL mergeKey( const OUString& aKeyName, const OUString& aUrl ) throw(InvalidRegistryException, MergeConflictException, RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual Reference< XEnumeration > SAL_CALL createEnumeration(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEnumeration > SAL_CALL createEnumeration(  ) throw (RuntimeException, std::exception) override;
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) override;
 
     friend class NestedKeyImpl;
 protected:
@@ -103,35 +103,35 @@ public:
     virtual ~NestedKeyImpl();
 
     // XRegistryKey
-    virtual OUString SAL_CALL getKeyName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual RegistryKeyType SAL_CALL getKeyType( const OUString& rKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual RegistryValueType SAL_CALL getValueType(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getLongValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLongValue( sal_Int32 value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< sal_Int32 > SAL_CALL getLongListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLongListValue( const css::uno::Sequence< sal_Int32 >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getAsciiValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAsciiValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getAsciiListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAsciiListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getStringValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setStringValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getStringListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setStringListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< sal_Int8 > SAL_CALL getBinaryValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setBinaryValue( const css::uno::Sequence< sal_Int8 >& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XRegistryKey > SAL_CALL openKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XRegistryKey > SAL_CALL createKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeKey(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL deleteKey( const OUString& rKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< Reference< XRegistryKey > > SAL_CALL openKeys(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getKeyNames(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL createLink( const OUString& aLinkName, const OUString& aLinkTarget ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL deleteLink( const OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getLinkTarget( const OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getResolvedName( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getKeyName() throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException, std::exception) override;
+    virtual RegistryKeyType SAL_CALL getKeyType( const OUString& rKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual RegistryValueType SAL_CALL getValueType(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getLongValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLongValue( sal_Int32 value ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< sal_Int32 > SAL_CALL getLongListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLongListValue( const css::uno::Sequence< sal_Int32 >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAsciiValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAsciiValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getAsciiListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAsciiListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getStringValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStringValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getStringListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStringListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< sal_Int8 > SAL_CALL getBinaryValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setBinaryValue( const css::uno::Sequence< sal_Int8 >& value ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Reference< XRegistryKey > SAL_CALL openKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Reference< XRegistryKey > SAL_CALL createKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL closeKey(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL deleteKey( const OUString& rKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< Reference< XRegistryKey > > SAL_CALL openKeys(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual Sequence< OUString > SAL_CALL getKeyNames(  ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL createLink( const OUString& aLinkName, const OUString& aLinkTarget ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL deleteLink( const OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getLinkTarget( const OUString& rLinkName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getResolvedName( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) override;
 
 protected:
     void        computeChanges();
@@ -1126,8 +1126,8 @@ public:
         : m_xReg1( r1 ) , m_xReg2( r2 )
         {}
 public:
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Any SAL_CALL nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
 
 private:
     Reference< XSimpleRegistry > m_xReg1;

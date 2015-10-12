@@ -58,21 +58,21 @@ protected:
 
     /** Cleans up members. */
     using AccessibleBrowseBoxBase::disposing;
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 protected:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -82,11 +82,11 @@ protected:
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const css::awt::Point& rPoint )
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** Grabs the focus to the BrowseBox. */
     virtual void SAL_CALL grabFocus()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo -----------------------------------------------------------
 
@@ -94,7 +94,7 @@ protected:
             The name of this class.
     */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
 public:
     // helper functions
@@ -146,10 +146,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
+    virtual Rectangle implGetBoundingBox() override;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
+    virtual Rectangle implGetBoundingBoxOnScreen() override;
 
     // internal helper methods ------------------------------------------------
 
@@ -224,21 +224,21 @@ protected:
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) override;
 
     // IAccessibleBrowseBox
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() SAL_OVERRIDE
+        getMyself() override
     {
         return this;
     }
-    void dispose() SAL_OVERRIDE;
-    virtual bool isAlive() const SAL_OVERRIDE
+    void dispose() override;
+    virtual bool isAlive() const override
     {
         return isContextAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) SAL_OVERRIDE
+        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );
@@ -247,7 +247,7 @@ protected:
         return xAccessible;
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getTable() SAL_OVERRIDE
+        getTable() override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );
@@ -256,21 +256,21 @@ protected:
         return xAccessible;
     }
     virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) SAL_OVERRIDE
+        const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) override
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             pContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )

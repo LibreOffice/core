@@ -96,9 +96,9 @@ public:
 
     bool    IsSubTable();
 
-    enumXFContent   GetContentType() SAL_OVERRIDE;
+    enumXFContent   GetContentType() override;
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
     void RemoveRow(sal_uInt16 row)
     {

@@ -239,7 +239,7 @@ namespace vcl
     class DeleteOnDeinit : public DeleteOnDeinitBase
     {
         T* m_pT;
-        virtual void doCleanup() SAL_OVERRIDE { delete m_pT; m_pT = NULL; }
+        virtual void doCleanup() override { delete m_pT; m_pT = NULL; }
     public:
         DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
         virtual ~DeleteOnDeinit() {}
@@ -272,7 +272,7 @@ namespace vcl
     class DeleteUnoReferenceOnDeinit : public vcl::DeleteOnDeinitBase
     {
         ::com::sun::star::uno::Reference<I> m_xI;
-        virtual void doCleanup() SAL_OVERRIDE { set(NULL); }
+        virtual void doCleanup() override { set(NULL); }
     public:
         DeleteUnoReferenceOnDeinit(const ::com::sun::star::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
             addDeinitContainer( this ); }

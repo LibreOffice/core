@@ -62,7 +62,7 @@ namespace pcr
             css::uno::Sequence< css::beans::NamedValue >& _out_properties );
 
     protected:
-        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
+        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
     private:
         sal_uInt16 m_nCharsId;
     };

@@ -52,23 +52,23 @@ public:
 
     int     mnFileTypes;
 
-    virtual void Clear() SAL_OVERRIDE;
+    virtual void Clear() override;
 
     /// Update the information in the view.
-    virtual void Reload() SAL_OVERRIDE;
+    virtual void Reload() override;
 
     DECL_STATIC_LINK_TYPED( RecentDocsView, ExecuteHdl_Impl, void*, void );
 
 protected:
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() override;
 
     bool isAcceptedFile(const OUString &rURL) const;
 

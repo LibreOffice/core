@@ -51,7 +51,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xAuthenticationHandler;
 
     virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest) override;
 
 };
 }

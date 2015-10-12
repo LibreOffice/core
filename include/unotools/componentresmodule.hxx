@@ -57,8 +57,8 @@ namespace utl
 
     protected:
         // OModule overridables
-        virtual void onFirstClient() SAL_OVERRIDE;
-        virtual void onLastClient() SAL_OVERRIDE;
+        virtual void onFirstClient() override;
+        virtual void onLastClient() override;
     };
 
     //= ModuleRes

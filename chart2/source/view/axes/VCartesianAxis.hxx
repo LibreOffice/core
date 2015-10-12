@@ -37,21 +37,21 @@ public:
 
     virtual ~VCartesianAxis();
 
-    virtual void createMaximumLabels() SAL_OVERRIDE;
-    virtual void createLabels() SAL_OVERRIDE;
-    virtual void updatePositions() SAL_OVERRIDE;
+    virtual void createMaximumLabels() override;
+    virtual void createLabels() override;
+    virtual void updatePositions() override;
 
-    virtual void createShapes() SAL_OVERRIDE;
+    virtual void createShapes() override;
 
-    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() SAL_OVERRIDE;
-    virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos ) SAL_OVERRIDE;
+    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() override;
+    virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos ) override;
     void createAllTickInfosFromComplexCategories( TickInfoArraysType& rAllTickInfos, bool bShiftedPosition );
 
     TickIter* createLabelTickIterator( sal_Int32 nTextLevel );
     TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
     sal_Int32 getTextLevelCount() const;
 
-    virtual TickFactory* createTickFactory() SAL_OVERRIDE;
+    virtual TickFactory* createTickFactory() override;
 
     /**
      * Get the value at which the other axis crosses.

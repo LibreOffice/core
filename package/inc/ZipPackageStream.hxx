@@ -135,7 +135,7 @@ public:
                             std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
                             const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
-                            const rtlRandomPool &rRandomPool ) SAL_OVERRIDE;
+                            const rtlRandomPool &rRandomPool ) override;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     void successfullyWritten( ZipEntry *pEntry );
@@ -144,50 +144,50 @@ public:
 
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XDataSinkEncrSupport
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream()
         throw ( ::com::sun::star::packages::WrongPasswordException, ::com::sun::star::packages::zip::ZipException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream()
         throw ( ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL setDataStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL setRawStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
         throw ( ::com::sun::star::packages::EncryptionNotAllowedException,
                 ::com::sun::star::packages::NoRawFormatException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStream()
         throw ( ::com::sun::star::io::IOException, ::com::sun::star::packages::NoEncryptionException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 #endif
 

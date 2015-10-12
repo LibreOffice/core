@@ -75,7 +75,7 @@ public:
     /** descr   Set the given value inside an Any to the variable referenced
         by the data member.
     */
-    virtual void    SetValue    (const ::com::sun::star::uno::Any & rValue) SAL_OVERRIDE
+    virtual void    SetValue    (const ::com::sun::star::uno::Any & rValue) override
     {
         rValue >>= mrValue;
     }

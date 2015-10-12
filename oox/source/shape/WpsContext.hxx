@@ -25,7 +25,7 @@ public:
     WpsContext(oox::core::ContextHandler2Helper& rParent, css::uno::Reference<css::drawing::XShape> xShape);
     virtual ~WpsContext();
 
-    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) SAL_OVERRIDE;
+    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
 
     oox::drawingml::ShapePtr getShape()
     {

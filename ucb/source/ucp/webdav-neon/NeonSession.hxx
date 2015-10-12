@@ -79,9 +79,9 @@ public:
 
     // DAVSession methods
     virtual bool CanUse( const OUString & inPath,
-                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) SAL_OVERRIDE;
+                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) override;
 
-    virtual bool UsesProxy() SAL_OVERRIDE;
+    virtual bool UsesProxy() override;
 
     const DAVRequestEnvironment & getRequestEnvironment() const
     { return m_aEnv; }
@@ -93,7 +93,7 @@ public:
               const std::vector< OUString > & inPropNames,
               std::vector< DAVResource > & ioResources,
               const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     // propnames
     virtual void
@@ -101,39 +101,39 @@ public:
               const Depth inDepth,
               std::vector< DAVResourceInfo >& ioResInfo,
               const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     PROPPATCH( const OUString & inPath,
                const std::vector< ProppatchValue > & inValues,
                const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     HEAD( const OUString &  inPath,
           const std::vector< OUString > & inHeaderNames,
           DAVResource & ioResource,
           const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     GET( const OUString & inPath,
          com::sun::star::uno::Reference<
              com::sun::star::io::XOutputStream > &  ioOutputStream,
          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     GET( const OUString & inPath,
@@ -142,14 +142,14 @@ public:
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     PUT( const OUString & inPath,
          const com::sun::star::uno::Reference<
              com::sun::star::io::XInputStream > & inInputStream,
          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     POST( const OUString & inPath,
@@ -158,7 +158,7 @@ public:
           const com::sun::star::uno::Reference<
               com::sun::star::io::XInputStream > & inInputStream,
           const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     POST( const OUString & inPath,
@@ -169,44 +169,44 @@ public:
           com::sun::star::uno::Reference<
               com::sun::star::io::XOutputStream > & oOutputStream,
           const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     MKCOL( const OUString & inPath,
            const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     COPY( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
           bool inOverWrite )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void
     MOVE( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
           bool inOverWrite )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void DESTROY( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     // set new lock.
     virtual void LOCK( const OUString & inURL,
                        com::sun::star::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     virtual void UNLOCK( const OUString & inURL,
                          const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     // helpers
     virtual void abort()
-        throw ( std::exception ) SAL_OVERRIDE;
+        throw ( std::exception ) override;
 
     const OUString & getHostName() const { return m_aHostName; }
 

@@ -63,7 +63,7 @@ private:
 public:
     GraphicExportOptionsDialog( vcl::Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
     virtual ~GraphicExportOptionsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     css::uno::Sequence<css::beans::PropertyValue> getFilterData();
 };
 

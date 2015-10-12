@@ -50,9 +50,9 @@ public:
     virtual ~SvxLineStyleToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                      const SfxPoolItem* pState ) override;
     void                Update( const SfxPoolItem* pState );
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 
@@ -68,8 +68,8 @@ public:
     virtual ~SvxLineWidthToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+                                      const SfxPoolItem* pState ) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 
@@ -98,16 +98,16 @@ private:
     void            implInit();
 
 protected:
-    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
-    virtual void    PopupModeEnd() SAL_OVERRIDE;
+    virtual void    Resizing( Size& rSize ) override;
+    virtual void    Resize() override;
+    virtual bool    Close() override;
+    virtual void    PopupModeEnd() override;
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
     */
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
 
 public:
     SvxLineEndWindow( sal_uInt16 nId,
@@ -118,12 +118,12 @@ public:
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
 };
 
 
@@ -138,8 +138,8 @@ public:
     virtual ~SvxLineEndToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+                                              const SfxPoolItem* pState ) override;
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
 

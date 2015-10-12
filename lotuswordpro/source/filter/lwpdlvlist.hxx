@@ -77,7 +77,7 @@ protected:
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 public:
     LwpObjectID& GetNext() { return m_ListNext; }
     LwpObjectID& GetPrevious() { return m_ListPrevious; }
@@ -98,7 +98,7 @@ protected:
     LwpObjectID m_Parent;
     LwpAtomHolder m_Name;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     void ReadName(LwpObjectStream* pObjStrm);
 public:
     LwpAtomHolder& GetName() { return m_Name; }
@@ -121,7 +121,7 @@ protected:
     bool m_bHasProperties;
     LwpPropList* m_pPropList;
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     void ReadPropertyList(LwpObjectStream* pObjStrm);
 public:
     LwpPropList* GetPropList() { return m_pPropList; }

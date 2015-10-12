@@ -90,7 +90,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     bool                bExampleCreated;
     bool                bGlobalFlag;
 
-    virtual short       Ok() SAL_OVERRIDE;
+    virtual short       Ok() override;
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
     DECL_LINK_TYPED(CreateExample_Hdl, SwOneExampleFrame&, void);
@@ -102,9 +102,9 @@ public:
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                         bool bGlobal = false);
     virtual ~SwMultiTOXTabDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
     SwForm*             GetForm(CurTOXType eType);
 
@@ -222,13 +222,13 @@ class SwTOXSelectTabPage : public SfxTabPage
 public:
     SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
 
-    virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -285,7 +285,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 public:
     SwTokenWindow(vcl::Window* pParent);
     virtual ~SwTokenWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
@@ -315,8 +315,8 @@ public:
     bool        CreateQuickHelp(Control* pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
 
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual void    GetFocus() override;
+    virtual void    setAllocation(const Size &rAllocation) override;
     void SetFocus2theAllBtn();
 private:
     sal_uInt32 GetControlIndex(FormTokenType eType) const;
@@ -328,11 +328,11 @@ class SwIdxTreeListBox : public SvTreeListBox
 {
     VclPtr<SwTOXEntryTabPage> pParent;
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 public:
     SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle);
     virtual ~SwIdxTreeListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
 };
@@ -438,12 +438,12 @@ class SwTOXEntryTabPage : public SfxTabPage
 public:
     SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
+    virtual void        ActivatePage( const SfxItemSet& ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet);
@@ -453,7 +453,7 @@ public:
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
     void SetFocus2theAllBtn();
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool Notify( NotifyEvent& rNEvt ) override;
 };
 
 class SwTOXStylesTabPage : public SfxTabPage
@@ -485,13 +485,13 @@ class SwTOXStylesTabPage : public SfxTabPage
 public:
     SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
 
-    virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet);

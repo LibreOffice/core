@@ -133,9 +133,9 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    virtual void FillRects() SAL_OVERRIDE;   // For Table- und normal cursors.
+    virtual void FillRects() override;   // For Table- und normal cursors.
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
-    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const SAL_OVERRIDE;
+    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 
     void Show();            // Update and display all selections.
     void Hide();            // Hide all selections.
@@ -150,19 +150,19 @@ public:
     const Point& GetEndPos() const  { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
           Point& GetEndPos()        { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
 
-    virtual void SetMark() SAL_OVERRIDE;
+    virtual void SetMark() override;
 
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
+    virtual SwCursor* Create( SwPaM* pRing = 0 ) const override;
 
-    virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
+    virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
+    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) override;
 
     bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
     // true: Cursor can be set to this position.
-    virtual bool IsAtValidPos( bool bPoint = true ) const SAL_OVERRIDE;
+    virtual bool IsAtValidPos( bool bPoint = true ) const override;
 
-    virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
+    virtual bool IsReadOnlyAvailable() const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
 };
@@ -184,21 +184,21 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual void FillRects() SAL_OVERRIDE;   // For table and normal cursor.
+    virtual void FillRects() override;   // For table and normal cursor.
     /// @see SwSelPaintRects::FillStartEnd(), override for table selections.
-    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const SAL_OVERRIDE;
+    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 
     // Check if SPoint is within table SSelection.
     bool IsInside( const Point& rPt ) const;
 
-    virtual void SetMark() SAL_OVERRIDE;
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
+    virtual void SetMark() override;
+    virtual SwCursor* Create( SwPaM* pRing = 0 ) const override;
 
-    virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
+    virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
+    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) override;
 
     // true: Cursor can be set to this position.
-    virtual bool IsAtValidPos( bool bPoint = true ) const SAL_OVERRIDE;
+    virtual bool IsAtValidPos( bool bPoint = true ) const override;
 
 };
 

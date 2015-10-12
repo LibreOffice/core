@@ -50,46 +50,46 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel )
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception) override;
 
-    css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
+    css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.OButtonModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
 
 // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XReset
-    virtual void SAL_CALL reset(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reset(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
-    ) const SAL_OVERRIDE;
+    ) const override;
 
     // XPropertySet and friends
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
-                throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+                throw (css::uno::Exception, std::exception) override;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-                throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+                throw (css::lang::IllegalArgumentException) override;
+    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     void    impl_resetNoBroadcast_nothrow();
@@ -127,7 +127,7 @@ private:
 protected:
 
     // UNO binding
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -135,50 +135,50 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.OButtonControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) override;
 
     // XActionListener
-    virtual void SAL_CALL actionPerformed(const css::awt::ActionEvent& rEvent) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL actionPerformed(const css::awt::ActionEvent& rEvent) throw ( css::uno::RuntimeException, std::exception) override;
 
     // XButton
-    virtual void SAL_CALL addActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLabel(const OUString& Label) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setActionCommand(const OUString& _rCommand) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLabel(const OUString& Label) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setActionCommand(const OUString& _rCommand) throw(css::uno::RuntimeException, std::exception) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) override;
 
     // XControl
-    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL setDesignMode(sal_Bool bOn) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) throw ( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL setDesignMode(sal_Bool bOn) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     // OFormNavigationHelper overriables
-    virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) SAL_OVERRIDE;
-    virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) SAL_OVERRIDE;
-    virtual void    allFeatureStatesChanged( ) SAL_OVERRIDE;
-    virtual bool    isEnabled( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
+    virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) override;
+    virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) override;
+    virtual void    allFeatureStatesChanged( ) override;
+    virtual bool    isEnabled( sal_Int16 _nFeatureId ) const override;
 
     // XDispatchProviderInterception disambiguaiton
-    virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) override;
 
     // OImageControl overridables
-    virtual void    actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& _rEvt ) SAL_OVERRIDE;
+    virtual void    actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& _rEvt ) override;
 
 private:
     DECL_LINK_TYPED( OnClick, void*, void );

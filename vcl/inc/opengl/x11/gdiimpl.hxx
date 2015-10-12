@@ -28,25 +28,25 @@ public:
     virtual ~X11OpenGLSalGraphicsImpl();
 
 protected:
-    virtual rtl::Reference<OpenGLContext> CreateWinContext() SAL_OVERRIDE;
-    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) SAL_OVERRIDE;
+    virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
+    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) override;
 
     bool RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo);
 
 public:
     // implementation of X11GraphicsImpl
 
-    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
 
-    virtual void Init() SAL_OVERRIDE;
+    virtual void Init() override;
 
-    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
-    bool RenderPixmapToScreen(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY) SAL_OVERRIDE;
+    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) override;
+    bool RenderPixmapToScreen(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY) override;
 
     bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                     ControlCacheKey& aControlCacheKey) SAL_OVERRIDE;
+                                     ControlCacheKey& aControlCacheKey) override;
     bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,
-                                      int nX, int nY) SAL_OVERRIDE;
+                                      int nX, int nY) override;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_GDIIMPL_HXX

@@ -37,19 +37,19 @@ protected:
     SbxProperty* pDfltProp;                 // Default-Property
     OUString     aClassName;                // Classname
     OUString     aDfltPropName;
-    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) override;
+    virtual bool StoreData( SvStream& ) const override;
     virtual ~SbxObject();
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);
     TYPEINFO_OVERRIDE();
     SbxObject( const OUString& rClassname );
     SbxObject( const SbxObject& );
     SbxObject& operator=( const SbxObject& );
-    virtual SbxDataType GetType() const SAL_OVERRIDE;
-    virtual SbxClassType GetClass() const SAL_OVERRIDE;
-    virtual void Clear() SAL_OVERRIDE;
+    virtual SbxDataType GetType() const override;
+    virtual SbxClassType GetClass() const override;
+    virtual void Clear() override;
 
     virtual bool IsClass( const OUString& ) const;
     const OUString& GetClassName() const { return aClassName; }

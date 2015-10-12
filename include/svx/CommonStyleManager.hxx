@@ -31,7 +31,7 @@ public:
 
     virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
-                                            long nMaxHeight = 32) SAL_OVERRIDE;
+                                            long nMaxHeight = 32) override;
 };
 
 } // end namespace svx

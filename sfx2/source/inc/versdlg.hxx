@@ -38,8 +38,8 @@ public:
     {
     }
     void setColSizes();
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKeyEvent) SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void KeyInput(const KeyEvent& rKeyEvent) override;
 };
 
 class SfxVersionTableDtor;
@@ -66,7 +66,7 @@ class SfxVersionDialog : public SfxModalDialog
 public:
                                 SfxVersionDialog ( SfxViewFrame* pFrame, bool );
     virtual                     ~SfxVersionDialog ();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
     bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
@@ -85,7 +85,7 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
 public:
     SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
     virtual ~SfxViewVersionDialog_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class SfxCmisVersionsDialog : public SfxModalDialog
@@ -103,7 +103,7 @@ class SfxCmisVersionsDialog : public SfxModalDialog
 public:
                                 SfxCmisVersionsDialog ( SfxViewFrame* pFrame );
     virtual                     ~SfxCmisVersionsDialog ();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 };
 
 #endif

@@ -31,7 +31,7 @@ namespace dbaxml
         OUString m_sTable;
         bool        m_bEscapeProcessing;
     protected:
-        virtual void setProperties(css::uno::Reference< css::beans::XPropertySet > & _xProp) SAL_OVERRIDE;
+        virtual void setProperties(css::uno::Reference< css::beans::XPropertySet > & _xProp) override;
     public:
 
         OXMLQuery( ODBFilter& rImport
@@ -44,7 +44,7 @@ namespace dbaxml
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
     };
 } // namespace dbaxml
 

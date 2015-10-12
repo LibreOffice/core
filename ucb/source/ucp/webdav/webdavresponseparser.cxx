@@ -356,14 +356,14 @@ namespace
         virtual ~WebDAVResponseParser();
 
         // Methods XDocumentHandler
-        virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException) override;
+        virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) throw (xml::sax::SAXException, uno::RuntimeException) override;
 
         const std::vector< ucb::Lock >& getResult_Lock() const { return maResult_Lock; }
         const std::vector< http_dav_ucp::DAVResource >& getResult_PropFind() const { return maResult_PropFind; }

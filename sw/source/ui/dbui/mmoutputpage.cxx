@@ -205,7 +205,7 @@ public:
         get(m_pBCCED, "bcc");
     }
     virtual ~SwCopyToDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pCCED.clear();
         m_pBCCED.clear();

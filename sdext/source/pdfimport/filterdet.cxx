@@ -59,10 +59,10 @@ public:
                      const pdfparse::PDFContainer*                   pTop );
     virtual ~FileEmitContext();
 
-    virtual bool         write( const void* pBuf, unsigned int nLen ) SAL_OVERRIDE;
-    virtual unsigned int getCurPos() SAL_OVERRIDE;
-    virtual bool         copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) SAL_OVERRIDE;
-    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) SAL_OVERRIDE;
+    virtual bool         write( const void* pBuf, unsigned int nLen ) override;
+    virtual unsigned int getCurPos() override;
+    virtual bool         copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) override;
+    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) override;
 
     const uno::Reference< io::XStream >& getContextStream() const { return m_xContextStream; }
 };

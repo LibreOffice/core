@@ -63,7 +63,7 @@ protected:
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = 0);
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
     TYPEINFO_OVERRIDE();     ///< Already in base class Client.
@@ -138,8 +138,8 @@ public:
     void RegisterToFormat( SwFormat& rFormat );
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
-    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
-    virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
@@ -176,7 +176,7 @@ public:
     virtual ~SwFlyFrameFormat();
 
     /// Creates the views.
-    virtual void MakeFrms() SAL_OVERRIDE;
+    virtual void MakeFrms() override;
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
                       const bool bCalcFrm = false ) const;
@@ -184,9 +184,9 @@ public:
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
                                       const bool bCalcFrm = false ) const;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
+    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );
@@ -204,7 +204,7 @@ public:
         @return true, if background color is transparent, but not "no fill"
         or a existing background graphic is transparent.
     */
-    virtual bool IsBackgroundTransparent() const SAL_OVERRIDE;
+    virtual bool IsBackgroundTransparent() const override;
 
     /** SwFlyFrameFormat::IsBackgroundBrushInherited
 
@@ -273,24 +273,24 @@ public:
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */
-    virtual void DelFrms() SAL_OVERRIDE;
+    virtual void DelFrms() override;
 
     /** Register DrawObjects in the arrays at layout.
      Reset delete marks. */
-    virtual void MakeFrms() SAL_OVERRIDE;
+    virtual void MakeFrms() override;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
+    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) override;
 
-    virtual SwFrameFormat::tLayoutDir GetLayoutDir() const SAL_OVERRIDE;
-    virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir ) SAL_OVERRIDE;
+    virtual SwFrameFormat::tLayoutDir GetLayoutDir() const override;
+    virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir ) override;
 
-    virtual sal_Int16 GetPositionLayoutDir() const SAL_OVERRIDE;
-    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir ) SAL_OVERRIDE;
+    virtual sal_Int16 GetPositionLayoutDir() const override;
+    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir ) override;
 
     inline bool IsPosAttrSet() const { return mbPosAttrSet; }
     inline void PosAttrSet() { mbPosAttrSet = true; }
 
-    virtual OUString GetDescription() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrameFormat);
 };

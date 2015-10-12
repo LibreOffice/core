@@ -180,7 +180,7 @@ class AddonsOptions_Impl : public ConfigItem
             @param      "lPropertyNames" is the list of properties which should be updated.
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const Sequence< OUString >& lPropertyNames ) override;
 
         //  public interface
 
@@ -276,7 +276,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
         bool                 CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
     //  private member
 

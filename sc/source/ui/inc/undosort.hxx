@@ -22,9 +22,9 @@ class UndoSort : public ScSimpleUndo
 public:
     UndoSort( ScDocShell* pDocSh, const ReorderParam& rParam );
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 private:
     void Execute( bool bUndo );

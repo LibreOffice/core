@@ -42,7 +42,7 @@ public:
         vcl::Window* pWindow,
         const SfxItemSet& rInAttrs);
     virtual ~SdPresLayoutDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                GetAttr(SfxItemSet& rOutAttrs);
 

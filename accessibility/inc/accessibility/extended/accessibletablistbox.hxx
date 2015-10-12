@@ -63,26 +63,26 @@ public:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     // XAccessibleContext
-    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) override;
 
     // IAccessibleTabListBox
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() SAL_OVERRIDE
+        getMyself() override
     {
         return this;
     }
 
     css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar() SAL_OVERRIDE
+        getHeaderBar() override
     {
         return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );
     }
@@ -93,7 +93,7 @@ protected:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */
-    virtual AccessibleBrowseBoxTable*   createAccessibleTable() SAL_OVERRIDE;
+    virtual AccessibleBrowseBoxTable*   createAccessibleTable() override;
 };
 
 

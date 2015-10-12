@@ -129,7 +129,7 @@ protected:
 public:
     SwTextAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
-    virtual sal_Int32* GetEnd() SAL_OVERRIDE;
+    virtual sal_Int32* GetEnd() override;
 };
 
 // attribute that must not overlap others

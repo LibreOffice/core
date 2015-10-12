@@ -159,7 +159,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrameFormat*, SwDoc *pDc );
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) override;
 
 public:
     OUString GetName() const { return m_StyleName; }
@@ -233,7 +233,7 @@ public:
     void SetPoolHlpFileId(sal_uInt8 const nId) { m_Master.SetPoolHlpFileId(nId); }
 
     /// Query information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
 
     const SwFrameFormat* GetPageFormatOfNode( const SwNode& rNd,
                                     bool bCheckForThisPgDc = true ) const;

@@ -52,33 +52,33 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
         virtual void SAL_CALL setTemplate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement
             )
-            throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception) override;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
-        ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setTarget(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement
-            ) throw( com::sun::star::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
+            ) throw( com::sun::star::lang::IllegalArgumentException, std::exception) override;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTarget(
-        ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        ) throw (com::sun::star::uno::RuntimeException, std::exception) override ;
 
         virtual void SAL_CALL setStatus(
             ::com::sun::star::xml::crypto::SecurityOperationStatus status )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
         virtual ::com::sun::star::xml::crypto::SecurityOperationStatus
             SAL_CALL getStatus(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
 
         //Helper for XServiceInfo
         static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;

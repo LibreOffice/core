@@ -35,14 +35,14 @@ public:
     TYPEINFO_OVERRIDE();
     SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SDRCAPT_ESCHORIZONTAL): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< sal_uInt16 >(eDir)) {}
     SdrCaptionEscDirItem(SvStream& rIn)                              : SfxEnumItem(SDRATTR_CAPTIONESCDIR,rIn)  {}
-    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetValueCount() const SAL_OVERRIDE; // { return 3; }
+    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const override;
+    virtual sal_uInt16           GetValueCount() const override; // { return 3; }
     SdrCaptionEscDir GetValue() const      { return (SdrCaptionEscDir)SfxEnumItem::GetValue(); }
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
 
-    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;
 };
 
 

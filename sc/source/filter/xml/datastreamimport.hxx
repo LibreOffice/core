@@ -30,7 +30,7 @@ public:
 
     virtual ~ScXMLDataStreamContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 #endif

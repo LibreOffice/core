@@ -42,20 +42,20 @@ public:
 
     ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
     virtual ~ScPivotLayoutTreeListBase();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvent) SAL_OVERRIDE;
-    virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvent) override;
+    virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) override;
     virtual TriState NotifyMoving(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
-                                  SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) SAL_OVERRIDE;
+                                  SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) override;
     virtual TriState NotifyCopying(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
-                                   SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) SAL_OVERRIDE;
+                                   SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) override;
     virtual DragDropMode NotifyStartDrag(TransferDataContainer& aTransferDataContainer,
-                                         SvTreeListEntry* pEntry) SAL_OVERRIDE;
-    virtual void DragFinished(sal_Int8 nDropAction) SAL_OVERRIDE;
+                                         SvTreeListEntry* pEntry) override;
+    virtual void DragFinished(sal_Int8 nDropAction) override;
 
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
     void PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector);
 

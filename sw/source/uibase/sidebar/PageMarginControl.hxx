@@ -62,7 +62,7 @@ public:
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
     virtual ~PageMarginControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr< svx::sidebar::ValueSetWithTextControl> mpMarginValueSet;

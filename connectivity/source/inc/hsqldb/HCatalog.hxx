@@ -42,10 +42,10 @@ namespace connectivity
 
         public:
             // implementation of the pure virtual methods
-            virtual void refreshTables() SAL_OVERRIDE;
-            virtual void refreshViews() SAL_OVERRIDE ;
-            virtual void refreshGroups() SAL_OVERRIDE;
-            virtual void refreshUsers() SAL_OVERRIDE ;
+            virtual void refreshTables() override;
+            virtual void refreshViews() override ;
+            virtual void refreshGroups() override;
+            virtual void refreshUsers() override ;
 
         public:
             OHCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
@@ -54,9 +54,9 @@ namespace connectivity
             inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
             inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() const { return m_xConnection; }
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             // ::cppu::OComponentHelper
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
         };
     }
 }

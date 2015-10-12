@@ -11,6 +11,7 @@
 #include <cassert>
 #include <limits>
 #include <set>
+#include <string>
 
 #include "clang/AST/Attr.h"
 
@@ -19,11 +20,11 @@
 
 namespace {
 
-class SalOverride:
-    public RecursiveASTVisitor<SalOverride>, public loplugin::RewritePlugin
+class Override:
+    public RecursiveASTVisitor<Override>, public loplugin::RewritePlugin
 {
 public:
-    explicit SalOverride(InstantiationData const & data): RewritePlugin(data) {}
+    explicit Override(InstantiationData const & data): RewritePlugin(data) {}
 
     virtual void run() override;
 
@@ -33,7 +34,7 @@ private:
     std::set<SourceLocation> insertions_;
 };
 
-void SalOverride::run() {
+void Override::run() {
     if (compiler.getLangOpts().CPlusPlus
         && compiler.getPreprocessor().getIdentifierInfo(
             "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
@@ -41,7 +42,7 @@ void SalOverride::run() {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 }
-bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
+bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // As a heuristic, ignore declarations where the name is spelled out in an
     // ignored location; that e.g. handles uses of the Q_OBJECT macro from
     // external QtCore/qobjectdefs.h:
@@ -72,6 +73,9 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         }
         return true;
     }
+    std::string over(
+        isInUnoIncludeFile(decl->getSourceRange().getBegin())
+        ? "SAL_OVERRIDE" : "override");
 #if LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion
     if (rewriter != nullptr) {
         // In  void MACRO(...);  getSourceRange().getEnd() would (erroneously?)
@@ -79,7 +83,7 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         // at the first ";" or "{" instead of getSourceRange().getEnd():
         unsigned parens = 0;
         bool seenSpace = false;
-        //TODO: Whether to add a space after the inserted "SAL_OVERRIDE" should
+        //TODO: Whether to add a space after an inserted "SAL_OVERRIDE" should
         // depend on the following token at the spelling location where
         // "SAL_OVERRIDE" is inserted, not on the following token in the fully-
         // macro-expanded view:
@@ -153,7 +157,8 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         assert(loc.isValid());
         if (!insertions_.insert(loc).second
             || insertTextAfterToken(
-                loc, addSpace ? " SAL_OVERRIDE " : " SAL_OVERRIDE"))
+                loc,
+                std::string(" ") + over + std::string(addSpace ? " " : "")))
         {
             return true;
         }
@@ -161,10 +166,9 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
 #endif
     report(
         DiagnosticsEngine::Warning,
-        ("overriding virtual function declaration not marked 'override' (aka"
-         " 'SAL_OVERRIDE')"),
+        ("overriding virtual function declaration not marked '%0'"),
         decl->getLocation())
-        << decl->getSourceRange();
+        << over << decl->getSourceRange();
     for (auto i = decl->begin_overridden_methods();
          i != decl->end_overridden_methods(); ++i)
     {
@@ -176,7 +180,7 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<SalOverride> X("saloverride", true);
+loplugin::Plugin::Registration<Override> X("override", true);
 
 }
 

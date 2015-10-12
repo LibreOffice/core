@@ -39,8 +39,8 @@ namespace dbaui
     public:
         OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin);
 
-        virtual void    Undo() SAL_OVERRIDE { TogglePosition(); }
-        virtual void    Redo() SAL_OVERRIDE { TogglePosition(); }
+        virtual void    Undo() override { TogglePosition(); }
+        virtual void    Redo() override { TogglePosition(); }
     };
 
     inline OJoinMoveTabWinUndoAct::OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin)

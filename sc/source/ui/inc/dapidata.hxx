@@ -41,7 +41,7 @@ private:
 public:
     ScDataPilotDatabaseDlg(vcl::Window* pParent);
     virtual ~ScDataPilotDatabaseDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    GetValues( ScImportSourceDesc& rDesc );
 };

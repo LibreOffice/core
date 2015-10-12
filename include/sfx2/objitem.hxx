@@ -35,8 +35,8 @@ public:
                              TYPEINFO_OVERRIDE();
                              SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=0 );
 
-    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool             operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
 
     SfxShell*                GetShell() const
                              { return _pSh; }

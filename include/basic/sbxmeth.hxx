@@ -34,7 +34,7 @@ public:
     SbxMethod( const SbxMethod& r );
     virtual ~SbxMethod();
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
-    virtual SbxClassType GetClass() const SAL_OVERRIDE;
+    virtual SbxClassType GetClass() const override;
     bool IsRuntimeFunction() const { return mbIsRuntimeFunction; }
     SbxDataType GetRuntimeFunctionReturnType() const{ return mbRuntimeFunctionReturnType; }
 };

@@ -200,20 +200,20 @@ public:
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (Exception, RuntimeException, std::exception) override;
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (Exception, RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override
     {
         return m_implName;
     }
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override
     {
         for( int i = 0 ; i < m_serviceNames.getLength() ; i ++ )
             if( m_serviceNames[i] == ServiceName )
@@ -221,13 +221,13 @@ public:
         return sal_False;
     }
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override
     {
         return m_serviceNames;
     }
 
     // XComponent
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 private:
     cppu::ComponentFactoryFunc     m_create;

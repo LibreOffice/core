@@ -52,7 +52,7 @@ public:
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
     virtual ~Layout();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     explicit Layout(vcl::Window* pParent);
@@ -63,8 +63,8 @@ protected:
     bool HasSize () const { return !bFirstSize; }
 
     // Window:
-    virtual void Resize () SAL_OVERRIDE;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
+    virtual void Resize () override;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
     // new:
     virtual void OnFirstSize (long nWidth, long nHeight) = 0;
 

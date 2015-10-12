@@ -59,7 +59,7 @@ public:
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;

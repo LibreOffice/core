@@ -109,8 +109,8 @@ public:
     virtual ~SwFormatMeta();
 
     /// SfxPoolItem
-    virtual bool             operator==( const SfxPoolItem & ) const SAL_OVERRIDE;
-    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool             operator==( const SfxPoolItem & ) const override;
+    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const override;
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTextNode(SwTextNode *const pTextNode);
@@ -151,19 +151,19 @@ protected:
             { m_wXMeta = xMeta; }
 
     /// SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
     explicit Meta(SwFormatMeta * const i_pFormat = 0);
     virtual ~Meta();
 
     /// sfx2::Metadatable
-    virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;
-    virtual bool IsInClipboard() const SAL_OVERRIDE;
-    virtual bool IsInUndo() const SAL_OVERRIDE;
-    virtual bool IsInContent() const SAL_OVERRIDE;
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
+    virtual bool IsInClipboard() const override;
+    virtual bool IsInUndo() const override;
+    virtual bool IsInContent() const override;
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
 };
 
 class MetaField

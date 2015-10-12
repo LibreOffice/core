@@ -41,7 +41,7 @@ public:
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetNullOffset(const Point& rOffset);
 
@@ -55,11 +55,11 @@ protected:
     RulerCtrlItem* pCtrlItem;
     bool bHorz;
 
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual void    ExtraDown() SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void    MouseMove(const MouseEvent& rMEvt) override;
+    virtual void    Command(const CommandEvent& rCEvt) override;
+    virtual void    ExtraDown() override;
 };
 
 } // end of namespace sd

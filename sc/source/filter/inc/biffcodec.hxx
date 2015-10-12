@@ -41,8 +41,8 @@ public:
     inline BiffDecoderBase* clone() { return implClone(); }
 
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface. */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) SAL_OVERRIDE;
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) SAL_OVERRIDE;
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) override;
 
     /** Returns true, if the decoder has been initialized correctly. */
     inline bool         isValid() const { return mbValid; }
@@ -84,18 +84,18 @@ private:
                         BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder );
 
     /** Returns a clone of the decoder for usage in new streams. */
-    virtual BiffDecoder_XOR* implClone() SAL_OVERRIDE;
+    virtual BiffDecoder_XOR* implClone() override;
 
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) SAL_OVERRIDE;
-    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
+    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
                             sal_uInt8* pnDestData,
                             const sal_uInt8* pnSrcData,
                             sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes ) SAL_OVERRIDE;
+                            sal_uInt16 nBytes ) override;
 
 private:
     ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
@@ -112,18 +112,18 @@ private:
                         BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder );
 
     /** Returns a clone of the decoder for usage in new streams. */
-    virtual BiffDecoder_RCF* implClone() SAL_OVERRIDE;
+    virtual BiffDecoder_RCF* implClone() override;
 
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) SAL_OVERRIDE;
-    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
+    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
                             sal_uInt8* pnDestData,
                             const sal_uInt8* pnSrcData,
                             sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes ) SAL_OVERRIDE;
+                            sal_uInt16 nBytes ) override;
 
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.

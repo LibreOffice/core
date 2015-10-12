@@ -64,11 +64,11 @@ public:
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -78,23 +78,23 @@ protected:
     virtual sal_Bool SAL_CALL filter(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
@@ -168,7 +168,7 @@ private:
 class XMLReportFilterHelper : public XMLFilter
 {
     virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS ) SAL_OVERRIDE;
+                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS ) override;
 public:
     explicit XMLReportFilterHelper( ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext > const & _xContext )
@@ -181,7 +181,7 @@ public:
 protected:
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override
     {
         return getImplementationName_Static();
     }
@@ -190,7 +190,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               ::com::sun::star::uno::RuntimeException, std::exception) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
@@ -201,13 +201,13 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+               ::com::sun::star::uno::RuntimeException, std::exception) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);
     }
 
-    virtual OUString getMediaType(bool _bOasis) SAL_OVERRIDE;
+    virtual OUString getMediaType(bool _bOasis) override;
 };
 
 } //  namespace chart

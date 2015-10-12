@@ -224,7 +224,7 @@ public:
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
     virtual ~ListEntryDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         mpOS.clear();
         mpOSVersion.clear();

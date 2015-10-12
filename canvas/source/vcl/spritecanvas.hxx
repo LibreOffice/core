@@ -115,7 +115,7 @@ namespace vclcanvas
         virtual ~SpriteCanvas();
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -125,14 +125,14 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) override;
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
@@ -140,7 +140,7 @@ namespace vclcanvas
                               const css::rendering::RenderState& renderState,
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
-                              const GraphicAttr&                              rAttr ) const SAL_OVERRIDE;
+                              const GraphicAttr&                              rAttr ) const override;
 
         /// Get backbuffer for this canvas
         OutDevProviderSharedPtr getFrontBuffer() const { return maDeviceHelper.getOutDev(); }

@@ -77,7 +77,7 @@ namespace svt
             WizardButtonFlags _nButtonFlags = WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP
         );
         virtual ~RoadmapWizard( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void            SetRoadmapHelpId( const OString& _rId );
 
@@ -87,8 +87,8 @@ namespace svt
         bool            isStateEnabled( WizardState _nState ) const;
 
         // WizardDialog overridables
-        virtual bool    canAdvance() const SAL_OVERRIDE;
-        virtual void    updateTravelUI() SAL_OVERRIDE;
+        virtual bool    canAdvance() const override;
+        virtual void    updateTravelUI() override;
 
     protected:
         /** declares a valid path in the wizard
@@ -163,7 +163,7 @@ namespace svt
 
             @see activatePath
         */
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
+        virtual WizardState     determineNextState( WizardState _nCurrentState ) const override;
 
         /** en- or disables a state
 
@@ -192,7 +192,7 @@ namespace svt
         bool    knowsState( WizardState _nState ) const;
 
         // OWizardMachine overriables
-        virtual void            enterState( WizardState _nState ) SAL_OVERRIDE;
+        virtual void            enterState( WizardState _nState ) override;
 
         /** returns a human readable name for a given state
 
@@ -208,7 +208,7 @@ namespace svt
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual VclPtr<TabPage> createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState _nState ) override;
 
         /** asks for a new label of the wizard page
 

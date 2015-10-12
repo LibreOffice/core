@@ -79,7 +79,7 @@ public:
         ItemUpdateReceiverInterface& rItemUpdateReceiver);
 
     /// releases our action listener
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual ~ControllerItem();
 
@@ -125,7 +125,7 @@ public:
 
 protected:
 
-    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;

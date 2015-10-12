@@ -28,7 +28,7 @@ public:
     FloatingWindowAccessible( VCLXWindow* pWindow );
     virtual ~FloatingWindowAccessible();
 
-    virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) SAL_OVERRIDE;
+    virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_SOURCE_INC_FLOATINGWINDOWACCESSIBLE_HXX

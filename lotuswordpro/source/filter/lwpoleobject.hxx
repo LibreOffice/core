@@ -98,7 +98,7 @@ class LwpGraphicOleObject : public LwpContent
 {
 public:
     LwpGraphicOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
     void         GetGrafScaledSize(double& fWidth, double& fHeight);
     virtual void GetGrafOrgSize(double& rWidth, double& rHeight);
 protected:
@@ -117,11 +117,11 @@ class LwpOleObject : public LwpGraphicOleObject
 public:
     LwpOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual ~LwpOleObject(){}
-    virtual void Read() SAL_OVERRIDE;
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    virtual void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
-    virtual void RegisterStyle() SAL_OVERRIDE;
-    void GetGrafOrgSize(double& rWidth, double& rHeight) SAL_OVERRIDE ;
+    virtual void Read() override;
+    virtual void Parse(IXFStream* pOutputStream) override;
+    virtual void XFConvert(XFContentContainer * pCont) override;
+    virtual void RegisterStyle() override;
+    void GetGrafOrgSize(double& rWidth, double& rHeight) override ;
 private:
     sal_uInt16 cPersistentFlags;
 

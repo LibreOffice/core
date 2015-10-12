@@ -59,8 +59,8 @@ namespace extensions { namespace resource
 
         OpenOfficeResourceLoader(css::uno::Reference< css::uno::XComponentContext> const&);
         // XResourceBundleLoader
-        virtual  css::uno::Reference< css::resource::XResourceBundle> SAL_CALL loadBundle_Default( const OUString& aBaseName ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual  css::uno::Reference<  css::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const css::lang::Locale& aLocale ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  css::uno::Reference< css::resource::XResourceBundle> SAL_CALL loadBundle_Default( const OUString& aBaseName ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) override;
+        virtual  css::uno::Reference<  css::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const css::lang::Locale& aLocale ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) override;
 
     private:
         OpenOfficeResourceLoader( const OpenOfficeResourceLoader& ) = delete;

@@ -77,7 +77,7 @@ struct SkipData: public HBox
 
     SkipData(hchar);
     virtual ~SkipData();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 struct DateCode;
 struct FieldCode : public HBox
@@ -95,7 +95,7 @@ struct FieldCode : public HBox
 
     FieldCode();
     virtual ~FieldCode();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 /**
  * Kind of BOOKMARK
@@ -120,7 +120,7 @@ struct Bookmark: public HBox
 
     Bookmark();
     virtual ~Bookmark();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // date format(7)
@@ -135,7 +135,7 @@ struct DateFormat: public HBox
     hchar dummy;
 
     DateFormat();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -157,9 +157,9 @@ struct DateCode: public HBox
     unsigned char key;
 
     DateCode();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 
-    virtual hchar_string GetString() SAL_OVERRIDE;
+    virtual hchar_string GetString() override;
 };
 
 /**
@@ -172,7 +172,7 @@ struct Tab: public HBox
     hchar dummy;
 
     Tab();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
@@ -386,7 +386,7 @@ struct TxtBox: public FBox
  */
     int Type()    { return type;  }
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 #define ALLOWED_GAP 5
@@ -655,7 +655,7 @@ struct Picture: public FBox
     virtual ~Picture();
 
     int   Type    ();
-    virtual bool Read    (HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read    (HWPFile &hwpf) override;
 };
 
 // line (14)
@@ -674,7 +674,7 @@ struct Line: public FBox
 
     Line();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // hidden(15)
@@ -692,7 +692,7 @@ struct Hidden: public HBox
     Hidden();
     virtual ~Hidden();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -721,7 +721,7 @@ struct HeaderFooter: public HBox
     HeaderFooter();
     virtual ~HeaderFooter();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -754,7 +754,7 @@ struct Footnote: public HBox
     Footnote();
     virtual ~Footnote();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // auto number(18)
@@ -782,7 +782,7 @@ struct AutoNum: public HBox
 
     AutoNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -796,7 +796,7 @@ struct NewNum: public HBox
 
     NewNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // page number(20)
@@ -818,7 +818,7 @@ struct ShowPageNum: public HBox
 
     ShowPageNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /* Start odd side (21) */
@@ -839,7 +839,7 @@ struct PageNumCtrl: public HBox
 
     PageNumCtrl();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // mail merge(22)
@@ -854,8 +854,8 @@ struct MailMerge: public HBox
 
     MailMerge();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
-    virtual hchar_string GetString() SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
+    virtual hchar_string GetString() override;
 };
 
 // char compositon(23)
@@ -870,7 +870,7 @@ struct Compose: public HBox
 
     Compose();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // hyphen(24)
@@ -887,7 +887,7 @@ struct Hyphen: public HBox
 
     Hyphen();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // toc mark(25)
@@ -903,7 +903,7 @@ struct TocMark: public HBox
 
     TocMark();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // index mark(26)
@@ -921,7 +921,7 @@ struct IndexMark: public HBox
 
     IndexMark();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // outline(28)
@@ -992,7 +992,7 @@ class Outline: public HBox
 
         Outline();
 
-        virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+        virtual bool Read(HWPFile &hwpf) override;
         hchar_string GetUnicode() const;
 };
 
@@ -1008,7 +1008,7 @@ struct KeepSpace: public HBox
 
     KeepSpace();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /* Fixed-width spaces (31) */
@@ -1021,7 +1021,7 @@ struct FixedSpace: public HBox
 
     FixedSpace();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HBOX_H
 

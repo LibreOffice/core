@@ -200,18 +200,18 @@ public:
     // lang::XEventListener
     virtual void SAL_CALL
         disposing( const lang::EventObject& rSource )
-            throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(uno::RuntimeException, std::exception) override;
 
     // linguistic2::XLinguServiceEventListener
     virtual void SAL_CALL
         processLinguServiceEvent( const linguistic2::LinguServiceEvent& aLngSvcEvent )
-            throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(uno::RuntimeException, std::exception) override;
 
     // linguistic2::XDictionaryListEventListener
     virtual void SAL_CALL
         processDictionaryListEvent(
                 const linguistic2::DictionaryListEvent& rDicListEvent )
-            throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(uno::RuntimeException, std::exception) override;
 
     inline  bool    AddLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );

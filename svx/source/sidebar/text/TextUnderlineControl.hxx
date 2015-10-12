@@ -37,7 +37,7 @@ public:
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     virtual ~TextUnderlineControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void Rearrange(FontUnderline eLine);
 
 private:

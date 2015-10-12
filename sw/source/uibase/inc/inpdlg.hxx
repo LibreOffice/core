@@ -34,8 +34,8 @@ class SwWrtShell;
 // insert fields
 class SwFieldInputDlg: public SvxStandardDialog
 {
-    virtual void    Apply() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
+    virtual void    Apply() override;
+    virtual void    StateChanged( StateChangedType ) override;
 
     SwWrtShell&       rSh;
     SwInputField*     pInpField;
@@ -54,7 +54,7 @@ public:
     SwFieldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
                     SwField* pField, bool bNextButton = false );
     virtual ~SwFieldInputDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

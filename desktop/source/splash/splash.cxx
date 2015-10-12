@@ -56,9 +56,9 @@ public:
     ScopedVclPtr<VirtualDevice> _vdev;
     explicit SplashScreenWindow(SplashScreen *);
     virtual ~SplashScreenWindow() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     // workwindow
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     void Redraw();
 
 };
@@ -108,26 +108,26 @@ public:
     SplashScreen();
 
     // XStatusIndicator
-    virtual void SAL_CALL end() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL reset() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL end() throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL reset() throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception ) override;
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
-        throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return desktop::splash::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return desktop::splash::getSupportedServiceNames(); }
 };
 

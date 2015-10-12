@@ -40,21 +40,21 @@ namespace cppcanvas
                         const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplSprite();
 
-            virtual void setAlpha( const double& rAlpha ) SAL_OVERRIDE;
-            virtual void movePixel( const ::basegfx::B2DPoint& rNewPos ) SAL_OVERRIDE;
-            virtual void move( const ::basegfx::B2DPoint& rNewPos ) SAL_OVERRIDE;
-            virtual void transform( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
-            virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
-            virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
-            virtual void setClip() SAL_OVERRIDE;
+            virtual void setAlpha( const double& rAlpha ) override;
+            virtual void movePixel( const ::basegfx::B2DPoint& rNewPos ) override;
+            virtual void move( const ::basegfx::B2DPoint& rNewPos ) override;
+            virtual void transform( const ::basegfx::B2DHomMatrix& rMatrix ) override;
+            virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
+            virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
+            virtual void setClip() override;
 
-            virtual void show() SAL_OVERRIDE;
-            virtual void hide() SAL_OVERRIDE;
+            virtual void show() override;
+            virtual void hide() override;
 
-            virtual void setPriority( double fPriority ) SAL_OVERRIDE;
+            virtual void setPriority( double fPriority ) override;
 
             virtual css::uno::Reference<
-                css::rendering::XSprite >  getUNOSprite() const SAL_OVERRIDE;
+                css::rendering::XSprite >  getUNOSprite() const override;
 
         private:
             ImplSprite(const ImplSprite&) = delete;

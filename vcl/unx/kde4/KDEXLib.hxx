@@ -81,14 +81,14 @@ class KDEXLib : public QObject, public SalXLib
         KDEXLib();
         virtual ~KDEXLib();
 
-        virtual void Init() SAL_OVERRIDE;
-        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
-        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle ) SAL_OVERRIDE;
-        virtual void Remove( int fd ) SAL_OVERRIDE;
-        virtual void StartTimer( sal_uLong nMS ) SAL_OVERRIDE;
-        virtual void StopTimer() SAL_OVERRIDE;
-        virtual void Wakeup() SAL_OVERRIDE;
-        virtual void PostUserEvent() SAL_OVERRIDE;
+        virtual void Init() override;
+        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents ) override;
+        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle ) override;
+        virtual void Remove( int fd ) override;
+        virtual void StartTimer( sal_uLong nMS ) override;
+        virtual void StopTimer() override;
+        virtual void Wakeup() override;
+        virtual void PostUserEvent() override;
 
         void doStartup();
         bool allowKdeDialogs() { return m_allowKdeDialogs; }

@@ -42,8 +42,8 @@ namespace dbaui
         // here returns physical and not logical coordinates
         // (in contrary to QueryMoveTabWinUndoAct)
 
-        virtual void    Undo() SAL_OVERRIDE { ToggleSizePosition(); }
-        virtual void    Redo() SAL_OVERRIDE { ToggleSizePosition(); }
+        virtual void    Undo() override { ToggleSizePosition(); }
+        virtual void    Redo() override { ToggleSizePosition(); }
     };
 
     inline OJoinSizeTabWinUndoAct::OJoinSizeTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OTableWindow* pTabWin)

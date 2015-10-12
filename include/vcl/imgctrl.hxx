@@ -41,11 +41,11 @@ public:
     void            SetScaleMode( const ::sal_Int16 _nMode );
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
 protected:
     void    ImplDraw( OutputDevice& rDev, DrawFlags nDrawFlags, const Point& rPos, const Size& rSize ) const;

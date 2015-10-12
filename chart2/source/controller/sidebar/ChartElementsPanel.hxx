@@ -51,10 +51,10 @@ public:
         ChartController* pController);
 
     virtual void DataChanged(
-        const DataChangedEvent& rEvent) SAL_OVERRIDE;
+        const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) SAL_OVERRIDE;
+        const ::sfx2::sidebar::EnumContext& rContext) override;
 
     // constructor/destuctor
     ChartElementsPanel(
@@ -64,12 +64,12 @@ public:
 
     virtual ~ChartElementsPanel();
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void updateData() SAL_OVERRIDE;
-    virtual void modelInvalid() SAL_OVERRIDE;
+    virtual void updateData() override;
+    virtual void modelInvalid() override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
     //ui controls

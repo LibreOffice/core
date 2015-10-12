@@ -51,23 +51,23 @@ public:
     DECLARE_XINTERFACE( )
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 protected:
     virtual ~OCommandContainer();
 
     // ODefinitionContainer
-    virtual css::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) override;
 
 protected:
     // OContentHelper overridables
-    virtual OUString determineContentType() const SAL_OVERRIDE;
+    virtual OUString determineContentType() const override;
 };
 
 }   // namespace dbaccess

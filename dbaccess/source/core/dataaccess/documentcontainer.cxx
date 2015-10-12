@@ -73,7 +73,7 @@ public:
     {
     }
 
-    void SAL_CALL   approveElement( const OUString& _rName, const Reference< XInterface >& _rxElement ) SAL_OVERRIDE;
+    void SAL_CALL   approveElement( const OUString& _rName, const Reference< XInterface >& _rxElement ) override;
 };
 
 void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )

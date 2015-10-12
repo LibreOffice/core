@@ -84,7 +84,7 @@ public:
     /**
      * @descr   Output group object and all its children.
      */
-    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void ToXml(IXFStream *pStrm) override;
 
 private:
     rtl::Reference<XFContentContainer>  m_aChildren;

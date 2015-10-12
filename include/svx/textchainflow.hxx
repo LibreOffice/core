@@ -94,14 +94,14 @@ class EditingTextChainFlow : public TextChainFlow
 {
 public:
     EditingTextChainFlow(SdrTextObj *);
-    virtual void CheckForFlowEvents(SdrOutliner *) SAL_OVERRIDE;
+    virtual void CheckForFlowEvents(SdrOutliner *) override;
 
-    //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
+    //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) override;
 
 protected:
-    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;
+    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) override;
 
-    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
+    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) override;
 
 private:
     void impBroadcastCursorInfo() const;

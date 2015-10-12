@@ -35,7 +35,7 @@ public:
         , DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedSeriesAreaOrLineProperty();
 
-    virtual OUString getInnerName() const SAL_OVERRIDE;
+    virtual OUString getInnerName() const override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;

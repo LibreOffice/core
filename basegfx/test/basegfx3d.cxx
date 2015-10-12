@@ -29,11 +29,11 @@ class b3dhommatrix : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -57,11 +57,11 @@ class b3dpoint : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -85,11 +85,11 @@ class b3drange : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -111,11 +111,11 @@ class b3dtuple : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 
@@ -139,11 +139,11 @@ class b3dvector : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
     }
 

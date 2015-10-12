@@ -45,14 +45,14 @@ public:
         sd::ViewShellBase& rViewShellBase,
         SfxBindings* pBindings);
     virtual ~NavigatorWrapper();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Control
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void GetFocus() override;
 
     // From ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 private:
     ViewShellBase& mrViewShellBase;

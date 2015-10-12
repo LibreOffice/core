@@ -268,7 +268,7 @@ public:
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
 protected:
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     void SetCurItemId(sal_uInt16 nSet)
     {
         mnCurItemId = nSet;
@@ -278,39 +278,39 @@ public:
                         ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
                         ToolBox( vcl::Window* pParent, const ResId& rResId );
     virtual             ~ToolBox();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     virtual void        Click();
     void                DoubleClick();
-    virtual void        Activate() SAL_OVERRIDE;
-    virtual void        Deactivate() SAL_OVERRIDE;
+    virtual void        Activate() override;
+    virtual void        Deactivate() override;
     void                Highlight();
     virtual void        Select();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Move() SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Move() override;
+    virtual void        Resize() override;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual bool        PrepareToggleFloatingMode() SAL_OVERRIDE;
-    virtual void        ToggleFloatingMode() SAL_OVERRIDE;
-    virtual void        StartDocking() SAL_OVERRIDE;
-    virtual bool        Docking( const Point& rPos, Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
-    virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual bool        PrepareToggleFloatingMode() override;
+    virtual void        ToggleFloatingMode() override;
+    virtual void        StartDocking() override;
+    virtual bool        Docking( const Point& rPos, Rectangle& rRect ) override;
+    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
+    virtual void        Resizing( Size& rSize ) override;
+    virtual Size        GetOptimalSize() const override;
 
     void                InsertItem( const ResId& rResId,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
@@ -524,7 +524,7 @@ public:
     // accessibility helpers
 
     // gets the displayed text
-    OUString GetDisplayText() const SAL_OVERRIDE;
+    OUString GetDisplayText() const override;
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)

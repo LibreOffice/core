@@ -45,7 +45,7 @@ public:
     virtual void HandleCaretChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
-    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
+    virtual void SetComponentState(short state, bool enable) override;
 
     //add TEXT_SELECTION_CHANGED event
     void HandleTextSelectionChangedEvent();

@@ -63,7 +63,7 @@ private:
     DECL_LINK_TYPED(InsertFileHdl, Button *, void);
     DECL_LINK_TYPED(DlgClosedHdl, sfx2::FileDialogHelper *, void);
 
-    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Apply() override;
 
     void            CheckTravel();
     void            SetField();
@@ -71,7 +71,7 @@ private:
 public:
     SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh);
     virtual ~SwJavaEditDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetScriptText() const { return aText; }
 

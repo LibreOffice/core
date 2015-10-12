@@ -42,8 +42,8 @@ public:
     UndoTextAPIChanged( SdrModel& rModel, TextApiObject* pTextObj );
     virtual ~UndoTextAPIChanged();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
 protected:
     OutlinerParaObject* mpOldText;
@@ -94,9 +94,9 @@ class TextAPIEditSource : public SvxEditSource
 {
     TextAPIEditSource_Impl* pImpl;
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
     explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
 
 public:

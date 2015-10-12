@@ -98,16 +98,16 @@ namespace tdoc_ucp {
                     const ::com::sun::star::lang::EventObject& Source,
                     sal_Bool GetsOwnership )
                 throw (::com::sun::star::util::CloseVetoException,
-                       ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                       ::com::sun::star::uno::RuntimeException, std::exception) override;
 
             virtual void SAL_CALL notifyClosing(
                     const ::com::sun::star::lang::EventObject& Source )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
             // lang::XEventListener (base of util::XCloseListener)
             virtual void SAL_CALL disposing(
                     const com::sun::star::lang::EventObject & Source )
-                throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
             void Dispose() { m_pManager = 0; }
 
@@ -127,12 +127,12 @@ namespace tdoc_ucp {
         // document::XDocumentEventListener
         virtual void SAL_CALL documentEventOccured(
                 const com::sun::star::document::DocumentEvent & Event )
-            throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // lang::XEventListener (base of document::XDocumentEventListener)
         virtual void SAL_CALL disposing(
                 const com::sun::star::lang::EventObject & Source )
-            throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // Non-interface
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >

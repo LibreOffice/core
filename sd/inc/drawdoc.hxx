@@ -203,7 +203,7 @@ private:
     bool                mbUseEmbedFonts;
 protected:
 
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
 
 public:
 
@@ -213,13 +213,13 @@ public:
                         SAL_DLLPRIVATE virtual ~SdDrawDocument();
 
     SAL_DLLPRIVATE SdDrawDocument*     AllocSdDrawDocument() const;
-    SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const SAL_OVERRIDE; //forwards to AllocSdDrawDocument
+    SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const override; //forwards to AllocSdDrawDocument
 
     SAL_DLLPRIVATE SdPage*             AllocSdPage(bool bMasterPage);
-    SAL_DLLPRIVATE virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE; //forwards to AllocSdPage
+    SAL_DLLPRIVATE virtual SdrPage*    AllocPage(bool bMasterPage) override; //forwards to AllocSdPage
 
-    SAL_DLLPRIVATE virtual bool        IsReadOnly() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool        IsReadOnly() const override;
+    SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) override;
 
     SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
 
@@ -231,7 +231,7 @@ public:
     SAL_DLLPRIVATE LanguageType        GetLanguage( const sal_uInt16 nId ) const;
     SAL_DLLPRIVATE void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
 
-    SAL_DLLPRIVATE SvxNumType          GetPageNumType() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE SvxNumType          GetPageNumType() const override;
     SAL_DLLPRIVATE void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
     OUString CreatePageNumValue(sal_uInt16 nNum) const;
 
@@ -249,13 +249,13 @@ public:
     void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
     bool                CreateMissingNotesAndHandoutPages();
 
-    SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) SAL_OVERRIDE;
-    SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
-    SAL_DLLPRIVATE SdrPage*            RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
+    SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
+    SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) override;
+    SAL_DLLPRIVATE SdrPage*            RemovePage(sal_uInt16 nPgNum) override;
 
-    SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
+    SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, bool bOnlyDuplicatePages=false, bool bUndo=true );
     void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
@@ -459,7 +459,7 @@ public:
                                 sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                                 sal_uInt16 nDestPos=0xFFFF,
                                 bool bMergeMasterPages = false, bool bAllMasterPages = false,
-                                bool bUndo = true, bool bTreadSourceAsConst = false) SAL_OVERRIDE;
+                                bool bUndo = true, bool bTreadSourceAsConst = false) override;
 
     ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     SAL_DLLPRIVATE void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
@@ -591,7 +591,7 @@ public:
     SAL_DLLPRIVATE bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     SAL_DLLPRIVATE void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
 private:
     /** This member stores the printer independent layout mode.  Please
@@ -662,9 +662,9 @@ private:
         bool bIsPageBack,
         bool bIsPageObj);
 
-    SAL_DLLPRIVATE virtual void PageListChanged() SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void MasterPageListChanged() SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void PageListChanged() override;
+    SAL_DLLPRIVATE virtual void MasterPageListChanged() override;
+    SAL_DLLPRIVATE virtual ImageMap* GetImageMapForObject(SdrObject* pObj) override;
 };
 
 namespace sd

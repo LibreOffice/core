@@ -58,9 +58,9 @@ public:
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
                                           Class *& rpObj);          \
-    virtual sal_Int32  GetClassId() const SAL_OVERRIDE;              \
-    virtual void    Load( SvPersistStream & ) SAL_OVERRIDE;          \
-    virtual void    Save( SvPersistStream & ) SAL_OVERRIDE;
+    virtual sal_Int32  GetClassId() const override;              \
+    virtual void    Load( SvPersistStream & ) override;          \
+    virtual void    Save( SvPersistStream & ) override;
 
 #define PRV_SV_IMPL_PERSIST( Class )                                \
     void *          Class::CreateInstance( SvPersistBase ** ppBase )\
@@ -142,17 +142,17 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     sal_uIntPtr         nStartIdx;
     const SvPersistStream * pRefStm;
 
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64  SeekPos(sal_uInt64 nPos) SAL_OVERRIDE;
-    virtual void        FlushData() SAL_OVERRIDE;
+    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) override;
+    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) override;
+    virtual sal_uInt64  SeekPos(sal_uInt64 nPos) override;
+    virtual void        FlushData() override;
 
 protected:
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
     sal_uInt32          ReadObj( SvPersistBase * & rpObj, bool bRegister );
 
 public:
-    virtual void        ResetError() SAL_OVERRIDE;
+    virtual void        ResetError() override;
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          sal_uInt32 nStartIdx = 1 );

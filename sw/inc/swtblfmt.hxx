@@ -42,7 +42,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
 
-    virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
 class SwTableLineFormat : public SwFrameFormat
@@ -64,7 +64,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
 
-    virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
 class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
@@ -82,14 +82,14 @@ protected:
     {}
 
    // For recognition of changes (especially TableBoxAttribute).
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFormat)
 
-    virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
 #endif

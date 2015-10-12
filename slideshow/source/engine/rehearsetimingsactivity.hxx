@@ -72,19 +72,19 @@ public:
     bool hasBeenClicked() const;
 
     // ViewEventHandler interface
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewsChanged() SAL_OVERRIDE;
+    virtual void viewAdded( const UnoViewSharedPtr& rView ) override;
+    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override;
+    virtual void viewChanged( const UnoViewSharedPtr& rView ) override;
+    virtual void viewsChanged() override;
 
     // Disposable:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     // Activity:
-    virtual double calcTimeLag() const SAL_OVERRIDE;
-    virtual bool perform() SAL_OVERRIDE;
-    virtual bool isActive() const SAL_OVERRIDE;
-    virtual void dequeued() SAL_OVERRIDE;
-    virtual void end() SAL_OVERRIDE;
+    virtual double calcTimeLag() const override;
+    virtual bool perform() override;
+    virtual bool isActive() const override;
+    virtual void dequeued() override;
+    virtual void end() override;
 
 private:
     class WakeupEvent;

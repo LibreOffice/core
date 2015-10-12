@@ -85,7 +85,7 @@ private:
     void operator =(Options &) = delete;
 
 protected:
-    virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) SAL_OVERRIDE;
+    virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) override;
 };
 
 } }

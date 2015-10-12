@@ -61,27 +61,27 @@ class XResultSet_impl : public Notifier,
 
         virtual ~XResultSet_impl();
 
-        virtual ContentEventNotifier*        cDEL() SAL_OVERRIDE
+        virtual ContentEventNotifier*        cDEL() override
         {
             return 0;
         }
 
-        virtual ContentEventNotifier*        cEXC( const OUString& ) SAL_OVERRIDE
+        virtual ContentEventNotifier*        cEXC( const OUString& ) override
         {
             return 0;
         }
 
-        virtual ContentEventNotifier*          cCEL() SAL_OVERRIDE
+        virtual ContentEventNotifier*          cCEL() override
         {
             return 0;
         }
 
-        virtual PropertySetInfoChangeNotifier* cPSL() SAL_OVERRIDE
+        virtual PropertySetInfoChangeNotifier* cPSL() override
         {
             return 0;
         }
 
-        virtual PropertyChangeNotifier*        cPCL() SAL_OVERRIDE
+        virtual PropertyChangeNotifier*        cPCL() override
         {
             return 0;
         }
@@ -93,22 +93,22 @@ class XResultSet_impl : public Notifier,
         virtual void SAL_CALL
         disposing(
             const com::sun::star::lang::EventObject& Source )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XComponent
         virtual void SAL_CALL
         dispose(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addEventListener(
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XRow
@@ -116,7 +116,7 @@ class XResultSet_impl : public Notifier,
         wasNull(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
@@ -129,7 +129,7 @@ class XResultSet_impl : public Notifier,
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getString( columnIndex );
@@ -141,7 +141,7 @@ class XResultSet_impl : public Notifier,
         getBoolean(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
@@ -153,7 +153,7 @@ class XResultSet_impl : public Notifier,
         getByte(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getByte( columnIndex );
@@ -166,7 +166,7 @@ class XResultSet_impl : public Notifier,
             sal_Int32 columnIndex )
             throw(
                 com::sun::star::sdbc::SQLException,
-                com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getShort( columnIndex );
@@ -178,7 +178,7 @@ class XResultSet_impl : public Notifier,
         getInt(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getInt( columnIndex );
@@ -190,7 +190,7 @@ class XResultSet_impl : public Notifier,
         getLong(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getLong( columnIndex );
@@ -202,7 +202,7 @@ class XResultSet_impl : public Notifier,
         getFloat(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
@@ -214,7 +214,7 @@ class XResultSet_impl : public Notifier,
         getDouble(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
@@ -226,7 +226,7 @@ class XResultSet_impl : public Notifier,
         getBytes(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
@@ -238,7 +238,7 @@ class XResultSet_impl : public Notifier,
         getDate(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDate( columnIndex );
@@ -250,7 +250,7 @@ class XResultSet_impl : public Notifier,
         getTime(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTime( columnIndex );
@@ -262,7 +262,7 @@ class XResultSet_impl : public Notifier,
         getTimestamp(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
@@ -274,7 +274,7 @@ class XResultSet_impl : public Notifier,
         getBinaryStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
@@ -286,7 +286,7 @@ class XResultSet_impl : public Notifier,
         getCharacterStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
@@ -299,7 +299,7 @@ class XResultSet_impl : public Notifier,
             sal_Int32 columnIndex,
             const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
@@ -311,7 +311,7 @@ class XResultSet_impl : public Notifier,
         getRef(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getRef( columnIndex );
@@ -323,7 +323,7 @@ class XResultSet_impl : public Notifier,
         getBlob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
@@ -335,7 +335,7 @@ class XResultSet_impl : public Notifier,
         getClob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getClob( columnIndex );
@@ -347,7 +347,7 @@ class XResultSet_impl : public Notifier,
         getArray(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getArray( columnIndex );
@@ -362,110 +362,110 @@ class XResultSet_impl : public Notifier,
         next(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isBeforeFirst(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isAfterLast(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         beforeFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         afterLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         first(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         last(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         getRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         absolute(
             sal_Int32 row )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         relative(
             sal_Int32 rows )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         previous(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         refreshRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowUpdated(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowInserted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowDeleted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         virtual  com::sun::star::uno::Reference<  com::sun::star::uno::XInterface > SAL_CALL
         getStatement(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // XDynamicResultSet
@@ -474,25 +474,25 @@ class XResultSet_impl : public Notifier,
         getStaticResultSet(
             void )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         setListener(
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XDynamicResultSetListener >& Listener )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         connectToCache( const com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > & xCache )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
                    com::sun::star::ucb::AlreadyInitializedException,
                    com::sun::star::ucb::ServiceNotFoundException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int16 SAL_CALL
         getCapabilities()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XCloseable
@@ -501,37 +501,37 @@ class XResultSet_impl : public Notifier,
         close(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XContentAccess
 
         virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
         queryContent(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XResultSetMetaDataSupplier
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
         getMetaData(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // XPropertySet
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setPropertyValue(
             const OUString& aPropertyName,
@@ -540,14 +540,14 @@ class XResultSet_impl : public Notifier,
                    com::sun::star::beans::PropertyVetoException,
                    com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addPropertyChangeListener(
@@ -555,7 +555,7 @@ class XResultSet_impl : public Notifier,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
@@ -563,7 +563,7 @@ class XResultSet_impl : public Notifier,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
@@ -571,14 +571,14 @@ class XResultSet_impl : public Notifier,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
     private:
 

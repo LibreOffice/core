@@ -54,29 +54,29 @@ public:
         const vcl::Window* pViewShellWindow);
     virtual ~FullScreenPane() throw();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     //----- XPane -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setAccessible (
         const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
 
 protected:
     virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
         CreateCanvas()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

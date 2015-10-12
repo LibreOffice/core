@@ -127,15 +127,15 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 public:
     SvxSwPosSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxSwPosSizeTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
 
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
 
     void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
 

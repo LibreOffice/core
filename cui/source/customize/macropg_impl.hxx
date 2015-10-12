@@ -50,7 +50,7 @@ private:
 public:
     AssignComponentDialog( vcl::Window * pParent, const OUString& rURL );
     virtual ~AssignComponentDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString getURL() const
         { return maURL; }

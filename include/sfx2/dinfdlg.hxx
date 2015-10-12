@@ -168,10 +168,10 @@ public:
                         GetCmisProperties() const { return m_aCmisProperties;}
 
     void        SetCmisProperties(const ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >& cmisProps );
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -215,10 +215,10 @@ private:
 
 protected:
     virtual ~SfxDocumentPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
 
 public:
     SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
@@ -240,10 +240,10 @@ private:
 
 protected:
     virtual ~SfxDocumentDescPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* ) override;
+    virtual void            Reset( const SfxItemSet* ) override;
 
 public:
     SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
@@ -257,7 +257,7 @@ class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 private:
     sal_uInt16 m_nDocInfoId;
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) SAL_OVERRIDE;
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) override;
 
 public:
     SfxDocumentInfoDialog( vcl::Window* pParent, const SfxItemSet& );
@@ -323,7 +323,7 @@ class CustomPropertiesDurationField : public Edit
     CustomPropertyLine*             m_pLine;
     com::sun::star::util::Duration  m_aDuration;
 protected:
-    virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
+    virtual void    RequestHelp(const HelpEvent& rEvt) override;
 public:
     CustomPropertiesDurationField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
 
@@ -365,9 +365,9 @@ private:
 public:
     CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
     virtual ~CustomPropertiesYesNoButton();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
 
     inline void     CheckYes() { m_aYesButton->Check(); }
     inline void     CheckNo() { m_aNoButton->Check(); }
@@ -444,7 +444,7 @@ public:
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
     virtual ~CustomPropertiesWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetVisibleLineCount() const;
@@ -480,7 +480,7 @@ private:
 public:
     CustomPropertiesControl(vcl::Window* pParent);
     virtual ~CustomPropertiesControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
@@ -490,7 +490,7 @@ public:
                     GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
     void    Init(VclBuilderContainer& rParent);
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 };
 
 // class SfxCustomPropertiesPage -----------------------------------------
@@ -506,11 +506,11 @@ private:
 
 protected:
     virtual ~SfxCustomPropertiesPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
 
 public:
     SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
@@ -628,9 +628,9 @@ private:
     using TabPage::DeactivatePage;
 
 protected:
-    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) override;
+    virtual void        Reset( const SfxItemSet* ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );

@@ -81,15 +81,15 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(css::uno::RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) throw(Exception, RuntimeException, std::exception) override;
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) override;
 };
 
 

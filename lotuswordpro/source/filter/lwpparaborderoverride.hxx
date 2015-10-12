@@ -72,7 +72,7 @@ public:
     LwpParaBorderOverride();
     virtual ~LwpParaBorderOverride();
 
-    virtual LwpParaBorderOverride* clone() const SAL_OVERRIDE;
+    virtual LwpParaBorderOverride* clone() const override;
 
     enum BorderWidthType
     {
@@ -82,7 +82,7 @@ public:
         PB_CUSTOMWIDTH  = 3         /* Border width is specified explicitly */
     };
 public:
-    virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE;
+    virtual void Read(LwpObjectStream *pStrm) override;
 
     LwpShadow*  GetShadow(){ return m_pShadow; }
     LwpBorderStuff* GetBorderStuff(){ return m_pBorderStuff; }

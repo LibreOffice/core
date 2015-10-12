@@ -440,16 +440,16 @@ public:
 
     MenuBar& operator =( const MenuBar& rMenu );
 
-    virtual bool IsMenuBar() const SAL_OVERRIDE { return true; }
+    virtual bool IsMenuBar() const override { return true; }
 
     /// Close the 'pStartedFrom' menu window.
-    virtual void ClosePopup(Menu* pMenu) SAL_OVERRIDE;
+    virtual void ClosePopup(Menu* pMenu) override;
 
     /// Deactivate the MenuBarWindow.
-    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId) SAL_OVERRIDE;
+    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId) override;
 
     /// Forward the KeyInput call to the MenuBar.
-    virtual void MenuBarKeyInput(const KeyEvent& rEvent) SAL_OVERRIDE;
+    virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
 
     void ShowCloseButton( bool bShow = true );
     bool HasCloseButton() const { return mbCloseBtnVisible; }
@@ -457,7 +457,7 @@ public:
     bool HasHideButton() const { return mbHideBtnVisible; }
     void ShowButtons( bool bClose, bool bFloat, bool bHide );
 
-    virtual void SelectItem(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void SelectItem(sal_uInt16 nId) override;
     bool HandleMenuActivateEvent(Menu *pMenu) const;
     bool HandleMenuDeActivateEvent(Menu *pMenu) const;
     bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
@@ -524,10 +524,10 @@ public:
     explicit PopupMenu( const ResId& );
     virtual ~PopupMenu();
 
-    virtual bool IsMenuBar() const SAL_OVERRIDE { return false; }
+    virtual bool IsMenuBar() const override { return false; }
 
     /// Close the 'pStartedFrom' menu window.
-    virtual void ClosePopup(Menu* pMenu) SAL_OVERRIDE;
+    virtual void ClosePopup(Menu* pMenu) override;
 
     void SetText( const OUString& rTitle )
     {
@@ -539,7 +539,7 @@ public:
 
     // Fuer das TestTool
     void EndExecute( sal_uInt16 nSelect = 0 );
-    virtual void SelectItem(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
     static bool IsInExecute();

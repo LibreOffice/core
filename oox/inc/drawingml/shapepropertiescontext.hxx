@@ -30,7 +30,7 @@ class ShapePropertiesContext : public ::oox::core::ContextHandler2
 public:
     ShapePropertiesContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rShape );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     Shape&              mrShape;

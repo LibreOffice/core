@@ -199,28 +199,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override;
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                uno::RuntimeException, std::exception) override;
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
 };
 
@@ -245,28 +245,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override;
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                uno::RuntimeException, std::exception) override;
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
 };
 
@@ -377,7 +377,7 @@ public:
     }
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
 
 };
 
@@ -1617,7 +1617,7 @@ public:
     void    Invalidate();
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
 };
 
 void SwXDocumentIndexMark::Impl::Invalidate()

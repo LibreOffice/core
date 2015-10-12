@@ -44,24 +44,24 @@ public:
     void DrawNotifyUndoHdl();
 
     //IDocumentDrawModelAccess
-    virtual const SwDrawModel* GetDrawModel() const SAL_OVERRIDE;
-    virtual SwDrawModel* GetDrawModel() SAL_OVERRIDE;
-    virtual SwDrawModel* _MakeDrawModel() SAL_OVERRIDE;
-    virtual SwDrawModel* GetOrCreateDrawModel() SAL_OVERRIDE;
-    virtual SdrLayerID GetHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetControlsId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleControlsId() const SAL_OVERRIDE;
+    virtual const SwDrawModel* GetDrawModel() const override;
+    virtual SwDrawModel* GetDrawModel() override;
+    virtual SwDrawModel* _MakeDrawModel() override;
+    virtual SwDrawModel* GetOrCreateDrawModel() override;
+    virtual SdrLayerID GetHeavenId() const override;
+    virtual SdrLayerID GetHellId() const override;
+    virtual SdrLayerID GetControlsId() const override;
+    virtual SdrLayerID GetInvisibleHeavenId() const override;
+    virtual SdrLayerID GetInvisibleHellId() const override;
+    virtual SdrLayerID GetInvisibleControlsId() const override;
 
-    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) SAL_OVERRIDE;
+    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) override;
 
-    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const SAL_OVERRIDE;
+    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const override;
 
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) override;
 
-    virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) SAL_OVERRIDE;
+    virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) override;
 
     virtual ~DocumentDrawModelManager() {}
 

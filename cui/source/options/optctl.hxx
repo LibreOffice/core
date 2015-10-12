@@ -44,10 +44,10 @@ private:
 public:
     SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxCTLOptionsPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX

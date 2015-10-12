@@ -41,7 +41,7 @@ public:
     virtual ~PresentationViewShellBase();
 
 protected:
-    virtual void InitializeFramework() SAL_OVERRIDE;
+    virtual void InitializeFramework() override;
 };
 
 } // end of namespace sd

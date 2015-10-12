@@ -47,14 +47,14 @@ public:
     void                    InsertValue( sal_uInt16 nValue, const OUString &rText );
     void                    RemoveValue( sal_uInt16 nValue );
 
-    sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const SAL_OVERRIDE;
+    sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const override;
 
-    virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
-    virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE;
-    virtual bool        IsEnabled( sal_uInt16 ) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetValueCount() const override;
+    virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const override;
+    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override;
+    virtual bool        IsEnabled( sal_uInt16 ) const override;
     void                    DisableValue( sal_uInt16 );
 };
 

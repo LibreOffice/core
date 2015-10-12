@@ -59,7 +59,7 @@ public:
         ENSURE_OR_THROW( mpAnimation, "Invalid animation" );
     }
 
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         mbIsActive = false;
         mpAnimation.reset();
@@ -71,12 +71,12 @@ public:
         mpEndEvent.reset();
     }
 
-    virtual double calcTimeLag() const SAL_OVERRIDE
+    virtual double calcTimeLag() const override
     {
         return 0.0;
     }
 
-    virtual bool perform() SAL_OVERRIDE
+    virtual bool perform() override
     {
         if (! isActive())
             return false;
@@ -95,22 +95,22 @@ public:
         return false; // don't reinsert
     }
 
-    virtual bool isActive() const SAL_OVERRIDE
+    virtual bool isActive() const override
     {
         return mbIsActive;
     }
 
-    virtual void dequeued() SAL_OVERRIDE
+    virtual void dequeued() override
     {
     }
 
-    virtual void end() SAL_OVERRIDE
+    virtual void end() override
     {
         perform();
     }
 
     virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
-                             const ShapeAttributeLayerSharedPtr&    rAttrLayer ) SAL_OVERRIDE
+                             const ShapeAttributeLayerSharedPtr&    rAttrLayer ) override
     {
         ENSURE_OR_THROW( rShape, "Invalid shape" );
         ENSURE_OR_THROW( rAttrLayer, "Invalid attribute layer" );

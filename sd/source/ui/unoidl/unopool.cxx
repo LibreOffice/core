@@ -50,7 +50,7 @@ public:
 
 protected:
     virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue )
-        throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException, std::exception ) override;
 
 private:
     SdDrawDocument* mpDrawModel;

@@ -75,8 +75,8 @@ class OKActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListene
 public:
     explicit OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){}
 
-    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) override;
 private:
 
     InformationDialog& mrInformationDialog;

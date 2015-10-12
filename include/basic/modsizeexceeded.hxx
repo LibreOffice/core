@@ -35,8 +35,8 @@ class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com
 
     // UNO interface
     public:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE { return m_lContinuations; }
-    com::sun::star::uno::Any SAL_CALL getRequest() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override { return m_lContinuations; }
+    com::sun::star::uno::Any SAL_CALL getRequest() throw( com::sun::star::uno::RuntimeException, std::exception ) override
     {
         return m_aRequest;
     }

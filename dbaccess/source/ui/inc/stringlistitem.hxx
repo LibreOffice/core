@@ -40,8 +40,8 @@ public:
     OStringListItem(sal_Int16 nWhich, const css::uno::Sequence< OUString >& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
-    virtual bool             operator==(const SfxPoolItem& _rItem) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const SAL_OVERRIDE;
+    virtual bool             operator==(const SfxPoolItem& _rItem) const override;
+    virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const override;
 
     css::uno::Sequence< OUString >  getList() const { return m_aList; }
 };

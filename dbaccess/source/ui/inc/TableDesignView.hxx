@@ -39,14 +39,14 @@ namespace dbaui
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTableBorderWindow(vcl::Window* pParent);
         virtual ~OTableBorderWindow();
         // Window overrides
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void Resize() override;
+        virtual void GetFocus() override;
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
@@ -70,18 +70,18 @@ namespace dbaui
     protected:
 
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
 
     public:
         OTableDesignView(   vcl::Window* pParent,
                             const css::uno::Reference< css::uno::XComponentContext >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void            GetFocus() SAL_OVERRIDE;
+        virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void            GetFocus() override;
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
@@ -90,17 +90,17 @@ namespace dbaui
         css::lang::Locale      getLocale() const { return m_aLocale;}
 
         // IClipboardTest
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual bool isPasteAllowed() override;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
 
         // set the view readonly or not
         void setReadOnly(bool _bReadOnly);
 
-        virtual void initialize() SAL_OVERRIDE;
+        virtual void initialize() override;
         void reSync(); // resync window data with realdata
     };
 }

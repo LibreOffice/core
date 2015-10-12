@@ -755,7 +755,7 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     private:
         VclPtr<SfxPopupWindow> m_pCallee;

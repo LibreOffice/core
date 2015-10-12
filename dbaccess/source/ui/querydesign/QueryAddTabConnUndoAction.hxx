@@ -31,8 +31,8 @@ namespace dbaui
     public:
         explicit OQueryAddTabConnUndoAction(OQueryTableView* pOwner);
 
-        virtual void Undo() SAL_OVERRIDE;
-        virtual void Redo() SAL_OVERRIDE;
+        virtual void Undo() override;
+        virtual void Redo() override;
     };
 
     // OQueryDelTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
@@ -42,8 +42,8 @@ namespace dbaui
     public:
         explicit OQueryDelTabConnUndoAction(OQueryTableView* pOwner);
 
-        virtual void Undo() SAL_OVERRIDE;
-        virtual void Redo() SAL_OVERRIDE;
+        virtual void Undo() override;
+        virtual void Redo() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYADDTABCONNUNDOACTION_HXX

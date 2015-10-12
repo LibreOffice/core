@@ -317,7 +317,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                                  { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
     // for readonly switching
-    SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     SAL_DLLPRIVATE void          _CheckReadonlyState();
     SAL_DLLPRIVATE void          _CheckReadonlySelection();
 
@@ -332,7 +332,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          ShowAtResize();
 
-    SAL_DLLPRIVATE virtual void  Move() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void  Move() override;
 
 public: // #i123922# Needs to be called from a 2nd place now as a helper method
     SAL_DLLPRIVATE bool          InsertGraphicDlg( SfxRequest& );
@@ -352,10 +352,10 @@ protected:
 
     virtual void    SelectShell();
 
-    virtual void    Activate(bool) SAL_OVERRIDE;
-    virtual void    Deactivate(bool) SAL_OVERRIDE;
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
+    virtual void    Activate(bool) override;
+    virtual void    Deactivate(bool) override;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;
+    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
     const SwFrameFormat* GetLastTableFrameFormat() const {return m_pLastTableFormat;}
     void            SetLastTableFrameFormat(const SwFrameFormat* pSet) {m_pLastTableFormat = pSet;}
@@ -378,23 +378,23 @@ public:
     SfxDispatcher   &GetDispatcher();
 
     void                    GotFocus() const;
-    virtual SdrView*        GetDrawView() const SAL_OVERRIDE;
-    virtual bool            HasUIFeature( sal_uInt32 nFeature ) SAL_OVERRIDE;
-    virtual void            ShowCursor( bool bOn = true ) SAL_OVERRIDE;
-    virtual ErrCode         DoVerb( long nVerb ) SAL_OVERRIDE;
+    virtual SdrView*        GetDrawView() const override;
+    virtual bool            HasUIFeature( sal_uInt32 nFeature ) override;
+    virtual void            ShowCursor( bool bOn = true ) override;
+    virtual ErrCode         DoVerb( long nVerb ) override;
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
-                                        SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
+                                        SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) override;
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
 
     OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
-    virtual bool            HasSelection( bool bText ) const SAL_OVERRIDE;
-    virtual OUString        GetSelectionText( bool bCompleteWords = false ) SAL_OVERRIDE;
-    virtual bool            PrepareClose( bool bUI = true ) SAL_OVERRIDE;
-    virtual void            MarginChanged() SAL_OVERRIDE;
+    virtual bool            HasSelection( bool bText ) const override;
+    virtual OUString        GetSelectionText( bool bCompleteWords = false ) override;
+    virtual bool            PrepareClose( bool bUI = true ) override;
+    virtual void            MarginChanged() override;
 
     // replace word/selection with text from the thesaurus
     // (this code has special handling for "in word" character)
@@ -465,7 +465,7 @@ public:
     void            InsFrmMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, bool bViewOnly = false);
-    virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) SAL_OVERRIDE;
+    virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) override;
 
     void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
 
@@ -561,16 +561,16 @@ public:
                  SfxShell       *GetCurShell()  { return m_pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
-    inline virtual       FmFormShell    *GetFormShell()       SAL_OVERRIDE { return m_pFormShell; }
-    inline virtual const FmFormShell    *GetFormShell() const SAL_OVERRIDE { return m_pFormShell; }
+    inline virtual       FmFormShell    *GetFormShell()       override { return m_pFormShell; }
+    inline virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }
 
-    virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
-    virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;
-    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) SAL_OVERRIDE;
-    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) SAL_OVERRIDE;
+    virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
+    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) override;
 
     void SetCrsrAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCrsr = bFlag, m_bCenterCrsr = bCenter; }
@@ -634,10 +634,10 @@ public:
     void SetAnnotationMode(bool bMode);
 
     // methods for printing
-    SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) override;
+    SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const override;
     SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window* pParent,
-                                                    const SfxItemSet& rSet) SAL_OVERRIDE;
+                                                    const SfxItemSet& rSet) override;
     static SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
 };
 

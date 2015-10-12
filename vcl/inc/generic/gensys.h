@@ -41,7 +41,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources) SAL_OVERRIDE;
+                                      int nDefaultButton, bool bUseResources) override;
 
 #if !defined(ANDROID) && !defined(IOS)
     // Simple helpers for X11 WM_CLASS hints

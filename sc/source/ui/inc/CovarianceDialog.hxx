@@ -20,12 +20,12 @@ public:
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
         vcl::Window* pParent, ScViewData* pViewData);
 
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
 protected:
-    virtual const OUString getLabel() SAL_OVERRIDE;
-    virtual const OUString getTemplate() SAL_OVERRIDE;
-    virtual sal_Int16 GetUndoNameId() SAL_OVERRIDE;
+    virtual const OUString getLabel() override;
+    virtual const OUString getTemplate() override;
+    virtual sal_Int16 GetUndoNameId() override;
 };
 
 #endif

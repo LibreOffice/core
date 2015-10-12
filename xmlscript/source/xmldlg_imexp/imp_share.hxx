@@ -183,20 +183,20 @@ public:
     virtual void SAL_CALL startDocument(
         css::uno::Reference< css::xml::input::XNamespaceMapping >
         const & xNamespaceMapping )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDocumentLocator(
         css::uno::Reference< css::xml::sax::XLocator > const & xLocator )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 };
 
 class ElementBase
@@ -219,28 +219,28 @@ public:
 
     // XElement
     virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL getParent()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getLocalName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getUid()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::xml::input::XAttributes >
-    SAL_CALL getAttributes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_CALL getAttributes() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL characters( OUString const & rChars )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         OUString const & Target, OUString const & Data )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 };
 
 class StylesElement
@@ -251,7 +251,7 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline StylesElement(
         OUString const & rLocalName,
@@ -287,9 +287,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     bool importTextColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
@@ -340,7 +340,7 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline MenuPopupElement(
         OUString const & rLocalName,
@@ -523,9 +523,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline WindowElement(
         OUString const & rLocalName,
@@ -540,7 +540,7 @@ class EventElement
 {
 public:
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline EventElement(
         sal_Int32 nUid, OUString const & rLocalName,
@@ -558,7 +558,7 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     BulletinBoardElement(
         OUString const & rLocalName,
@@ -574,9 +574,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline ButtonElement(
         OUString const & rLocalName,
@@ -594,9 +594,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline CheckBoxElement(
         OUString const & rLocalName,
@@ -615,9 +615,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline ComboBoxElement(
         OUString const & rLocalName,
@@ -636,9 +636,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline MenuListElement(
         OUString const & rLocalName,
@@ -656,7 +656,7 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline RadioElement(
         OUString const & rLocalName,
@@ -675,9 +675,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline RadioGroupElement(
         OUString const & rLocalName,
@@ -697,9 +697,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline TitledBoxElement(
         OUString const & rLocalName,
@@ -717,9 +717,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline TextElement(
         OUString const & rLocalName,
@@ -736,9 +736,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline FixedHyperLinkElement(
         OUString const & rLocalName,
@@ -756,9 +756,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline TextFieldElement(
         OUString const & rLocalName,
@@ -776,9 +776,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline ImageControlElement(
         OUString const & rLocalName,
@@ -796,9 +796,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline FileControlElement(
         OUString const & rLocalName,
@@ -816,9 +816,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline TreeControlElement(
         OUString const & rLocalName,
@@ -836,9 +836,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline CurrencyFieldElement(
         OUString const & rLocalName,
@@ -856,9 +856,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline DateFieldElement(
         OUString const & rLocalName,
@@ -876,9 +876,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline NumericFieldElement(
         OUString const & rLocalName,
@@ -896,9 +896,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline TimeFieldElement(
         OUString const & rLocalName,
@@ -916,9 +916,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline PatternFieldElement(
         OUString const & rLocalName,
@@ -936,9 +936,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline FormattedFieldElement(
         OUString const & rLocalName,
@@ -956,9 +956,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline FixedLineElement(
         OUString const & rLocalName,
@@ -976,9 +976,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline ScrollBarElement(
         OUString const & rLocalName,
@@ -996,9 +996,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline SpinButtonElement(
         OUString const & rLocalName,
@@ -1016,9 +1016,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline MultiPage(
         OUString const & rLocalName,
@@ -1041,9 +1041,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline Frame(
         OUString const & rLocalName,
@@ -1063,9 +1063,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline Page(
         OUString const & rLocalName,
@@ -1087,9 +1087,9 @@ public:
     SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement()
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     inline ProgressBarElement(
         OUString const & rLocalName,

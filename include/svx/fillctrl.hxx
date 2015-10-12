@@ -69,9 +69,9 @@ public:
     SvxFillToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~SvxFillToolBoxControl();
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     void Update();
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
 class SAL_WARN_UNUSED FillControl : public vcl::Window
@@ -85,14 +85,14 @@ private:
 
     void SetOptimalSize();
 
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
 public:
     FillControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~FillControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 };
 
 #endif // INCLUDED_SVX_FILLCTRL_HXX

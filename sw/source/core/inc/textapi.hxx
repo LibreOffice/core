@@ -35,9 +35,9 @@ class SwTextAPIEditSource : public SvxEditSource
 {
     SwTextAPIEditSource_Impl* pImpl;
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
     explicit            SwTextAPIEditSource( const SwTextAPIEditSource& rSource );
 
 public:

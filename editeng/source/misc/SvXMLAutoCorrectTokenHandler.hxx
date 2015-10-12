@@ -40,12 +40,12 @@ public:
 
     //XFastTokenHandler
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // Much faster direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const SAL_OVERRIDE;
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
 };
 
 #endif // EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTTOKENHANDLER_HXX

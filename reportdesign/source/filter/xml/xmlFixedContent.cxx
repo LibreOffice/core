@@ -59,8 +59,8 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
 
-    virtual void InsertControlCharacter(sal_Int16   _nControl) SAL_OVERRIDE;
-    virtual void InsertString(const OUString& _sString) SAL_OVERRIDE;
+    virtual void InsertControlCharacter(sal_Int16   _nControl) override;
+    virtual void InsertString(const OUString& _sString) override;
 };
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,

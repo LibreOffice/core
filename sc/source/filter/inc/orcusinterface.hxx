@@ -50,10 +50,10 @@ class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_se
 public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
 
-    virtual void set_origin_date(int year, int month, int day) SAL_OVERRIDE;
+    virtual void set_origin_date(int year, int month, int day) override;
 
-    virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t grammar) SAL_OVERRIDE;
-    virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const SAL_OVERRIDE;
+    virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t grammar) override;
+    virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const override;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
@@ -64,21 +64,21 @@ class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_str
 public:
     ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 
-    virtual size_t append(const char* s, size_t n) SAL_OVERRIDE;
-    virtual size_t add(const char* s, size_t n) SAL_OVERRIDE;
+    virtual size_t append(const char* s, size_t n) override;
+    virtual size_t add(const char* s, size_t n) override;
 
-    virtual void set_segment_bold(bool b) SAL_OVERRIDE;
-    virtual void set_segment_italic(bool b) SAL_OVERRIDE;
-    virtual void set_segment_font(size_t font_index) SAL_OVERRIDE;
-    virtual void set_segment_font_name(const char* s, size_t n) SAL_OVERRIDE;
-    virtual void set_segment_font_size(double point) SAL_OVERRIDE;
+    virtual void set_segment_bold(bool b) override;
+    virtual void set_segment_italic(bool b) override;
+    virtual void set_segment_font(size_t font_index) override;
+    virtual void set_segment_font_name(const char* s, size_t n) override;
+    virtual void set_segment_font_size(double point) override;
     virtual void set_segment_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
-    virtual void append_segment(const char* s, size_t n) SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t blue) override;
+    virtual void append_segment(const char* s, size_t n) override;
 
-    virtual size_t commit_segments() SAL_OVERRIDE;
+    virtual size_t commit_segments() override;
 };
 
 class ScOrcusConditionalFormat : public orcus::spreadsheet::iface::import_conditional_format
@@ -88,50 +88,50 @@ public:
     virtual ~ScOrcusConditionalFormat();
 
     virtual void set_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
 
-    virtual void set_formula(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_formula(const char* p, size_t n) override;
 
-    virtual void set_condition_type(orcus::spreadsheet::condition_type_t type) SAL_OVERRIDE;
+    virtual void set_condition_type(orcus::spreadsheet::condition_type_t type) override;
 
-    virtual void set_date(orcus::spreadsheet::condition_date_t date) SAL_OVERRIDE;
+    virtual void set_date(orcus::spreadsheet::condition_date_t date) override;
 
-    virtual void commit_condition() SAL_OVERRIDE;
+    virtual void commit_condition() override;
 
-    virtual void set_icon_name(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_icon_name(const char* p, size_t n) override;
 
-    virtual void set_databar_gradient(bool gradient) SAL_OVERRIDE;
+    virtual void set_databar_gradient(bool gradient) override;
 
-    virtual void set_databar_axis(orcus::spreadsheet::databar_axis_t axis) SAL_OVERRIDE;
+    virtual void set_databar_axis(orcus::spreadsheet::databar_axis_t axis) override;
 
     virtual void set_databar_color_positive(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
 
     virtual void set_databar_color_negative(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
 
-    virtual void set_min_databar_length(double length) SAL_OVERRIDE;
+    virtual void set_min_databar_length(double length) override;
 
-    virtual void set_max_databar_length(double length) SAL_OVERRIDE;
+    virtual void set_max_databar_length(double length) override;
 
-    virtual void set_show_value(bool show) SAL_OVERRIDE;
+    virtual void set_show_value(bool show) override;
 
-    virtual void set_iconset_reverse(bool reverse) SAL_OVERRIDE;
+    virtual void set_iconset_reverse(bool reverse) override;
 
-    virtual void set_xf_id(size_t xf) SAL_OVERRIDE;
+    virtual void set_xf_id(size_t xf) override;
 
-    virtual void set_operator(orcus::spreadsheet::condition_operator_t condition_type) SAL_OVERRIDE;
+    virtual void set_operator(orcus::spreadsheet::condition_operator_t condition_type) override;
 
-    virtual void set_type(orcus::spreadsheet::conditional_format_t type) SAL_OVERRIDE;
+    virtual void set_type(orcus::spreadsheet::conditional_format_t type) override;
 
-    virtual void commit_entry() SAL_OVERRIDE;
+    virtual void commit_entry() override;
 
-    virtual void set_range(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_range(const char* p, size_t n) override;
 
     virtual void set_range(orcus::spreadsheet::row_t row_start, orcus::spreadsheet::col_t col_start,
-            orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end) SAL_OVERRIDE;
+            orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end) override;
 
-    virtual void commit_format() SAL_OVERRIDE;
+    virtual void commit_format() override;
 
 private:
 
@@ -151,15 +151,15 @@ public:
 
     virtual ~ScOrcusAutoFilter();
 
-    virtual void set_range(const char* p_ref, size_t n_ref) SAL_OVERRIDE;
+    virtual void set_range(const char* p_ref, size_t n_ref) override;
 
-    virtual void set_column(orcus::spreadsheet::col_t col) SAL_OVERRIDE;
+    virtual void set_column(orcus::spreadsheet::col_t col) override;
 
-    virtual void append_column_match_value(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void append_column_match_value(const char* p, size_t n) override;
 
-    virtual void commit_column() SAL_OVERRIDE;
+    virtual void commit_column() override;
 
-    virtual void commit() SAL_OVERRIDE;
+    virtual void commit() override;
 
 private:
     ScDocument& mrDoc;
@@ -175,15 +175,15 @@ public:
     ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc);
     virtual ~ScOrcusSheetProperties();
 
-    virtual void set_column_width(orcus::spreadsheet::col_t col, double width, orcus::length_unit_t unit) SAL_OVERRIDE;
+    virtual void set_column_width(orcus::spreadsheet::col_t col, double width, orcus::length_unit_t unit) override;
 
-    virtual void set_column_hidden(orcus::spreadsheet::col_t col, bool hidden) SAL_OVERRIDE;
+    virtual void set_column_hidden(orcus::spreadsheet::col_t col, bool hidden) override;
 
-    virtual void set_row_height(orcus::spreadsheet::row_t row, double height, orcus::length_unit_t unit) SAL_OVERRIDE;
+    virtual void set_row_height(orcus::spreadsheet::row_t row, double height, orcus::length_unit_t unit) override;
 
-    virtual void set_row_hidden(orcus::spreadsheet::row_t row, bool hidden) SAL_OVERRIDE;
+    virtual void set_row_hidden(orcus::spreadsheet::row_t row, bool hidden) override;
 
-    virtual void set_merge_cell_range(const char* p_range, size_t n_range) SAL_OVERRIDE;
+    virtual void set_merge_cell_range(const char* p_range, size_t n_range) override;
 };
 
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
@@ -207,44 +207,44 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
-    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() SAL_OVERRIDE { return &maAutoFilter; }
-    virtual orcus::spreadsheet::iface::import_table* get_table() SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override { return &maAutoFilter; }
+    virtual orcus::spreadsheet::iface::import_table* get_table() override;
+    virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
+    virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
 
     // Orcus import interface
-    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) SAL_OVERRIDE;
-    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) SAL_OVERRIDE;
-    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value) SAL_OVERRIDE;
+    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) override;
+    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) override;
+    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) override;
+    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value) override;
     virtual void set_date_time(
-        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, int year, int month, int day, int hour, int minute, double second) SAL_OVERRIDE;
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, int year, int month, int day, int hour, int minute, double second) override;
 
-    virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index) SAL_OVERRIDE;
+    virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index) override;
     virtual void set_format(orcus::spreadsheet::row_t row_start, orcus::spreadsheet::col_t col_start,
-            orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end, size_t xf_index) SAL_OVERRIDE;
+            orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end, size_t xf_index) override;
 
-    virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double val) SAL_OVERRIDE;
-
-    virtual void set_shared_formula(
-        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
-        const char* p_formula, size_t n_formula) SAL_OVERRIDE;
+    virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) override;
+    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) override;
+    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double val) override;
 
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
-        const char* p_formula, size_t n_formula, const char* p_range, size_t n_range) SAL_OVERRIDE;
+        const char* p_formula, size_t n_formula) override;
 
-    virtual void set_shared_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) SAL_OVERRIDE;
+    virtual void set_shared_formula(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
+        const char* p_formula, size_t n_formula, const char* p_range, size_t n_range) override;
+
+    virtual void set_shared_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) override;
 
     virtual void set_array_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
-        const char* p, size_t n, orcus::spreadsheet::row_t array_rows, orcus::spreadsheet::col_t array_cols) SAL_OVERRIDE;
+        const char* p, size_t n, orcus::spreadsheet::row_t array_rows, orcus::spreadsheet::col_t array_cols) override;
 
     virtual void set_array_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
-        const char* p, size_t n, const char* p_range, size_t n_range) SAL_OVERRIDE;
+        const char* p, size_t n, const char* p_range, size_t n_range) override;
 
     SCTAB getIndex() const { return mnTab; }
 };
@@ -357,81 +357,81 @@ public:
 
     // font
 
-    virtual void set_font_count(size_t n) SAL_OVERRIDE;
-    virtual void set_font_bold(bool b) SAL_OVERRIDE;
-    virtual void set_font_italic(bool b) SAL_OVERRIDE;
-    virtual void set_font_name(const char* s, size_t n) SAL_OVERRIDE;
-    virtual void set_font_size(double point) SAL_OVERRIDE;
-    virtual void set_font_underline(orcus::spreadsheet::underline_t e) SAL_OVERRIDE;
+    virtual void set_font_count(size_t n) override;
+    virtual void set_font_bold(bool b) override;
+    virtual void set_font_italic(bool b) override;
+    virtual void set_font_name(const char* s, size_t n) override;
+    virtual void set_font_size(double point) override;
+    virtual void set_font_underline(orcus::spreadsheet::underline_t e) override;
     virtual void set_font_color( orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
-    virtual size_t commit_font() SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t blue) override;
+    virtual size_t commit_font() override;
 
     // fill
 
-    virtual void set_fill_count(size_t n) SAL_OVERRIDE;
-    virtual void set_fill_pattern_type(const char* s, size_t n) SAL_OVERRIDE;
-    virtual void set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
-    virtual void set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
-    virtual size_t commit_fill() SAL_OVERRIDE;
+    virtual void set_fill_count(size_t n) override;
+    virtual void set_fill_pattern_type(const char* s, size_t n) override;
+    virtual void set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
+    virtual void set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
+    virtual size_t commit_fill() override;
 
     // border
 
-    virtual void set_border_count(size_t n) SAL_OVERRIDE;
-    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n) SAL_OVERRIDE;
+    virtual void set_border_count(size_t n) override;
+    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n) override;
     virtual void set_border_color(orcus::spreadsheet::border_direction_t dir,
             orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
-    virtual size_t commit_border() SAL_OVERRIDE;
+            orcus::spreadsheet::color_elem_t blue) override;
+    virtual size_t commit_border() override;
 
     // cell protection
-    virtual void set_cell_hidden(bool b) SAL_OVERRIDE;
-    virtual void set_cell_locked(bool b) SAL_OVERRIDE;
-    virtual size_t commit_cell_protection() SAL_OVERRIDE;
+    virtual void set_cell_hidden(bool b) override;
+    virtual void set_cell_locked(bool b) override;
+    virtual size_t commit_cell_protection() override;
 
     // number format
-    virtual void set_number_format_count(size_t n) SAL_OVERRIDE;
-    virtual void set_number_format_identifier(size_t n) SAL_OVERRIDE;
-    virtual void set_number_format_code(const char* s, size_t n) SAL_OVERRIDE;
-    virtual size_t commit_number_format() SAL_OVERRIDE;
+    virtual void set_number_format_count(size_t n) override;
+    virtual void set_number_format_identifier(size_t n) override;
+    virtual void set_number_format_code(const char* s, size_t n) override;
+    virtual size_t commit_number_format() override;
 
     // cell style xf
 
-    virtual void set_cell_style_xf_count(size_t n) SAL_OVERRIDE;
-    virtual size_t commit_cell_style_xf() SAL_OVERRIDE;
+    virtual void set_cell_style_xf_count(size_t n) override;
+    virtual size_t commit_cell_style_xf() override;
 
     // cell xf
 
-    virtual void set_cell_xf_count(size_t n) SAL_OVERRIDE;
-    virtual size_t commit_cell_xf() SAL_OVERRIDE;
+    virtual void set_cell_xf_count(size_t n) override;
+    virtual size_t commit_cell_xf() override;
 
     // dxf
-    virtual void set_dxf_count(size_t count) SAL_OVERRIDE;
-    virtual size_t commit_dxf() SAL_OVERRIDE;
+    virtual void set_dxf_count(size_t count) override;
+    virtual size_t commit_dxf() override;
 
     // xf (cell format) - used both by cell xf and cell style xf.
 
-    virtual void set_xf_number_format(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_font(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_fill(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_border(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_protection(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_style_xf(size_t index) SAL_OVERRIDE;
-    virtual void set_xf_apply_alignment(bool b) SAL_OVERRIDE;
-    virtual void set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align) SAL_OVERRIDE;
-    virtual void set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align) SAL_OVERRIDE;
+    virtual void set_xf_number_format(size_t index) override;
+    virtual void set_xf_font(size_t index) override;
+    virtual void set_xf_fill(size_t index) override;
+    virtual void set_xf_border(size_t index) override;
+    virtual void set_xf_protection(size_t index) override;
+    virtual void set_xf_style_xf(size_t index) override;
+    virtual void set_xf_apply_alignment(bool b) override;
+    virtual void set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align) override;
+    virtual void set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align) override;
 
     // cell style entry
 
-    virtual void set_cell_style_count(size_t n) SAL_OVERRIDE;
-    virtual void set_cell_style_name(const char* s, size_t n) SAL_OVERRIDE;
-    virtual void set_cell_style_xf(size_t index) SAL_OVERRIDE;
-    virtual void set_cell_style_builtin(size_t index) SAL_OVERRIDE;
-    virtual size_t commit_cell_style() SAL_OVERRIDE;
+    virtual void set_cell_style_count(size_t n) override;
+    virtual void set_cell_style_name(const char* s, size_t n) override;
+    virtual void set_cell_style_xf(size_t index) override;
+    virtual void set_cell_style_builtin(size_t index) override;
+    virtual size_t commit_cell_style() override;
 };
 
 class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
@@ -465,13 +465,13 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 public:
     ScOrcusFactory(ScDocument& rDoc);
 
-    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length) SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length) SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index) SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings() SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() SAL_OVERRIDE;
-    virtual orcus::spreadsheet::iface::import_styles* get_styles() SAL_OVERRIDE;
-    virtual void finalize() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length) override;
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length) override;
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index) override;
+    virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings() override;
+    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() override;
+    virtual orcus::spreadsheet::iface::import_styles* get_styles() override;
+    virtual void finalize() override;
 
     size_t appendString(const OUString& rStr);
     size_t addString(const OUString& rStr);
@@ -497,33 +497,33 @@ public:
     ScOrcusTable(SCTAB nTab, ScDocument& rDoc);
     virtual ~ScOrcusTable();
 
-    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override;
 
-    virtual void set_identifier(size_t id) SAL_OVERRIDE;
+    virtual void set_identifier(size_t id) override;
 
-    virtual void set_range(const char* p_ref, size_t n_ref) SAL_OVERRIDE;
+    virtual void set_range(const char* p_ref, size_t n_ref) override;
 
-    virtual void set_totals_row_count(size_t row_count) SAL_OVERRIDE;
+    virtual void set_totals_row_count(size_t row_count) override;
 
-    virtual void set_name(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_name(const char* p, size_t n) override;
 
-    virtual void set_display_name(const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_display_name(const char* p, size_t n) override;
 
-    virtual void set_column_count(size_t n) SAL_OVERRIDE;
+    virtual void set_column_count(size_t n) override;
 
-    virtual void set_column_identifier(size_t id) SAL_OVERRIDE;
-    virtual void set_column_name(const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_column_totals_row_label(const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_column_totals_row_function(orcus::spreadsheet::totals_row_function_t func) SAL_OVERRIDE;
-    virtual void commit_column() SAL_OVERRIDE;
+    virtual void set_column_identifier(size_t id) override;
+    virtual void set_column_name(const char* p, size_t n) override;
+    virtual void set_column_totals_row_label(const char* p, size_t n) override;
+    virtual void set_column_totals_row_function(orcus::spreadsheet::totals_row_function_t func) override;
+    virtual void commit_column() override;
 
-    virtual void set_style_name(const char* p, size_t n) SAL_OVERRIDE;
-    virtual void set_style_show_first_column(bool b) SAL_OVERRIDE;
-    virtual void set_style_show_last_column(bool b) SAL_OVERRIDE;
-    virtual void set_style_show_row_stripes(bool b) SAL_OVERRIDE;
-    virtual void set_style_show_column_stripes(bool b) SAL_OVERRIDE;
+    virtual void set_style_name(const char* p, size_t n) override;
+    virtual void set_style_show_first_column(bool b) override;
+    virtual void set_style_show_last_column(bool b) override;
+    virtual void set_style_show_row_stripes(bool b) override;
+    virtual void set_style_show_column_stripes(bool b) override;
 
-    virtual void commit() SAL_OVERRIDE;
+    virtual void commit() override;
 };
 
 #endif

@@ -34,15 +34,15 @@ namespace dbaui
 
         VclPtr<OTableFieldControl>  m_pFieldControl;
     protected:
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
     public:
         OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar );
         virtual ~OFieldDescGenWin();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
         void Init();
 
         void DisplayData( OFieldDescription* pFieldDescr );
@@ -58,13 +58,13 @@ namespace dbaui
         OUString BoolStringUI(const OUString& rPersistentString) const;
 
         // IClipboardTest
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual bool isPasteAllowed() override;
 
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
 
         inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
     };

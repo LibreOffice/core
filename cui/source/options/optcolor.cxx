@@ -174,7 +174,7 @@ class ColorConfigWindow_Impl
 public:
     explicit ColorConfigWindow_Impl(vcl::Window* pParent);
     virtual ~ColorConfigWindow_Impl() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 public:
     void SetLinks (Link<Button*,void> const&, Link<ListBox&,void> const&, Link<Control&,void> const&);
@@ -269,11 +269,11 @@ private:
     void SetAppearance();
 
 private:
-    virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
+    virtual void Command (CommandEvent const& rCEvt) override;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
 
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 
     bool IsGroupVisible (Group) const;
 };
@@ -849,13 +849,13 @@ class ColorConfigCtrl_Impl : public VclVBox
     DECL_LINK_TYPED(ColorHdl, ListBox&, void);
     DECL_LINK_TYPED(ControlFocusHdl, Control&, void);
 
-    virtual bool PreNotify (NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
+    virtual bool PreNotify (NotifyEvent& rNEvt) override;
+    virtual void Command (CommandEvent const& rCEvt) override;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
 public:
     explicit ColorConfigCtrl_Impl(vcl::Window* pParent);
     virtual ~ColorConfigCtrl_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
         const OUString &rColorSetting, const OUString &rPreview);

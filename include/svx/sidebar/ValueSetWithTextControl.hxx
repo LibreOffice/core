@@ -79,7 +79,7 @@ public:
         const OUString& rItemText2,
         const OUString* pItemHelpText );
 
-    virtual void UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 
 private:
     struct ValueSetWithTextItem

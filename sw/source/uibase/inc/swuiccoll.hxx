@@ -48,9 +48,9 @@ class SwCondCollPage : public SfxTabPage
     bool                m_bNewTemplate;
 
     virtual ~SwCondCollPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK_TYPED( OnOffHdl, Button*, void );
     DECL_LINK_TYPED( AssignRemoveHdl, ListBox&, void);
@@ -72,8 +72,8 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return m_aPageRg; }
 
-    virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(      SfxItemSet *rSet) override;
+    virtual void Reset      (const SfxItemSet *rSet) override;
 
     void SetCollection( SwFormat* pFormat, bool bNew );
 };

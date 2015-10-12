@@ -127,21 +127,21 @@ namespace rptui
         OViewsWindow(OViewsWindow&) = delete;
         void operator =(OViewsWindow&) = delete;
     protected:
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
         // Window overrides
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-        virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
         void resize(const OSectionWindow& _rSectionWindow);
 
@@ -238,8 +238,8 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
-        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
+        virtual void markSection(const sal_uInt16 _nPos) override;
 
         /** align all marked objects in all sections
         */

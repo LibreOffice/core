@@ -32,8 +32,8 @@ public:
                 sal_uInt16          nRscId );
 
 protected:
-    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
-    virtual void                RefreshInputSet() SAL_OVERRIDE;
+    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
+    virtual void                RefreshInputSet() override;
 
 private:
     sal_uInt16 nDlgRsc;

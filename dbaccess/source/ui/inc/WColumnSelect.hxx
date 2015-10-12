@@ -73,14 +73,14 @@ namespace dbaui
                                     const ::comphelper::UStringMixEqual& _aCase);
 
     public:
-        virtual void            Reset ( ) SAL_OVERRIDE;
-        virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual bool            LeavePage() SAL_OVERRIDE;
-        virtual OUString        GetTitle() const SAL_OVERRIDE ;
+        virtual void            Reset ( ) override;
+        virtual void            ActivatePage() override;
+        virtual bool            LeavePage() override;
+        virtual OUString        GetTitle() const override ;
 
         OWizColumnSelect(vcl::Window* pParent);
         virtual ~OWizColumnSelect();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX

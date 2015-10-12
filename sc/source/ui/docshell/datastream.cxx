@@ -213,7 +213,7 @@ public:
     }
 
 private:
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         while (!isTerminateRequested())
         {

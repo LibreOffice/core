@@ -34,7 +34,7 @@ public:
     explicit BoxWipe( bool topCentered ) : m_topCentered(topCentered),
                                   m_unitRect( createUnitRect() )
         {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     const bool m_topCentered;
     const ::basegfx::B2DPolyPolygon m_unitRect;

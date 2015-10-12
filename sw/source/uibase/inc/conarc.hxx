@@ -31,11 +31,11 @@ public:
     ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual bool    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool    MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool    MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void    Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE; // activate function
-    virtual void    Deactivate() SAL_OVERRIDE;
+    virtual void    Activate(const sal_uInt16 nSlotId) override; // activate function
+    virtual void    Deactivate() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_CONARC_HXX

@@ -81,7 +81,7 @@ class SvtFileDialogURLSelector : public MenuButton
 {
 public:
     virtual ~SvtFileDialogURLSelector();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 private:
     VclPtr<SvtFileDialog>      m_pDlg;
     PopupMenu*          m_pMenu;
@@ -93,7 +93,7 @@ protected:
 
     SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
 
-    virtual void        Activate() SAL_OVERRIDE;
+    virtual void        Activate() override;
 };
 
 class SvtUpButton_Impl : public SvtFileDialogURLSelector
@@ -106,10 +106,10 @@ public:
     virtual ~SvtUpButton_Impl();
 
 protected:
-    virtual void        FillURLMenu( PopupMenu* _pMenu ) SAL_OVERRIDE;
-    virtual void        Select() SAL_OVERRIDE;
-    virtual void        Click() SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual void        FillURLMenu( PopupMenu* _pMenu ) override;
+    virtual void        Select() override;
+    virtual void        Click() override;
+    virtual Size        GetOptimalSize() const override;
 };
 
 typedef sal_uInt8 SvtFileDlgState;

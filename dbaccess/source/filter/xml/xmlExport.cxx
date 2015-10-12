@@ -178,7 +178,7 @@ namespace dbaxml
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
                 const ::std::vector< XMLPropertyState > * /*pProperties*/ ,
-                sal_uInt32 /*nIdx*/ ) const SAL_OVERRIDE
+                sal_uInt32 /*nIdx*/ ) const override
         {
             // nothing to do here
         }

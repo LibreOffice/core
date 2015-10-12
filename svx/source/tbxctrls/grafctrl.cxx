@@ -95,7 +95,7 @@ private:
 
 protected:
 
-    virtual void    Modify() SAL_OVERRIDE;
+    virtual void    Modify() override;
 
 public:
                     ImplGrafMetricField( vcl::Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
@@ -241,16 +241,16 @@ private:
 
 protected:
 
-    virtual void            GetFocus() SAL_OVERRIDE;
+    virtual void            GetFocus() override;
 
 public:
 
                             ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
                             virtual ~ImplGrafControl();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
     void                    Update( const SfxPoolItem* pItem ) { maField->Update( pItem ); }
-    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField->SetText( rStr ); }
+    void                    SetText( const OUString& rStr ) override { maField->SetText( rStr ); }
 };
 
 ImplGrafControl::ImplGrafControl(
@@ -318,9 +318,9 @@ private:
     sal_uInt16              mnCurPos;
     Reference< XFrame > mxFrame;
 
-    virtual void    Select() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
     static void     ImplReleaseFocus();
 
 public:

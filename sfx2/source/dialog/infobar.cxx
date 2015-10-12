@@ -60,7 +60,7 @@ public:
 
     virtual ~SfxCloseButton() {}
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 };
 
 void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)

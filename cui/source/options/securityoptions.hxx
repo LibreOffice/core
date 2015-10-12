@@ -46,7 +46,7 @@ namespace svx
     public:
         SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions* pOptions );
         virtual ~SecurityOptionsDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked(); }
         bool IsSignDocsChecked() const { return m_pSignDocsCB->IsChecked(); }

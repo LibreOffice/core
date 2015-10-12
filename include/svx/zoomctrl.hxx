@@ -32,9 +32,9 @@ private:
 
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
+    virtual void    Paint( const UserDrawEvent& rEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 
@@ -47,8 +47,8 @@ class SVX_DLLPUBLIC SvxZoomPageStatusBarControl : public SfxStatusBarControl
 private:
     Image maImage;
 public:
-    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
-    virtual bool    MouseButtonDown( const MouseEvent & rEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const UserDrawEvent& rEvt ) override;
+    virtual bool    MouseButtonDown( const MouseEvent & rEvt ) override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 

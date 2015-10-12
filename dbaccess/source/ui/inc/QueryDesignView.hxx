@@ -76,30 +76,30 @@ namespace dbaui
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isPasteAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
         // clears the whole query
-        virtual void clear() SAL_OVERRIDE;
+        virtual void clear() override;
         // set the view readonly or not
-        virtual void setReadOnly(bool _bReadOnly) SAL_OVERRIDE;
+        virtual void setReadOnly(bool _bReadOnly) override;
         // check if the statement is correct when not returning false
         bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const OUString& _rsStatement) SAL_OVERRIDE;
+        virtual void setStatement(const OUString& _rsStatement) override;
         // returns the current sql statement
-        virtual OUString getStatement() SAL_OVERRIDE;
+        virtual OUString getStatement() override;
         /// late construction
-        virtual void Construct() SAL_OVERRIDE;
-        virtual void initialize() SAL_OVERRIDE;
+        virtual void Construct() override;
+        virtual void initialize() override;
         // Window overrides
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
 
         bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
@@ -150,7 +150,7 @@ namespace dbaui
                                 ,OTableFieldDescRef& aInfo);
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 
     private:

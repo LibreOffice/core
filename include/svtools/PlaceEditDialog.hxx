@@ -64,7 +64,7 @@ public :
      PlaceEditDialog( vcl::Window* pParent);
      PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
      virtual ~PlaceEditDialog();
-     virtual void dispose() SAL_OVERRIDE;
+     virtual void dispose() override;
 
      // Returns a place instance with given information
      std::shared_ptr<Place> GetPlace();

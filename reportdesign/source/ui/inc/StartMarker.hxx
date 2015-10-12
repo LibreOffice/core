@@ -45,23 +45,23 @@ namespace rptui
         void initDefaultNodeImages();
         void setColor();
 
-        virtual void ImplInitSettings() SAL_OVERRIDE;
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+        virtual void ImplInitSettings() override;
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
         OStartMarker(OStartMarker&) = delete;
         void operator =(OStartMarker&) = delete;
     public:
         OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
         virtual ~OStartMarker();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // SfxListener
-        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
+        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) override;
         // Window overrides
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-        virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+        virtual void Resize() override;
+        virtual void RequestHelp(const HelpEvent& rHEvt) override;
         using Window::Notify;
 
         void setTitle(const OUString& _sTitle);
@@ -71,7 +71,7 @@ namespace rptui
         */
         void showRuler(bool _bShow);
 
-        virtual void setCollapsed(bool _bCollapsed) SAL_OVERRIDE;
+        virtual void setCollapsed(bool _bCollapsed) override;
 
         /** zoom the ruler and view windows
         */

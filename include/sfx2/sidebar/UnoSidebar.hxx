@@ -42,23 +42,23 @@ public:
     SfxUnoSidebar(const css::uno::Reference<css::frame::XFrame>&);
 
     virtual void SAL_CALL showDecks (const sal_Bool bVisible)
-                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
 
     virtual void SAL_CALL setVisible (const sal_Bool bVisible)
-                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isVisible()
-                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame()
-                                throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual css::uno::Reference<css::ui::XDecks> SAL_CALL getDecks()
-                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::ui::XSidebar> SAL_CALL getSidebar()
-                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
 };
 

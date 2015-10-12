@@ -39,7 +39,7 @@ public:
                        const OUString& rQName );
     virtual ~XMLAxisOOoContext();
 
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) override;
 
     bool IsCategoryAxis() const { return m_bIsCategoryAxis;}
 

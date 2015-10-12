@@ -39,123 +39,123 @@ namespace fileaccess {
         wasNull(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         getBoolean(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int8 SAL_CALL
         getByte(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int16 SAL_CALL
         getShort(
             sal_Int32 columnIndex )
             throw(
                 com::sun::star::sdbc::SQLException,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int32 SAL_CALL
         getInt(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
         getLong(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual float SAL_CALL
         getFloat(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual double SAL_CALL
         getDouble(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getBytes(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::util::Date SAL_CALL
         getDate(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::util::Time SAL_CALL
         getTime(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::util::DateTime SAL_CALL
         getTimestamp(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         getBinaryStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         getCharacterStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Any SAL_CALL
         getObject(
             sal_Int32 columnIndex,
             const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRef > SAL_CALL
         getRef(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob > SAL_CALL
         getBlob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XClob > SAL_CALL
         getClob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XArray > SAL_CALL
         getArray(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
     private:
         osl::Mutex                                                              m_aMutex;

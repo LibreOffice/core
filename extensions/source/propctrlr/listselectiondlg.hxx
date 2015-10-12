@@ -45,10 +45,10 @@ namespace pcr
             const OUString& _rPropertyUIName
         );
         virtual ~ListSelectionDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Dialog overridables
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
 
     private:
         void    initialize( );

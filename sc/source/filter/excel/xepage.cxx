@@ -337,7 +337,7 @@ public:
     explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement)
          : XclExpXmlElementRecord(nElement) {}
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)

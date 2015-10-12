@@ -45,11 +45,11 @@ public:
     SvxZoomSliderControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
     virtual ~SvxZoomSliderControl();
 
-    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual void  Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
-    virtual bool  MouseButtonDown( const MouseEvent & ) SAL_OVERRIDE;
-    virtual bool  MouseButtonUp( const MouseEvent & ) SAL_OVERRIDE;
-    virtual bool  MouseMove( const MouseEvent & rEvt ) SAL_OVERRIDE;
+    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void  Paint( const UserDrawEvent& rEvt ) override;
+    virtual bool  MouseButtonDown( const MouseEvent & ) override;
+    virtual bool  MouseButtonUp( const MouseEvent & ) override;
+    virtual bool  MouseMove( const MouseEvent & rEvt ) override;
 };
 
 #endif

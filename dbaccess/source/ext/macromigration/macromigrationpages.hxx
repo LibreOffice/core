@@ -58,7 +58,7 @@ namespace dbmm
     public:
         explicit PreparationPage(vcl::Window *pParent);
         virtual ~PreparationPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -75,7 +75,7 @@ namespace dbmm
     public:
         explicit SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
         virtual ~SaveDBDocPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
@@ -90,9 +90,9 @@ namespace dbmm
 
     protected:
         // IWizardPageController overridables
-        virtual void        initializePage() SAL_OVERRIDE;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
-        virtual bool        canAdvance() const SAL_OVERRIDE;
+        virtual void        initializePage() override;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        canAdvance() const override;
 
     private:
         DECL_LINK( OnLocationModified, Edit* );
@@ -105,7 +105,7 @@ namespace dbmm
     public:
         explicit ProgressPage(vcl::Window *pParent);
         virtual ~ProgressPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -114,13 +114,13 @@ namespace dbmm
 
     protected:
         // IMigrationProgress
-        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _bRange ) SAL_OVERRIDE;
-        virtual void    setObjectProgressText( const OUString& _rText ) SAL_OVERRIDE;
-        virtual void    setObjectProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
-        virtual void    endObject() SAL_OVERRIDE;
-        virtual void    start( const sal_uInt32 _nOverallRange ) SAL_OVERRIDE;
-        virtual void    setOverallProgressText( const OUString& _rText ) SAL_OVERRIDE;
-        virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
+        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _bRange ) override;
+        virtual void    setObjectProgressText( const OUString& _rText ) override;
+        virtual void    setObjectProgressValue( const sal_uInt32 _nValue ) override;
+        virtual void    endObject() override;
+        virtual void    start( const sal_uInt32 _nOverallRange ) override;
+        virtual void    setOverallProgressText( const OUString& _rText ) override;
+        virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) override;
 
     private:
         VclPtr<FixedText>          m_pObjectCount;
@@ -138,7 +138,7 @@ namespace dbmm
     public:
         explicit ResultPage(vcl::Window *pParent);
         virtual ~ResultPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
 

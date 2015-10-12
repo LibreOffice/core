@@ -213,19 +213,19 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 
 protected:
 
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        Resize() override;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
     void                ClickIcon();
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     static void         DrawEntryImage(
                             SvxIconChoiceCtrlEntry* pEntry,
                             const Point& rPos,
@@ -235,7 +235,7 @@ protected:
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bInplaceEdit );
 
-    virtual void        FillLayoutData() const SAL_OVERRIDE;
+    virtual void        FillLayoutData() const override;
 
     void                CallImplEventListeners(sal_uLong nEvent, void* pData);
 
@@ -243,7 +243,7 @@ public:
 
                         SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
     virtual             ~SvtIconChoiceCtrl();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
@@ -317,7 +317,7 @@ public:
 
     /** Creates and returns the accessible object of the Box. */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 };
 
 #endif // INCLUDED_SVTOOLS_IVCTRL_HXX

@@ -41,26 +41,26 @@ public:
         DrawViewShell* pShell);
     virtual ~DrawView();
 
-    virtual void MarkListHasChanged() SAL_OVERRIDE;
-    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    virtual void MarkListHasChanged() override;
+    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) override;
 
-    virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) SAL_OVERRIDE;
+    virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) override;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     void    BlockPageOrderChangedHint(bool bBlock);
 
-    bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) SAL_OVERRIDE;
-    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const SAL_OVERRIDE;
+    bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) override;
+    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const override;
 
-    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) SAL_OVERRIDE;
-    virtual void HideSdrPage() SAL_OVERRIDE; // SdrPageView* pPV);
+    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) override;
+    virtual void HideSdrPage() override; // SdrPageView* pPV);
 
     void    PresPaint(const vcl::Region& rRegion);
 
-    virtual void DeleteMarked() SAL_OVERRIDE; // from SdrView
+    virtual void DeleteMarked() override; // from SdrView
 protected:
-    virtual void ModelHasChanged() SAL_OVERRIDE;
+    virtual void ModelHasChanged() override;
 
 private:
     DrawDocShell*   mpDocShell;

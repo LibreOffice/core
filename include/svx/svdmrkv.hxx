@@ -146,13 +146,13 @@ private:
     void UndirtyMrkPnt() const;
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
-    virtual void ModelHasChanged() SAL_OVERRIDE; // Is called by the PaintView
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    virtual void ModelHasChanged() override; // Is called by the PaintView
     virtual void SetMarkHandles();                                           // maHdlList - fill (List of handles)
     void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     void         AddDragModeHdl(SdrDragMode eMode);
-    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
@@ -180,15 +180,15 @@ protected:
     virtual ~SdrMarkView();
 
 public:
-    virtual bool IsAction() const SAL_OVERRIDE;
-    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
-    virtual void EndAction() SAL_OVERRIDE;
-    virtual void BckAction() SAL_OVERRIDE;
-    virtual void BrkAction() SAL_OVERRIDE;
-    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
+    virtual bool IsAction() const override;
+    virtual void MovAction(const Point& rPnt) override;
+    virtual void EndAction() override;
+    virtual void BckAction() override;
+    virtual void BrkAction() override;
+    virtual void TakeActionRect(Rectangle& rRect) const override;
 
-    virtual void ClearPageView() SAL_OVERRIDE;
-    virtual void HideSdrPage() SAL_OVERRIDE;
+    virtual void ClearPageView() override;
+    virtual void HideSdrPage() override;
     virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     // Returns sal_True if objects, points or glue points are selected by drawing a frame

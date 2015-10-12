@@ -108,7 +108,7 @@ namespace dxcanvas
         void initialize();
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

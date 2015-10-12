@@ -57,9 +57,9 @@ namespace dbaui
         sal_uInt16 GetCurUndoActId(){ return m_nCurUndoActId; }
 
         // IClipboardTest
-        virtual void cut() SAL_OVERRIDE;
-        virtual void copy() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual void cut() override;
+        virtual void copy() override;
+        virtual void paste() override;
 
     protected:
         void Paste( long nRow );
@@ -73,11 +73,11 @@ namespace dbaui
         virtual bool IsInsertNewAllowed( long nRow )    = 0;
         virtual bool IsDeleteAllowed( long nRow )       = 0;
 
-        virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
-        virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
-        virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
+        virtual RowStatus GetRowStatus(long nRow) const override;
+        virtual void KeyInput(const KeyEvent& rEvt) override;
+        virtual void Command( const CommandEvent& rEvt ) override;
 
-        virtual void Init() SAL_OVERRIDE;
+        virtual void Init() override;
     };
 }
 #endif

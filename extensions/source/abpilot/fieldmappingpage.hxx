@@ -36,14 +36,14 @@ namespace abp
     public:
         explicit FieldMappingPage(OAddessBookSourcePilot* _pParent);
         virtual ~FieldMappingPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     protected:
         // OWizardPage overridables
-        virtual void        initializePage() SAL_OVERRIDE;
+        virtual void        initializePage() override;
 
         // TabDialog overridables
-        virtual void        ActivatePage() SAL_OVERRIDE;
-        virtual void        DeactivatePage() SAL_OVERRIDE;
+        virtual void        ActivatePage() override;
+        virtual void        DeactivatePage() override;
 
     private:
         DECL_LINK_TYPED( OnInvokeDialog, Button*, void );

@@ -125,7 +125,7 @@ namespace objectpositioning
             <mnLineAlignment> are calculated.
             calculated position is set at the given object.
         */
-        virtual void CalcPosition() SAL_OVERRIDE;
+        virtual void CalcPosition() override;
 
         // calculated anchored position for object position type AS_CHAR
         const Point& GetAnchorPos() const { return maAnchorPos;}

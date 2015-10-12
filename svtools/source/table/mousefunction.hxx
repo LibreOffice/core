@@ -76,9 +76,9 @@ namespace svt { namespace table
 
     public:
         // MouseFunction
-        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
+        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
 
     private:
         ColPos  m_nResizingColumn;
@@ -97,9 +97,9 @@ namespace svt { namespace table
 
     public:
         // MouseFunction
-        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
+        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
 
     private:
         bool    m_bActive;
@@ -118,9 +118,9 @@ namespace svt { namespace table
 
     public:
         // MouseFunction
-        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
-        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
+        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
+        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) override;
 
     private:
         ColPos  m_nActiveColumn;

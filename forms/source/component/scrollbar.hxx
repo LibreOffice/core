@@ -36,42 +36,42 @@ namespace frm
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw (::css::uno::RuntimeException, std::exception) override;
+        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::css::uno::RuntimeException, std::exception) override;
 
         // XPersistObject
         DECLARE_XPERSISTOBJECT()
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertyState
-        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const SAL_OVERRIDE;
+        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
-        ) const SAL_OVERRIDE;
+        ) const override;
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue )
-            throw ( css::uno::Exception, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::Exception, std::exception ) override;
         virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-            throw ( css::lang::IllegalArgumentException ) SAL_OVERRIDE;
+            throw ( css::lang::IllegalArgumentException ) override;
 
         // OBoundControlModel
-        virtual css::uno::Any   translateDbColumnToControlValue( ) SAL_OVERRIDE;
-        virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
-        virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
+        virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+        virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
+        virtual css::uno::Any   getDefaultForReset() const override;
 
         virtual css::uno::Sequence< css::uno::Type >
-                                getSupportedBindingTypes() SAL_OVERRIDE;
-        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
-        virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+                                getSupportedBindingTypes() override;
+        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
+        virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
 
         // XCoponent and related helpers
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
         // prevent method hiding
         using OBoundControlModel::disposing;

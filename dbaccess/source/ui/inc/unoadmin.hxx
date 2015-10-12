@@ -53,8 +53,8 @@ protected:
     virtual ~ODatabaseAdministrationDialog();
 protected:
 // OGenericUnoDialog overridables
-    virtual void destroyDialog() SAL_OVERRIDE;
-    virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE;
+    virtual void destroyDialog() override;
+    virtual void implInitialize(const css::uno::Any& _rValue) override;
 };
 
 }   // namespace dbaui

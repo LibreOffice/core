@@ -39,8 +39,8 @@ class SVX_DLLPUBLIC SdrObjGroup : public SdrObject
 {
 private:
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     SdrObjList*                 pSub;    // Subliste (Kinder)
     Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
@@ -51,62 +51,62 @@ public:
     SdrObjGroup();
     virtual ~SdrObjGroup();
 
-    virtual void SetBoundRectDirty() SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
-    virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
-    virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
-    virtual void SetObjList(SdrObjList* pNewObjList) SAL_OVERRIDE;
-    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
-    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
-    virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
+    virtual void SetBoundRectDirty() override;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    virtual SdrLayerID GetLayer() const override;
+    virtual void NbcSetLayer(SdrLayerID nLayer) override;
+    virtual void SetObjList(SdrObjList* pNewObjList) override;
+    virtual void SetPage(SdrPage* pNewPage) override;
+    virtual void SetModel(SdrModel* pNewModel) override;
+    virtual SdrObjList* GetSubList() const override;
 
-    virtual const Rectangle& GetCurrentBoundRect() const SAL_OVERRIDE;
-    virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;
+    virtual const Rectangle& GetCurrentBoundRect() const override;
+    virtual const Rectangle& GetSnapRect() const override;
 
-    virtual SdrObjGroup* Clone() const SAL_OVERRIDE;
+    virtual SdrObjGroup* Clone() const override;
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 
-    virtual void RecalcSnapRect() SAL_OVERRIDE;
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual void RecalcSnapRect() override;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
     // special drag methods
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool BegCreate(SdrDragStat& rStat) override;
 
-    virtual long GetRotateAngle() const SAL_OVERRIDE;
-    virtual long GetShearAngle(bool bVertical = false) const SAL_OVERRIDE;
+    virtual long GetRotateAngle() const override;
+    virtual long GetShearAngle(bool bVertical = false) const override;
 
-    virtual void Move(const Size& rSiz) SAL_OVERRIDE;
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
-    virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
-    virtual void Mirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
-    virtual void SetAnchorPos(const Point& rPnt) SAL_OVERRIDE;
-    virtual void SetRelativePos(const Point& rPnt) SAL_OVERRIDE;
-    virtual void SetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void SetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Move(const Size& rSiz) override;
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) override;
+    virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
+    virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void SetAnchorPos(const Point& rPnt) override;
+    virtual void SetRelativePos(const Point& rPnt) override;
+    virtual void SetSnapRect(const Rectangle& rRect) override;
+    virtual void SetLogicRect(const Rectangle& rRect) override;
 
-    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
-    virtual void NbcSetAnchorPos(const Point& rPnt) SAL_OVERRIDE;
-    virtual void NbcSetRelativePos(const Point& rPnt) SAL_OVERRIDE;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcMove(const Size& rSiz) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
+    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcSetAnchorPos(const Point& rPnt) override;
+    virtual void NbcSetRelativePos(const Point& rPnt) override;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
 
-    virtual void NbcReformatText() SAL_OVERRIDE;
-    virtual void ReformatText() SAL_OVERRIDE;
+    virtual void NbcReformatText() override;
+    virtual void ReformatText() override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif // INCLUDED_SVX_SVDOGRP_HXX

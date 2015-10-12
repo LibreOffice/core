@@ -28,7 +28,7 @@ class CSubmissionGet : public CSubmission
 {
 public:
     CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) SAL_OVERRIDE;
+    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
 
 };
 #endif

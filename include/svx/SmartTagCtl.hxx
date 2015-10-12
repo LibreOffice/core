@@ -63,7 +63,7 @@ private:
     void            FillMenu();
     DECL_LINK_TYPED( MenuSelect, Menu *, bool);
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
 
 public:
     SvxSmartTagsControl( sal_uInt16 nId, Menu&, SfxBindings& );

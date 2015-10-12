@@ -123,7 +123,7 @@ public:
         int nWidth);
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 private:
     ScopedVclPtr<VirtualDevice> mpPreviewDevice;

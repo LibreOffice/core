@@ -51,8 +51,8 @@ public:
         const OUString& rsTitle);
 
     virtual ~PaneDockingWindow();
-    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nType ) override;
+    virtual void MouseButtonDown (const MouseEvent& rEvent) override;
     /** When docked the given range is passed to the parent SplitWindow.
     */
     void SetValidSizeRange (const Range& rValidSizeRange);

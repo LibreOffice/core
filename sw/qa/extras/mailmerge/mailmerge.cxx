@@ -41,7 +41,7 @@ class MMTest : public SwModelTestBase
 public:
     MMTest();
 
-    virtual void tearDown() SAL_OVERRIDE
+    virtual void tearDown() override
     {
         if (mxMMComponent.is())
         {
@@ -211,7 +211,7 @@ protected:
 #define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
     class TestName : public BaseClass { \
     protected: \
-        virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
+        virtual OUString getTestName() override { return OUString(#TestName); } \
     public: \
         CPPUNIT_TEST_SUITE(TestName); \
         CPPUNIT_TEST(MailMerge); \
@@ -220,7 +220,7 @@ protected:
         void MailMerge() { \
             executeMailMergeTest(filename, datasource, tablename, file); \
         } \
-        void verify() SAL_OVERRIDE; \
+        void verify() override; \
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()

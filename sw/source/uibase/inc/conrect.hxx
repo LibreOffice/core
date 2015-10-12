@@ -34,10 +34,10 @@ class ConstRectangle : public SwDrawBase
     ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE;    // activate function
+    virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_CONRECT_HXX

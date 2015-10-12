@@ -52,10 +52,10 @@ public:
                         ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
     virtual             ~ScViewForwarder();
 
-    virtual bool        IsValid() const SAL_OVERRIDE;
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual bool        IsValid() const override;
+    virtual Rectangle   GetVisArea() const override;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 
     void                SetInvalid();
 };
@@ -150,10 +150,10 @@ public:
                                                    const EditView* _pEditView);
     virtual             ~ScEditObjectViewForwarder();
 
-    virtual bool        IsValid() const SAL_OVERRIDE;
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual bool        IsValid() const override;
+    virtual Rectangle   GetVisArea() const override;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 
     void                SetInvalid();
 };
@@ -249,10 +249,10 @@ public:
                         ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
 
-    virtual bool        IsValid() const SAL_OVERRIDE;
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual bool        IsValid() const override;
+    virtual Rectangle   GetVisArea() const override;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 
     void                SetInvalid();
 
@@ -380,7 +380,7 @@ public:
                         ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, bool bHeader);
     virtual             ~ScPreviewHeaderFooterViewForwarder();
 
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const override;
 };
 
 ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, bool bHeader)
@@ -422,7 +422,7 @@ public:
                             ScAddress aCellPos);
     virtual             ~ScPreviewCellViewForwarder();
 
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const override;
 };
 
 ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShell,
@@ -464,7 +464,7 @@ public:
                             bool bColHeader);
     virtual             ~ScPreviewHeaderCellViewForwarder();
 
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const override;
 };
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
@@ -508,7 +508,7 @@ public:
                             bool bNoteMark);
     virtual             ~ScPreviewNoteViewForwarder();
 
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const override;
 };
 
 ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
@@ -550,15 +550,15 @@ public:
                         ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin);
     virtual             ~ScEditViewForwarder();
 
-    virtual bool        IsValid() const SAL_OVERRIDE;
-    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual bool        GetSelection( ESelection& rSelection ) const SAL_OVERRIDE;
-    virtual bool        SetSelection( const ESelection& rSelection ) SAL_OVERRIDE;
-    virtual bool        Copy() SAL_OVERRIDE;
-    virtual bool        Cut() SAL_OVERRIDE;
-    virtual bool        Paste() SAL_OVERRIDE;
+    virtual bool        IsValid() const override;
+    virtual Rectangle   GetVisArea() const override;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual bool        GetSelection( ESelection& rSelection ) const override;
+    virtual bool        SetSelection( const ESelection& rSelection ) override;
+    virtual bool        Copy() override;
+    virtual bool        Cut() override;
+    virtual bool        Paste() override;
 
     void                SetInvalid();
 };
@@ -1632,10 +1632,10 @@ class ScCsvViewForwarder : public SvxViewForwarder
 public:
     explicit                    ScCsvViewForwarder( vcl::Window* pWindow, const Rectangle& rBoundBox );
 
-    virtual bool                IsValid() const SAL_OVERRIDE;
-    virtual Rectangle           GetVisArea() const SAL_OVERRIDE;
-    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
-    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual bool                IsValid() const override;
+    virtual Rectangle           GetVisArea() const override;
+    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
+    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 
     void                        SetInvalid();
 };

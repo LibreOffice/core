@@ -36,13 +36,13 @@ class FrameworkStatusBar : public StatusBar
 
         void         SetStatusBarManager( StatusBarManager* pStatusBarManager );
 
-        virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        virtual void UserDraw(const UserDrawEvent& rUDEvt) SAL_OVERRIDE;
-        virtual void Command( const CommandEvent &rEvt ) SAL_OVERRIDE;
-        virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nType ) override;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+        virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
+        virtual void Command( const CommandEvent &rEvt ) override;
+        virtual void MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     private:
         StatusBarManager*       m_pMgr;

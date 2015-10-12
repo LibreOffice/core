@@ -68,11 +68,11 @@ public:
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~FwkTabPage();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    ActivatePage() SAL_OVERRIDE;
-    virtual void    DeactivatePage() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    ActivatePage() override;
+    virtual void    DeactivatePage() override;
+    virtual void    Resize() override;
 };
 
 struct TabEntry
@@ -110,14 +110,14 @@ private:
 public:
     FwkTabWindow( vcl::Window* pParent );
     virtual ~FwkTabWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            AddEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     void            RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );
-    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Resize() override;
 };
 
 } // namespace framework

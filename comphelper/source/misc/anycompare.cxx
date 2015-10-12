@@ -60,7 +60,7 @@ namespace comphelper
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             Date lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -88,7 +88,7 @@ namespace comphelper
     class TimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             Time lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -121,7 +121,7 @@ namespace comphelper
     class DateTimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             DateTime lhs, rhs;
             if  (   !( _lhs >>= lhs )

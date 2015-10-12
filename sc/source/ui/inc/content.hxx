@@ -108,28 +108,28 @@ protected:
 
     using SvTreeListBox::ExecuteDrop;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
-    virtual void        DragFinished( sal_Int8 nAction ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    virtual void        DragFinished( sal_Int8 nAction ) override;
 
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind) override;
 
 public:
             ScContentTree( vcl::Window* pParent, const ResId& rResId );
             virtual ~ScContentTree();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;
-    OUString GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
-    OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
+    OUString GetEntryAltText( SvTreeListEntry* pEntry ) const override;
+    OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
 
     void     ObjectFresh( ScContentId nType, SvTreeListEntry* pEntry = NULL);
     bool     SetNavigatorDlgFlag(bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
     void    InitWindowBits( bool bButtons );
 

@@ -71,15 +71,15 @@ public:
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
     virtual bool            GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreUnit,
                                                  SfxMapUnit ePresUnit,
                                                  OUString&  rText,
-                                                 const IntlWrapper *pIntl ) const SAL_OVERRIDE;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+                                                 const IntlWrapper *pIntl ) const override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     void                    merge( const MediaItem& rMediaItem );
 

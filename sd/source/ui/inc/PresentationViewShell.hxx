@@ -51,17 +51,17 @@ public:
     */
     void FinishInitialization( FrameView* pFrameView );
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) SAL_OVERRIDE;
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) SAL_OVERRIDE;
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) override;
+    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
 
 private:
     Rectangle       maOldVisArea;
 
-    virtual void Activate (bool bIsMDIActivate) SAL_OVERRIDE;
-    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
+    virtual void Activate (bool bIsMDIActivate) override;
+    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin) override;
 };
 
 } // end of namespace sd

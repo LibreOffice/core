@@ -67,11 +67,11 @@ private:
 
 protected:
 
-    virtual void        StartSplit() SAL_OVERRIDE;
-    virtual void        SplitResize() SAL_OVERRIDE;
-    virtual void        Split() SAL_OVERRIDE;
-    virtual void        Command ( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonDown ( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void        StartSplit() override;
+    virtual void        SplitResize() override;
+    virtual void        Split() override;
+    virtual void        Command ( const CommandEvent& rCEvt ) override;
+    virtual void        MouseButtonDown ( const MouseEvent& ) override;
 
 public:
                         SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
@@ -79,7 +79,7 @@ public:
                             WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
 
                         virtual ~SfxSplitWindow();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                ReleaseWindow_Impl(SfxDockingWindow *pWin, bool bSaveConfig=true);
 
@@ -121,9 +121,9 @@ public:
     bool                IsAutoHide( bool bSelf = false ) const;
     SplitWindow*        GetSplitWindow();
 
-    virtual void        AutoHide() SAL_OVERRIDE;
-    virtual void        FadeOut() SAL_OVERRIDE;
-    virtual void        FadeIn() SAL_OVERRIDE;
+    virtual void        AutoHide() override;
+    virtual void        FadeOut() override;
+    virtual void        FadeIn() override;
     void                SetActiveWindow_Impl( SfxDockingWindow* pWin );
 };
 

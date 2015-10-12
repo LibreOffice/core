@@ -35,8 +35,8 @@ public:
     virtual ~VbaDialogsBase() {}
 
     // XCollection
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX

@@ -70,7 +70,7 @@ namespace sdr { namespace contact {
             getTemporaryControlForWindow( const vcl::Window& _rWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer ) const;
 
     protected:
-        virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) SAL_OVERRIDE;
+        virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) override;
 
     private:
         ViewContactOfUnoControl( const ViewContactOfUnoControl& ) = delete;
@@ -79,7 +79,7 @@ namespace sdr { namespace contact {
     protected:
         // This method is responsible for creating the graphical visualisation data
         // ONLY based on model data
-        virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+        virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
     };
 
 

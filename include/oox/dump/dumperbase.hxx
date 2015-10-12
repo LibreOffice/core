@@ -602,17 +602,17 @@ public:
 protected:
     explicit            NameListBase( const SharedConfigData& rCfgData ) : mrCfgData( rCfgData ) {}
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
 
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
                             const OUString& rKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
     virtual void        implProcessConfigItemInt(
                             TextInputStream& rStrm,
                             sal_Int64 nKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
     /** Derived classes set the name for the passed key. */
     virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) = 0;
@@ -655,16 +655,16 @@ protected:
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
                             const OUString& rKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
     /** Sets the name for the passed key. */
-    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
+    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) override;
     /** Returns the name for the passed key, or the default name, if key is not contained. */
-    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const SAL_OVERRIDE;
+    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const override;
     /** Returns the name for the passed double value. */
-    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const SAL_OVERRIDE;
+    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const override;
     /** Inserts all names from the passed list. */
-    virtual void        implIncludeList( const NameListBase& rList ) SAL_OVERRIDE;
+    virtual void        implIncludeList( const NameListBase& rList ) override;
 
 private:
     OUString            maDefName;
@@ -684,9 +684,9 @@ protected:
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
                             const OUString& rKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
-    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
+    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) override;
 
 private:
     bool                mbIgnoreEmpty;
@@ -708,16 +708,16 @@ protected:
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
                             const OUString& rKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
     /** Sets the name for the passed key. */
-    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
+    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) override;
     /** Returns the name for the passed key. */
-    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const SAL_OVERRIDE;
+    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const override;
     /** Returns the name for the passed double value. */
-    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const SAL_OVERRIDE;
+    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const override;
     /** Inserts all flags from the passed list. */
-    virtual void        implIncludeList( const NameListBase& rList ) SAL_OVERRIDE;
+    virtual void        implIncludeList( const NameListBase& rList ) override;
 
 private:
     sal_Int64           mnIgnore;
@@ -732,11 +732,11 @@ public:
 
 protected:
     /** Sets the name for the passed key. */
-    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
+    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) override;
     /** Returns the name for the passed key. */
-    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const SAL_OVERRIDE;
+    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const override;
     /** Inserts all flags from the passed list. */
-    virtual void        implIncludeList( const NameListBase& rList ) SAL_OVERRIDE;
+    virtual void        implIncludeList( const NameListBase& rList ) override;
 
 private:
     struct ExtItemFormatKey
@@ -768,13 +768,13 @@ public:
 
 protected:
     /** Sets the name for the passed key. */
-    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
+    virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) override;
     /** Returns the converted value with appended unit name. */
-    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const SAL_OVERRIDE;
+    virtual OUString implGetName( const Config& rCfg, sal_Int64 nKey ) const override;
     /** Returns the converted value with appended unit name. */
-    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const SAL_OVERRIDE;
+    virtual OUString implGetNameDbl( const Config& rCfg, double fValue ) const override;
     /** Empty implementation. */
-    virtual void        implIncludeList( const NameListBase& rList ) SAL_OVERRIDE;
+    virtual void        implIncludeList( const NameListBase& rList ) override;
 
 private:
     OUString     maUnitName;
@@ -851,11 +851,11 @@ public:
     bool                isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
                             const OUString& rKey,
-                            const OUString& rData ) SAL_OVERRIDE;
+                            const OUString& rData ) override;
 
 private:
     bool                readConfigFile( const OUString& rFileUrl );
@@ -957,7 +957,7 @@ protected:
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
     const OUString*     implGetOption( const OUString& rKey ) const;
     NameListRef         implGetNameList( const OUString& rListName ) const;
 
@@ -1064,7 +1064,7 @@ public:
 
 
 protected:
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
 
 private:
     void                writeItemName( const String& rItemName );
@@ -1168,7 +1168,7 @@ public:
     bool                isStorage() const;
 
 private:
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
 
 private:
     StorageRef          mxStrg;
@@ -1196,7 +1196,7 @@ protected:
     void                construct( const ConfigRef& rxConfig );
     void                construct( const ObjectBase& rParent );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
     virtual void        implDump();
 
 
@@ -1222,8 +1222,8 @@ protected:
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
     void                construct( const ObjectBase& rParent );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
-    virtual void        implDump() SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
+    virtual void        implDump() override;
 
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
@@ -1298,7 +1298,7 @@ protected:
     void                construct( const ObjectBase& rParent, const OUString& rSysFileName );
     void                construct( const OutputObjectBase& rParent );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
 
 
 
@@ -1468,7 +1468,7 @@ protected:
     void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
     void                construct( const InputObjectBase& rParent );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
 
     void                skipBlock( sal_Int64 nBytes, bool bShowSize = true );
     void                dumpRawBinary( sal_Int64 nBytes, bool bShowOffset = true, bool bStream = false );
@@ -1662,7 +1662,7 @@ public:
 protected:
     void                dumpBinaryStream( bool bShowOffset = true );
 
-    virtual void        implDump() SAL_OVERRIDE;
+    virtual void        implDump() override;
 };
 
 
@@ -1684,8 +1684,8 @@ protected:
                             const BinaryInputStreamRef& rxStrm,
                             rtl_TextEncoding eTextEnc );
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
-    virtual void        implDump() SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
+    virtual void        implDump() override;
 
     virtual void        implDumpText( TextInputStream& rTextStrm ) = 0;
 
@@ -1713,7 +1713,7 @@ public:
                             rtl_TextEncoding eTextEnc );
 
 protected:
-    virtual void        implDumpText( TextInputStream& rTextStrm ) SAL_OVERRIDE;
+    virtual void        implDumpText( TextInputStream& rTextStrm ) override;
     void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
 };
 
@@ -1728,7 +1728,7 @@ public:
                             const OUString& rSysFileName );
 
 protected:
-    virtual void        implDumpText( TextInputStream& rTextStrm ) SAL_OVERRIDE;
+    virtual void        implDumpText( TextInputStream& rTextStrm ) override;
 };
 
 
@@ -1752,8 +1752,8 @@ protected:
     sal_Int64           getRecSize() const { return mnRecSize; }
     NameListRef         getRecNames() const { return maRecNames.getNameList( cfg() ); }
 
-    virtual bool        implIsValid() const SAL_OVERRIDE;
-    virtual void        implDump() SAL_OVERRIDE;
+    virtual bool        implIsValid() const override;
+    virtual void        implDump() override;
 
     virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize ) = 0;
     virtual void        implWriteExtHeader();
@@ -1793,7 +1793,7 @@ protected:
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
 
-    virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
+    virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize ) override;
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) = 0;
 
 private:

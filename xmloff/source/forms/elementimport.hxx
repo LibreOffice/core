@@ -115,21 +115,21 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void    EndElement() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void    EndElement() override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
 
         // IEventAttacher
         virtual void registerEvents(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
-            ) SAL_OVERRIDE;
+            ) override;
 
         /** create the (uninitialized) element which is to represent the read data
 
@@ -220,13 +220,13 @@ namespace xmloff
 
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void    EndElement() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void    EndElement() override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
 
         void addOuterAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs);
 
@@ -238,7 +238,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
 
-        virtual OUString determineDefaultServiceName() const SAL_OVERRIDE;
+        virtual OUString determineDefaultServiceName() const override;
 
         /** registers the given cell address as value binding address for our element
 
@@ -265,7 +265,7 @@ namespace xmloff
 
         // OElementImport overridables
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        createElement() SAL_OVERRIDE;
+                        createElement() override;
     };
 
     // TODO:
@@ -290,13 +290,13 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute( sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
             const OUString& _rValue
-       ) SAL_OVERRIDE;
+       ) override;
     };
 
     //= OReferredControlImport
@@ -314,12 +314,12 @@ namespace xmloff
 
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
     };
 
     //= OPasswordImport
@@ -335,7 +335,7 @@ namespace xmloff
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
     };
 
     //= ORadioImport
@@ -352,7 +352,7 @@ namespace xmloff
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
     };
 
     //= OURLReferenceImport
@@ -372,7 +372,7 @@ namespace xmloff
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
     };
 
     //= OButtonImport
@@ -391,7 +391,7 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
     //= OValueRangeImport
@@ -413,12 +413,12 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute( sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue ) SAL_OVERRIDE;
+            const OUString& _rValue ) override;
     };
 
     //= OTextLikeImport
@@ -441,11 +441,11 @@ namespace xmloff
 
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void    EndElement() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void    EndElement() override;
 
     private:
         void    adjustDefaultControlProperty();
@@ -491,19 +491,19 @@ namespace xmloff
 
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void    EndElement() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void    EndElement() override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
 
         // OControlImport ovrridables
-        virtual void doRegisterCellValueBinding( const OUString& _rBoundCellAddress ) SAL_OVERRIDE;
+        virtual void doRegisterCellValueBinding( const OUString& _rBoundCellAddress ) override;
 
     protected:
         void implPushBackLabel(const OUString& _rLabel);
@@ -530,7 +530,7 @@ namespace xmloff
             const OListAndComboImportRef& _rListBox);
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
     //= OComboItemImport
@@ -548,7 +548,7 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
     //= OContainerImport
@@ -630,9 +630,9 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
     protected:
         OControlImport* implCreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
@@ -654,7 +654,7 @@ namespace xmloff
     protected:
         // OContainerImport overridables
         virtual SvXMLImportContext* implCreateControlWrapper(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName) SAL_OVERRIDE;
+            sal_uInt16 _nPrefix, const OUString& _rLocalName) override;
     };
 
     //= OFormImport
@@ -673,25 +673,25 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void    EndElement() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void    EndElement() override;
 
         // OContainerImport overridables
         virtual SvXMLImportContext* implCreateControlWrapper(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName) SAL_OVERRIDE;
+            sal_uInt16 _nPrefix, const OUString& _rLocalName) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
-            const OUString& _rValue) SAL_OVERRIDE;
+            const OUString& _rValue) override;
 
         OControlImport* implCreateChildContext(
                 sal_uInt16 _nPrefix, const OUString& _rLocalName,
                 OControlElement::ElementType _eType );
 
-        virtual OUString determineDefaultServiceName() const SAL_OVERRIDE;
+        virtual OUString determineDefaultServiceName() const override;
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
     };
 

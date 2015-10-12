@@ -55,7 +55,7 @@ private:
 public:
     NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
     virtual ~NewObjectDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName( const OUString& rName )
     {
@@ -72,7 +72,7 @@ class GotoLineDialog : public ModalDialog
 public:
     explicit GotoLineDialog(vcl::Window * pParent);
     virtual ~GotoLineDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     sal_Int32 GetLineNumber() const;
 };
 
@@ -89,7 +89,7 @@ private:
 public:
     explicit ExportDialog( vcl::Window * pParent );
     virtual ~ExportDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool isExportAsPackage () const { return mbExportAsPackage; }
 };
@@ -98,16 +98,16 @@ public:
 class ExtTreeListBox : public TreeListBox
 {
 protected:
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) SAL_OVERRIDE;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) override;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) SAL_OVERRIDE;
-    virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) override;
+    virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry ) override;
 
     virtual TriState    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) override;
     virtual TriState    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) override;
     TriState            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove );
 
@@ -126,7 +126,7 @@ private:
 public:
     CheckBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~CheckBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvTreeListEntry*    FindEntry( const OUString& rName );
@@ -134,9 +134,9 @@ public:
     void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;
 
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel ) SAL_OVERRIDE;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind) override;
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel ) override;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
@@ -154,7 +154,7 @@ private:
 public:
     explicit LibDialog(vcl::Window* pParent);
     virtual ~LibDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            SetStorageName( const OUString& rName );
 
@@ -174,9 +174,9 @@ private:
 public:
     OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
     virtual ~OrganizeDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual short   Execute() override;
 
     DECL_LINK_TYPED( ActivatePageHdl, TabControl*, void );
 };
@@ -201,13 +201,13 @@ protected:
 
     VclPtr<TabDialog>          pTabDlg;
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual void        DeactivatePage() SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual void        DeactivatePage() override;
 
 public:
     ObjectPage(vcl::Window* pParent, const OString& rName, sal_uInt16 nMode);
     virtual ~ObjectPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                SetCurrentEntry( EntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
@@ -247,15 +247,15 @@ protected:
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
     SvTreeListEntry*    ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual void        DeactivatePage() SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual void        DeactivatePage() override;
 
     VclPtr<TabDialog>          pTabDlg;
 
 public:
     explicit LibPage(vcl::Window* pParent);
     virtual             ~LibPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };

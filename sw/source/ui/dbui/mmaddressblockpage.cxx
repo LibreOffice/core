@@ -813,14 +813,14 @@ class SwAssignFieldsControl : public Control
     DECL_LINK_TYPED(MatchHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
 
     void                MakeVisible( sal_Int32 nIndex );
 public:
     SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits);
     virtual ~SwAssignFieldsControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void        Init(SwMailMergeConfigItem& rConfigItem);
     void        SetModifyHdl(const Link<LinkParamNone*,void>& rModifyHdl)
@@ -828,8 +828,8 @@ public:
                     m_aModifyHdl = rModifyHdl;
                     m_aModifyHdl.Call(nullptr);
                 }
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 };
 
 VCL_BUILDER_FACTORY_ARGS(SwAssignFieldsControl, WB_BORDER)

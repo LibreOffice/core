@@ -156,7 +156,7 @@ public:
 private:
     virtual ~WriteThread() {}
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
     rtl::Reference< WriteThread > * reference_;
     Components & components_;

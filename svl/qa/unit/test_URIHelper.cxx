@@ -73,28 +73,28 @@ public:
         css::uno::Reference< css::ucb::XContentIdentifier > const & identifier);
 
     virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
-    getIdentifier() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {
+    getIdentifier() throw (css::uno::RuntimeException, std::exception) override {
         return m_identifier;
     }
 
     virtual OUString SAL_CALL getContentType()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         return OUString();
     }
 
     virtual void SAL_CALL addContentEventListener(
         css::uno::Reference< css::ucb::XContentEventListener > const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {}
 
     virtual void SAL_CALL removeContentEventListener(
         css::uno::Reference< css::ucb::XContentEventListener > const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {}
 
     virtual sal_Int32 SAL_CALL createCommandIdentifier()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         return 0;
     }
@@ -104,9 +104,9 @@ public:
         css::uno::Reference< css::ucb::XCommandEnvironment > const &)
         throw (
             css::uno::Exception, css::ucb::CommandAbortedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL abort(sal_Int32) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+    virtual void SAL_CALL abort(sal_Int32) throw (css::uno::RuntimeException, std::exception) override {}
 
 private:
     static char const m_prefix[];
@@ -172,7 +172,7 @@ class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
 public:
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
         css::uno::Reference< css::ucb::XContentIdentifier > const & identifier)
-        throw (css::ucb::IllegalIdentifierException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::ucb::IllegalIdentifierException, css::uno::RuntimeException, std::exception) override
     {
         return new Content(identifier);
     }
@@ -180,7 +180,7 @@ public:
     virtual sal_Int32 SAL_CALL compareContentIds(
         css::uno::Reference< css::ucb::XContentIdentifier > const & id1,
         css::uno::Reference< css::ucb::XContentIdentifier > const & id2)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         assert(id1.is() && id2.is());
         return
@@ -190,7 +190,7 @@ public:
 
 class Test: public CppUnit::TestFixture {
 public:
-    virtual void setUp() SAL_OVERRIDE;
+    virtual void setUp() override;
 
     void finish();
 

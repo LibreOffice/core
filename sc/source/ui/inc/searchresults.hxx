@@ -30,11 +30,11 @@ class SearchResultsDlg : public ModelessDialog
 public:
     SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 nId );
     virtual ~SearchResultsDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges );
 
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 };
 
 class SearchResultsDlgWrapper : public SfxChildWindow

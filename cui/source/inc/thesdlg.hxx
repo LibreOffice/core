@@ -43,14 +43,14 @@ class LookUpComboBox : public ComboBox
 public:
     LookUpComboBox(vcl::Window *pParent);
     virtual ~LookUpComboBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED( ModifyTimer_Hdl, Idle *, void );
 
     void init(SvxThesaurusDialog *pDialog);
 
     // ComboBox
-    virtual void        Modify() SAL_OVERRIDE;
+    virtual void        Modify() override;
 };
 
 class AlternativesExtraData
@@ -86,7 +86,7 @@ public:
 
     void init(SvxThesaurusDialog *pDialog);
     virtual ~ThesaurusAlternativesCtrl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SvTreeListEntry *   AddEntry( sal_Int32 nVal, const OUString &rText, bool bIsHeader );
 
@@ -94,8 +94,8 @@ public:
     void            SetExtraData( const SvTreeListEntry *pEntry, const AlternativesExtraData &rData );
     AlternativesExtraData * GetExtraData( const SvTreeListEntry *pEntry );
 
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 };
 
 class ReplaceEdit : public Edit
@@ -108,14 +108,14 @@ class ReplaceEdit : public Edit
 public:
     ReplaceEdit(vcl::Window *pParent);
     virtual ~ReplaceEdit();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void init(Button *pBtn)  { m_pBtn = pBtn; }
 
     // Edit
-    virtual void        Modify() SAL_OVERRIDE;
-    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
+    virtual void        Modify() override;
+    virtual void        SetText( const OUString& rStr ) override;
+    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection ) override;
 };
 
 class SvxThesaurusDialog : public SvxStandardDialog
@@ -136,7 +136,7 @@ class SvxThesaurusDialog : public SvxStandardDialog
 
 public:
     virtual ~SvxThesaurusDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool                    WordFound() const { return m_bWordFound; }
     OUString                getErrStr() const { return m_aErrStr; }
@@ -157,7 +157,7 @@ public:
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const OUString &rText );
     void    LookUp_Impl();
-    virtual void     Apply() SAL_OVERRIDE;
+    virtual void     Apply() override;
 
 public:
     SvxThesaurusDialog( vcl::Window* pParent,

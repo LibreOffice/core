@@ -49,7 +49,7 @@ public:
     explicit PresenterProtocolHandler (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterProtocolHandler();
 
-    void SAL_CALL disposing() SAL_OVERRIDE;
+    void SAL_CALL disposing() override;
 
     static OUString getImplementationName_static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_static();
@@ -60,16 +60,16 @@ public:
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XDispatchProvider
 
@@ -78,12 +78,12 @@ public:
             const css::util::URL& aURL,
             const OUString& aTargetFrameName,
             sal_Int32 nSearchFlags )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence<css::uno::Reference<css::frame::XDispatch> > SAL_CALL
         queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors)
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
 private:
     class Dispatch;

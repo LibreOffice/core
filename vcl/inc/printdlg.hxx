@@ -64,12 +64,12 @@ namespace vcl
         public:
             PrintPreviewWindow( vcl::Window* pParent );
             virtual ~PrintPreviewWindow();
-            virtual void dispose() SAL_OVERRIDE;
+            virtual void dispose() override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-            virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
-            virtual void Resize() SAL_OVERRIDE;
-            virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+            virtual void Command( const CommandEvent& ) override;
+            virtual void Resize() override;
+            virtual void DataChanged( const DataChangedEvent& ) override;
 
             void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
                              const OUString& i_rPaperName,
@@ -88,9 +88,9 @@ namespace vcl
         public:
             ShowNupOrderWindow( vcl::Window* pParent );
 
-            virtual Size GetOptimalSize() const SAL_OVERRIDE;
+            virtual Size GetOptimalSize() const override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
 
             void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
             {
@@ -236,9 +236,9 @@ namespace vcl
         void storeToSettings();
         com::sun::star::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void Command( const CommandEvent& ) override;
+        virtual void DataChanged( const DataChangedEvent& ) override;
 
         DECL_LINK_TYPED( SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( ClickHdl, Button*, void );
@@ -254,7 +254,7 @@ namespace vcl
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         bool isPrintToFile();
         bool isCollate();
@@ -280,7 +280,7 @@ namespace vcl
     public:
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
         virtual ~PrintProgressDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();

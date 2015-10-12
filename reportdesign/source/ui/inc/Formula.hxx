@@ -68,39 +68,39 @@ public:
         , svl::SharedStringPool& rStrPool );
 
     virtual ~FormulaDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // IFormulaEditorHelper
-    virtual void notifyChange() SAL_OVERRIDE;
-    virtual void fill() SAL_OVERRIDE;
-    virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) SAL_OVERRIDE;
-    virtual void doClose(bool _bOk) SAL_OVERRIDE;
-    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) SAL_OVERRIDE;
-    virtual void showReference(const OUString& _sFormula) SAL_OVERRIDE;
-    virtual void dispatch(bool _bOK, bool _bMatrixChecked) SAL_OVERRIDE;
-    virtual void setDispatcherLock( bool bLock ) SAL_OVERRIDE;
-    virtual void setReferenceInput(const formula::FormEditData* _pData) SAL_OVERRIDE;
-    virtual void deleteFormData() SAL_OVERRIDE;
-    virtual void clear() SAL_OVERRIDE;
-    virtual void switchBack() SAL_OVERRIDE;
-    virtual formula::FormEditData* getFormEditData() const SAL_OVERRIDE;
-    virtual void setCurrentFormula(const OUString& _sReplacement) SAL_OVERRIDE;
-    virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd) SAL_OVERRIDE;
-    virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const SAL_OVERRIDE;
-    virtual OUString getCurrentFormula() const SAL_OVERRIDE;
+    virtual void notifyChange() override;
+    virtual void fill() override;
+    virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) override;
+    virtual void doClose(bool _bOk) override;
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) override;
+    virtual void showReference(const OUString& _sFormula) override;
+    virtual void dispatch(bool _bOK, bool _bMatrixChecked) override;
+    virtual void setDispatcherLock( bool bLock ) override;
+    virtual void setReferenceInput(const formula::FormEditData* _pData) override;
+    virtual void deleteFormData() override;
+    virtual void clear() override;
+    virtual void switchBack() override;
+    virtual formula::FormEditData* getFormEditData() const override;
+    virtual void setCurrentFormula(const OUString& _sReplacement) override;
+    virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd) override;
+    virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const override;
+    virtual OUString getCurrentFormula() const override;
 
-    virtual formula::IFunctionManager* getFunctionManager() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const SAL_OVERRIDE;
-    virtual ::com::sun::star::table::CellAddress getReferencePosition() const SAL_OVERRIDE;
+    virtual formula::IFunctionManager* getFunctionManager() override;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const override;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
+    virtual ::com::sun::star::table::CellAddress getReferencePosition() const override;
 
-    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) SAL_OVERRIDE;
+    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) override;
 
     // IControlReferenceHandler
-    virtual void ShowReference(const OUString& _sRef) SAL_OVERRIDE;
-    virtual void HideReference( bool bDoneRefMode = true ) SAL_OVERRIDE;
-    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
-    virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
+    virtual void ShowReference(const OUString& _sRef) override;
+    virtual void HideReference( bool bDoneRefMode = true ) override;
+    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
+    virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
 };
 
 

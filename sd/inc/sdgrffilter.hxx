@@ -34,7 +34,7 @@ public:
     virtual ~SdGRFFilter();
 
     bool    Import();
-    bool    Export() SAL_OVERRIDE;
+    bool    Export() override;
 
     static void HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError = ERRCODE_NONE );
 };

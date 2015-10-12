@@ -44,7 +44,7 @@ public:
     KDEModalityFilter( WId nWinId );
     virtual ~KDEModalityFilter();
 
-    virtual bool eventFilter( QObject *pObject, QEvent *pEvent ) SAL_OVERRIDE;
+    virtual bool eventFilter( QObject *pObject, QEvent *pEvent ) override;
 };
 
 #endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX

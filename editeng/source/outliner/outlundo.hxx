@@ -47,8 +47,8 @@ private:
 public:
     OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, ParaFlag nOldFlags, ParaFlag nNewFlags );
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 class OutlinerUndoChangeParaNumberingRestart : public OutlinerUndoBase
@@ -71,8 +71,8 @@ public:
         sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
         bool  nOldbParaIsNumberingRestart, bool nbNewParaIsNumberingRestart );
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 class OutlinerUndoChangeDepth : public OutlinerUndoBase
@@ -85,8 +85,8 @@ private:
 public:
                     OutlinerUndoChangeDepth( Outliner* pOutliner, sal_Int32 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 // Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
@@ -100,8 +100,8 @@ private:
 public:
                     OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPara );
 
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Undo() override;
+    virtual void    Redo() override;
 };
 
 class OLUndoExpand : public EditUndo
@@ -110,8 +110,8 @@ class OLUndoExpand : public EditUndo
 public:
     OLUndoExpand( Outliner* pOut, sal_uInt16 nId );
     virtual ~OLUndoExpand();
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
     sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;

@@ -59,7 +59,7 @@ namespace connectivity
         {
         protected:
 
-            virtual OUString getDropForeignKey() const SAL_OVERRIDE
+            virtual OUString getDropForeignKey() const override
             {
                 return OUString(" DROP FOREIGN KEY ");
             }

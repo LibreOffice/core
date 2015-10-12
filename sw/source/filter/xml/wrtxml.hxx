@@ -43,15 +43,15 @@ class SwXMLWriter : public StgWriter
     using StgWriter::Write;
 
 protected:
-    virtual sal_uLong WriteStorage() SAL_OVERRIDE;
-    virtual sal_uLong WriteMedium( SfxMedium& aTargetMedium ) SAL_OVERRIDE;
+    virtual sal_uLong WriteStorage() override;
+    virtual sal_uLong WriteMedium( SfxMedium& aTargetMedium ) override;
 
 public:
 
     SwXMLWriter( const OUString& rBaseURL );
     virtual ~SwXMLWriter();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 ) SAL_OVERRIDE;
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 ) override;
 
 private:
 

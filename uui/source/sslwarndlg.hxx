@@ -44,7 +44,7 @@ public:
 
     css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
 
-    virtual void response(short nResponseId) SAL_OVERRIDE;
+    virtual void response(short nResponseId) override;
 
     void setDescription1Text(const OUString &aText) { set_primary_text(aText); }
 };

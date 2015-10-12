@@ -69,7 +69,7 @@ private:
                                             bool bRecursive );
 
     virtual                     ~SearchThread();
-    virtual void                execute() SAL_OVERRIDE;
+    virtual void                execute() override;
 
 public:
 
@@ -94,12 +94,12 @@ private:
 public:
                         SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
     virtual             ~SearchProgress();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
                         DECL_LINK_TYPED( CleanUpHdl, void*, void );
 
-    virtual short       Execute() SAL_OVERRIDE;
-    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual short       Execute() override;
+    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) override;
     void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -113,7 +113,7 @@ private:
     TokenList_impl&             mrTakenList;
 
     virtual                     ~TakeThread();
-    virtual void                execute() SAL_OVERRIDE;
+    virtual void                execute() override;
 
 public:
 
@@ -140,13 +140,13 @@ public:
 
     TakeProgress( vcl::Window* pWindow );
     virtual ~TakeProgress();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED( CleanUpHdl, void*, void );
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
-    virtual short       Execute() SAL_OVERRIDE;
-    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual short       Execute() override;
+    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) override;
 };
 
 class ActualizeProgress : public ModalDialog
@@ -165,9 +165,9 @@ private:
 public:
                         ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
     virtual             ~ActualizeProgress();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual short       Execute() SAL_OVERRIDE;
+    virtual short       Execute() override;
 };
 
 class TitleDialog : public ModalDialog
@@ -177,7 +177,7 @@ private:
 public:
     TitleDialog(vcl::Window* pParent, const OUString& rOldText);
     virtual ~TitleDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetTitle() const { return m_pEdit->GetText(); }
 };
 
@@ -192,7 +192,7 @@ private:
 public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
     virtual ~GalleryIdDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     sal_uLong GetId() const { return m_pLbResName->GetSelectEntryPos(); }
 };
 
@@ -203,7 +203,7 @@ class GalleryThemeProperties : public SfxTabDialog
     sal_uInt16 m_nGeneralPageId;
     sal_uInt16 m_nFilesPageId;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) override;
 
 public:
     GalleryThemeProperties(vcl::Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
@@ -221,15 +221,15 @@ private:
     VclPtr<FixedText>          m_pFtMSShowChangeDate;
     ExchangeData*       pData;
 
-    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE {}
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) override {}
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
 
 public:
 
                         TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual             ~TPGalleryThemeGeneral();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );
 
@@ -269,8 +269,8 @@ class TPGalleryThemeProperties : public SfxTabPage
     css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    virtual void        Reset( const SfxItemSet* /*rSet*/ ) SAL_OVERRIDE {}
-    virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) SAL_OVERRIDE { return true; }
+    virtual void        Reset( const SfxItemSet* /*rSet*/ ) override {}
+    virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) override { return true; }
     static OUString     addExtension( const OUString&, const OUString& );
     void                FillFilterList();
 
@@ -292,7 +292,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
                         virtual ~TPGalleryThemeProperties();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }

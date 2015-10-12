@@ -82,9 +82,9 @@ public:
     */
     SdrObject*   CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
-    virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) SAL_OVERRIDE;
-    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) SAL_OVERRIDE;
+    virtual void MarkListHasChanged() override;
+    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) override;
+    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) override;
 
     static void createControlLabelPair(
         OutputDevice* _pOutDev,
@@ -103,13 +103,13 @@ public:
         SdrUnoObj*& _rpControl
     );
 
-    virtual SdrPageView* ShowSdrPage(SdrPage* pPage) SAL_OVERRIDE;
-    virtual void HideSdrPage() SAL_OVERRIDE;
+    virtual SdrPageView* ShowSdrPage(SdrPage* pPage) override;
+    virtual void HideSdrPage() override;
 
     // for copying complete form structures, not only control models
-    virtual SdrModel* GetMarkedObjModel() const SAL_OVERRIDE;
+    virtual SdrModel* GetMarkedObjModel() const override;
 
-    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin ) override;
 
     /** grab the focus to the first form control on the view
         @param _bForceSync
@@ -123,7 +123,7 @@ public:
             GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
-    bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
 
     /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
     FmFormPage* GetCurPage();
@@ -144,8 +144,8 @@ public:
      void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
      void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
 
-    virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) SAL_OVERRIDE;
-    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) SAL_OVERRIDE;
+    virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) override;
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) override;
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
     SVX_DLLPRIVATE bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);

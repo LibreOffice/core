@@ -32,12 +32,12 @@ protected:
 
 public:
     SwHeadFootFrm(SwFrameFormat * pFrm, SwFrm*, sal_uInt16 aType);
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
     virtual SwTwips GrowFrm( SwTwips,
-                             bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+                             bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips ShrinkFrm( SwTwips,
-                               bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
+                               bool bTst = false, bool bInfo = false ) override;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
 };
 
 /// Header in the document layout, inside a page.

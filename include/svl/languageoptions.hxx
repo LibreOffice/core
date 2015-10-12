@@ -118,13 +118,13 @@ private:
 
     bool            isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const;
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SvtSystemLanguageOptions();
     virtual ~SvtSystemLanguageOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
 
     LanguageType    GetWin16SystemLanguage() const;
 

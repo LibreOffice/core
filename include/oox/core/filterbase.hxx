@@ -199,11 +199,11 @@ public:
 
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rServiceName )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                         getSupportedServiceNames()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
@@ -220,30 +220,30 @@ public:
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
                             throw(  ::com::sun::star::uno::Exception,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XImporter interface ------------------------------
 
     virtual void SAL_CALL setTargetDocument(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxDocument )
                             throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XExporter interface ------------------------------
 
     virtual void SAL_CALL setSourceDocument(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxDocument )
                             throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XFilter interface --------------------------------
 
     virtual sal_Bool SAL_CALL filter(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL cancel()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     bool exportVBA() const;
 

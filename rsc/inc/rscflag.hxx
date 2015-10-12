@@ -35,30 +35,30 @@ class RscFlag : public RscConst
     RSCINST         CreateBasic( RSCINST * pInst );
 public:
                     RscFlag( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
                                   bool bOwnClass, Atom nConsId );
-    sal_uInt32      Size() SAL_OVERRIDE;
+    sal_uInt32      Size() override;
 
-    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE;
-    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE;
+    virtual void    SetToDefault( const RSCINST & rInst ) override;
+    bool            IsDefault( const RSCINST & rInst ) override;
     bool            IsDefault( const RSCINST & rInst, Atom nConstId );
 
                     // whether the flag is set
     bool            IsSet( const RSCINST & rInst, Atom nConstId );
 
                     // sets as default
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) override;
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                                     Atom nConstId );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              sal_Int32 nValue ) SAL_OVERRIDE;
-    ERRTYPE         SetNotConst( const RSCINST & rInst, Atom nConstId ) SAL_OVERRIDE;
+                              sal_Int32 nValue ) override;
+    ERRTYPE         SetNotConst( const RSCINST & rInst, Atom nConstId ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
 
 /******************* R s c C l i e n t ***********************************/
@@ -69,34 +69,34 @@ class RscClient : public RscTop
 public:
                     RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
                                Atom nConstantId );
-    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
-    sal_uInt32      Size() SAL_OVERRIDE { return pRefClass->Size(); }
+    virtual RSCCLASS_TYPE   GetClassType() const override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    sal_uInt32      Size() override { return pRefClass->Size(); }
 
                     // an assignment to a variable
-    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE {
+    bool            IsDefault( const RSCINST & rInst ) override {
                         return pRefClass->IsDefault( rInst, nConstId );
                     };
                     // sets as default
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) override
                         {
                             return pRefClass->IsValueDefault( rInst,
                                                               pDef, nConstId );
                         }
-    ERRTYPE         SetBool( const RSCINST & rInst, bool bValue ) SAL_OVERRIDE
+    ERRTYPE         SetBool( const RSCINST & rInst, bool bValue ) override
                         {
                             if( bValue )
                                 return pRefClass->SetConst( rInst, nConstId, sal_Int32(bValue) );
                             else
                                 return pRefClass->SetNotConst( rInst, nConstId );
                         }
-    ERRTYPE         GetBool( const RSCINST & rInst, bool * pB ) SAL_OVERRIDE
+    ERRTYPE         GetBool( const RSCINST & rInst, bool * pB ) override
                         {
                             *pB = pRefClass->IsSet( rInst, nConstId );
                             return ERR_OK;
                         }
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
 };
 
 #endif // INCLUDED_RSC_INC_RSCFLAG_HXX

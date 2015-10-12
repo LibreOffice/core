@@ -49,15 +49,15 @@ class SvxColorOptionsTabPage : public SfxTabPage
 public:
     SvxColorOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxColorOptionsTabPage(  );
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void        FillUserData() SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) override;
+    virtual void        FillUserData() override;
 
 };
 

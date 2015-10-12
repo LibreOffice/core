@@ -686,7 +686,7 @@ private:
     SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint = false);
     SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     using Window::ImplHitTest;
     SVT_DLLPRIVATE bool ImplHitTest( const Point& rPosition,
@@ -709,15 +709,15 @@ protected:
 public:
             Ruler( vcl::Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual ~Ruler();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual bool    StartDrag();
     virtual void    Drag();
@@ -726,8 +726,8 @@ public:
     void            DoubleClick();
     virtual void    ExtraDown();
 
-    void            Activate() SAL_OVERRIDE;
-    void            Deactivate() SAL_OVERRIDE;
+    void            Activate() override;
+    void            Deactivate() override;
 
     void            SetWinPos( long nOff = 0, long nWidth = 0 );
     long            GetWinOffset() const { return mnWinOff; }
@@ -796,7 +796,7 @@ public:
 
     void            DrawTicks();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 };
 
 #endif // INCLUDED_SVTOOLS_RULER_HXX

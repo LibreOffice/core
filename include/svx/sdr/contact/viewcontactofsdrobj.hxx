@@ -44,7 +44,7 @@ protected:
 
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
 public:
     // access to SdrObject
@@ -58,26 +58,26 @@ public:
     virtual ~ViewContactOfSdrObj();
 
     // Access to possible sub-hierarchy
-    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
-    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
-    virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
+    virtual sal_uInt32 GetObjectCount() const override;
+    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
+    virtual ViewContact* GetParentContact() const override;
 
     // React on changes of the object of this ViewContact
-    virtual void ActionChanged() SAL_OVERRIDE;
+    virtual void ActionChanged() override;
 
     /// override for accessing the SdrObject
-    virtual SdrObject* TryToGetSdrObject() const SAL_OVERRIDE;
+    virtual SdrObject* TryToGetSdrObject() const override;
 
 
     // primitive stuff
 
     // add Gluepoints (if available)
-    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const override;
 
     // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
     // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
     // for 3D scenes
-    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const override;
 };
 
 }}

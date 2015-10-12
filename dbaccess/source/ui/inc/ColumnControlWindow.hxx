@@ -42,15 +42,15 @@ namespace dbaui
         OUString                    m_sAutoIncrementValue;
         bool                        m_bAutoIncrementEnabled;
     protected:
-        virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
-        virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
+        virtual void        ActivateAggregate( EControlType eType ) override;
+        virtual void        DeactivateAggregate( EControlType eType ) override;
 
-        virtual css::lang::Locale  GetLocale() const SAL_OVERRIDE;
-        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
-        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
-        virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
-        virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
-        virtual void                CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual css::lang::Locale  GetLocale() const override;
+        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
+        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) override;
+        virtual bool                isAutoIncrementValueEnabled() const override;
+        virtual OUString            getAutoIncrementValue() const override;
+        virtual void                CellModified(long nRow, sal_uInt16 nColId ) override;
 
     public:
         OColumnControlWindow(vcl::Window* pParent
@@ -58,9 +58,9 @@ namespace dbaui
 
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
-        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() SAL_OVERRIDE;
-        virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
+        virtual const OTypeInfoMap* getTypeInfo() const override;
         TOTypeInfoSP getDefaultTyp() const;
     };
 }   // namespace dbaui

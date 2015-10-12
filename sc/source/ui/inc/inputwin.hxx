@@ -62,48 +62,48 @@ class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit wind
 public:
                     ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh );
     virtual         ~ScTextWnd();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
-    virtual const OUString& GetTextString() const SAL_OVERRIDE;
+    virtual void            SetTextString( const OUString& rString ) override;
+    virtual const OUString& GetTextString() const override;
 
-    bool                     IsInputActive() SAL_OVERRIDE;
-    virtual EditView*       GetEditView() SAL_OVERRIDE;
+    bool                     IsInputActive() override;
+    virtual EditView*       GetEditView() override;
 
                         // for function autopilots
-    virtual void            MakeDialogEditView() SAL_OVERRIDE;
+    virtual void            MakeDialogEditView() override;
 
-    virtual void            StartEditEngine() SAL_OVERRIDE;
-    virtual void            StopEditEngine( bool bAll ) SAL_OVERRIDE;
+    virtual void            StartEditEngine() override;
+    virtual void            StopEditEngine( bool bAll ) override;
 
-    virtual void            TextGrabFocus() SAL_OVERRIDE;
+    virtual void            TextGrabFocus() override;
 
-    virtual void             DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void             DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void            SetFormulaMode( bool bSet ) SAL_OVERRIDE;
+    virtual void            SetFormulaMode( bool bSet ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
-    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
+    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
+    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
 
     DECL_LINK_TYPED( NotifyHdl, LinkParamNone*, void );
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Resize() override;
 
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    KeyInput(const KeyEvent& rKEvt) override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    virtual OUString  GetText() const SAL_OVERRIDE;
+    virtual OUString  GetText() const override;
 
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
@@ -140,18 +140,18 @@ private:
 public:
                     ScPosWnd( vcl::Window* pParent );
     virtual         ~ScPosWnd();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual void    Modify() SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual void    Modify() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 private:
     void            FillRangeNames();
@@ -169,15 +169,15 @@ class ScMultiTextWnd : public ScTextWnd
 public:
     ScMultiTextWnd( ScInputBarGroup* pParent, ScTabViewShell* pViewSh );
     virtual ~ScMultiTextWnd();
-    virtual void StartEditEngine() SAL_OVERRIDE;
-    virtual void StopEditEngine( bool bAll ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual EditView*  GetEditView() SAL_OVERRIDE;
+    virtual void StartEditEngine() override;
+    virtual void StopEditEngine( bool bAll ) override;
+    virtual void Resize() override;
+    virtual EditView*  GetEditView() override;
     long GetPixelHeightForLines( long nLines );
     long GetEditEngTxtHeight();
 
     void DoScroll();
-    virtual void SetTextString( const OUString& rString ) SAL_OVERRIDE;
+    virtual void SetTextString( const OUString& rString ) override;
     void SetNumLines( long nLines );
     long GetNumLines() { return mnLines; }
     long GetLastNumExpandedLines() { return mnLastExpandedLines; }
@@ -185,7 +185,7 @@ protected:
     void SetScrollBarRange();
     void InitEditEngine();
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
     DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
     DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
 private:
@@ -202,19 +202,19 @@ class ScInputBarGroup : public ScTextWndBase
 public:
                     ScInputBarGroup( vcl::Window* Parent, ScTabViewShell* pViewSh );
     virtual         ~ScInputBarGroup();
-    virtual void    dispose() SAL_OVERRIDE;
-    virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
-    virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
-    void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
-    void            StartEditEngine() SAL_OVERRIDE;
-    EditView*       GetEditView() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual const OUString&   GetTextString() const SAL_OVERRIDE;
-    virtual void            StopEditEngine( bool bAll ) SAL_OVERRIDE;
-    virtual void            TextGrabFocus() SAL_OVERRIDE;
-    void            SetFormulaMode( bool bSet ) SAL_OVERRIDE;
-    void            MakeDialogEditView() SAL_OVERRIDE;
-    bool            IsInputActive() SAL_OVERRIDE;
+    virtual void    dispose() override;
+    virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
+    virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
+    void            SetTextString( const OUString& rString ) override;
+    void            StartEditEngine() override;
+    EditView*       GetEditView() override;
+    virtual void    Resize() override;
+    virtual const OUString&   GetTextString() const override;
+    virtual void            StopEditEngine( bool bAll ) override;
+    virtual void            TextGrabFocus() override;
+    void            SetFormulaMode( bool bSet ) override;
+    void            MakeDialogEditView() override;
+    bool            IsInputActive() override;
     ScrollBar&      GetScrollBar() { return *aScrollBar.get(); }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
@@ -236,11 +236,11 @@ class ScInputWindow : public ToolBox                        // Parent toolbox
 public:
                     ScInputWindow( vcl::Window* pParent, SfxBindings* pBind );
     virtual         ~ScInputWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Resize() override;
+    virtual void    Select() override;
 
     void            SetFuncString( const OUString& rString, bool bDoEdit = true );
     void            SetPosString( const OUString& rStr );
@@ -270,15 +270,15 @@ public:
 
     ScInputHandler* GetInputHandler(){ return pInputHdl;}
 
-    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void            StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     bool            IsMultiLineInput() { return mbIsMultiLine; }
 protected:
-    virtual void    SetText( const OUString& rString ) SAL_OVERRIDE;
-    virtual OUString  GetText() const SAL_OVERRIDE;
+    virtual void    SetText( const OUString& rString ) override;
+    virtual OUString  GetText() const override;
 
     static bool UseSubTotal( ScRangeList* pRangeList );
     bool IsPointerAtResizePos();

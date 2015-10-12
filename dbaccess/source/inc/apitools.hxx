@@ -45,13 +45,13 @@ public:
                   const css::uno::Reference< css::uno::XInterface >& _xParent);
 
 // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
 
 // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL release() throw() override;
 
     inline operator css::uno::Reference< css::uno::XInterface > () const
         { return static_cast<css::uno::XWeak *>(const_cast<OSubComponent *>(this)); }
@@ -179,7 +179,7 @@ public:
 // XTypeProvider helpers
 
 #define DECLARE_IMPLEMENTATION_ID( )    \
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;  \
     static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
@@ -223,9 +223,9 @@ css::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (css::uno:
 
 // helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE; \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE
+    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override; \
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override; \
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override
 
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
     css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception)  \

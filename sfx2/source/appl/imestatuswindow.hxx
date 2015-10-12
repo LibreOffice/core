@@ -95,11 +95,11 @@ private:
 
     virtual void SAL_CALL
     disposing(com::sun::star::lang::EventObject const & rSource)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
     propertyChange(com::sun::star::beans::PropertyChangeEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
     getConfig();

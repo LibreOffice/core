@@ -139,7 +139,7 @@ public:
         : SvSimpleTable(rParent, nBits)
     {
     }
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
     void setColSizes();
 };
 

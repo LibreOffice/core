@@ -117,7 +117,7 @@ public:
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Initialize the dialog and the security environment, returns TRUE on success
     bool    Init();
@@ -127,7 +127,7 @@ public:
     void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
 
                 // Execute the dialog...
-    short       Execute() SAL_OVERRIDE;
+    short       Execute() override;
 
                 // Did signatures change?
     bool    SignaturesChanged() const { return mbSignaturesChanged; }

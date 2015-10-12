@@ -33,17 +33,17 @@ namespace accessibility
                                           const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                           ::svt::AccessibleBrowseBoxObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( css::uno::RuntimeException, std::exception ) override;
 
         /** @return  The XAccessible interface of the specified child. */
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int32 nChildIndex ) throw ( css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            getAccessibleChild( sal_Int32 nChildIndex ) throw ( css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception ) override;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( css::uno::RuntimeException, std::exception ) override;
 
         /** Grabs the focus to the BrowseBox. */
-        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) override;
 
         inline bool isRowBarCell() const
         {
@@ -53,19 +53,19 @@ namespace accessibility
         /** @return
                 The name of this class.
         */
-        virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
 
         /** Creates a new AccessibleStateSetHelper and fills it with states of the
             current object.
             @return
                 A filled AccessibleStateSetHelper.
         */
-        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() SAL_OVERRIDE;
+        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
 
     protected:
-        virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
+        virtual Rectangle implGetBoundingBox() override;
 
-        virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
+        virtual Rectangle implGetBoundingBoxOnScreen() override;
     };
 }
 

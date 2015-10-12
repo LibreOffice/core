@@ -54,11 +54,11 @@ protected:
 public:
     ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
     virtual ~ODatasourceSelectDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
     void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }
 
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    Close() override;
 
 protected:
     DECL_LINK_TYPED( ListDblClickHdl, ListBox&, void );

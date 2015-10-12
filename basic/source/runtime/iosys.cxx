@@ -73,7 +73,7 @@ class SbiInputDialog : public ModalDialog {
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
     virtual ~SbiInputDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     const OUString& GetInput() { return aText; }
 };
 
@@ -312,11 +312,11 @@ class OslStream : public SvStream
 public:
                         OslStream( const OUString& rName, StreamMode nStrmMode );
                        virtual ~OslStream();
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
-    virtual void        FlushData() SAL_OVERRIDE;
-    virtual void        SetSize( sal_uInt64 nSize) SAL_OVERRIDE;
+    virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
+    virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
+    virtual void        FlushData() override;
+    virtual void        SetSize( sal_uInt64 nSize) override;
 };
 
 OslStream::OslStream( const OUString& rName, StreamMode nStrmMode )
@@ -408,11 +408,11 @@ public:
     explicit UCBStream( Reference< XInputStream > & xIS );
     explicit UCBStream( Reference< XStream > & xS );
                        virtual ~UCBStream();
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
-    virtual void        FlushData() SAL_OVERRIDE;
-    virtual void        SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
+    virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
+    virtual void        FlushData() override;
+    virtual void        SetSize( sal_uInt64 nSize ) override;
 };
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )

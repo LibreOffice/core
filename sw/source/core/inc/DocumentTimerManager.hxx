@@ -39,15 +39,15 @@ public:
 
     DocumentTimerManager( SwDoc& i_rSwdoc );
 
-    void StartIdling() SAL_OVERRIDE;
+    void StartIdling() override;
 
-    void StopIdling() SAL_OVERRIDE;
+    void StopIdling() override;
 
-    void BlockIdling() SAL_OVERRIDE;
+    void BlockIdling() override;
 
-    void UnblockIdling() SAL_OVERRIDE;
+    void UnblockIdling() override;
 
-    void StartBackgroundJobs() SAL_OVERRIDE;
+    void StartBackgroundJobs() override;
 
     // Our own 'IdleTimer' calls the following method
     DECL_LINK_TYPED( DoIdleJobs, Idle *, void );

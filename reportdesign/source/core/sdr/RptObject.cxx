@@ -180,7 +180,7 @@ namespace
     class ParaAdjust : public AnyConverter
     {
     public:
-        virtual ::com::sun::star::uno::Any operator() (const OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const SAL_OVERRIDE
+        virtual ::com::sun::star::uno::Any operator() (const OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const override
         {
             uno::Any aRet;
             if (_sPropertyName == PROPERTY_PARAADJUST)

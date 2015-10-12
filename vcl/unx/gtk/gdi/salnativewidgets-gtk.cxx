@@ -282,9 +282,9 @@ public:
     GdkX11Pixmap( int nWidth, int nHeight, int nDepth );
     virtual ~GdkX11Pixmap();
 
-    virtual int          GetDepth() const SAL_OVERRIDE;
-    virtual SalX11Screen GetScreen() const SAL_OVERRIDE;
-    virtual Pixmap       GetPixmap() const SAL_OVERRIDE;
+    virtual int          GetDepth() const override;
+    virtual SalX11Screen GetScreen() const override;
+    virtual Pixmap       GetPixmap() const override;
     GdkPixmap*           GetGdkPixmap() const;
     GdkDrawable*         GetGdkDrawable() const;
 

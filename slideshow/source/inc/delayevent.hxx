@@ -51,11 +51,11 @@ public:
         mbWasFired(false) {}
 
     // Event:
-    virtual bool fire() SAL_OVERRIDE;
-    virtual bool isCharged() const SAL_OVERRIDE;
-    virtual double getActivationTime( double nCurrentTime ) const SAL_OVERRIDE;
+    virtual bool fire() override;
+    virtual bool isCharged() const override;
+    virtual double getActivationTime( double nCurrentTime ) const override;
     // Disposable:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     double const mnTimeout;

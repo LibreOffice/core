@@ -40,7 +40,7 @@ public:
         m_bLayoutDirty = true;
     }
 
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 protected:
     //these are the two that need to be implemented by
     //containers, figure out how much space you want...
@@ -48,13 +48,13 @@ protected:
     //..and decide what to do when set to this size
     virtual void setAllocation(const Size &rAllocation) = 0;
 
-    virtual sal_uInt16 getDefaultAccessibleRole() const SAL_OVERRIDE;
+    virtual sal_uInt16 getDefaultAccessibleRole() const override;
 public:
     //you don't want to override these
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) SAL_OVERRIDE;
-    virtual void SetPosPixel(const Point& rAllocPos) SAL_OVERRIDE;
-    virtual void SetSizePixel(const Size& rAllocation) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
+    virtual void SetPosPixel(const Point& rAllocPos) override;
+    virtual void SetSizePixel(const Size& rAllocation) override;
 private:
     bool m_bLayoutDirty;
 };
@@ -85,14 +85,14 @@ public:
     {
         m_bHomogeneous = bHomogeneous;
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 protected:
-    virtual sal_uInt16 getDefaultAccessibleRole() const SAL_OVERRIDE;
+    virtual sal_uInt16 getDefaultAccessibleRole() const override;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
     Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 
     virtual long getPrimaryDimension(const Size &rSize) const = 0;
     virtual void setPrimaryDimension(Size &rSize, long) const = 0;
@@ -113,31 +113,31 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const SAL_OVERRIDE
+    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const SAL_OVERRIDE
+    virtual long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const SAL_OVERRIDE
+    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const override
     {
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
@@ -152,31 +152,31 @@ public:
         m_bVerticalContainer = false;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const SAL_OVERRIDE
+    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const SAL_OVERRIDE
+    virtual long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const SAL_OVERRIDE
+    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const override
     {
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
@@ -204,11 +204,11 @@ public:
     {
         m_eLayoutStyle = eStyle;
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
     void sort_native_button_order();
 protected:
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
     Size addSpacing(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 private:
     VclButtonBoxStyle m_eLayoutStyle;
@@ -232,31 +232,31 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const SAL_OVERRIDE
+    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const SAL_OVERRIDE
+    virtual long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const SAL_OVERRIDE
+    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const override
     {
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
@@ -271,31 +271,31 @@ public:
         m_bVerticalContainer = false;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const SAL_OVERRIDE
+    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const SAL_OVERRIDE
+    virtual long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const SAL_OVERRIDE
+    virtual long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const SAL_OVERRIDE
+    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const override
     {
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
@@ -319,8 +319,8 @@ public:
 private:
 
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 public:
     VclGrid(vcl::Window *pParent)
         : VclContainer(pParent)
@@ -360,7 +360,7 @@ public:
     {
         return m_nColumnSpacing;
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 };
 
 class VCL_DLLPUBLIC VclBin : public VclContainer
@@ -372,8 +372,8 @@ public:
     }
     virtual vcl::Window *get_child();
     virtual const vcl::Window *get_child() const;
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 };
 
 class VCL_DLLPUBLIC VclFrame : public VclBin
@@ -391,17 +391,17 @@ public:
     {
     }
     virtual ~VclFrame();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void set_label(const OUString &rLabel);
     OUString get_label() const;
-    virtual vcl::Window *get_child() SAL_OVERRIDE;
-    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
+    virtual vcl::Window *get_child() override;
+    virtual const vcl::Window *get_child() const override;
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
 protected:
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
-    virtual OUString getDefaultAccessibleName() const SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
+    virtual OUString getDefaultAccessibleName() const override;
 };
 
 class VCL_DLLPUBLIC VclAlignment : public VclBin
@@ -419,10 +419,10 @@ public:
         , m_fYScale(1.0)
     {
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 protected:
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 private:
     sal_Int32 m_nBottomPadding;
     sal_Int32 m_nLeftPadding;
@@ -446,10 +446,10 @@ public:
         m_pDisclosureButton->Show();
     }
     virtual ~VclExpander() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
-    virtual vcl::Window *get_child() SAL_OVERRIDE;
-    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual vcl::Window *get_child() override;
+    virtual const vcl::Window *get_child() const override;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
     bool get_expanded() const
     {
         return m_pDisclosureButton->IsChecked();
@@ -462,11 +462,11 @@ public:
     {
         m_pDisclosureButton->SetText(rLabel);
     }
-    virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
+    virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
 protected:
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
@@ -479,10 +479,10 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
     virtual ~VclScrolledWindow() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
-    virtual vcl::Window *get_child() SAL_OVERRIDE;
-    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual vcl::Window *get_child() override;
+    virtual const vcl::Window *get_child() const override;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
     ScrollBar& getVertScrollBar() { return *m_pVScroll; }
     ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
     Size getVisibleChildSize() const;
@@ -490,11 +490,11 @@ public:
     //to override it
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
 protected:
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
     DECL_LINK_TYPED(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
-    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual bool Notify(NotifyEvent& rNEvt) override;
 private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;
@@ -510,7 +510,7 @@ public:
     {
     }
 protected:
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual void setAllocation(const Size &rAllocation) override;
 };
 
 //Enforces that its children are always the same size as itself.
@@ -535,7 +535,7 @@ private:
             SetPaintTransparent(true);
             SetBackground();
         }
-        virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE
+        virtual void Command(const CommandEvent& rCEvt) override
         {
             GetParent()->Command(rCEvt);
         }
@@ -543,7 +543,7 @@ private:
 
     VclPtr<EventBoxHelper> m_aEventBoxHelper;
 protected:
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     virtual ~VclEventBox();
 public:
     VclEventBox(vcl::Window* pParent)
@@ -552,12 +552,12 @@ public:
     {
         m_aEventBoxHelper->Show();
     }
-    virtual vcl::Window *get_child() SAL_OVERRIDE;
-    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
-    virtual Size calculateRequisition() const SAL_OVERRIDE;
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual vcl::Window *get_child() override;
+    virtual const vcl::Window *get_child() const override;
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 
-    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCEvt) override;
 };
 
 enum VclSizeGroupMode
@@ -659,8 +659,8 @@ public:
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    virtual short Execute() SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual short Execute() override;
     ///Emitted when an action widget is clicked
     virtual void response(short nResponseId);
     OUString get_primary_text() const;
@@ -668,7 +668,7 @@ public:
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
     virtual ~MessageDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);

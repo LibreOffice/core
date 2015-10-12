@@ -31,7 +31,7 @@ class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 public:
     SbStdFactory();
 
-    virtual SbxObject*  CreateObject( const OUString& rClassName ) SAL_OVERRIDE;
+    virtual SbxObject*  CreateObject( const OUString& rClassName ) override;
 };
 
 // class SbStdPicture
@@ -41,7 +41,7 @@ protected:
     Graphic     aGraphic;
 
    virtual ~SbStdPicture();
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
     void    PropWidth( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -51,7 +51,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdPicture();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     Graphic GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
@@ -69,7 +69,7 @@ protected:
     OUString  aName;
 
    virtual ~SbStdFont();
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
     void    PropItalic( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -82,7 +82,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdFont();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     void     SetBold( bool bB ) { bBold = bB; }
     bool     IsBold() const { return bBold; }
@@ -104,7 +104,7 @@ class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 protected:
 
     virtual ~SbStdClipboard();
-    virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
     static void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
@@ -117,7 +117,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdClipboard();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 };
 
 #endif // INCLUDED_BASIC_INC_SBSTDOBJ_HXX

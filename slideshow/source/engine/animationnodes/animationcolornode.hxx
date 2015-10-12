@@ -38,11 +38,11 @@ public:
           mxColorNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const SAL_OVERRIDE { return "AnimationColorNode"; }
+    virtual const char* getDescription() const override { return "AnimationColorNode"; }
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
+    virtual AnimationActivitySharedPtr createActivity() const override;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimateColor > mxColorNode;

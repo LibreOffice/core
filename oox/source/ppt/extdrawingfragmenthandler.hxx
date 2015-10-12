@@ -29,7 +29,7 @@ public:
         oox::drawingml::ShapePtr pShapePtr ) throw();
     virtual ~ExtDrawingFragmentHandler() throw();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;
 
 private:
         const oox::ppt::SlidePersistPtr mpSlidePersistPtr;

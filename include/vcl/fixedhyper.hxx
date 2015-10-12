@@ -45,19 +45,19 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
 
             Changes the pointer only over the text.
         */
-        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& rMEvt ) override;
 
         /** overwrites Window::MouseButtonUp().
 
             Calls the set link if the mouse is over the text.
         */
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
 
         /** overwrites Window::RequestHelp().
 
             Shows tooltip only if the mouse is over the text.
         */
-        virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
     public:
         /** ctors
@@ -70,21 +70,21 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
 
             Changes the color of the text and shows a focus rectangle.
         */
-        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        GetFocus() override;
 
         /** overwrites Window::LoseFocus().
 
             Changes the color of the text and hides the focus rectangle.
         */
-        virtual void        LoseFocus() SAL_OVERRIDE;
+        virtual void        LoseFocus() override;
 
         /** overwrites Window::KeyInput().
 
             KEY_RETURN and KEY_SPACE calls the link handler.
         */
-        virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 
-        virtual bool        set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+        virtual bool        set_property(const OString &rKey, const OString &rValue) override;
 
 
         /** sets m_aClickHdl with rLink.
@@ -106,7 +106,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         const OUString&    GetURL() const { return m_sURL;}
 
         /** sets new text and recalculates the text length. */
-        virtual void SetText(const OUString& rNewDescription) SAL_OVERRIDE;
+        virtual void SetText(const OUString& rNewDescription) override;
     };
 
 #endif

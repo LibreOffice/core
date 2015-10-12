@@ -42,10 +42,10 @@ public:
 
     virtual ~SwSdrUndo();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 };
 
 class SwUndoDrawGroup : public SwUndo
@@ -59,8 +59,8 @@ public:
 
     virtual ~SwUndoDrawGroup();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrameFormat*, SdrObject* );
     void SetGroupFormat( SwDrawFrameFormat* );
@@ -88,8 +88,8 @@ public:
 
     virtual ~SwUndoDrawUnGroup();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrameFormat* );
 };
@@ -104,8 +104,8 @@ public:
 
     virtual ~SwUndoDrawUnGroupConnectToLayout();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void AddFormatAndObj( SwDrawFrameFormat* pDrawFrameFormat,
                        SdrObject* pDrawObject );
@@ -123,8 +123,8 @@ public:
 
     virtual ~SwUndoDrawDelete();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrameFormat*, const SdrMark& );
 };

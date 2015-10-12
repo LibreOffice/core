@@ -94,17 +94,17 @@ class SvMetaClass : public SvMetaType
 
 protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm ) SAL_OVERRIDE;
+                                      SvTokenStream & rInStm ) override;
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
-                                     SvTokenStream & rInStm ) SAL_OVERRIDE;
+                                     SvTokenStream & rInStm ) override;
 public:
             TYPEINFO_OVERRIDE();
             SvMetaClass();
 
     void                FillClasses( SvMetaClassList & rList );
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
 };
 
 #endif // INCLUDED_IDL_INC_OBJECT_HXX

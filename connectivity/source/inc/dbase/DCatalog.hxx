@@ -30,7 +30,7 @@ namespace connectivity
         class ODbaseCatalog : public file::OFileCatalog
         {
     public:
-            virtual void refreshTables() SAL_OVERRIDE;
+            virtual void refreshTables() override;
 
         public:
             ODbaseCatalog(ODbaseConnection* _pCon);

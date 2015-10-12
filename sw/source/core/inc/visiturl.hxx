@@ -31,7 +31,7 @@ public:
     SwURLStateChanged( SwDoc* pD );
     virtual ~SwURLStateChanged();
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 #endif

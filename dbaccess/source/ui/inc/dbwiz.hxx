@@ -72,29 +72,29 @@ public:
         ,const css::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
-    virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
+    virtual const SfxItemSet* getOutputSet() const override;
+    virtual SfxItemSet* getWriteOutputSet() override;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const SAL_OVERRIDE;
-    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
-    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() SAL_OVERRIDE;
-    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
-    virtual void clearPassword() SAL_OVERRIDE;
-    virtual bool saveDatasource() SAL_OVERRIDE;
-    virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
-    virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
+    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
+    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
+    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
+    virtual void clearPassword() override;
+    virtual bool saveDatasource() override;
+    virtual void setTitle(const OUString& _sTitle) override;
+    virtual void enableConfirmSettings( bool _bEnable ) override;
 
 protected:
     /// to override to create new pages
-    virtual VclPtr<TabPage> createPage(WizardState _nState) SAL_OVERRIDE;
-    virtual WizardState determineNextState(WizardState _nCurrentState) const SAL_OVERRIDE;
-    virtual bool        leaveState(WizardState _nState) SAL_OVERRIDE;
+    virtual VclPtr<TabPage> createPage(WizardState _nState) override;
+    virtual WizardState determineNextState(WizardState _nCurrentState) const override;
+    virtual bool        leaveState(WizardState _nState) override;
     virtual ::svt::IWizardPageController*
-                        getPageController( TabPage* _pCurrentPage ) const SAL_OVERRIDE;
-    virtual bool        onFinish() SAL_OVERRIDE;
+                        getPageController( TabPage* _pCurrentPage ) const override;
+    virtual bool        onFinish() override;
 
 protected:
 

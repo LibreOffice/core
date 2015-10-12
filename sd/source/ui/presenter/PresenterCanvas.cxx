@@ -64,37 +64,37 @@ public:
         const css::geometry::RealSize2D& rSpriteSize);
     virtual ~PresenterCustomSprite();
     virtual void SAL_CALL disposing()
-        throw (RuntimeException) SAL_OVERRIDE;
+        throw (RuntimeException) override;
 
     // XSprite
 
     virtual void SAL_CALL setAlpha (double nAlpha)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) override;
 
     virtual void SAL_CALL move (const geometry::RealPoint2D& rNewPos,
         const rendering::ViewState& rViewState,
         const rendering::RenderState& rRenderState)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) override;
 
     virtual void SAL_CALL transform (const geometry::AffineMatrix2D& rTransformation)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) override;
 
     virtual void SAL_CALL clip (const Reference<rendering::XPolyPolygon2D>& rClip)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setPriority (double nPriority)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     virtual void SAL_CALL show()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     virtual void SAL_CALL hide()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XCustomSprite
 
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
 private:
     rtl::Reference<PresenterCanvas> mpCanvas;

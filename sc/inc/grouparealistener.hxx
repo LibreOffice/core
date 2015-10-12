@@ -43,8 +43,8 @@ public:
 
     ScRange getListeningRange() const;
 
-    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
-    virtual void Query( QueryBase& rQuery ) const SAL_OVERRIDE;
+    virtual void Notify( const SfxHint& rHint ) override;
+    virtual void Query( QueryBase& rQuery ) const override;
 
     /**
      * Given the row span of changed cells within a single column, collect all

@@ -24,17 +24,17 @@ public:
     SmOoxmlExport( const SmNode* pIn, oox::core::OoxmlVersion version );
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
-    virtual void HandleVerticalStack( const SmNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleText( const SmNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL ) SAL_OVERRIDE;
-    virtual void HandleRoot( const SmRootNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleAttribute( const SmAttributNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleOperator( const SmOperNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags ) SAL_OVERRIDE;
-    virtual void HandleMatrix( const SmMatrixNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleBrace( const SmBraceNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel ) SAL_OVERRIDE;
-    virtual void HandleBlank() SAL_OVERRIDE;
+    virtual void HandleVerticalStack( const SmNode* pNode, int nLevel ) override;
+    virtual void HandleText( const SmNode* pNode, int nLevel ) override;
+    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL ) override;
+    virtual void HandleRoot( const SmRootNode* pNode, int nLevel ) override;
+    virtual void HandleAttribute( const SmAttributNode* pNode, int nLevel ) override;
+    virtual void HandleOperator( const SmOperNode* pNode, int nLevel ) override;
+    virtual void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags ) override;
+    virtual void HandleMatrix( const SmMatrixNode* pNode, int nLevel ) override;
+    virtual void HandleBrace( const SmBraceNode* pNode, int nLevel ) override;
+    virtual void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel ) override;
+    virtual void HandleBlank() override;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
 };

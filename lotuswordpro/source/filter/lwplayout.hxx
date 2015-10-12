@@ -162,7 +162,7 @@ public:
     virtual bool HasContent(){return false;}
     //End by
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 protected:
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
@@ -235,11 +235,11 @@ class LwpHeadLayout : public LwpVirtualLayout
 public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeadLayout(){}
-    void RegisterStyle() SAL_OVERRIDE;
+    void RegisterStyle() override;
     LwpVirtualLayout* FindEnSuperTableLayout();
 protected:
-    void Read() SAL_OVERRIDE;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_HEAD_LAYOUT;}
+    void Read() override;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEAD_LAYOUT;}
 };
 
 class LwpLayoutStyle
@@ -273,9 +273,9 @@ class LwpMiddleLayout : public LwpVirtualLayout
 public:
     LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpMiddleLayout();
-    virtual bool MarginsSameAsParent() SAL_OVERRIDE;
-    virtual double GetMarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
-    virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
+    virtual bool MarginsSameAsParent() override;
+    virtual double GetMarginsValue(const sal_uInt8& nWhichSide) override;
+    virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide) override;
     LwpLayoutGeometry* GetGeometry();
     double GetGeometryHeight();
     double GetGeometryWidth();
@@ -284,14 +284,14 @@ public:
     enumXFTextDir GetTextDirection();
     XFBorders* GetXFBorders();
     LwpColor* GetBackColor();
-    virtual bool IsAutoGrow() SAL_OVERRIDE;
-    virtual bool IsAutoGrowUp() SAL_OVERRIDE;
-    virtual bool IsAutoGrowDown() SAL_OVERRIDE;
-    virtual bool IsAutoGrowLeft() SAL_OVERRIDE;
-    virtual bool IsAutoGrowRight() SAL_OVERRIDE;
-    virtual sal_uInt8 GetContentOrientation() SAL_OVERRIDE;
-    virtual bool HonorProtection() SAL_OVERRIDE;
-    virtual bool IsProtected() SAL_OVERRIDE;
+    virtual bool IsAutoGrow() override;
+    virtual bool IsAutoGrowUp() override;
+    virtual bool IsAutoGrowDown() override;
+    virtual bool IsAutoGrowLeft() override;
+    virtual bool IsAutoGrowRight() override;
+    virtual sal_uInt8 GetContentOrientation() override;
+    virtual bool HonorProtection() override;
+    virtual bool IsProtected() override;
     LwpVirtualLayout* GetWaterMarkLayout();
     XFBGImage* GetXFBGImage();
     bool GetUsePrinterSettings();
@@ -305,7 +305,7 @@ public:
     double GetScaleHeight();
 
     bool CanSizeRight();
-    virtual double GetWidth() SAL_OVERRIDE;
+    virtual double GetWidth() override;
     sal_Int32 GetMinimumWidth();
     bool IsSizeRightToContent();
     bool IsSizeRightToContainer();
@@ -317,10 +317,10 @@ public:
     XFBGImage* GetFillPattern();
 
     //Check whether there are contents in the layout
-    virtual bool HasContent() SAL_OVERRIDE;
+    virtual bool HasContent() override;
 
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 protected:
     enum
     {
@@ -355,7 +355,7 @@ public:
     LwpShadow* GetShadow();
     XFShadow* GetXFShadow();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 protected:
     LwpUseWhen* m_pUseWhen;
     LwpObjectID m_Positon;
@@ -366,10 +366,10 @@ protected:
     LwpObjectID m_LayExtJoinStuff;
 
 public:
-    LwpUseWhen* VirtualGetUseWhen() SAL_OVERRIDE;
-    virtual sal_uInt16 GetNumCols() SAL_OVERRIDE;
-    virtual double GetColWidth(sal_uInt16 nIndex) SAL_OVERRIDE;
-    virtual double GetColGap(sal_uInt16 nIndex) SAL_OVERRIDE;
+    LwpUseWhen* VirtualGetUseWhen() override;
+    virtual sal_uInt16 GetNumCols() override;
+    virtual double GetColWidth(sal_uInt16 nIndex) override;
+    virtual double GetColGap(sal_uInt16 nIndex) override;
     sal_uInt16 GetUsePage();
 public:
     enum UseWhenType
@@ -382,12 +382,12 @@ public:
     };
 public:
     UseWhenType GetUseWhenType();
-    virtual bool IsUseOnAllPages() SAL_OVERRIDE;
-    virtual bool IsUseOnAllEvenPages() SAL_OVERRIDE;
-    virtual bool IsUseOnAllOddPages() SAL_OVERRIDE;
-    virtual bool IsUseOnPage() SAL_OVERRIDE;
+    virtual bool IsUseOnAllPages() override;
+    virtual bool IsUseOnAllEvenPages() override;
+    virtual bool IsUseOnAllOddPages() override;
+    virtual bool IsUseOnPage() override;
     LwpObjectID& GetPosition(){ return m_Positon;}
-    virtual LwpVirtualLayout* GetContainerLayout() SAL_OVERRIDE;
+    virtual LwpVirtualLayout* GetContainerLayout() override;
 };
 
 class LwpPlacableLayout : public LwpLayout
@@ -397,11 +397,11 @@ public:
     virtual ~LwpPlacableLayout();
     sal_uInt8 GetWrapType();
     LwpLayoutRelativity* GetRelativityPiece();
-    virtual sal_uInt8 GetRelativeType() SAL_OVERRIDE;
+    virtual sal_uInt8 GetRelativeType() override;
     sal_Int32 GetBaseLineOffset();
-    virtual bool IsAnchorPage() SAL_OVERRIDE;
-    virtual bool IsAnchorFrame() SAL_OVERRIDE;
-    virtual bool IsAnchorCell() SAL_OVERRIDE;
+    virtual bool IsAnchorPage() override;
+    virtual bool IsAnchorFrame() override;
+    virtual bool IsAnchorCell() override;
     virtual void XFConvertFrame(XFContentContainer* /*pCont*/, sal_Int32 /*nStart*/ = 0, sal_Int32 /*nEnd*/ = 0, bool /*bAll*/ = false) {}
     /**
      * @descr:   Get font style for setting position of frame
@@ -423,7 +423,7 @@ public:
         LAY_WRAP_IRREG_BIGGEST
     };
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 protected:
     sal_uInt8 m_nWrapType;
     sal_uInt8 m_nBuoyancy;

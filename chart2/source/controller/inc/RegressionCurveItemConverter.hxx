@@ -48,17 +48,17 @@ public:
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
     virtual ~RegressionCurveItemConverter();
 
-    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const SAL_OVERRIDE;
-    virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) SAL_OVERRIDE;
+    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
+    virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
-    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
+    virtual const sal_uInt16 * GetWhichPairs() const override;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::Exception ) override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::Exception ) override;
 
 private:
     std::shared_ptr< ItemConverter >  m_spGraphicConverter;

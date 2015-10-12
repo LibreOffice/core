@@ -20,12 +20,12 @@ class ScOrcusFiltersImpl : public ScOrcusFilters
 public:
     static OString toSystemPath(const OUString& rPath);
 
-    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const SAL_OVERRIDE;
-    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const SAL_OVERRIDE;
-    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const SAL_OVERRIDE;
-    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const SAL_OVERRIDE;
+    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const override;
+    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const override;
+    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const override;
+    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const override;
 
-    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const SAL_OVERRIDE;
+    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const override;
 };
 
 class ScOrcusXMLContextImpl : public ScOrcusXMLContext
@@ -39,9 +39,9 @@ public:
     ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath);
     virtual ~ScOrcusXMLContextImpl();
 
-    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) SAL_OVERRIDE;
+    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;
 
-    virtual bool importXML(const ScOrcusImportXMLParam& rParam) SAL_OVERRIDE;
+    virtual bool importXML(const ScOrcusImportXMLParam& rParam) override;
 };
 
 #endif

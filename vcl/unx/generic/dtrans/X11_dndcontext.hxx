@@ -47,9 +47,9 @@ namespace x11 {
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
-        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rejectDrop() throw(std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception) override;
+        virtual void SAL_CALL rejectDrop() throw(std::exception) override;
+        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception) override;
     };
 
     class DropTargetDragContext :
@@ -66,8 +66,8 @@ namespace x11 {
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
-        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rejectDrag() throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception) override;
+        virtual void SAL_CALL rejectDrag() throw(std::exception) override;
     };
 
     class DragSourceContext :
@@ -84,10 +84,10 @@ namespace x11 {
         virtual ~DragSourceContext();
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception) SAL_OVERRIDE;
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception) SAL_OVERRIDE;
-        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception) SAL_OVERRIDE;
-        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception) override;
+        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception) override;
+        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception) override;
+        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception) override;
     };
 } // namespace
 

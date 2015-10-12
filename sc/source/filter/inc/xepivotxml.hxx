@@ -33,7 +33,7 @@ public:
     };
 
     XclExpXmlPivotCaches( const XclExpRoot& rRoot );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
     void SetCaches( const std::vector<Entry>& rCaches );
     bool HasCaches() const;
@@ -64,7 +64,7 @@ class XclExpXmlPivotTables : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpXmlPivotTables( const XclExpRoot& rRoot, const XclExpXmlPivotCaches& rCaches );
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
     void AppendTable( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId );
 

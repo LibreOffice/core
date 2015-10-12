@@ -41,8 +41,8 @@ private:
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
  protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
  public:
@@ -90,23 +90,23 @@ private:
     bool GetCloseBack() const
         { return static_cast<const Svx3DCloseBackItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual E3dLatheObj* Clone() const SAL_OVERRIDE;
+    virtual E3dLatheObj* Clone() const override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 
     // set/get local parameters with geometry recreation
     void SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew);
     const basegfx::B2DPolyPolygon& GetPolyPoly2D() const { return maPolyPoly2D; }
 
     // break up
-    virtual bool IsBreakObjPossible() SAL_OVERRIDE;
-    virtual SdrAttrObj* GetBreakObj() SAL_OVERRIDE;
+    virtual bool IsBreakObjPossible() override;
+    virtual SdrAttrObj* GetBreakObj() override;
 };
 
 #endif // INCLUDED_SVX_LATHE3D_HXX

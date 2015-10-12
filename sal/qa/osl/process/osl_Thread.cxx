@@ -235,7 +235,7 @@ protected:
 
         @see ThreadSafeValue
     */
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             while(schedule())
             {
@@ -246,7 +246,7 @@ protected:
 
 public:
 
-    virtual void SAL_CALL suspend() SAL_OVERRIDE
+    virtual void SAL_CALL suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
@@ -282,7 +282,7 @@ public:
             //m_bWait = sal_True;
         }
 
-    virtual void SAL_CALL suspend() SAL_OVERRIDE
+    virtual void SAL_CALL suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
@@ -293,7 +293,7 @@ protected:
     //sal_Bool m_bWait;
     sal_Int32 m_nWaitSec;
 
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             /// if the thread should terminate, schedule return false
             while (m_aFlag.getValue() < 20 && schedule())
@@ -311,7 +311,7 @@ protected:
                 }
             }
         }
-    void SAL_CALL onTerminated() SAL_OVERRIDE
+    void SAL_CALL onTerminated() override
         {
             t_print("normally terminate this thread %u!\n", (unsigned) getIdentifier());
         }
@@ -335,14 +335,14 @@ class ONoScheduleThread : public Thread
 public:
     sal_Int32 getValue() { return m_aFlag.getValue(); }
 
-    virtual void SAL_CALL suspend() SAL_OVERRIDE
+    virtual void SAL_CALL suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
             m_aFlag.release();
         }
 protected:
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             while (m_aFlag.getValue() < 10)
             {
@@ -350,7 +350,7 @@ protected:
                 ThreadHelper::thread_sleep_tenth_sec(1);
             }
         }
-    void SAL_CALL onTerminated() SAL_OVERRIDE
+    void SAL_CALL onTerminated() override
         {
             t_print("normally terminate this thread %u!\n", (unsigned) getIdentifier());
         }
@@ -379,14 +379,14 @@ public:
     OAddThread(){}
     sal_Int32 getValue() { return m_aFlag.getValue(); }
 
-    virtual void SAL_CALL suspend() SAL_OVERRIDE
+    virtual void SAL_CALL suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
             m_aFlag.release();
         }
 protected:
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             //if the thread should terminate, schedule return false
             while (schedule())
@@ -394,7 +394,7 @@ protected:
                 m_aFlag.addValue(1);
             }
         }
-    void SAL_CALL onTerminated() SAL_OVERRIDE
+    void SAL_CALL onTerminated() override
         {
             // t_print("normally terminate this thread %d!\n", getIdentifier());
         }
@@ -451,11 +451,11 @@ namespace osl_Thread
     public:
 
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -519,11 +519,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -600,11 +600,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -654,11 +654,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -739,11 +739,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -818,11 +818,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -910,11 +910,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -976,11 +976,11 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -1434,9 +1434,9 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE {}
+        void setUp() override {}
 
-        void tearDown() SAL_OVERRIDE {}
+        void tearDown() override {}
 
         // insert your test code here.
         void getPriority_001()
@@ -1478,9 +1478,9 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE {}
+        void setUp() override {}
 
-        void tearDown() SAL_OVERRIDE {}
+        void tearDown() override {}
 
         void getIdentifier_001()
         {
@@ -1497,8 +1497,8 @@ namespace osl_Thread
     class getCurrentIdentifier : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE {}
-        void tearDown() SAL_OVERRIDE {}
+        void setUp() override {}
+        void tearDown() override {}
 
         void getCurrentIdentifier_001()
         {
@@ -1526,8 +1526,8 @@ namespace osl_Thread
     class waittest : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE {}
-        void tearDown() SAL_OVERRIDE {}
+        void setUp() override {}
+        void tearDown() override {}
 
         /** call wait in the run method
 
@@ -1586,8 +1586,8 @@ namespace osl_Thread
     class yield : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE {}
-        void tearDown() SAL_OVERRIDE {}
+        void setUp() override {}
+        void tearDown() override {}
 
         void yield_001()
         {
@@ -1604,8 +1604,8 @@ namespace osl_Thread
     class schedule : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE {}
-        void tearDown() SAL_OVERRIDE {}
+        void setUp() override {}
+        void tearDown() override {}
 
         /** The requested thread will get terminate the next time schedule() is called.
 
@@ -1757,7 +1757,7 @@ public:
 private:
     char m_nData;
 
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             char * pc = new char[2];
 //      strcpy(pc, &m_nData);
@@ -1787,7 +1787,7 @@ class idThread: public Thread
 public:
     oslThreadIdentifier m_Id;
 private:
-    void SAL_CALL run() SAL_OVERRIDE
+    void SAL_CALL run() override
         {
             oslThreadIdentifier* pId = new oslThreadIdentifier;
             *pId = getIdentifier();
@@ -1815,11 +1815,11 @@ namespace osl_ThreadData
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -1838,11 +1838,11 @@ namespace osl_ThreadData
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 
@@ -1949,11 +1949,11 @@ namespace osl_ThreadData
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
+        void setUp() override
             {
             }
 
-        void tearDown() SAL_OVERRIDE
+        void tearDown() override
             {
             }
 

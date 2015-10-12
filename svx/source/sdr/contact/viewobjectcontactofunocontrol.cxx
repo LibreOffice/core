@@ -375,10 +375,10 @@ namespace sdr { namespace contact {
 
         virtual ~SdrPageViewAccess() {}
 
-        virtual bool    isDesignMode() const SAL_OVERRIDE;
+        virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
+                        getControlContainer( const OutputDevice& _rDevice ) const override;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
 
@@ -417,10 +417,10 @@ namespace sdr { namespace contact {
 
         virtual ~InvisibleControlViewAccess() {}
 
-        virtual bool    isDesignMode() const SAL_OVERRIDE;
+        virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
+                        getControlContainer( const OutputDevice& _rDevice ) const override;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
 
@@ -467,10 +467,10 @@ namespace sdr { namespace contact {
 
         virtual ~DummyPageViewAccess() {}
 
-        virtual bool    isDesignMode() const SAL_OVERRIDE;
+        virtual bool    isDesignMode() const override;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
+                        getControlContainer( const OutputDevice& _rDevice ) const override;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
 
 
@@ -627,24 +627,24 @@ namespace sdr { namespace contact {
         virtual ~ViewObjectContactOfUnoControl_Impl();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception) override;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const WindowEvent& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowMoved( const WindowEvent& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowShown( const EventObject& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowHidden( const EventObject& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowResized( const WindowEvent& e ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowMoved( const WindowEvent& e ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowShown( const EventObject& e ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowHidden( const EventObject& e ) throw(RuntimeException, std::exception) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception) override;
 
         // XModeChangeListener
-        virtual void SAL_CALL modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException, std::exception) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     private:
         /** retrieves the SdrPageView which our associated SdrPageViewWindow belongs to
@@ -802,17 +802,17 @@ namespace sdr { namespace contact {
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
             get2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const SAL_OVERRIDE;
+            ) const override;
 
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
             create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const SAL_OVERRIDE;
+            ) const override;
 
         virtual ::basegfx::B2DRange
             getB2DRange(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const SAL_OVERRIDE;
+            ) const override;
 
     public:
         explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
@@ -822,7 +822,7 @@ namespace sdr { namespace contact {
             getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation );
         }
 
-        virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
+        virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
         // declare unique ID for this primitive class
         DeclPrimitive2DIDBlock()

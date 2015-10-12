@@ -46,13 +46,13 @@ public:
     virtual                     ~SvLBoxFontString();
 
     /** Creates a new empty list box item. */
-    virtual SvLBoxItem*         Create() const SAL_OVERRIDE;
+    virtual SvLBoxItem*         Create() const override;
 
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
 
     /** Paints this entry to the specified position, using the own font settings. */
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
 
 
@@ -94,7 +94,7 @@ protected:
                                     const OUString& rEntryText,
                                     const Image& rCollImg,
                                     const Image& rExpImg,
-                                    SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
+                                    SvLBoxButtonKind eButtonKind) override;
 };
 
 #endif

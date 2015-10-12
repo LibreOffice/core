@@ -175,14 +175,14 @@ class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes : public AbstractGeom
     std::unique_ptr< ShapeHelper > m_pShapeHelper;
 public:
     ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
-    virtual double getLeft() const SAL_OVERRIDE;
-    virtual void setLeft( double nLeft ) SAL_OVERRIDE;
-    virtual double getTop() const SAL_OVERRIDE;
-    virtual void setTop( double nTop ) SAL_OVERRIDE;
-    virtual double getHeight() const SAL_OVERRIDE;
-    virtual void setHeight( double nHeight ) SAL_OVERRIDE;
-    virtual double getWidth() const SAL_OVERRIDE;
-    virtual void setWidth( double nWidth) SAL_OVERRIDE;
+    virtual double getLeft() const override;
+    virtual void setLeft( double nLeft ) override;
+    virtual double getTop() const override;
+    virtual void setTop( double nTop ) override;
+    virtual double getHeight() const override;
+    virtual void setHeight( double nHeight ) override;
+    virtual double getWidth() const override;
+    virtual void setWidth( double nWidth) override;
     virtual ~ConcreteXShapeGeometryAttributes();
 };
 
@@ -195,20 +195,20 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xControl,
         double fOffsetX, double fOffsetY );
-    virtual double getLeft() const SAL_OVERRIDE;
-    virtual void setLeft( double fLeft ) SAL_OVERRIDE;
-    virtual double getTop() const SAL_OVERRIDE;
-    virtual void setTop( double fTop ) SAL_OVERRIDE;
-    virtual double getWidth() const SAL_OVERRIDE;
-    virtual void setWidth( double fWidth ) SAL_OVERRIDE;
-    virtual double getHeight() const SAL_OVERRIDE;
-    virtual void setHeight( double fHeight ) SAL_OVERRIDE;
-    virtual double getInnerWidth() const SAL_OVERRIDE;
-    virtual void setInnerWidth( double fWidth ) SAL_OVERRIDE;
-    virtual double getInnerHeight() const SAL_OVERRIDE;
-    virtual void setInnerHeight( double fHeight ) SAL_OVERRIDE;
-    virtual double getOffsetX() const SAL_OVERRIDE;
-    virtual double getOffsetY() const SAL_OVERRIDE;
+    virtual double getLeft() const override;
+    virtual void setLeft( double fLeft ) override;
+    virtual double getTop() const override;
+    virtual void setTop( double fTop ) override;
+    virtual double getWidth() const override;
+    virtual void setWidth( double fWidth ) override;
+    virtual double getHeight() const override;
+    virtual void setHeight( double fHeight ) override;
+    virtual double getInnerWidth() const override;
+    virtual void setInnerWidth( double fWidth ) override;
+    virtual double getInnerHeight() const override;
+    virtual void setInnerHeight( double fHeight ) override;
+    virtual double getOffsetX() const override;
+    virtual double getOffsetY() const override;
 
 private:
     double implGetPos( bool bPosY ) const;

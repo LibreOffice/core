@@ -24,7 +24,7 @@
 class SW_DLLPUBLIC SwFilterOptions : public utl::ConfigItem
 {
 private:
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
@@ -32,7 +32,7 @@ public:
 
     void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                      sal_uInt32* pValues );
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

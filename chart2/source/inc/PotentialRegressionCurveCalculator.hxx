@@ -34,18 +34,18 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const SAL_OVERRIDE;
+        sal_Int32 nNumberFormatKey ) const override;
 
 private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
         const css::uno::Sequence<double>& aXValues,
         const css::uno::Sequence<double>& aYValues )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual double SAL_CALL getCurveValue( double x )
         throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
         double min,
@@ -55,7 +55,7 @@ private:
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
         sal_Bool bMaySkipPointsInCalculation )
         throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::uno::RuntimeException, std::exception) override;
 
     // formula is: f(x) = x ^ m_fSlope * m_fSign * m_fIntercept
     double m_fSlope;

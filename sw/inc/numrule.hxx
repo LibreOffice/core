@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator !=;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     SwNumFormat();
@@ -76,16 +76,16 @@ public:
     void       SetCharFormat( SwCharFormat* );
 
     void                    SetCharFormatName(const OUString& rSet);
-    virtual OUString        GetCharFormatName() const SAL_OVERRIDE;
+    virtual OUString        GetCharFormatName() const override;
 
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
     sal_Unicode     GetGrfBulletCP() const {return cGrfBulletCP;}
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) SAL_OVERRIDE;
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) override;
 
-    virtual void                SetVertOrient(sal_Int16 eSet) SAL_OVERRIDE;
-    virtual sal_Int16   GetVertOrient() const SAL_OVERRIDE;
+    virtual void                SetVertOrient(sal_Int16 eSet) override;
+    virtual sal_Int16   GetVertOrient() const override;
     const SwFormatVertOrient*      GetGraphicOrientation() const;
 
     bool IsEnumeration() const; // #i22362#

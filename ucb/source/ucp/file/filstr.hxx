@@ -64,18 +64,18 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         getInputStream(  )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > SAL_CALL
         getOutputStream(  )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XTruncate
 
         virtual void SAL_CALL truncate()
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XInputStream
@@ -87,7 +87,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         sal_Int32 SAL_CALL
         readSomeBytes(
@@ -96,7 +96,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         void SAL_CALL
@@ -105,21 +105,21 @@ class XStream_impl :  public cppu::WeakImplHelper<
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         sal_Int32 SAL_CALL
         available(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         void SAL_CALL
         closeInput(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XSeekable
 
@@ -128,19 +128,19 @@ class XStream_impl :  public cppu::WeakImplHelper<
             sal_Int64 location )
             throw( com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         sal_Int64 SAL_CALL
         getPosition(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         sal_Int64 SAL_CALL
         getLength(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XOutputStream
@@ -150,7 +150,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
 
@@ -159,7 +159,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         void SAL_CALL
@@ -167,12 +167,12 @@ class XStream_impl :  public cppu::WeakImplHelper<
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL waitForCompletion()
             throw (
                 com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                com::sun::star::uno::RuntimeException, std::exception) override;
 
     private:
 

@@ -67,17 +67,17 @@ public:
 
 public:
     SAL_DLLPRIVATE virtual ~FmFormObj();
-    SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) override;
 
-    SAL_DLLPRIVATE virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void NbcReformatText() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetObjInventor() const override;
+    SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const override;
+    SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
-    SAL_DLLPRIVATE virtual FmFormObj* Clone() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual FmFormObj* Clone() const override;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     SAL_DLLPRIVATE FmFormObj& operator= (const FmFormObj& rObj);
 
-    SAL_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) override;
 
     SAL_DLLPRIVATE virtual void clonedFrom(const FmFormObj* _pSource);
 
@@ -94,15 +94,15 @@ public:
     SAL_DLLPRIVATE static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
     SAL_DLLPRIVATE static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
 
-    SAL_DLLPRIVATE virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) override;
 
 protected:
-    SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) override;
+    SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) override;
 
     // #i70852# override Layer interface to force to FormControl layer
-    SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const override;
+    SAL_DLLPRIVATE virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from

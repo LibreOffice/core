@@ -33,16 +33,16 @@ public:
     TemplateLocalView ( vcl::Window* pParent );
 
     virtual ~TemplateLocalView ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Fill view with template folders thumbnails
-    virtual void Populate () SAL_OVERRIDE;
+    virtual void Populate () override;
 
-    virtual void reload () SAL_OVERRIDE;
+    virtual void reload () override;
 
-    virtual void showRootRegion () SAL_OVERRIDE;
+    virtual void showRootRegion () override;
 
-    virtual void showRegion (ThumbnailViewItem *pItem) SAL_OVERRIDE;
+    virtual void showRegion (ThumbnailViewItem *pItem) override;
 
     void showRegion (const OUString &rName);
 
@@ -59,11 +59,11 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    virtual sal_uInt16 createRegion (const OUString &rName) SAL_OVERRIDE;
+    virtual sal_uInt16 createRegion (const OUString &rName) override;
 
-    virtual bool isNestedRegionAllowed () const SAL_OVERRIDE;
+    virtual bool isNestedRegionAllowed () const override;
 
-    virtual bool isImportAllowed () const SAL_OVERRIDE;
+    virtual bool isImportAllowed () const override;
 
     bool removeRegion (const sal_uInt16 nItemId);
 
@@ -93,7 +93,7 @@ public:
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) SAL_OVERRIDE;
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
 private:
 

@@ -44,15 +44,15 @@ public:
     explicit            UnoBinaryInputStream( BinaryInputStream& rInStrm );
 
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available()
-                        throw (NotConnectedException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (NotConnectedException, IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput()
-                        throw (NotConnectedException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+                        throw (NotConnectedException, IOException, RuntimeException, std::exception) override;
 
 private:
     void                ensureConnected() const throw (NotConnectedException);

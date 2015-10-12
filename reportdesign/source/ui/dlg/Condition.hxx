@@ -107,17 +107,17 @@ namespace rptui
     public:
         Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
         virtual ~Condition();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /** will be called when the id of the image list needs to change.
             @param  _eBitmapSet
                 <svtools/imgdef.hxx>
         */
-        virtual void setImageList(sal_Int16 _eBitmapSet) SAL_OVERRIDE;
+        virtual void setImageList(sal_Int16 _eBitmapSet) override;
 
         /** will be called when the controls need to be resized.
         */
-        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
+        virtual void resizeControls(const Size& _rDiff) override;
 
         /** sets the props at the control
             @param  _xCondition the source
@@ -153,7 +153,7 @@ namespace rptui
         sal_uInt16 mapToolbarItemToSlotId(sal_uInt16 nItemId) const;
 
     protected:
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
 
     private:
         void    impl_layoutOperands();

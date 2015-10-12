@@ -37,21 +37,21 @@ public:
 
     DocumentLayoutManager( SwDoc& i_rSwdoc );
 
-    virtual const SwViewShell *GetCurrentViewShell() const SAL_OVERRIDE;
-    virtual SwViewShell *GetCurrentViewShell() SAL_OVERRIDE; //< It must be able to communicate to a SwViewShell.This is going to be removed later.
-    virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;
+    virtual const SwViewShell *GetCurrentViewShell() const override;
+    virtual SwViewShell *GetCurrentViewShell() override; //< It must be able to communicate to a SwViewShell.This is going to be removed later.
+    virtual void SetCurrentViewShell( SwViewShell* pNew ) override;
 
-    virtual const SwRootFrm *GetCurrentLayout() const SAL_OVERRIDE;
-    virtual SwRootFrm *GetCurrentLayout() SAL_OVERRIDE;
-    virtual bool HasLayout() const SAL_OVERRIDE;
+    virtual const SwRootFrm *GetCurrentLayout() const override;
+    virtual SwRootFrm *GetCurrentLayout() override;
+    virtual bool HasLayout() const override;
 
-    virtual const SwLayouter* GetLayouter() const SAL_OVERRIDE;
-    virtual SwLayouter* GetLayouter() SAL_OVERRIDE;
-    virtual void SetLayouter( SwLayouter* pNew ) SAL_OVERRIDE;
+    virtual const SwLayouter* GetLayouter() const override;
+    virtual SwLayouter* GetLayouter() override;
+    virtual void SetLayouter( SwLayouter* pNew ) override;
 
-    virtual SwFrameFormat* MakeLayoutFormat( RndStdIds eRequest, const SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void DelLayoutFormat( SwFrameFormat *pFormat ) SAL_OVERRIDE;
-    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor, bool bSetTextFlyAtt, bool bMakeFrms ) SAL_OVERRIDE;
+    virtual SwFrameFormat* MakeLayoutFormat( RndStdIds eRequest, const SfxItemSet* pSet ) override;
+    virtual void DelLayoutFormat( SwFrameFormat *pFormat ) override;
+    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor, bool bSetTextFlyAtt, bool bMakeFrms ) override;
 
     //Non Interface methods
     void ClearSwLayouterEntries();

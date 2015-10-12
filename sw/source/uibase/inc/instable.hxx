@@ -66,7 +66,7 @@ class SwInsTableDlg : public SfxModalDialog
 public:
     SwInsTableDlg( SwView& rView );
     virtual ~SwInsTableDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,

@@ -37,7 +37,7 @@ private:
 public:
             ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove = false );
             virtual ~ScInsertCellDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     InsCellCmd GetInsCellCmd() const;
 };

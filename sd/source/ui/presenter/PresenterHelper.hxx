@@ -51,7 +51,7 @@ public:
     // XInitialize
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw(css::uno::Exception,css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception,css::uno::RuntimeException, std::exception) override;
 
     // XPresenterHelper
 
@@ -61,7 +61,7 @@ public:
         sal_Bool bInitiallyVisible,
         sal_Bool bEnableChildTransparentMode,
         sal_Bool bEnableParentClip)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createSharedCanvas (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxUpdateCanvas,
@@ -69,33 +69,33 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
         const css::uno::Reference<css::awt::XWindow>& rxWindow)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createCanvas (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         sal_Int16 nRequestedCanvasFeatures,
         const OUString& rsOptionalCanvasServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL toTop (
         const css::uno::Reference<css::awt::XWindow>& rxWindow)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL loadBitmap (
         const OUString& rsURL,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL captureMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL releaseMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::awt::Rectangle SAL_CALL getWindowExtentsRelative (
         const css::uno::Reference<css::awt::XWindow>& rxChildWindow,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

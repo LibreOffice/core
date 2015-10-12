@@ -30,8 +30,8 @@ class ScVbaAxisTitle : public AxisTitleBase
 public:
         ScVbaAxisTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
         // XHelperInterface
-        virtual OUString getServiceImplName() SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+        virtual OUString getServiceImplName() override;
+        virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif
 

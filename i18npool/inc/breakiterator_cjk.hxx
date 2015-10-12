@@ -33,17 +33,17 @@ public:
 
     Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType)
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(com::sun::star::uno::RuntimeException, std::exception) override;
     Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType)
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(com::sun::star::uno::RuntimeException, std::exception) override;
     Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(com::sun::star::uno::RuntimeException, std::exception) override;
     LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
 protected:
     xdictionary *dict;

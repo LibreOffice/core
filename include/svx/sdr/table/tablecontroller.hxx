@@ -46,24 +46,24 @@ public:
     SVX_DLLPRIVATE virtual ~SvxTableController();
 
     // from sdr::SelectionController
-    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
+    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
 
-    SVX_DLLPRIVATE virtual bool HasMarked() SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool DeleteMarked() SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool HasMarked() override;
+    SVX_DLLPRIVATE virtual bool DeleteMarked() override;
 
-    SVX_DLLPRIVATE virtual void onSelectionHasChanged() SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void onSelectionHasChanged() override;
 
-    SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet ) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual void Execute( SfxRequest& rReq ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet ) override;
+    SVX_DLLPRIVATE virtual void Execute( SfxRequest& rReq ) override;
 
-    SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const override;
+    SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr ) override;
 
-    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  ) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  ) override;
+    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats ) override;
 
     // slots
     SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = 0 );
@@ -87,15 +87,15 @@ public:
       */
     SVX_DLLPRIVATE void FillCommonBorderAttrFromSelectedCells(SvxBoxItem& rBox, SvxBoxInfoItem& rBoxInfo) const;
 
-    SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const override;
+    SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll) override;
 
-    SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage ) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage ) override;
+    SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) override;
 
-    SVX_DLLPRIVATE virtual bool hasSelectedCells() const SAL_OVERRIDE { return mbCellSelectionMode || mpView->IsTextEdit(); }
+    SVX_DLLPRIVATE virtual bool hasSelectedCells() const override { return mbCellSelectionMode || mpView->IsTextEdit(); }
     /// @see sdr::SelectionController::setCursorLogicPosition().
-    SVX_DLLPRIVATE virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint) override;
 
     void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos );
     void setSelectedCells( const CellPos& rFirstPos, const CellPos& rLastPos );

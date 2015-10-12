@@ -40,10 +40,10 @@ public:
     UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage );
     virtual ~UndoAnimation();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 
 private:
     std::unique_ptr<UndoAnimationImpl>  mpImpl;
@@ -56,10 +56,10 @@ public:
     UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     virtual ~UndoAnimationPath();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 
 private:
     std::unique_ptr<UndoAnimationPathImpl> mpImpl;
@@ -73,10 +73,10 @@ public:
     UndoTransition( SdDrawDocument* pDoc, SdPage* pThePage );
     virtual ~UndoTransition();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 
 private:
     std::unique_ptr<UndoTransitionImpl> mpImpl;

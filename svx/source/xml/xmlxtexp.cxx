@@ -81,7 +81,7 @@ public:
     explicit SvxXMLColorEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLColorEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 };
 
 class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
@@ -90,7 +90,7 @@ public:
     explicit SvxXMLLineEndEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLLineEndEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
     XMLMarkerStyleExport maMarkerStyle;
 };
@@ -101,7 +101,7 @@ public:
     explicit SvxXMLDashEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLDashEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 
 private:
     XMLDashStyleExport maDashStyle;
@@ -113,7 +113,7 @@ public:
     explicit SvxXMLHatchEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLHatchEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
     XMLHatchStyleExport maHatchStyle;
 };
@@ -124,7 +124,7 @@ public:
     explicit SvxXMLGradientEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLGradientEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
     XMLGradientStyleExport maGradientStyle;
 };
@@ -135,7 +135,7 @@ public:
     explicit SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLBitmapEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 
 private:
     XMLImageStyle maImageStyle;

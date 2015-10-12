@@ -92,7 +92,7 @@ class SwDropCapsPict : public Control
     Size            maTextSize;
     Reference< css::i18n::XBreakIterator >   xBreak;
 
-    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect) override;
     void            CheckScript();
     Size            CalcTextSize();
     inline void     InitPrinter();
@@ -118,14 +118,14 @@ public:
     void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
 
     virtual ~SwDropCapsPict();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void UpdatePaintSettings();       // also invalidates control!
 
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
-    void SetText( const OUString& rT ) SAL_OVERRIDE;
+    void SetText( const OUString& rT ) override;
     void SetLines( sal_uInt8 nL );
     void SetDistance( sal_uInt16 nD );
     void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );

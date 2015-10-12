@@ -80,26 +80,26 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() SAL_OVERRIDE;
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
     /** Return <TRUE/> when the enumeration has more elements, i.e. it is
         save to call GetNextElement() at least one more time.
     */
-    virtual bool HasMoreElements() const SAL_OVERRIDE;
+    virtual bool HasMoreElements() const override;
 
     /** Return the next element of the enumeration.  Call the
         HasMoreElements() before to make sure that there exists at least one
         more element.  Calling this method with HasMoreElements() returning
         <FALSE/> is an error.
     */
-    virtual SharedPageDescriptor GetNextElement() SAL_OVERRIDE;
+    virtual SharedPageDescriptor GetNextElement() override;
 
     /** Rewind the enumeration so that the next call to GetNextElement()
         will return its first element.
     */
-    virtual void Rewind() SAL_OVERRIDE;
+    virtual void Rewind() override;
 
 private:
     /// Implementation object.

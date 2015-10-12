@@ -73,14 +73,14 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
-    virtual bool        canAdvance() const SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+    virtual bool        canAdvance() const override;
 
 public:
     SwMailMergeAddressBlockPage(SwMailMergeWizard* _pParent);
     virtual ~SwMailMergeAddressBlockPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };
 
@@ -108,7 +108,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
 public:
     SwSelectAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig);
     virtual ~SwSelectAddressBlockDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void         SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
@@ -126,11 +126,11 @@ class DDListBox : public SvTreeListBox
 public:
     DDListBox(vcl::Window* pParent, const WinBits nStyle);
     virtual ~DDListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 };
 
 #define MOVE_ITEM_LEFT           1
@@ -148,21 +148,21 @@ class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
     using VclMultiLineEdit::SetText;
 
 protected:
-    bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    bool            PreNotify( NotifyEvent& rNEvt ) override;
 public:
     AddressMultiLineEdit(vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     virtual ~AddressMultiLineEdit();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
 
     void            SetSelectionChangedHdl( const Link<AddressMultiLineEdit&,void>& rLink ) {m_aSelectionLink = rLink;}
 
-    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
+    void            SetText( const OUString& rStr ) override;
     OUString        GetAddress();
 
     void            InsertNewEntry( const OUString& rStr );
@@ -234,7 +234,7 @@ private:
 public:
     SwCustomizeAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
     virtual ~SwCustomizeAddressBlockDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            SetAddress(const OUString& rAddress);
     OUString GetAddress();
@@ -266,7 +266,7 @@ public:
                 const OUString& rPreview,
                 bool bIsAddressBlock);
     virtual ~SwAssignFieldsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 #endif
 

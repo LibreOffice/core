@@ -46,13 +46,13 @@ public:
     ScAutoFmtPreview(vcl::Window* pParent);
     void DetectRTL(ScViewData *pViewData);
     virtual ~ScAutoFmtPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void NotifyChange( ScAutoFormatData* pNewData );
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Resize() override;
 
 private:
     ScAutoFormatData* pCurData;

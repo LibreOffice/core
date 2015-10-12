@@ -78,25 +78,25 @@ public:
     {
     }
 
-    virtual bool    approveValue( const css::uno::Any& rValue ) const SAL_OVERRIDE
+    virtual bool    approveValue( const css::uno::Any& rValue ) const override
     {
         VALUE aVal;
         return ( rValue >>= aVal );
     }
 
-    virtual void    setValue( const css::uno::Any& rValue ) SAL_OVERRIDE
+    virtual void    setValue( const css::uno::Any& rValue ) override
     {
         VALUE aTypedVal = VALUE();
         OSL_VERIFY( rValue >>= aTypedVal );
         (m_pInstance->*m_pWriter)( aTypedVal );
     }
 
-    virtual void getValue( css::uno::Any& rValue ) const SAL_OVERRIDE
+    virtual void getValue( css::uno::Any& rValue ) const override
     {
         rValue = css::uno::makeAny( (m_pInstance->*m_pReader)() );
     }
 
-    virtual bool isWriteable() const SAL_OVERRIDE
+    virtual bool isWriteable() const override
     {
         return m_pWriter != 0;
     }
@@ -254,13 +254,13 @@ protected:
 
     /// OPropertysetHelper methods
     virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
-        throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
-        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        throw (css::uno::Exception, std::exception) override;
+    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
 public:
     /// helper struct for granting selective access to some notification-related methods

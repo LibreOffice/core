@@ -1500,7 +1500,7 @@ public:
         m_aWheelData = CommandWheelData(rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel);
 
     }
-    virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) SAL_OVERRIDE
+    virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) override
     {
         return ImplCallWheelCommand(pWindow, rMousePos, &m_aWheelData);
     }
@@ -1569,7 +1569,7 @@ public:
     {
         m_aSwipeData = CommandSwipeData(rEvt.mnVelocityX);
     }
-    virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
+    virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {
         return ImplCallCommand(pWindow, CommandEventId::Swipe, &m_aSwipeData);
     }
@@ -1591,7 +1591,7 @@ public:
     {
         m_aLongPressData = CommandLongPressData(rEvt.mnX, rEvt.mnY);
     }
-    virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
+    virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) override
     {
         return ImplCallCommand(pWindow, CommandEventId::LongPress, &m_aLongPressData);
     }

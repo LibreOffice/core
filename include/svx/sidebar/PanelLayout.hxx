@@ -35,11 +35,11 @@ public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
     virtual ~PanelLayout();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
+    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
 };
 

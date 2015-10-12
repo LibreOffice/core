@@ -36,12 +36,12 @@ namespace dbaui
 
         // set the statement for representation
         /// late construction
-        virtual void Construct() SAL_OVERRIDE;
-        virtual void initialize() SAL_OVERRIDE;
+        virtual void Construct() override;
+        virtual void initialize() override;
 
 
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX

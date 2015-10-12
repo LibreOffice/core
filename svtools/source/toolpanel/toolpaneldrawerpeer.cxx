@@ -62,8 +62,8 @@ namespace svt
         {
         }
 
-        virtual void    ProcessWindowEvent( const VclWindowEvent& i_rVclWindowEvent ) SAL_OVERRIDE;
-        virtual void    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet ) SAL_OVERRIDE;
+        virtual void    ProcessWindowEvent( const VclWindowEvent& i_rVclWindowEvent ) override;
+        virtual void    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet ) override;
 
     protected:
         virtual ~ToolPanelDrawerContext()

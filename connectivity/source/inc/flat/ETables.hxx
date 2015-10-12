@@ -31,7 +31,7 @@ namespace connectivity
         class OFlatTables : public OFlatTables_BASE
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         public:
             OFlatTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)

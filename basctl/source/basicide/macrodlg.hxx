@@ -87,13 +87,13 @@ private:
 public:
                         MacroChooser( vcl::Window* pParent, bool bCreateEntries = true );
                         virtual ~MacroChooser();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     SbMethod*           GetMacro();
     void                DeleteMacro();
     SbMethod*           CreateMacro();
 
-    virtual short       Execute() SAL_OVERRIDE;
+    virtual short       Execute() override;
 
     void                SetMode (Mode);
     Mode                GetMode () const { return nMode; }

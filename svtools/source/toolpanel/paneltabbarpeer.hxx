@@ -42,10 +42,10 @@ namespace svt
         virtual ~PanelTabBarPeer();
 
         // VCLXWindow overridables
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
         // XComponent
-        void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     private:
         AccessibleFactoryAccess m_aAccessibleFactory;

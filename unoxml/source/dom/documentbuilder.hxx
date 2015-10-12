@@ -74,59 +74,59 @@ namespace DOM
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Obtain an instance of a DOMImplementation object.
         */
         virtual css::uno::Reference< css::xml::dom::XDOMImplementation > SAL_CALL getDOMImplementation()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Indicates whether or not this parser is configured to understand
         namespaces.
         */
         virtual sal_Bool SAL_CALL isNamespaceAware()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Indicates whether or not this parser is configured to validate XML
         documents.
         */
         virtual sal_Bool SAL_CALL isValidating()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Obtain a new instance of a DOM Document object to build a DOM tree
         with.
         */
         virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL newDocument()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Parse the content of the given InputStream as an XML document and
         return a new DOM Document object.
         */
         virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL parse(const css::uno::Reference< css::io::XInputStream >& is)
-            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) override;
 
         /**
         Parse the content of the given URI as an XML document and return
         a new DOM Document object.
         */
         virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL parseURI(const OUString& uri)
-            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) override;
 
         /**
         Specify the EntityResolver to be used to resolve entities present
         in the XML document to be parsed.
         */
         virtual void SAL_CALL setEntityResolver(const css::uno::Reference< css::xml::sax::XEntityResolver >& er)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         css::uno::Reference< css::xml::sax::XEntityResolver > SAL_CALL getEntityResolver()
             throw (css::uno::RuntimeException);
@@ -137,7 +137,7 @@ namespace DOM
         the XML document to be parsed.
         */
         virtual void SAL_CALL setErrorHandler(const css::uno::Reference< css::xml::sax::XErrorHandler >& eh)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 }
 

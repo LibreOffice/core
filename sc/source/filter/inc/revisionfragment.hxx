@@ -29,13 +29,13 @@ public:
 
 protected:
     virtual oox::core::ContextHandlerRef onCreateContext(
-        sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+        sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
-    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual void onStartElement( const AttributeList& rAttribs ) override;
+    virtual void onCharacters( const OUString& rChars ) override;
+    virtual void onEndElement() override;
 
-    virtual void finalizeImport() SAL_OVERRIDE;
+    virtual void finalizeImport() override;
 
 private:
     void importHeader( const AttributeList& rAttribs );
@@ -54,13 +54,13 @@ public:
 
 protected:
     virtual oox::core::ContextHandlerRef onCreateContext(
-        sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+        sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
-    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual void onStartElement( const AttributeList& rAttribs ) override;
+    virtual void onCharacters( const OUString& rChars ) override;
+    virtual void onEndElement() override;
 
-    virtual void finalizeImport() SAL_OVERRIDE;
+    virtual void finalizeImport() override;
 
 private:
     void importCommon( const AttributeList& rAttribs );

@@ -218,17 +218,17 @@ private:
     ScFilterBoxMode eMode;
 
 protected:
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() override;
     void            SelectHdl();
 
 public:
                 ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 virtual ~ScFilterListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void    Select() override;
 
     SCCOL           GetCol() const          { return nCol; }
     SCROW           GetRow() const          { return nRow; }
@@ -347,9 +347,9 @@ class ScFilterFloatingWindow : public FloatingWindow
 public:
     ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     // required for System FloatingWindows that will not process KeyInput by themselves
-    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetPreferredKeyInputWindow() override;
 };
 
 ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
@@ -647,7 +647,7 @@ class AutoFilterAction : public ScMenuFloatingWindow::Action
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
         mpWindow(p), meMode(eMode) {}
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         mpWindow->UpdateAutoFilterFromMenu(meMode);
     }
@@ -660,7 +660,7 @@ class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
         mpWindow(p), maPos(rPos) {}
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         mpWindow->RefreshAutoFilterButton(maPos);
     }

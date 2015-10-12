@@ -37,15 +37,15 @@ public:
 
     //typedef ::std::vector< const SwTextNode* > tSortedOutlineNodeList;
 
-    sal_Int32 getOutlineNodesCount() const SAL_OVERRIDE;
+    sal_Int32 getOutlineNodesCount() const override;
 
-    int getOutlineLevel( const sal_Int32 nIdx ) const SAL_OVERRIDE;
+    int getOutlineLevel( const sal_Int32 nIdx ) const override;
     OUString getOutlineText( const sal_Int32 nIdx,
                                   const bool bWithNumber = true,
                                   const bool bWithSpacesForLevel = false,
-                                  const bool bWithFootnote = true ) const SAL_OVERRIDE;
-    SwTextNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
-    void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
+                                  const bool bWithFootnote = true ) const override;
+    SwTextNode* getOutlineNode( const sal_Int32 nIdx ) const override;
+    void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const override;
 
     virtual ~DocumentOutlineNodesManager();
 

@@ -57,14 +57,14 @@ public:
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = NULL );
     virtual ~FormulaModalDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( bool bForced = false );
@@ -97,7 +97,7 @@ public:
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = NULL );
     virtual ~FormulaDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 private:
     ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
@@ -107,7 +107,7 @@ protected:
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( bool bForced = false );

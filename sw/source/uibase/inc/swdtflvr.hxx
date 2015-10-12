@@ -135,14 +135,14 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     SwTransferable&                 operator=( const SwTransferable& ) = delete;
 
 protected:
-    virtual void        AddSupportedFormats() SAL_OVERRIDE;
-    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
+    virtual void        AddSupportedFormats() override;
+    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm,
                                         void* pUserObject,
                                         SotClipboardFormatId nUserObjectId,
-                                        const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
-    virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
-    virtual void        ObjectReleased() SAL_OVERRIDE;
+                                        const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual void        DragFinished( sal_Int8 nDropAction ) override;
+    virtual void        ObjectReleased() override;
 
     using TransferableHelper::StartDrag;
 
@@ -204,7 +204,7 @@ public:
     void    Invalidate() {m_pWrtShell = 0;}
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

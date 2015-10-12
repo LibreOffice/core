@@ -48,21 +48,21 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
 protected:
     virtual void exportStyleContent(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle ) SAL_OVERRIDE;
+                ::com::sun::star::style::XStyle > & rStyle ) override;
 
     virtual void _collectTextEmbeddedAutoStyles(
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
     virtual void _exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo ) SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo ) override;
 
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        bool bAutoStyles, bool bProgress ) SAL_OVERRIDE;
+        bool bAutoStyles, bool bProgress ) override;
 
 public:
     SwXMLTextParagraphExport(

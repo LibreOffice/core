@@ -55,13 +55,13 @@ class SwFrameMenuButtonBase : public MenuButton, public ISwFrameControl
 
 protected:
     virtual ~SwFrameMenuButtonBase() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 public:
     SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrm* pFrm );
 
-    virtual const SwFrm* GetFrame()   SAL_OVERRIDE { return m_pFrm; }
-    virtual SwEditWin*   GetEditWin() SAL_OVERRIDE { return m_pEditWin; }
+    virtual const SwFrm* GetFrame()   override { return m_pFrm; }
+    virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
     const SwPageFrm*     GetPageFrame();
 };
 

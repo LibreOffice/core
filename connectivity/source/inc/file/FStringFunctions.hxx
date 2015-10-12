@@ -38,7 +38,7 @@ namespace connectivity
         class OOp_Upper : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** LCASE(str)
@@ -52,7 +52,7 @@ namespace connectivity
         class OOp_Lower : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** ASCII(str)
@@ -69,7 +69,7 @@ namespace connectivity
         class OOp_Ascii : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** LENGTH(str)
@@ -87,7 +87,7 @@ namespace connectivity
         class OOp_CharLength : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** CHAR(N,...)
@@ -102,7 +102,7 @@ namespace connectivity
         class OOp_Char : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** CONCAT(str1,str2,...)
@@ -119,7 +119,7 @@ namespace connectivity
         class OOp_Concat : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LOCATE(substr,str)
@@ -140,7 +140,7 @@ namespace connectivity
         class OOp_Locate : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** SUBSTRING(str,pos)
@@ -162,7 +162,7 @@ namespace connectivity
         class OOp_SubString : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LTRIM(str)
@@ -175,7 +175,7 @@ namespace connectivity
         class OOp_LTrim : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** RTRIM(str)
@@ -188,7 +188,7 @@ namespace connectivity
         class OOp_RTrim : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** SPACE(N)
@@ -201,7 +201,7 @@ namespace connectivity
         class OOp_Space : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** REPLACE(str,from_str,to_str)
@@ -214,7 +214,7 @@ namespace connectivity
         class OOp_Replace : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** REPEAT(str,count)
@@ -227,7 +227,7 @@ namespace connectivity
         class OOp_Repeat : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
         };
 
         /** INSERT(str,pos,len,newstr)
@@ -240,7 +240,7 @@ namespace connectivity
         class OOp_Insert : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LEFT(str,len)
@@ -253,7 +253,7 @@ namespace connectivity
         class OOp_Left : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
         };
 
         /** RIGHT(str,len)
@@ -265,7 +265,7 @@ namespace connectivity
         class OOp_Right : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
         };
     }
 }

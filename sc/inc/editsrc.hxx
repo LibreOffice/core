@@ -57,11 +57,11 @@ public:
     virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
-    virtual ScEditEngineDefaulter* GetEditEngine() SAL_OVERRIDE;
+    virtual ScEditEngineDefaulter* GetEditEngine() override;
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
 };
 
 /**
@@ -81,12 +81,12 @@ public:
     virtual ~ScCellEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
-    virtual ScEditEngineDefaulter* GetEditEngine() SAL_OVERRIDE;
+    virtual ScEditEngineDefaulter* GetEditEngine() override;
 
-    virtual SvxEditSource* Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxEditSource* Clone() const override;
+    virtual SvxTextForwarder* GetTextForwarder() override;
 
-    virtual void UpdateData() SAL_OVERRIDE;
+    virtual void UpdateData() override;
 
     void SetDoUpdateData(bool bValue);
     bool IsDirty() const;
@@ -106,11 +106,11 @@ public:
                                 ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                     ~ScAnnotationEditSource();
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE ;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override ;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 //  EditSource with a shared forwarder for all children of one text object
@@ -124,9 +124,9 @@ public:
                         ScSimpleEditSource( SvxTextForwarder* pForw );
     virtual             ~ScSimpleEditSource();
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE ;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override ;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
 
 };
 
@@ -139,12 +139,12 @@ public:
                         ScAccessibilityEditSource( ::std::unique_ptr < ScAccessibleTextData > && pAccessibleCellTextData );
     virtual             ~ScAccessibilityEditSource();
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual SvxViewForwarder*   GetViewForwarder() SAL_OVERRIDE;
-    virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
-    virtual SfxBroadcaster&     GetBroadcaster() const SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual SvxViewForwarder*   GetViewForwarder() override;
+    virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) override;
+    virtual void                UpdateData() override;
+    virtual SfxBroadcaster&     GetBroadcaster() const override;
 };
 
 #endif

@@ -38,7 +38,7 @@ public:
         , const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& xContext );
     virtual ~ChartTypeDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr<ChartTypeTabPage>   m_pChartTypeTabPage;

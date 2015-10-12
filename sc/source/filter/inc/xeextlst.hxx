@@ -49,7 +49,7 @@ class XclExpExtCfvo : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rPos, bool bFirst );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     ScColorScaleEntryType meType;
@@ -81,7 +81,7 @@ class XclExpExtIcon : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit XclExpExtIcon( const XclExpRoot& rRoot, const std::pair<ScIconSetType, sal_Int32>& rCustomEntry);
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     const char* pIconSetName;
@@ -92,7 +92,7 @@ class XclExpExtDataBar : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     databar::ScAxisPosition meAxisPosition;
@@ -111,7 +111,7 @@ class XclExpExtIconSet : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, const ScAddress& rPos);
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     XclExpRecordList<XclExpExtCfvo> maCfvos;
@@ -128,7 +128,7 @@ class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     XclExpRecordRef mxEntry;
@@ -144,7 +144,7 @@ class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExp
 {
 public:
     explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, std::vector<XclExpExtCondFormatData>& rData, const ScRangeList& rRange);
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     XclExpRecordList<XclExpExtCfRule> maCfRules;
@@ -157,9 +157,9 @@ class XclExpExtCondFormat : public XclExpExt
 {
 public:
     XclExpExtCondFormat( const XclExpRoot& rRoot );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
-    virtual XclExpExtType GetType() SAL_OVERRIDE { return XclExpExtDataBarType; }
+    virtual XclExpExtType GetType() override { return XclExpExtDataBarType; }
 
     void AddRecord( XclExpExtConditionalFormattingRef aFormat );
 
@@ -171,9 +171,9 @@ class XclExpExtCalcPr : public XclExpExt
 {
 public:
     XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
-    virtual XclExpExtType GetType() SAL_OVERRIDE { return XclExpExtDataFooType; }
+    virtual XclExpExtType GetType() override { return XclExpExtDataFooType; }
 
 private:
     formula::FormulaGrammar::AddressConvention meConv;
@@ -184,7 +184,7 @@ class XclExtLst : public XclExpRecordBase, public XclExpRoot
 {
 public:
     explicit XclExtLst( const XclExpRoot& rRoot);
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
     void AddRecord( XclExpExtRef aEntry );
 

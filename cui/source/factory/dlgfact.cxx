@@ -1407,7 +1407,7 @@ public:
         m_pDialog.reset( VclPtr<SvxMacroAssignDlg>::Create( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
     }
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
     virtual ~SvxMacroAssignDialog();
 
 private:

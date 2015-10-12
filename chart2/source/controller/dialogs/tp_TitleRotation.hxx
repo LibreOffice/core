@@ -43,12 +43,12 @@ private:
 public:
     SchAlignmentTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     static VclPtr<SfxTabPage> CreateWithoutRotation(vcl::Window* pParent, const SfxItemSet* rInAttrs);
-    virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
+    virtual void Reset(const SfxItemSet* rInAttrs) override;
 };
 
 } //namespace chart

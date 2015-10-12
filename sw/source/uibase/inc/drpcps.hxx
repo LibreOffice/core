@@ -66,7 +66,7 @@ friend class SwDropCapsPict;
 
     SwWrtShell &rSh;
 
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
     void    FillSet( SfxItemSet &rSet );
 
     DECL_LINK_TYPED(ClickHdl, Button*, void);
@@ -82,14 +82,14 @@ friend class SwDropCapsPict;
 public:
     SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
 
-    virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(      SfxItemSet *rSet) override;
+    virtual void Reset      (const SfxItemSet *rSet) override;
 
     void    SetFormat(bool bSet){bFormat = bSet;}
 };

@@ -41,10 +41,10 @@ class UCBHELPER_DLLPUBLIC ActiveDataSink :
 public:
     // XActiveDataSink methods.
     virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 } /* namespace ucbhelper */

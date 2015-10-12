@@ -1327,7 +1327,7 @@ public:
     virtual ~PopupPainter() { }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override
     {
         SvLBoxString::Paint(rPos, rOutDev, rRenderContext, pView, rEntry);
 

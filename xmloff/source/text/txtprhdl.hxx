@@ -33,7 +33,7 @@ public:
     XMLTextPropertyHandlerFactory();
     virtual ~XMLTextPropertyHandlerFactory();
 
-    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const SAL_OVERRIDE ;
+    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override ;
 };
 
 

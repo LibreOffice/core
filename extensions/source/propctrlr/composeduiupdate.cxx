@@ -134,20 +134,20 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException, std::exception) override;
+        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException, std::exception) override;
 
         // UNOCompatibleNonUNOReference overridables
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() override;
+        virtual void SAL_CALL release() throw() override;
 
     protected:
         virtual ~CachedInspectorUI();
@@ -519,7 +519,7 @@ namespace pcr
             {
             }
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const SAL_OVERRIDE;
+            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const override;
         };
 
 
@@ -544,7 +544,7 @@ namespace pcr
         public:
             DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter );
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const SAL_OVERRIDE;
+            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const override;
         };
 
 

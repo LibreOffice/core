@@ -58,12 +58,12 @@ public:
     }
 
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         m_pMemory = static_cast<char*>(rtl_allocateMemory( m_nSizeOfMemory ));
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
         rtl_freeMemory(m_pMemory);
         m_pMemory = NULL;
@@ -106,12 +106,12 @@ public:
     }
 
     // initialise your test code values here.
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         m_pZeroMemory = static_cast<char*>(rtl_allocateZeroMemory( m_nSizeOfZeroMemory ));
     }
 
-    void tearDown() SAL_OVERRIDE
+    void tearDown() override
     {
         rtl_freeZeroMemory(m_pZeroMemory, m_nSizeOfZeroMemory);
         // LLA: no check possible, may GPF if there is something wrong.

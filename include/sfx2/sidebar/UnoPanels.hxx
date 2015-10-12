@@ -34,36 +34,36 @@ public:
 
 // XPanels
     virtual OUString SAL_CALL getDeckId()
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
 
 // XNameAccess
 
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(css::container::NoSuchElementException,
                                       css::lang::WrappedTargetException,
-                                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                      css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
 
 // XIndexAccess
 
     virtual sal_Int32 SAL_CALL getCount()
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(css::lang::IndexOutOfBoundsException,
                                       css::lang::WrappedTargetException,
-                                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                      css::uno::RuntimeException, std::exception) override;
 
 // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-                                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(css::uno::RuntimeException, std::exception) override;
 
 private:
 

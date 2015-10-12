@@ -277,7 +277,7 @@ protected:
 
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle ) SAL_OVERRIDE;
+                ::com::sun::star::style::XStyle > & rStyle ) override;
 
     void exportPageFrames( bool bAutoStyles, bool bProgress );
     void exportFrameFrames( bool bAutoStyles, bool bProgress,

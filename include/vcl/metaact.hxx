@@ -102,15 +102,15 @@ public:
 protected:
     virtual             ~MetaPixelAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaPixelAction( const Point& rPt, const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
     const Color&        GetColor() const { return maColor; }
@@ -126,15 +126,15 @@ public:
 protected:
     virtual             ~MetaPointAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaPointAction( const Point& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
 };
@@ -152,17 +152,17 @@ public:
 protected:
     virtual             ~MetaLineAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaLineAction( const Point& rStart, const Point& rEnd );
                         MetaLineAction( const Point& rStart, const Point& rEnd,
                                         const LineInfo& rLineInfo );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
@@ -180,15 +180,15 @@ public:
 protected:
     virtual             ~MetaRectAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaRectAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -206,16 +206,16 @@ public:
 protected:
     virtual             ~MetaRoundRectAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaRoundRectAction( const Rectangle& rRect,
                                              sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
@@ -233,15 +233,15 @@ public:
 protected:
     virtual             ~MetaEllipseAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaEllipseAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -259,16 +259,16 @@ public:
 protected:
     virtual             ~MetaArcAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaArcAction( const Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -288,16 +288,16 @@ public:
 protected:
     virtual             ~MetaPieAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaPieAction( const Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -317,16 +317,16 @@ public:
 protected:
     virtual             ~MetaChordAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaChordAction( const Rectangle& rRect,
                                          const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -345,16 +345,16 @@ public:
 protected:
     virtual             ~MetaPolyLineAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaPolyLineAction( const tools::Polygon& );
     explicit            MetaPolyLineAction( const tools::Polygon&, const LineInfo& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
@@ -371,15 +371,15 @@ public:
 protected:
     virtual             ~MetaPolygonAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaPolygonAction( const tools::Polygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
 };
@@ -395,15 +395,15 @@ public:
 protected:
     virtual             ~MetaPolyPolygonAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaPolyPolygonAction( const tools::PolyPolygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
@@ -422,16 +422,16 @@ public:
 protected:
     virtual             ~MetaTextAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     MetaTextAction( const Point& rPt, const OUString& rStr,
                     sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
@@ -459,15 +459,15 @@ public:
                          const long* pDXAry, sal_Int32 nIndex,
                          sal_Int32 nLen );
 
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
 
-    virtual MetaAction* Clone() SAL_OVERRIDE;
+    virtual MetaAction* Clone() override;
 
-    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Scale( double fScaleX, double fScaleY ) override;
 
-    virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void    Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void    Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     const Point&    GetPoint() const { return maStartPt; }
     const OUString& GetText() const { return maStr; }
@@ -491,17 +491,17 @@ public:
 protected:
     virtual             ~MetaStretchTextAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                            const OUString& rStr,
                            sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
@@ -523,16 +523,16 @@ public:
 protected:
     virtual             ~MetaTextRectAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     MetaTextRectAction( const Rectangle& rRect,
                         const OUString& rStr, DrawTextFlags nStyle );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const OUString&     GetText() const { return maStr; }
@@ -554,17 +554,17 @@ public:
 protected:
     virtual             ~MetaTextLineAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaTextLineAction( const Point& rPos, long nWidth,
                                             FontStrikeout eStrikeout,
                                             FontUnderline eUnderline,
                                             FontUnderline eOverline );
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maPos; }
     long                GetWidth() const { return mnWidth; }
@@ -585,15 +585,15 @@ public:
 protected:
     virtual             ~MetaBmpAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpAction( const Point& rPt, const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -612,16 +612,16 @@ public:
 protected:
     virtual             ~MetaBmpScaleAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                             const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -643,17 +643,17 @@ public:
 protected:
     virtual             ~MetaBmpScalePartAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -674,15 +674,15 @@ public:
 protected:
     virtual             ~MetaBmpExAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -701,16 +701,16 @@ public:
 protected:
     virtual             ~MetaBmpExScaleAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                               const BitmapEx& rBmpEx ) ;
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -732,17 +732,17 @@ public:
 protected:
     virtual             ~MetaBmpExScalePartAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
                                                   const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -764,17 +764,17 @@ public:
 protected:
     virtual             ~MetaMaskAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaMaskAction( const Point& rPt,
                                         const Bitmap& rBmp,
                                         const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -795,17 +795,17 @@ public:
 protected:
     virtual             ~MetaMaskScaleAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaMaskScaleAction( const Point& rPt, const Size& rSz,
                                              const Bitmap& rBmp,
                                              const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -829,18 +829,18 @@ public:
 protected:
     virtual             ~MetaMaskScalePartAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaMaskScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                  const Point& rSrcPt, const Size& rSrcSz,
                                                  const Bitmap& rBmp,
                                                  const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -862,15 +862,15 @@ public:
 protected:
     virtual             ~MetaGradientAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -888,15 +888,15 @@ public:
 protected:
     virtual             ~MetaGradientExAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaGradientExAction( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -914,15 +914,15 @@ public:
 protected:
     virtual             ~MetaHatchAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
@@ -940,16 +940,16 @@ public:
 protected:
     virtual             ~MetaWallpaperAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaWallpaperAction( const Rectangle& rRect,
                                              const Wallpaper& rPaper );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
@@ -967,15 +967,15 @@ public:
 protected:
     virtual             ~MetaClipRegionAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaClipRegionAction( const vcl::Region& rRegion, bool bClip );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
@@ -992,15 +992,15 @@ public:
 protected:
     virtual             ~MetaISectRectClipRegionAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaISectRectClipRegionAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -1016,15 +1016,15 @@ public:
 protected:
     virtual             ~MetaISectRegionClipRegionAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaISectRegionClipRegionAction( const vcl::Region& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
 };
@@ -1041,14 +1041,14 @@ public:
 protected:
     virtual             ~MetaMoveClipRegionAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaMoveClipRegionAction( long nHorzMove, long nVertMove );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     long                GetHorzMove() const { return mnHorzMove; }
     long                GetVertMove() const { return mnVertMove; }
@@ -1066,10 +1066,10 @@ public:
 protected:
     virtual             ~MetaLineColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaLineColorAction( const Color& rColor, bool bSet );
 
@@ -1089,10 +1089,10 @@ public:
 protected:
     virtual             ~MetaFillColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaFillColorAction( const Color& rColor, bool bSet );
 
@@ -1111,10 +1111,10 @@ public:
 protected:
     virtual             ~MetaTextColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaTextColorAction( const Color& );
 
@@ -1133,10 +1133,10 @@ public:
 protected:
     virtual             ~MetaTextFillColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaTextFillColorAction( const Color& rColor, bool bSet );
 
@@ -1156,10 +1156,10 @@ public:
 protected:
     virtual             ~MetaTextLineColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaTextLineColorAction( const Color& rColor, bool bSet );
 
@@ -1179,10 +1179,10 @@ public:
 protected:
     virtual             ~MetaOverlineColorAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaOverlineColorAction( const Color& rColor, bool bSet );
 
@@ -1201,10 +1201,10 @@ public:
 protected:
     virtual             ~MetaTextAlignAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaTextAlignAction( TextAlign eAlign );
 
@@ -1222,14 +1222,14 @@ public:
 protected:
     virtual             ~MetaMapModeAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaMapModeAction( const MapMode& );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const MapMode&      GetMapMode() const { return maMapMode; }
 };
@@ -1245,14 +1245,14 @@ public:
 protected:
     virtual             ~MetaFontAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaFontAction( const vcl::Font& );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Font&    GetFont() const { return maFont; }
 };
@@ -1268,10 +1268,10 @@ public:
 protected:
     virtual             ~MetaPushAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaPushAction( PushFlags nFlags );
 
@@ -1286,10 +1286,10 @@ public:
 protected:
     virtual             ~MetaPopAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 };
 
 class VCL_DLLPUBLIC MetaRasterOpAction : public MetaAction
@@ -1303,10 +1303,10 @@ public:
 protected:
     virtual             ~MetaRasterOpAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaRasterOpAction( RasterOp eRasterOp );
 
@@ -1325,15 +1325,15 @@ public:
 protected:
     virtual             ~MetaTransparentAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
@@ -1353,16 +1353,16 @@ public:
 protected:
     virtual             ~MetaFloatTransparentAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                     const Size& rSize, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return maMtf; }
     const Point&        GetPoint() const { return maPoint; }
@@ -1384,16 +1384,16 @@ public:
 protected:
     virtual             ~MetaEPSAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaEPSAction( const Point& rPoint, const Size& rSize,
                                        const GfxLink& rGfxLink, const GDIMetaFile& rSubst );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GfxLink&      GetLink() const { return maGfxLink; }
     const GDIMetaFile&  GetSubstitute() const { return maSubst; }
@@ -1413,10 +1413,10 @@ public:
 protected:
     virtual             ~MetaRefPointAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
                         MetaRefPointAction( const Point& rRefPoint, bool bSet );
 
@@ -1443,13 +1443,13 @@ public:
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
-    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
+    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     const OString&      GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
@@ -1468,10 +1468,10 @@ public:
 protected:
     virtual             ~MetaLayoutModeAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaLayoutModeAction( ComplexTextLayoutMode nLayoutMode );
 
@@ -1489,10 +1489,10 @@ public:
 protected:
     virtual             ~MetaTextLanguageAction();
 public:
-    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
-    virtual MetaAction* Clone() SAL_OVERRIDE;
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual MetaAction* Clone() override;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
     explicit            MetaTextLanguageAction( LanguageType );
 

@@ -64,7 +64,7 @@ public:
     SfxVirtualMenu*         GetPopupMenu() const;
 
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                          const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                          const SfxPoolItem* pState ) override;
 
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
     static SfxUnoMenuControl* CreateControl( const OUString&, sal_uInt16, Menu&, const OUString& sItemText, SfxBindings&, SfxVirtualMenu* );

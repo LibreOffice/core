@@ -41,16 +41,16 @@ public:
   virtual ~DragSourceContext();
 
   virtual sal_Int32 SAL_CALL getCurrentCursor(  )
-    throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL setCursor( sal_Int32 cursorId )
-    throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL setImage( sal_Int32 imageId )
-    throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL transferablesFlavorsChanged(  )
-    throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw( com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX

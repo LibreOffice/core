@@ -41,9 +41,9 @@ private:
         void                ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
 protected:
-        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt) override;
 
 public:
 
@@ -57,8 +57,8 @@ public:
 
         void            MoveSplitTo(Point aPos);
 
-        virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void    StateChanged( StateChangedType nType ) override;
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         void            SetCtrModifiedHdl( const Link<ScPrivatSplit&,void>& rLink ) { aCtrModifiedLink = rLink; }
 };

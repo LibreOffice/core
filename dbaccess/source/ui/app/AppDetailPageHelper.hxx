@@ -64,12 +64,12 @@ namespace dbaui
         bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         explicit OPreviewWindow(vcl::Window* _pParent);
 
         // Window overrides
-        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };
@@ -168,11 +168,11 @@ namespace dbaui
     public:
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
         /** creates the tables page
             @param  _xConnection
@@ -347,7 +347,7 @@ namespace dbaui
                             bool _bTable);
 
     protected:
-        void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        void DataChanged( const DataChangedEvent& rDCEvt ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILPAGEHELPER_HXX

@@ -39,17 +39,17 @@ public:
     virtual ~X11OpenGLSalVirtualDevice();
 
     // SalGeometryProvider
-    virtual long GetWidth() const SAL_OVERRIDE { return mnWidth; }
-    virtual long GetHeight() const SAL_OVERRIDE { return mnHeight; }
+    virtual long GetWidth() const override { return mnWidth; }
+    virtual long GetHeight() const override { return mnHeight; }
 
     SalDisplay *            GetDisplay() const { return mpDisplay; }
     SalX11Screen            GetXScreenNumber() const { return mnXScreen; }
 
-    virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual SalGraphics*    AcquireGraphics() override;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
                             // Set new size, without saving the old contents
-    virtual bool            SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual bool            SetSize( long nNewDX, long nNewDY ) override;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_SALVD_H

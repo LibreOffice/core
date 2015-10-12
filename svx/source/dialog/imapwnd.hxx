@@ -82,7 +82,7 @@ public:
 
                             virtual ~IMapUserData() { }
 
-    virtual SdrObjUserData* Clone( SdrObject * ) const SAL_OVERRIDE { return new IMapUserData( *this ); }
+    virtual SdrObjUserData* Clone( SdrObject * ) const override { return new IMapUserData( *this ); }
 
     const IMapObjectPtr     GetObject() const { return mpObj; }
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
@@ -104,18 +104,18 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
 protected:
 
     // GraphCtrl
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
-    virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
-    virtual void        SdrObjChanged( const SdrObject& rObj ) SAL_OVERRIDE;
-    virtual void        MarkListHasChanged() SAL_OVERRIDE;
-    virtual void        InitSdrModel() SAL_OVERRIDE;
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual Size        GetOptimalSize() const override;
+    virtual void        Command(const CommandEvent& rCEvt) override;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void        SdrObjCreated( const SdrObject& rObj ) override;
+    virtual void        SdrObjChanged( const SdrObject& rObj ) override;
+    virtual void        MarkListHasChanged() override;
+    virtual void        InitSdrModel() override;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     void                ReplaceImageMap( const ImageMap& rNewImageMap, bool bScaleToGraphic );
 
@@ -129,7 +129,7 @@ public:
 
                         IMapWindow( vcl::Window* pParent, WinBits nBits, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         virtual ~IMapWindow();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 
@@ -150,7 +150,7 @@ public:
     void                SelectFirstObject();
     void                StartPolyEdit();
 
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 

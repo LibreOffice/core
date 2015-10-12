@@ -40,26 +40,26 @@ public:
 
     /** This method creates all shapes needed for representing the pie chart.
      */
-    virtual void createShapes() SAL_OVERRIDE;
-    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize ) SAL_OVERRIDE;
+    virtual void createShapes() override;
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize ) override;
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) SAL_OVERRIDE;
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) SAL_OVERRIDE;
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
+    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const SAL_OVERRIDE;
-    virtual bool shouldSnapRectToUsedArea() SAL_OVERRIDE;
+    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
+    virtual bool shouldSnapRectToUsedArea() override;
 
     //MinimumAndMaximumSupplier
-    virtual double getMinimumX() SAL_OVERRIDE;
-    virtual double getMaximumX() SAL_OVERRIDE;
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
+    virtual double getMinimumX() override;
+    virtual double getMaximumX() override;
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
 
-    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
 private: //methods
     //no default constructor

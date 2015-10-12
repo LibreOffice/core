@@ -110,7 +110,7 @@ public:
                             ScLookupCache( ScDocument * pDoc, const ScRange & rRange );
     virtual                 ~ScLookupCache();
     /// Remove from document structure and delete (!) cache on modify hint.
-    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( const SfxHint& rHint ) override;
 
     /// @returns document address in o_rAddress if Result==FOUND
             Result          lookup( ScAddress & o_rResultAddress,

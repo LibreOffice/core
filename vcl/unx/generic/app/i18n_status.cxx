@@ -97,14 +97,14 @@ public:
     explicit XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow();
 
-    virtual void setPosition( SalFrame* ) SAL_OVERRIDE;
-    virtual void setText( const OUString & ) SAL_OVERRIDE;
-    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
-    virtual void toggle( bool bOn ) SAL_OVERRIDE;
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void setPosition( SalFrame* ) override;
+    virtual void setText( const OUString & ) override;
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) override;
+    virtual void toggle( bool bOn ) override;
+    virtual void dispose() override;
 
     // override WorkWindow::DataChanged
-    virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rEvt ) override;
 };
 
 }
@@ -312,17 +312,17 @@ class IIIMPStatusWindow : public StatusWindow
 public:
     IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
 
-    virtual void setText( const OUString & ) SAL_OVERRIDE;
-    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
-    virtual void toggle( bool bOn ) SAL_OVERRIDE;
+    virtual void setText( const OUString & ) override;
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) override;
+    virtual void toggle( bool bOn ) override;
     virtual ~IIIMPStatusWindow() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void layout();
 
     // override Window focus handler
-    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        GetFocus() override;
     // override WorkWindow::DataChanged
-    virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rEvt ) override;
 };
 
 }

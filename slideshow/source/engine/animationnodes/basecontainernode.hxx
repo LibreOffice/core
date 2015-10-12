@@ -41,23 +41,23 @@ public:
     void appendChildNode( AnimationNodeSharedPtr const& pNode );
 
 #if defined(DBG_UTIL)
-    virtual void showState() const SAL_OVERRIDE;
-    virtual const char* getDescription() const SAL_OVERRIDE { return "BaseContainerNode"; }
+    virtual void showState() const override;
+    virtual const char* getDescription() const override { return "BaseContainerNode"; }
 #endif
 
 protected:
     // overrides from BaseNode
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
-    virtual bool init_st() SAL_OVERRIDE;
+    virtual bool init_st() override;
     bool init_children();
-    virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
-    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
+    virtual void deactivate_st( NodeState eDestState ) override;
+    virtual bool hasPendingAnimation() const override;
     // force to be implemented by derived class:
-    virtual void activate_st() SAL_OVERRIDE = 0;
+    virtual void activate_st() override = 0;
     virtual void notifyDeactivating(
-        AnimationNodeSharedPtr const& rNotifier ) SAL_OVERRIDE = 0;
+        AnimationNodeSharedPtr const& rNotifier ) override = 0;
 
 protected:
     bool isDurationIndefinite() const { return mbDurationIndefinite; }

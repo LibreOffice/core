@@ -64,9 +64,9 @@ public:
     virtual ~SwComboBox();
 
     void                    InsertSwEntry(const SwBoxEntry&);
-    virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = 0) SAL_OVERRIDE;
+    virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = 0) override;
 
-    virtual void            RemoveEntryAt(sal_Int32 nPos) SAL_OVERRIDE;
+    virtual void            RemoveEntryAt(sal_Int32 nPos) override;
 
     sal_Int32               GetSwEntryPos(const SwBoxEntry& rEntry) const;
     const SwBoxEntry&       GetSwEntry(sal_Int32) const;

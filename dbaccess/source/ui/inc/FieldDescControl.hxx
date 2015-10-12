@@ -175,7 +175,7 @@ namespace dbaui
     public:
         OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl();
-        virtual void        dispose() SAL_OVERRIDE;
+        virtual void        dispose() override;
 
         void                DisplayData(OFieldDescription* pFieldDescr );
 
@@ -196,9 +196,9 @@ namespace dbaui
         void                paste();
 
         void                Init();
-        virtual void        GetFocus() SAL_OVERRIDE;
-        virtual void        LoseFocus() SAL_OVERRIDE;
-        virtual void        Resize() SAL_OVERRIDE;
+        virtual void        GetFocus() override;
+        virtual void        LoseFocus() override;
+        virtual void        Resize() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;

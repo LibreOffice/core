@@ -34,19 +34,19 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED( CancelHdl, Button *, void );
     sal_uInt16 m_nOrganizerId;
 protected:
-    virtual void   RefreshInputSet() SAL_OVERRIDE;
+    virtual void   RefreshInputSet() override;
 
 public:
     SfxStyleDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
     virtual ~SfxStyleDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
     const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }
 
-    virtual short               Ok() SAL_OVERRIDE;
+    virtual short               Ok() override;
 
     static OUString GenerateUnusedName(SfxStyleSheetBasePool &rPool);
 };

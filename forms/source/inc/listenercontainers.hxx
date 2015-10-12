@@ -103,7 +103,7 @@ namespace frm
         virtual bool    implTypedNotify(
                             const css::uno::Reference< css::form::XResetListener >& _rxListener,
                             const css::lang::EventObject& _rEvent
-                        ) SAL_OVERRIDE;
+                        ) override;
     };
 
 

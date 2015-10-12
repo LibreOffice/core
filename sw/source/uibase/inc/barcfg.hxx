@@ -26,13 +26,13 @@ class SwToolbarConfigItem : public utl::ConfigItem
 
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwToolbarConfigItem( bool bWeb );
     virtual ~SwToolbarConfigItem();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     void        SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId );
 };

@@ -38,10 +38,10 @@ public:
             ::com::sun::star::chart2::XChartDocument > & xChartDocument );
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
-    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
+    virtual void Reset( const SfxItemSet* rInAttrs ) override;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     ErrorBarResources   m_aErrorBarResources;

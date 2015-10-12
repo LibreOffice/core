@@ -82,13 +82,13 @@ public:
     SvxGridItem( sal_uInt16 _nWhich) : SfxPoolItem(_nWhich){};
     SvxGridItem( const SvxGridItem& pTestItem );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+                                    OUString &rText, const IntlWrapper * = 0 ) const override;
 
 };
 
@@ -102,15 +102,15 @@ class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 public:
     SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxGridTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
     VclPtr<CheckBox>            pCbxUseGridsnap;

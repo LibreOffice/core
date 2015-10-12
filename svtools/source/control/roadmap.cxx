@@ -41,7 +41,7 @@ class IDLabel :  public FixedText
 {
 public:
     IDLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 class RoadmapItem : public RoadmapTypes

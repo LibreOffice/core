@@ -79,16 +79,16 @@ protected:
     void WorkOnDesc(
         const OString &rOpenTag,
         OString &rText
-    ) SAL_OVERRIDE;
+    ) override;
     void WorkOnText(
         const OString &rOpenTag,
         OString &rText
-    ) SAL_OVERRIDE;
+    ) override;
     void EndOfText(
         const OString &rOpenTag,
         const OString &rCloseTag
-    ) SAL_OVERRIDE;
-    void Output( const OString& rOutput ) SAL_OVERRIDE;
+    ) override;
+    void Output( const OString& rOutput ) override;
 
 public:
     XRMResExport(
@@ -113,16 +113,16 @@ protected:
     void WorkOnDesc(
         const OString &rOpenTag,
         OString &rText
-    ) SAL_OVERRIDE;
+    ) override;
     void WorkOnText(
         const OString &rOpenTag,
         OString &rText
-    ) SAL_OVERRIDE;
+    ) override;
     void EndOfText(
         const OString &rOpenTag,
         const OString &rCloseTag
-    ) SAL_OVERRIDE;
-    void Output( const OString& rOutput ) SAL_OVERRIDE;
+    ) override;
+    void Output( const OString& rOutput ) override;
 public:
     XRMResMerge(
         const OString &rMergeSource,

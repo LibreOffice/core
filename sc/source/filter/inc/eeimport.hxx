@@ -51,12 +51,12 @@ public:
     ScEEImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ~ScEEImport();
 
-    virtual sal_uLong    Read( SvStream& rStream, const OUString& rBaseURL ) SAL_OVERRIDE;
-    virtual ScRange  GetRange() SAL_OVERRIDE { return maRange; }
+    virtual sal_uLong    Read( SvStream& rStream, const OUString& rBaseURL ) override;
+    virtual ScRange  GetRange() override { return maRange; }
     virtual void     WriteToDocument( bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = NULL,
-                                      bool bConvertDate = true ) SAL_OVERRIDE;
+                                      bool bConvertDate = true ) override;
 };
 
 #endif

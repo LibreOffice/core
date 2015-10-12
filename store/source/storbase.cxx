@@ -97,8 +97,8 @@ private:
 
     /** PageData::Allocator implementation.
      */
-    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) SAL_OVERRIDE;
-    virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
+    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) override;
+    virtual void deallocate_Impl (void * pPage) override;
 };
 
 } // namespace store

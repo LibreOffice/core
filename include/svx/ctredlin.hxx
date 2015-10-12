@@ -78,9 +78,9 @@ public:
         The relevant text with the selected color is drawn in the output device.
     */
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 
-    SvLBoxItem*     Create() const SAL_OVERRIDE;
+    SvLBoxItem*     Create() const override;
 };
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRedlinTable : public SvSimpleTable
@@ -108,14 +108,14 @@ private:
 
 protected:
 
-    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*) SAL_OVERRIDE;
-    virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
+    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*) override;
+    virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
 
 public:
 
     SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvxRedlinTable();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag=true);
@@ -160,7 +160,7 @@ public:
     SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
                                  SvTreeListEntry* pParent = NULL, sal_uIntPtr nPos = TREELIST_APPEND);
 
-    virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
+    virtual SvTreeListEntry* CreateEntry() const override;
 
     void            SetColCompareHdl(const Link<const SvSortData*,sal_Int32>& rLink ) { aColCompareLink = rLink; }
 };
@@ -211,9 +211,9 @@ protected:
 public:
                     SvxTPFilter( vcl::Window * pParent);
     virtual         ~SvxTPFilter();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    DeactivatePage() SAL_OVERRIDE;
+    virtual void    DeactivatePage() override;
     void            SetRedlinTable(SvxRedlinTable*);
 
     Date            GetFirstDate() const;
@@ -300,7 +300,7 @@ private:
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
     virtual ~SvxTPView();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
@@ -324,8 +324,8 @@ public:
 
     void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
 
-    virtual void    ActivatePage() SAL_OVERRIDE;
-    virtual void    DeactivatePage() SAL_OVERRIDE;
+    virtual void    ActivatePage() override;
+    virtual void    DeactivatePage() override;
 };
 
 
@@ -346,7 +346,7 @@ public:
                     SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
 
                     virtual ~SvxAcceptChgCtr();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            ShowFilterPage();
     void            ShowViewPage();

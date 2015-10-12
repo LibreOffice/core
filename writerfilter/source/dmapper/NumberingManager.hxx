@@ -187,7 +187,7 @@ public:
     // Mapping functions
     static OUString GetStyleName( sal_Int32 nId );
 
-    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues() SAL_OVERRIDE;
+    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues() override;
 
     void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
 
@@ -220,11 +220,11 @@ private:
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 
     // Properties
-    virtual void lcl_attribute( Id nName, Value & rVal ) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute( Id nName, Value & rVal ) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
 public:
 

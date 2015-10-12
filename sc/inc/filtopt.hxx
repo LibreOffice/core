@@ -34,12 +34,12 @@ private:
 
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
             ScFilterOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
 
     bool        GetWK3Flag() const          { return bWK3Flag; }
 };

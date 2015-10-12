@@ -70,12 +70,12 @@ public:
 
     SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow );
 
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool        Notify( NotifyEvent& rEvt ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool        Notify( NotifyEvent& rEvt ) override;
+    virtual void        Resize() override;
+    virtual void        GetFocus() override;
     void                DoResize();
 };
 

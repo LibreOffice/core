@@ -96,14 +96,14 @@ public:
 // FAT allocator.
 
 class StgFATStrm : public StgStrm {     // the master FAT stream
-    virtual bool Pos2Page( sal_Int32 nBytePos ) SAL_OVERRIDE;
+    virtual bool Pos2Page( sal_Int32 nBytePos ) override;
     bool  SetPage( short, sal_Int32 );
 public:
     explicit StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
     sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
-    virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
+    virtual bool SetSize( sal_Int32 ) override;
 };
 
 // The stream has a size increment which normally is 1, but which can be
@@ -118,9 +118,9 @@ public:
     StgDataStrm( StgIo&, StgDirEntry& );
     void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
     void SetIncrement( short n ) { m_nIncr = n ; }
-    virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
-    virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
-    virtual sal_Int32 Write( const void*, sal_Int32 ) SAL_OVERRIDE;
+    virtual bool SetSize( sal_Int32 ) override;
+    virtual sal_Int32 Read( void*, sal_Int32 ) override;
+    virtual sal_Int32 Write( const void*, sal_Int32 ) override;
 };
 
 // The small stream class provides access to streams with a size < 4096 bytes.
@@ -135,9 +135,9 @@ class StgSmallStrm : public StgStrm     // a logical data stream
 public:
     StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );
     StgSmallStrm( StgIo&, StgDirEntry& );
-    virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
-    virtual sal_Int32 Write( const void*, sal_Int32 ) SAL_OVERRIDE;
-    virtual bool IsSmallStrm() const SAL_OVERRIDE { return true; }
+    virtual sal_Int32 Read( void*, sal_Int32 ) override;
+    virtual sal_Int32 Write( const void*, sal_Int32 ) override;
+    virtual bool IsSmallStrm() const override { return true; }
 };
 
 class StgTmpStrm : public SvMemoryStream
@@ -145,16 +145,16 @@ class StgTmpStrm : public SvMemoryStream
     OUString m_aName;
     SvFileStream* m_pStrm;
     using SvMemoryStream::GetData;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
-    virtual void FlushData() SAL_OVERRIDE;
+    virtual sal_uLong GetData( void* pData, sal_uLong nSize ) override;
+    virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) override;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
+    virtual void FlushData() override;
 
 public:
     explicit StgTmpStrm( sal_uLong=16 );
     virtual ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
-    virtual void SetSize( sal_uInt64 ) SAL_OVERRIDE;
+    virtual void SetSize( sal_uInt64 ) override;
     sal_uLong GetSize() const;
 };
 

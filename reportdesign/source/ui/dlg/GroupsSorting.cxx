@@ -88,11 +88,11 @@ public:
     explicit OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 class OFieldExpressionControl : public ::svt::EditBrowseBox
@@ -114,13 +114,13 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
 public:
     OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
     virtual ~OFieldExpressionControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // XContainerListener
     void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
     void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 
     void        fillColumns(const uno::Reference< container::XNameAccess>& _xColumns);
     void        lateInit();
@@ -142,26 +142,26 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect = true);
 
-    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
+    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
     using ::svt::EditBrowseBox::GetRowCount;
 protected:
-    virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
+    virtual bool IsTabAllowed(bool bForward) const override;
 
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
-    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
-    virtual bool SaveModified() SAL_OVERRIDE;
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
-    virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const override;
+    virtual bool SeekRow( long nRow ) override;
+    virtual bool SaveModified() override;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
+    virtual RowStatus GetRowStatus(long nRow) const override;
 
-    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rEvt) override;
+    virtual void Command( const CommandEvent& rEvt ) override;
 
     // D&D
-    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
-    virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) override;
 
     using BrowseBox::AcceptDrop;
     using BrowseBox::ExecuteDrop;

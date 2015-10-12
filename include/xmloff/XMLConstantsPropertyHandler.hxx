@@ -49,13 +49,13 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
+            const SvXMLUnitConverter& rUnitConverter ) const override;
 
     /// Exports the given value in cas of the given XML-data-type
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
+            const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX

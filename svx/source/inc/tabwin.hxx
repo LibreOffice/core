@@ -43,17 +43,17 @@ protected:
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
     virtual ~FmFieldWinListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 protected:
     // DragSourceHelper
-    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
     // SvTreeListBox
-    virtual bool DoubleClickHdl() SAL_OVERRIDE;
+    virtual bool DoubleClickHdl() override;
 
     using SvTreeListBox::ExecuteDrop;
 };
@@ -88,17 +88,17 @@ public:
                SfxChildWindow *pMgr, vcl::Window* pParent);
 
     virtual ~FmFieldWin();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual bool Close() SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual bool PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual void Resize() override;
+    virtual bool Close() override;
+    virtual void GetFocus() override;
+    virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) SAL_OVERRIDE;
+                              const SfxPoolItem* pState) override;
 
     void UpdateContent(FmFormShell*);
     void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
-    void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
+    void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
     const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
     ::dbtools::SharedConnection GetConnection() const { return m_aConnection; }
@@ -109,7 +109,7 @@ public:
 
 protected:
     // FmXChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
 protected:
     inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }

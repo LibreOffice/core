@@ -92,7 +92,7 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
 
 protected:
     inline void check();
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     virtual ~PackageRegistryImpl();
     PackageRegistryImpl() : t_helper( getMutex() ) {}
@@ -105,7 +105,7 @@ public:
         Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
-    virtual void SAL_CALL update() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL update() throw (RuntimeException, std::exception) override;
 
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
@@ -114,12 +114,12 @@ public:
         throw (deployment::DeploymentException,
                deployment::InvalidRemovedParameterException,
                CommandFailedException,
-               lang::IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+               lang::IllegalArgumentException, RuntimeException, std::exception) override;
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    getSupportedPackageTypes() throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
                 throw (deployment::DeploymentException,
-                RuntimeException, std::exception) SAL_OVERRIDE;
+                RuntimeException, std::exception) override;
 
 };
 

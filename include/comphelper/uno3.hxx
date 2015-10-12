@@ -32,16 +32,16 @@ namespace comphelper
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \
-        virtual void    SAL_CALL acquire() throw() SAL_OVERRIDE { baseclass::acquire(); }    \
-        virtual void    SAL_CALL release() throw() SAL_OVERRIDE { baseclass::release(); }
+        virtual void    SAL_CALL acquire() throw() override { baseclass::acquire(); }    \
+        virtual void    SAL_CALL release() throw() override { baseclass::release(); }
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
         (e.g. if you override queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
-        virtual void            SAL_CALL acquire() throw() SAL_OVERRIDE { baseclass::acquire(); } \
-        virtual void            SAL_CALL release() throw() SAL_OVERRIDE { baseclass::release(); }    \
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+        virtual void            SAL_CALL acquire() throw() override { baseclass::acquire(); } \
+        virtual void            SAL_CALL release() throw() override { baseclass::release(); }    \
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) override \
             { return baseclass::queryInterface(_rType); }
 
     /** Use this macro to forward XComponent methods to base class
@@ -67,21 +67,21 @@ namespace comphelper
         that would be ::cppu::WeakComponentImplHelperBase
     */
     #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { baseclass::acquire(); }   \
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE { baseclass::release(); }   \
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+        virtual void SAL_CALL acquire() throw() override { baseclass::acquire(); }   \
+        virtual void SAL_CALL release() throw() override { baseclass::release(); }   \
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) override \
             { return baseclass::queryInterface(_rType); }                               \
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::dispose();                                                      \
         }                                                                               \
         virtual void SAL_CALL addEventListener(                                         \
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::addEventListener(xListener);                                        \
         }                                                                               \
         virtual void SAL_CALL removeEventListener(                                      \
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::removeEventListener(xListener);                                 \
         }
@@ -91,9 +91,9 @@ namespace comphelper
     //= forwarding/merging XInterface funtionality
 
     #define DECLARE_XINTERFACE( )   \
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE; \
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override; \
+        virtual void SAL_CALL acquire() throw() override; \
+        virtual void SAL_CALL release() throw() override;
 
     #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
         void SAL_CALL classname::acquire() throw() { refcountbase::acquire(); } \
@@ -127,8 +127,8 @@ namespace comphelper
     //= forwarding/merging XTypeProvider funtionality
 
     #define DECLARE_XTYPEPROVIDER( )    \
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override; \
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
         ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) \

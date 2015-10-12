@@ -89,12 +89,12 @@ class TimingListener
     , private boost::noncopyable
 {
 public:
-    void startTest( CppUnit::Test *) SAL_OVERRIDE
+    void startTest( CppUnit::Test *) override
     {
         m_nStartTime = osl_getGlobalTimer();
     }
 
-    void endTest( CppUnit::Test *test ) SAL_OVERRIDE
+    void endTest( CppUnit::Test *test ) override
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         std::cout << test->getName() << ": " << nEndTime-m_nStartTime
@@ -115,7 +115,7 @@ class EyecatcherListener
     , private boost::noncopyable
 {
 public:
-    void startTest( CppUnit::Test* test) SAL_OVERRIDE
+    void startTest( CppUnit::Test* test) override
     {
         std::unique_ptr<char[]> tn(new char [ test->getName().length() + 2 ]);
         strcpy(tn.get(), test->getName().c_str());
@@ -132,7 +132,7 @@ public:
         setenv("LO_TESTNAME", tn.get(), true);
     }
 
-    void endTest( CppUnit::Test* /* test */ ) SAL_OVERRIDE
+    void endTest( CppUnit::Test* /* test */ ) override
     {
     }
 };
@@ -141,7 +141,7 @@ public:
 class LogFailuresAsTheyHappen : public CppUnit::TestListener
 {
 public:
-    virtual void addFailure( const CppUnit::TestFailure &failure ) SAL_OVERRIDE
+    virtual void addFailure( const CppUnit::TestFailure &failure ) override
     {
         printFailureLocation( failure.sourceLine() );
         printFailedTestName( failure );
@@ -291,7 +291,7 @@ public:
 
         return success;
     }
-    virtual bool operator()() const SAL_OVERRIDE
+    virtual bool operator()() const override
     {
         return run();
     }

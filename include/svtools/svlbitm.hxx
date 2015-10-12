@@ -111,10 +111,10 @@ public:
     SvLBoxString();
     virtual ~SvLBoxString();
 
-    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+                              SvViewDataItem* pViewData) override;
 
     OUString GetText() const
     {
@@ -128,10 +128,10 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
                        vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
-                       const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
+    virtual SvLBoxItem* Create() const override;
+    virtual void Clone(SvLBoxItem* pSource) override;
 };
 
 class SvLBoxBmp : public SvLBoxItem
@@ -140,12 +140,12 @@ class SvLBoxBmp : public SvLBoxItem
 public:
     SvLBoxBmp();
     virtual ~SvLBoxBmp();
-    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    virtual void InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    virtual sal_uInt16 GetType() const override;
+    virtual void InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,  vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
-    virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
+    virtual SvLBoxItem* Create() const override;
+    virtual void Clone( SvLBoxItem* pSource ) override;
 };
 
 
@@ -170,20 +170,20 @@ public:
     virtual ~SvLBoxButton();
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+                              SvViewDataItem* pViewData) override;
 
-    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetType() const override;
     bool ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
 
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
                        vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
-                       const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const SAL_OVERRIDE;
+    virtual SvLBoxItem* Create() const override;
 
-    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
+    virtual void Clone(SvLBoxItem* pSource) override;
     SvItemStateFlags GetButtonFlags() const
     {
         return nItemFlags;
@@ -254,18 +254,18 @@ public:
     SvLBoxContextBmp();
     virtual ~SvLBoxContextBmp();
 
-    virtual sal_uInt16 GetType() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) SAL_OVERRIDE;
+                              SvViewDataItem* pViewData) override;
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
                        vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
-                       const SvTreeListEntry& rEntry) SAL_OVERRIDE;
+                       const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
+    virtual SvLBoxItem* Create() const override;
+    virtual void Clone(SvLBoxItem* pSource) override;
 
 
     bool SetModeImages(const Image& rBitmap1, const Image& rBitmap2);

@@ -34,17 +34,17 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
+    virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const SAL_OVERRIDE;
+        const override;
 
-    virtual bool QueryValue(com::sun::star::uno::Any & rVal, sal_uInt8 = 0) const SAL_OVERRIDE;
+    virtual bool QueryValue(com::sun::star::uno::Any & rVal, sal_uInt8 = 0) const override;
 
-    virtual bool PutValue(const com::sun::star::uno::Any & rVal, sal_uInt8 ) SAL_OVERRIDE;
+    virtual bool PutValue(const com::sun::star::uno::Any & rVal, sal_uInt8 ) override;
 
     virtual sal_uInt16 GetValueCount() const = 0;
 

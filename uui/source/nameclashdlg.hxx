@@ -49,7 +49,7 @@ public:
                      OUString const & rProposedNewName,
                      bool bAllowOverwrite );
     virtual ~NameClashDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString getNewName() const { return maNewName; }
 };
 

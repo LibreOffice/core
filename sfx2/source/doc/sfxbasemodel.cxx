@@ -156,9 +156,9 @@ public:
     virtual ~SfxDocInfoListener_Impl();
 
     virtual void SAL_CALL disposing( const lang::EventObject& )
-        throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( RuntimeException, std::exception ) override;
     virtual void SAL_CALL modified( const lang::EventObject& )
-        throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( RuntimeException, std::exception ) override;
 };
 SfxDocInfoListener_Impl::~SfxDocInfoListener_Impl()
 {
@@ -248,7 +248,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     }
 
     // ::sfx2::IModifiableDocument
-    virtual void storageIsModified() SAL_OVERRIDE
+    virtual void storageIsModified() override
     {
         if ( m_pObjectShell.Is() && !m_pObjectShell->IsModified() )
             m_pObjectShell->SetModified();
@@ -324,8 +324,8 @@ public:
         : m_pData( pData )
     {}
 
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( RuntimeException, std::exception ) SAL_OVERRIDE ;
-    virtual void SAL_CALL printJobEvent( const view::PrintJobEvent& rEvent ) throw ( RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( RuntimeException, std::exception ) override ;
+    virtual void SAL_CALL printJobEvent( const view::PrintJobEvent& rEvent ) throw ( RuntimeException, std::exception) override;
 };
 
 void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& ) throw ( RuntimeException, std::exception )
@@ -1138,9 +1138,9 @@ namespace
         }
 
         // XUndoAction
-        virtual OUString SAL_CALL getTitle() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL undo(  ) throw (UndoFailedException, RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL redo(  ) throw (UndoFailedException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getTitle() throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL undo(  ) throw (UndoFailedException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL redo(  ) throw (UndoFailedException, RuntimeException, std::exception) override;
 
     private:
         const Reference< XModel >   m_xModel;

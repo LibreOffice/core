@@ -91,7 +91,7 @@ namespace drawinglayer
             virtual ~GeoTexSvxGradient();
 
             // compare operator
-            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const SAL_OVERRIDE;
+            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
             // virtual base methods
             virtual void appendTransformationsAndColors(
@@ -127,8 +127,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -158,8 +158,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -185,8 +185,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -213,8 +213,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -241,8 +241,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -269,8 +269,8 @@ namespace drawinglayer
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) SAL_OVERRIDE;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -303,7 +303,7 @@ namespace drawinglayer
             virtual ~GeoTexSvxHatch();
 
             // compare operator
-            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const SAL_OVERRIDE;
+            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
             void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices);
             double getDistanceToHatch(const basegfx::B2DPoint& rUV) const;
@@ -342,7 +342,7 @@ namespace drawinglayer
             virtual ~GeoTexSvxTiled();
 
             // compare operator
-            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const SAL_OVERRIDE;
+            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
             void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices);
         };

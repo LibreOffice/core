@@ -150,15 +150,15 @@ public:
     PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource );
     virtual ~PolarPlottingPositionHelper();
 
-    virtual PlottingPositionHelper* clone() const SAL_OVERRIDE;
+    virtual PlottingPositionHelper* clone() const override;
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix) SAL_OVERRIDE;
-    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) SAL_OVERRIDE;
+    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix) override;
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
 
     ::basegfx::B3DHomMatrix getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
-                  getTransformationScaledLogicToScene() const SAL_OVERRIDE;
+                  getTransformationScaledLogicToScene() const override;
 
     //the resulting values provided by the following 3 methods should be used
     //for input to the transformation received with
@@ -182,9 +182,9 @@ public:
     double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
 
     virtual ::com::sun::star::drawing::Position3D
-            transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const SAL_OVERRIDE;
+            transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const override;
     virtual ::com::sun::star::drawing::Position3D
-            transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const SAL_OVERRIDE;
+            transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const override;
     ::com::sun::star::drawing::Position3D
             transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling=true ) const;
 

@@ -38,7 +38,7 @@ namespace dbaui
         }
 
         // IWindowEventFilter
-        virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const SAL_OVERRIDE
+        virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const override
         {
             return  ( _rEvent.GetId() == VCLEVENT_WINDOW_ENABLED )
                 ||  ( _rEvent.GetId() == VCLEVENT_WINDOW_DISABLED )
@@ -56,7 +56,7 @@ namespace dbaui
         }
 
         // IWindowOperator
-        virtual void operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const SAL_OVERRIDE;
+        virtual void operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const override;
 
     private:
         const OUString    m_sDisabledText;

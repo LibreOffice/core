@@ -97,9 +97,9 @@ public:
         SfxBindings* pBindings);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = NULL );
@@ -109,8 +109,8 @@ public:
     NavigatorDragType           GetNavigatorDragType();
 
 protected:
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual bool                Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual void                Resize() override;
+    virtual bool                Notify(NotifyEvent& rNEvt) override;
 
 private:
     friend class ::sd::NavigatorChildWindow;
@@ -149,7 +149,7 @@ private:
                                 DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
                                 DECL_LINK_TYPED( ShapeFilterCallback, Menu *, bool );
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
     void                        SetDragImage();
     void                        ApplyImageList();
 public:
@@ -170,7 +170,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                const SfxPoolItem* pState ) override;
 
 private:
     VclPtr<SdNavigatorWin> pNavigatorWin;
@@ -188,7 +188,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                const SfxPoolItem* pState ) override;
 
 private:
     VclPtr<SdNavigatorWin> pNavigatorWin;

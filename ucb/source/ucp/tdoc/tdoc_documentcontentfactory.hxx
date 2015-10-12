@@ -40,15 +40,15 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XTransientDocumentsDocumentContentFactory
     virtual com::sun::star::uno::Reference<
@@ -56,7 +56,7 @@ public:
     createDocumentContent( const ::com::sun::star::uno::Reference<
                                 com::sun::star::frame::XModel >& Model )
         throw ( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // Non-UNO interfaces
     static OUString

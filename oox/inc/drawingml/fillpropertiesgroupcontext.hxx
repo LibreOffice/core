@@ -52,7 +52,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     GradientFillProperties& mrGradientProps;
@@ -70,7 +70,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     PatternFillProperties& mrPatternProps;
@@ -91,7 +91,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     ArtisticEffectProperties& maEffect;
@@ -112,7 +112,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     BlipFillProperties& mrBlipProps;
@@ -134,7 +134,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     BlipFillProperties& mrBlipProps;
@@ -157,7 +157,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     BlipFillProperties& mrBlipProps;
@@ -177,7 +177,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     BlipFillProperties& mrBlipProps;
@@ -195,7 +195,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
 private:
     BlipFillProperties& mrBlipProps;
@@ -213,7 +213,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
                             sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+                            const ::oox::AttributeList& rAttribs ) override;
 
     static ::oox::core::ContextHandlerRef
                         createFillContext(

@@ -57,10 +57,10 @@ public:
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     void onSelectionChanged();
     void onChangeCurrentPage();

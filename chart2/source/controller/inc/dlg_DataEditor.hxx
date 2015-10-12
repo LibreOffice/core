@@ -47,10 +47,10 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataEditor();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Dialog
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
     void SetReadOnly( bool bReadOnly );
     bool ApplyChangesToModel();

@@ -42,27 +42,27 @@ public:
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL isValidNatNum( const ::com::sun::star::lang::Locale& aLocale,
                 sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual ::com::sun::star::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
                 const ::com::sun::star::i18n::NativeNumberXmlAttributes& aAttr )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         //XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,

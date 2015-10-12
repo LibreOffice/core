@@ -26,14 +26,14 @@
 class SwColumnFrm: public SwFootnoteBossFrm
 {
 private:
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwColumnFrm();
 
 public:
     SwColumnFrm( SwFrameFormat*, SwFrm* );
 
-    virtual void PaintBreak() const SAL_OVERRIDE;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
+    virtual void PaintBreak() const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwColumnFrm)
 };

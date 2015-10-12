@@ -123,9 +123,9 @@ public:
     SalFrameGeometry        maGeometry;
 
     // SalGeometryProvider
-    virtual long GetWidth() const SAL_OVERRIDE { return maGeometry.nWidth; }
-    virtual long GetHeight() const SAL_OVERRIDE { return maGeometry.nHeight; }
-    virtual bool IsOffScreen() const SAL_OVERRIDE { return false; }
+    virtual long GetWidth() const override { return maGeometry.nWidth; }
+    virtual long GetHeight() const override { return maGeometry.nHeight; }
+    virtual bool IsOffScreen() const override { return false; }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned

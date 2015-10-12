@@ -64,7 +64,7 @@ private:
 public:
     explicit                    ScCsvTableBox( vcl::Window* pParent, WinBits nBits );
     virtual                     ~ScCsvTableBox();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
@@ -118,9 +118,9 @@ public:
     inline void                 SetColTypeHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maColTypeHdl = rHdl; }
 
 protected:
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual Size                GetOptimalSize() const SAL_OVERRIDE;
+    virtual void                Resize() override;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual Size                GetOptimalSize() const override;
 
 private:
     DECL_DLLPRIVATE_LINK_TYPED( CsvCmdHdl, ScCsvControl&, void );
@@ -130,11 +130,11 @@ private:
     // accessibility ----------------------------------------------------------
 public:
     /** Creates and returns the accessible object of this control. */
-    virtual XAccessibleRef      CreateAccessible() SAL_OVERRIDE;
+    virtual XAccessibleRef      CreateAccessible() override;
 
 protected:
     /** Creates a new accessible object. */
-    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() SAL_OVERRIDE;
+    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() override;
 };
 
 #endif

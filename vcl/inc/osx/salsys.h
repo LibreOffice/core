@@ -33,13 +33,13 @@ public:
     virtual ~AquaSalSystem();
 
     // get info about the display
-    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
+    virtual unsigned int GetDisplayScreenCount() override;
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
 
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources) SAL_OVERRIDE;
+                                      int nDefaultButton, bool bUseResources) override;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALSYS_H

@@ -76,7 +76,7 @@ namespace drawinglayer
             const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

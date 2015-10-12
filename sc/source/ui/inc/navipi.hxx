@@ -62,9 +62,9 @@ public:
     void                UpdateEntries( const std::vector<OUString> &aNewEntryList );
 
 protected:
-    virtual void        Select() SAL_OVERRIDE;
-    virtual void        DoubleClick() SAL_OVERRIDE;
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Select() override;
+    virtual void        DoubleClick() override;
+    virtual bool        Notify( NotifyEvent& rNEvt ) override;
 
 private:
     struct ScenarioEntry
@@ -97,17 +97,17 @@ class ScScenarioWindow : public vcl::Window
 public:
             ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
             virtual ~ScScenarioWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    NotifyState( const SfxPoolItem* pState );
     void    SetComment( const OUString& rComment )
                 { aEdComment->SetText( rComment ); }
 
-    void    SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+    void    SetSizePixel( const Size& rNewSize ) override;
 
 protected:
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
 private:
     VclPtr<ScScenarioListBox>   aLbScenario;
@@ -126,12 +126,12 @@ public:
     void    SetCol( SCCOL nColNo );
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual void    Up() SAL_OVERRIDE;
-    virtual void    Down() SAL_OVERRIDE;
-    virtual void    First() SAL_OVERRIDE;
-    virtual void    Last() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    LoseFocus() override;
+    virtual void    Up() override;
+    virtual void    Down() override;
+    virtual void    First() override;
+    virtual void    Last() override;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -157,8 +157,8 @@ public:
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    LoseFocus() override;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -175,7 +175,7 @@ public:
             virtual ~ScDocListBox();
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Select() override;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -193,13 +193,13 @@ public:
     void UpdateButtons();
     void InitImageList();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );
 
 protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual void    Click() SAL_OVERRIDE;
+    virtual void    Select() override;
+    virtual void    Click() override;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -299,20 +299,20 @@ private:
     static void ReleaseFocus();
 
 protected:
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
     void            Resizing( Size& rSize );
 
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
                     const bool bUseStyleSettingsBackground);
                 virtual ~ScNavigatorDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     using Window::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
@@ -325,7 +325,7 @@ public:
 
     SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
 
-    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual void    Resizing( Size& rSize ) override;
 
 private:
     VclPtr<ScNavigatorDlg> pNavigator;

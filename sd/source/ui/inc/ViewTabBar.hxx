@@ -64,7 +64,7 @@ public:
         ::com::sun::star::frame::XController>& rxController);
     virtual ~ViewTabBar();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     VclPtr< ::TabControl> GetTabControl() const { return mpTabControl;}
 
@@ -75,13 +75,13 @@ public:
     virtual void SAL_CALL
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     //----- XTabBar -----------------------------------------------------------
 
@@ -89,40 +89,40 @@ public:
         SAL_CALL addTabBarButtonAfter (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton,
             const ::com::sun::star::drawing::framework::TabBarButton& rAnchor)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void
         SAL_CALL appendTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void
         SAL_CALL removeTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool
         SAL_CALL hasTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
         SAL_CALL getTabBarButtons()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /** The returned value is calculated as the difference between the
         total height of the control and the heigh of its first tab page.

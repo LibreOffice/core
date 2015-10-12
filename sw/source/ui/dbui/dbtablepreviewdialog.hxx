@@ -39,7 +39,7 @@ public:
     SwDBTablePreviewDialog(vcl::Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
     virtual ~SwDBTablePreviewDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 };
 #endif

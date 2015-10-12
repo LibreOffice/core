@@ -50,25 +50,25 @@ class DataBrowser : public ::svt::EditBrowseBox
 {
 protected:
     // EditBrowseBox overridables
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const SAL_OVERRIDE;
-    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
-    virtual bool IsTabAllowed( bool bForward ) const SAL_OVERRIDE;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual bool SaveModified() SAL_OVERRIDE;
-    virtual void CursorMoved() SAL_OVERRIDE;
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const override;
+    virtual bool SeekRow( long nRow ) override;
+    virtual bool IsTabAllowed( bool bForward ) const override;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
+    virtual bool SaveModified() override;
+    virtual void CursorMoved() override;
     // called whenever the control of the current cell has been modified
-    virtual void CellModified() SAL_OVERRIDE;
-    virtual void ColumnResized( sal_uInt16 nColId ) SAL_OVERRIDE;
-    virtual void EndScroll() SAL_OVERRIDE;
-    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void CellModified() override;
+    virtual void ColumnResized( sal_uInt16 nColId ) override;
+    virtual void EndScroll() override;
+    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
 
     void SetDirty();
 
 public:
     DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
     virtual ~DataBrowser();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /** GetCellText returns the text at the given position
         @param  nRow
@@ -78,7 +78,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const SAL_OVERRIDE;
+    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const override;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
@@ -88,7 +88,7 @@ public:
     bool isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue );
 
     // Window
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     /// @return old state
     bool SetReadOnly( bool bNewState );

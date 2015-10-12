@@ -71,7 +71,7 @@ public:
     SAL_DLLPRIVATE const SfxItemPool&      GetItemPool() const;
 
     SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        createUnoModel() SAL_OVERRIDE;
+        createUnoModel() override;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         getUnoModel();
     SdrModel& getSdrModel();

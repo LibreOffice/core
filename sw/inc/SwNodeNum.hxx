@@ -39,17 +39,17 @@ public:
     void ChangeNumRule( SwNumRule& rNumRule );
     SwTextNode* GetTextNode() const { return mpTextNode;}
 
-    virtual bool IsNotificationEnabled() const SAL_OVERRIDE;
+    virtual bool IsNotificationEnabled() const override;
 
-    virtual bool IsContinuous() const SAL_OVERRIDE;
+    virtual bool IsContinuous() const override;
 
-    virtual bool IsCounted() const SAL_OVERRIDE;
+    virtual bool IsCounted() const override;
 
-    virtual bool LessThan(const SwNumberTreeNode & rNode) const SAL_OVERRIDE;
+    virtual bool LessThan(const SwNumberTreeNode & rNode) const override;
 
-    virtual bool IsRestart() const SAL_OVERRIDE;
+    virtual bool IsRestart() const override;
 
-    virtual SwNumberTree::tSwNumTreeNumber GetStartValue() const SAL_OVERRIDE;
+    virtual SwNumberTree::tSwNumTreeNumber GetStartValue() const override;
 
     SwPosition GetPosition() const;
 
@@ -71,16 +71,16 @@ public:
     const SwNodeNum* GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const;
 
 protected:
-    virtual SwNumberTreeNode * Create() const SAL_OVERRIDE;
+    virtual SwNumberTreeNode * Create() const override;
 
     // --> #i64010#
-    virtual bool HasCountedChildren() const SAL_OVERRIDE;
-    virtual bool IsCountedForNumbering() const SAL_OVERRIDE;
+    virtual bool HasCountedChildren() const override;
+    virtual bool IsCountedForNumbering() const override;
 
     // method called before this tree node has been added to the list tree
-    virtual void PreAdd() SAL_OVERRIDE;
+    virtual void PreAdd() override;
     // method called at a child after this child has been removed from the list tree
-    virtual void PostRemove() SAL_OVERRIDE;
+    virtual void PostRemove() override;
 private:
     SwTextNode * mpTextNode;
     SwNumRule * mpNumRule;
@@ -90,11 +90,11 @@ private:
     SwNodeNum( const SwNodeNum& ) = delete;
     SwNodeNum& operator=( const SwNodeNum& ) = delete;
 
-    virtual bool IsCountPhantoms() const SAL_OVERRIDE;
+    virtual bool IsCountPhantoms() const override;
 
-    virtual bool IsNotifiable() const SAL_OVERRIDE;
+    virtual bool IsNotifiable() const override;
 
-    virtual void NotifyNode() SAL_OVERRIDE;
+    virtual void NotifyNode() override;
 };
 
 #endif // INCLUDED_SW_INC_SWNODENUM_HXX

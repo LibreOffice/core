@@ -32,11 +32,11 @@ class SfxDocumentFontsPage: public SfxTabPage
 public:
     SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSet& set );
     virtual ~SfxDocumentFontsPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage> Create( vcl::Window* parent, const SfxItemSet* set );
 protected:
-    virtual bool FillItemSet( SfxItemSet* set ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet* set ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* set ) override;
+    virtual void Reset( const SfxItemSet* set ) override;
 private:
     VclPtr<CheckBox> embedFontsCheckbox;
 };

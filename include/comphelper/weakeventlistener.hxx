@@ -117,12 +117,12 @@ namespace comphelper
         }
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) override;
 
     protected:
         // OComponentHelper overridables
         // to be overridden, again - the derived class should revoke the listener from the broadcaster
-        virtual void SAL_CALL disposing( ) SAL_OVERRIDE = 0;
+        virtual void SAL_CALL disposing( ) override = 0;
     };
 
 
@@ -146,7 +146,7 @@ namespace comphelper
 
     protected:
         using OWeakEventListenerAdapter_Base::disposing;
-        virtual void SAL_CALL disposing( ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( ) override;
     };
 
 

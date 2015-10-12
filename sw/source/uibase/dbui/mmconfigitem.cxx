@@ -154,13 +154,13 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     static const Sequence< OUString>&       GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwMailMergeConfigItem_Impl();
     virtual ~SwMailMergeConfigItem_Impl();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     const           Sequence< OUString>
                         GetAddressBlocks(bool bConvertToConfig = false) const;
     void                SetAddressBlocks(

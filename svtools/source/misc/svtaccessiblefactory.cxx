@@ -58,7 +58,7 @@ namespace svt
                 createAccessibleTabListBox(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*rxParent*/,
                     SvHeaderTabListBox& /*rBox*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -67,7 +67,7 @@ namespace svt
                 createAccessibleBrowseBox(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_rxParent*/,
                     IAccessibleTableProvider& /*_rBrowseBox*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -76,7 +76,7 @@ namespace svt
                 createAccessibleTableControl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_rxParent*/,
                     table::IAccessibleTable& /*_rTable*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -85,7 +85,7 @@ namespace svt
                 createAccessibleIconChoiceCtrl(
                     SvtIconChoiceCtrl& /*_rIconCtrl*/,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_xParent*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -93,7 +93,7 @@ namespace svt
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 createAccessibleTabBar(
                     TabBar& /*_rTabBar*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -101,7 +101,7 @@ namespace svt
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                 createAccessibleTextWindowContext(
                     VCLXWindow* /*pVclXWindow*/, TextEngine& /*rEngine*/, TextView& /*rView*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -110,7 +110,7 @@ namespace svt
                 createAccessibleTreeListBox(
                     SvTreeListBox& /*_rListBox*/,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_xParent*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -120,7 +120,7 @@ namespace svt
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*rxParent*/,
                     IAccessibleTableProvider& /*_rOwningTable*/,
                     AccessibleBrowseBoxObjType /*_eObjType*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -133,7 +133,7 @@ namespace svt
                     sal_Int32 /*_nRowId*/,
                     sal_uInt16 /*_nColId*/,
                     sal_Int32 /*_nOffset*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -145,7 +145,7 @@ namespace svt
                     IAccessibleTableProvider& /*_rBrowseBox*/,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& /*_xFocusWindow*/,
                     AccessibleBrowseBoxObjType  /*_eObjType*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -159,7 +159,7 @@ namespace svt
                     sal_uInt16 /*_nColPos*/,
                     const TriState& /*_eState*/,
                     bool /*_bIsTriState*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -172,7 +172,7 @@ namespace svt
                     IAccessibleTableProvider& /*_rBrowseBox*/,
                     sal_Int32 /*_nRowPos*/,
                     sal_uInt16 /*_nColPos*/
-                ) const SAL_OVERRIDE
+                ) const override
             {
                 return NULL;
             }
@@ -181,7 +181,7 @@ namespace svt
                 createAccessibleToolPanelDeck(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*i_rAccessibleParent*/,
                     ::svt::ToolPanelDeck& /*i_rPanelDeck*/
-                ) SAL_OVERRIDE
+                ) override
             {
                 return NULL;
             }
@@ -190,7 +190,7 @@ namespace svt
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*i_rAccessibleParent*/,
                     ::svt::IToolPanelDeck& /*i_rPanelDeck*/,
                     ::svt::PanelTabBar& /*i_rTabBar*/
-                ) SAL_OVERRIDE
+                ) override
             {
                 return NULL;
             }

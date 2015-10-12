@@ -36,10 +36,10 @@ public:
                             PivotCacheField& rCacheField );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
-    virtual void        onStartRecord( SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
 
 private:
     PivotCacheField&    mrCacheField;
@@ -54,10 +54,10 @@ public:
                             PivotCache& rPivotCache );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
-    virtual void        finalizeImport() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
+    virtual void        finalizeImport() override;
 
 private:
     PivotCache&         mrPivotCache;
@@ -72,9 +72,9 @@ public:
                             const PivotCache& rPivotCache );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
 
 private:
     void                startCacheRecord();
@@ -97,7 +97,7 @@ public:
                             PivotCache& rPivotCache );
 
     /** Imports the entire fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment() SAL_OVERRIDE;
+    virtual bool        importFragment() override;
 
 private:
     PivotCache&         mrPivotCache;
@@ -112,7 +112,7 @@ public:
 
     /** Reads the current record from stream and tries to insert a cell into
         the source data sheet. */
-    virtual void        importRecord( BiffInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        importRecord( BiffInputStream& rStrm ) override;
 
 private:
     void                startNextRow();

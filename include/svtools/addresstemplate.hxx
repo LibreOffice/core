@@ -100,7 +100,7 @@ namespace svt
         );
 
         virtual ~AddressBookSourceDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // to be used if the object was constructed for editing a field mapping only
         void        getFieldMapping(
@@ -110,7 +110,7 @@ namespace svt
         void    implConstruct();
 
         // Window overridables
-        virtual bool        PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+        virtual bool        PreNotify( NotifyEvent& _rNEvt ) override;
 
         // implementations
         void    implScrollFields(sal_Int32 _nPos, bool _bAdjustFocus, bool _bAdjustScrollbar);

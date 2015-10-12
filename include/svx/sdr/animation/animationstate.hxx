@@ -58,7 +58,7 @@ namespace sdr
             virtual ~PrimitiveAnimation();
 
             // execute event, from base class Event
-            virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
+            virtual void Trigger(sal_uInt32 nTime) override;
         };
     } // end of namespace animation
 } // end of namespace sdr

@@ -58,16 +58,16 @@ namespace frm
         virtual ~OAttributeDispatcher( );
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) override;
 
         // ITextAttributeListener
-        virtual void    onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState ) SAL_OVERRIDE;
+        virtual void    onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState ) override;
 
         // ORichTextFeatureDispatcher
-        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) SAL_OVERRIDE;
+        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) override;
 
         // ORichTextFeatureDispatcher
-        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
 
         // own overridables
         virtual void    fillFeatureEventFromAttributeState( css::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const;

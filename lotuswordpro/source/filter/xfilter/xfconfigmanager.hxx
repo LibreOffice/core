@@ -97,7 +97,7 @@ public:
     /**
      * @descr   Output config information.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
     XFLineNumberConfig  *m_pLineNumberConfig;

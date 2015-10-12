@@ -135,7 +135,7 @@ private:
     void    implUpdateImages( );
 
 protected:
-    virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool                Notify( NotifyEvent& rNEvt ) override;
 
     OUString                    _aPath;
     OUString                    _aDefExt;
@@ -163,74 +163,74 @@ public:
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits, WinBits nExtraBits );
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
-    virtual short               Execute() SAL_OVERRIDE;
-    virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
+    virtual short               Execute() override;
+    virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) override;
 
             void                FileSelect();
-            void                FilterSelect() SAL_OVERRIDE;
+            void                FilterSelect() override;
 
-    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) SAL_OVERRIDE;
-    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const SAL_OVERRIDE;
-    void                        SetStandardDir( const OUString& rStdDir ) SAL_OVERRIDE;
-    const OUString&             GetStandardDir() const SAL_OVERRIDE;
-    std::vector<OUString>       GetPathList() const SAL_OVERRIDE;        // for MultiSelection
+    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) override;
+    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const override;
+    void                        SetStandardDir( const OUString& rStdDir ) override;
+    const OUString&             GetStandardDir() const override;
+    std::vector<OUString>       GetPathList() const override;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,
-                                           const OUString& rType ) SAL_OVERRIDE;
+                                           const OUString& rType ) override;
 
             void                AddFilterGroup(
                                   const OUString& _rFilter,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) SAL_OVERRIDE;
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) override;
 
-            void                SetCurFilter( const OUString& rFilter ) SAL_OVERRIDE;
-            OUString            GetCurFilter() const SAL_OVERRIDE;
+            void                SetCurFilter( const OUString& rFilter ) override;
+            OUString            GetCurFilter() const override;
             sal_uInt16          GetFilterCount() const;
             const OUString&     GetFilterName( sal_uInt16 nPos ) const;
 
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
+    virtual void                Resize() override;
+    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) override;
 
     void                        PrevLevel_Impl();
     void                        OpenURL_Impl( const OUString& rURL );
 
-    SvtFileView*                GetView() SAL_OVERRIDE;
+    SvtFileView*                GetView() override;
 
     void                        InitSize();
-    void                        UpdateControls( const OUString& rURL ) SAL_OVERRIDE;
-    void                        EnableAutocompletion( bool _bEnable = true ) SAL_OVERRIDE;
+    void                        UpdateControls( const OUString& rURL ) override;
+    void                        EnableAutocompletion( bool _bEnable = true ) override;
 
-    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE { _pFileNotifier = pNotifier; }
+    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) override { _pFileNotifier = pNotifier; }
 
-    sal_Int32                   getTargetColorDepth() SAL_OVERRIDE;
-    sal_Int32                   getAvailableWidth() SAL_OVERRIDE;
-    sal_Int32                   getAvailableHeight() SAL_OVERRIDE;
-    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) SAL_OVERRIDE;
-    bool                        getShowState() SAL_OVERRIDE;
+    sal_Int32                   getTargetColorDepth() override;
+    sal_Int32                   getAvailableWidth() override;
+    sal_Int32                   getAvailableHeight() override;
+    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) override;
+    bool                        getShowState() override;
     bool                        isAutoExtensionEnabled();
 
-    OUString                    getCurrentFileText( ) const SAL_OVERRIDE;
-    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false ) SAL_OVERRIDE;
+    OUString                    getCurrentFileText( ) const override;
+    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false ) override;
 
-    void                        onAsyncOperationStarted() SAL_OVERRIDE;
-    void                        onAsyncOperationFinished() SAL_OVERRIDE;
+    void                        onAsyncOperationStarted() override;
+    void                        onAsyncOperationFinished() override;
 
     void                        RemovablePlaceSelected(bool enable = true);
 
     static void                 displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // inline
-    inline void                 SetPath( const OUString& rNewURL ) SAL_OVERRIDE;
-    inline void                 SetHasFilename( bool bHasFilename ) SAL_OVERRIDE;
-    inline const OUString&      GetPath() SAL_OVERRIDE;
+    inline void                 SetPath( const OUString& rNewURL ) override;
+    inline void                 SetHasFilename( bool bHasFilename ) override;
+    inline const OUString&      GetPath() override;
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    bool                        ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    bool                        ContentIsFolder( const OUString& rURL ) override { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     bool                        ContentHasParentFolder( const OUString& rURL );
     bool                        ContentCanMakeFolder( const OUString& rURL );
     bool                        ContentGetTitle( const OUString& rURL, OUString& rTitle );
@@ -257,9 +257,9 @@ private:
     sal_uInt16                  adjustFilter( const OUString& _rFilter );
 
     // IFilePickerController, needed by OControlAccess
-    virtual Control*            getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const SAL_OVERRIDE;
-    virtual void                enableControl( sal_Int16 _nControlId, bool _bEnable ) SAL_OVERRIDE;
-    virtual OUString            getCurFilter( ) const SAL_OVERRIDE;
+    virtual Control*            getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const override;
+    virtual void                enableControl( sal_Int16 _nControlId, bool _bEnable ) override;
+    virtual OUString            getCurFilter( ) const override;
 
     OUString                    implGetInitialURL( const OUString& _rPath, const OUString& _rFallback );
 

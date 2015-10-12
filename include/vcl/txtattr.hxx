@@ -72,9 +72,9 @@ public:
 
     const Color&            GetColor() const { return maColor; }
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
 };
 
@@ -88,9 +88,9 @@ public:
                             TextAttribFontWeight( const TextAttribFontWeight& rAttr );
                             virtual ~TextAttribFontWeight();
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
     inline FontWeight getFontWeight() const { return meWeight; }
 };
@@ -108,9 +108,9 @@ public:
                             virtual ~TextAttribHyperLink();
 
     const OUString&         GetURL() const                              { return maURL; }
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
 class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib
@@ -120,9 +120,9 @@ public:
                             TextAttribProtect( const TextAttribProtect& rAttr );
                             virtual ~TextAttribProtect();
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
 };
 

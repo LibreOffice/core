@@ -55,22 +55,22 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     Idle aCursorMoveIdle;
     ESelection aOldSelection;
 
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
 
     DECL_LINK_TYPED(MenuSelectHdl, Menu *, bool);
     DECL_LINK_TYPED(ModifyTimerHdl, Idle *, void);
     DECL_LINK_TYPED(CursorMoveTimerHdl, Idle *, void);
 
-    virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void MouseMove(const MouseEvent &rEvt) SAL_OVERRIDE;
-    virtual void MouseButtonUp(const MouseEvent &rEvt) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& ) override;
+    virtual void Resize() override;
+    virtual void MouseMove(const MouseEvent &rEvt) override;
+    virtual void MouseButtonUp(const MouseEvent &rEvt) override;
+    virtual void MouseButtonDown(const MouseEvent &rEvt) override;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
     DECL_LINK_TYPED(EditStatusHdl, EditStatus&, void);
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
@@ -85,7 +85,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 public:
     SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
     virtual ~SmEditWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SmDocShell* GetDoc();
     SmViewShell* GetView();
@@ -94,10 +94,10 @@ public:
     SfxItemPool* GetEditEngineItemPool();
 
     // Window
-    virtual void SetText(const OUString& rText) SAL_OVERRIDE;
-    virtual OUString GetText() const SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void SetText(const OUString& rText) override;
+    virtual OUString GetText() const override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
     ESelection GetSelection() const;
     void SetSelection(const ESelection& rSel);
@@ -127,7 +127,7 @@ public:
     void StartCursorMove();
 
     // for Accessibility
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     using Window::GetAccessible;
 };

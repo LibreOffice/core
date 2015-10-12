@@ -39,16 +39,16 @@ private:
     DECL_LINK_TYPED( UpdateHdl, Idle*, void );
 
 protected:
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
 public:
     RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent, vcl::Window* pShrinkModeLabel, const ResId& rResId );
     RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
     virtual ~RefEdit();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetRefString( const OUString& rStr );
 
@@ -60,8 +60,8 @@ public:
 
     using Edit::SetText;
 
-    void         SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void Modify() SAL_OVERRIDE;
+    void         SetText( const OUString& rStr ) override;
+    virtual void Modify() override;
 
     void         StartUpdateData();
 
@@ -85,15 +85,15 @@ private:
     VclPtr<RefEdit>                  pRefEdit;     // zugeordnetes Edit-Control
 
 protected:
-    virtual void Click() SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void Click() override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
 public:
     RefButton(vcl::Window* _pParent, WinBits nStyle = 0);
     virtual ~RefButton();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
     void SetStartImage();
     void SetEndImage();

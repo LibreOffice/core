@@ -26,14 +26,14 @@ class SwExpandPortion : public SwTextPortion
 {
 public:
     inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -47,16 +47,16 @@ public:
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 
-    virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
-    virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual SwLinePortion *Compress() override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
+    virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     static sal_uInt16 MayUnderflow( const SwTextFormatInfo &rInf, sal_Int32 nIdx,
         bool bUnderflow );
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -66,10 +66,10 @@ class SwPostItsPortion : public SwExpandPortion
     bool    bScript;
 public:
     explicit SwPostItsPortion( bool bScrpt );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     bool IsScript() const { return bScript; }
     OUTPUT_OPERATOR_OVERRIDE
 };

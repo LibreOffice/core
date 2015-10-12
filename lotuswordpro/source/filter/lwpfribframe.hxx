@@ -71,9 +71,9 @@ class LwpFribFrame : public LwpFrib
 public:
     explicit LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
     virtual ~LwpFribFrame(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     rtl::Reference<LwpObject> GetLayout();
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
     void SetParaDropcap(LwpPara* pPara);
     void XFConvert(XFContentContainer* pCont);
 private:
@@ -85,9 +85,9 @@ class LwpFribRubyFrame : public LwpFrib
 public:
     LwpFribRubyFrame( LwpPara* pPara) : LwpFrib(pPara){}
     virtual ~LwpFribRubyFrame(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyLayout* GetLayout();
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
     void XFConvert(XFContentContainer* pCont);
 private:
     LwpObjectID m_objLayout;

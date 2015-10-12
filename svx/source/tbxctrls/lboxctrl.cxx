@@ -62,18 +62,18 @@ class SvxPopupWindowListBox: public SfxPopupWindow
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // SfxPopupWindow
-    virtual void                PopupModeEnd() SAL_OVERRIDE;
+    virtual void                PopupModeEnd() override;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                              const SfxPoolItem* pState ) override;
 
     inline ListBox &            GetListBox()    { return *m_pListBox; }
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    virtual vcl::Window*             GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*             GetPreferredKeyInputWindow() override;
 };
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)

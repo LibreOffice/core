@@ -102,8 +102,8 @@ protected:
     void                SetFocusRect( const Rectangle* pRect = NULL );      // pRect == NULL -> calculate rectangle in method
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
 
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
@@ -112,15 +112,15 @@ public:
     void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
     virtual ~SvxRectCtl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        KeyInput( const KeyEvent& rKeyEvt ) override;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void        Resize() override;
+    virtual Size        GetOptimalSize() const override;
 
     void                Reset();
     RECT_POINT          GetActualRP() const { return eRP;}
@@ -133,7 +133,7 @@ public:
     Rectangle           CalculateFocusRectangle() const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
     RECT_POINT          GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& rPixelPoint ) const;
 
@@ -192,12 +192,12 @@ public:
     SvxPixelCtl( vcl::Window* pParent, sal_uInt16 nNumber = 8 );
 
     virtual ~SvxPixelCtl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
     void    SetXBitmap( const BitmapEx& rBitmapEx );
 
@@ -214,7 +214,7 @@ public:
     void    Reset();
     SvxPixelCtlAccessible*  m_pAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xAccess;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
     long GetSquares() const { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }
@@ -226,9 +226,9 @@ public:
     Point IndexToPoint(long nIndex) const ;
     long GetFoucsPosIndex() const ;
     //Keyboard function for key input and focus handling function
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
 };
 
 /************************************************************************/
@@ -379,11 +379,11 @@ protected:
 public:
     SvxPreviewBase(vcl::Window* pParent);
     virtual ~SvxPreviewBase();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // change support
-    virtual void StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+    virtual void StateChanged(StateChangedType nStateChange) override;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
     // dada read access
     SdrModel& getModel() const
@@ -416,7 +416,7 @@ private:
 public:
     SvxXLinePreview( vcl::Window* pParent );
     virtual ~SvxXLinePreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 
@@ -424,9 +424,9 @@ public:
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 };
 
 /*************************************************************************
@@ -443,12 +443,12 @@ private:
 public:
     SvxXRectPreview(vcl::Window* pParent);
     virtual ~SvxXRectPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Resize() override;
 };
 
 /*************************************************************************
@@ -469,13 +469,13 @@ public:
     SvxXShadowPreview(vcl::Window *pParent);
 
     virtual ~SvxXShadowPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 };
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX

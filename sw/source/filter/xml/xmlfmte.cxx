@@ -262,7 +262,7 @@ protected:
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-            ) const SAL_OVERRIDE;
+            ) const override;
 public:
 
     explicit SwXMLAutoStylePoolP( SvXMLExport& rExport );

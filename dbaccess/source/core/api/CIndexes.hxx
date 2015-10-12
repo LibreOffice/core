@@ -28,10 +28,10 @@ namespace dbaccess
     {
         css::uno::Reference< css::container::XNameAccess > m_xIndexes;
     protected:
-        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() SAL_OVERRIDE;
-        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
-        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) SAL_OVERRIDE;
+        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
     public:
         OIndexes(connectivity::OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
@@ -41,7 +41,7 @@ namespace dbaccess
             ,m_xIndexes(_rxIndexes)
         {}
 
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
     };
 }
 

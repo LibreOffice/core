@@ -73,9 +73,9 @@ public:
 
 public:
     //Interface ISaxAttributeList:
-    virtual void    AddAttribute(const OUString& name, const OUString& value) SAL_OVERRIDE;
+    virtual void    AddAttribute(const OUString& name, const OUString& value) override;
 
-    virtual void    Clear() SAL_OVERRIDE;
+    virtual void    Clear() override;
 
     css::uno::Reference<css::xml::sax::XAttributeList>   GetAttributeList() const;
 

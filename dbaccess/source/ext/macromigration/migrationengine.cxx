@@ -747,15 +747,15 @@ namespace dbmm
         }
 
         // IProgressConsumer
-        virtual void    start( sal_uInt32 _nRange ) SAL_OVERRIDE
+        virtual void    start( sal_uInt32 _nRange ) override
         {
             m_rDelegator.startObject( m_sObjectName, m_sAction, _nRange );
         }
-        virtual void    advance( sal_uInt32 _nValue ) SAL_OVERRIDE
+        virtual void    advance( sal_uInt32 _nValue ) override
         {
             m_rDelegator.setObjectProgressValue( _nValue );
         }
-        virtual void    end() SAL_OVERRIDE
+        virtual void    end() override
         {
             m_rDelegator.endObject();
         }

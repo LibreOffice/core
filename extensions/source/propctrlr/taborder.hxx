@@ -52,7 +52,7 @@ namespace pcr
         void            MoveSelection( long nRelPos );
 
     protected:
-        virtual void    ModelHasMoved(SvTreeListEntry* pSource ) SAL_OVERRIDE;
+        virtual void    ModelHasMoved(SvTreeListEntry* pSource ) override;
 
     private:
         using SvTreeListBox::MoveSelection;
@@ -102,7 +102,7 @@ namespace pcr
         );
 
         virtual ~TabOrderDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void SetModified();
     };

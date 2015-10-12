@@ -62,106 +62,106 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         // XFilePickerNotifier
 
         virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XExecutableDialog functions
 
         virtual void SAL_CALL setTitle( const OUString& aTitle )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int16 SAL_CALL execute()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XFilePicker functions
 
         virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDefaultName( const OUString& aName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
             throw( com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getDisplayDirectory(  )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles(  )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XFilePicker2 functions
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles()
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XFilterManager functions
 
         virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
-            throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setCurrentFilter( const OUString& aTitle )
-            throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getCurrentFilter(  )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XFilterGroupManager functions
 
         virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XFilePickerControlAccess functions
 
         virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any& aValue )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable )
-            throw(::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setLabel( sal_Int16 nControlId, const OUString& aLabel )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual OUString SAL_CALL getLabel( sal_Int16 nControlId )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XFilePreview
 
         virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL getTargetColorDepth(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL getAvailableWidth(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL getAvailableHeight(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL getShowState(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XInitialization
 
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XCancellable
 
         virtual void SAL_CALL cancel( )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // FilePicker Event functions
 

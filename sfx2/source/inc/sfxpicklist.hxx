@@ -68,7 +68,7 @@ class SfxPickList : public SfxListener
         static void         ExecuteMenuEntry( sal_uInt16 nId );
         static void         ExecuteEntry( sal_uInt32 nIndex );
 
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_SFXPICKLIST_HXX

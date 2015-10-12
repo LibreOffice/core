@@ -75,72 +75,72 @@ class PluginControl_Impl : public ::cppu::WeakAggImplHelper4<
 {
 public:
     // css::awt::XControl
-    virtual void SAL_CALL setContext( const css::uno::Reference< css::uno::XInterface > & xContext ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL setContext( const css::uno::Reference< css::uno::XInterface > & xContext ) throw( css::uno::RuntimeException, std::exception ) override
     { _xContext = xContext; }
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getContext() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getContext() throw( css::uno::RuntimeException, std::exception ) override
     { return _xContext; }
 
-    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel > & Model ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
+    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel > & Model ) throw( css::uno::RuntimeException, std::exception ) override = 0;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override = 0;
 
-    virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() throw( css::uno::RuntimeException, std::exception ) override
     { return static_cast<css::awt::XView*>(this); }
 
-    virtual sal_Bool SAL_CALL isTransparent() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL isTransparent() throw( css::uno::RuntimeException, std::exception ) override
     { return sal_False; }
 
-    virtual void SAL_CALL setDesignMode( sal_Bool bOn ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isDesignMode() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL setDesignMode( sal_Bool bOn ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL isDesignMode() throw( css::uno::RuntimeException, std::exception ) override
     { return _bInDesignMode; }
 
-    virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit > & xToolkit, const css::uno::Reference< css::awt::XWindowPeer > & Parent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit > & xToolkit, const css::uno::Reference< css::awt::XWindowPeer > & Parent) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() throw( css::uno::RuntimeException, std::exception ) override
     { return _xPeer; }
 
     // css::awt::XWindow
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setFocus() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setFocus() throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual css::awt::Rectangle SAL_CALL getPosSize() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::awt::Rectangle SAL_CALL getPosSize() throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addFocusListener( const css::uno::Reference< css::awt::XFocusListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeFocusListener( const css::uno::Reference< css::awt::XFocusListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addKeyListener( const css::uno::Reference< css::awt::XKeyListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeKeyListener( const css::uno::Reference< css::awt::XKeyListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addMouseListener( const css::uno::Reference< css::awt::XMouseListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeMouseListener( const css::uno::Reference< css::awt::XMouseListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addMouseMotionListener( const Reference< css::awt::XMouseMotionListener > & l ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addPaintListener( const css::uno::Reference< css::awt::XPaintListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removePaintListener( const css::uno::Reference< css::awt::XPaintListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addFocusListener( const css::uno::Reference< css::awt::XFocusListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeFocusListener( const css::uno::Reference< css::awt::XFocusListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addKeyListener( const css::uno::Reference< css::awt::XKeyListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeKeyListener( const css::uno::Reference< css::awt::XKeyListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addMouseListener( const css::uno::Reference< css::awt::XMouseListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeMouseListener( const css::uno::Reference< css::awt::XMouseListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addMouseMotionListener( const Reference< css::awt::XMouseMotionListener > & l ) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addPaintListener( const css::uno::Reference< css::awt::XPaintListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removePaintListener( const css::uno::Reference< css::awt::XPaintListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject & rSource ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject & rSource ) throw( css::uno::RuntimeException, std::exception ) override;
     // css::awt::XFocusListener
-    virtual void SAL_CALL focusGained( const css::awt::FocusEvent & rEvt ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL focusLost( const css::awt::FocusEvent & rEvt ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL focusGained( const css::awt::FocusEvent & rEvt ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL focusLost( const css::awt::FocusEvent & rEvt ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // css::lang::XComponent
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XView
-    virtual sal_Bool SAL_CALL setGraphics( const css::uno::Reference< css::awt::XGraphics > & /*aDevice*/ ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL setGraphics( const css::uno::Reference< css::awt::XGraphics > & /*aDevice*/ ) throw( css::uno::RuntimeException, std::exception ) override
     { return sal_False; }
-    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() throw( css::uno::RuntimeException, std::exception ) override
     { return css::uno::Reference< css::awt::XGraphics > (); }
 
-    virtual css::awt::Size SAL_CALL getSize() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::awt::Size SAL_CALL getSize() throw( css::uno::RuntimeException, std::exception ) override
     { return css::awt::Size(_nWidth, _nHeight); }
 
-    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setZoom( float ZoomX, float ZoomY ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setZoom( float ZoomX, float ZoomY ) throw( css::uno::RuntimeException, std::exception ) override;
 
 public:
                                 PluginControl_Impl();

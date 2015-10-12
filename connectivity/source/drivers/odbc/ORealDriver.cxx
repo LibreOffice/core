@@ -93,8 +93,8 @@ namespace connectivity
         class ORealObdcDriver : public ODBCDriver
         {
         protected:
-            virtual oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const SAL_OVERRIDE;
-            virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) SAL_OVERRIDE;
+            virtual oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const override;
+            virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) override;
         public:
             explicit ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };

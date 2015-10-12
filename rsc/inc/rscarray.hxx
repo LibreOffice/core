@@ -35,7 +35,7 @@ public:
     RSCINST aInst;
     RscInstNode( sal_uInt32 nId );
     virtual ~RscInstNode();
-    virtual sal_uInt32  GetId() const SAL_OVERRIDE;
+    virtual sal_uInt32  GetId() const override;
     RscInstNode *   Left() const { return static_cast<RscInstNode *>(pLeft); };
     RscInstNode *   Right() const{ return static_cast<RscInstNode *>(pRight); };
     RscInstNode *   Search( sal_uInt32 nId ) const
@@ -62,33 +62,33 @@ public:
                     RscArray( Atom nId, sal_uInt32 nTypId,
                               RscTop * pSuper, RscEnum * pTypeClass );
                     virtual ~RscArray();
-    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    virtual RSCCLASS_TYPE   GetClassType() const override;
 
-    virtual RscTop *    GetTypeClass() const SAL_OVERRIDE;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
-    void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
+    virtual RscTop *    GetTypeClass() const override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    void            Destroy( const RSCINST & rInst ) override;
     virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
                                  RscTop * pCreateClass,
-                                 RSCINST * pGetInst ) SAL_OVERRIDE;
+                                 RSCINST * pGetInst ) override;
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
                                  RscTop * pCreateClass,
-                                 RSCINST * pGetInst ) SAL_OVERRIDE;
+                                 RSCINST * pGetInst ) override;
 
                     // gives the size of the class in bytes
-    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
+    sal_uInt32      Size() override { return nSize; }
 
-    bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;
-    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE;
-    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE;
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    bool            IsConsistent( const RSCINST & rInst ) override;
+    virtual void    SetToDefault( const RSCINST & rInst ) override;
+    bool            IsDefault( const RSCINST & rInst ) override;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) override;
 
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
-                                    const RscId & aId, const char * ) SAL_OVERRIDE;
+                                    const RscId & aId, const char * ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
 
 class RscClassArray : public RscArray
@@ -99,12 +99,12 @@ public:
                     virtual ~RscClassArray();
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
-                                    const RscId & aId, const char * ) SAL_OVERRIDE;
+                                    const RscId & aId, const char * ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                   sal_uInt32 nDeep, bool bExtra ) SAL_OVERRIDE;
+                                   sal_uInt32 nDeep, bool bExtra ) override;
 };
 
 
@@ -113,7 +113,7 @@ class RscLangArray : public RscArray
 public:
                     RscLangArray( Atom nId, sal_uInt32 nTypId,
                                   RscTop * pSuper, RscEnum * pTypeClass );
-    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    virtual RSCCLASS_TYPE   GetClassType() const override;
 };
 
 #endif // INCLUDED_RSC_INC_RSCARRAY_HXX

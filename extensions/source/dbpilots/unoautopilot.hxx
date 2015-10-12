@@ -49,18 +49,18 @@ namespace dbp
 
     public:
         // XTypeProvider
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override
         {
             return css::uno::Sequence<sal_Int8>();
         }
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override
         {
             return getImplementationName_Static();
         }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override
         {
             return getSupportedServiceNames_Static();
         }
@@ -83,19 +83,19 @@ namespace dbp
         }
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override
         {
             css::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
             return xInfo;
         }
 
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override
         {
             return *this->getArrayHelper();
         }
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override
         {
             css::uno::Sequence< css::beans::Property > aProps;
             describeProperties(aProps);
@@ -104,12 +104,12 @@ namespace dbp
 
     protected:
     // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override
         {
             return VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext);
         }
 
-        virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE
+        virtual void implInitialize(const css::uno::Any& _rValue) override
         {
             css::beans::PropertyValue aArgument;
             if (_rValue >>= aArgument)

@@ -40,14 +40,14 @@ public:
                                     OUString& rNewName,
                                        XMLTransformerOOoEventMap_Impl& rMap );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOOOTCONTEXT_HXX

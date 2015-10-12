@@ -95,7 +95,7 @@ namespace vclcanvas
 
     private:
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
+            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const override;
 
         // for the redraw
         BackBufferSharedPtr                                 mpBackBuffer;

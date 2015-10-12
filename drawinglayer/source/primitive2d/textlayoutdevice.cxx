@@ -65,7 +65,7 @@ namespace
     public:
         explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
         virtual ~ImpTimedRefDev();
-        virtual void Invoke() SAL_OVERRIDE;
+        virtual void Invoke() override;
 
         VirtualDevice& acquireVirtualDevice();
         void releaseVirtualDevice();

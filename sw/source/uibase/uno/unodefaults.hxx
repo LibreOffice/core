@@ -30,7 +30,7 @@ public:
     SwSvxUnoDrawPool( SwDoc* pDoc ) throw();
     virtual ~SwSvxUnoDrawPool() throw();
 
-    virtual SfxItemPool* getModelPool( bool bReadOnly ) throw() SAL_OVERRIDE;
+    virtual SfxItemPool* getModelPool( bool bReadOnly ) throw() override;
 };
 
 #endif

@@ -36,7 +36,7 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format") {}
 
-    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE
+    bool mustTestImportOf(const char* filename) const override
     {
         // Don't test the first import of these, for some reason those tests fail
         const char* aBlacklist[] =
@@ -80,7 +80,7 @@ public:
 
     }
 
-    virtual void postLoad(const char* pFilename) SAL_OVERRIDE
+    virtual void postLoad(const char* pFilename) override
     {
         if (OString(pFilename) == "tdf90421.fodt")
         {

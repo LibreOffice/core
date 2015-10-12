@@ -36,18 +36,18 @@ public:
 
     // XMimeContentType
 
-    virtual OUString SAL_CALL getMediaType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getMediaSubtype(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getFullMediaType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getMediaType(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getMediaSubtype(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getFullMediaType(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL hasParameter( const OUString& aName )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getParameterValue( const OUString& aName )
-        throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
 private:
     void SAL_CALL init( const OUString& aCntType ) throw( css::lang::IllegalArgumentException );

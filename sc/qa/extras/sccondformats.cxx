@@ -36,8 +36,8 @@ class ScConditionalFormatTest : public CalcUnoApiTest
 public:
     ScConditionalFormatTest();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init();
     void testCondFormat();

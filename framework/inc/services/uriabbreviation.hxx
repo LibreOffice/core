@@ -42,7 +42,7 @@ public:
     DECLARE_XSERVICEINFO
 
     // ::com::sun::star::util::XStringAbbreviation:
-    virtual OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     UriAbbreviation(UriAbbreviation &) = delete;

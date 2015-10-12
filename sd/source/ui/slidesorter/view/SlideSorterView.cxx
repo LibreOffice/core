@@ -92,12 +92,12 @@ namespace {
         Painter (SlideSorterView& rView) : mrView(rView) {}
         virtual ~Painter() {}
 
-        virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) SAL_OVERRIDE
+        virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
         {
             mrView.Paint(rDevice,rRepaintArea);
         }
 
-        virtual void SetLayerInvalidator (const SharedILayerInvalidator&) SAL_OVERRIDE {}
+        virtual void SetLayerInvalidator (const SharedILayerInvalidator&) override {}
 
     private:
         SlideSorterView& mrView;
@@ -112,14 +112,14 @@ public:
     BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
     virtual ~BackgroundPainter() {}
 
-    virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) SAL_OVERRIDE
+    virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
     {
         rDevice.SetFillColor(maBackgroundColor);
         rDevice.SetLineColor();
         rDevice.DrawRect(rRepaintArea);
     }
 
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator&) SAL_OVERRIDE {}
+    virtual void SetLayerInvalidator (const SharedILayerInvalidator&) override {}
 
     void SetColor (const Color& rColor) { maBackgroundColor = rColor; }
 

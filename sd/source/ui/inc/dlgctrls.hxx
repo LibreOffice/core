@@ -37,7 +37,7 @@ class SD_DLLPUBLIC FadeEffectLB : public ListBox
 public:
     FadeEffectLB(vcl::Window* pParent, WinBits nStyle);
     virtual ~FadeEffectLB();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void         Fill();
 
 /*  void                        selectEffectFromPage( SdPage* pPage ); */

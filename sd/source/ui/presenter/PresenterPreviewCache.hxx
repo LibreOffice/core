@@ -55,43 +55,43 @@ public:
         preview cache can be provided via methods.
     */
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw(css::uno::Exception,css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception,css::uno::RuntimeException, std::exception) override;
 
     // XSlidePreviewCache
 
     virtual void SAL_CALL setDocumentSlides (
         const css::uno::Reference<css::container::XIndexAccess>& rxSlides,
         const css::uno::Reference<css::uno::XInterface>& rxDocument)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setVisibleRange (
         sal_Int32 nFirstVisibleSlideIndex,
         sal_Int32 nLastVisibleSlideIndex)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setPreviewSize (
         const css::geometry::IntegerSize2D& rSize)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL
         getSlidePreview (
             sal_Int32 nSlideIndex,
             const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addPreviewCreationNotifyListener (
         const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removePreviewCreationNotifyListener (
         const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL pause()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL resume()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

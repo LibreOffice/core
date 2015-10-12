@@ -167,17 +167,17 @@ private:
 
 private:
                                     ORptExport();
-    virtual void                    SetBodyAttributes() SAL_OVERRIDE;
+    virtual void                    SetBodyAttributes() override;
 protected:
 
-    virtual void                    _ExportStyles( bool bUsed ) SAL_OVERRIDE;
-    virtual void                    _ExportAutoStyles() SAL_OVERRIDE;
-    virtual void                    _ExportContent() SAL_OVERRIDE;
-    virtual void                    _ExportMasterStyles() SAL_OVERRIDE;
-    virtual void                    _ExportFontDecls() SAL_OVERRIDE;
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
-    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() SAL_OVERRIDE;
-    virtual XMLShapeExport*         CreateShapeExport() SAL_OVERRIDE;
+    virtual void                    _ExportStyles( bool bUsed ) override;
+    virtual void                    _ExportAutoStyles() override;
+    virtual void                    _ExportContent() override;
+    virtual void                    _ExportMasterStyles() override;
+    virtual void                    _ExportFontDecls() override;
+    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
+    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
+    virtual XMLShapeExport*         CreateShapeExport() override;
 
     virtual                 ~ORptExport(){};
 public:
@@ -190,7 +190,7 @@ public:
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 

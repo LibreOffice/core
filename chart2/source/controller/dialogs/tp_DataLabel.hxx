@@ -39,8 +39,8 @@ public:
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
-    virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
-    virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet* rInAttrs) override;
+    virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
 
 private:
     DataLabelResources  m_aDataLabelResources;

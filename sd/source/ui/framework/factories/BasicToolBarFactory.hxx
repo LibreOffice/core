@@ -60,7 +60,7 @@ public:
         const css::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
     virtual ~BasicToolBarFactory();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // ToolBarFactory
 
@@ -68,25 +68,25 @@ public:
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxToolBarId)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception) override;
 
     virtual void SAL_CALL
         releaseResource (
             const css::uno::Reference<com::sun::star::drawing::framework::XResource>&
                 rxToolBar)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;

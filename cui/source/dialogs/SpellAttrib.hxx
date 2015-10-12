@@ -112,9 +112,9 @@ public:
     const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
 
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
 
@@ -132,9 +132,9 @@ public:
 
     LanguageType            GetLanguage() const {return m_eLanguage;}
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
 
@@ -150,9 +150,9 @@ public:
                             SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr );
                             virtual ~SpellBackgroundAttrib();
 
-    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
-    virtual TextAttrib*     Clone() const SAL_OVERRIDE;
-    virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual TextAttrib*     Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 }//namespace svx
 #endif

@@ -54,7 +54,7 @@ class ODbDataSourceAdministrationHelper;
             ,const css::uno::Any& _aDataSourceName
         );
         virtual ~OTableSubscriptionDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // forwards from ODbDataSourceAdministrationHelper
         void        successfullyConnected();
@@ -64,10 +64,10 @@ class ODbDataSourceAdministrationHelper;
         css::uno::Reference< css::beans::XPropertySet >   getCurrentDataSource();
         inline void endExecution() { m_bStopExecution = true; }
 
-        virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
-        virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
+        virtual const SfxItemSet* getOutputSet() const override;
+        virtual SfxItemSet* getWriteOutputSet() override;
 
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
     };
 
 }   // namespace dbaui

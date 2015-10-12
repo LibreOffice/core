@@ -39,7 +39,7 @@ public:
         const SdrObject* pObj1,
         const SdrObject* pObj2);
     virtual ~MorphDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            SaveSettings() const;
     sal_uInt16      GetFadeSteps() const { return (sal_uInt16) m_pMtfSteps->GetValue(); }

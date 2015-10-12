@@ -44,18 +44,18 @@ public:
     virtual ~EnhancedCustomShapeHandle();
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL release() throw() override;
 
     // XCustomShapeHandle
     virtual com::sun::star::awt::Point SAL_CALL getPosition()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL setControllerPosition( const com::sun::star::awt::Point& )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

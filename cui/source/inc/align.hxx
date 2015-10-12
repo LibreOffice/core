@@ -59,15 +59,15 @@ class AlignmentTabPage : public SfxTabPage
 
 public:
     virtual             ~AlignmentTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges() { return s_pRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     explicit            AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );

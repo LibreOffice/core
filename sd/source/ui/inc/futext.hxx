@@ -41,25 +41,25 @@ public:
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
+    virtual void DoExecute( SfxRequest& rReq ) override;
 
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
-    virtual void ReceiveRequest(SfxRequest& rReq) SAL_OVERRIDE;
-    virtual void DoubleClick(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
+    virtual bool RequestHelp(const HelpEvent& rHEvt) override;
+    virtual void ReceiveRequest(SfxRequest& rReq) override;
+    virtual void DoubleClick(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() SAL_OVERRIDE;           ///< activates the function
-    virtual void Deactivate() SAL_OVERRIDE;         ///< deactivates the function
+    virtual void Activate() override;           ///< activates the function
+    virtual void Deactivate() override;         ///< deactivates the function
 
     void    SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag);
     bool    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -67,7 +67,7 @@ public:
 
         @returns true if a active function was aborted
     */
-    virtual bool cancel() SAL_OVERRIDE;
+    virtual bool cancel() override;
 
     static void ChangeFontSize( bool, OutlinerView*, const FontList*, ::sd::View* );
 
@@ -79,7 +79,7 @@ protected:
         SfxRequest& rReq);
 
 private:
-    virtual void disposing() SAL_OVERRIDE;
+    virtual void disposing() override;
 
     SdrObjectWeakRef    mxTextObj;
     bool                bFirstObjCreated;

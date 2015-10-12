@@ -291,7 +291,7 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
            ::std::vector< XMLPropertyState > &rProperties,
-           const XMLPropertyState& rProp ) SAL_OVERRIDE;
+           const XMLPropertyState& rProp ) override;
 };
 
 XMLTableCellPropsContext::XMLTableCellPropsContext(

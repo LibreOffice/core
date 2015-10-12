@@ -51,8 +51,8 @@ public:
     ScTpDefaultsItem( const ScTpDefaultsItem& rItem );
     virtual ~ScTpDefaultsItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
     const ScDefaultsOptions& GetDefaultsOptions() const { return theOptions; }
 
@@ -66,14 +66,14 @@ class ScDefaultsCfg : public ScDefaultsOptions, public utl::ConfigItem
 {
 private:
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     ScDefaultsCfg();
 
     void SetOptions( const ScDefaultsOptions& rNew );
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

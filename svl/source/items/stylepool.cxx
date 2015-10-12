@@ -291,7 +291,7 @@ namespace {
               mbSkipUnusedItemSets( bSkipUnusedItemSets ),
               mbSkipIgnorable( bSkipIgnorable )
         {}
-        virtual StylePool::SfxItemSet_Pointer_t getNext() SAL_OVERRIDE;
+        virtual StylePool::SfxItemSet_Pointer_t getNext() override;
     };
 
     StylePool::SfxItemSet_Pointer_t Iterator::getNext()

@@ -36,7 +36,7 @@ namespace connectivity
     // static data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_sql_Date();
         // A ctor that is needed for returning the object
         java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date(pEnv,myObj){}
@@ -57,7 +57,7 @@ namespace connectivity
     // static data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_sql_Time();
         // A ctor that is needed for returning the object
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
@@ -75,7 +75,7 @@ namespace connectivity
     // static data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_sql_Timestamp();
         // A ctor that is needed for returning the object
         java_sql_Timestamp( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}

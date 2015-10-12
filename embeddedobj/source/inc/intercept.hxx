@@ -48,7 +48,7 @@ public:
         const css::util::URL& URL,
         const css::uno::Sequence<
         css::beans::PropertyValue >& Arguments )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
     addStatusListener(
@@ -57,7 +57,7 @@ public:
         const css::util::URL& URL )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     virtual void SAL_CALL
     removeStatusListener(
@@ -66,14 +66,14 @@ public:
         const css::util::URL& URL )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     //XInterceptorInfo
     virtual css::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
     virtual css::uno::Reference<
@@ -84,7 +84,7 @@ public:
         sal_Int32 SearchFlags )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     virtual css::uno::Sequence<
     css::uno::Reference<
@@ -94,7 +94,7 @@ public:
         css::frame::DispatchDescriptor >& Requests )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
 
     //XDispatchProviderInterceptor
@@ -103,7 +103,7 @@ public:
     getSlaveDispatchProvider(  )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     virtual void SAL_CALL
     setSlaveDispatchProvider(
@@ -111,14 +111,14 @@ public:
         css::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     virtual css::uno::Reference<
     css::frame::XDispatchProvider > SAL_CALL
     getMasterDispatchProvider(  )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
     virtual void SAL_CALL
     setMasterDispatchProvider(
@@ -126,7 +126,7 @@ public:
         css::frame::XDispatchProvider >& NewSupplier )
         throw (
             css::uno::RuntimeException, std::exception
-        ) SAL_OVERRIDE;
+        ) override;
 
 
 private:

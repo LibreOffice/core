@@ -38,11 +38,11 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
-    virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet *rSet) override;
+    virtual void Reset(const SfxItemSet *rSet) override;
 
     virtual ~SwFootNotePage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 private:
 
     VclPtr<RadioButton>    m_pMaxHeightPageBtn;
@@ -68,8 +68,8 @@ private:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void    ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 };
 

@@ -64,13 +64,13 @@ private:
 public:
             ScLinkedAreaDlg( vcl::Window* pParent );
             virtual ~ScLinkedAreaDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh );
 
-    virtual short   Execute() SAL_OVERRIDE;          // overwritten to set dialog parent
+    virtual short   Execute() override;          // overwritten to set dialog parent
 
     OUString       GetURL();
     OUString       GetFilter();        // may be empty

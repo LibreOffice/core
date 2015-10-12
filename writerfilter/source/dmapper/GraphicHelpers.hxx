@@ -39,8 +39,8 @@ public:
     sal_Int16 relation() const { return m_nRelation;}
     sal_Int32 position() const { return m_nPosition;}
  private:
-    virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
-    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
+    virtual void lcl_attribute( Id aName, Value& rVal ) override;
+    virtual void lcl_sprm( Sprm& rSprm ) override;
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
@@ -61,8 +61,8 @@ public:
     sal_Int32 getWrapMode( );
 
  private:
-    virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
-    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
+    virtual void lcl_attribute( Id aName, Value& rVal ) override;
+    virtual void lcl_sprm( Sprm& rSprm ) override;
 };
 typedef std::shared_ptr<WrapHandler> WrapHandlerPtr;
 

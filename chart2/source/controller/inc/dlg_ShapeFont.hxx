@@ -34,7 +34,7 @@ public:
     ShapeFontDialog(vcl::Window* pParent, const SfxItemSet* pAttr,
         const ViewElementListProvider* pViewElementListProvider);
 private:
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
 
     const ViewElementListProvider* m_pViewElementListProvider;
     sal_uInt16 m_nNamePageId;

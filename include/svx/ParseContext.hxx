@@ -41,18 +41,18 @@ namespace svxform
 
         virtual ~OSystemParseContext();
         // retrieves language specific error messages
-        virtual OUString getErrorMessage(ErrorCode _eCodes) const SAL_OVERRIDE;
+        virtual OUString getErrorMessage(ErrorCode _eCodes) const override;
 
         // retrieves language specific keyword strings (only ASCII allowed)
-        virtual OString getIntlKeywordAscii(InternationalKeyCode _eKey) const SAL_OVERRIDE;
+        virtual OString getIntlKeywordAscii(InternationalKeyCode _eKey) const override;
 
         // finds out, if we have an international keyword (only ASCII allowed)
-        virtual InternationalKeyCode getIntlKeyCode(const OString& rToken) const SAL_OVERRIDE;
+        virtual InternationalKeyCode getIntlKeyCode(const OString& rToken) const override;
 
         /** get's a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>
         */
-        virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const SAL_OVERRIDE;
+        virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const override;
 
     };
 

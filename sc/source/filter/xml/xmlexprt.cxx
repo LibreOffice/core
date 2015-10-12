@@ -311,7 +311,7 @@ public:
     virtual ~ScXMLShapeExport();
 
     /** is called before a shape element for the given XShape is exported */
-    virtual void onExport( const uno::Reference < drawing::XShape >& xShape ) SAL_OVERRIDE;
+    virtual void onExport( const uno::Reference < drawing::XShape >& xShape ) override;
 };
 
 ScXMLShapeExport::~ScXMLShapeExport()

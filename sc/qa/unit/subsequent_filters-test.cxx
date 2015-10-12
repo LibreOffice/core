@@ -92,10 +92,10 @@ public:
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) override;
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
     void testBooleanFormatXLSX();

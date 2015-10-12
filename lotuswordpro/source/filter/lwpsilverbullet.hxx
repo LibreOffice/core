@@ -93,9 +93,9 @@ public:
 
     virtual ~LwpSilverBullet();
 
-    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void RegisterStyle() override;
 
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 
     bool IsBulletOrdered();
 

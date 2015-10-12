@@ -330,19 +330,19 @@ public:
     //  XInterface
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw() override;
 
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw() override;
 
     //  XTypeProvider
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XStorage
 
@@ -351,7 +351,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openStreamElement(
             const OUString& aStreamName, sal_Int32 nOpenMode )
@@ -360,7 +360,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openEncryptedStreamElement(
             const OUString& aStreamName, sal_Int32 nOpenMode, const OUString& aPass )
@@ -370,7 +370,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
@@ -378,7 +378,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneStreamElement(
             const OUString& aStreamName )
@@ -387,7 +387,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneEncryptedStreamElement(
             const OUString& aStreamName, const OUString& aPass )
@@ -397,7 +397,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL copyLastCommitTo(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xTargetStorage )
@@ -405,7 +405,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL copyStorageElementLastCommitTo(
             const OUString& aStorName,
@@ -414,19 +414,19 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL isStreamElement( const OUString& aElementName )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::InvalidStorageException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL isStorageElement( const OUString& aElementName )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::InvalidStorageException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeElement( const OUString& aElementName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -434,7 +434,7 @@ public:
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL renameElement( const OUString& rEleName, const OUString& rNewName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -443,7 +443,7 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL copyElementTo(    const OUString& aElementName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
@@ -454,7 +454,7 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL moveElementTo(    const OUString& aElementName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
@@ -465,7 +465,7 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XStorage2
 
@@ -476,7 +476,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneEncryptedStream( const OUString& sStreamName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -485,7 +485,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //  XStorageRawAccess
 
@@ -496,7 +496,7 @@ public:
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawEncrStreamElement(
             const OUString& sStreamName )
@@ -506,7 +506,7 @@ public:
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL insertRawEncrStreamElement( const OUString& aStreamName,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
@@ -516,145 +516,145 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XTransactedObject
     virtual void SAL_CALL commit()
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL revert()
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XTransactionBroadcaster
     virtual void SAL_CALL addTransactionListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeTransactionListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XModifiable
 
     virtual sal_Bool SAL_CALL isModified()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setModified( sal_Bool bModified )
         throw ( ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addModifyListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeModifyListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XNameAccess
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XComponent
 
     virtual void SAL_CALL dispose()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addEventListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeEventListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XEncryptionProtectedSource
 
     virtual void SAL_CALL setEncryptionPassword( const OUString& aPass )
         throw ( ::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::io::IOException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::io::IOException, std::exception ) override;
 
     virtual void SAL_CALL removeEncryption()
         throw ( ::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::io::IOException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::io::IOException, std::exception ) override;
 
     //  XEncryptionProtectedSource2
 
     virtual void SAL_CALL setEncryptionData(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL hasEncryptionData()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XEncryptionProtectedStorage
 
-    virtual void SAL_CALL setEncryptionAlgorithms( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aAlgorithms ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setEncryptionAlgorithms( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aAlgorithms ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //  XPropertySet
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& aPropertyName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& aPropertyName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& PropertyName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw ( ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     //  XOptimizedStorage
     virtual void SAL_CALL insertRawNonEncrStreamElementDirect( const OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
@@ -664,7 +664,7 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL insertStreamElementDirect( const OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -672,7 +672,7 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL copyElementDirectlyTo( const OUString& sSourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XOptimizedStorage >& xTargetStorage, const OUString& sTargetName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -681,21 +681,21 @@ public:
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL writeAndAttachToStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL attachToURL( const OUString& sURL, sal_Bool bReadOnly )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getElementPropertyValue( const OUString& sElementName, const OUString& sPropertyName )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -705,7 +705,7 @@ public:
                 ::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL copyStreamElementData( const OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -713,54 +713,54 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XRelationshipAccess
     virtual sal_Bool SAL_CALL hasByID( const OUString& sID )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getTargetByID( const OUString& sID )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getTypeByID( const OUString& sID )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL getAllRelationships(  )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aEntry, sal_Bool bReplace )
         throw ( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL insertRelationships( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aEntries, sal_Bool bReplace )
         throw ( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL clearRelationships(  )
         throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XHierarchicalStorageAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode )
@@ -769,7 +769,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamElementByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const OUString& sPassword )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -778,7 +778,7 @@ public:
                 ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeStreamElementByHierarchicalName( const OUString& sElementPath )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -786,7 +786,7 @@ public:
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XHierarchicalStorageAccess2
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
@@ -797,7 +797,7 @@ public:
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 StorageHolder_Impl::StorageHolder_Impl( OStorage* pStorage )

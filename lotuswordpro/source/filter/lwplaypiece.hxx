@@ -78,7 +78,7 @@ class LwpLayoutGeometry : public LwpVirtualPiece
 {
 public:
     LwpLayoutGeometry(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     sal_Int32 GetWidth() { return m_nWidth; }
     sal_Int32 GetHeight() { return m_nHeight; }
     LwpPoint GetOrigin() { return m_Origin; }
@@ -86,7 +86,7 @@ public:
     sal_uInt8 GetContentOrientation(){ return m_ContentOrientation;}
 
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     sal_Int32 m_nWidth;
     sal_Int32 m_nHeight;
@@ -106,7 +106,7 @@ public:
 
     enum    {CENTERED = 1, TILED = 2};
     LwpLayoutScale(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     sal_uInt16 GetScaleMode(){return m_nScaleMode;}
     sal_uInt32 GetScalePercentage(){return m_nScalePercentage;}
     sal_Int32 GetScaleWidth(){return m_nScaleWidth;}
@@ -114,7 +114,7 @@ public:
     sal_uInt16 GetPlacement(){return m_nPlacement;}
     inline LwpPoint& GetOffset() {return m_Offset;}
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     sal_uInt16 m_nScaleMode;
     sal_uInt32 m_nScalePercentage;
@@ -133,11 +133,11 @@ class LwpLayoutMargins : public LwpVirtualPiece
 {
 public:
     LwpLayoutMargins(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     LwpMargins& GetMargins() { return m_Margins; }
     LwpMargins& GetExtMargins(){ return m_ExtMargins;}
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpMargins m_Margins;
     LwpMargins m_ExtMargins;
@@ -151,10 +151,10 @@ class LwpLayoutBorder : public LwpVirtualPiece
 {
 public:
     LwpLayoutBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     LwpBorderStuff& GetBorderStuff(){ return m_BorderStuff;}
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpBorderStuff m_BorderStuff;
 private:
@@ -165,10 +165,10 @@ class LwpLayoutBackground : public LwpVirtualPiece
 {
 public:
     LwpLayoutBackground(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     LwpBackgroundStuff& GetBackgoudStuff(){return m_BackgroundStuff;}
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpBackgroundStuff m_BackgroundStuff;
 private:
@@ -193,9 +193,9 @@ class LwpLayoutExternalBorder : public LwpVirtualPiece
 {
 public:
     LwpLayoutExternalBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpExternalBorder   m_ExtranalBorder;
 private:
@@ -219,12 +219,12 @@ class LwpLayoutColumns : public LwpVirtualPiece
 {
 public:
     LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     inline sal_uInt16 GetNumCols(){return m_nNumCols;}
     double GetColWidth(sal_uInt16 nIndex);
     double GetColGap(sal_uInt16 nIndex);
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     sal_uInt16 m_nNumCols;
     LwpColumnInfo* m_pColumns;
@@ -236,10 +236,10 @@ class LwpLayoutGutters : public LwpVirtualPiece
 {
 public:
     LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     inline LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpBorderStuff m_BorderBuffer;
 private:
@@ -296,9 +296,9 @@ class LwpLayoutJoins : public LwpVirtualPiece
 {
 public:
     LwpLayoutJoins(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpJoinStuff m_JoinStuff;
 private:
@@ -311,10 +311,10 @@ class LwpLayoutShadow : public LwpVirtualPiece
 {
 public:
     LwpLayoutShadow(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     LwpShadow& GetShadow() { return m_Shadow; }
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpShadow m_Shadow;
 private:
@@ -367,10 +367,10 @@ class LwpLayoutRelativity: public LwpVirtualPiece
 {
 public:
     LwpLayoutRelativity(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void Parse(IXFStream* pOutputStream) override;
     LwpLayoutRelativityGuts& GetRelGuts() { return m_RelGuts; }
 protected:
-    virtual void Read() SAL_OVERRIDE;
+    virtual void Read() override;
 protected:
     LwpLayoutRelativityGuts m_RelGuts;
 private:

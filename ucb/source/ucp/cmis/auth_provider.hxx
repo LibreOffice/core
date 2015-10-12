@@ -29,7 +29,7 @@ namespace cmis
                            const OUString& sBindingUrl ):
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
-            bool authenticationQuery( std::string& username, std::string& password ) SAL_OVERRIDE;
+            bool authenticationQuery( std::string& username, std::string& password ) override;
 
             static char* onedriveAuthCodeFallback( const char* url,
                     const char* /*username*/,

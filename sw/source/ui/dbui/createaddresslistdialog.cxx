@@ -65,23 +65,23 @@ class SwAddressControl_Impl : public Control
 
     void                MakeVisible(const Rectangle& aRect);
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual Size        GetOptimalSize() const override;
 
     using Window::SetData;
 
 public:
     SwAddressControl_Impl(vcl::Window* pParent , WinBits nBits );
     virtual ~SwAddressControl_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void        SetData(SwCSVData& rDBData);
 
     void        SetCurrentDataSet(sal_uInt32 nSet);
     sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet;}
     void        SetCursorTo(sal_uInt32 nElement);
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 };
 
 SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits ) :

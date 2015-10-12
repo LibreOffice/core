@@ -39,9 +39,9 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneAppearance_TabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void ActivatePage() SAL_OVERRIDE;
+    virtual void ActivatePage() override;
 
 private:
     DECL_LINK_TYPED( SelectSchemeHdl, ListBox&, void );

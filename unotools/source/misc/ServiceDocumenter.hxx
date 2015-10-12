@@ -25,17 +25,17 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
             , m_sServiceBaseUrl("http://api.libreoffice.org/docs/idl/ref")
             {};
         // XServiceDocumenter
-        virtual ::rtl::OUString SAL_CALL getCoreBaseUrl() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual ::rtl::OUString SAL_CALL getCoreBaseUrl() throw (css::uno::RuntimeException, std::exception) override
             { return m_sCoreBaseUrl; };
-        virtual void SAL_CALL setCoreBaseUrl( const ::rtl::OUString& sCoreBaseUrl ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL setCoreBaseUrl( const ::rtl::OUString& sCoreBaseUrl ) throw (css::uno::RuntimeException, std::exception) override
             { m_sCoreBaseUrl = sCoreBaseUrl; };
-        virtual ::rtl::OUString SAL_CALL getServiceBaseUrl() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual ::rtl::OUString SAL_CALL getServiceBaseUrl() throw (css::uno::RuntimeException, std::exception) override
             { return m_sServiceBaseUrl; };
-        virtual void SAL_CALL setServiceBaseUrl( const ::rtl::OUString& sServiceBaseUrl ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL setServiceBaseUrl( const ::rtl::OUString& sServiceBaseUrl ) throw (css::uno::RuntimeException, std::exception) override
             { m_sServiceBaseUrl = sServiceBaseUrl; };
-        virtual void SAL_CALL showServiceDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCoreDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL showServiceDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL showCoreDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) throw (css::uno::RuntimeException, std::exception) override;
     protected:
         virtual ~ServiceDocumenter()
             {};

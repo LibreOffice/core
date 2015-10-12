@@ -55,17 +55,17 @@ namespace toolkit
     public:
         ScrollableWrapper( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
         virtual ~ScrollableWrapper();
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void    SetScrollWidth( long nWidth ) SAL_OVERRIDE;
-        virtual void    SetScrollHeight( long nHeight ) SAL_OVERRIDE;
-        virtual void    SetScrollLeft( long nLeft ) SAL_OVERRIDE;
-        virtual void    SetScrollTop( long Top ) SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void    SetScrollWidth( long nWidth ) override;
+        virtual void    SetScrollHeight( long nHeight ) override;
+        virtual void    SetScrollLeft( long nLeft ) override;
+        virtual void    SetScrollTop( long Top ) override;
 
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK_TYPED( ScrollBarHdl, ScrollBar*, void );
         virtual void ResetScrollBars();
         // Window
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
     };
 
 } // namespacetoolkit

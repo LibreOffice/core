@@ -121,7 +121,7 @@ protected:
     Point m_aContentPos;        // content area's position relatively to Frm
     bool m_bValidContentPos;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
     void MakePrtArea( const SwBorderAttrs &rAttrs );
     void MakeContentPos( const SwBorderAttrs &rAttrs );
 
@@ -133,21 +133,21 @@ protected:
 
     SwFlyFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwFlyFrm();
 
     /** method to assure that anchored object is registered at the correct
         page frame
     */
-    virtual void RegisterAtCorrectPage() SAL_OVERRIDE;
+    virtual void RegisterAtCorrectPage() override;
 
-    virtual bool _SetObjTop( const SwTwips _nTop ) SAL_OVERRIDE;
-    virtual bool _SetObjLeft( const SwTwips _nLeft ) SAL_OVERRIDE;
+    virtual bool _SetObjTop( const SwTwips _nTop ) override;
+    virtual bool _SetObjLeft( const SwTwips _nLeft ) override;
 
-    virtual const SwRect GetObjBoundRect() const SAL_OVERRIDE;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual const SwRect GetObjBoundRect() const override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
-    virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( ) SAL_OVERRIDE;
+    virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( ) override;
 
     SwTwips CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL);
 
@@ -156,17 +156,17 @@ public:
     TYPEINFO_OVERRIDE();
 
     // get client information
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
-    virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
+                        SwPrintData const*const pPrintData = NULL ) const override;
+    virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
+                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
 
-    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
-    virtual void Cut() SAL_OVERRIDE;
+    virtual void CheckDirection( bool bVert ) override;
+    virtual void Cut() override;
 #ifdef DBG_UTIL
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
 #endif
 
     SwTwips _Shrink( SwTwips, bool bTst );
@@ -244,13 +244,13 @@ public:
     void InsertColumns();
 
     // #i26791# - pure virtual methods of base class <SwAnchoredObject>
-    virtual void MakeObjPos() SAL_OVERRIDE;
-    virtual void InvalidateObjPos() SAL_OVERRIDE;
+    virtual void MakeObjPos() override;
+    virtual void InvalidateObjPos() override;
 
-    virtual SwFrameFormat& GetFrameFormat() SAL_OVERRIDE;
-    virtual const SwFrameFormat& GetFrameFormat() const SAL_OVERRIDE;
+    virtual SwFrameFormat& GetFrameFormat() override;
+    virtual const SwFrameFormat& GetFrameFormat() const override;
 
-    virtual const SwRect GetObjRect() const SAL_OVERRIDE;
+    virtual const SwRect GetObjRect() const override;
 
     /** method to determine if a format on the Writer fly frame is possible
 
@@ -259,18 +259,18 @@ public:
         <SwAnchoredObject::IsFormatPossible()> by:
         format isn't possible, if Writer fly frame is locked resp. col-locked.
     */
-    virtual bool IsFormatPossible() const SAL_OVERRIDE;
+    virtual bool IsFormatPossible() const override;
     static void GetAnchoredObjects( std::list<SwAnchoredObject*>&, const SwFormat& rFormat );
 
     // overwriting "SwFrameFormat *SwLayoutFrm::GetFormat" to provide the correct derived return type.
     // (This is in order to skip on the otherwise necessary casting of the result to
     // 'SwFlyFrameFormat *' after calls to this function. The casting is now done in this function.)
-    virtual const SwFlyFrameFormat *GetFormat() const SAL_OVERRIDE;
-    virtual       SwFlyFrameFormat *GetFormat() SAL_OVERRIDE;
+    virtual const SwFlyFrameFormat *GetFormat() const override;
+    virtual       SwFlyFrameFormat *GetFormat() override;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer ) const SAL_OVERRIDE { SwLayoutFrm::dumpAsXml( writer ); };
+    virtual void dumpAsXml( xmlTextWriterPtr writer ) const override { SwLayoutFrm::dumpAsXml( writer ); };
 
-    virtual void Calc(vcl::RenderContext* pRenderContext) const SAL_OVERRIDE;
+    virtual void Calc(vcl::RenderContext* pRenderContext) const override;
 
     const Point& ContentPos() const { return m_aContentPos; }
     Point& ContentPos() { return m_aContentPos; }

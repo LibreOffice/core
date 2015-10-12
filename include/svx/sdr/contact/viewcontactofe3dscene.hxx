@@ -40,7 +40,7 @@ protected:
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
 public:
     // basic constructor, used from SdrObject.
@@ -53,7 +53,7 @@ public:
     }
 
     // React on changes of the object of this ViewContact
-    virtual void ActionChanged() SAL_OVERRIDE;
+    virtual void ActionChanged() override;
 
     // access to ViewInformation3D and ObjectTransformation
     const drawinglayer::geometry::ViewInformation3D& getViewInformation3D(const ::basegfx::B3DRange& rContentRange) const;
@@ -94,7 +94,7 @@ protected:
 
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

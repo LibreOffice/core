@@ -67,7 +67,7 @@ public:
 
     SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags = 0);
     virtual ~SfxNewFileDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Returns false, when '- No -' is set as Template
     // Template names can only be obtained when IsTemplate() returns true.

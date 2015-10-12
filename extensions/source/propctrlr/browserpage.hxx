@@ -33,13 +33,13 @@ namespace pcr
         VclPtr<OBrowserListBox>     m_aListBox;
 
     protected:
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void StateChanged(StateChangedType nType) override;
 
     public:
         OBrowserPage(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~OBrowserPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();

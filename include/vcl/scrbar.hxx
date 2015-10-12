@@ -90,20 +90,20 @@ private:
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );
     virtual         ~ScrollBar();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void Tracking(const TrackingEvent& rTEvt) SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
-    virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void Tracking(const TrackingEvent& rTEvt) override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags) override;
+    virtual void Resize() override;
+    virtual void StateChanged(StateChangedType nType) override;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
+    virtual bool PreNotify(NotifyEvent& rNEvt) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     using Window::Scroll;
     void            Scroll();
@@ -137,7 +137,7 @@ public:
     void            SetEndScrollHdl( const Link<ScrollBar*,void>& rLink ) { maEndScrollHdl = rLink; }
     const Link<ScrollBar*,void>&   GetEndScrollHdl() const { return maEndScrollHdl; }
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
 };
 
 
@@ -150,13 +150,13 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 public:
     explicit        ScrollBarBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 #endif // INCLUDED_VCL_SCRBAR_HXX

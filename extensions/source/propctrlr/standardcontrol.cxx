@@ -960,16 +960,16 @@ namespace pcr
         VclPtr<MultiLineEdit>   m_aImplEdit;
 
     protected:
-        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    Resize() override;
 
     public:
                         OMultilineFloatingEdit(vcl::Window* _pParen);
         virtual         ~OMultilineFloatingEdit();
-        virtual void    dispose() SAL_OVERRIDE;
+        virtual void    dispose() override;
         MultiLineEdit&  getEdit() { return *m_aImplEdit.get(); }
 
     protected:
-        virtual bool    PreNotify(NotifyEvent& _rNEvt) SAL_OVERRIDE;
+        virtual bool    PreNotify(NotifyEvent& _rNEvt) override;
     };
 
 

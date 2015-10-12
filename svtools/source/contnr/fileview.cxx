@@ -124,7 +124,7 @@ namespace
         CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
 
     protected:
-        virtual void SAL_CALL onShot() SAL_OVERRIDE;
+        virtual void SAL_CALL onShot() override;
     };
 
 
@@ -181,17 +181,17 @@ private:
     bool            Kill( const OUString& rURL );
 
 protected:
-    virtual bool     DoubleClickHdl() SAL_OVERRIDE;
-    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const SAL_OVERRIDE;
+    virtual bool     DoubleClickHdl() override;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const override;
 
 public:
     ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
     virtual ~ViewTabListBox_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -203,8 +203,8 @@ public:
 
     DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
-    virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+    virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
 };
 
 // provides a list of _unique_ Entries
@@ -297,7 +297,7 @@ public:
                             virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation
-    virtual bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const SAL_OVERRIDE;
+    virtual bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const override;
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const OUString*         GetTransTableFileName() const;
@@ -401,7 +401,7 @@ protected:
     DECL_LINK_TYPED( SelectionMultiplexer, SvTreeListBox*, void );
 
     // IEnumerationResultHandler overridables
-    virtual void        enumerationDone( ::svt::EnumerationResult eResult ) SAL_OVERRIDE;
+    virtual void        enumerationDone( ::svt::EnumerationResult eResult ) override;
             void        implEnumerationSuccess();
 };
 

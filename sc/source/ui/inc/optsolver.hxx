@@ -44,7 +44,7 @@ public:
     void    SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 /// The dialog's content for a row, not yet parsed
@@ -96,12 +96,12 @@ public:
                     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
                     virtual ~ScOptSolverDlg();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
-    virtual void    SetActive() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual bool    IsRefInputMode() const override;
+    virtual void    SetActive() override;
+    virtual bool    Close() override;
 
 private:
     VclPtr<FixedText>       m_pFtObjectiveCell;
@@ -208,7 +208,7 @@ class ScSolverProgressDialog : public ModelessDialog
 public:
     ScSolverProgressDialog( vcl::Window* pParent );
     virtual ~ScSolverProgressDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    HideTimeLimit();
     void    SetTimeLimit( sal_Int32 nSeconds );
@@ -221,7 +221,7 @@ class ScSolverNoSolutionDialog : public ModalDialog
 public:
     ScSolverNoSolutionDialog(vcl::Window* pParent, const OUString& rErrorText);
     virtual ~ScSolverNoSolutionDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class ScSolverSuccessDialog : public ModalDialog
@@ -235,7 +235,7 @@ class ScSolverSuccessDialog : public ModalDialog
 public:
     ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );
     virtual ~ScSolverSuccessDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

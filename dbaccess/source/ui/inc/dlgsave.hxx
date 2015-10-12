@@ -66,7 +66,7 @@ namespace dbaui
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
         virtual ~OSaveAsDlg();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         OUString getName() const;
         OUString getCatalog() const;

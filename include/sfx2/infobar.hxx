@@ -50,11 +50,11 @@ class SfxInfoBarWindow : public vcl::Window
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
                           const OUString& sMessage );
         virtual ~SfxInfoBarWindow( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         const OUString& getId() const { return m_sId; }
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
-        virtual void Resize( ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+        virtual void Resize( ) override;
 
         /** Add button to Infobar.
          * Infobar takes ownership of the button so the button is
@@ -75,13 +75,13 @@ class SfxInfoBarContainerWindow : public vcl::Window
     public:
         SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
         virtual ~SfxInfoBarContainerWindow( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         SfxInfoBarWindow* appendInfoBar(const OUString& sId, const OUString& sMessage);
         SfxInfoBarWindow* getInfoBar(const OUString& sId);
         void removeInfoBar(SfxInfoBarWindow* pInfoBar);
 
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 };
 
 

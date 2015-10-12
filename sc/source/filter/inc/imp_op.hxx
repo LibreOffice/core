@@ -203,7 +203,7 @@ public:
 
     virtual                 ~ImportExcel();
 
-    virtual FltError        Read() SAL_OVERRIDE;
+    virtual FltError        Read() override;
 };
 
 #endif

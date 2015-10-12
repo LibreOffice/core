@@ -55,11 +55,11 @@ class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
     VclPtr<SfxAcceleratorConfigPage>   m_pAccelConfigPage;
 
-    void                        KeyInput( const KeyEvent &rKEvt ) SAL_OVERRIDE;
+    void                        KeyInput( const KeyEvent &rKEvt ) override;
 
 protected:
     virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&,
-                                          const Image&, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
+                                          const Image&, SvLBoxButtonKind eButtonKind) override;
 
 public:
     SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
@@ -68,7 +68,7 @@ public:
     {
     }
     virtual ~SfxAccCfgTabListBox_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetAccelConfigPage(SfxAcceleratorConfigPage* pAccelConfigPage)
     {
@@ -172,10 +172,10 @@ private:
 public:
                                 SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
-    virtual bool                FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual bool                FillItemSet( SfxItemSet* ) override;
+    virtual void                Reset( const SfxItemSet* ) override;
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
 };

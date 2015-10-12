@@ -66,7 +66,7 @@
 class XFTabStop : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 inline void XFTabStop::ToXml(IXFStream *pStrm)

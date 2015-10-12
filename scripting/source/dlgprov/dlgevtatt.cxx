@@ -61,7 +61,7 @@ namespace dlgprov
     {
         protected:
         Reference< frame::XModel >  m_xModel;
-        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) SAL_OVERRIDE;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
         public:
         DialogSFScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel ) : DialogScriptListenerImpl( rxContext ), m_xModel( rxModel ) {}
     };
@@ -69,7 +69,7 @@ namespace dlgprov
   class DialogLegacyScriptListenerImpl : public DialogSFScriptListenerImpl
     {
         protected:
-        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) SAL_OVERRIDE;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
         public:
         DialogLegacyScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel ) : DialogSFScriptListenerImpl( rxContext, rxModel ){}
     };
@@ -81,7 +81,7 @@ namespace dlgprov
     Reference< beans::XIntrospectionAccess > m_xIntrospectionAccess;
     bool m_bDialogProviderMode;
 
-        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) SAL_OVERRIDE;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
 
     public:
         DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
@@ -99,7 +99,7 @@ namespace dlgprov
         OUString msDialogCodeName;
         OUString msDialogLibName;
         Reference<  script::XScriptListener > mxListener;
-        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) SAL_OVERRIDE;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
         public:
         DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const OUString& sDialogLibName );
     };

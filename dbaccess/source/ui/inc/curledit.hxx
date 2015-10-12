@@ -43,14 +43,14 @@ class OConnectionURLEdit : public Edit
 public:
     OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
     virtual ~OConnectionURLEdit();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 public:
     // Edit overridables
-    virtual void    SetText(const OUString& _rStr) SAL_OVERRIDE;
-    virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection) SAL_OVERRIDE;
-    virtual OUString  GetText() const SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void    SetText(const OUString& _rStr) override;
+    virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection) override;
+    virtual OUString  GetText() const override;
+    virtual void Resize() override;
 
     /** Shows the Prefix
         @param  _bShowPrefix

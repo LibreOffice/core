@@ -50,21 +50,21 @@ public:
     ScTabPageSortFields( vcl::Window*             pParent,
             const SfxItemSet&   rArgSet );
     virtual ~ScTabPageSortFields();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
-    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) SAL_OVERRIDE;
-    virtual void SetSizePixel(const Size& rAllocation) SAL_OVERRIDE;
-    virtual void SetPosPixel(const Point& rAllocPos) SAL_OVERRIDE;
+    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) override;
+    virtual void SetSizePixel(const Size& rAllocation) override;
+    virtual void SetPosPixel(const Point& rAllocPos) override;
 
 protected:
-    virtual void        ActivatePage    ( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = 0) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = 0) override;
 
 private:
     OUString            aStrUndefined;
@@ -109,20 +109,20 @@ public:
     ScTabPageSortOptions( vcl::Window*            pParent,
             const SfxItemSet&  rArgSet );
     virtual ~ScTabPageSortOptions();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 protected:
-    virtual void        ActivatePage    ( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = 0) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = 0) override;
 
 private:
 

@@ -41,7 +41,7 @@ namespace cppcanvas
                               const ImplSpriteCanvas::TransformationArbiterSharedPtr&     rTransformArbiter );
             virtual ~ImplCustomSprite();
 
-            virtual CanvasSharedPtr getContentCanvas() const SAL_OVERRIDE;
+            virtual CanvasSharedPtr getContentCanvas() const override;
 
         private:
             ImplCustomSprite(const ImplCustomSprite&) = delete;

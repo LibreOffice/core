@@ -39,18 +39,18 @@ namespace svt
         virtual ~DummyPanel();
 
         // IToolPanel
-        virtual OUString GetDisplayName() const SAL_OVERRIDE;
-        virtual Image GetImage() const SAL_OVERRIDE;
-        virtual OString GetHelpID() const SAL_OVERRIDE;
-        virtual void Activate( vcl::Window& i_rParentWindow ) SAL_OVERRIDE;
-        virtual void Deactivate() SAL_OVERRIDE;
-        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) SAL_OVERRIDE;
-        virtual void GrabFocus() SAL_OVERRIDE;
-        virtual void Dispose() SAL_OVERRIDE;
+        virtual OUString GetDisplayName() const override;
+        virtual Image GetImage() const override;
+        virtual OString GetHelpID() const override;
+        virtual void Activate( vcl::Window& i_rParentWindow ) override;
+        virtual void Deactivate() override;
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) override;
+        virtual void GrabFocus() override;
+        virtual void Dispose() override;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                     CreatePanelAccessible(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                    ) SAL_OVERRIDE;
+                    ) override;
     };
 
 

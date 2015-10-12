@@ -274,7 +274,7 @@ private:
 class AsciiReader: public Reader
 {
     friend class SwReader;
-    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
+    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
 public:
     AsciiReader(): Reader() {}
 };
@@ -284,9 +284,9 @@ class SW_DLLPUBLIC StgReader : public Reader
     OUString aFltName;
 
 public:
-    virtual int GetReaderType() SAL_OVERRIDE;
+    virtual int GetReaderType() override;
     OUString GetFltName() { return aFltName; }
-    virtual void SetFltName( const OUString& r ) SAL_OVERRIDE;
+    virtual void SetFltName( const OUString& r ) override;
 };
 
 // The given stream has to be created dynamically and must
@@ -465,7 +465,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
     // Create error at call.
-    virtual sal_uLong WriteStream() SAL_OVERRIDE;
+    virtual sal_uLong WriteStream() override;
     virtual sal_uLong WriteStorage() = 0;
     virtual sal_uLong WriteMedium( SfxMedium& ) = 0;
 
@@ -474,10 +474,10 @@ protected:
 public:
     StgWriter() : Writer() {}
 
-    virtual bool IsStgWriter() const SAL_OVERRIDE;
+    virtual bool IsStgWriter() const override;
 
-    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 ) SAL_OVERRIDE;
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 ) SAL_OVERRIDE;
+    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 ) override;
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 ) override;
 
     SotStorage& GetStorage() const       { return *pStg; }
 };

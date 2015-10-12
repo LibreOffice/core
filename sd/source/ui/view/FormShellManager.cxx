@@ -37,8 +37,8 @@ class FormShellManagerFactory
 {
 public:
     FormShellManagerFactory (ViewShell& rViewShell, FormShellManager& rManager);
-    virtual FmFormShell* CreateShell (ShellId nId, vcl::Window* pParentWindow, FrameView* pFrameView) SAL_OVERRIDE;
-    virtual void ReleaseShell (SfxShell* pShell) SAL_OVERRIDE;
+    virtual FmFormShell* CreateShell (ShellId nId, vcl::Window* pParentWindow, FrameView* pFrameView) override;
+    virtual void ReleaseShell (SfxShell* pShell) override;
 
 private:
     ::sd::ViewShell& mrViewShell;

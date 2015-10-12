@@ -102,42 +102,42 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
         /** @see XTitle */
         virtual OUString SAL_CALL getTitle()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see XTitle */
         virtual void SAL_CALL setTitle(const OUString& sTitle)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see XTitleChangeBroadcaster */
         virtual void SAL_CALL addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see XTitleChangeBroadcaster */
         virtual void SAL_CALL removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see XTitleChangeListener */
         virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see css.document.XDocumentEventListener */
         virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see css.lang.XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 
         /** @see css.frame.XFrameActionListener */
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
 
     // internal

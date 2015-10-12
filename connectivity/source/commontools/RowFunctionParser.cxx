@@ -62,11 +62,11 @@ public:
         maValue( rValue )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const override
     {
         return maValue;
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const override
     {
     }
 };
@@ -89,7 +89,7 @@ public:
         mpSecondArg( rSecondArg )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const override
     {
         ORowSetValueDecoratorRef aRet;
         switch(meFunct)
@@ -108,7 +108,7 @@ public:
         }
         return aRet;
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const override
     {
         switch(meFunct)
         {
@@ -232,11 +232,11 @@ public:
         mpArg( rArg )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const override
     {
         return _aRow[mpArg->evaluate(_aRow )->getValue().getInt32()];
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const override
     {
     }
 };

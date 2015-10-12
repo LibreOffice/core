@@ -43,7 +43,7 @@ private:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState ) SAL_OVERRIDE;
+                               const SfxPoolItem* pState ) override;
 
 public:
     SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
@@ -113,7 +113,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
 
-    virtual bool        Close() SAL_OVERRIDE;
+    virtual bool        Close() override;
 
     sal_uInt16              InitColorArrays( Color* pSrcCols, Color* pDstCols,
                                          sal_uIntPtr* pTols );
@@ -135,7 +135,7 @@ public:
 
     SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent);
     virtual ~SvxBmpMask();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                SetColor( const Color& rColor );
     void                PipetteClicked();

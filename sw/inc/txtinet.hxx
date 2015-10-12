@@ -33,14 +33,14 @@ class SW_DLLPUBLIC SwTextINetFormat : public SwTextAttrNesting, public SwClient
     bool m_bVisitedValid    : 1; // is m_bVisited valid?
 
 protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextINetFormat();
     TYPEINFO_OVERRIDE();
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);
 

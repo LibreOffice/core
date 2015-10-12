@@ -28,7 +28,7 @@ struct SwDocStat;
 
 class SwWordCountFloatDlg : public SfxModelessDialog
 {
-    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    Activate() override;
     void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
     void showCJK(bool bShowCJK);
     void showStandardizedPages(bool bShowStandardizedPages);
@@ -57,7 +57,7 @@ public:
                              vcl::Window *pParent,
                              SfxChildWinInfo* pInfo);
     virtual ~SwWordCountFloatDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void    UpdateCounts();
 
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);

@@ -49,7 +49,7 @@ namespace dbaui
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
         virtual ~OTextConnectionHelper();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
     private:
         VclPtr<FixedText>        m_pExtensionHeader;

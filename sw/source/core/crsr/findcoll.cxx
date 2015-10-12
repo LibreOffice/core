@@ -37,8 +37,8 @@ struct SwFindParaFormatColl : public SwFindParas
         : pFormatColl( &rFormatColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
     virtual ~SwFindParaFormatColl() {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
-    virtual bool IsReplaceMode() const SAL_OVERRIDE;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
+    virtual bool IsReplaceMode() const override;
 };
 
 int SwFindParaFormatColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,

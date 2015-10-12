@@ -90,7 +90,7 @@ public:
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 
     virtual ~OSQLMessageBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     void Construct( WinBits nStyle, MessageType eImage );

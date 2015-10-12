@@ -37,10 +37,10 @@ namespace frm
         // XDispatch
         virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
             throw (css::uno::RuntimeException,
-                   std::exception) SAL_OVERRIDE;
+                   std::exception) override;
 
         // ORichTextFeatureDispatcher
-        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
     };
 
     class OParagraphDirectionDispatcher : public OAttributeDispatcher
@@ -55,7 +55,7 @@ namespace frm
 
     protected:
         // ORichTextFeatureDispatcher
-        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
     };
 
     class OTextDirectionDispatcher : public ORichTextFeatureDispatcher
@@ -65,10 +65,10 @@ namespace frm
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) override;
 
         // ORichTextFeatureDispatcher
-        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
     };
 
     class OAsianFontLayoutDispatcher : public OParametrizedAttributeDispatcher
@@ -84,7 +84,7 @@ namespace frm
     protected:
         // OParametrizedAttributeDispatcher
         virtual const SfxPoolItem* convertDispatchArgsToItem(
-            const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) SAL_OVERRIDE;
+            const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
     };
 
 

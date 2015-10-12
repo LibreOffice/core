@@ -104,9 +104,9 @@ public:
     PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB );
     void                SetMaster( bool bMaster );
     void                SetPageType( PageType ePageType );
-    ShapeExport&        WriteNonVisualProperties( Reference< XShape > xShape ) SAL_OVERRIDE;
-    ShapeExport&        WriteTextShape( Reference< XShape > xShape ) SAL_OVERRIDE;
-    ShapeExport&        WriteUnknownShape( Reference< XShape > xShape ) SAL_OVERRIDE;
+    ShapeExport&        WriteNonVisualProperties( Reference< XShape > xShape ) override;
+    ShapeExport&        WriteTextShape( Reference< XShape > xShape ) override;
+    ShapeExport&        WriteUnknownShape( Reference< XShape > xShape ) override;
     ShapeExport&        WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder );
     ShapeExport&        WritePageShape( Reference< XShape > xShape, PageType ePageType, bool bPresObj );
 

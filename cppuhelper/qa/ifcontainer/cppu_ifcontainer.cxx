@@ -50,7 +50,7 @@ public:
         : m_pStats(pStats) { m_pStats->m_nAlive++; }
     virtual ~ContainerListener() { m_pStats->m_nAlive--; }
     virtual void SAL_CALL disposing( const EventObject& )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE
+        throw (RuntimeException, std::exception) override
     {
         m_pStats->m_nDisposed++;
     }

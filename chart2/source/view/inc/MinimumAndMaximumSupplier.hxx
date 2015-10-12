@@ -69,21 +69,21 @@ public:
     void clearMinimumAndMaximumSupplierList();
 
     //--MinimumAndMaximumSupplier
-    virtual double getMinimumX() SAL_OVERRIDE;
-    virtual double getMaximumX() SAL_OVERRIDE;
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
-    virtual double getMinimumZ() SAL_OVERRIDE;
-    virtual double getMaximumZ() SAL_OVERRIDE;
+    virtual double getMinimumX() override;
+    virtual double getMaximumX() override;
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
+    virtual double getMinimumZ() override;
+    virtual double getMaximumZ() override;
 
-    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) override;
+    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
-    virtual long calculateTimeResolutionOnXAxis() SAL_OVERRIDE;
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) SAL_OVERRIDE;
+    virtual long calculateTimeResolutionOnXAxis() override;
+    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) override;
 
 private:
     typedef ::std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;

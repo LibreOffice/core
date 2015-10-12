@@ -79,11 +79,11 @@ public:
 
     inline sal_uInt32 GetFinalFontID() const;
 
-    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void RegisterStyle() override;
 
 protected:
     void ReadCommon();
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 
 protected:
 
@@ -125,7 +125,7 @@ class LwpCharacterStyle : public LwpTextStyle
 public:
     LwpCharacterStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
 
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 
 private:
 

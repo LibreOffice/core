@@ -44,7 +44,7 @@ namespace {
     struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
     {
         virtual ~DamageTracker() {}
-        virtual void damaged( const basegfx::B2IBox& ) const SAL_OVERRIDE {}
+        virtual void damaged( const basegfx::B2IBox& ) const override {}
     };
 }
 #endif

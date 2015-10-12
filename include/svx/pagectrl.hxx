@@ -69,7 +69,7 @@ private:
     sal_uInt16 eUsage;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
     virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
                           const bool bSecond, const bool bEnabled);
@@ -82,7 +82,7 @@ protected:
 public:
     SvxPageWindow(vcl::Window* pParent);
     virtual ~SvxPageWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     //UUUU
     void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
@@ -158,7 +158,7 @@ public:
 
     void ResetBackground();
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
 };
 
 #endif // INCLUDED_SVX_PAGECTRL_HXX

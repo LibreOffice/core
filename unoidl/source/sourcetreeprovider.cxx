@@ -101,7 +101,7 @@ public:
 private:
     virtual ~Cursor() throw () {}
 
-    virtual rtl::Reference<Entity> getNext(OUString *) SAL_OVERRIDE
+    virtual rtl::Reference<Entity> getNext(OUString *) override
     { return rtl::Reference<Entity>(); } //TODO
 };
 
@@ -112,10 +112,10 @@ public:
 private:
     virtual ~SourceModuleEntity() throw () {}
 
-    virtual std::vector<OUString> getMemberNames() const SAL_OVERRIDE
+    virtual std::vector<OUString> getMemberNames() const override
     { return std::vector<OUString>(); } //TODO
 
-    virtual rtl::Reference< MapCursor > createCursor() const SAL_OVERRIDE
+    virtual rtl::Reference< MapCursor > createCursor() const override
     { return new Cursor; }
 };
 

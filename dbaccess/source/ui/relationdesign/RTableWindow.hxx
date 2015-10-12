@@ -33,7 +33,7 @@ namespace dbaui
             @return
                 The composed name or the window name.
         */
-        virtual OUString GetName() const SAL_OVERRIDE { return GetComposedName(); }
+        virtual OUString GetName() const override { return GetComposedName(); }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX

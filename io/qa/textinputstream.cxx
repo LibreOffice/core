@@ -46,7 +46,7 @@ private:
             css::io::NotConnectedException,
             css::io::BufferSizeExceededException, css::io::IOException,
             css::uno::RuntimeException, std::exception)
-        SAL_OVERRIDE
+        override
     { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); return 0;}
 
     sal_Int32 SAL_CALL readSomeBytes(
@@ -54,7 +54,7 @@ private:
         throw (
             css::io::NotConnectedException,
             css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE
+            css::uno::RuntimeException, ::std::exception) override
     {
         assert(nMaxBytesToRead >= 0);
         osl::MutexGuard g(mutex_);
@@ -74,7 +74,7 @@ private:
         throw (
             css::io::NotConnectedException,
             css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            css::uno::RuntimeException, std::exception) override
     {
         assert(nBytesToSkip >= 0);
         osl::MutexGuard g(mutex_);
@@ -87,7 +87,7 @@ private:
     sal_Int32 SAL_CALL available()
         throw (
             css::io::NotConnectedException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            css::uno::RuntimeException, std::exception) override
     {
         osl::MutexGuard g(mutex_);
         checkClosed();
@@ -98,7 +98,7 @@ private:
     void SAL_CALL closeInput()
         throw (
             css::io::NotConnectedException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            css::uno::RuntimeException, std::exception) override
     {
         osl::MutexGuard g(mutex_);
         checkClosed();

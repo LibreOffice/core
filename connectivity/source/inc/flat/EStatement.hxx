@@ -30,7 +30,7 @@ namespace connectivity
         class OFlatStatement : public file::OStatement
         {
         protected:
-            virtual file::OResultSet* createResultSet() SAL_OVERRIDE;
+            virtual file::OResultSet* createResultSet() override;
         public:
             OFlatStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
             DECLARE_SERVICE_INFO();

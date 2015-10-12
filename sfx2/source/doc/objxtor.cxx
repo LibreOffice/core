@@ -154,9 +154,9 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::u
 public:
     explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
     virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) SAL_OVERRIDE ;
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) override ;
+    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) override ;
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) override ;
 
 };
 

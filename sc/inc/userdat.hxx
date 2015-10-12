@@ -56,7 +56,7 @@ public:
     explicit            ScDrawObjData();
 
 private:
-     virtual ScDrawObjData* Clone( SdrObject* pObj ) const SAL_OVERRIDE;
+     virtual ScDrawObjData* Clone( SdrObject* pObj ) const override;
 };
 
 class ScIMapInfo : public SdrObjUserData
@@ -69,7 +69,7 @@ public:
                     ScIMapInfo( const ScIMapInfo& rIMapInfo );
     virtual         ~ScIMapInfo();
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const SAL_OVERRIDE;
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
 
     void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const             { return aImageMap; }
@@ -81,7 +81,7 @@ public:
                     ScMacroInfo();
     virtual         ~ScMacroInfo();
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const SAL_OVERRIDE;
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
 
     void            SetMacro( const OUString& rMacro ) { maMacro = rMacro; }
     const OUString& GetMacro() const { return maMacro; }

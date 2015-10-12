@@ -33,7 +33,7 @@ namespace {
 
 class TestThread: public osl::Thread, private boost::noncopyable {
 private:
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 };
 
 void TestThread::run() {

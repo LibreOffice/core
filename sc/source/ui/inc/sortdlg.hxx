@@ -46,7 +46,7 @@ class ScSortWarningDlg : public ModalDialog
 public:
     ScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
     virtual ~ScSortWarningDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     DECL_LINK_TYPED( BtnHdl, Button*, void );
 private:
     VclPtr<FixedText>       aFtText;

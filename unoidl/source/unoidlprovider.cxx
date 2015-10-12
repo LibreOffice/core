@@ -659,7 +659,7 @@ public:
 private:
     virtual ~UnoidlCursor() throw () {}
 
-    virtual rtl::Reference< Entity > getNext(OUString * name) SAL_OVERRIDE;
+    virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
     rtl::Reference< MappedFile > file_;
     rtl::Reference<UnoidlProvider> reference1_; // HACK to keep alive whatever
@@ -701,9 +701,9 @@ public:
 private:
     virtual ~UnoidlModuleEntity() throw () {}
 
-    virtual std::vector< OUString > getMemberNames() const SAL_OVERRIDE;
+    virtual std::vector< OUString > getMemberNames() const override;
 
-    virtual rtl::Reference< MapCursor > createCursor() const SAL_OVERRIDE {
+    virtual rtl::Reference< MapCursor > createCursor() const override {
         return new UnoidlCursor(
             file_, rtl::Reference<UnoidlProvider>(),
             const_cast<UnoidlModuleEntity *>(this), map_);

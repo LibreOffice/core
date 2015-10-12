@@ -62,9 +62,9 @@ private:
     static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext >& xCtx, OUString& docName );
 
 protected:
-    virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
-    virtual void            ExpandedHdl() SAL_OVERRIDE;
-    virtual bool            ExpandingHdl() SAL_OVERRIDE;
+    virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
+    virtual void            ExpandedHdl() override;
+    virtual bool            ExpandingHdl() override;
 public:
     void                    Init( const OUString& language );
     void                    RequestSubEntries(  SvTreeListEntry* pRootEntry,
@@ -72,7 +72,7 @@ public:
                                 css::uno::Reference< css::frame::XModel>& model  );
                             SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
@@ -100,7 +100,7 @@ private:
 public:
     CuiInputDialog(vcl::Window * pParent, InputDialogMode nMode);
     virtual ~CuiInputDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName(const OUString& rName)
@@ -177,9 +177,9 @@ public:
                     // to specify the language or provider
                     SvxScriptOrgDialog( vcl::Window* pParent, const OUString& language );
                     virtual ~SvxScriptOrgDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual short   Execute() override;
 
 };
 
@@ -197,7 +197,7 @@ public:
 
     virtual ~SvxScriptErrorDialog();
 
-    short           Execute() SAL_OVERRIDE;
+    short           Execute() override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX

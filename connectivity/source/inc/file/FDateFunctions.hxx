@@ -36,7 +36,7 @@ namespace connectivity
         class OOp_DayOfWeek : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** DAYOFMONTH(date)
@@ -48,7 +48,7 @@ namespace connectivity
         class OOp_DayOfMonth : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** DAYOFYEAR(date)
@@ -61,7 +61,7 @@ namespace connectivity
         class OOp_DayOfYear : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** MONTH(date)
@@ -73,7 +73,7 @@ namespace connectivity
         class OOp_Month : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** DAYNAME(date)
@@ -86,7 +86,7 @@ namespace connectivity
         class OOp_DayName : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** MONTHNAME(date)
@@ -99,7 +99,7 @@ namespace connectivity
         class OOp_MonthName : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** QUARTER(date)
@@ -112,7 +112,7 @@ namespace connectivity
         class OOp_Quarter : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** WEEK(date)
@@ -137,7 +137,7 @@ namespace connectivity
         class OOp_Week : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** YEAR(date)
@@ -149,7 +149,7 @@ namespace connectivity
         class OOp_Year : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** HOUR(time)
@@ -161,7 +161,7 @@ namespace connectivity
         class OOp_Hour : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** MINUTE(time)
@@ -174,7 +174,7 @@ namespace connectivity
         class OOp_Minute : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** SECOND(time)
@@ -186,7 +186,7 @@ namespace connectivity
         class OOp_Second : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** CURDATE()
@@ -199,7 +199,7 @@ namespace connectivity
         class OOp_CurDate : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** CURTIME()
@@ -212,7 +212,7 @@ namespace connectivity
         class OOp_CurTime : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** NOW()
@@ -224,7 +224,7 @@ namespace connectivity
         class OOp_Now : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
         };
     }
 }

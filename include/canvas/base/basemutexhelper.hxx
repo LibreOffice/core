@@ -56,7 +56,7 @@ namespace canvas
         mutable osl::Mutex m_aMutex;
 
     private:
-        virtual void SAL_CALL disposing() SAL_OVERRIDE
+        virtual void SAL_CALL disposing() override
         { disposeThis(); }
     };
 }

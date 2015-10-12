@@ -82,7 +82,7 @@ public:
     DockingWindow (vcl::Window* pParent);
     DockingWindow (Layout* pParent);
     virtual ~DockingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void ResizeIfDocking (Point const&, Size const&);
     void ResizeIfDocking (Size const&);
     Size GetDockingSize () const { return aDockingRect.GetSize(); }
@@ -92,11 +92,11 @@ public:
     void Hide ();
 
 protected:
-    virtual bool Docking( const Point& rPos, Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
-    virtual void     ToggleFloatingMode() SAL_OVERRIDE;
-    virtual bool PrepareToggleFloatingMode() SAL_OVERRIDE;
-    virtual void     StartDocking() SAL_OVERRIDE;
+    virtual bool Docking( const Point& rPos, Rectangle& rRect ) override;
+    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
+    virtual void     ToggleFloatingMode() override;
+    virtual bool PrepareToggleFloatingMode() override;
+    virtual void     StartDocking() override;
 
 private:
     // the position and the size of the floating window
@@ -121,11 +121,11 @@ private:
 class TabBar : public ::TabBar
 {
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 
-    virtual TabBarAllowRenamingReturnCode  AllowRenaming() SAL_OVERRIDE;
-    virtual void    EndRenaming() SAL_OVERRIDE;
+    virtual TabBarAllowRenamingReturnCode  AllowRenaming() override;
+    virtual void    EndRenaming() override;
 
 public:
     TabBar (vcl::Window* pParent);
@@ -169,7 +169,7 @@ protected:
 public:
     BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
     virtual         ~BaseWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            Init();
     virtual void    DoInit();
@@ -183,7 +183,7 @@ public:
     virtual void    ExecuteCommand (SfxRequest&);
     virtual void    ExecuteGlobal (SfxRequest&);
     virtual void    GetState (SfxItemSet&) = 0;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
     virtual void    StoreData();
     virtual void    UpdateData();

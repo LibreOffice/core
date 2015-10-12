@@ -57,8 +57,8 @@ private:
     bool m_bModal;
 public:
     TableValueSet(vcl::Window *pParent, WinBits nStyle);
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     void updateSettings();
     void setModal(bool bModal) { m_bModal = bModal; }
 };
@@ -129,7 +129,7 @@ public:
         , aImpl(this, rBase, true)
     {
     }
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 };
 
 void showTableDesignDialog( vcl::Window*, ViewShellBase& );

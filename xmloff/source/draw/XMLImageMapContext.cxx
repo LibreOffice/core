@@ -137,15 +137,15 @@ public:
 
     void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
-    void EndElement() SAL_OVERRIDE;
+    void EndElement() override;
 
     SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 
 protected:
 
@@ -333,11 +333,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue) SAL_OVERRIDE;
+        const OUString& rValue) override;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
 };
 
 
@@ -443,11 +443,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue) SAL_OVERRIDE;
+        const OUString& rValue) override;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
 };
 
 
@@ -541,11 +541,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue) SAL_OVERRIDE;
+        const OUString& rValue) override;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
 };
 
 TYPEINIT1(XMLImageMapCircleContext, XMLImageMapObjectContext);

@@ -186,19 +186,19 @@ protected:
     SAL_DLLPRIVATE void DoInitialLayout();
 public:
     virtual         ~SystemWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     virtual bool    Close();
     virtual void    TitleButtonClick( TitleButton nButton );
     virtual void    Pin();
     virtual void    Roll();
     virtual void    Resizing( Size& rSize );
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual Size    GetOptimalSize() const override;
+    virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
@@ -240,8 +240,8 @@ public:
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
 
-    virtual void     SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual OUString GetText() const SAL_OVERRIDE;
+    virtual void     SetText( const OUString& rStr ) override;
+    virtual OUString GetText() const override;
 
     /**
     Returns the screen number the window is on

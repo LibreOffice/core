@@ -33,14 +33,14 @@ namespace dbaui
     {
         bool m_bReadOnly;
     protected:
-        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
+        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) override;
 
     public:
         OColumnTreeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly(bool _bRo=true) { m_bReadOnly = _bRo; }
-        virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
+        virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
 
     private:
         using OMarkableTreeListBox::Select;
@@ -72,14 +72,14 @@ namespace dbaui
         DECL_LINK_TYPED( TableListRightSelectHdl, SvTreeListBox*, void );
 
     public:
-        virtual void            Reset ( ) SAL_OVERRIDE;
-        virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual bool            LeavePage() SAL_OVERRIDE;
-        virtual OUString        GetTitle() const SAL_OVERRIDE ;
+        virtual void            Reset ( ) override;
+        virtual void            ActivatePage() override;
+        virtual bool            LeavePage() override;
+        virtual OUString        GetTitle() const override ;
 
         OWizNameMatching(vcl::Window* pParent);
         virtual ~OWizNameMatching();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX

@@ -45,17 +45,17 @@ public:
 
     // ::com::sun::star::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL getNameByIndex(sal_Int16 i)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL getTypeByName(const OUString& aName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL getValueByIndex(sal_Int16 i)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL getValueByName(const OUString& aName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
 };
 

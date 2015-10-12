@@ -60,7 +60,7 @@ private:
 public:
     SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
     virtual ~SdSnapLineDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void GetAttr(SfxItemSet& rOutAttrs);
 

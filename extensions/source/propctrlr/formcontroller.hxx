@@ -81,23 +81,23 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet and friends
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue
-            )   throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+            )   throw (css::lang::IllegalArgumentException) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                 sal_Int32 nHandle, const css::uno::Any& rValue
-            ) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+            ) throw (css::uno::Exception, std::exception) override;
         virtual void SAL_CALL getFastPropertyValue(
                 css::uno::Any& rValue, sal_Int32 nHandle
-            ) const SAL_OVERRIDE;
+            ) const override;
     private:
         using FormController_PropertyBase1::getFastPropertyValue;
     };

@@ -46,41 +46,41 @@ public:
     WinSalInstance();
     virtual ~WinSalInstance();
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-    virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
-    virtual void            DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual void            DestroyFrame( SalFrame* pFrame ) override;
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) override;
+    virtual void            DestroyObject( SalObject* pObject ) override;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData ) SAL_OVERRIDE;
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
-    virtual void            DestroyPrinter( SalPrinter* pPrinter ) SAL_OVERRIDE;
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) SAL_OVERRIDE;
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
-    virtual OUString            GetDefaultPrinter() SAL_OVERRIDE;
-    virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
-    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
-    virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
-    virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
-    virtual comphelper::SolarMutex* GetYieldMutex() SAL_OVERRIDE;
-    virtual sal_uIntPtr         ReleaseYieldMutex() SAL_OVERRIDE;
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) SAL_OVERRIDE;
-    virtual bool                CheckYieldMutex() SAL_OVERRIDE;
+                                               ImplJobSetup* pSetupData ) override;
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
+    virtual void            DestroyPrinter( SalPrinter* pPrinter ) override;
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) override;
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) override;
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) override;
+    virtual OUString            GetDefaultPrinter() override;
+    virtual SalTimer*           CreateSalTimer() override;
+    virtual SalI18NImeStatus*   CreateI18NImeStatus() override;
+    virtual SalSystem*          CreateSalSystem() override;
+    virtual SalBitmap*          CreateSalBitmap() override;
+    virtual comphelper::SolarMutex* GetYieldMutex() override;
+    virtual sal_uIntPtr         ReleaseYieldMutex() override;
+    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) override;
+    virtual bool                CheckYieldMutex() override;
 
-    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
-    virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
-    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) SAL_OVERRIDE;
-    virtual void                DestroyMenu( SalMenu* ) SAL_OVERRIDE;
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData ) SAL_OVERRIDE;
-    virtual void                DestroyMenuItem( SalMenuItem* ) SAL_OVERRIDE;
-    virtual SalSession*         CreateSalSession() SAL_OVERRIDE;
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
-    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
+    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
+    virtual bool                AnyInput( VclInputFlags nType ) override;
+    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) override;
+    virtual void                DestroyMenu( SalMenu* ) override;
+    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData ) override;
+    virtual void                DestroyMenuItem( SalMenuItem* ) override;
+    virtual SalSession*         CreateSalSession() override;
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };

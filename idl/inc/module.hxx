@@ -49,19 +49,19 @@ class SvMetaModule : public SvMetaExtern
     SvGlobalName            aEndName;
     SvGlobalName            aNextName;
 protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
                         TYPEINFO_OVERRIDE();
 
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
+    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL  ) override;
 
                         SvMetaModule( bool bImported );
 
     bool                FillNextName( SvGlobalName * );
     bool                IsImported() const { return bImported; }
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     void                WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };

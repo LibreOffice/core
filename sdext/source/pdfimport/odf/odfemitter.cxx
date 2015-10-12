@@ -42,9 +42,9 @@ private:
 public:
     explicit OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput );
 
-    virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) SAL_OVERRIDE;
-    virtual void write( const OUString& rString ) SAL_OVERRIDE;
-    virtual void endTag( const char* pTag ) SAL_OVERRIDE;
+    virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) override;
+    virtual void write( const OUString& rString ) override;
+    virtual void endTag( const char* pTag ) override;
 };
 
 OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :

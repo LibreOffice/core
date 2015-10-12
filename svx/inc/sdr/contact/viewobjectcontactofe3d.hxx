@@ -48,7 +48,7 @@ namespace sdr
 
             // also override the 2d method to deliver a 2d object with embedd3d 3d and the 3d transformation which is able to
             // answer the get2DRange question accordingly
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfE3d(ObjectContact& rObjectContact, ViewContact& rViewContact);

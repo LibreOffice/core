@@ -102,7 +102,7 @@ class SeriesHeaderEdit : public Edit
 {
 public:
     explicit SeriesHeaderEdit( vcl::Window * pParent );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const { return m_nStartColumn;}

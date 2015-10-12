@@ -50,7 +50,7 @@ public:
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );
 
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) override;
 
     virtual ~XMLPersMixedContentTContext();
 };

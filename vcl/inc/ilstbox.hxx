@@ -240,14 +240,14 @@ private:
     vcl::QuickSelectionEngine maQuickSelectionEngine;
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
     void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bErase = false, bool bLayout = false);
@@ -259,15 +259,15 @@ protected:
     void            ImplShowFocusRect();
     void            ImplHideFocusRect();
 
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
-    virtual void  FillLayoutData() const SAL_OVERRIDE;
+    virtual void  FillLayoutData() const override;
 
                     ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~ImplListBoxWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     ImplEntryList*  GetEntryList() const { return mpEntryList; }
 
@@ -359,13 +359,13 @@ public:
     void EnableQuickSelection( const bool& b );
 
     using Control::ImplInitSettings;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 protected:
     // ISearchableStringList
-    virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual vcl::StringEntryIdentifier    NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
-    virtual void                            SelectEntry( vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
+    virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const override;
+    virtual vcl::StringEntryIdentifier    NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const override;
+    virtual void                            SelectEntry( vcl::StringEntryIdentifier _entry ) override;
 };
 
 class ImplListBox : public Control
@@ -386,11 +386,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() override;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) override;
 
     void                ImplResizeControls();
     void                ImplCheckScrollBars();
@@ -403,14 +403,14 @@ protected:
 public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~ImplListBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
     ImplListBoxWindow*      GetMainWindow()                 { return maLBWindow.get(); }
 
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual void    Resize() override;
+    virtual const Wallpaper& GetDisplayBackground() const override;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );
@@ -497,12 +497,12 @@ private:
     bool            mbAutoWidth;
 
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
                     ImplListBoxFloatingWindow( vcl::Window* pParent );
     virtual         ~ImplListBoxFloatingWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
     void            SetImplListBox( ImplListBox* pLB )  { mpImplLB = pLB; }
 
     void            SetPrefSize( const Size& rSz )      { maPrefSz = rSz; }
@@ -514,8 +514,8 @@ public:
     void            StartFloat( bool bStartTracking );
 
     virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
-    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
+                                     long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override
                         { FloatingWindow::SetPosSizePixel( rNewPos, rNewSize ); }
 
     void            SetDropDownLineCount( sal_uInt16 n ) { mnDDLineCount = n; }
@@ -523,7 +523,7 @@ public:
 
     sal_Int32       GetPopupModeStartSaveSelection() const { return mnPopupModeStartSaveSelection; }
 
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resize() override;
 };
 
 class ImplWin : public Control
@@ -544,17 +544,17 @@ private:
 
     void ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
 protected:
-    virtual void  FillLayoutData() const SAL_OVERRIDE;
+    virtual void  FillLayoutData() const override;
 
 public:
                     ImplWin( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     sal_Int32       GetItemPos() const { return mnItemPos; }
     void            SetItemPos( sal_Int32  n ) { mnItemPos = n; }
@@ -579,10 +579,10 @@ public:
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
-    virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    ShowFocus(const Rectangle& rRect) override;
 
     using Control::ImplInitSettings;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 };
 
@@ -594,7 +594,7 @@ private:
 public:
                     ImplBtn( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     void    MBDown();
 
     boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;

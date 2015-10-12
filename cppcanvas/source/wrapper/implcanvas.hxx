@@ -53,23 +53,23 @@ namespace cppcanvas
             explicit ImplCanvas( const css::uno::Reference< css::rendering::XCanvas >& rCanvas );
             virtual ~ImplCanvas();
 
-            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
-            virtual ::basegfx::B2DHomMatrix          getTransformation() const SAL_OVERRIDE;
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
+            virtual ::basegfx::B2DHomMatrix          getTransformation() const override;
 
-            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
-            virtual void                             setClip() SAL_OVERRIDE;
-            virtual ::basegfx::B2DPolyPolygon const* getClip() const SAL_OVERRIDE;
+            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
+            virtual void                             setClip() override;
+            virtual ::basegfx::B2DPolyPolygon const* getClip() const override;
 
-            virtual ColorSharedPtr                   createColor() const SAL_OVERRIDE;
+            virtual ColorSharedPtr                   createColor() const override;
 
-            virtual CanvasSharedPtr                  clone() const SAL_OVERRIDE;
+            virtual CanvasSharedPtr                  clone() const override;
 
-            virtual void                             clear() const SAL_OVERRIDE;
+            virtual void                             clear() const override;
 
             virtual css::uno::Reference<
-                css::rendering::XCanvas >            getUNOCanvas() const SAL_OVERRIDE;
+                css::rendering::XCanvas >            getUNOCanvas() const override;
 
-            virtual css::rendering::ViewState        getViewState() const SAL_OVERRIDE;
+            virtual css::rendering::ViewState        getViewState() const override;
 
             // take compiler-provided default copy constructor
             //ImplCanvas(const ImplCanvas&);

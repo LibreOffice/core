@@ -85,7 +85,7 @@ class TableProperties : public TextProperties
 {
 protected:
     // create a new itemset
-    SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+    SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
 public:
     // basic constructor
@@ -98,9 +98,9 @@ public:
     virtual ~TableProperties();
 
     // Clone() operator, normally just calls the local copy constructor
-    BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+    BaseProperties& Clone(SdrObject& rObj) const override;
 
-    virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) SAL_OVERRIDE;
+    virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) override;
 };
 
 TableProperties::TableProperties(SdrObject& rObj)
@@ -229,16 +229,16 @@ public:
     SdrTableObjImpl& operator=( const SdrTableObjImpl& rSource );
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     void update();
 
     void connectTableStyle();
     void disconnectTableStyle();
-    virtual bool isInUse() SAL_OVERRIDE;
+    virtual bool isInUse() override;
 private:
     static SdrTableObjImpl* lastLayoutTable;
     static Rectangle lastLayoutInputRectangle;

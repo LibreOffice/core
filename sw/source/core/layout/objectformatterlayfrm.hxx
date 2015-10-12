@@ -48,7 +48,7 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
 
     protected:
 
-        virtual SwFrm& GetAnchorFrm() SAL_OVERRIDE;
+        virtual SwFrm& GetAnchorFrm() override;
 
     public:
         virtual ~SwObjectFormatterLayFrm();
@@ -56,8 +56,8 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         // Not relevant for objects anchored at layout frame.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
-                                  const bool _bCheckForMovedFwd = false ) SAL_OVERRIDE;
-        virtual bool DoFormatObjs() SAL_OVERRIDE;
+                                  const bool _bCheckForMovedFwd = false ) override;
+        virtual bool DoFormatObjs() override;
 
         static SwObjectFormatterLayFrm* CreateObjFormatter(
                                                 SwLayoutFrm& _rAnchorLayFrm,

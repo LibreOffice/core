@@ -51,7 +51,7 @@ class ShowWindow
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, vcl::Window* pParent );
     virtual ~ShowWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool         SetEndMode();
     bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
@@ -68,20 +68,20 @@ public:
 
     void            RestartShow( sal_Int32 nPageIndexToRestart );
 
-    virtual void    Move() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Move() override;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
 
-    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    KeyInput(const KeyEvent& rKEvt) override;
+    virtual void    MouseMove(const MouseEvent& rMEvt) override;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     /// Override the sd::Window's CreateAccessible to create a different accessible object
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible() SAL_OVERRIDE;
+        CreateAccessible() override;
 
     void            TerminateShow();
     void            RestartShow();

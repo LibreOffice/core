@@ -82,7 +82,7 @@ public:
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
-    virtual bool        IsProtect() const SAL_OVERRIDE;
+    virtual bool        IsProtect() const override;
     const OUString&     GetURL()    const   { return sURL; }
     const SwTextINetFormat* GetINetAttr()       { return pINetAttr; }
 };
@@ -114,7 +114,7 @@ public:
 
     const SwFormatField* GetPostIt() const  { return pField; }
     SwRangeRedline* GetRedline() { return pRedline; }
-    virtual bool    IsProtect()     const SAL_OVERRIDE;
+    virtual bool    IsProtect()     const override;
     bool            IsPostIt()   const {return mbPostIt; }
 };
 

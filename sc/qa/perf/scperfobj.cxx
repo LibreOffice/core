@@ -49,8 +49,8 @@ public:
 
     ScPerfObj();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init(const OUString& aFileName);
 

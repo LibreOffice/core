@@ -113,7 +113,7 @@ namespace dbaui
                         const css::uno::Reference< css::container::XNameAccess>& _rxCols
                     );
         virtual ~DlgFilterCrit();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void            BuildWherePart();
 

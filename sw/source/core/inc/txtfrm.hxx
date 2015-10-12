@@ -196,15 +196,15 @@ class SwTextFrm: public SwContentFrm
     */
     void _CalcHeightOfLastLine( const bool _bUseFont = false );
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwTextFrm();
 
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
 
-    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) SAL_OVERRIDE;
+    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
 
     /**
      * This is public, as it needs to be called by some methods in order to save the Prepare
@@ -228,7 +228,7 @@ public:
      * Returns false if rPos > number of character is string
      */
     virtual bool GetCharRect( SwRect& rRect, const SwPosition& rPos,
-                                SwCrsrMoveState* pCMS = 0 ) const SAL_OVERRIDE;
+                                SwCrsrMoveState* pCMS = 0 ) const override;
 
     /// A slimmer version of GetCharRect for autopositioning Frames
     bool GetAutoPos( SwRect &, const SwPosition& ) const;
@@ -256,7 +256,7 @@ public:
     bool GetTopOfLine( SwTwips& _onTopOfLine,
                        const SwPosition& _rPos ) const;
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
     /**
      * In nOffset returns the offset of the char within the set
@@ -267,7 +267,7 @@ public:
      *          returns true
      */
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
+                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
 
     /**
      * Makes sure that the Frame is not switched (e.g. switched for a
@@ -279,21 +279,21 @@ public:
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect Paint();
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
-    virtual bool GetInfo( SfxPoolItem & ) const SAL_OVERRIDE;
+                        SwPrintData const*const pPrintData = NULL ) const override;
+    virtual bool GetInfo( SfxPoolItem & ) const override;
 
     /**
      * Layout oriented cursor travelling:
      * Left border, right border, previous Line, following Line,
      * same horizontal position
      */
-    virtual bool LeftMargin(SwPaM *) const SAL_OVERRIDE;
-    virtual bool RightMargin(SwPaM *, bool bAPI = false) const SAL_OVERRIDE;
+    virtual bool LeftMargin(SwPaM *) const override;
+    virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
     virtual bool UnitUp(SwPaM *, const SwTwips nOffset = 0,
-                            bool bSetInReadOnly = false ) const SAL_OVERRIDE;
+                            bool bSetInReadOnly = false ) const override;
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
-                            bool bSetInReadOnly = false ) const SAL_OVERRIDE;
+                            bool bSetInReadOnly = false ) const override;
     bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
     bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
@@ -338,14 +338,14 @@ public:
      * potentially destroyed and replaced by Prepare
      */
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
+                          const void *pVoid = 0, bool bNotify = true ) override;
 
     /**
      * nMaxHeight is the required height
      * bSplit indicates, that the paragraph has to be split
      * bTst indicates, that we are currently doing a test formatting
      */
-    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst ) SAL_OVERRIDE;
+    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst ) override;
 
     /**
      * The WouldFit equivalent for temporarily rewired TextFrames
@@ -433,8 +433,8 @@ public:
      */
     SwTwips GetFootnoteLine( const SwTextFootnote *pFootnote ) const;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
-    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void CheckDirection( bool bVert ) override;
 
     /// Returns the sum of line height in pLine
     sal_uInt16 GetParHeight() const;
@@ -629,7 +629,7 @@ public:
 
     static void repaintTextFrames( const SwTextNode& rNode );
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
 //use this to protect a SwTextFrm for a given scope from getting merged with

@@ -82,7 +82,7 @@ public:
 private:
     virtual ~Cursor() throw () {}
 
-    virtual rtl::Reference< Entity > getNext(OUString * name) SAL_OVERRIDE;
+    virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
     rtl::Reference< Manager > manager_;
     RegistryKey ucr_;
@@ -137,9 +137,9 @@ public:
 private:
     virtual ~Module() throw () {}
 
-    virtual std::vector< OUString > getMemberNames() const SAL_OVERRIDE;
+    virtual std::vector< OUString > getMemberNames() const override;
 
-    virtual rtl::Reference< MapCursor > createCursor() const SAL_OVERRIDE
+    virtual rtl::Reference< MapCursor > createCursor() const override
     { return new Cursor(manager_, ucr_, key_); }
 
     rtl::Reference< Manager > manager_;

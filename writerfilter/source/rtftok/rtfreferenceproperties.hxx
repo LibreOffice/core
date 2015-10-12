@@ -24,7 +24,7 @@ public:
     RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
     RTFReferenceProperties(RTFSprms rAttributes);
     virtual ~RTFReferenceProperties();
-    virtual void resolve(Properties& rHandler) SAL_OVERRIDE;
+    virtual void resolve(Properties& rHandler) override;
     RTFSprms& getAttributes()
     {
         return m_aAttributes;

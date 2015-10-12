@@ -43,19 +43,19 @@ typedef ::cppu::WeakImplHelper<
             virtual ~MenuBarFactory();
 
             virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                throw (css::uno::RuntimeException, std::exception) override
             {
                 return OUString("com.sun.star.comp.framework.MenuBarFactory");
             }
 
             virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                throw (css::uno::RuntimeException, std::exception) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
             virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                throw (css::uno::RuntimeException, std::exception) override
             {
                 css::uno::Sequence< OUString > aSeq(1);
                 aSeq[0] = "com.sun.star.ui.UIElementFactory";
@@ -63,7 +63,7 @@ typedef ::cppu::WeakImplHelper<
             }
 
             // XUIElementFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
             static void CreateUIElement(const OUString& ResourceURL
                         ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args

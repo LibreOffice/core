@@ -37,7 +37,7 @@ private:
     bool                bNegativeEnabled;
 
 protected:
-    void            Modify() SAL_OVERRIDE;
+    void            Modify() override;
 
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);

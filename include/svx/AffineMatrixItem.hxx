@@ -35,13 +35,13 @@ public:
     AffineMatrixItem(const AffineMatrixItem&);
     virtual ~AffineMatrixItem();
 
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-    virtual SvStream& Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem* Create( SvStream& rIn, sal_uInt16 nVer ) const override;
+    virtual SvStream& Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif // INCLUDED_SVX_AFFINEMATRIXITEM_HXX

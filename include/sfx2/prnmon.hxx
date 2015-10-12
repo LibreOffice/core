@@ -45,10 +45,10 @@ public:
                                                    SfxViewShell *pViewShell,
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
-    virtual short           Execute() SAL_OVERRIDE;
-    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual short           Execute() override;
+    virtual bool            Notify( NotifyEvent& rNEvt ) override;
 
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    DisableHelp();

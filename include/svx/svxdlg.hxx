@@ -406,7 +406,7 @@ public:
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false) = 0;
-    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) SAL_OVERRIDE = 0;
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) override = 0;
 
     virtual DialogGetRanges             GetDialogGetRangesFunc() = 0;
 
@@ -415,10 +415,10 @@ public:
             vcl::Window* pParent,
             bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
-        ) SAL_OVERRIDE = 0;
+        ) override = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
-            vcl::Window* pParent, const css::uno::Any& rException) SAL_OVERRIDE = 0;
+            vcl::Window* pParent, const css::uno::Any& rException) override = 0;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 vcl::Window* _pParent,

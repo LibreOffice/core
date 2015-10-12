@@ -38,7 +38,7 @@ namespace sdr
 
             // This method is responsible for creating the graphical visualisation data derived ONLY from
             // the model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
         public:
             // basic constructor, used from SdrObject.

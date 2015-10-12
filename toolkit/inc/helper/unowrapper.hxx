@@ -42,24 +42,24 @@ private:
 public:
     UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
 
-    virtual void        Destroy() SAL_OVERRIDE;
+    virtual void        Destroy() override;
 
     // Toolkit
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit() override;
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
-    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) override;
+    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) SAL_OVERRIDE;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) override;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) override;
 
-    void                WindowDestroyed( vcl::Window* pWindow ) SAL_OVERRIDE;
+    void                WindowDestroyed( vcl::Window* pWindow ) override;
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        CreateAccessible( Menu* pMenu, bool bIsMenuBar ) SAL_OVERRIDE;
+                        CreateAccessible( Menu* pMenu, bool bIsMenuBar ) override;
 
 private:
     virtual ~UnoWrapper();

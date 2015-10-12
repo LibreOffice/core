@@ -63,7 +63,7 @@ public:
     */
     void Hide();
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     /** This returns the content window when the child window is already
         visible.  Otherwise <NULL/> is returned.  In that case a later call
@@ -72,14 +72,14 @@ public:
         Note that GetWindow() may return different Window pointers when
         Hide() is called in between.
     */
-    virtual vcl::Window* GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetWindow() override;
 
     /** The local getWindow() first calls GetWindow() to provide a valid
         window pointer before forwarding the call to the base class.
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>
         SAL_CALL getWindow()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -88,7 +88,7 @@ public:
 
     virtual void SAL_CALL disposing(
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;

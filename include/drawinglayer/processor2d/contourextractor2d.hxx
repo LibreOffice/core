@@ -47,7 +47,7 @@ namespace drawinglayer
             bool                                mbExtractFillOnly : 1;
 
             /// tooling methods
-            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) SAL_OVERRIDE;
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
             explicit ContourExtractor2D(

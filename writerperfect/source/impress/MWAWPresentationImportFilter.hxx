@@ -28,16 +28,16 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
-    virtual void doRegisterHandlers(OdpGenerator &rGenerator) SAL_OVERRIDE;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &) override;
+    virtual void doRegisterHandlers(OdpGenerator &rGenerator) override;
 };
 
 OUString MWAWPresentationImportFilter_getImplementationName()

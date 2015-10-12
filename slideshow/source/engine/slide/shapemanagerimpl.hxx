@@ -87,7 +87,7 @@ public:
     // Disposable interface
 
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
 
@@ -95,32 +95,32 @@ private:
 
 
     virtual bool handleMousePressed(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
+        ::com::sun::star::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseReleased(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
+        ::com::sun::star::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseDragged(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
+        ::com::sun::star::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseMoved(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
+        ::com::sun::star::awt::MouseEvent const& evt ) override;
 
 
     // ViewUpdate interface
 
 
-    virtual bool update() SAL_OVERRIDE;
-    virtual bool needsUpdate() const SAL_OVERRIDE;
+    virtual bool update() override;
+    virtual bool needsUpdate() const override;
 
 
     // ShapeManager interface
 
 
-    virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape ) SAL_OVERRIDE;
-    virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) SAL_OVERRIDE;
-    virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) SAL_OVERRIDE;
+    virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
+    virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
+    virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
     virtual ShapeSharedPtr lookupShape(
         ::com::sun::star::uno::Reference<
-           ::com::sun::star::drawing::XShape > const & xShape ) const SAL_OVERRIDE;
-    virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) SAL_OVERRIDE;
+           ::com::sun::star::drawing::XShape > const & xShape ) const override;
+    virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) override;
 
 
     // SubsettableShapeManager interface
@@ -128,17 +128,17 @@ private:
 
     virtual boost::shared_ptr<AttributableShape> getSubsetShape(
         const boost::shared_ptr<AttributableShape>& rOrigShape,
-        const DocTreeNode&                          rTreeNode ) SAL_OVERRIDE;
+        const DocTreeNode&                          rTreeNode ) override;
     virtual void revokeSubset(
         const boost::shared_ptr<AttributableShape>& rOrigShape,
-        const boost::shared_ptr<AttributableShape>& rSubsetShape ) SAL_OVERRIDE;
+        const boost::shared_ptr<AttributableShape>& rSubsetShape ) override;
 
     virtual void addIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) SAL_OVERRIDE;
+        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
     virtual void removeIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) SAL_OVERRIDE;
-    virtual bool notifyIntrinsicAnimationsEnabled() SAL_OVERRIDE;
-    virtual bool notifyIntrinsicAnimationsDisabled() SAL_OVERRIDE;
+        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
+    virtual bool notifyIntrinsicAnimationsEnabled() override;
+    virtual bool notifyIntrinsicAnimationsDisabled() override;
 
 
     // ShapeListenerEventHandler
@@ -147,12 +147,12 @@ private:
     virtual bool listenerAdded( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::presentation::XShapeEventListener>& xListener,
                                 const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::drawing::XShape>&                   xShape ) SAL_OVERRIDE;
+                                   ::com::sun::star::drawing::XShape>&                   xShape ) override;
 
     virtual bool listenerRemoved( const ::com::sun::star::uno::Reference<
                                      ::com::sun::star::presentation::XShapeEventListener>& xListener,
                                   const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape>&                   xShape ) SAL_OVERRIDE;
+                                     ::com::sun::star::drawing::XShape>&                   xShape ) override;
 
     // ShapeCursorEventHandler interface
 

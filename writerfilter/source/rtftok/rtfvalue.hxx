@@ -42,13 +42,13 @@ public:
     RTFValue(const RTFShape& aShape);
     virtual ~RTFValue();
     void setString(const OUString& sValue);
-    virtual int getInt() const SAL_OVERRIDE;
-    virtual OUString getString() const SAL_OVERRIDE;
-    virtual css::uno::Any getAny() const SAL_OVERRIDE;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual int getInt() const override;
+    virtual OUString getString() const override;
+    virtual css::uno::Any getAny() const override;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string toString() const SAL_OVERRIDE;
+    virtual std::string toString() const override;
 #endif
     RTFValue* Clone();
     RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);

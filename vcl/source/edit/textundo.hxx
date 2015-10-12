@@ -44,9 +44,9 @@ public:
     virtual ~TextUndoManager();
 
     using SfxUndoManager::Undo;
-    virtual bool Undo() SAL_OVERRIDE;
+    virtual bool Undo() override;
     using SfxUndoManager::Redo;
-    virtual bool Redo() SAL_OVERRIDE;
+    virtual bool Redo() override;
 
 };
 
@@ -70,10 +70,10 @@ public:
 
     TextEngine*         GetTextEngine() const   { return mpTextEngine; }
 
-    virtual void        Undo() SAL_OVERRIDE      = 0;
-    virtual void        Redo() SAL_OVERRIDE      = 0;
+    virtual void        Undo() override      = 0;
+    virtual void        Redo() override      = 0;
 
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual OUString GetComment() const override;
 };
 
 #endif // INCLUDED_VCL_SOURCE_EDIT_TEXTUNDO_HXX

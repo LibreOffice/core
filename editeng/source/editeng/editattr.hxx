@@ -154,7 +154,7 @@ class EditCharAttribFont: public EditCharAttrib
 public:
     EditCharAttribFont( const SvxFontItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -165,7 +165,7 @@ class EditCharAttribWeight : public EditCharAttrib
 public:
     EditCharAttribWeight( const SvxWeightItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 // class EditCharAttribItalic
@@ -175,7 +175,7 @@ class EditCharAttribItalic : public EditCharAttrib
 public:
     EditCharAttribItalic( const SvxPostureItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -186,7 +186,7 @@ class EditCharAttribShadow : public EditCharAttrib
 public:
     EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -197,7 +197,7 @@ class EditCharAttribEscapement : public EditCharAttrib
 public:
     EditCharAttribEscapement( const SvxEscapementItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -208,7 +208,7 @@ class EditCharAttribOutline : public EditCharAttrib
 public:
     EditCharAttribOutline( const SvxContourItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -219,7 +219,7 @@ class EditCharAttribStrikeout : public EditCharAttrib
 public:
     EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -230,7 +230,7 @@ class EditCharAttribCaseMap : public EditCharAttrib
 public:
     EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -241,7 +241,7 @@ class EditCharAttribUnderline : public EditCharAttrib
 public:
     EditCharAttribUnderline( const SvxUnderlineItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -252,7 +252,7 @@ class EditCharAttribOverline : public EditCharAttrib
 public:
     EditCharAttribOverline( const SvxOverlineItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -263,7 +263,7 @@ class EditCharAttribEmphasisMark : public EditCharAttrib
 public:
     EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -274,7 +274,7 @@ class EditCharAttribRelief : public EditCharAttrib
 public:
     EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -285,7 +285,7 @@ class EditCharAttribFontHeight : public EditCharAttrib
 public:
     EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -296,7 +296,7 @@ class EditCharAttribFontWidth : public EditCharAttrib
 public:
     EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -307,7 +307,7 @@ class EditCharAttribColor : public EditCharAttrib
 public:
     EditCharAttribColor( const SvxColorItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 // class EditCharAttribBackgroundColor
@@ -318,7 +318,7 @@ public:
     EditCharAttribBackgroundColor(const SvxBackgroundColorItem& rAttr,
                                   sal_uInt16 nStart,
                                   sal_uInt16 nEnd );
-    virtual void    SetFont(SvxFont& rFont, OutputDevice* pOutDev) SAL_OVERRIDE;
+    virtual void    SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
 };
 
 
@@ -330,7 +330,7 @@ class EditCharAttribLanguage : public EditCharAttrib
 public:
     EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -341,7 +341,7 @@ class EditCharAttribTab : public EditCharAttrib
 public:
     EditCharAttribTab( const SfxVoidItem& rAttr, sal_uInt16 nPos );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -352,7 +352,7 @@ class EditCharAttribLineBreak : public EditCharAttrib
 public:
     EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_uInt16 nPos );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -375,7 +375,7 @@ public:
     bool operator != ( const EditCharAttribField& rAttr ) const
                                     { return !(operator == ( rAttr ) ); }
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
     Color*&         GetTextColor()           { return pTxtColor; }
     Color*&         GetFieldColor()           { return pFldColor; }
 
@@ -393,7 +393,7 @@ class EditCharAttribPairKerning : public EditCharAttrib
 public:
     EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -404,7 +404,7 @@ class EditCharAttribKerning : public EditCharAttrib
 public:
     EditCharAttribKerning( const SvxKerningItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 
@@ -415,7 +415,7 @@ class EditCharAttribWordLineMode: public EditCharAttrib
 public:
     EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
 // class EditCharAttribGrabBag

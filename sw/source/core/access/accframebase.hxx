@@ -36,29 +36,29 @@ protected:
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
     SwFlyFrm* getFlyFrm() const;
     bool GetSelectedState( );
     SwPaM* GetCrsr();
 
-    virtual void _InvalidateCursorPos() SAL_OVERRIDE;
-    virtual void _InvalidateFocus() SAL_OVERRIDE;
+    virtual void _InvalidateCursorPos() override;
+    virtual void _InvalidateFocus() override;
 
     virtual ~SwAccessibleFrameBase();
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwAccessibleFrameBase( SwAccessibleMap* pInitMap,
                            sal_Int16 nInitRole,
                            const SwFlyFrm *pFlyFrm );
 
-    virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
+    virtual bool HasCursor() override;   // required by map to remember that object
 
     static sal_uInt8 GetNodeType( const SwFlyFrm *pFlyFrm );
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( bool bRecursive = false ) SAL_OVERRIDE;
-    virtual bool SetSelectedState( bool bSeleted ) SAL_OVERRIDE;
+    virtual void Dispose( bool bRecursive = false ) override;
+    virtual bool SetSelectedState( bool bSeleted ) override;
 };
 
 #endif

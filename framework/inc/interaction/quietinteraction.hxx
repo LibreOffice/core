@@ -72,7 +72,7 @@ class QuietInteraction : public  ::cppu::WeakImplHelper<
 
             @threadsafe yes
         */
-        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // c++ interface
     public:

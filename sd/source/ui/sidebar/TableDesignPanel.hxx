@@ -33,12 +33,12 @@ public:
     virtual ~TableDesignPanel();
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 protected:
     virtual vcl::Window* CreateWrappedControl (
         vcl::Window* pParentWindow,
-        ViewShellBase& rViewShellBase) SAL_OVERRIDE;
+        ViewShellBase& rViewShellBase) override;
 };
 
 } } // end of namespace sd::sidebar

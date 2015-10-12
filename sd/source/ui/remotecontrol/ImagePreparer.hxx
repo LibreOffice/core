@@ -31,7 +31,7 @@ private:
     css::uno::Reference<css::presentation::XSlideShowController> xController;
     Transmitter *pTransmitter;
 
-    virtual void Invoke() SAL_OVERRIDE;
+    virtual void Invoke() override;
 
     void sendPreview( sal_uInt32 aSlideNumber );
     css::uno::Sequence<sal_Int8> preparePreview( sal_uInt32 aSlideNumber,

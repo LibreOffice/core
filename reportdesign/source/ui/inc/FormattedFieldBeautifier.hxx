@@ -48,9 +48,9 @@ namespace rptui
         FormattedFieldBeautifier(const OReportController & _aObserver);
         virtual ~FormattedFieldBeautifier();
 
-        void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) SAL_OVERRIDE;
-        void    notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
-        void    handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
+        void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) override;
+        void    notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) override;
+        void    handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) override;
     };
 
 } // namespace rptui

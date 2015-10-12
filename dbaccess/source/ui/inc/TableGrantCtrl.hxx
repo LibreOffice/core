@@ -61,7 +61,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 public:
     OTableGrantControl( vcl::Window* pParent, WinBits nBits);
     virtual ~OTableGrantControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void UpdateTables();
     void setUserName(const OUString& _sUserName);
     void setGrantUser(const css::uno::Reference< css::sdbcx::XAuthorizable>& _xGrantUser);
@@ -69,7 +69,7 @@ public:
     void setTablesSupplier(const css::uno::Reference< css::sdbcx::XTablesSupplier >& _xTablesSup);
     void setComponentContext(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
-    virtual void Init() SAL_OVERRIDE;
+    virtual void Init() override;
 
     // IAccessibleTableProvider
     /** Creates the accessible object of a data table cell.
@@ -78,22 +78,22 @@ public:
         @return  The XAccessible interface of the specified cell. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible >
-    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
+    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
 protected:
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
-    virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rNEvt ) override;
 
-    virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
-    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
-    virtual bool SaveModified() SAL_OVERRIDE;
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
+    virtual bool IsTabAllowed(bool bForward) const override;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const override;
+    virtual bool SeekRow( long nRow ) override;
+    virtual bool SaveModified() override;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
 
-    virtual void CellModified() SAL_OVERRIDE;
+    virtual void CellModified() override;
 
 private:
     DECL_LINK_TYPED( AsynchActivate, void*, void );

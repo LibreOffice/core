@@ -1254,7 +1254,7 @@ public:
 
     DurationDialog_Impl( vcl::Window* pParent, const util::Duration& rDuration );
     virtual ~DurationDialog_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     util::Duration  GetDuration() const;
 };
 

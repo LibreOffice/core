@@ -49,13 +49,13 @@ namespace dbaui
         IClipboardTest* getActiveChild() const;
 
     protected:
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
     public:
         explicit OTableFieldDescWin( vcl::Window* pParent);
         virtual ~OTableFieldDescWin();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void Init();
 
@@ -64,9 +64,9 @@ namespace dbaui
         void SetReadOnly( bool bReadOnly );
 
         // Window overrides
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
 
         void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
@@ -78,13 +78,13 @@ namespace dbaui
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
-        virtual bool isCutAllowed() SAL_OVERRIDE;
-        virtual bool isCopyAllowed() SAL_OVERRIDE;
-        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool isCutAllowed() override;
+        virtual bool isCopyAllowed() override;
+        virtual bool isPasteAllowed() override;
 
-        virtual void copy() SAL_OVERRIDE;
-        virtual void cut() SAL_OVERRIDE;
-        virtual void paste() SAL_OVERRIDE;
+        virtual void copy() override;
+        virtual void cut() override;
+        virtual void paste() override;
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
         inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }

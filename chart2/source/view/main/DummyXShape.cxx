@@ -85,13 +85,13 @@ public:
         mrProperties(rProps) {}
 
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& rName )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     virtual beans::Property SAL_CALL getPropertyByName( const OUString& rName )
-        throw(uno::RuntimeException, beans::UnknownPropertyException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, beans::UnknownPropertyException, std::exception) override;
 
     virtual uno::Sequence< beans::Property > SAL_CALL getProperties()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
 private:
     const std::map<OUString, uno::Any>& mrProperties;

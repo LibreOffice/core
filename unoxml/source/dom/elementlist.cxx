@@ -49,7 +49,7 @@ namespace
         }
 
         virtual void SAL_CALL handleEvent(const css::uno::Reference<css::xml::dom::events::XEvent>& rEvent)
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw(css::uno::RuntimeException, std::exception) override
         {
             css::uno::Reference<css::xml::dom::events::XEventListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);

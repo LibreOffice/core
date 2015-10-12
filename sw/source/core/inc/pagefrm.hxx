@@ -102,13 +102,13 @@ class SwPageFrm: public SwFootnoteBossFrm
                                      bool bPaintRightShadow,
                                      bool bRightSidebar );
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwPageFrm();
 
 protected:
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
@@ -165,20 +165,20 @@ public:
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrameFormat* pFormat );
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
+                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
     /// Get info from Client
-    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& ) const override;
 
-    virtual void Cut() SAL_OVERRIDE;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
-    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
+    virtual void Cut() override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     bool HasGrid() const { return bHasGrid; }
 
     void PaintDecorators( ) const;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
-    virtual void PaintBreak() const SAL_OVERRIDE;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
+    virtual void PaintBreak() const override;
 
     /// Paint line number etc.
     void RefreshExtraData( const SwRect & ) const;
@@ -316,7 +316,7 @@ public:
     */
     sw::sidebarwindows::SidebarPosition SidebarPosition() const;
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
     const SwRect PrtWithoutHeaderAndFooter() const;
 

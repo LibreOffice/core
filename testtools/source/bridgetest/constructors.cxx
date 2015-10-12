@@ -61,7 +61,7 @@ private:
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, std::exception) override;
 };
 
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
@@ -208,17 +208,17 @@ private:
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, std::exception) override;
 
     //XMultiBase1
     virtual double SAL_CALL getatt1()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setatt1( double _att1 )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL fn12( const OUString& arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 
     double m_attr1;

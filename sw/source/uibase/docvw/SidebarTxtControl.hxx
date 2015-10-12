@@ -39,16 +39,16 @@ class SidebarTextControl : public Control
         SwPostItMgr& mrPostItMgr;
 
     protected:
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-        virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
-        virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        virtual void    LoseFocus() SAL_OVERRIDE;
-        virtual void    RequestHelp(const HelpEvent &rEvt) SAL_OVERRIDE;
-        virtual OUString GetSurroundingText() const SAL_OVERRIDE;
-        virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
+        virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+        virtual void    Command( const CommandEvent& rCEvt ) override;
+        virtual void    LoseFocus() override;
+        virtual void    RequestHelp(const HelpEvent &rEvt) override;
+        virtual OUString GetSurroundingText() const override;
+        virtual Selection GetSurroundingTextSelection() const override;
 
         DECL_LINK_TYPED( Select, Menu*, bool );
 
@@ -58,17 +58,17 @@ class SidebarTextControl : public Control
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );
         virtual ~SidebarTextControl();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
 
         OutlinerView* GetTextView() const;
 
         DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
-        virtual void Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) SAL_OVERRIDE;
+        virtual void Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
 };
 
 } } // end of namespace sw::sidebarwindows

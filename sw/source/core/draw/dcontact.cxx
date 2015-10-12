@@ -1998,7 +1998,7 @@ namespace sdr
              *
              * This method will not handle included hierarchies and not check geometric visibility.
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             VOCOfDrawVirtObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -2017,7 +2017,7 @@ namespace sdr
              * Always needs to return something. Default is to create a standard ViewObjectContact
              * containing the given ObjectContact and *this.
              */
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
         public:
             /// basic constructor, used from SdrObject.

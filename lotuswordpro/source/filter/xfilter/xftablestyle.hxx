@@ -85,9 +85,9 @@ public:
 
     void    SetBackImage(XFBGImage *pImage);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
 private:
     double  m_fWidth;

@@ -86,11 +86,11 @@ public:
 
     rtl::Reference<XFFont> GetFont(){ return m_pFont; }
 
-    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
+    virtual enumXFStyle GetStyleFamily() override;
 
-    virtual bool        Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool        Equal(IXFStyle *pStyle) override;
 
-    virtual void        ToXml(IXFStream *strm) SAL_OVERRIDE;
+    virtual void        ToXml(IXFStream *strm) override;
 
 private:
     rtl::Reference<XFFont> m_pFont;

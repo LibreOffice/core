@@ -48,17 +48,17 @@ public:
     virtual ~ScVbaButtonCharacters();
 
     // XCharacters attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCaption( const OUString& rCaption ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setText( const OUString& rText ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setCaption( const OUString& rCaption ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setText( const OUString& rText ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XCharacters methods
-    virtual void SAL_CALL Insert( const OUString& rString ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Insert( const OUString& rString ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE
@@ -87,20 +87,20 @@ public:
         const css::uno::Reference< css::drawing::XShape >& rxShape ) throw (css::uno::RuntimeException);
 
     // XSheetObject attributes
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLeft( double fLeft ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setTop( double fTop ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setWidth( double fWidth ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHeight( double fHeight ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getPlacement() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPlacement( sal_Int32 nPlacement ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getPrintObject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLeft( double fLeft ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTop( double fTop ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setWidth( double fWidth ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHeight( double fHeight ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getPlacement() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPlacement( sal_Int32 nPlacement ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getPrintObject() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) throw (css::uno::RuntimeException, std::exception) override;
 
     /** Sets default properties after a new object has been created. */
     void setDefaultProperties( sal_Int32 nIndex ) throw (css::uno::RuntimeException);
@@ -142,16 +142,16 @@ public:
         ListenerType eListenerType ) throw (css::uno::RuntimeException);
 
     // XSheetObject attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getOnAction() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setOnAction( const OUString& rMacroName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getPrintObject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getOnAction() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setOnAction( const OUString& rMacroName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getPrintObject() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XControlObject attributes
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     sal_Int32 getModelIndexInForm() const throw (css::uno::RuntimeException);
@@ -176,27 +176,27 @@ public:
         const css::uno::Reference< css::drawing::XControlShape >& rxControlShape ) throw (css::uno::RuntimeException);
 
     // XButton attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCaption( const OUString& rCaption ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getHorizontalAlignment() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHorizontalAlignment( sal_Int32 nAlign ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getVerticalAlignment() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVerticalAlignment( sal_Int32 nAlign ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getOrientation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setOrientation( sal_Int32 nOrientation ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setCaption( const OUString& rCaption ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getHorizontalAlignment() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHorizontalAlignment( sal_Int32 nAlign ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getVerticalAlignment() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVerticalAlignment( sal_Int32 nAlign ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getOrientation() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setOrientation( sal_Int32 nOrientation ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XButton methods
     css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
-        const css::uno::Any& rStart, const css::uno::Any& rLength ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Any& rStart, const css::uno::Any& rLength ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE
 
 protected:
-    virtual OUString implGetBaseName() const SAL_OVERRIDE;
-    virtual void implSetDefaultProperties() throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString implGetBaseName() const override;
+    virtual void implSetDefaultProperties() throw (css::uno::RuntimeException) override;
 };
 
 #endif

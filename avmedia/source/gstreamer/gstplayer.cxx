@@ -87,7 +87,7 @@ public:
     MissingPluginInstallerThread(): Thread("MissingPluginInstaller") {}
 
 private:
-    void execute() SAL_OVERRIDE;
+    void execute() override;
 };
 
 class MissingPluginInstaller {

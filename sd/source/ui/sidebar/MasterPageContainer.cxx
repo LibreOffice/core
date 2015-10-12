@@ -91,7 +91,7 @@ public:
     bool HasToken (Token aToken) const;
     const SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken) const;
     SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken);
-    virtual Token PutMasterPage (const SharedMasterPageDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual Token PutMasterPage (const SharedMasterPageDescriptor& rDescriptor) override;
     void InvalidatePreview (Token aToken);
     Image GetPreviewForToken (
         Token aToken,
@@ -111,14 +111,14 @@ public:
         const SharedMasterPageDescriptor& rpDescriptor,
         bool bForcePageObject,
         bool bForcePreview,
-        bool bSendEvents) SAL_OVERRIDE;
+        bool bSendEvents) override;
 
     void ReleaseDescriptor (Token aToken);
 
     /** Called by the MasterPageContainerFiller to notify that all master
         pages from template documents have been added.
     */
-    virtual void FillingDone() SAL_OVERRIDE;
+    virtual void FillingDone() override;
 
 private:
     Implementation();

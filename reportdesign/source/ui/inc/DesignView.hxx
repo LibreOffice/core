@@ -86,23 +86,23 @@ namespace rptui
         void operator =(ODesignView&) = delete;
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
         // return the Rectangle where I can paint myself
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     public:
         ODesignView(vcl::Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
 
-        virtual void initialize() SAL_OVERRIDE;
+        virtual void initialize() override;
 
         inline OReportController&   getController() const { return m_rReportController; }
 
@@ -208,9 +208,9 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
-        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
         OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
-        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
+        virtual void markSection(const sal_uInt16 _nPos) override;
 
         /** fills the positions of all collapsed sections.
         *

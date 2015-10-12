@@ -242,7 +242,7 @@ class MappingDialog_Impl : public ModalDialog
 public:
     MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
     virtual ~MappingDialog_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    SetModified() {bModified = true;}
 
@@ -477,7 +477,7 @@ class DBChangeDialog_Impl : public ModalDialog
 public:
     DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
     virtual ~DBChangeDialog_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString     GetCurrentURL()const;
 };

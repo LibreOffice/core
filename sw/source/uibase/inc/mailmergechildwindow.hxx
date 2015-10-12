@@ -31,9 +31,9 @@ class SwMailMergeChildWin : public SfxFloatingWindow
 public:
     SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
     virtual ~SwMailMergeChildWin();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
+    virtual void FillInfo(SfxChildWinInfo&) const override;
 };
 
 class SwMailMergeChildWindow : public SfxChildWindow

@@ -38,7 +38,7 @@ namespace sfx2
         );
 
         virtual ~TitledDockingWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /** sets a title to be displayed in the docking window
         */
@@ -82,19 +82,19 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea) SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
-        virtual void StateChanged( StateChangedType i_nType ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) SAL_OVERRIDE;
-        virtual void SetText( const OUString& i_rText ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea) override;
+        virtual void Resize() override;
+        virtual void StateChanged( StateChangedType i_nType ) override;
+        virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) override;
+        virtual void SetText( const OUString& i_rText ) override;
 
         // DockingWindow overridables
-        void EndDocking(const Rectangle& rRect, bool bFloatMode) SAL_OVERRIDE;
+        void EndDocking(const Rectangle& rRect, bool bFloatMode) override;
 
         // own overridables
         virtual void onLayoutDone();
 
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     protected:
         /** internal version of ResetToolBox
         */

@@ -133,7 +133,7 @@ public:
         StartListening(rFrame);
     }
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     bool                IsValid() const {return bValid;}
 };

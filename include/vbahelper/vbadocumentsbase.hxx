@@ -43,11 +43,11 @@ public:
     virtual ~VbaDocumentsBase() {}
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE = 0;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE = 0;
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override = 0;
 
     // VbaDocumentsBase_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) SAL_OVERRIDE = 0;
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override = 0;
 
 protected:
     css::uno::Any createDocument() throw (css::uno::RuntimeException, std::exception);

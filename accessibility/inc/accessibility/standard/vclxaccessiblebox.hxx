@@ -63,7 +63,7 @@ public:
     // XAccessible
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-            getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleContext
 
@@ -72,69 +72,69 @@ public:
         boxes.
     */
     sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     /** For drop down list boxes the text field is a not editable
         <type>VCLXAccessibleTextField</type>, for combo boxes it is an
         editable <type>VLCAccessibleEdit</type>.
     */
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
     /** The role is always <const
         scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
     */
     sal_Int16 SAL_CALL getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
     /** The returned string is associated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
     /** No keybinding returned so far.
     */
     virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL
             getAccessibleActionKeyBinding( sal_Int32 nIndex )
                 throw (css::lang::IndexOutOfBoundsException,
-                       css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                       css::uno::RuntimeException, std::exception) override;
 
     // XComponent
 
     /** This method is called from the implementation helper during an
         XComponent::dispose() call.
     */
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // XAccessibleValue
 
     virtual css::uno::Any SAL_CALL getCurrentValue( )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL setCurrentValue(
         const css::uno::Any& aNumber )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getMaximumValue(  )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getMinimumValue(  )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.
@@ -172,10 +172,10 @@ protected:
     */
     virtual bool IsValid() const = 0;
 
-    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
+    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) override;
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
 private:
     /// Index in parent.  This is settable from the outside.

@@ -205,8 +205,8 @@ protected:
 class WrappedConstantErrorLowProperty : public WrappedStatisticProperty< double >
 {
 public:
-    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const SAL_OVERRIDE;
+    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
     explicit WrappedConstantErrorLowProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
@@ -259,8 +259,8 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
 class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double >
 {
 public:
-    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const SAL_OVERRIDE;
+    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
     explicit WrappedConstantErrorHighProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                tSeriesOrDiagramPropertyType ePropertyType );
@@ -313,8 +313,8 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
 class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
 {
 public:
-    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const SAL_OVERRIDE;
+    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const override;
 
     explicit WrappedMeanValueProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType );
@@ -357,8 +357,8 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
 class WrappedErrorCategoryProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorCategory >
 {
 public:
-    virtual ::com::sun::star::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const SAL_OVERRIDE;
+    virtual ::com::sun::star::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const override;
 
     explicit WrappedErrorCategoryProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType );
@@ -455,8 +455,8 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
 class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
 public:
-    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const SAL_OVERRIDE;
+    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
     explicit WrappedPercentageErrorProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
@@ -509,8 +509,8 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
 class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
 public:
-    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const SAL_OVERRIDE;
+    virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
     explicit WrappedErrorMarginProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
@@ -563,8 +563,8 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
 class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >
 {
 public:
-    virtual ::com::sun::star::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const SAL_OVERRIDE;
+    virtual ::com::sun::star::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const override;
 
     explicit WrappedErrorIndicatorProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
@@ -636,8 +636,8 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
 class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 >
 {
 public:
-    virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nNewValue ) const SAL_OVERRIDE;
+    virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nNewValue ) const override;
 
     explicit WrappedErrorBarStyleProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact1,
                                            tSeriesOrDiagramPropertyType ePropertyType );
@@ -682,8 +682,8 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
 class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OUString >
 {
 public:
-    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const SAL_OVERRIDE;
+    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const override;
 
     explicit WrappedErrorBarRangePositiveProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
@@ -749,8 +749,8 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
 class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OUString >
 {
 public:
-    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const SAL_OVERRIDE;
+    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const override;
 
     explicit WrappedErrorBarRangeNegativeProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
@@ -816,8 +816,8 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
 class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >
 {
 public:
-    virtual ::com::sun::star::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType & aNewValue ) const SAL_OVERRIDE;
+    virtual ::com::sun::star::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType & aNewValue ) const override;
 
     explicit WrappedRegressionCurvesProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
@@ -871,9 +871,9 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
 class WrappedStatisticPropertySetProperty : public WrappedStatisticProperty< Reference< beans::XPropertySet > >
 {
 public:
-    virtual Reference< beans::XPropertySet > getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
+    virtual Reference< beans::XPropertySet > getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     // properties are read-only, so this method should never be called
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const Reference< beans::XPropertySet > & xNewValue ) const SAL_OVERRIDE;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const Reference< beans::XPropertySet > & xNewValue ) const override;
 
     enum PropertySetType
     {

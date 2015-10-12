@@ -57,12 +57,12 @@ protected:
 public:
     explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~MenuButton();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    Activate() override;
     virtual void    Select();
 
     void            ExecuteMenu();

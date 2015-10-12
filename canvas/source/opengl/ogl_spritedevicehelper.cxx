@@ -521,19 +521,19 @@ namespace oglcanvas
             GLuint mnDepthId;
             GLuint mnTextureId;
 
-            virtual bool startBufferRendering() SAL_OVERRIDE
+            virtual bool startBufferRendering() override
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, mnFrambufferId);
                 return true;
             }
 
-            virtual bool endBufferRendering() SAL_OVERRIDE
+            virtual bool endBufferRendering() override
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 return true;
             }
 
-            virtual GLuint getTextureId() SAL_OVERRIDE
+            virtual GLuint getTextureId() override
             {
                 return mnTextureId;
             }

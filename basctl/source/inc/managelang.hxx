@@ -74,7 +74,7 @@ private:
 public:
     ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr );
     virtual ~ManageLanguageDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class SetDefaultLanguageDialog : public ModalDialog
@@ -94,7 +94,7 @@ private:
 public:
     SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
     virtual ~SetDefaultLanguageDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     css::uno::Sequence< css::lang::Locale >   GetLocales() const;
 };

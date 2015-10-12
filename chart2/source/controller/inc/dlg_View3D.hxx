@@ -41,10 +41,10 @@ public:
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
                   const XColorListRef &pColorTable );
     virtual ~View3DDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // from Dialog (base of TabDialog)
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 
 private:
     VclPtr<TabControl>     m_pTabControl;

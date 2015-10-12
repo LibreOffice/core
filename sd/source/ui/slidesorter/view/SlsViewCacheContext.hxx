@@ -41,13 +41,13 @@ class ViewCacheContext : public cache::CacheContext
 public:
     ViewCacheContext (SlideSorter& rSlideSorter);
     virtual ~ViewCacheContext();
-    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview) SAL_OVERRIDE;
-    virtual bool IsIdle() SAL_OVERRIDE;
-    virtual bool IsVisible (cache::CacheKey aKey) SAL_OVERRIDE;
-    virtual const SdrPage* GetPage (cache::CacheKey aKey) SAL_OVERRIDE;
-    virtual std::shared_ptr<std::vector<cache::CacheKey> > GetEntryList (bool bVisible) SAL_OVERRIDE;
-    virtual sal_Int32 GetPriority (cache::CacheKey aKey) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() SAL_OVERRIDE;
+    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview) override;
+    virtual bool IsIdle() override;
+    virtual bool IsVisible (cache::CacheKey aKey) override;
+    virtual const SdrPage* GetPage (cache::CacheKey aKey) override;
+    virtual std::shared_ptr<std::vector<cache::CacheKey> > GetEntryList (bool bVisible) override;
+    virtual sal_Int32 GetPriority (cache::CacheKey aKey) override;
+    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() override;
 
 private:
     model::SlideSorterModel& mrModel;

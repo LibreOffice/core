@@ -55,15 +55,15 @@ private:
 
     void InitSettings();
 
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual void GetFocus() override;
 
     DECL_LINK_TYPED(SplitHdl, Splitter*, void);
 
 protected:
     void ThemeSelectionHasChanged();
     virtual ~GalleryControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar

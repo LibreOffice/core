@@ -33,11 +33,11 @@ class SVT_DLLPUBLIC BrowserHeader: public HeaderBar
 
 public:
     virtual             ~BrowserHeader();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 protected:
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        Select() SAL_OVERRIDE;
-    virtual void        EndDrag() SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        Select() override;
+    virtual void        EndDrag() override;
 
 public:
                         BrowserHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );

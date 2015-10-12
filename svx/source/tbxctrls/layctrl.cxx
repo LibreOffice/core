@@ -77,13 +77,13 @@ public:
                                          const OUString&            rText,
                                          const Reference< XFrame >& rFrame );
                             virtual ~TableWindow();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
-    void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
-    virtual void            PopupModeEnd() SAL_OVERRIDE;
+    void                    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) override;
+    virtual void            PopupModeEnd() override;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -416,12 +416,12 @@ private:
 public:
                             ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString &rText, const Reference< XFrame >& rFrame );
 
-    void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
-    virtual void            PopupModeEnd() SAL_OVERRIDE;
+    void                    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) override;
+    virtual void            PopupModeEnd() override;
 };
 
 

@@ -48,7 +48,7 @@ public:
             css::uno::Any oldValue, css::uno::Any newValue);
     //for value changed event
     virtual void HandleValueChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
+            css::uno::Any oldValue, css::uno::Any newValue) override;
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCLISTEVENTLISTENER_HXX

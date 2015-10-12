@@ -112,7 +112,7 @@ private:
     SymbolMap_t         m_aSymbols;
     bool                m_bModified;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 public:
     SmSymbolManager();

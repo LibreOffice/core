@@ -57,7 +57,7 @@ namespace oglcanvas
         CanvasBitmap( const CanvasBitmap& rSrc );
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         /** Write out recorded actions
          */

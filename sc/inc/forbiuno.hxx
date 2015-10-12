@@ -32,13 +32,13 @@ class ScForbiddenCharsObj : public SvxUnoForbiddenCharsTable, public SfxListener
     ScDocShell*     pDocShell;
 
 protected:
-    virtual void    onChange() SAL_OVERRIDE;
+    virtual void    onChange() override;
 
 public:
                     ScForbiddenCharsObj( ScDocShell* pDocSh );
     virtual         ~ScForbiddenCharsObj();
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 #endif

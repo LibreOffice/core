@@ -34,15 +34,15 @@ class GroupNode: public Node {
 public:
     GroupNode(int layer, bool extensible, OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
-    virtual NodeMap & getMembers() SAL_OVERRIDE;
+    virtual NodeMap & getMembers() override;
 
-    virtual OUString getTemplateName() const SAL_OVERRIDE;
+    virtual OUString getTemplateName() const override;
 
-    virtual void setMandatory(int layer) SAL_OVERRIDE;
+    virtual void setMandatory(int layer) override;
 
-    virtual int getMandatory() const SAL_OVERRIDE;
+    virtual int getMandatory() const override;
 
     bool isExtensible() const { return extensible_;}
 
@@ -51,7 +51,7 @@ private:
 
     virtual ~GroupNode();
 
-    virtual Kind kind() const SAL_OVERRIDE;
+    virtual Kind kind() const override;
 
     bool extensible_;
     NodeMap members_;

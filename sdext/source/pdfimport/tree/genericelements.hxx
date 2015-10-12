@@ -111,7 +111,7 @@ namespace pdfi
     struct ListElement : public Element
     {
         ListElement() : Element( NULL ) {}
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
     };
 
     struct HyperlinkElement : public Element
@@ -121,7 +121,7 @@ namespace pdfi
         HyperlinkElement( Element* pParent, const OUString& rURI )
         : Element( pParent ), URI( rURI ) {}
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
 
         OUString URI;
     };
@@ -166,7 +166,7 @@ namespace pdfi
         : DrawElement( pParent, nGCId ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
     };
 
     struct TextElement : public GraphicalElement
@@ -177,7 +177,7 @@ namespace pdfi
         : GraphicalElement( pParent, nGCId ), FontId( nFontId ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
 
         OUStringBuffer Text;
         sal_Int32           FontId;
@@ -190,7 +190,7 @@ namespace pdfi
         explicit ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
 
         // returns true only if only a single line is contained
         bool isSingleLined( PDFIProcessor& rProc ) const;
@@ -213,7 +213,7 @@ namespace pdfi
                          const basegfx::B2DPolyPolygon& rPolyPoly,
                          sal_Int8 nAction );
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
 
         void updateGeometry();
 
@@ -233,7 +233,7 @@ namespace pdfi
         : DrawElement( pParent, nGCId ), Image( nImage ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
 
         ImageId Image;
     };
@@ -253,7 +253,7 @@ namespace pdfi
     public:
         virtual ~PageElement();
 
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
 
         static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
@@ -278,7 +278,7 @@ namespace pdfi
     public:
         virtual ~DocumentElement();
 
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) SAL_OVERRIDE;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
     };
 
     // this class is the differentiator of document types: it will create

@@ -71,26 +71,26 @@ namespace dbaccess
 
     protected:
         // OFilteredContainer overridables
-        virtual OUString getTableTypeRestriction() const SAL_OVERRIDE;
+        virtual OUString getTableTypeRestriction() const override;
 
     private:
-        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OFilteredContainer::acquire();}
-        virtual void SAL_CALL release() throw() SAL_OVERRIDE { OFilteredContainer::release();}
+        virtual void SAL_CALL acquire() throw() override { OFilteredContainer::acquire();}
+        virtual void SAL_CALL release() throw() override { OFilteredContainer::release();}
     // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
         // ::connectivity::sdbcx::OCollection
-        virtual ::connectivity::sdbcx::ObjectType       createObject(const OUString& _rName) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() SAL_OVERRIDE;
-        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
-        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) SAL_OVERRIDE;
+        virtual ::connectivity::sdbcx::ObjectType       createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
         using OFilteredContainer::disposing;
 

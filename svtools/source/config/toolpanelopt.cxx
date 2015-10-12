@@ -70,7 +70,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
             \sa baseclass ConfigItem
             \param[in,out] seqPropertyNames is the list of properties which should be updated.
         */
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) override;
 
         /**
          loads required data from the configuration. It's called in the constructor to
@@ -87,7 +87,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
 
     private:
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
         /** return list of key names of our configuration management which represent oue module tree
 

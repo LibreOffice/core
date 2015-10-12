@@ -57,14 +57,14 @@ namespace dbaccess
         inline virtual void removeMasterContainerListener(){}
 
         // ::connectivity::sdbcx::OCollection
-        virtual void impl_refresh() throw(css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
 
-        virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject) SAL_OVERRIDE;
+        virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject) override;
 
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
         */
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
         class EnsureReset
         {

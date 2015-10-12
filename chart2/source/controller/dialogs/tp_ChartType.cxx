@@ -311,12 +311,12 @@ class SplinePropertiesDialog : public ModalDialog
 public:
     explicit SplinePropertiesDialog( vcl::Window* pParent );
     virtual ~SplinePropertiesDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
-    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nType ) override;
 
 private:
     DECL_LINK_TYPED( SplineTypeListBoxHdl, ListBox&, void );
@@ -403,12 +403,12 @@ class SteppedPropertiesDialog : public ModalDialog
 public:
     explicit SteppedPropertiesDialog( vcl::Window* pParent );
     virtual ~SteppedPropertiesDialog() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
 
-    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nType ) override;
 
 private:
 

@@ -95,21 +95,21 @@ private:
     DECL_LINK_TYPED( AutoHdl_Impl, Button*, void );
 
 protected:
-    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 
 public:
     virtual ~SvxStdParagraphTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     DECL_LINK_TYPED(ELRLoseFocusHdl, Control&, void);
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
 
-    virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            ChangesApplied() SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* rSet ) override;
+    virtual void            Reset( const SfxItemSet* rSet ) override;
+    virtual void            ChangesApplied() override;
 
 
     void                    SetPageWidth( sal_uInt16 nPageWidth );
@@ -119,7 +119,7 @@ public:
     void                    EnableAutoFirstLine();
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
-    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -162,21 +162,21 @@ class SvxParaAlignTabPage : public SfxTabPage
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 protected:
-    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 public:
     virtual ~SvxParaAlignTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
-    virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            ChangesApplied() SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* rSet ) override;
+    virtual void            Reset( const SfxItemSet* rSet ) override;
+    virtual void            ChangesApplied() override;
 
     void                    EnableJustifyExt();
-    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
@@ -201,20 +201,20 @@ class SvxExtParagraphTabPage: public SfxTabPage
 
 public:
     virtual ~SvxExtParagraphTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual void        ChangesApplied() override;
 
     void                DisablePageBreak();
 
 protected:
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 private:
                         SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -265,7 +265,7 @@ private:
     DECL_LINK_TYPED( PageBreakPosHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( PageBreakTypeHdl_Impl, ListBox&, void );
 
-    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 
@@ -283,15 +283,15 @@ class SvxAsianTabPage : public SfxTabPage
 
 public:
     virtual ~SvxAsianTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        ChangesApplied() SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual void        ChangesApplied() override;
 
 };
 

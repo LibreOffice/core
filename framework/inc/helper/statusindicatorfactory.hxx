@@ -196,19 +196,19 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
         StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             return cppu::supportsService(this, ServiceName);
         }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             css::uno::Sequence< OUString > aSeq(1);
             aSeq[0] = "com.sun.star.task.StatusIndicatorFactory";
@@ -218,15 +218,15 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
         virtual void SAL_CALL update()
-            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) override;
 
         // similar (XStatusIndicator)
         void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,

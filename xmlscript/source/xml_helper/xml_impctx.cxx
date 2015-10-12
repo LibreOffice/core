@@ -138,48 +138,48 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
         OUString const & servicename )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(
         Sequence< Any > const & arguments )
-        throw (Exception, std::exception) SAL_OVERRIDE;
+        throw (Exception, std::exception) override;
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument()
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL startElement(
         OUString const & rQElementName,
         Reference< xml::sax::XAttributeList > const & xAttribs )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement(
         OUString const & rQElementName )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL characters(
         OUString const & rChars )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL setDocumentLocator(
         Reference< xml::sax::XLocator > const & xLocator )
-        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (xml::sax::SAXException, RuntimeException, std::exception) override;
 
     // XNamespaceMapping
     virtual sal_Int32 SAL_CALL getUidByUri( OUString const & Uri )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getUriByUid( sal_Int32 Uid )
-        throw (container::NoSuchElementException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (container::NoSuchElementException, RuntimeException, std::exception) override;
 };
 
 DocumentHandlerImpl::DocumentHandlerImpl(
@@ -346,31 +346,31 @@ public:
 
     // XAttributes
     virtual sal_Int32 SAL_CALL getLength()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getIndexByQName(
         OUString const & rQName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getIndexByUidName(
         sal_Int32 nUid, OUString const & rLocalName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getQNameByIndex(
         sal_Int32 nIndex )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getUidByIndex(
         sal_Int32 nIndex )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getLocalNameByIndex(
         sal_Int32 nIndex )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getValueByIndex(
         sal_Int32 nIndex )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getValueByUidName(
         sal_Int32 nUid, OUString const & rLocalName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getTypeByIndex(
         sal_Int32 nIndex )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 inline ExtendedAttributes::ExtendedAttributes(

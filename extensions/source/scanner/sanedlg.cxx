@@ -97,7 +97,7 @@ public:
         disposeOnce();
     }
 
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         mpParentDialog.clear();
         vcl::Window::dispose();
@@ -129,10 +129,10 @@ public:
         return mbDragEnable;
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     Point GetPixelPos(const Point& rIn) const;
     Point GetLogicPos(const Point& rIn) const;
 
@@ -190,7 +190,7 @@ public:
     {
         ReadDIB(maPreviewBitmap, rStream, true);
     }
-    virtual Size GetOptimalSize() const SAL_OVERRIDE
+    virtual Size GetOptimalSize() const override
     {
         Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MAP_APPFONT));
         aSize.setWidth(aSize.getWidth()+1);

@@ -35,17 +35,17 @@ public:
 
     //better performance for big data
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
-                                    , const ::com::sun::star::awt::Size& rPageResolution ) SAL_OVERRIDE;
+                                    , const ::com::sun::star::awt::Size& rPageResolution ) override;
 
     virtual void createVAxisList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> & xChartDoc
             , const ::com::sun::star::awt::Size& rFontReferenceSize
-            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) SAL_OVERRIDE;
+            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) override;
 
-    virtual void initVAxisInList() SAL_OVERRIDE;
-    virtual void updateScalesAndIncrementsOnAxes() SAL_OVERRIDE;
+    virtual void initVAxisInList() override;
+    virtual void updateScalesAndIncrementsOnAxes() override;
 
-    virtual void createGridShapes() SAL_OVERRIDE;
+    virtual void createGridShapes() override;
 
 private:
     VPolarCoordinateSystem();

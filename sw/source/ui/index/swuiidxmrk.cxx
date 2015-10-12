@@ -565,7 +565,7 @@ class SwNewUserIdxDlg : public ModalDialog
                 m_pNameED->GrabFocus();
             }
     virtual ~SwNewUserIdxDlg() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pOKPB.clear();
         m_pNameED.clear();
@@ -1003,7 +1003,7 @@ public:
                             bool bNewEntry,
                             bool bCreate);
     virtual ~SwCreateAuthEntryDlg_Impl();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 

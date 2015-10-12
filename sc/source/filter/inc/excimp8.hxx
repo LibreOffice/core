@@ -38,7 +38,7 @@ public:
                             ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
     virtual                 ~ImportExcel8();
 
-    virtual FltError        Read() SAL_OVERRIDE;
+    virtual FltError        Read() override;
 
     void                    Calccount();              // 0x0C
     void                    Precision();              // 0x0E
@@ -56,8 +56,8 @@ public:
     void                    FeatHdr();                // 0x0867
     void                    Feat();                   // 0x0868
 
-    virtual void            EndSheet() SAL_OVERRIDE;
-    virtual void            PostDocLoad() SAL_OVERRIDE;
+    virtual void            EndSheet() override;
+    virtual void            PostDocLoad() override;
 
 private:
     void                    LoadDocumentProperties();

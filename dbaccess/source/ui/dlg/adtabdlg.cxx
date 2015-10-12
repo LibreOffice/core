@@ -76,13 +76,13 @@ public:
     virtual ~TableListFacade();
 
 private:
-    virtual void    updateTableObjectList( bool _bAllowViews ) SAL_OVERRIDE;
-    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
-    virtual bool    isLeafSelected() const SAL_OVERRIDE;
+    virtual void    updateTableObjectList( bool _bAllowViews ) override;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const override;
+    virtual bool    isLeafSelected() const override;
     // OContainerListener
-    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 TableListFacade::~TableListFacade()
@@ -236,13 +236,13 @@ public:
     virtual ~QueryListFacade();
 
 private:
-    virtual void    updateTableObjectList( bool _bAllowViews ) SAL_OVERRIDE;
-    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
-    virtual bool    isLeafSelected() const SAL_OVERRIDE;
+    virtual void    updateTableObjectList( bool _bAllowViews ) override;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const override;
+    virtual bool    isLeafSelected() const override;
     // OContainerListener
-    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 QueryListFacade::~QueryListFacade()

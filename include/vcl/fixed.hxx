@@ -49,35 +49,35 @@ private:
 public:
     SAL_DLLPRIVATE static DrawTextFlags ImplGetTextStyle( WinBits nWinBits );
 protected:
-    virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
-    virtual vcl::Window* getAccessibleRelationLabelFor() const SAL_OVERRIDE;
+    virtual vcl::Window* getAccessibleRelationLabelFor() const override;
 
 public:
     explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        FixedText( vcl::Window* pParent, const ResId& rResId );
     virtual         ~FixedText();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            setMaxWidthChars(sal_Int32 nWidth);
     void            setMinWidthChars(sal_Int32 nWidth);
     static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
+    virtual bool    set_property(const OString &rKey, const OString &rValue) override;
     void            set_mnemonic_widget(vcl::Window *pWindow);
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
@@ -87,8 +87,8 @@ class VCL_DLLPUBLIC SelectableFixedText : public Edit
 public:
     explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
+    virtual void    LoseFocus() override;
+    virtual void    ApplySettings(vcl::RenderContext&) override;
 };
 
 
@@ -105,25 +105,25 @@ private:
     SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
 
 protected:
-    virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
 public:
     explicit        FixedLine( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
     explicit        FixedLine( vcl::Window* pParent, const ResId& );
 
-    virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const override;
 };
 
 // - FixedBitmap -
@@ -142,13 +142,13 @@ private:
 public:
     explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
@@ -179,21 +179,21 @@ public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        FixedImage( vcl::Window* pParent, const ResId& );
 
-    virtual void    ApplySettings(vcl::RenderContext&) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual Size    GetOptimalSize() const override;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
     bool            SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const { return maImage;}
-    virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool    set_property(const OString &rKey, const OString &rValue) override;
 
     static Image loadThemeImage(const OString &rFileName);
 };

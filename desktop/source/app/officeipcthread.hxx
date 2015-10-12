@@ -93,7 +93,7 @@ class OfficeIPCThread : public salhelper::Thread
     virtual ~OfficeIPCThread();
 
     /// Working method which should be overridden
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
   public:
     enum Status
@@ -137,21 +137,21 @@ class OfficeIPCThreadController : public ::cppu::WeakImplHelper<
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent )
-            throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent )
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 }

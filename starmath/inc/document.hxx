@@ -107,13 +107,13 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 
 
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     bool        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
-                             sal_uInt16 nAspect = ASPECT_CONTENT) SAL_OVERRIDE;
+                             sal_uInt16 nAspect = ASPECT_CONTENT) override;
 
     virtual void        FillClass(SvGlobalName* pClassName,
                                   SotClipboardFormatId*  pFormat,
@@ -121,16 +121,16 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
                                   OUString* pFullTypeName,
                                   OUString* pShortTypeName,
                                   sal_Int32 nFileFormat,
-                                  bool bTemplate = false ) const SAL_OVERRIDE;
+                                  bool bTemplate = false ) const override;
 
-    virtual sal_uLong   GetMiscStatus() const SAL_OVERRIDE;
-    virtual void        OnDocumentPrinterChanged( Printer * ) SAL_OVERRIDE;
-    virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
-    virtual bool        Load( SfxMedium& rMedium ) SAL_OVERRIDE;
-    virtual bool        Save() SAL_OVERRIDE;
-    virtual bool        SaveAs( SfxMedium& rMedium ) SAL_OVERRIDE;
-    virtual bool        ConvertTo( SfxMedium &rMedium ) SAL_OVERRIDE;
-    virtual bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+    virtual sal_uLong   GetMiscStatus() const override;
+    virtual void        OnDocumentPrinterChanged( Printer * ) override;
+    virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
+    virtual bool        Load( SfxMedium& rMedium ) override;
+    virtual bool        Save() override;
+    virtual bool        SaveAs( SfxMedium& rMedium ) override;
+    virtual bool        ConvertTo( SfxMedium &rMedium ) override;
+    virtual bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
 
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
@@ -138,7 +138,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     bool                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
 
-    virtual bool        ConvertFrom(SfxMedium &rMedium) SAL_OVERRIDE;
+    virtual bool        ConvertFrom(SfxMedium &rMedium) override;
 
     /** Called whenever the formula is changed
      * Deletes the current cursor
@@ -203,15 +203,15 @@ public:
 
     void        Repaint();
 
-    virtual ::svl::IUndoManager *GetUndoManager () SAL_OVERRIDE;
+    virtual ::svl::IUndoManager *GetUndoManager () override;
 
     static SfxItemPool& GetPool();
 
     void        Execute( SfxRequest& rReq );
     void        GetState(SfxItemSet &);
 
-    virtual void SetVisArea (const Rectangle & rVisArea) SAL_OVERRIDE;
-    virtual void SetModified(bool bModified) SAL_OVERRIDE;
+    virtual void SetVisArea (const Rectangle & rVisArea) override;
+    virtual void SetModified(bool bModified) override;
 
     /** Get a cursor for modifying this document
      * @remarks Don't store this reference, a new cursor may be made...

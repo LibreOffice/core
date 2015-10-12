@@ -45,7 +45,7 @@ public:
 
                             MediaFloater( SfxBindings* pBindings, SfxChildWindow* pCW, vcl::Window* pParent );
                             virtual ~MediaFloater();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
     void                    setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately );
 
@@ -53,8 +53,8 @@ public:
 
 private:
 
-    virtual void            Resize() SAL_OVERRIDE;
-    virtual void            ToggleFloatingMode() SAL_OVERRIDE;
+    virtual void            Resize() override;
+    virtual void            ToggleFloatingMode() override;
 
     MediaWindow*            mpMediaWindow;
 };

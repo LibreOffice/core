@@ -41,7 +41,7 @@ namespace rptxml
 
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
     public:
 
         OXMLSubDocument( ORptFilter& rImport
@@ -52,8 +52,8 @@ namespace rptxml
                     ,OXMLCell* _pCellParent);
         virtual ~OXMLSubDocument();
 
-        virtual void EndElement() SAL_OVERRIDE;
-        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) SAL_OVERRIDE;
+        virtual void EndElement() override;
+        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
     };
 
 } // namespace rptxml

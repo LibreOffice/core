@@ -36,12 +36,12 @@ public:
     /**
      * Blacklist handling
      */
-    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
+    bool mustTestImportOf(const char* filename) const override {
         // Only test import of .odt document
         return OString(filename).endsWith(".odt");
     }
 
-    bool mustValidate(const char* filename) const SAL_OVERRIDE
+    bool mustValidate(const char* filename) const override
     {
         std::vector<const char*> aBlacklist = {
             // These are known problems, they should be fixed one by one.
@@ -55,7 +55,7 @@ public:
         return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
     }
 
-    virtual void preTest(const char* pFilename) SAL_OVERRIDE
+    virtual void preTest(const char* pFilename) override
     {
         if (OString(pFilename) == "fdo58949.docx")
         {
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    virtual void postTest(const char* pFilename) SAL_OVERRIDE
+    virtual void postTest(const char* pFilename) override
     {
         if (OString(pFilename) == "fdo58949.docx")
         {

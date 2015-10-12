@@ -110,12 +110,12 @@ public:
                             { return Color( GetColorData( nXclIndex ) ); }
 
     /** Saves the PALETTE record, if it differs from the default palette. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the contents of the PALETTE record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     typedef std::shared_ptr< XclExpPaletteImpl > XclExpPaletteImplRef;
@@ -174,11 +174,11 @@ public:
         @param nHash  The hash value calculated from the font data. */
     virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const;
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the contents of the FONT record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     XclFontData         maData;         /// All font attributes.
@@ -191,7 +191,7 @@ class XclExpDxfFont : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpDxfFont(const XclExpRoot& rRoot, const SfxItemSet& rItemSet);
 
-    virtual void SaveXml(XclExpXmlStream& rStrm) SAL_OVERRIDE;
+    virtual void SaveXml(XclExpXmlStream& rStrm) override;
 private:
 
     ScDxfFont maDxfData;
@@ -204,10 +204,10 @@ public:
     explicit            XclExpBlindFont( const XclExpRoot& rRoot );
 
     /** Returns always false to never find this font while searching the font list. */
-    virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const SAL_OVERRIDE;
+    virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const override;
 
     /** Skips writing this record. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
 };
 
 class ScPatternAttr;
@@ -246,8 +246,8 @@ public:
                             XclExpColorType eColorType, bool bAppFont = false );
 
     /** Writes all FONT records contained in this buffer. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Initializes the default fonts for the current BIFF version. */
@@ -297,8 +297,8 @@ public:
     sal_uInt16          Insert( sal_uLong nScNumFmt );
 
     /** Writes all FORMAT records contained in this buffer. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
@@ -482,7 +482,7 @@ public:
 
     void                SetXmlIds( sal_uInt32 nBorderId, sal_uInt32 nFillId );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 protected:
     explicit            XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
@@ -526,7 +526,7 @@ private:
     void                WriteBody8( XclExpStream& rStrm );
 
     /** Writes the contents of the XF record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 };
 
 /** Represents a default XF record. Supports methods to set attributes directly. */
@@ -552,11 +552,11 @@ public:
     /** Returns true, if this record represents an Excel built-in style. */
     inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     /** Writes the contents of the STYLE record. */
-    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
     OUString            maName;         /// Name of the cell style.
@@ -633,8 +633,8 @@ public:
     sal_Int32           GetXmlCellIndex( sal_uInt32 nXFId ) const;
 
     /** Writes all XF records contained in this buffer. */
-    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) override;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     typedef XclExpRecordList< XclExpXF >    XclExpXFList;
@@ -714,7 +714,7 @@ public:
             XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
     virtual ~XclExpDxf();
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     std::unique_ptr<XclExpCellAlign> mpAlign;
@@ -733,7 +733,7 @@ public:
 
     sal_Int32 GetDxfId(const OUString& rName);
 
-    virtual void SaveXml( XclExpXmlStream& rStrm) SAL_OVERRIDE;
+    virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:
     typedef boost::ptr_vector<XclExpDxf> DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
@@ -747,7 +747,7 @@ class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpXmlStyleSheet( const XclExpRoot& rRoot );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 #endif

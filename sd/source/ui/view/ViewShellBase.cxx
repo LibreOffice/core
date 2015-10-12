@@ -204,9 +204,9 @@ class FocusForwardingWindow : public vcl::Window
 public:
     FocusForwardingWindow (vcl::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
-    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual void KeyInput (const KeyEvent& rEvent) override;
+    virtual void Command (const CommandEvent& rEvent) override;
 
 private:
     ViewShellBase& mrBase;

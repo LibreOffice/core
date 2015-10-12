@@ -85,17 +85,17 @@ class DispatchHelper : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XS
                                         const OUString&                                      sTargetFrameName  ,
                                               sal_Int32                                             nSearchFlags      ,
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(
                                 const css::frame::DispatchResultEvent& aResult )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         virtual void SAL_CALL disposing(
                                 const css::lang::EventObject& aEvent )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 
 }

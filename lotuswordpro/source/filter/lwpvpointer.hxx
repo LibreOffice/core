@@ -68,9 +68,9 @@ class LwpVersionedPointer : public LwpObject
 {
 public:
     LwpVersionedPointer(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    void Read() SAL_OVERRIDE;
-    void RegisterStyle() SAL_OVERRIDE;
-    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    void Read() override;
+    void RegisterStyle() override;
+    void Parse(IXFStream* pOutputStream) override;
     LwpObjectID& GetPointer(){return m_PointerID;}
 protected:
     LwpObjectID m_PointerID;

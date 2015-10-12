@@ -50,14 +50,14 @@ protected:
 public:
     explicit            MoreButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual             ~MoreButton();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    void                Click() SAL_OVERRIDE;
+    void                Click() override;
 
     using PushButton::SetState;
 
-    void                SetText( const OUString& rNewText ) SAL_OVERRIDE;
-    OUString            GetText() const SAL_OVERRIDE;
+    void                SetText( const OUString& rNewText ) override;
+    OUString            GetText() const override;
 };
 
 #endif // INCLUDED_VCL_MOREBTN_HXX

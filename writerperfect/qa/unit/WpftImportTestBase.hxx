@@ -61,15 +61,15 @@ class WpftImportTestBase
 public:
     explicit WpftImportTestBase(const rtl::OUString &rFactoryURL);
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 protected:
     void doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath);
 
 private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
-                      SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+                      SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
 
     void impl_detectFilterName(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
 

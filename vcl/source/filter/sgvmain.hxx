@@ -168,7 +168,7 @@ public:
     PointType       Pos1;      // start point
     PointType       Pos2;      // end point
     friend SvStream& ReadStrkType(SvStream& rIStream, StrkType& rStrk);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 
 #define RectSize 52
@@ -184,7 +184,7 @@ public:
     sal_uInt16      RotationAngle;  //  315...<45
     sal_uInt16      Slant;          // >270...<90
     friend SvStream& ReadRectType(SvStream& rIStream, RectType& rRect);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 
 #define PolySize 44
@@ -199,7 +199,7 @@ public:
     sal_uInt32       SD_EckP; // pointer to corner point (StarDraw)
     PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
     friend SvStream& ReadPolyType(SvStream& rIStream, PolyType& rPoly);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 #define  PolyClosBit 0x01     // kinds of Poly:   0: polyLine  1: polygon
 
@@ -215,7 +215,7 @@ public:
     sal_uInt32       SD_EckP; // pointer to corner points (StarDraw)
     PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
     friend SvStream& ReadSplnType(SvStream& rIStream, SplnType& rSpln);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 // kinds of Spline: see Poly
 
@@ -232,7 +232,7 @@ public:
     sal_uInt16      StartAngle; // and not for full circles
     sal_uInt16      RelAngle;   // and full ellipses
     friend SvStream& ReadCircType(SvStream& rIStream, CircType& rCirc);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 #define CircFull 0x00  /* kinds of circle: 0: full circle    */
 #define CircSect 0x01  /*                  1: circle sector  */
@@ -257,7 +257,7 @@ public:
     sal_Int16   FitBreit;    // width to format for Fit2Size
     UCHAR*      Buffer;      // this variable is not set by reading from disk, but explicit!
     friend SvStream& ReadTextType(SvStream& rIStream, TextType& rText);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 #define TextOutlBit 0x01     /*       1=Sourcecode for outliner (ignored byDrawObjekt()) */
 #define TextFitSBit 0x02     /* Bit1: 1=Text-Fit2Size, also outliner  (2.0)              */
@@ -302,7 +302,7 @@ public:
     }
 
     friend SvStream& ReadBmapType(SvStream& rIStream, BmapType& rBmap);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut) override;
 };
 
 #define GrupSize 48

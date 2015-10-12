@@ -54,15 +54,15 @@ class SwLabPrtPage : public SfxTabPage
 public:
     SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabPrtPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
             void FillItem(SwLabItem& rItem);
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
     inline Printer* GetPrt() { return pPrinter; }
 };
 

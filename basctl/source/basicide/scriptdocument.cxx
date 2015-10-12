@@ -130,7 +130,7 @@ namespace basctl
 
             virtual ~FilterDocuments() {}
 
-            virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const SAL_OVERRIDE;
+            virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const override;
 
         private:
             static bool    impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument );
@@ -268,15 +268,15 @@ namespace basctl
 
     protected:
         // DocumentEventListener
-        virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
-        virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
+        virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
 
     private:
         bool        impl_initDocument_nothrow( const Reference< XModel >& _rxModel );

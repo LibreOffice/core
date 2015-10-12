@@ -48,12 +48,12 @@ namespace frm
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) override;
 
         // ORichTextFeatureDispatcher
-        virtual void    invalidateFeatureState_Broadcast() SAL_OVERRIDE;
+        virtual void    invalidateFeatureState_Broadcast() override;
         virtual css::frame::FeatureStateEvent
-                        buildStatusEvent() const SAL_OVERRIDE;
+                        buildStatusEvent() const override;
 
     protected:
         /** determines whether our functionality is currently available
@@ -75,10 +75,10 @@ namespace frm
         virtual ~OPasteClipboardDispatcher();
 
         // OClipboardDispatcher
-        virtual bool    implIsEnabled( ) const SAL_OVERRIDE;
+        virtual bool    implIsEnabled( ) const override;
 
         // ORichTextFeatureDispatcher
-        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) SAL_OVERRIDE;
+        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) override;
 
     private:
         DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );

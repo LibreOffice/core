@@ -107,13 +107,13 @@ private:
 public:
     SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxJavaOptionsPage();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
-    virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            FillUserData() SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* rSet ) override;
+    virtual void            Reset( const SfxItemSet* rSet ) override;
+    virtual void            FillUserData() override;
 };
 
 // class SvxJavaParameterDlg ---------------------------------------------
@@ -142,9 +142,9 @@ private:
 public:
     explicit SvxJavaParameterDlg( vcl::Window* pParent );
     virtual ~SvxJavaParameterDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual short           Execute() SAL_OVERRIDE;
+    virtual short           Execute() override;
 
     css::uno::Sequence< OUString > GetParameters() const;
     void SetParameters( css::uno::Sequence< OUString >& rParams );
@@ -175,7 +175,7 @@ private:
 public:
     explicit SvxJavaClassPathDlg( vcl::Window* pParent );
     virtual ~SvxJavaClassPathDlg();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
     inline const OUString&  GetOldPath() const { return m_sOldPath; }
     inline void             SetFocus() { m_pPathList->GrabFocus(); }

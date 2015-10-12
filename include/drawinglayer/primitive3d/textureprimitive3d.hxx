@@ -67,7 +67,7 @@ namespace drawinglayer
             bool getFilter() const { return mbFilter; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -100,13 +100,13 @@ namespace drawinglayer
             double getTransparence() const { return mfTransparence; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// own getB3DRange implementation to include transparent geometries to BoundRect calculations
-            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// local decomposition.
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()
@@ -145,7 +145,7 @@ namespace drawinglayer
             const attribute::FillGradientAttribute& getGradient() const { return maGradient; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()
@@ -184,7 +184,7 @@ namespace drawinglayer
             const attribute::FillGraphicAttribute& getFillGraphicAttribute() const { return maFillGraphicAttribute; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()
@@ -215,7 +215,7 @@ namespace drawinglayer
                 const basegfx::B2DVector& rTextureSize);
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

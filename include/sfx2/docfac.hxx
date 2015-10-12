@@ -89,7 +89,7 @@ private:
 #define SFX_DECL_OBJECTFACTORY()                                            \
 public:                                                                     \
     static SfxObjectFactory&    Factory();                                  \
-    virtual SfxObjectFactory&   GetFactory() const SAL_OVERRIDE { return Factory(); }
+    virtual SfxObjectFactory&   GetFactory() const override { return Factory(); }
 
 #define SFX_IMPL_OBJECTFACTORY(ClassName,GlobName,Flags,ShortName)          \
     SfxObjectFactory& ClassName::Factory()                                  \

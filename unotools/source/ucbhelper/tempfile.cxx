@@ -172,7 +172,7 @@ class SequentialTokens: public Tokens {
 public:
     explicit SequentialTokens(bool showZero): m_value(0), m_show(showZero) {}
 
-    bool next(OUString * token) SAL_OVERRIDE {
+    bool next(OUString * token) override {
         assert(token != 0);
         if (m_value == SAL_MAX_UINT32) {
             return false;
@@ -192,7 +192,7 @@ class UniqueTokens: public Tokens {
 public:
     UniqueTokens(): m_count(0) {}
 
-    bool next(OUString * token) SAL_OVERRIDE {
+    bool next(OUString * token) override {
         assert(token != 0);
         // Because of the shared globalValue, no single instance of UniqueTokens
         // is guaranteed to exhaustively test all 36^6 possible values, but stop

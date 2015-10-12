@@ -74,13 +74,13 @@ class SW_DLLPUBLIC SwTextRuby : public SwTextAttrNesting, public SwClient
 {
     SwTextNode* m_pTextNode;
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
     SwTextRuby( SwFormatRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextRuby();
     TYPEINFO_OVERRIDE();
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     SAL_DLLPRIVATE void InitRuby(SwTextNode & rNode);
 

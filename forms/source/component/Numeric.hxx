@@ -32,54 +32,54 @@ class ONumericModel
 private:
     css::uno::Any          m_aSaveValue;
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ONumericModel );
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.ONumericModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
 
     // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
-    ) const SAL_OVERRIDE;
+    ) const override;
 
 protected:
     // OBoundControlModel overridables
     virtual css::uno::Any
-                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+                            translateDbColumnToControlValue( ) override;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
     virtual css::uno::Any
-                            getDefaultForReset() const SAL_OVERRIDE;
-    virtual void            resetNoBroadcast() SAL_OVERRIDE;
+                            getDefaultForReset() const override;
+    virtual void            resetNoBroadcast() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class ONumericControl: public OBoundControl
 {
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     { return OUString("com.sun.star.form.ONumericControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
 };
 
 

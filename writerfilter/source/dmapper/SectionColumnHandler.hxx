@@ -44,8 +44,8 @@ class SectionColumnHandler : public LoggedProperties
     _Column   m_aTempColumn;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
 
 public:
     SectionColumnHandler();

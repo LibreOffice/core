@@ -156,22 +156,22 @@ protected:
     using vcl::unohelper::DragAndDropClient::dragExit;
     using vcl::unohelper::DragAndDropClient::dragOver;
     virtual void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
     virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
     virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
     virtual void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
     virtual void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
     virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
-                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     Edit(WindowType nType);
-    virtual void FillLayoutData() const SAL_OVERRIDE;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void FillLayoutData() const override;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
     // public because needed in button.cxx
     SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle);
@@ -179,21 +179,21 @@ public:
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     Edit( vcl::Window* pParent, const ResId& rResId );
     virtual ~Edit();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
-    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Resize() override;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void        GetFocus() override;
+    virtual void        LoseFocus() override;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void        Command( const CommandEvent& rCEvt ) override;
+    virtual void        StateChanged( StateChangedType nType ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
     virtual void        Modify();
     virtual void        UpdateData();
@@ -235,9 +235,9 @@ public:
     virtual void        Paste();
     void                Undo();
 
-    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void        SetText( const OUString& rStr ) override;
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
-    virtual OUString    GetText() const SAL_OVERRIDE;
+    virtual OUString    GetText() const override;
 
     void                SetPlaceholderText( const OUString& rStr );
     OUString            GetPlaceholderText() const;
@@ -259,7 +259,7 @@ public:
 
     virtual Size        CalcMinimumSize() const;
     virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const override;
     virtual Size        CalcSize(sal_Int32 nChars) const;
     sal_Int32           GetMaxVisChars() const;
 
@@ -274,9 +274,9 @@ public:
     static PopupMenu*   CreatePopupMenu();
     static void         DeletePopupMenu( PopupMenu* pMenu );
 
-    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
-    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual OUString GetSurroundingText() const override;
+    virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 
     void SetTextFilter(TextFilter* pFilter) { mpFilterText = pFilter; }
 

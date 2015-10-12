@@ -103,24 +103,24 @@ private:
     using Window::SetZoom;
 
 protected:
-    virtual void   Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void   Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void   KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void   MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void   MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void   MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void   Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void   Command( const CommandEvent& rCEvt ) override;
+    virtual void   KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void   MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void   MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void   MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    virtual void   GetFocus() SAL_OVERRIDE;
-    virtual void   LoseFocus() SAL_OVERRIDE;
+    virtual void   GetFocus() override;
+    virtual void   LoseFocus() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
 public:
             ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
             virtual ~ScPreview();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             //  Instead of calling Invalidate
     void    DoInvalidate();

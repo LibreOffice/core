@@ -49,9 +49,9 @@ public:
                         MessBox( vcl::Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
     virtual             ~MessBox();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
 
     void                SetMessText( const OUString& rText ) { maMessText = rText; }
     const OUString&     GetMessText() const { return maMessText; }
@@ -62,7 +62,7 @@ public:
     void                SetCheckBoxState( bool bCheck );
     bool                GetCheckBoxState() const;
 
-    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const override;
 };
 
 class VCL_DLLPUBLIC InfoBox : public MessBox

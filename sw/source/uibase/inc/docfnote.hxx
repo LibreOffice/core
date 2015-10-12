@@ -31,7 +31,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
     sal_uInt16 m_nFootNoteId;
     sal_uInt16 m_nEndNoteId;
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
     DECL_LINK_TYPED( OkHdl, Button *, void );
 

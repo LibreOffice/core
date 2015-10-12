@@ -47,9 +47,9 @@ public:
         : Edit(pParent, nStyle)
         , bOnlyNumeric(false)
     {}
-    virtual void KeyInput(const KeyEvent& rKEvent) SAL_OVERRIDE;
-    virtual void Modify() SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvent) override;
+    virtual void Modify() override;
+    virtual bool set_property(const OString &rKey, const OString &rValue) override;
 };
 
 // class SvxProxyTabPage -------------------------------------------------
@@ -101,10 +101,10 @@ private:
 public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 // #98647# class SvxScriptExecListBox ------------------------------------
@@ -117,7 +117,7 @@ public:
             :ListBox(pParent, rResId) {}
 
 protected:
-    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 };
 
 // class SvxSecurityTabPage ---------------------------------------------
@@ -168,16 +168,16 @@ private:
 
                 SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual     ~SvxSecurityTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
-    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 struct SvxEMailTabPage_Impl;
@@ -200,12 +200,12 @@ class SvxEMailTabPage : public SfxTabPage
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX

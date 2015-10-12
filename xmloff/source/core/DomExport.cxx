@@ -146,9 +146,9 @@ public:
     explicit DomExport( SvXMLExport& rExport );
     virtual ~DomExport();
 
-    virtual void element( const Reference<XElement>& ) SAL_OVERRIDE;
-    virtual void endElement( const Reference<XElement>& ) SAL_OVERRIDE;
-    virtual void character( const Reference<XCharacterData>& ) SAL_OVERRIDE;
+    virtual void element( const Reference<XElement>& ) override;
+    virtual void endElement( const Reference<XElement>& ) override;
+    virtual void character( const Reference<XCharacterData>& ) override;
 };
 
 DomExport::DomExport( SvXMLExport& rExport ) :

@@ -46,7 +46,7 @@ public:
         const bool bLandscape );
 
     virtual ~PageColumnControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     VclPtr< svx::sidebar::ValueSetWithTextControl> mpColumnValueSet;

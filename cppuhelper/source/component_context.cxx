@@ -302,7 +302,7 @@ public:
         Reference< lang::XComponent > const & xTarget );
 
     virtual void SAL_CALL disposing( lang::EventObject const & rSource )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 inline void DisposingForwarder::listen(
@@ -356,7 +356,7 @@ protected:
 protected:
     Any lookupMap( OUString const & rName );
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
@@ -365,34 +365,34 @@ public:
 
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName(
         OUString const & name, Any const & element )
         throw (lang::IllegalArgumentException, container::ElementExistException,
-               lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+               lang::WrappedTargetException, RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( OUString const & name )
         throw (container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+               lang::WrappedTargetException, RuntimeException, std::exception) override;
     // XNameReplace
     virtual void SAL_CALL replaceByName(
         OUString const & name, Any const & element )
         throw (lang::IllegalArgumentException,container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+               lang::WrappedTargetException, RuntimeException, std::exception) override;
     // XNameAccess
     virtual Any SAL_CALL getByName( OUString const & name )
         throw (container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+               lang::WrappedTargetException, RuntimeException, std::exception) override;
     virtual Sequence<OUString> SAL_CALL getElementNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( OUString const & name )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) override;
 };
 
 // XNameContainer

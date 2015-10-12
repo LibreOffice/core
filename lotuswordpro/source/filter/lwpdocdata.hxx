@@ -180,8 +180,8 @@ private:
     static OUString TimeToOUString(LtTm& dt);
 
 public:
-    void Read() SAL_OVERRIDE;
-    void Parse(IXFStream *pOutputStream) SAL_OVERRIDE;
+    void Read() override;
+    void Parse(IXFStream *pOutputStream) override;
 };
 #endif
 

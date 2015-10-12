@@ -58,19 +58,19 @@ private:
 protected:
     explicit        SpinField( WindowType nTyp );
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 
     void            EndDropDown();
 
-    virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    FillLayoutData() const override;
     Rectangle *     ImplFindPartRect( const Point& rPt );
 
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     virtual bool    ShowDropDown( bool bShow );
 
@@ -79,15 +79,15 @@ public:
     virtual void    First();
     virtual void    Last();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     void            SetUpHdl( const Link<>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<>& rLink ) { maDownHdlLink = rLink; }
@@ -95,10 +95,10 @@ public:
     void            SetFirstHdl( const Link<>& rLink ) { maFirstHdlLink = rLink; }
     void            SetLastHdl( const Link<>& rLink ) { maLastHdlLink = rLink; }
 
-    virtual Size    CalcMinimumSize() const SAL_OVERRIDE;
-    virtual Size    CalcMinimumSizeForText(const OUString &rString) const SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual Size    CalcSize(sal_Int32 nChars) const SAL_OVERRIDE;
+    virtual Size    CalcMinimumSize() const override;
+    virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
+    virtual Size    GetOptimalSize() const override;
+    virtual Size    CalcSize(sal_Int32 nChars) const override;
 };
 
 #endif // INCLUDED_VCL_SPINFLD_HXX

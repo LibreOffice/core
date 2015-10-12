@@ -50,7 +50,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     DECL_LINK_TYPED(ButtonHdl, Button*, void);
     DECL_LINK_TYPED(AddDBHdl, Button*, void);
 
-    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Apply() override;
     void            UpdateFields();
     void            FillDBPopup();
     SvTreeListEntry*    Insert(const OUString& rDBName);
@@ -59,7 +59,7 @@ class SwChangeDBDlg: public SvxStandardDialog
 public:
     SwChangeDBDlg(SwView& rVw);
     virtual ~SwChangeDBDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

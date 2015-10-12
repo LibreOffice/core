@@ -36,8 +36,8 @@ public:
     E3dPolyScene();
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual E3dPolyScene* Clone() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual E3dPolyScene* Clone() const override;
 };
 
 #endif // INCLUDED_SVX_POLYSC3D_HXX

@@ -53,7 +53,7 @@ private:
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
     void makeCurrent();
-    virtual void updateChecksum() const SAL_OVERRIDE;
+    virtual void updateChecksum() const override;
 
     bool calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const;
 
@@ -64,26 +64,26 @@ public:
 public:
 
     // SalBitmap methods
-    bool            Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal ) SAL_OVERRIDE;
-    bool            Create( const SalBitmap& rSalBmp ) SAL_OVERRIDE;
-    bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics ) SAL_OVERRIDE;
-    bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
+    bool            Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal ) override;
+    bool            Create( const SalBitmap& rSalBmp ) override;
+    bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics ) override;
+    bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount ) override;
     virtual bool    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
                             Size& rSize,
-                            bool bMask = false ) SAL_OVERRIDE;
+                            bool bMask = false ) override;
 
-    void            Destroy() SAL_OVERRIDE;
+    void            Destroy() override;
 
-    Size            GetSize() const SAL_OVERRIDE;
-    sal_uInt16      GetBitCount() const SAL_OVERRIDE;
+    Size            GetSize() const override;
+    sal_uInt16      GetBitCount() const override;
 
-    BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) SAL_OVERRIDE;
-    void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
+    BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) override;
+    void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
 
-    bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
+    bool            GetSystemData( BitmapSystemData& rData ) override;
 
-    bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
-    bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
+    bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
+    bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
 
 public:
 

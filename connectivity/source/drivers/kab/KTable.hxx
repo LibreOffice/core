@@ -48,7 +48,7 @@ namespace connectivity
 
             KabConnection* getConnection() { return m_pConnection;}
 
-            virtual void refreshColumns() SAL_OVERRIDE;
+            virtual void refreshColumns() override;
 
             OUString getTableName() const { return m_Name; }
             OUString getSchema() const { return m_SchemaName; }

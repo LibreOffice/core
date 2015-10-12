@@ -54,7 +54,7 @@ public:
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,
                                   const SfxItemState eState,
                                   const SfxPoolItem* pState,
-                                  const bool bIsEnabled) SAL_OVERRIDE;
+                                  const bool bIsEnabled) override;
 
 private:
     ThemePanel(vcl::Window* pParent,
@@ -62,7 +62,7 @@ private:
                    SfxBindings* pBindings);
     virtual ~ThemePanel();
 
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SfxBindings* mpBindings;
 

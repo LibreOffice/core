@@ -192,8 +192,8 @@ class PptGraphicHelper : public GraphicHelper
 {
 public:
     explicit            PptGraphicHelper( const PowerPointImport& rFilter );
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const SAL_OVERRIDE;
-    virtual sal_Int32 getDefaultChartAreaFillStyle() const SAL_OVERRIDE;
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const override;
+    virtual sal_Int32 getDefaultChartAreaFillStyle() const override;
 private:
     const PowerPointImport& mrFilter;
 };

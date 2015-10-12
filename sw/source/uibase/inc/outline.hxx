@@ -63,15 +63,15 @@ protected:
     DECL_LINK_TYPED( FormHdl, Button *, void );
     DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
 
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
-        virtual short   Ok() SAL_OVERRIDE;
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
+        virtual short   Ok() override;
 
 public:
         SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
         virtual ~SwOutlineTabDialog();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     SwNumRule*          GetNumRule() {return pNumRule;}
     sal_uInt16          GetLevel(const OUString &rFormatName) const;
@@ -122,15 +122,15 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 public:
     SwOutlineSettingsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetWrtShell(SwWrtShell* pShell);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg       DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual void        ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg       DeactivatePage(SfxItemSet *pSet) override;
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet);
 };

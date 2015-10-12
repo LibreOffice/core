@@ -50,13 +50,13 @@ class SwLabDlg : public SfxTabDialog
     sal_uInt16 m_nPrivateId;
     void          _ReplaceGroup( const OUString &rMake );
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 public:
 
      SwLabDlg( vcl::Window* pParent, const SfxItemSet& rSet,
                  SwDBManager* pDBManager, bool bLabel);
     virtual ~SwLabDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SwLabRec*   GetRecord(const OUString &rRecName, bool bCont);
     void        GetLabItem(SwLabItem &rItem);

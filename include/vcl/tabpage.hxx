@@ -42,13 +42,13 @@ public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        TabPage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~TabPage();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
 
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
@@ -56,10 +56,10 @@ public:
     OString         GetConfigId() const;
 
     //To-Do, consider inheriting from VclContainer
-    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) SAL_OVERRIDE;
-    virtual void    SetPosPixel(const Point& rNewPos) SAL_OVERRIDE;
-    virtual void    SetSizePixel(const Size& rNewSize) SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
+    virtual void    SetPosPixel(const Point& rNewPos) override;
+    virtual void    SetSizePixel(const Size& rNewSize) override;
+    virtual Size    GetOptimalSize() const override;
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX

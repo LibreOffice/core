@@ -99,16 +99,16 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException, std::exception ) override;
 
         // Sprite
         virtual void redraw( OutputDevice& rOutDev,
-                             bool          bBufferedUpdate ) const SAL_OVERRIDE;
+                             bool          bBufferedUpdate ) const override;
         virtual void redraw( OutputDevice&              rOutDev,
                              const ::basegfx::B2DPoint& rPos,
-                             bool                       bBufferedUpdate ) const SAL_OVERRIDE;
+                             bool                       bBufferedUpdate ) const override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
@@ -116,7 +116,7 @@ namespace vclcanvas
                               const css::rendering::RenderState& renderState,
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
-                              const GraphicAttr&                              rAttr ) const SAL_OVERRIDE;
+                              const GraphicAttr&                              rAttr ) const override;
     };
 }
 

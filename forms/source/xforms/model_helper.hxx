@@ -55,19 +55,19 @@ public:
     explicit BindingCollection( Model* pModel ) : mpModel( pModel ) {}
     virtual ~BindingCollection() {}
 
-    virtual bool isValid( const T& t ) const SAL_OVERRIDE
+    virtual bool isValid( const T& t ) const override
     {
         return Binding::getBinding( t ) != NULL;
     }
 
 protected:
-    virtual void _insert( const T& t ) SAL_OVERRIDE
+    virtual void _insert( const T& t ) override
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
         Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
-    virtual void _remove( const T& t ) SAL_OVERRIDE
+    virtual void _remove( const T& t ) override
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
         Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>() );
@@ -83,19 +83,19 @@ public:
     virtual ~SubmissionCollection() {}
 
 public:
-    virtual bool isValid( const T& t ) const SAL_OVERRIDE
+    virtual bool isValid( const T& t ) const override
     {
         return Submission::getSubmission( t ) != NULL;
     }
 
 protected:
-    virtual void _insert( const T& t ) SAL_OVERRIDE
+    virtual void _insert( const T& t ) override
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
         Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
-    virtual void _remove( const T& t ) SAL_OVERRIDE
+    virtual void _remove( const T& t ) override
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
         Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( ) );
@@ -105,7 +105,7 @@ protected:
 class InstanceCollection : public Collection<css::uno::Sequence<css::beans::PropertyValue> >
 {
 public:
-    virtual bool isValid( const T& t ) const SAL_OVERRIDE
+    virtual bool isValid( const T& t ) const override
     {
         const css::beans::PropertyValue* pValues = t.getConstArray();
         OUString sInstance( "Instance" );

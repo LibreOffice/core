@@ -30,14 +30,14 @@ private:
     SvxAutoCorrCfg& rParent;
     static com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
     SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
     virtual ~SvxBaseAutoCorrCfg();
 
     void                    Load(bool bInit);
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
     void                    SetModified() {ConfigItem::SetModified();}
 };
 
@@ -47,14 +47,14 @@ private:
     SvxAutoCorrCfg& rParent;
     static com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
     SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
     virtual ~SvxSwAutoCorrCfg();
 
     void                    Load(bool bInit);
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
     void                    SetModified() {ConfigItem::SetModified();}
 };
 /*--------------------------------------------------------------------

@@ -59,8 +59,8 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
 
 protected:
     /// helper to get the created xShape instance, needs to be overridden
-    virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const SAL_OVERRIDE;
-    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const SAL_OVERRIDE;
+    virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const override;
+    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
 
 public:
 
@@ -74,12 +74,12 @@ public:
             ::com::sun::star::text::TextContentAnchorType eDfltAnchorType );
     virtual ~XMLTextFrameContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,

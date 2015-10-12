@@ -43,7 +43,7 @@ class FmShowColsDialog : public ModalDialog
 public:
     FmShowColsDialog(vcl::Window* pParent);
     virtual ~FmShowColsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
 

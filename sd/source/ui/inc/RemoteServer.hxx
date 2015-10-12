@@ -94,7 +94,7 @@ namespace sd
 
             ::std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
 
-            void execute() SAL_OVERRIDE;
+            void execute() override;
     };
 }
 

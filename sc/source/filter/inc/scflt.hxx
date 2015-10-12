@@ -595,7 +595,7 @@ public:
         FaceName[sizeof(FaceName)-1] = 0;
     }
     Sc10FontData( SvStream& rStream );
-    virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10FontData(*this); }
+    virtual ScDataObject*   Clone() const override { return new Sc10FontData(*this); }
 };
 
 // Font-Collection
@@ -629,7 +629,7 @@ public:
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10NameData(SvStream& rStream);
-    virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10NameData(*this); }
+    virtual ScDataObject*   Clone() const override { return new Sc10NameData(*this); }
 };
 
 // Range-Collection
@@ -680,7 +680,7 @@ public:
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10PatternData(SvStream& rStream);
-virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10PatternData(*this); }
+virtual ScDataObject*       Clone() const override { return new Sc10PatternData(*this); }
 };
 
 // Template-Collection
@@ -708,7 +708,7 @@ public:
                             memcpy(&DataBaseRec, &rData.DataBaseRec, sizeof(DataBaseRec));
                         }
                         Sc10DataBaseData(SvStream& rStream);
-virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10DataBaseData(*this); }
+virtual ScDataObject*       Clone() const override { return new Sc10DataBaseData(*this); }
 };
 
 // DataBank-Collection
@@ -732,7 +732,7 @@ public:
                         Sc10PageData( const Sc10PageFormat& rFormat ) : aPageFormat(rFormat) {}
     bool                operator==( const Sc10PageData& rData ) const
                             { return aPageFormat == rData.aPageFormat; }
-    virtual ScDataObject*   Clone() const SAL_OVERRIDE;
+    virtual ScDataObject*   Clone() const override;
 };
 
 // PageFormat-Collection

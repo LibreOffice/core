@@ -68,7 +68,7 @@ class LwpFribText : public LwpFrib
 public:
     LwpFribText( LwpPara* pPara, bool bNoUnicode=false);
     virtual ~LwpFribText(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
     OUString m_Content;
@@ -96,7 +96,7 @@ class LwpFribParaNumber : public LwpFrib
 public:
     explicit LwpFribParaNumber( LwpPara* pPara ) : LwpFrib(pPara),
         m_nStyleID(0), m_nNumberChar(0), m_nLevel(1), m_nStart(0){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
 
     inline sal_uInt16 GetStyleID() const;
 
@@ -130,9 +130,9 @@ public:
 
     virtual ~LwpFribDocVar();
 
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
 
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
+    void RegisterStyle(LwpFoundry* pFoundry) override;
 
     void XFConvert(XFContentContainer* pXFPara);
 
@@ -187,7 +187,7 @@ class LwpFribUnicode: public LwpFrib
 public:
     explicit LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
     virtual ~LwpFribUnicode(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
     OUString m_Content;
@@ -201,7 +201,7 @@ public:
     explicit LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
         m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){}
     virtual ~LwpFribPageNumber(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void XFConvert(XFContentContainer* pXFPara);
 private:
     sal_uInt16 m_nNumStyle;

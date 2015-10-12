@@ -65,13 +65,13 @@ private:
 public:
     SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLoadOptPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 class SwCaptionOptDlg : public SfxSingleTabDialog
@@ -83,7 +83,7 @@ public:
 class CaptionComboBox : public SwComboBox
 {
 protected:
-    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& ) override;
 
 public:
     CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
@@ -101,10 +101,10 @@ private:
 public:
     SwCaptionPreview(vcl::Window* pParent, WinBits nStyle);
     void Init();
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     void SetPreviewText( const OUString& rText );
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual Size GetOptimalSize() const override;
 };
 
 class SwCaptionOptPage : public SfxTabPage
@@ -169,13 +169,13 @@ public:
                         SwCaptionOptPage( vcl::Window* pParent,
                                          const SfxItemSet& rSet );
                         virtual ~SwCaptionOptPage();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
 #endif

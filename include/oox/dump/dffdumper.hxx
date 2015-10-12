@@ -41,9 +41,9 @@ protected:
 
     using               SequenceRecordObjectBase::construct;
 
-    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
-    virtual void        implWriteExtHeader() SAL_OVERRIDE;
-    virtual void        implDumpRecordBody() SAL_OVERRIDE;
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) override;
+    virtual void        implWriteExtHeader() override;
+    virtual void        implDumpRecordBody() override;
 
 private:
     sal_uInt32          dumpDffSimpleColor( const String& rName );

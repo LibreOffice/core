@@ -137,15 +137,15 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
     virtual ~ExtBoxWithBtns_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 
-    virtual void    RecalcAll() SAL_OVERRIDE;
-    virtual void    selectEntry( const long nPos ) SAL_OVERRIDE;
+    virtual void    RecalcAll() override;
+    virtual void    selectEntry( const long nPos ) override;
 
     void            enableButtons( bool bEnable );
 };

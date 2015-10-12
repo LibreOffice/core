@@ -78,12 +78,12 @@ class SwWrapTabPage: public SfxTabPage
     bool m_bContourImage;
 
     virtual ~SwWrapTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void            ApplyImageList();
-    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     DECL_LINK( RangeModifyHdl, MetricField * );
     DECL_LINK_TYPED( RangeLoseFocusHdl, Control&, void );
@@ -100,8 +100,8 @@ public:
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
-    virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool    FillItemSet(SfxItemSet *rSet) override;
+    virtual void    Reset(const SfxItemSet *rSet) override;
 
     static const sal_uInt16* GetRanges() { return m_aWrapPageRg; }
     inline void     SetNewFrame(bool bNewFrame) { m_bNew = bNewFrame; }

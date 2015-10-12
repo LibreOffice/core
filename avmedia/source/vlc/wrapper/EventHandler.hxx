@@ -28,7 +28,7 @@ namespace wrapper
         void stop();
 
     protected:
-        virtual void SAL_CALL run() SAL_OVERRIDE;
+        virtual void SAL_CALL run() override;
 
     public:
         typedef std::function< void() > TCallback;

@@ -40,25 +40,25 @@ public:
     void releaseInputFiles();
 
     // XPlayer
-    virtual void SAL_CALL start() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL stop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isPlaying() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getDuration() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMediaTime( double fTime ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual double SAL_CALL getMediaTime() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isPlaybackLoop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVolumeDB( sal_Int16 nVolumeDB ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getVolumeDB() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMute( sal_Bool bSet ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isMute() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const css::uno::Sequence< css::uno::Any >& rArguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL start() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL stop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isPlaying() throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getDuration() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMediaTime( double fTime ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getMediaTime() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isPlaybackLoop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setVolumeDB( sal_Int16 nVolumeDB ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getVolumeDB() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMute( sal_Bool bSet ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isMute() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const css::uno::Sequence< css::uno::Any >& rArguments ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber() throw (css::uno::RuntimeException, std::exception) override;
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     DECL_LINK_TYPED( TimerHandler, Timer*, void );

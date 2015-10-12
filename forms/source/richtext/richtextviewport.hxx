@@ -43,13 +43,13 @@ namespace frm
         bool    GetHideInactiveSelection() const { return m_bHideInactiveSelection; }
 
     protected:
-        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void        GetFocus() SAL_OVERRIDE;
-        virtual void        LoseFocus() SAL_OVERRIDE;
-        virtual void        KeyInput( const KeyEvent& _rKEvt ) SAL_OVERRIDE;
-        virtual void        MouseMove( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonDown( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
-        virtual void        MouseButtonUp( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
+        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void        GetFocus() override;
+        virtual void        LoseFocus() override;
+        virtual void        KeyInput( const KeyEvent& _rKEvt ) override;
+        virtual void        MouseMove( const MouseEvent& _rMEvt ) override;
+        virtual void        MouseButtonDown( const MouseEvent& _rMEvt ) override;
+        virtual void        MouseButtonUp( const MouseEvent& _rMEvt ) override;
 
     private:
         inline void implInvalidateAttributes() const

@@ -82,7 +82,7 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        ) SAL_OVERRIDE;
+        ) override;
 
     private:
         virtual ~IgnoringSettingsImport()
@@ -99,7 +99,7 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        ) SAL_OVERRIDE;
+        ) override;
 
     protected:
         virtual ~OfficeSettingsImport();
@@ -122,8 +122,8 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        ) SAL_OVERRIDE;
-        virtual void endElement() SAL_OVERRIDE;
+        ) override;
+        virtual void endElement() override;
 
     protected:
         // own overridables
@@ -148,11 +148,11 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        ) SAL_OVERRIDE;
+        ) override;
 
     protected:
         // ConfigItemImport overridables
-        virtual void getItemValue( css::uno::Any& o_rValue ) const SAL_OVERRIDE;
+        virtual void getItemValue( css::uno::Any& o_rValue ) const override;
 
     private:
         /// the settings represented by our child elements

@@ -56,7 +56,7 @@ public:
         @return
             The rectangle of the visible part of the document.
      */
-    virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
+    virtual Rectangle GetVisibleArea() const override;
 
     /** Transform the specified point from internal coordinates to an
         absolute screen position.
@@ -68,7 +68,7 @@ public:
             The same point but in screen coordinates relative to the upper
             left corner of the (current) screen.
      */
-    virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
+    virtual Point LogicToPixel (const Point& rPoint) const override;
 
     /** Transform the specified size from internal coordinates to a screen
     * position.
@@ -79,7 +79,7 @@ public:
         @return
             The same size but in screen coordinates.
      */
-    virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
+    virtual Size LogicToPixel (const Size& rSize) const override;
 
 protected:
     SdrPaintView* mpView;

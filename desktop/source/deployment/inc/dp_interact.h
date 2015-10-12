@@ -118,7 +118,7 @@ public:
     inline bool isAborted() const { return m_aborted; }
 
     // XAbortChannel
-    virtual void SAL_CALL sendAbort() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL sendAbort() throw (css::uno::RuntimeException, std::exception) override;
 
     class SAL_DLLPRIVATE Chain
     {

@@ -294,7 +294,7 @@ public:
     DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void    StartDocking();
     virtual bool    Docking( const Point& rPos, Rectangle& rRect );
@@ -304,10 +304,10 @@ public:
 
     virtual void    Resizing( Size& rSize );
     virtual bool    Close();
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            RollDown();
     bool            IsRollUp() const;
@@ -334,19 +334,19 @@ public:
 
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     PosSizeFlags nFlags = PosSizeFlags::All ) SAL_OVERRIDE;
+                                     PosSizeFlags nFlags = PosSizeFlags::All ) override;
     void            SetPosSizePixel( const Point& rNewPos,
-                                     const Size& rNewSize ) SAL_OVERRIDE
+                                     const Size& rNewSize ) override
                         { Window::SetPosSizePixel( rNewPos, rNewSize ); }
-    Point           GetPosPixel() const SAL_OVERRIDE;
-    Size            GetSizePixel() const SAL_OVERRIDE;
-    void            SetOutputSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+    Point           GetPosPixel() const override;
+    Size            GetSizePixel() const override;
+    void            SetOutputSizePixel( const Size& rNewSize ) override;
     Size            GetOutputSizePixel() const;
 
-    virtual void SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual OUString GetText() const SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
+    virtual void SetText( const OUString& rStr ) override;
+    virtual OUString GetText() const override;
+    virtual Size GetOptimalSize() const override;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 
 

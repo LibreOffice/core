@@ -79,14 +79,14 @@ public:
     void    SetHatchBorderPixel( const Size & rSize );
 
     void    SelectMouse( const Point & rPos );
-    virtual void    MouseButtonUp( const MouseEvent & rEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent & rEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent & rEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent & rEvt ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent & rEvt ) override;
+    virtual void    MouseMove( const MouseEvent & rEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent & rEvt ) override;
+    virtual void    KeyInput( const KeyEvent & rEvt ) override;
+    virtual void    Resize() override;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & ) override;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX

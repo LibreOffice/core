@@ -29,7 +29,7 @@ class spDefContext : public oox::core::ContextHandler2
 {
 public:
     spDefContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rDefaultObject );
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     Shape& mrDefaultObject;

@@ -67,7 +67,7 @@ namespace dxcanvas
                       const DeviceRef&        rDevice );
 
         /// Dispose all internal references
-        virtual void disposeThis() SAL_OVERRIDE;
+        virtual void disposeThis() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);

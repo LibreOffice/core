@@ -37,33 +37,33 @@ class ChartWindow : public vcl::Window
 public:
     ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle );
     virtual ~ChartWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void clear();
 
     //from base class Window:
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void Activate() SAL_OVERRIDE;
-    virtual void Deactivate() SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void Resize() override;
+    virtual void Activate() override;
+    virtual void Deactivate() override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual void Command( const CommandEvent& rCEvt ) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 
     void ForceInvalidate();
-    virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
-    virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
-    virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
+    virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
 private:
     ChartController* m_pWindowController;

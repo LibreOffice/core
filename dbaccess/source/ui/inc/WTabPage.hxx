@@ -36,7 +36,7 @@ namespace dbaui
 
     public:
         virtual ~OWizardPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
         virtual void        Reset ( )           = 0;
         virtual bool    LeavePage()         = 0;
         virtual OUString    GetTitle() const    = 0;

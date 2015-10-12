@@ -65,9 +65,9 @@ class ImplSdPPTImport : public SdrPowerPointImport
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName );
 
-    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) SAL_OVERRIDE;
+    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPageCapsule pPage,
-                                            SfxStyleSheet*, SfxStyleSheet** ) const SAL_OVERRIDE;
+                                            SfxStyleSheet*, SfxStyleSheet** ) const override;
 
 public:
 
@@ -78,7 +78,7 @@ public:
     virtual ~ImplSdPPTImport();
 
     bool         Import();
-    virtual bool ReadFormControl(  tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const SAL_OVERRIDE;
+    virtual bool ReadFormControl(  tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const override;
 };
 
 class SdPPTImport

@@ -37,10 +37,10 @@ public:
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLBlockListExport() {}
-    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
-    void _ExportAutoStyles() SAL_OVERRIDE {}
-    void _ExportMasterStyles () SAL_OVERRIDE {}
-    void _ExportContent() SAL_OVERRIDE {}
+    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass) override;
+    void _ExportAutoStyles() override {}
+    void _ExportMasterStyles () override {}
+    void _ExportContent() override {}
 };
 
 class SwXMLTextBlockExport : public SvXMLExport
@@ -56,11 +56,11 @@ public:
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLTextBlockExport() {}
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) SAL_OVERRIDE {return 0;}
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override {return 0;}
     sal_uInt32 exportDoc(const OUString & rText);
-    void _ExportAutoStyles() SAL_OVERRIDE {}
-    void _ExportMasterStyles () SAL_OVERRIDE {}
-    void _ExportContent() SAL_OVERRIDE {}
+    void _ExportAutoStyles() override {}
+    void _ExportMasterStyles () override {}
+    void _ExportContent() override {}
 };
 
 #endif

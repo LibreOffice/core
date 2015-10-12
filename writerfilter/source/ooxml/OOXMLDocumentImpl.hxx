@@ -94,48 +94,48 @@ public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages);
     virtual ~OOXMLDocumentImpl();
 
-    virtual void resolve(Stream & rStream) SAL_OVERRIDE;
+    virtual void resolve(Stream & rStream) override;
 
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rType,
-                                 const sal_Int32 nNoteId) SAL_OVERRIDE;
+                                 const sal_Int32 nNoteId) override;
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rType,
-                                const sal_Int32 nNoteId) SAL_OVERRIDE;
+                                const sal_Int32 nNoteId) override;
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
-                               const OUString & rId) SAL_OVERRIDE;
+                               const OUString & rId) override;
     virtual void resolveFooter(Stream & rStream,
                                const sal_Int32 type,
-                               const OUString & rId) SAL_OVERRIDE;
+                               const OUString & rId) override;
 
-    virtual void resolveComment(Stream & rStream, const sal_Int32 nId) SAL_OVERRIDE;
+    virtual void resolveComment(Stream & rStream, const sal_Int32 nId) override;
 
     OOXMLPropertySet * getPicturePropSet(const OUString & rId);
-    virtual void resolvePicture(Stream & rStream, const OUString & rId) SAL_OVERRIDE;
+    virtual void resolvePicture(Stream & rStream, const OUString & rId) override;
 
-    virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
+    virtual OUString getTargetForId(const OUString & rId) override;
 
-    virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::frame::XModel> getModel() SAL_OVERRIDE;
-    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) SAL_OVERRIDE;
-    virtual void setXNoteId(const sal_Int32 nId) SAL_OVERRIDE;
-    virtual sal_Int32 getXNoteId() const SAL_OVERRIDE;
-    virtual void setXNoteType(const Id & rId) SAL_OVERRIDE;
-    virtual const OUString & getTarget() const SAL_OVERRIDE;
-    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) SAL_OVERRIDE;
-    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() SAL_OVERRIDE;
-    virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() SAL_OVERRIDE;
+    virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    virtual css::uno::Reference<css::frame::XModel> getModel() override;
+    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) override;
+    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() override;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() override;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) override;
+    virtual void setXNoteId(const sal_Int32 nId) override;
+    virtual sal_Int32 getXNoteId() const override;
+    virtual void setXNoteType(const Id & rId) override;
+    virtual const OUString & getTarget() const override;
+    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) override;
+    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) override;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() override;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() override;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() override;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList() override;
+    virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() override;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() override;
+    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() override;
+    virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() override;
 
     void incrementProgress();
     bool IsSkipImages() { return mbSkipImages; };

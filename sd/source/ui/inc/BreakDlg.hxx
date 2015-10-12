@@ -53,9 +53,9 @@ public:
         sal_uLong nSumActionCount,
         sal_uLong nObjCount);
     virtual ~BreakDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    short Execute() SAL_OVERRIDE;
+    short Execute() override;
 
 private:
     VclPtr<FixedText>      m_pFiObjInfo;

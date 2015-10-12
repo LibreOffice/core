@@ -29,9 +29,9 @@ class PlacesListBox_Impl : public SvHeaderTabListBox
     public:
         PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
         virtual ~PlacesListBox_Impl( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 };
 
 /** ListBox to handle Places.
@@ -51,7 +51,7 @@ class PlacesListBox : public Control
     public:
         PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits );
         virtual ~PlacesListBox( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void AppendPlace( PlacePtr pPlace );
         void RemovePlace( sal_uInt16 nPos );
@@ -63,14 +63,14 @@ class PlacesListBox : public Control
         void SetAddHdl( const Link<Button*,void>& rHdl );
         void SetDelHdl( const Link<Button*,void>& rHdl );
         void SetDelEnabled( bool enabled );
-        void SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+        void SetSizePixel( const Size& rNewSize ) override;
         void updateView( );
 
         VclPtr<PushButton> GetAddButton() const { return mpAddBtn; }
         VclPtr<PushButton> GetDeleteButton() const { return mpDelBtn; }
         VclPtr<PlacesListBox_Impl> GetPlacesListBox() const { return mpImpl; }
 
-        virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool Notify( NotifyEvent& rNEvt ) override;
 
     private:
 

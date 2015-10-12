@@ -59,7 +59,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( ::sal_Int32 aElement,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElement )
             {
@@ -96,7 +96,7 @@ public:
 
     virtual ContextHandlerRef
     onCreateContext( ::sal_Int32 aElement,
-                     const AttributeList& rAttribs ) SAL_OVERRIDE
+                     const AttributeList& rAttribs ) override
         {
             switch( aElement )
             {
@@ -161,7 +161,7 @@ public:
         }
 
     virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
-        throw (SAXException, RuntimeException) SAL_OVERRIDE
+        throw (SAXException, RuntimeException) override
         {
             sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
             if( nIdx != -1 )

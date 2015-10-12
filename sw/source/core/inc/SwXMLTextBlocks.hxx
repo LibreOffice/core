@@ -53,38 +53,38 @@ public:
     SwXMLTextBlocks( const OUString& rFile );
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText = false );
-    virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) SAL_OVERRIDE;
+    virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
     static OUString GeneratePackageName ( const OUString& rShort );
     virtual ~SwXMLTextBlocks();
-    virtual sal_uLong Delete( sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) SAL_OVERRIDE;
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) SAL_OVERRIDE;
-    virtual void  ClearDoc() SAL_OVERRIDE;
-    virtual sal_uLong GetDoc( sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) SAL_OVERRIDE;
-    virtual sal_uLong PutDoc() SAL_OVERRIDE;
-    virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) SAL_OVERRIDE;
-    virtual sal_uLong MakeBlockList() SAL_OVERRIDE;
+    virtual sal_uLong Delete( sal_uInt16 ) override;
+    virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) override;
+    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) override;
+    virtual void  ClearDoc() override;
+    virtual sal_uLong GetDoc( sal_uInt16 ) override;
+    virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) override;
+    virtual sal_uLong PutDoc() override;
+    virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) override;
+    virtual sal_uLong MakeBlockList() override;
 
-    virtual short GetFileType() const SAL_OVERRIDE;
-    virtual sal_uLong OpenFile( bool bReadOnly = true ) SAL_OVERRIDE;
-    virtual void  CloseFile() SAL_OVERRIDE;
+    virtual short GetFileType() const override;
+    virtual sal_uLong OpenFile( bool bReadOnly = true ) override;
+    virtual void  CloseFile() override;
 
     static bool IsFileUCBStorage( const OUString & rFileName);
 
     // Methods for the new Autocorrecter
     sal_uLong GetText( const OUString& rShort, OUString& );
 
-    virtual bool IsOnlyTextBlock( const OUString& rShort ) const SAL_OVERRIDE;
+    virtual bool IsOnlyTextBlock( const OUString& rShort ) const override;
     bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
     void SetIsTextOnly( const OUString& rShort, bool bNewValue );
 
     virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false ) SAL_OVERRIDE;
+                                 bool bFileAlreadyOpen = false ) override;
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
                                  const SvxMacroTableDtor& rMacroTable,
-                                 bool bFileAlreadyOpen = false ) SAL_OVERRIDE;
-    virtual bool PutMuchEntries( bool bOn ) SAL_OVERRIDE;
+                                 bool bFileAlreadyOpen = false ) override;
+    virtual bool PutMuchEntries( bool bOn ) override;
 
 public:
     SwDoc* GetDoc() const { return pDoc; }

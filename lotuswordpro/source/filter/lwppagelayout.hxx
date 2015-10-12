@@ -67,12 +67,12 @@ class LwpPageLayout: public LwpLayout
 public:
     LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpPageLayout();
-    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void RegisterStyle() override;
     OUString RegisterEndnoteStyle();
-    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_PAGE_LAYOUT;}
+    virtual void Parse(IXFStream* pOutputStream) override;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_PAGE_LAYOUT;}
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     LwpHeaderLayout* GetHeaderLayout();
     LwpFooterLayout* GetFooterLayout();
     void ParseGeometry(XFPageMaster* pm1);
@@ -87,8 +87,8 @@ protected:
     void ParseFootNoteSeparator(XFPageMaster* pm1);
     double GetMarginWidth();
     void GetWidthAndHeight(double& fWidth, double& fHeight);
-    double GetWidth() SAL_OVERRIDE;
-    double GetHeight() SAL_OVERRIDE;
+    double GetWidth() override;
+    double GetHeight() override;
 protected:
     LwpAtomHolder*  m_pPrinterBinName;
     sal_uInt16      m_nPrinterBin;
@@ -101,7 +101,7 @@ public:
     void ConvertFillerPageText(XFContentContainer* pCont);
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
-    virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber = 0) SAL_OVERRIDE;
+    virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber = 0) override;
     bool operator <(LwpPageLayout& Other);
     LwpPara* GetPagePosition();
 };
@@ -113,12 +113,12 @@ class LwpHeaderLayout: public LwpPlacableLayout
 public:
     LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeaderLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_HEADER_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEADER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle( XFPageMaster* pm1 );
     void RegisterStyle( XFMasterPage* mp1 );
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     void ParseMargins( XFHeaderStyle* ph1 );
     void ParseBorder( XFHeaderStyle* ph1 );
     void ParseShadow( XFHeaderStyle* ph1 );
@@ -136,12 +136,12 @@ class LwpFooterLayout: public LwpPlacableLayout
 public:
     LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFooterLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTER_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FOOTER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);
     void RegisterStyle(XFMasterPage* mp1);
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     void ParseMargins( XFFooterStyle* pFooterStyle );
     void ParseBorder( XFFooterStyle* pFooterStyle );
     void ParseShadow( XFFooterStyle* pFooterStyle );

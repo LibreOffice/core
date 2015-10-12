@@ -66,7 +66,7 @@ private:
     void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
 
 protected:
-    virtual void            NextToken( int nToken ) SAL_OVERRIDE;
+    virtual void            NextToken( int nToken ) override;
 
 public:
     EditHTMLParser(SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);

@@ -72,7 +72,7 @@ private:
         { return maPropertyNames; }
     bool RetrieveOptions();
 
-    virtual void                ImplCommit() SAL_OVERRIDE;
+    virtual void                ImplCommit() override;
 
 public:
     SvxChartOptions();
@@ -81,7 +81,7 @@ public:
     const SvxChartColorTable&   GetDefaultColors();
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 };
 
 
@@ -94,8 +94,8 @@ public:
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
     void                    SetOptions( SvxChartOptions* pOpts ) const;
 
     const SvxChartColorTable & GetColorList() const  { return m_aColorTable;}

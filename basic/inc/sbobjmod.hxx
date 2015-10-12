@@ -39,9 +39,9 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
     SbObjModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
-    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) override;
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     using SbxValue::GetObject;
     SbxVariable* GetObject();
@@ -64,7 +64,7 @@ public:
     TYPEINFO_OVERRIDE();
     SbUserFormModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
-    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) override;
     void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();
     void Load();
@@ -93,8 +93,8 @@ public:
     SbUserFormModuleInstance( SbUserFormModule* pParentModule, const OUString& rName,
         const css::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual bool IsClass( const OUString& ) const SAL_OVERRIDE;
-    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
+    virtual bool IsClass( const OUString& ) const override;
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) override;
 };
 
 #endif // INCLUDED_BASIC_INC_SBOBJMOD_HXX

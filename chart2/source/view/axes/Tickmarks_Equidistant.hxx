@@ -39,8 +39,8 @@ public:
     double*     firstValue();
     double*     nextValue();
 
-    virtual TickInfo*   firstInfo() SAL_OVERRIDE;
-    virtual TickInfo*   nextInfo() SAL_OVERRIDE;
+    virtual TickInfo*   firstInfo() override;
+    virtual TickInfo*   nextInfo() override;
 
 private: //methods
     sal_Int32   getIntervalCount( sal_Int32 nDepth );

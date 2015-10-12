@@ -99,51 +99,51 @@ namespace pdfi
 
         // ContentSink interface implementation
 
-        virtual void setPageNum( sal_Int32 nNumPages ) SAL_OVERRIDE;
-        virtual void startPage( const css::geometry::RealSize2D& rSize ) SAL_OVERRIDE;
-        virtual void endPage() SAL_OVERRIDE;
+        virtual void setPageNum( sal_Int32 nNumPages ) override;
+        virtual void startPage( const css::geometry::RealSize2D& rSize ) override;
+        virtual void endPage() override;
 
         virtual void hyperLink( const css::geometry::RealRectangle2D& rBounds,
-                                const OUString&                             rURI ) SAL_OVERRIDE;
-        virtual void pushState() SAL_OVERRIDE;
-        virtual void popState() SAL_OVERRIDE;
-        virtual void setFlatness( double ) SAL_OVERRIDE;
-        virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) SAL_OVERRIDE;
+                                const OUString&                             rURI ) override;
+        virtual void pushState() override;
+        virtual void popState() override;
+        virtual void setFlatness( double ) override;
+        virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) override;
         virtual void setLineDash( const css::uno::Sequence<double>& dashes,
-                                  double                                         start ) SAL_OVERRIDE;
-        virtual void setLineJoin(sal_Int8) SAL_OVERRIDE;
-        virtual void setLineCap(sal_Int8) SAL_OVERRIDE;
-        virtual void setMiterLimit(double) SAL_OVERRIDE;
-        virtual void setLineWidth(double) SAL_OVERRIDE;
-        virtual void setFillColor( const css::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
-        virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
-        virtual void setFont( const FontAttributes& rFont ) SAL_OVERRIDE;
-        virtual void setTextRenderMode( sal_Int32 ) SAL_OVERRIDE;
+                                  double                                         start ) override;
+        virtual void setLineJoin(sal_Int8) override;
+        virtual void setLineCap(sal_Int8) override;
+        virtual void setMiterLimit(double) override;
+        virtual void setLineWidth(double) override;
+        virtual void setFillColor( const css::rendering::ARGBColor& rColor ) override;
+        virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) override;
+        virtual void setFont( const FontAttributes& rFont ) override;
+        virtual void setTextRenderMode( sal_Int32 ) override;
 
         virtual void strokePath( const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
+                                       css::rendering::XPolyPolygon2D >& rPath ) override;
         virtual void fillPath( const css::uno::Reference<
-                                     css::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
+                                     css::rendering::XPolyPolygon2D >& rPath ) override;
         virtual void eoFillPath( const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
+                                       css::rendering::XPolyPolygon2D >& rPath ) override;
 
         virtual void intersectClip(const css::uno::Reference<
-                                         css::rendering::XPolyPolygon2D >& rPath) SAL_OVERRIDE;
+                                         css::rendering::XPolyPolygon2D >& rPath) override;
         virtual void intersectEoClip(const css::uno::Reference<
-                                           css::rendering::XPolyPolygon2D >& rPath) SAL_OVERRIDE;
+                                           css::rendering::XPolyPolygon2D >& rPath) override;
 
         virtual void drawGlyphs( const OUString&                               rGlyphs,
                                  const css::geometry::RealRectangle2D& rRect,
                                  const css::geometry::Matrix2D&        rFontMatrix,
-                                 double fontSize) SAL_OVERRIDE;
-        virtual void endText() SAL_OVERRIDE;
+                                 double fontSize) override;
+        virtual void endText() override;
 
         virtual void drawMask(const css::uno::Sequence<
                                     css::beans::PropertyValue>& xBitmap,
-                              bool                                           bInvert ) SAL_OVERRIDE;
+                              bool                                           bInvert ) override;
         /// Given image must already be color-mapped and normalized to sRGB.
         virtual void drawImage(const css::uno::Sequence<
-                                     css::beans::PropertyValue>& xBitmap ) SAL_OVERRIDE;
+                                     css::beans::PropertyValue>& xBitmap ) override;
         /** Given image must already be color-mapped and normalized to sRGB.
 
             maskColors must contain two sequences of color components
@@ -151,16 +151,16 @@ namespace pdfi
         virtual void drawColorMaskedImage(const css::uno::Sequence<
                                                 css::beans::PropertyValue>& xBitmap,
                                           const css::uno::Sequence<
-                                                css::uno::Any>&             xMaskColors ) SAL_OVERRIDE;
+                                                css::uno::Any>&             xMaskColors ) override;
         virtual void drawMaskedImage(const css::uno::Sequence<
                                            css::beans::PropertyValue>& xBitmap,
                                      const css::uno::Sequence<
                                            css::beans::PropertyValue>& xMask,
-                                     bool                                             bInvertMask) SAL_OVERRIDE;
+                                     bool                                             bInvertMask) override;
         virtual void drawAlphaMaskedImage(const css::uno::Sequence<
                                                 css::beans::PropertyValue>& xImage,
                                           const css::uno::Sequence<
-                                                css::beans::PropertyValue>& xMask) SAL_OVERRIDE;
+                                                css::beans::PropertyValue>& xMask) override;
 
         /// nElements == -1 means fill in number of pages
         void startIndicator( const OUString& rText, sal_Int32 nElements = -1 );

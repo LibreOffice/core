@@ -40,7 +40,7 @@ private:
 
 protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                  const SfxPoolItem* pState ) override;
 
 public:
     SvxFontSizeMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );

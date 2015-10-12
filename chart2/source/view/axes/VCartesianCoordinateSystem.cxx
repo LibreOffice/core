@@ -47,7 +47,7 @@ public:
 
     //XTextualDataSequence
     virtual uno::Sequence< OUString > SAL_CALL getTextualData()
-        throw ( uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw ( uno::RuntimeException, std::exception) override
     {
         return m_aTextSequence;
     }

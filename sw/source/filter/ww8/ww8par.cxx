@@ -454,9 +454,9 @@ struct SBBItem
 public:
     Sttb();
     virtual ~Sttb();
-    bool Read(SvStream &rS) SAL_OVERRIDE;
+    bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* fp ) SAL_OVERRIDE;
+    virtual void Print( FILE* fp ) override;
 #endif
     OUString getStringAtIndex( sal_uInt32 );
 };

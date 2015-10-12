@@ -98,12 +98,12 @@ public:
     uno::Any getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException);
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override;
 
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
@@ -238,7 +238,7 @@ class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
 public:
     explicit ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer );
-    virtual uno::Any createCollectionObject( const uno::Any& rSource ) SAL_OVERRIDE;
+    virtual uno::Any createCollectionObject( const uno::Any& rSource ) override;
 
 private:
     ScVbaObjectContainerRef mxContainer;
@@ -344,11 +344,11 @@ public:
 protected:
     uno::Reference< container::XIndexContainer > createForm() throw (uno::RuntimeException);
 
-    virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const SAL_OVERRIDE;
-    virtual OUString implGetShapeServiceName() const SAL_OVERRIDE;
+    virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const override;
+    virtual OUString implGetShapeServiceName() const override;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const;
-    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException) SAL_OVERRIDE;
-    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException) override;
+    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) override;
 
 protected:
     uno::Reference< container::XIndexContainer > mxFormIC;
@@ -450,8 +450,8 @@ public:
         const uno::Reference< sheet::XSpreadsheet >& rxSheet ) throw (uno::RuntimeException);
 
 protected:
-    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) SAL_OVERRIDE;
-    virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const SAL_OVERRIDE;
+    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) override;
+    virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const override;
 };
 
 ScVbaButtonContainer::ScVbaButtonContainer(

@@ -51,17 +51,17 @@ class SvxTabulatorTabPage : public SfxTabPage
 
 public:
     virtual ~SvxTabulatorTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
 
     void                DisableControls( const sal_uInt16 nFlag );
 
 protected:
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
 private:
     SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -119,7 +119,7 @@ private:
     DECL_LINK_TYPED( GetFillCharHdl_Impl, Control&, void );
     DECL_LINK_TYPED( GetDezCharHdl_Impl, Control&, void );
 
-    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX

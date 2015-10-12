@@ -38,15 +38,15 @@ public:
     explicit ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
     virtual ~ViewContactOfPageSubObject();
 
-    virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
+    virtual ViewContact* GetParentContact() const override;
     const SdrPage& getPage() const;
 };
 
 class ViewContactOfPageBackground : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -56,8 +56,8 @@ public:
 class ViewContactOfPageShadow : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -67,8 +67,8 @@ public:
 class ViewContactOfPageFill : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -78,8 +78,8 @@ public:
 class ViewContactOfMasterPage : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -89,8 +89,8 @@ public:
 class ViewContactOfOuterPageBorder : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -100,8 +100,8 @@ public:
 class ViewContactOfInnerPageBorder : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -118,15 +118,15 @@ public:
 class ViewContactOfPageHierarchy : public ViewContactOfPageSubObject
 {
 protected:
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     explicit ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
     virtual ~ViewContactOfPageHierarchy();
 
-    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
-    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetObjectCount() const override;
+    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
 };
 
 class ViewContactOfGrid : public ViewContactOfPageSubObject
@@ -135,8 +135,8 @@ protected:
     // bitfield
     bool                                        mbFront : 1;
 
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     ViewContactOfGrid(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront);
@@ -151,8 +151,8 @@ protected:
     // bitfield
     bool                                        mbFront : 1;
 
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 
 public:
     ViewContactOfHelplines(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront);
@@ -184,7 +184,7 @@ protected:
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
 public:
     // access to SdrObject
@@ -198,16 +198,16 @@ public:
     virtual ~ViewContactOfSdrPage();
 
     // Access to possible sub-hierarchy
-    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
-    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetObjectCount() const override;
+    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
 
     // React on changes of the object of this ViewContact
-    virtual void ActionChanged() SAL_OVERRIDE;
+    virtual void ActionChanged() override;
 
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

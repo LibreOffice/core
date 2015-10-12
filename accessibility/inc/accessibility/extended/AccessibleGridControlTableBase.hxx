@@ -59,11 +59,11 @@ public:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleChild,
@@ -79,48 +79,48 @@ public:
 
     /** @return  The number of used rows in the table (0 = empty table). */
     virtual sal_Int32 SAL_CALL getAccessibleRowCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The number of used columns in the table (0 = empty table). */
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The row extent of the specified cell (always 1). */
     virtual sal_Int32 SAL_CALL
     getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The column extent of the specified cell (always 1). */
     virtual sal_Int32 SAL_CALL
     getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The caption cell of the table (not supported). */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleCaption()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The summary object of the table (not supported). */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleSummary()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The child index of the specified cell. */
     virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The row index of the specified child cell. */
     virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /** @return  The column index of the specified child cell. */
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleRowDescription,
@@ -138,23 +138,23 @@ public:
 
     /** Queries for a new interface. */
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** Aquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () override;
 
     /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () override;
 
     // XTypeProvider ----------------------------------------------------------
 
     /** @return  A sequence of possible types (received from base classes). */
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     /** @return  An unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     // internal helper methods ------------------------------------------------

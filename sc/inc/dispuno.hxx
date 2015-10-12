@@ -62,35 +62,35 @@ public:
                             ScDispatchProviderInterceptor(ScTabViewShell* pViewSh);
     virtual                 ~ScDispatchProviderInterceptor();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
                             queryDispatch( const ::com::sun::star::util::URL& aURL,
                                         const OUString& aTargetFrameName,
                                         sal_Int32 nSearchFlags )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
                                         ::com::sun::star::frame::XDispatch > > SAL_CALL
                             queryDispatches( const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::frame::DispatchDescriptor >& aDescripts )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                             /// XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-                            getSlaveDispatchProvider() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            getSlaveDispatchProvider() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setSlaveDispatchProvider( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-                            getMasterDispatchProvider() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            getMasterDispatchProvider() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setMasterDispatchProvider( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XDispatchProvider >& xNewSupplier )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                             /// XEventListener
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 class ScDispatch : public cppu::WeakImplHelper<
@@ -108,31 +108,31 @@ public:
                             ScDispatch(ScTabViewShell* pViewSh);
     virtual                 ~ScDispatch();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XDispatch
     virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL,
                                 const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aArgs )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   addStatusListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::frame::XStatusListener >& xControl,
                                 const ::com::sun::star::util::URL& aURL )
                                 throw(::com::sun::star::uno::RuntimeException,
-                                      std::exception) SAL_OVERRIDE;
+                                      std::exception) override;
     virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::frame::XStatusListener >& xControl,
                                 const ::com::sun::star::util::URL& aURL )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                             /// XSelectionChangeListener
     virtual void SAL_CALL   selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
                                 throw (::com::sun::star::uno::RuntimeException,
-                                       std::exception) SAL_OVERRIDE;
+                                       std::exception) override;
 
                             /// XEventListener
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
-                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 #endif

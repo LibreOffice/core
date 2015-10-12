@@ -56,13 +56,13 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScAnalysisOfVarianceDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
 protected:
-    virtual sal_Int16 GetUndoNameId() SAL_OVERRIDE;
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) SAL_OVERRIDE;
+    virtual sal_Int16 GetUndoNameId() override;
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
 
 #endif

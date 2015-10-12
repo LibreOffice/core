@@ -94,11 +94,11 @@ public:
 
         // css.frame.XStatusListener
         virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-          throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+          throw(css::uno::RuntimeException, std::exception) override;
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-          throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+          throw(css::uno::RuntimeException, std::exception) override;
 
         bool IsSet() const {return m_bState;}
 };

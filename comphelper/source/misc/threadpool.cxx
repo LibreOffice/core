@@ -30,7 +30,7 @@ public:
     {
     }
 
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         ThreadTask *pTask;
         while ( ( pTask = waitForWork() ) )

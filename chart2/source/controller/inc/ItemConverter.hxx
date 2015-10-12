@@ -172,7 +172,7 @@ protected:
         ::com::sun::star::beans::XPropertySet >  GetPropertySet() const { return m_xPropertySet;}
 
     // ____ ::utl::OEventListenerAdapter ____
-    virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource ) SAL_OVERRIDE;
+    virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource ) override;
 
 protected:
     /** sets a new property set, that you get with GetPropertySet().  It should

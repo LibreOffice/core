@@ -36,14 +36,14 @@ class SW_DLLPUBLIC SwAutoCorrect : public SvxAutoCorrect
 protected:
     // Return replacement text (only for SWG-format, all others can be obtained from wordlist!).
     // rShort is stream-name - encrypted!
-    virtual bool GetLongText( const OUString& rShort, OUString& rLong ) SAL_OVERRIDE;
+    virtual bool GetLongText( const OUString& rShort, OUString& rLong ) override;
 
-    virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& ) SAL_OVERRIDE;
+    virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& ) override;
 
     // Text with attributes (only SWG-format!).
     // rShort is stream-name - encrypted!
     virtual bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                              const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) SAL_OVERRIDE;
+                              const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) override;
 
 public:
     SwAutoCorrect( const SvxAutoCorrect& rACorr );

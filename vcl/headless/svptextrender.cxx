@@ -54,8 +54,8 @@ public:
                                        basebmp::Format nBmpFormat, B2IPoint& rTargetPos );
 
 protected:
-    virtual void    RemovingFont( ServerFont& ) SAL_OVERRIDE;
-    virtual void    RemovingGlyph( GlyphData& ) SAL_OVERRIDE;
+    virtual void    RemovingFont( ServerFont& ) override;
+    virtual void    RemovingGlyph( GlyphData& ) override;
 
 };
 

@@ -40,7 +40,7 @@ namespace comphelper
         ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XEventListener> m_xListener;
     public:
         OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener);
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     };
 
 }   // namespace comphelper

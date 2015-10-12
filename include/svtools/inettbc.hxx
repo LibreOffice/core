@@ -53,17 +53,17 @@ friend class SvtURLBox_Impl;
     SAL_DLLPRIVATE void AutoCompleteHandler( Edit* );
 
 protected:
-    virtual bool                    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void                    Select() SAL_OVERRIDE;
-    virtual void                    Modify() SAL_OVERRIDE;
-    virtual bool                    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool                    Notify( NotifyEvent& rNEvt ) override;
+    virtual void                    Select() override;
+    virtual void                    Modify() override;
+    virtual bool                    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     virtual ~SvtURLBox();
-    virtual void                    dispose() SAL_OVERRIDE;
+    virtual void                    dispose() override;
 
     void                            SetBaseURL( const OUString& rURL );
     const OUString&                 GetBaseURL() const { return aBaseURL; }

@@ -64,15 +64,15 @@ public:
     // Animation interface
 
     virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                           const ShapeAttributeLayerSharedPtr& rAttrLayer ) SAL_OVERRIDE;
+                           const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) SAL_OVERRIDE;
-    virtual void end() SAL_OVERRIDE;
+                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
+    virtual void end() override;
 
     // NumberAnimation interface
 
-    virtual bool operator()( double nValue ) SAL_OVERRIDE;
-    virtual double getUnderlyingValue() const SAL_OVERRIDE;
+    virtual bool operator()( double nValue ) override;
+    virtual double getUnderlyingValue() const override;
 
 private:
     void end_();

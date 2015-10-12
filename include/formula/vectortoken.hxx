@@ -63,7 +63,7 @@ class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 public:
     SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength );
 
-    virtual FormulaToken* Clone() const SAL_OVERRIDE;
+    virtual FormulaToken* Clone() const override;
 
     const VectorRefArray& GetArray() const;
     size_t GetArrayLength() const;
@@ -91,7 +91,7 @@ public:
         const std::vector<VectorRefArray>& rArrays, size_t nReqLength, size_t nArrayLength,
         size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
-    virtual FormulaToken* Clone() const SAL_OVERRIDE;
+    virtual FormulaToken* Clone() const override;
 
     const std::vector<VectorRefArray>& GetArrays() const;
     size_t GetArrayLength() const;

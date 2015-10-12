@@ -87,8 +87,8 @@ extern "C" { static void SAL_CALL thisModule() {} }
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper< XDispatchResultListener >
 {
 public:
-    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception ) override;
 };
 
 void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )

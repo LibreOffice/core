@@ -33,9 +33,9 @@ public:
                                SfxStyleSheetBase* pStyle, long nMaxHeight = 32);
     virtual ~CommonStylePreviewRenderer();
 
-    virtual bool recalculate() SAL_OVERRIDE;
-    virtual Size getRenderSize() SAL_OVERRIDE;
-    virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) SAL_OVERRIDE;
+    virtual bool recalculate() override;
+    virtual Size getRenderSize() override;
+    virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) override;
 };
 
 } // end namespace svx

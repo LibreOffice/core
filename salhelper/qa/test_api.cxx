@@ -64,7 +64,7 @@ public:
     explicit DerivedCondition(osl::Mutex & mutex): Condition(mutex) {}
 
 protected:
-    virtual bool applies() const SAL_OVERRIDE { return false; }
+    virtual bool applies() const override { return false; }
 };
 
 class DerivedConditionWaiterTimedout:

@@ -56,13 +56,13 @@ public:
     WinSalSystem() : m_nPrimary( 0 ) {}
     virtual ~WinSalSystem();
 
-    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
-    virtual unsigned int GetDisplayBuiltInScreen() SAL_OVERRIDE;
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  SAL_OVERRIDE;
+    virtual unsigned int GetDisplayScreenCount() override;
+    virtual unsigned int GetDisplayBuiltInScreen() override;
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  override;
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources)  SAL_OVERRIDE;
+                                      int nDefaultButton, bool bUseResources)  override;
     bool initMonitors();
     // discards monitorinfo; used by WM_DISPLAYCHANGED handler
     void clearMonitors();

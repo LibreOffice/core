@@ -32,11 +32,11 @@ class SchOptionTabPage : public SfxTabPage
 public:
     SchOptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchOptionTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
-    virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
+    virtual void Reset(const SfxItemSet* rInAttrs) override;
 
     void Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors );
 

@@ -62,7 +62,7 @@ namespace dbaui
         OUString  GetSelectedDocumentFilter() const;
 
     protected:
-        virtual void        RequestHelp( const HelpEvent& _rHEvt ) SAL_OVERRIDE;
+        virtual void        RequestHelp( const HelpEvent& _rHEvt ) override;
 
         StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation = false ) const;
 

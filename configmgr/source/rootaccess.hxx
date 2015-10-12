@@ -62,14 +62,14 @@ public:
         Components & components, OUString const & pathRepresenation,
         OUString const & locale, bool update);
 
-    virtual Path getAbsolutePath() SAL_OVERRIDE;
+    virtual Path getAbsolutePath() override;
 
     virtual void initBroadcaster(
-        Modifications::Node const & modifications, Broadcaster * broadcaster) SAL_OVERRIDE;
+        Modifications::Node const & modifications, Broadcaster * broadcaster) override;
 
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () override;
 
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () override;
 
     OUString getAbsolutePathRepresentation();
 
@@ -82,58 +82,58 @@ public:
     virtual void SAL_CALL addChangesListener(
         css::uno::Reference< css::util::XChangesListener >
             const & aListener)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeChangesListener(
         css::uno::Reference< css::util::XChangesListener >
             const & aListener)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL commitChanges()
         throw (
             css::lang::WrappedTargetException,
             css::uno::RuntimeException,
-            std::exception) SAL_OVERRIDE;
+            std::exception) override;
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     virtual ~RootAccess();
 
-    virtual Path getRelativePath() SAL_OVERRIDE;
+    virtual Path getRelativePath() override;
 
-    virtual OUString getRelativePathRepresentation() SAL_OVERRIDE;
+    virtual OUString getRelativePathRepresentation() override;
 
-    virtual rtl::Reference< Node > getNode() SAL_OVERRIDE;
+    virtual rtl::Reference< Node > getNode() override;
 
-    virtual bool isFinalized() SAL_OVERRIDE;
+    virtual bool isFinalized() override;
 
-    virtual OUString getNameInternal() SAL_OVERRIDE;
+    virtual OUString getNameInternal() override;
 
-    virtual rtl::Reference< RootAccess > getRootAccess() SAL_OVERRIDE;
+    virtual rtl::Reference< RootAccess > getRootAccess() override;
 
-    virtual rtl::Reference< Access > getParentAccess() SAL_OVERRIDE;
+    virtual rtl::Reference< Access > getParentAccess() override;
 
     virtual void addTypes(std::vector< css::uno::Type > * types)
-        const SAL_OVERRIDE;
+        const override;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services) SAL_OVERRIDE;
+        std::vector< OUString > * services) override;
 
-    virtual void initDisposeBroadcaster(Broadcaster * broadcaster) SAL_OVERRIDE;
+    virtual void initDisposeBroadcaster(Broadcaster * broadcaster) override;
 
-    virtual void clearListeners() throw () SAL_OVERRIDE;
+    virtual void clearListeners() throw () override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     typedef
         std::multiset<

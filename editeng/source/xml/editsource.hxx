@@ -31,9 +31,9 @@ public:
     explicit SvxEditEngineSource( EditEngine* pEditEngine );
     virtual ~SvxEditEngineSource();
 
-    virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
-    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
-    virtual void                UpdateData() SAL_OVERRIDE;
+    virtual SvxEditSource*      Clone() const override;
+    virtual SvxTextForwarder*   GetTextForwarder() override;
+    virtual void                UpdateData() override;
 
 private:
     explicit SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );

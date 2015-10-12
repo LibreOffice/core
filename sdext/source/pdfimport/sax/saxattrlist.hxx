@@ -53,15 +53,15 @@ namespace pdfi
         virtual ~SaxAttrList();
 
         // css::xml::sax::XAttributeList
-        virtual sal_Int16 SAL_CALL getLength() throw(std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw(std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getValueByName(const OUString& aName) throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Int16 SAL_CALL getLength() throw(std::exception) override;
+        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw(std::exception) override;
+        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw(std::exception) override;
+        virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw(std::exception) override;
+        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw(std::exception) override;
+        virtual OUString SAL_CALL getValueByName(const OUString& aName) throw(std::exception) override;
 
         // css::util::XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() throw(std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() throw(std::exception) override;
     };
 }
 

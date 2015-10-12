@@ -112,8 +112,8 @@ public:
 
     /** External representation.
      */
-    virtual storeError guard  (sal_uInt32 nAddr) SAL_OVERRIDE;
-    virtual storeError verify (sal_uInt32 nAddr) const SAL_OVERRIDE;
+    virtual storeError guard  (sal_uInt32 nAddr) override;
+    virtual storeError verify (sal_uInt32 nAddr) const override;
 };
 
 /*========================================================================
@@ -226,8 +226,8 @@ public:
         sal_uInt32       nAddr,
         OStorePageBIOS & rBIOS);
 
-    virtual storeError guard  (sal_uInt32 nAddr) SAL_OVERRIDE;
-    virtual storeError verify (sal_uInt32 nAddr) const SAL_OVERRIDE;
+    virtual storeError guard  (sal_uInt32 nAddr) override;
+    virtual storeError verify (sal_uInt32 nAddr) const override;
 
     /** read (indirect data page).
     */
@@ -647,8 +647,8 @@ public:
 
     /** External representation.
     */
-    virtual storeError guard  (sal_uInt32 nAddr) SAL_OVERRIDE;
-    virtual storeError verify (sal_uInt32 nAddr) const SAL_OVERRIDE;
+    virtual storeError guard  (sal_uInt32 nAddr) override;
+    virtual storeError verify (sal_uInt32 nAddr) const override;
 
     /** attrib.
     */

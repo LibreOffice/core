@@ -56,12 +56,12 @@ public:
 
     virtual ~FmFormModel();
 
-    virtual SdrPage* AllocPage(bool bMasterPage) SAL_OVERRIDE;
-    virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    virtual SdrPage* RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
-    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) SAL_OVERRIDE;
-    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    virtual SdrPage* AllocPage(bool bMasterPage) override;
+    virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
+    virtual SdrPage* RemovePage(sal_uInt16 nPgNum) override;
+    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
+    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
+    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }
     void                    SetObjectShell( SfxObjectShell* pShell );

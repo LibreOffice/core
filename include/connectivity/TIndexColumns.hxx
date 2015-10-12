@@ -30,9 +30,9 @@ namespace connectivity
     {
         OIndexHelper* m_pIndex;
     protected:
-        virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() SAL_OVERRIDE;
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
+        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
     public:
         OIndexColumns(  OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,

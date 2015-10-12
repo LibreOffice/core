@@ -138,7 +138,7 @@ namespace svt
     public:
         ToolPanelDeck( vcl::Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
         virtual ~ToolPanelDeck();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // attributes
         PDeckLayouter       GetLayouter() const;
@@ -153,24 +153,24 @@ namespace svt
         const vcl::Window&     GetPanelWindowAnchor() const;
 
         // IToolPanelDeck
-        virtual size_t      GetPanelCount() const SAL_OVERRIDE;
-        virtual PToolPanel  GetPanel( const size_t i_nPos ) const SAL_OVERRIDE;
+        virtual size_t      GetPanelCount() const override;
+        virtual PToolPanel  GetPanel( const size_t i_nPos ) const override;
         virtual ::boost::optional< size_t >
-                            GetActivePanel() const SAL_OVERRIDE;
-        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) SAL_OVERRIDE;
-        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) SAL_OVERRIDE;
-        virtual void        AddListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
-        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
+                            GetActivePanel() const override;
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) override;
+        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) override;
+        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) override;
+        virtual void        AddListener( IToolPanelDeckListener& i_rListener ) override;
+        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) override;
 
     protected:
         // Window overridables
-        virtual void Resize() SAL_OVERRIDE;
-        virtual bool Notify( NotifyEvent& i_rNotifyEvent ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void Resize() override;
+        virtual bool Notify( NotifyEvent& i_rNotifyEvent ) override;
+        virtual void GetFocus() override;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
+                     GetComponentInterface( bool i_bCreate ) override;
 
     private:
         ::std::unique_ptr< ToolPanelDeck_Impl >   m_pImpl;

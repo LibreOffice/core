@@ -133,7 +133,7 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal();
 
-    virtual bool IsValidFieldIndex() const SAL_OVERRIDE;
+    virtual bool IsValidFieldIndex() const override;
 };
 
 struct ScDBQueryParamMatrix : public ScDBQueryParamBase
@@ -143,7 +143,7 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
     ScDBQueryParamMatrix();
     virtual ~ScDBQueryParamMatrix();
 
-    virtual bool IsValidFieldIndex() const SAL_OVERRIDE;
+    virtual bool IsValidFieldIndex() const override;
 };
 
 #endif

@@ -48,7 +48,7 @@ class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
     void log_write( OString const & text );
 
 protected:
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
     virtual ~ProgressLogImpl();
 
 public:
@@ -56,9 +56,9 @@ public:
                      Reference<XComponentContext> const & xContext );
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL pop() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL pop() throw (RuntimeException, std::exception) override;
 };
 
 

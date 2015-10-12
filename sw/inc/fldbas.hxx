@@ -409,8 +409,8 @@ protected:
 public:
     virtual                 ~SwValueField();
 
-    virtual SwFieldType*    ChgTyp( SwFieldType* ) SAL_OVERRIDE;
-    virtual void            SetLanguage(sal_uInt16 nLng) SAL_OVERRIDE;
+    virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
+    virtual void            SetLanguage(sal_uInt16 nLng) override;
 
     inline SwDoc*           GetDoc() const          { return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc(); }
 
@@ -433,7 +433,7 @@ protected:
     SwFormulaField( const SwFormulaField& rField );
 
 public:
-    virtual OUString        GetFormula() const SAL_OVERRIDE;
+    virtual OUString        GetFormula() const override;
     void                    SetFormula(const OUString& rStr);
 
     void                    SetExpandedFormula(const OUString& rStr);

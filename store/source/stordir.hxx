@@ -70,7 +70,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
+    virtual bool isKindOf (sal_uInt32 nTypeId) override;
 
 protected:
     /** Destruction.

@@ -42,25 +42,25 @@ public:
     // SalBitmap
     virtual bool            Create( const Size& rSize,
                                     sal_uInt16 nBitCount,
-                                    const BitmapPalette& rPal ) SAL_OVERRIDE;
-    virtual bool            Create( const SalBitmap& rSalBmp ) SAL_OVERRIDE;
+                                    const BitmapPalette& rPal ) override;
+    virtual bool            Create( const SalBitmap& rSalBmp ) override;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    SalGraphics* pGraphics ) SAL_OVERRIDE;
+                                    SalGraphics* pGraphics ) override;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
+                                    sal_uInt16 nNewBitCount ) override;
     virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
-                                    bool bMask = false ) SAL_OVERRIDE;
-    virtual void            Destroy() SAL_OVERRIDE;
-    virtual Size            GetSize() const SAL_OVERRIDE;
-    virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
+                                    bool bMask = false ) override;
+    virtual void            Destroy() override;
+    virtual Size            GetSize() const override;
+    virtual sal_uInt16      GetBitCount() const override;
 
-    virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) SAL_OVERRIDE;
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
-    virtual bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
+    virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
+    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
+    virtual bool            GetSystemData( BitmapSystemData& rData ) override;
 
-    virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
-    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
+    virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
+    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
 
     static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };

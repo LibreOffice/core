@@ -48,15 +48,15 @@ public:
 
     explicit ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
-     void dispose() SAL_OVERRIDE;
+     void dispose() override;
 
-    virtual void PopupModeEnd() SAL_OVERRIDE;
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual void PopupModeEnd() override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
     void addSeparator();
@@ -200,7 +200,7 @@ class ScCheckListBox : public SvTreeListBox
 
     ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     virtual ~ScCheckListBox() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { delete mpCheckButton; SvTreeListBox::dispose(); }
+    virtual void dispose() override { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
@@ -209,7 +209,7 @@ class ScCheckListBox : public SvTreeListBox
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
     void         ExpandChildren( SvTreeListEntry* pParent );
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
 };
 /**
  * This class implements a popup window for field button, for quick access
@@ -242,13 +242,13 @@ public:
 
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual vcl::Window* GetPreferredKeyInputWindow() override;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
@@ -277,7 +277,7 @@ public:
     void setPopupEndAction(Action* p);
 
 protected:
-    virtual void handlePopupEnd() SAL_OVERRIDE;
+    virtual void handlePopupEnd() override;
 
 private:
     struct Member
@@ -297,9 +297,9 @@ private:
     public:
         CancelButton(ScCheckListMenuWindow* pParent);
         virtual ~CancelButton();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void Click() SAL_OVERRIDE;
+        virtual void Click() override;
 
     private:
         VclPtr<ScCheckListMenuWindow> mpParent;

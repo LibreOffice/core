@@ -73,9 +73,9 @@ public:
         Invalidate();
     }
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE
+    virtual Size GetOptimalSize() const override
     {
         return LogicToPixel(Size(43, 14), MAP_APPFONT);
     }
@@ -88,11 +88,11 @@ class MaskSet : public ValueSet
 public:
     MaskSet(SvxBmpMask* pMask, vcl::Window* pParent);
     virtual ~MaskSet() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { pSvxBmpMask.clear(); ValueSet::dispose(); }
-    virtual void Select() SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE
+    virtual void dispose() override { pSvxBmpMask.clear(); ValueSet::dispose(); }
+    virtual void Select() override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void GetFocus() override;
+    virtual Size GetOptimalSize() const override
     {
         return LogicToPixel(Size(24, 12), MAP_APPFONT);
     }

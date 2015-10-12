@@ -91,7 +91,7 @@ class SvBaseLinksDlg : public ModalDialog
 public:
     SvBaseLinksDlg( vcl::Window * pParent, sfx2::LinkManager*, bool bHtml = false );
     virtual ~SvBaseLinksDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     void SetActLink( sfx2::SvBaseLink * pLink );
 };
 

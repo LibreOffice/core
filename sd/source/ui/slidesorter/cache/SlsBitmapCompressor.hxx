@@ -82,9 +82,9 @@ class NoBitmapCompression
     class DummyReplacement;
 public:
     virtual ~NoBitmapCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const SAL_OVERRIDE;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless() const SAL_OVERRIDE;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const override;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual bool IsLossless() const override;
 };
 
 /** This is another trivial bitmap compressor.  Instead of compressing a
@@ -97,9 +97,9 @@ class CompressionByDeletion
 {
 public:
     virtual ~CompressionByDeletion() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless() const SAL_OVERRIDE;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const override;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual bool IsLossless() const override;
 };
 
 /** Compress a preview bitmap by reducing its resolution.  While the aspect
@@ -114,11 +114,11 @@ class ResolutionReduction
     static const sal_Int32 mnWidth = 100;
 public:
     virtual ~ResolutionReduction() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const SAL_OVERRIDE;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const override;
     /** Scale the replacement bitmap up to the original size.
     */
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless() const SAL_OVERRIDE;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual bool IsLossless() const override;
 };
 
 /** Compress preview bitmaps using the PNG format.
@@ -130,9 +130,9 @@ class PngCompression
     class PngReplacement;
 public:
     virtual ~PngCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
-    virtual bool IsLossless() const SAL_OVERRIDE;
+    virtual std::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const override;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual bool IsLossless() const override;
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

@@ -38,7 +38,7 @@ namespace svx
         void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
         void setColWidths();
         void Resort( bool bForced );
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
     };
 
     class WebConnectionInfoDialog : public ModalDialog
@@ -61,7 +61,7 @@ namespace svx
     public:
         explicit WebConnectionInfoDialog( vcl::Window* pParent );
         virtual ~WebConnectionInfoDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     };
 
 

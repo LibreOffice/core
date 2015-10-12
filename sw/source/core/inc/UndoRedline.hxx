@@ -43,8 +43,8 @@ public:
 
     virtual ~SwUndoRedline();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     sal_uInt16 GetRedlSaveCount() const;
 };
@@ -55,8 +55,8 @@ class SwUndoRedlineDelete : public SwUndoRedline
     bool bIsDelim : 1;
     bool bIsBackspace : 1;
 
-    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
-    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
+    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
@@ -74,15 +74,15 @@ class SwUndoRedlineSort : public SwUndoRedline
     sal_uLong nSaveEndNode, nOffset;
     sal_Int32 nSaveEndContent;
 
-    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
-    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
+    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
     SwUndoRedlineSort( const SwPaM& rRange, const SwSortOptions& rOpt );
 
     virtual ~SwUndoRedlineSort();
 
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void SetSaveRange( const SwPaM& rRange );
     void SetOffset( const SwNodeIndex& rIdx );
@@ -91,23 +91,23 @@ public:
 class SwUndoAcceptRedline : public SwUndoRedline
 {
 private:
-    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
     SwUndoAcceptRedline( const SwPaM& rRange );
 
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
 class SwUndoRejectRedline : public SwUndoRedline
 {
 private:
-    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
     SwUndoRejectRedline( const SwPaM& rRange );
 
-    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
 class SwUndoCompDoc : public SwUndo, public SwUndRng
@@ -123,8 +123,8 @@ public:
 
     virtual ~SwUndoCompDoc();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX

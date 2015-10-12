@@ -76,12 +76,12 @@ using namespace ::com::sun::star::uno;
 class ScExportTest : public ScBootstrapFixture, XmlTestTools
 {
 protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) SAL_OVERRIDE;
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     ScExportTest();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 #if !defined MACOSX && !defined DRAGONFLY
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );

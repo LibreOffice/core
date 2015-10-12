@@ -25,7 +25,7 @@ public:
                     const OUString &rPath, const BitmapEx &rImage );
 
 protected:
-    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
 protected:
     Link<ThumbnailViewItem*, void> maOpenTemplateHdl;

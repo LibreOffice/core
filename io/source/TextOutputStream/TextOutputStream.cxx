@@ -69,28 +69,28 @@ public:
 
     // Methods XTextOutputStream
     virtual void SAL_CALL writeString( const OUString& aString )
-        throw(IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL setEncoding( const OUString& Encoding )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     // Methods XOutputStream
     virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL flush(  )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL closeOutput(  )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
 
     // Methods XActiveDataSource
     virtual void SAL_CALL setOutputStream( const Reference< XOutputStream >& aStream )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
     virtual Reference< XOutputStream > SAL_CALL getOutputStream(  )
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(RuntimeException, std::exception) override;
 
     // Methods XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
+        virtual OUString              SAL_CALL getImplementationName() throw(std::exception) override;
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) override;
 };
 
 OTextOutputStream::OTextOutputStream()

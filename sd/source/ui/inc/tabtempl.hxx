@@ -65,8 +65,8 @@ private:
     sal_uInt16 m_nTabId;
     sal_uInt16 m_nAsianTypoId;
 
-    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
-    virtual void                RefreshInputSet() SAL_OVERRIDE;
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void                RefreshInputSet() override;
 
 public:
     SdTabTemplateDlg(vcl::Window* pParent,

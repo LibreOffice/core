@@ -81,7 +81,7 @@ public:
 
                         SdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
                         virtual ~SdVectorizeDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
 };

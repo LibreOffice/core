@@ -69,7 +69,7 @@ public:
 
     virtual ~SfxBasicManagerCreationListener();
 
-    virtual void onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager ) SAL_OVERRIDE;
+    virtual void onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager ) override;
 };
 
 SfxBasicManagerCreationListener::~SfxBasicManagerCreationListener()

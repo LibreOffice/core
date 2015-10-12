@@ -87,7 +87,7 @@ public:
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     virtual ~LwpDivInfo();
 

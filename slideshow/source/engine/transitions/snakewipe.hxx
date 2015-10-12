@@ -34,7 +34,7 @@ class SnakeWipe : public ParametricPolyPolygon
 {
 public:
     SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis );
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 
 protected:
     // topLeftHorizontal:
@@ -57,7 +57,7 @@ public:
         : SnakeWipe( nElements, diagonal, flipOnYAxis ),
           m_opposite( opposite )
         {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     const bool m_opposite;
 };

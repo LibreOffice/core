@@ -49,8 +49,8 @@ private:
     uno::Reference<frame::XComponentLoader> xLoader;
     uno::Reference<lang::XComponent> xComponent;
 public:
-    virtual void Init() SAL_OVERRIDE;
-    virtual int Main() SAL_OVERRIDE;
+    virtual void Init() override;
+    virtual int Main() override;
     void Open(OUString & aFileUrl);
 };
 
@@ -95,7 +95,7 @@ public:
         disposeOnce();
     }
 
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         mpContextWidth.clear();
         mpContextHeight.clear();

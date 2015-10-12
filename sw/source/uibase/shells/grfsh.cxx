@@ -96,7 +96,7 @@ public:
     {
     }
 
-    virtual void Update(Graphic & rGraphic) SAL_OVERRIDE
+    virtual void Update(Graphic & rGraphic) override
     {
         DBG_TESTSOLARMUTEX();
         m_pShell->Push();

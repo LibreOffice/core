@@ -53,25 +53,25 @@ private:
     VclPtr<AnnotationWindow>   mpAnnotationWindow;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+    virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    LoseFocus() override;
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
     virtual ~AnnotationTextWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 
-    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
-    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
+    virtual OUString GetSurroundingText() const override;
+    virtual Selection GetSurroundingTextSelection() const override;
 
-    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    GetFocus() override;
 };
 
 class AnnotationWindow : public FloatingWindow
@@ -95,14 +95,14 @@ class AnnotationWindow : public FloatingWindow
         basegfx::B2DPolygon     maPopupTriangle;
 
     protected:
-        void            SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+        void            SetSizePixel( const Size& rNewSize ) override;
 
         DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
         virtual ~AnnotationWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void StartEdit();
 
@@ -135,12 +135,12 @@ class AnnotationWindow : public FloatingWindow
 
         void            ToggleInsMode();
 
-        virtual void    Deactivate() SAL_OVERRIDE;
-        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
-        virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        virtual void    GetFocus() SAL_OVERRIDE;
+        virtual void    Deactivate() override;
+        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+        virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void    Command( const CommandEvent& rCEvt ) override;
+        virtual void    GetFocus() override;
 
         void            SetColor();
 

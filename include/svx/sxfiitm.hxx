@@ -33,11 +33,11 @@ public:
     SdrFractionItem(sal_uInt16 nId=0): SfxPoolItem(nId) {}
     SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(sal_uInt16 nId, SvStream& rIn);
-    virtual bool             operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const SAL_OVERRIDE;
+    virtual bool             operator==(const SfxPoolItem&) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const override;
+    virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const override;
+    virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const override;
+    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const override;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
 };

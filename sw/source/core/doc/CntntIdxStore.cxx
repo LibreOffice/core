@@ -129,7 +129,7 @@ namespace
         std::vector<PaMEntry> m_aUnoCrsrEntries;
         std::vector<PaMEntry> m_aShellCrsrEntries;
         typedef std::function<void (SwPosition& rPos, sal_Int32 nContent)> updater_t;
-        virtual void Clear() SAL_OVERRIDE
+        virtual void Clear() override
         {
             m_aBkmkEntries.clear();
             m_aRedlineEntries.clear();
@@ -137,11 +137,11 @@ namespace
             m_aUnoCrsrEntries.clear();
             m_aShellCrsrEntries.clear();
         }
-        virtual bool Empty() SAL_OVERRIDE
+        virtual bool Empty() override
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) SAL_OVERRIDE
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) override
         {
             SaveBkmks(pDoc, nNode, nContent);
             SaveRedlines(pDoc, nNode, nContent);
@@ -149,7 +149,7 @@ namespace
             SaveUnoCrsrs(pDoc, nNode, nContent);
             SaveShellCrsrs(pDoc, nNode, nContent);
         }
-        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
+        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) override
         {
             SwContentNode* pCNd = pDoc->GetNodes()[ nNode ]->GetContentNode();
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
@@ -159,7 +159,7 @@ namespace
             RestoreUnoCrsrs(aUpdater);
             RestoreShellCrsrs(aUpdater);
         }
-        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
+        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) override
         {
             SwContentNode* pCNd = rNd.GetContentNode();
             SwDoc* pDoc = rNd.GetDoc();

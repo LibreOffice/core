@@ -36,8 +36,8 @@ public:
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
     inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
     OUTPUT_OPERATOR_OVERRIDE
 };
 
@@ -49,7 +49,7 @@ class SwFlyCntPortion : public SwLinePortion
     bool bDraw : 1;  // DrawContact?
     bool bMax : 1;   // Line adjustment and height == line height
     sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
 
 public:
     // Use new datatype for parameter <nFlags>
@@ -81,8 +81,8 @@ public:
                   objectpositioning::AsCharFlags nFlags );
     sal_Int32 GetFlyCrsrOfst( const sal_uInt16 nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCrsrMoveState* pCMS ) const;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

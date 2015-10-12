@@ -37,10 +37,10 @@ public:
     SvxNewTableDialog( vcl::Window* pWindow );
     virtual ~SvxNewTableDialog();
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 
-    virtual sal_Int32 getRows() const SAL_OVERRIDE;
-    virtual sal_Int32 getColumns() const SAL_OVERRIDE;
+    virtual sal_Int32 getRows() const override;
+    virtual sal_Int32 getColumns() const override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX

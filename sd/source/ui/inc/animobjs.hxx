@@ -68,13 +68,13 @@ public:
     SdDisplay(vcl::Window* pWin);
     virtual ~SdDisplay();
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
     void    SetBitmapEx( BitmapEx* pBmpEx );
     void    SetScale( const Fraction& rFrac );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual Size GetOptimalSize() const override;
 };
 
 class AnimationWindow : public SfxDockingWindow
@@ -85,17 +85,17 @@ class AnimationWindow : public SfxDockingWindow
 public:
     AnimationWindow(SfxBindings* pBindings, SfxChildWindow *pCW, vcl::Window* pParent);
     virtual ~AnimationWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    AddObj( ::sd::View& rView );
     void    CreateAnimObj( ::sd::View& rView );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 protected:
-    virtual bool    Close() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    FillInfo( SfxChildWinInfo& ) const SAL_OVERRIDE;
+    virtual bool    Close() override;
+    virtual void    Resize() override;
+    virtual void    FillInfo( SfxChildWinInfo& ) const override;
 
 private:
     VclPtr<SdDisplay>      m_pCtlDisplay;
@@ -162,7 +162,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-        const SfxPoolItem* pState ) SAL_OVERRIDE;
+        const SfxPoolItem* pState ) override;
 private:
     VclPtr<AnimationWindow> pAnimationWin;
 };

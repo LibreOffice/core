@@ -143,7 +143,7 @@ public:
     PluginConnector( int nSocket );
     virtual ~PluginConnector();
 
-    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID ) SAL_OVERRIDE;
+    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID ) override;
     MediatorMessage*    Transact( const char*, sal_uLong, ... );
     MediatorMessage*    Transact( sal_uInt32, ... );
     void                Respond( sal_uLong nID, char*, sal_uLong, ... );

@@ -40,17 +40,17 @@ public:
                          const css::ucb::Lock& rLock,
                          sal_Int32* plastChanceToSendRefreshRequest = 0 );
 
-    virtual ~SerfLockReqProcImpl() SAL_OVERRIDE;
+    virtual ~SerfLockReqProcImpl() override;
 
     virtual
-    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) SAL_OVERRIDE;
+    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;
 
 private:
     virtual
-    void processChunkOfResponseData( const char* data, apr_size_t len ) SAL_OVERRIDE;
+    void processChunkOfResponseData( const char* data, apr_size_t len ) override;
 
     virtual
-    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) override;
 
     SerfSession& m_rSession;
     css::ucb::Lock m_aLock;

@@ -51,12 +51,12 @@ public:
     virtual ~SwGrammarContact() { aTimer.Stop(); delete mpProxyList; }
 
     // (pure) virtual functions of IGrammarContact
-    virtual void updateCursorPosition( const SwPosition& rNewPos ) SAL_OVERRIDE;
-    virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) SAL_OVERRIDE;
-    virtual void finishGrammarCheck( SwTextNode& rTextNode ) SAL_OVERRIDE;
+    virtual void updateCursorPosition( const SwPosition& rNewPos ) override;
+    virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) override;
+    virtual void finishGrammarCheck( SwTextNode& rTextNode ) override;
 protected:
     // virtual function of SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
 SwGrammarContact::SwGrammarContact() : mpProxyList(0), mbFinished( false )

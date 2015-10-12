@@ -87,14 +87,14 @@ class UnoTreeListBoxImpl : public SvTreeListBox
 public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle );
     virtual ~UnoTreeListBoxImpl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
-    virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
+    virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
 
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) override;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
     DECL_LINK_TYPED(OnSelectionChangeHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(OnExpandingHdl, SvTreeListBox*, bool);
@@ -112,14 +112,14 @@ public:
     explicit        UnoTreeListItem( SvTreeListEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                          const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) SAL_OVERRIDE;
-    SvLBoxItem*     Create() const SAL_OVERRIDE;
-    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+                          const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
+    SvLBoxItem*     Create() const override;
+    void            Clone( SvLBoxItem* pSource ) override;
 
 private:
     OUString        maGraphicURL;
@@ -616,8 +616,8 @@ class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TreeSelectionEnumeration( std::list< Any >& rSelection );
-    virtual sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
 
     std::list< Any > maSelection;
     std::list< Any >::iterator maIter;

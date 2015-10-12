@@ -43,14 +43,14 @@ private:
 
     const SdOptionsGeneric& mrParent;
 
-    virtual void            ImplCommit() SAL_OVERRIDE;
+    virtual void            ImplCommit() override;
 
 public:
 
     SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
     virtual ~SdOptionsItem();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
                                 const ::com::sun::star::uno::Sequence< OUString >& rNames );
@@ -113,9 +113,9 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
             SdOptionsLayout( sal_uInt16 nConfigId, bool bUseConfig );
@@ -147,8 +147,8 @@ public:
                             SdOptionsLayoutItem( sal_uInt16 nWhich);
                             SdOptionsLayoutItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -162,9 +162,9 @@ class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
 private:
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -180,8 +180,8 @@ public:
 
                             SdOptionsContentsItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
 private:
     SdOptionsContents       maOptionsContents;
@@ -232,9 +232,9 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -323,8 +323,8 @@ public:
                             SdOptionsMiscItem( sal_uInt16 nWhich);
                             SdOptionsMiscItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -351,9 +351,9 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -392,8 +392,8 @@ public:
                             SdOptionsSnapItem( sal_uInt16 nWhich);
                             SdOptionsSnapItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -411,9 +411,9 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -430,9 +430,9 @@ class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 {
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -502,9 +502,9 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const SAL_OVERRIDE;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) SAL_OVERRIDE;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const SAL_OVERRIDE;
+    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
+    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
+    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
 
 public:
 
@@ -565,8 +565,8 @@ public:
                             SdOptionsPrintItem( sal_uInt16 nWhich);
                             SdOptionsPrintItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 

@@ -84,11 +84,11 @@ public:
     virtual ~KDEFileDialog();
 
 protected:
-    virtual void                resizeEvent( QResizeEvent *pEvent ) SAL_OVERRIDE;
-    virtual void                showEvent( QShowEvent *pEvent ) SAL_OVERRIDE;
+    virtual void                resizeEvent( QResizeEvent *pEvent ) override;
+    virtual void                showEvent( QShowEvent *pEvent ) override;
     void                        updateCustomWidgetLayout();
 
-    virtual void                customEvent( QCustomEvent *pEvent ) SAL_OVERRIDE;
+    virtual void                customEvent( QCustomEvent *pEvent ) override;
 
 protected:
     void                        appendControl( const QString &rId, const QString &rType, const QString &rTitle );

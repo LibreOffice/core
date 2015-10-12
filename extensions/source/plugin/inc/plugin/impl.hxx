@@ -228,33 +228,33 @@ public:
     void setPluginContext( const Reference< css::plugin::XPluginContext > & );
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire()  throw() SAL_OVERRIDE
+    virtual Any SAL_CALL queryInterface( const Type& ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire()  throw() override
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release()  throw() SAL_OVERRIDE
+    virtual void SAL_CALL release()  throw() override
     { OWeakAggObject::release(); }
 
     // OWeakAggObject
     virtual Any SAL_CALL queryAggregation( const Type& )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // PluginContol_Impl
-    virtual void SAL_CALL dispose() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL createPeer( const Reference< css::awt::XToolkit > & xToolkit, const Reference< css::awt::XWindowPeer > & Parent) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw(std::exception) override;
+    virtual void SAL_CALL createPeer( const Reference< css::awt::XToolkit > & xToolkit, const Reference< css::awt::XWindowPeer > & Parent) throw( RuntimeException, std::exception ) override;
 
-    virtual sal_Bool SAL_CALL setModel( const Reference< css::awt::XControlModel > & Model ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Reference< css::awt::XControlModel > SAL_CALL getModel()throw( RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL setModel( const Reference< css::awt::XControlModel > & Model ) throw( RuntimeException, std::exception ) override;
+    virtual Reference< css::awt::XControlModel > SAL_CALL getModel()throw( RuntimeException, std::exception ) override
     { return m_xModel; }
 
-    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException, std::exception ) override;
 
     // css::plugin::XPlugin
-    virtual sal_Bool SAL_CALL provideNewStream(const OUString& mimetype, const Reference< css::io::XActiveDataSource > & stream, const OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL provideNewStream(const OUString& mimetype, const Reference< css::io::XActiveDataSource > & stream, const OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception) override;
 
     // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(std::exception) override;
     virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class PluginManager
@@ -291,23 +291,23 @@ public:
     static XPlugin_Impl* getXPluginFromNPP( NPP );
     static XPlugin_Impl* getPluginImplementation( const Reference< css::plugin::XPlugin >& plugin );
 
-    virtual Reference< css::plugin::XPluginContext > SAL_CALL createPluginContext() throw(std::exception) SAL_OVERRIDE;
+    virtual Reference< css::plugin::XPluginContext > SAL_CALL createPluginContext() throw(std::exception) override;
 
     // has to be implemented per system
     static Sequence< css::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception);
     // calls system specific impl_getPluginDescriptions
     // checks whether plugins are disabled
     virtual Sequence< css::plugin::PluginDescription > SAL_CALL getPluginDescriptions()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual Reference< css::plugin::XPlugin > SAL_CALL createPlugin( const Reference< css::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const css::plugin::PluginDescription& plugintype) throw( RuntimeException,css::plugin::PluginException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< css::plugin::XPlugin > SAL_CALL createPlugin( const Reference< css::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const css::plugin::PluginDescription& plugintype) throw( RuntimeException,css::plugin::PluginException, std::exception ) override;
 
-    virtual Reference< css::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< css::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< css::awt::XToolkit > & toolkit, const Reference< css::awt::XWindowPeer > & parent, const OUString& url ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< css::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< css::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< css::awt::XToolkit > & toolkit, const Reference< css::awt::XWindowPeer > & parent, const OUString& url ) throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw() SAL_OVERRIDE;
-    virtual OUString SAL_CALL getImplementationName() throw() SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw() override;
+    virtual OUString SAL_CALL getImplementationName() throw() override;
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  ) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  ) override;
     static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
     static OUString                getImplementationName_Static() throw(  )
     {
@@ -365,7 +365,7 @@ public:
 
     virtual ~PluginInputStream();
 
-    virtual PluginStreamType getStreamType() SAL_OVERRIDE;
+    virtual PluginStreamType getStreamType() override;
 
     void setMode( sal_Int32 nMode );
     sal_uInt32 read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size );
@@ -378,19 +378,19 @@ public:
     { bool bRet = m_xSelf.is(); m_xSelf.clear();  return bRet; }
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) override;
+    virtual void SAL_CALL flush() throw(std::exception) override;
+    virtual void SAL_CALL closeOutput() throw(std::exception) override;
 
     // XConnectable
-    virtual void SAL_CALL setPredecessor( const Reference< css::io::XConnectable >& xPredecessor ) throw(std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL setPredecessor( const Reference< css::io::XConnectable >& xPredecessor ) throw(std::exception) override
         { m_xPredecessor = xPredecessor; }
-    virtual Reference< css::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) SAL_OVERRIDE
+    virtual Reference< css::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) override
         { return m_xPredecessor; }
 
-    virtual void SAL_CALL setSuccessor( const Reference< css::io::XConnectable >& xSuccessor ) throw(std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL setSuccessor( const Reference< css::io::XConnectable >& xSuccessor ) throw(std::exception) override
         { m_xSuccessor = xSuccessor; }
-    virtual Reference< css::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) SAL_OVERRIDE
+    virtual Reference< css::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) override
         { return m_xSuccessor; }
 };
 
@@ -403,7 +403,7 @@ public:
                         sal_uInt32 len, sal_uInt32 lastmod );
     virtual ~PluginOutputStream();
 
-    virtual PluginStreamType getStreamType() SAL_OVERRIDE;
+    virtual PluginStreamType getStreamType() override;
 
     Reference< css::io::XOutputStream > & getOutputStream() { return m_xStream; }
 };
@@ -429,7 +429,7 @@ public:
     void*       getNotifyData() { return m_pNotifyData; }
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject&  Source ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject&  Source ) throw(std::exception) override;
 };
 
 #endif

@@ -279,8 +279,8 @@ class SwHTMLWriter : public Writer
     void CollectLinkTargets();
 
 protected:
-    sal_uLong WriteStream() SAL_OVERRIDE;
-    void SetupFilterOptions(SfxMedium& rMedium) SAL_OVERRIDE;
+    sal_uLong WriteStream() override;
+    void SetupFilterOptions(SfxMedium& rMedium) override;
 
 public:
     std::vector<OUString> aImgMapNames;     // geschriebene Image Maps

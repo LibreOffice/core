@@ -32,7 +32,7 @@ class ScMoveTableDlg : public ModalDialog
 public:
     ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault);
     virtual ~ScMoveTableDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt16  GetSelectedDocument     () const { return nDocument; }
     SCTAB   GetSelectedTable        () const { return nTable; }

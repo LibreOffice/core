@@ -42,43 +42,43 @@ public:
         IDocumentState & rState);
 
     /** IDocumentUndoRedo */
-    virtual void DoUndo(bool const bDoUndo) SAL_OVERRIDE;
-    virtual bool DoesUndo() const SAL_OVERRIDE;
-    virtual void DoGroupUndo(bool const bDoUndo) SAL_OVERRIDE;
-    virtual bool DoesGroupUndo() const SAL_OVERRIDE;
-    virtual void DoDrawUndo(bool const bDoUndo) SAL_OVERRIDE;
-    virtual bool DoesDrawUndo() const SAL_OVERRIDE;
-    virtual void SetUndoNoModifiedPosition() SAL_OVERRIDE;
-    virtual void LockUndoNoModifiedPosition() SAL_OVERRIDE;
-    virtual void UnLockUndoNoModifiedPosition() SAL_OVERRIDE;
-    virtual void SetUndoNoResetModified() SAL_OVERRIDE;
-    virtual bool IsUndoNoResetModified() const SAL_OVERRIDE;
+    virtual void DoUndo(bool const bDoUndo) override;
+    virtual bool DoesUndo() const override;
+    virtual void DoGroupUndo(bool const bDoUndo) override;
+    virtual bool DoesGroupUndo() const override;
+    virtual void DoDrawUndo(bool const bDoUndo) override;
+    virtual bool DoesDrawUndo() const override;
+    virtual void SetUndoNoModifiedPosition() override;
+    virtual void LockUndoNoModifiedPosition() override;
+    virtual void UnLockUndoNoModifiedPosition() override;
+    virtual void SetUndoNoResetModified() override;
+    virtual bool IsUndoNoResetModified() const override;
 
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
-                               SwRewriter const*const pRewriter) SAL_OVERRIDE;
+                               SwRewriter const*const pRewriter) override;
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
-                             SwRewriter const*const pRewriter) SAL_OVERRIDE;
-    virtual void DelAllUndoObj() SAL_OVERRIDE;
+                             SwRewriter const*const pRewriter) override;
+    virtual void DelAllUndoObj() override;
     virtual bool GetLastUndoInfo(OUString *const o_pStr,
-                                 SwUndoId *const o_pId) const SAL_OVERRIDE;
-    virtual SwUndoComments_t GetUndoComments() const SAL_OVERRIDE;
+                                 SwUndoId *const o_pId) const override;
+    virtual SwUndoComments_t GetUndoComments() const override;
     virtual bool GetFirstRedoInfo(OUString *const o_pStr,
-                                  SwUndoId *const o_pId = 0) const SAL_OVERRIDE;
-    virtual SwUndoComments_t GetRedoComments() const SAL_OVERRIDE;
+                                  SwUndoId *const o_pId = 0) const override;
+    virtual SwUndoComments_t GetRedoComments() const override;
     virtual bool Repeat(::sw::RepeatContext & rContext,
-                        sal_uInt16 const nRepeatCnt) SAL_OVERRIDE;
-    virtual SwUndoId GetRepeatInfo(OUString *const o_pStr) const SAL_OVERRIDE;
-    virtual void AppendUndo(SwUndo *const pUndo) SAL_OVERRIDE;
-    virtual void ClearRedo() SAL_OVERRIDE;
-    virtual bool IsUndoNodes(SwNodes const& rNodes) const SAL_OVERRIDE;
-    virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const SAL_OVERRIDE;
+                        sal_uInt16 const nRepeatCnt) override;
+    virtual SwUndoId GetRepeatInfo(OUString *const o_pStr) const override;
+    virtual void AppendUndo(SwUndo *const pUndo) override;
+    virtual void ClearRedo() override;
+    virtual bool IsUndoNodes(SwNodes const& rNodes) const override;
+    virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;
 
     // ::svl::IUndoManager
     virtual void AddUndoAction(SfxUndoAction *pAction,
-                                   bool bTryMerg = false) SAL_OVERRIDE;
-    virtual bool Undo() SAL_OVERRIDE;
-    virtual bool Redo() SAL_OVERRIDE;
-    virtual void EnableUndo(bool bEnable) SAL_OVERRIDE;
+                                   bool bTryMerg = false) override;
+    virtual bool Undo() override;
+    virtual bool Redo() override;
+    virtual void EnableUndo(bool bEnable) override;
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();

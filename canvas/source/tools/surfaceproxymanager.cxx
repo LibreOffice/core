@@ -48,7 +48,7 @@ namespace canvas
             texture may be distributed to several real hardware
             surfaces.
         */
-        virtual std::shared_ptr<ISurfaceProxy> createSurfaceProxy( const IColorBufferSharedPtr& pBuffer ) const SAL_OVERRIDE
+        virtual std::shared_ptr<ISurfaceProxy> createSurfaceProxy( const IColorBufferSharedPtr& pBuffer ) const override
         {
             // not much to do for now, simply allocate a new surface
             // proxy from our internal pool and initialize this thing

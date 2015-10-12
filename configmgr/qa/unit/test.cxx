@@ -65,8 +65,8 @@ namespace {
 
 class Test: public CppUnit::TestFixture {
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testKeyFetch();
     void testKeySet();
@@ -133,11 +133,11 @@ protected:
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     int count_;
     bool * destroyed_;
@@ -191,7 +191,7 @@ public:
     SimpleRecursiveTest(Test const & theTest, int count, bool * destroyed);
 
 private:
-    virtual void step() const SAL_OVERRIDE;
+    virtual void step() const override;
 };
 
 SimpleRecursiveTest::SimpleRecursiveTest(
@@ -500,7 +500,7 @@ protected:
     virtual bool iteration() = 0;
 
 private:
-    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL run() override;
 
     osl::Condition & stop_;
     bool success_;
@@ -536,7 +536,7 @@ public:
         OUString const & relative);
 
 private:
-    virtual bool iteration() SAL_OVERRIDE;
+    virtual bool iteration() override;
 
     Test const & test_;
     OUString path_;
@@ -580,7 +580,7 @@ public:
         OUString const & relative);
 
 private:
-    virtual bool iteration() SAL_OVERRIDE;
+    virtual bool iteration() override;
 
     Test const & test_;
     OUString path_;

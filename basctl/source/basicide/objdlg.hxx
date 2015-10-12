@@ -37,7 +37,7 @@ class ObjectCatalog : public DockingWindow
 public:
     explicit ObjectCatalog(vcl::Window* pParent);
     virtual ~ObjectCatalog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 public:
     void UpdateEntries () { aTree->UpdateEntries(); }
     void SetCurrentEntry (BaseWindow* pCurWin);
@@ -49,8 +49,8 @@ private:
     VclPtr<TreeListBox> aTree;
 
 private:
-    virtual void Resize () SAL_OVERRIDE; // Window
-    virtual void ToggleFloatingMode () SAL_OVERRIDE; // DockingWindow
+    virtual void Resize () override; // Window
+    virtual void ToggleFloatingMode () override; // DockingWindow
     void ArrangeWindows ();
 };
 

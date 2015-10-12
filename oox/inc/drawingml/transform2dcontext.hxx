@@ -33,7 +33,7 @@ class Transform2DContext : public ::oox::core::ContextHandler2
 public:
     Transform2DContext( ::oox::core::ContextHandler2Helper& rParent,
                         const ::oox::AttributeList& rAttributes, Shape& rShape, bool btxXfrm = false ) throw();
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     Shape&              mrShape;

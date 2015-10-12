@@ -92,13 +92,13 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()
-        throw( css::uno::RuntimeException ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) override
     {
         return Collection<T>::getElementType();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( css::uno::RuntimeException ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) override
     {
         return Collection<T>::hasElements();
     }
@@ -108,7 +108,7 @@ public:
         const OUString& aName )
         throw( css::container::NoSuchElementException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException ) SAL_OVERRIDE
+               css::uno::RuntimeException ) override
     {
         if( hasItem( aName ) )
             return css::uno::makeAny( getItem( aName ) );
@@ -118,14 +118,14 @@ public:
     }
 
     virtual Names_t SAL_CALL getElementNames()
-        throw( css::uno::RuntimeException ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) override
     {
         return getNames();
     }
 
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& aName )
-        throw( css::uno::RuntimeException ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) override
     {
         return hasItem( aName );
     }

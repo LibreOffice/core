@@ -45,13 +45,13 @@ public:
     explicit DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     virtual ~DlgEdPage();
 
-    virtual SdrPage* Clone() const SAL_OVERRIDE;
-    virtual SdrPage* Clone( SdrModel* pNewModel ) const SAL_OVERRIDE;
+    virtual SdrPage* Clone() const override;
+    virtual SdrPage* Clone( SdrModel* pNewModel ) const override;
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum) SAL_OVERRIDE;
+    virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum) override;
 
 protected:
     DlgEdPage(const DlgEdPage& rSrcPage);

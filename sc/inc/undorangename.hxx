@@ -28,11 +28,11 @@ public:
 
     virtual ~ScUndoAllRangeNames();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
-    virtual void Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
-    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const override;
+    virtual OUString GetComment() const override;
 
 private:
     void DoChange(const boost::ptr_map<OUString, ScRangeName>& rNames);
@@ -50,11 +50,11 @@ public:
 
     virtual ~ScUndoAddRangeData();
 
-    virtual void Undo() SAL_OVERRIDE;
-    virtual void Redo() SAL_OVERRIDE;
-    virtual void Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
-    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
-    virtual OUString GetComment() const SAL_OVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const override;
+    virtual OUString GetComment() const override;
 
 private:
     ScRangeData* mpRangeData;

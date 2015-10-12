@@ -30,12 +30,12 @@ class SwMergeTableDlg : public SvxStandardDialog
 
     bool&        m_rMergePrev;
 protected:
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
 
 public:
     SwMergeTableDlg( vcl::Window *pParent, bool& rWithPrev );
     virtual ~SwMergeTableDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif

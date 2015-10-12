@@ -245,15 +245,15 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Returns a progress bar size that takes all group children into account. */
-    virtual sal_Size    DoGetProgressSize() const SAL_OVERRIDE;
+    virtual sal_Size    DoGetProgressSize() const override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 
 protected:
     XclImpDrawObjVector maChildren;         /// Grouped objects.
@@ -268,13 +268,13 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 
 protected:
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
@@ -296,13 +296,13 @@ protected:
     void                ConvertRectStyle( SdrObject& rSdrObj ) const;
 
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 
 protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
@@ -318,7 +318,7 @@ public:
 
 protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 };
 
 /** An arc object. */
@@ -329,13 +329,13 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 
 protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
@@ -354,11 +354,11 @@ protected:
     void                ReadCoordList( XclImpStream& rStrm );
 
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
 
 protected:
     typedef std::vector< Point > PointVector;
@@ -389,15 +389,15 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
     /** Inserts the contained text data at the passed object. */
-    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
 protected:
     XclImpObjTextData   maTextData;     /// Textbox data from BIFF5 OBJ or BIFF8 TXO record.
@@ -415,19 +415,19 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Returns the needed size on the progress bar. */
-    virtual sal_Size    DoGetProgressSize() const SAL_OVERRIDE;
+    virtual sal_Size    DoGetProgressSize() const override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
     /** Converts the chart document. */
-    virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
+    virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
 private:
     /** Calculates the object anchor of a sheet chart (chart fills one page). */
@@ -451,7 +451,7 @@ public:
 
 protected:
     /** Inserts the note into the document, sets visibility. */
-    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
 private:
     ScAddress           maScPos;        /// Cell position of the note object.
@@ -523,9 +523,9 @@ protected:
     void                ConvertLabel( ScfPropertySet& rPropSet ) const;
 
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
     /** Additional processing on the SdrObject, calls new virtual function DoProcessControl(). */
-    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
     /** Derived classes return the service name of the control component to be created. */
     virtual OUString DoGetServiceName() const = 0;
@@ -541,11 +541,11 @@ public:
 
 protected:
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 };
 
 /** A checkbox control. */
@@ -556,15 +556,15 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     sal_uInt16          mnState;
@@ -579,15 +579,15 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     sal_uInt16          mnNextInGroup;      /// Next option button in a group.
@@ -602,11 +602,11 @@ public:
 
 protected:
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 };
 
 /** A groupbox control. */
@@ -617,15 +617,15 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     sal_uInt16          mnGroupBoxFlags;
@@ -639,11 +639,11 @@ public:
 
 protected:
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 };
 
 /** An edit control. */
@@ -657,15 +657,15 @@ protected:
     bool                IsNumeric() const;
 
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     sal_uInt16          mnContentType;
@@ -685,7 +685,7 @@ protected:
     void                ReadSbs( XclImpStream& rStrm );
 
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
 
 protected:
     sal_uInt16          mnValue;
@@ -706,13 +706,13 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 };
 
 /** A scrollbar control. */
@@ -723,13 +723,13 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 };
 
 /** Base class for list controls (listbox, dropdown). */
@@ -763,15 +763,15 @@ protected:
     void                ReadFullLbsData( XclImpStream& rStrm, sal_Size nRecLeft );
 
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     ScfUInt8Vec         maSelection;
@@ -791,15 +791,15 @@ protected:
     void                ReadFullLbsData( XclImpStream& rStrm );
 
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Sets additional properties for the current form control. */
-    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const SAL_OVERRIDE;
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const override;
     /** Returns the service name of the control component to be created. */
-    virtual OUString DoGetServiceName() const SAL_OVERRIDE;
+    virtual OUString DoGetServiceName() const override;
     /** Returns the type of the macro event to be created. */
-    virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
+    virtual XclTbxEventType DoGetEventType() const override;
 
 protected:
     sal_uInt16          mnLeft;
@@ -817,7 +817,7 @@ class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
 public:
     explicit            XclImpPictureObj( const XclImpRoot& rRoot );
     /** Returns the ObjectName - can use non-obvious lookup for override in the associated vba document module stream**/
-    virtual OUString GetObjName() const SAL_OVERRIDE;
+    virtual OUString GetObjName() const override;
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
 
@@ -838,17 +838,17 @@ public:
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
+    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const override;
     /** Override to do additional processing on the SdrObject. */
-    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
 private:
     /** Reads and sets the picture flags from a BIFF3-BIFF5 OBJ picture record. */
@@ -921,7 +921,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual bool        GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const SAL_OVERRIDE;
+    virtual bool        GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const override;
 };
 
 /** This is the central instance for converting binary DFF data into shape
@@ -971,14 +971,14 @@ private:
                             SvStream& rDffStrm,
                             DffRecordHeader& rHeader,
                             void* pClientData,
-                            DffObjData& rObjData ) SAL_OVERRIDE;
+                            DffObjData& rObjData ) override;
     /** Processes an DFF object, reads properties from DFF stream. */
     virtual SdrObject*  ProcessObj(
                             SvStream& rDffStrm,
                             DffObjData& rDffObjData,
                             void* pClientData,
                             Rectangle& rTextRect,
-                            SdrObject* pOldSdrObj = 0 ) SAL_OVERRIDE;
+                            SdrObject* pOldSdrObj = 0 ) override;
 
     // virtual functions of SvxMSConvertOCXControls
 
@@ -989,7 +989,7 @@ private:
                             const ::com::sun::star::awt::Size& rSize,
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape >* pxShape,
-                            bool bFloatingCtrl ) SAL_OVERRIDE;
+                            bool bFloatingCtrl ) override;
 
 private:
     /** Data per registered drawing manager, will be stacked for recursive calls. */
@@ -1132,9 +1132,9 @@ public:
     void                ConvertObjects( XclImpDffConverter& rDffConv );
 
     /** Calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const SAL_OVERRIDE;
+    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const override;
     /** On call, updates the used area of the sheet. */
-    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj ) SAL_OVERRIDE;
+    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj ) override;
 
 private:
     /** Reads a BIFF3-BIFF5 NOTE record. */

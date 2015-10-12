@@ -42,24 +42,24 @@ public:
     virtual ~ShapeController();
 
     // late initialisation, especially for adding as listener
-    virtual void initialize() SAL_OVERRIDE;
+    virtual void initialize() override;
 
 protected:
     // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // state of a feature
-    virtual FeatureState getState( const OUString& rCommand ) SAL_OVERRIDE;
+    virtual FeatureState getState( const OUString& rCommand ) override;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) SAL_OVERRIDE;
+    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) override;
 
     // all the features which should be handled by this class
-    virtual void describeSupportedFeatures() SAL_OVERRIDE;
+    virtual void describeSupportedFeatures() override;
 
 private:
     DECL_LINK_TYPED( CheckNameHdl, AbstractSvxObjectNameDialog&, bool);

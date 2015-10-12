@@ -23,15 +23,15 @@ private:
     int m_nWidth;
     long m_nCurYOffset;
     int m_nBaseWidth;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
 public:
     LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);
     virtual ~LineNumberWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void DoScroll( long nHorzScroll, long nVertScroll );
 

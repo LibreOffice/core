@@ -159,8 +159,8 @@ friend class SfxPrinterController;
     bool                        mbPrinterSettingsModified;
 
 protected:
-    virtual void                Activate(bool IsMDIActivate) SAL_OVERRIDE;
-    virtual void                Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void                Activate(bool IsMDIActivate) override;
+    virtual void                Deactivate(bool IsMDIActivate) override;
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
@@ -168,7 +168,7 @@ protected:
 
     virtual void                Move();
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 public:
     // Iteration
@@ -255,7 +255,7 @@ public:
     virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
-    virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
+    virtual SfxObjectShell*     GetObjectShell() override;
 
     /** retrieves the document which shall be considered the "current document" when the frame is active
 

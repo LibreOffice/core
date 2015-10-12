@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~UnknownAuthDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     css::uno::Reference< css::security::XCertificate > getCert()
     {

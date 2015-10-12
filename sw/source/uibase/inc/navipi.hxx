@@ -43,8 +43,8 @@ enum class RegionMode;
 
 class SwNavHelpToolBox : public SwHelpToolBox
 {
-    virtual void    MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent &rEvt) override;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
@@ -123,11 +123,11 @@ class SwNavigationPI : public vcl::Window,
 
 protected:
 
-    virtual         void Resize() SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual         void Resize() override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     // release ObjectShellLock early enough for app end
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     NumEditAction&  GetPageEdit();
     bool            ToggleTree();
@@ -137,7 +137,7 @@ public:
 
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, vcl::Window*);
     virtual ~SwNavigationPI();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            GotoPage(); // jump to page; bindable function
 
@@ -145,7 +145,7 @@ public:
     void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                            const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                            const SfxPoolItem* pState ) override;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);

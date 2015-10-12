@@ -39,26 +39,26 @@ namespace DOM
         static CDOMImplementation* get();
 
         // there is just 1 static instance, so these must not delete it!
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw () override;
+        virtual void SAL_CALL release() throw () override;
 
         /**
         Creates a DOM Document object of the specified type with its document element.
         */
         virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const css::uno::Reference< css::xml::dom::XDocumentType >& doctype)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Creates an empty DocumentType node.
         */
         virtual css::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         /**
         Test if the DOM implementation implements a specific feature.
         */
         virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
         };
 }
 #endif

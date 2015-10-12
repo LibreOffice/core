@@ -108,9 +108,9 @@ public:
 #endif
     virtual ~ImplDdeItem();
 
-    virtual DdeData* Get( SotClipboardFormatId ) SAL_OVERRIDE;
-    virtual bool     Put( const DdeData* ) SAL_OVERRIDE;
-    virtual void     AdviseLoop( bool ) SAL_OVERRIDE;
+    virtual DdeData* Get( SotClipboardFormatId ) override;
+    virtual bool     Put( const DdeData* ) override;
+    virtual void     AdviseLoop( bool ) override;
 
     void Notify()
     {

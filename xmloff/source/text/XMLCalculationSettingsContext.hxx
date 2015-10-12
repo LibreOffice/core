@@ -33,7 +33,7 @@ public:
                                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLCalculationSettingsContext();
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
 };
 

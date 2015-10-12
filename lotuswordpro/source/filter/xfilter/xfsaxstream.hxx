@@ -89,32 +89,32 @@ public:
     /**
      * @descr   Start document callback.
      */
-    virtual void            StartDocument() SAL_OVERRIDE;
+    virtual void            StartDocument() override;
 
     /**
      * @descr   End document callback.
      */
-    virtual void            EndDocument() SAL_OVERRIDE;
+    virtual void            EndDocument() override;
 
     /**
      * @descr   Start output element.
      */
-    virtual void            StartElement(const OUString& oustr) SAL_OVERRIDE;
+    virtual void            StartElement(const OUString& oustr) override;
 
     /**
      * @descr   End output element.
      */
-    virtual void            EndElement(const OUString& oustr) SAL_OVERRIDE;
+    virtual void            EndElement(const OUString& oustr) override;
 
     /**
      * @descr   Output Character section.
      */
-    virtual void            Characters(const OUString& oustr) SAL_OVERRIDE;
+    virtual void            Characters(const OUString& oustr) override;
 
     /**
      * @descr   Get the attribute list interface.
      */
-    virtual IXFAttrList*    GetAttrList() SAL_OVERRIDE;
+    virtual IXFAttrList*    GetAttrList() override;
 
 public:
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_aHandler;

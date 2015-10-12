@@ -193,7 +193,7 @@ namespace comphelper
         virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        ) SAL_OVERRIDE
+                        ) override
         {
             const EventClass& rTypedEvent( static_cast< const EventClass& >( _rEvent ) );
             ListenerClass* pTypedListener( static_cast< ListenerClass* >( _rxListener.get() ) );
@@ -250,7 +250,7 @@ namespace comphelper
         virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        ) SAL_OVERRIDE
+                        ) override
         {
             return implTypedNotify(
                 ::com::sun::star::uno::Reference< ListenerClass >( static_cast< ListenerClass* >( _rxListener.get() ) ),

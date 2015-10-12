@@ -39,8 +39,8 @@ private:
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
 public:
@@ -81,20 +81,20 @@ public:
     bool GetCloseBack() const
         { return static_cast<const Svx3DCloseBackItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual E3dExtrudeObj* Clone() const SAL_OVERRIDE;
+    virtual E3dExtrudeObj* Clone() const override;
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
-    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
-    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const override;
+    virtual OUString TakeObjNamePlural() const override;
 
     // set/get local parameters with geometry regeneration
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() const { return maExtrudePolygon; }
 
-    virtual bool IsBreakObjPossible() SAL_OVERRIDE;
-    virtual SdrAttrObj* GetBreakObj() SAL_OVERRIDE;
+    virtual bool IsBreakObjPossible() override;
+    virtual SdrAttrObj* GetBreakObj() override;
 };
 
 #endif // INCLUDED_SVX_EXTRUD3D_HXX

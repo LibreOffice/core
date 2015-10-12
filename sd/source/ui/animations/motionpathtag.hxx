@@ -44,39 +44,39 @@ public:
     SdrPathObj* getPathObj() const { return mpPathObj; }
 
     /// @return true if the SmartTag handled the event.
-    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;
 
     /// @return true if the SmartTag consumes this event.
-    virtual bool KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const SAL_OVERRIDE;
-    virtual sal_uLong GetMarkedPointCount() const SAL_OVERRIDE;
-    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) SAL_OVERRIDE;
-    virtual void CheckPossibilities() SAL_OVERRIDE;
-    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark) SAL_OVERRIDE;
+    virtual sal_uLong GetMarkablePointCount() const override;
+    virtual sal_uLong GetMarkedPointCount() const override;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) override;
+    virtual void CheckPossibilities() override;
+    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark) override;
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // IPolyPolygonEditorController
-    virtual void DeleteMarkedPoints() SAL_OVERRIDE;
-    virtual bool IsDeleteMarkedPointsPossible() const SAL_OVERRIDE;
+    virtual void DeleteMarkedPoints() override;
+    virtual bool IsDeleteMarkedPointsPossible() const override;
 
-    virtual void RipUpAtMarkedPoints() SAL_OVERRIDE;
-    virtual bool IsRipUpAtMarkedPointsPossible() const SAL_OVERRIDE;
+    virtual void RipUpAtMarkedPoints() override;
+    virtual bool IsRipUpAtMarkedPointsPossible() const override;
 
-    virtual bool IsSetMarkedSegmentsKindPossible() const SAL_OVERRIDE;
-    virtual SdrPathSegmentKind GetMarkedSegmentsKind() const SAL_OVERRIDE;
-    virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) SAL_OVERRIDE;
+    virtual bool IsSetMarkedSegmentsKindPossible() const override;
+    virtual SdrPathSegmentKind GetMarkedSegmentsKind() const override;
+    virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) override;
 
-    virtual bool IsSetMarkedPointsSmoothPossible() const SAL_OVERRIDE;
-    virtual SdrPathSmoothKind GetMarkedPointsSmooth() const SAL_OVERRIDE;
-    virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) SAL_OVERRIDE;
+    virtual bool IsSetMarkedPointsSmoothPossible() const override;
+    virtual SdrPathSmoothKind GetMarkedPointsSmooth() const override;
+    virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) override;
 
-    virtual bool IsOpenCloseMarkedObjectsPossible() const SAL_OVERRIDE;
-    virtual SdrObjClosedKind GetMarkedObjectsClosedState() const SAL_OVERRIDE;
+    virtual bool IsOpenCloseMarkedObjectsPossible() const override;
+    virtual SdrObjClosedKind GetMarkedObjectsClosedState() const override;
 
     void MovePath( int nDX, int nDY );
     bool OnDelete();
@@ -85,17 +85,17 @@ public:
     bool OnMove( const KeyEvent& rKEvt );
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire(  ) throw () SAL_OVERRIDE;
-    virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE;
+    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL acquire(  ) throw () override;
+    virtual void SAL_CALL release(  ) throw () override;
 
 protected:
-    virtual void addCustomHandles( SdrHdlList& rHandlerList ) SAL_OVERRIDE;
-    virtual bool getContext( SdrViewContext& rContext ) SAL_OVERRIDE;
-    virtual void disposing() SAL_OVERRIDE;
-    virtual void deselect() SAL_OVERRIDE;
+    virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
+    virtual bool getContext( SdrViewContext& rContext ) override;
+    virtual void disposing() override;
+    virtual void deselect() override;
 
     void updatePathAttributes();
     void selectionChanged();

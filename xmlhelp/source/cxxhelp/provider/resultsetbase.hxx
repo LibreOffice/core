@@ -62,32 +62,32 @@ namespace chelp {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         virtual void SAL_CALL
         release(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         // XComponent
         virtual void SAL_CALL
         dispose(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addEventListener(
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         // XRow
@@ -95,7 +95,7 @@ namespace chelp {
         wasNull(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0<= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
@@ -108,7 +108,7 @@ namespace chelp {
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getString( columnIndex );
@@ -120,7 +120,7 @@ namespace chelp {
         getBoolean(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
@@ -132,7 +132,7 @@ namespace chelp {
         getByte(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getByte( columnIndex );
@@ -145,7 +145,7 @@ namespace chelp {
             sal_Int32 columnIndex )
             throw(
                 com::sun::star::sdbc::SQLException,
-                com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getShort( columnIndex );
@@ -157,7 +157,7 @@ namespace chelp {
         getInt(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getInt( columnIndex );
@@ -169,7 +169,7 @@ namespace chelp {
         getLong(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getLong( columnIndex );
@@ -181,7 +181,7 @@ namespace chelp {
         getFloat(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
@@ -193,7 +193,7 @@ namespace chelp {
         getDouble(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
@@ -205,7 +205,7 @@ namespace chelp {
         getBytes(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
@@ -217,7 +217,7 @@ namespace chelp {
         getDate(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getDate( columnIndex );
@@ -229,7 +229,7 @@ namespace chelp {
         getTime(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getTime( columnIndex );
@@ -241,7 +241,7 @@ namespace chelp {
         getTimestamp(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
@@ -253,7 +253,7 @@ namespace chelp {
         getBinaryStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
@@ -265,7 +265,7 @@ namespace chelp {
         getCharacterStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
@@ -278,7 +278,7 @@ namespace chelp {
             sal_Int32 columnIndex,
             const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
@@ -290,7 +290,7 @@ namespace chelp {
         getRef(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getRef( columnIndex );
@@ -302,7 +302,7 @@ namespace chelp {
         getBlob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
@@ -314,7 +314,7 @@ namespace chelp {
         getClob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getClob( columnIndex );
@@ -326,7 +326,7 @@ namespace chelp {
         getArray(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                   com::sun::star::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getArray( columnIndex );
@@ -341,110 +341,110 @@ namespace chelp {
         next(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isBeforeFirst(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isAfterLast(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         beforeFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         afterLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         first(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         last(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         getRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         absolute(
             sal_Int32 row )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         relative(
             sal_Int32 rows )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         previous(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         refreshRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowUpdated(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowInserted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowDeleted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         virtual  com::sun::star::uno::Reference<  com::sun::star::uno::XInterface > SAL_CALL
         getStatement(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XCloseable
 
@@ -452,37 +452,37 @@ namespace chelp {
         close(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XContentAccess
 
         virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
         queryContent(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XResultSetMetaDataSupplier
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
         getMetaData(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // XPropertySet
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setPropertyValue(
             const OUString& aPropertyName,
@@ -491,14 +491,14 @@ namespace chelp {
                    com::sun::star::beans::PropertyVetoException,
                    com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addPropertyChangeListener(
@@ -506,7 +506,7 @@ namespace chelp {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
@@ -514,7 +514,7 @@ namespace chelp {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
@@ -522,14 +522,14 @@ namespace chelp {
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
     protected:
 

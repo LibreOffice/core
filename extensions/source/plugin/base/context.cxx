@@ -75,9 +75,9 @@ public:
     virtual ~FileSink();
 
     // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) override;
+    virtual void SAL_CALL flush() throw(std::exception) override;
+    virtual void SAL_CALL closeOutput() throw (RuntimeException, std::exception) override;
 };
 
 }
@@ -93,14 +93,14 @@ public:
     virtual ~XPluginContext_Impl();
 
 
-    virtual OUString SAL_CALL getValue(const Reference< css::plugin::XPlugin > & plugin, css::plugin::PluginVariable variable) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL getURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL getURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL postURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL postURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL newStream(const Reference< css::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< css::io::XActiveDataSource > & source) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL displayStatusText(const Reference< css::plugin::XPlugin > & plugin, const OUString& message) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getUserAgent(const Reference< css::plugin::XPlugin > & plugin) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getValue(const Reference< css::plugin::XPlugin > & plugin, css::plugin::PluginVariable variable) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL getURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL getURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL postURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL postURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL newStream(const Reference< css::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< css::io::XActiveDataSource > & source) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL displayStatusText(const Reference< css::plugin::XPlugin > & plugin, const OUString& message) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getUserAgent(const Reference< css::plugin::XPlugin > & plugin) throw( css::plugin::PluginException, RuntimeException, std::exception ) override;
 };
 
 Reference< css::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw(std::exception)

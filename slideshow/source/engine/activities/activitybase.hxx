@@ -40,7 +40,7 @@ public:
     explicit ActivityBase( const ActivityParameters& rParms );
 
     /// From Disposable interface
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     /** From Activity interface
@@ -48,17 +48,17 @@ protected:
         Derived classes should override, call this first
         and then perform their work.
     */
-    virtual bool perform() SAL_OVERRIDE;
-    virtual double calcTimeLag() const SAL_OVERRIDE;
-    virtual bool isActive() const SAL_OVERRIDE;
+    virtual bool perform() override;
+    virtual double calcTimeLag() const override;
+    virtual bool isActive() const override;
 
 private:
-    virtual void dequeued() SAL_OVERRIDE;
+    virtual void dequeued() override;
 
     // From AnimationActivity interface
     virtual void setTargets(
         const AnimatableShapeSharedPtr&        rShape,
-        const ShapeAttributeLayerSharedPtr&    rAttrLayer ) SAL_OVERRIDE;
+        const ShapeAttributeLayerSharedPtr&    rAttrLayer ) override;
 
 private:
     /** Hook for derived classes
@@ -117,7 +117,7 @@ protected:
 
 private:
     /// Activity:
-    virtual void end() SAL_OVERRIDE;
+    virtual void end() override;
     virtual void performEnd() = 0;
 
 private:

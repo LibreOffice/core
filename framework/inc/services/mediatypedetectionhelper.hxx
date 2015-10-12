@@ -78,7 +78,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper< ::com::sun::s
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     //  variables
     //  should be private every time

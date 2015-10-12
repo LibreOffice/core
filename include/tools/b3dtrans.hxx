@@ -232,7 +232,7 @@ protected:
     void CalcNewViewportValues();
     bool CalcFocalLength();
 
-    virtual void DeviceRectangleChange() SAL_OVERRIDE;
+    virtual void DeviceRectangleChange() override;
 };
 
 #endif

@@ -66,7 +66,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
     virtual ~ODbAdminDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /** create and return an item set for use with the dialog.
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
@@ -83,25 +83,25 @@ public:
     */
     void selectDataSource(const css::uno::Any& _aDataSourceName);
 
-    virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
-    virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
+    virtual const SfxItemSet* getOutputSet() const override;
+    virtual SfxItemSet* getWriteOutputSet() override;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const SAL_OVERRIDE;
-    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
-    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() SAL_OVERRIDE;
-    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
-    virtual void clearPassword() SAL_OVERRIDE;
-    virtual bool saveDatasource() SAL_OVERRIDE;
-    virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
-    virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
+    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
+    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
+    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
+    virtual void clearPassword() override;
+    virtual bool saveDatasource() override;
+    virtual void setTitle(const OUString& _sTitle) override;
+    virtual void enableConfirmSettings( bool _bEnable ) override;
 
 protected:
     // adds a new detail page and remove all the old ones
     void addDetailPage(sal_uInt16 _nPageId,sal_uInt16 _nTextId,CreateTabPage pCreateFunc);
 
-    virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
-    virtual short Ok() SAL_OVERRIDE;
+    virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
+    virtual short Ok() override;
 
 protected:
     inline bool isUIEnabled() const { return m_bUIEnabled; }

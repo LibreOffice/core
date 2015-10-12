@@ -48,7 +48,7 @@ private:
 public:
     CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
     virtual ~CellBorderStyleControl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar

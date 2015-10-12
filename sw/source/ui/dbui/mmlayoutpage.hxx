@@ -80,12 +80,12 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
                             bool bExample);
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample);
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) override;
 public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeLayoutPage();
-    virtual void            dispose() SAL_OVERRIDE;
+    virtual void            dispose() override;
 
     static SwFrameFormat*        InsertAddressAndGreeting(SwView* pView,
                                             SwMailMergeConfigItem& rConfigItem,

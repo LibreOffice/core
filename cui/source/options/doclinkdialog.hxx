@@ -48,7 +48,7 @@ namespace svx
     public:
         ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew );
         virtual ~ODocumentLinkDialog();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // name validation has to be done by an external instance
         // the validator link gets a pointer to a String, and should return 0 if the string is not

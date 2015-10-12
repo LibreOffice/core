@@ -54,7 +54,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 // context for flat file xml format
@@ -72,7 +72,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList) override;
 };
 
 class SchXMLBodyContext : public SvXMLImportContext
@@ -88,11 +88,11 @@ public:
         const OUString& rLName );
     virtual ~SchXMLBodyContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_CONTEXTS_HXX

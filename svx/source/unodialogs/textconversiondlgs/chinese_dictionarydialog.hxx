@@ -62,7 +62,7 @@ class DictionaryList : public SvSimpleTable
 public:
     DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
     virtual ~DictionaryList();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
         vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
@@ -95,7 +95,7 @@ private:
 
     void setColSizes();
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
 public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
@@ -115,12 +115,12 @@ class ChineseDictionaryDialog : public ModalDialog
 public:
     explicit ChineseDictionaryDialog( vcl::Window* pParent );
     virtual ~ChineseDictionaryDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
 
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual short   Execute() override;
 
 private:
     DECL_LINK_TYPED( DirectionHdl, Button*, void );

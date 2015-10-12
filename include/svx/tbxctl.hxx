@@ -43,9 +43,9 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
+    virtual void                Select(sal_uInt16 nSelectModifier) override;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                              const SfxPoolItem* pState ) override;
 };
 
 #endif

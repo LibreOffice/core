@@ -28,8 +28,8 @@ public:
     bool IsDataElement(SCCOL nColumn);
 
 protected:
-    virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKeyEvent) SAL_OVERRIDE;
+    virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
+    virtual void KeyInput(const KeyEvent& rKeyEvent) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

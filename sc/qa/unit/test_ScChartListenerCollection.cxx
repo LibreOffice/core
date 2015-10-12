@@ -49,7 +49,7 @@ struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
     : mNotifyCount(0) {
     }
 
-    void notify() SAL_OVERRIDE {
+    void notify() override {
         mNotifyCount++;
     }
 };

@@ -55,9 +55,9 @@ namespace connectivity
             inline ONDXKey(const ONDXKey& rKey);
 
             inline ONDXKey& operator= (const ONDXKey& rKey);
-            virtual void setValue(const ORowSetValue& _rVal) SAL_OVERRIDE;
+            virtual void setValue(const ORowSetValue& _rVal) override;
 
-            virtual const ORowSetValue& getValue() const SAL_OVERRIDE;
+            virtual const ORowSetValue& getValue() const override;
 
             sal_uInt32 GetRecord() const        { return nRecord;   }
             void setRecord(sal_uInt32 _nRec)    { nRecord = _nRec;  }

@@ -170,11 +170,11 @@ namespace xmloff
                 getControlNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         // IFormsExportContext
-        virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) SAL_OVERRIDE;
-        virtual SvXMLExport&                                getGlobalContext() SAL_OVERRIDE;
+        virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) override;
+        virtual SvXMLExport&                                getGlobalContext() override;
         virtual OUString                             getObjectStyleName(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) SAL_OVERRIDE;
-        virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper() SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) override;
+        virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper() override;
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
         */

@@ -31,8 +31,8 @@ class ScTextImportOptionsDlg : public ModalDialog
 public:
     ScTextImportOptionsDlg(vcl::Window* pParent);
     virtual ~ScTextImportOptionsDlg();
-    virtual void dispose() SAL_OVERRIDE;
-    virtual short Execute() SAL_OVERRIDE;
+    virtual void dispose() override;
+    virtual short Execute() override;
 
     LanguageType getLanguageType() const;
     bool isDateConversionSet() const;

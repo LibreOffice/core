@@ -40,7 +40,7 @@ public:
                                       ::com::sun::star::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneGeometry_TabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();

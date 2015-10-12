@@ -36,13 +36,13 @@ class SwNavigationConfig : public utl::ConfigItem
 
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwNavigationConfig();
     virtual ~SwNavigationConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 
     ContentTypeId GetRootType()const {return nRootType;}
     void        SetRootType(ContentTypeId nSet){

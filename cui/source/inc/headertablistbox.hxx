@@ -31,14 +31,14 @@ private:
     VclPtr<SvHeaderTabListBox>      maListBox;
 protected:
     DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar*, void );
-    virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool                Notify( NotifyEvent& rNEvt ) override;
 public:
     MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
     virtual ~MacroEventListBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void Resize() SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
     SvHeaderTabListBox& GetListBox()
     {

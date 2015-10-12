@@ -145,12 +145,12 @@ class SwRootFrm: public SwLayoutFrm
     void _DeleteEmptySct(); // Destroys the registered SectionFrms
     void _RemoveFromList( SwSectionFrm* pSct ); // Removes SectionFrms from the Delete List
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwRootFrm();
 
 protected:
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
 public:
 
@@ -197,22 +197,22 @@ public:
           void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
     virtual bool  GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
+                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+                        SwPrintData const*const pPrintData = NULL ) const override;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #ifdef DBG_UTIL
-    virtual void Cut() SAL_OVERRIDE;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
+    virtual void Cut() override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
 #endif
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
     Point  GetNextPrevContentPos( const Point &rPoint, bool bNext ) const;
 
-    virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
+    virtual Size ChgSize( const Size& aNewSize ) override;
 
     void SetIdleFlags()
     {

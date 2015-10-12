@@ -38,12 +38,12 @@ public:
         const OUString& rsRightPaneURL);
     virtual ~ToolPanelModule();
 
-    virtual void SaveResourceState() SAL_OVERRIDE;
+    virtual void SaveResourceState() override;
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;

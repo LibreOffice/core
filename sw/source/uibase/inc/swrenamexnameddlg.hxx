@@ -49,7 +49,7 @@ public:
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess );
     virtual ~SwRenameXNamedDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetForbiddenChars(const OUString& rSet)
     {

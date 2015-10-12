@@ -34,81 +34,81 @@ class DocumentRedlineManager : public IDocumentRedlineAccess,
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
 
-    virtual RedlineMode_t GetRedlineMode() const SAL_OVERRIDE;
+    virtual RedlineMode_t GetRedlineMode() const override;
 
-    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
+    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) override;
 
-    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
+    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) override;
 
-    virtual bool IsRedlineOn() const SAL_OVERRIDE;
+    virtual bool IsRedlineOn() const override;
 
-    virtual bool IsIgnoreRedline() const SAL_OVERRIDE;
+    virtual bool IsIgnoreRedline() const override;
 
-    virtual const SwRedlineTable& GetRedlineTable() const SAL_OVERRIDE;
-    virtual SwRedlineTable& GetRedlineTable() SAL_OVERRIDE;
-    virtual const SwExtraRedlineTable& GetExtraRedlineTable() const SAL_OVERRIDE;
-    virtual SwExtraRedlineTable& GetExtraRedlineTable() SAL_OVERRIDE;
-    virtual bool HasExtraRedlineTable() const SAL_OVERRIDE;
+    virtual const SwRedlineTable& GetRedlineTable() const override;
+    virtual SwRedlineTable& GetRedlineTable() override;
+    virtual const SwExtraRedlineTable& GetExtraRedlineTable() const override;
+    virtual SwExtraRedlineTable& GetExtraRedlineTable() override;
+    virtual bool HasExtraRedlineTable() const override;
 
-    virtual bool IsInRedlines(const SwNode& rNode) const SAL_OVERRIDE;
+    virtual bool IsInRedlines(const SwNode& rNode) const override;
 
-    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) override;
 
-    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) override;
+    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) override;
 
-    virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) SAL_OVERRIDE;
+    virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) override;
 
     virtual bool DeleteRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
+        /*[in]*/sal_uInt16 nDelType) override;
 
     virtual bool DeleteRedline(
         /*[in]*/const SwStartNode& rSection,
         /*[in]*/bool bSaveInUndo,
-        /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
+        /*[in]*/sal_uInt16 nDelType) override;
 
     virtual sal_uInt16 GetRedlinePos(
         /*[in]*/const SwNode& rNode,
-        /*[in]*/sal_uInt16 nType) const SAL_OVERRIDE;
+        /*[in]*/sal_uInt16 nType) const override;
 
-    virtual void CompressRedlines() SAL_OVERRIDE;
+    virtual void CompressRedlines() override;
 
     virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,
-        /*[in]*/sal_uInt16* pFndPos) const SAL_OVERRIDE;
+        /*[in]*/sal_uInt16* pFndPos) const override;
 
-    virtual bool IsRedlineMove() const SAL_OVERRIDE;
+    virtual bool IsRedlineMove() const override;
 
-    virtual void SetRedlineMove(/*[in]*/bool bFlag) SAL_OVERRIDE;
+    virtual void SetRedlineMove(/*[in]*/bool bFlag) override;
 
-    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) override;
 
-    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 
-    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) override;
 
-    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
+    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 
-    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
+    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const override;
 
-    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
+    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const override;
 
-    virtual void UpdateRedlineAttr() SAL_OVERRIDE;
+    virtual void UpdateRedlineAttr() override;
 
-    virtual sal_uInt16 GetRedlineAuthor() SAL_OVERRIDE;
+    virtual sal_uInt16 GetRedlineAuthor() override;
 
-    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) SAL_OVERRIDE;
+    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) override;
 
     virtual bool SetRedlineComment(
         /*[in]*/const SwPaM& rPam,
-        /*[in]*/const OUString& rComment) SAL_OVERRIDE;
+        /*[in]*/const OUString& rComment) override;
 
-    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const SAL_OVERRIDE;
+    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const override;
 
     virtual void SetRedlinePassword(
-        /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) SAL_OVERRIDE;
+        /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) override;
 
 
     //Non Interface methods;

@@ -82,7 +82,7 @@ public:
                         bool bSetAutoFormat = true,
                         const SwTableAutoFormat* pSelFormat = 0 );
     virtual ~SwAutoFormatDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const;
 };

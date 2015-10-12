@@ -23,7 +23,7 @@ public:
     InputDialog (const OUString &labelText, vcl::Window *pParent = NULL);
     OUString getEntryText () const;
     virtual ~InputDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
 

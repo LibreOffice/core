@@ -54,7 +54,7 @@ public:
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,
                                   const SfxItemState eState,
                                   const SfxPoolItem* pState,
-                                  const bool bIsEnabled) SAL_OVERRIDE;
+                                  const bool bIsEnabled) override;
 
 private:
     struct TemplateEntry
@@ -75,7 +75,7 @@ private:
                    SfxBindings* pBindings);
 
     virtual ~StylePresetsPanel();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     SfxBindings* mpBindings;
 

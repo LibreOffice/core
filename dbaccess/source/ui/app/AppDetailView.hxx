@@ -57,27 +57,27 @@ namespace dbaui
     public:
         explicit OCreationList( OTasksWindow& _rParent );
         // Window overrides
-        virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void MouseMove( const MouseEvent& rMEvt ) override;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+        virtual void KeyInput( const KeyEvent& rKEvt ) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
 
         inline void resetLastActive() { m_pLastActiveEntry = NULL;}
 
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) SAL_OVERRIDE;
-        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) SAL_OVERRIDE;
-        virtual void        ModelHasCleared() SAL_OVERRIDE;
+        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) override;
+        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) override;
+        virtual void        ModelHasCleared() override;
 
         // IMnemonicEntryList
-        virtual void        SelectSearchEntry( const void* _pEntry ) SAL_OVERRIDE;
-        virtual void        ExecuteSearchEntry( const void* _pEntry ) const SAL_OVERRIDE;
+        virtual void        SelectSearchEntry( const void* _pEntry ) override;
+        virtual void        ExecuteSearchEntry( const void* _pEntry ) const override;
 
     private:
         void    onSelected( SvTreeListEntry* _pEntry ) const;
@@ -120,14 +120,14 @@ namespace dbaui
         DECL_LINK_TYPED( OnEntrySelectHdl, SvTreeListBox*, void );
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
 
@@ -156,14 +156,14 @@ namespace dbaui
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
     public:
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // Window overrides
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void GetFocus() override;
 
         /** creates the tables page
             @param  _xConnection
@@ -192,12 +192,12 @@ namespace dbaui
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
 
-        bool isCutAllowed() SAL_OVERRIDE ;
-        bool isCopyAllowed() SAL_OVERRIDE    ;
-        bool isPasteAllowed() SAL_OVERRIDE;
-        void copy() SAL_OVERRIDE;
-        void cut() SAL_OVERRIDE;
-        void paste() SAL_OVERRIDE;
+        bool isCutAllowed() override ;
+        bool isCopyAllowed() override    ;
+        bool isPasteAllowed() override;
+        void copy() override;
+        void cut() override;
+        void paste() override;
 
         /** return the qualified name.
             @param  _pEntry

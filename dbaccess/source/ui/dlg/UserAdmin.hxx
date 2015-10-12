@@ -65,17 +65,17 @@ public:
     static  VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     OUString GetUser();
 
     // subclasses must override this, but it isn't pure virtual
-    virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+    virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
     // <method>OGenericAdministrationPage::fillControls</method>
-    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     // <method>OGenericAdministrationPage::fillWindows</method>
-    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX

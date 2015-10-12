@@ -352,7 +352,7 @@ public:
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 
-    virtual void    PostUserEvent() SAL_OVERRIDE = 0;
+    virtual void    PostUserEvent() override = 0;
 };
 
 inline  Display *SalColormap::GetXDisplay() const
@@ -364,9 +364,9 @@ public:
              SalX11Display( Display* pDisp );
     virtual ~SalX11Display();
 
-    virtual bool        Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
+    virtual bool        Dispatch( XEvent *pEvent ) override;
     virtual void        Yield();
-    virtual void        PostUserEvent() SAL_OVERRIDE;
+    virtual void        PostUserEvent() override;
 
     bool                IsEvent();
     void                SetupInput( SalI18N_InputMethod *pInputMethod );

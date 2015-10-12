@@ -78,8 +78,8 @@ public:
     {
     }
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void randomTest();
     void testPageDescName();
@@ -1193,7 +1193,7 @@ namespace
         {
             m_eNmType = INTRNL_NAME;
         }
-        virtual const SwNode* GetNodeOfFormula() const SAL_OVERRIDE
+        virtual const SwNode* GetNodeOfFormula() const override
         {
             return m_pNode;
         }
@@ -1445,9 +1445,9 @@ namespace
         int m_nModifyCount;
         int m_nNotifyCount;
         TestClient() : m_nModifyCount(0), m_nNotifyCount(0) {};
-        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
+        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
         { ++m_nModifyCount; }
-        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE
+        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
         {
             if(typeid(TestHint) == typeid(rHint))
                 ++m_nNotifyCount;
@@ -1462,7 +1462,7 @@ namespace
         TYPEINFO_OVERRIDE();
         int m_nModifyCount;
         OtherTestClient() : m_nModifyCount(0) {};
-        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
+        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
         { ++m_nModifyCount; }
     };
     TYPEINIT1( OtherTestClient, SwClient );

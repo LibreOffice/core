@@ -59,7 +59,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue ) SAL_OVERRIDE;
+                               const OUString& rValue ) override;
 
 public:
 
@@ -76,7 +76,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
     const OUString& GetListStyle() const { return sListStyleName; }
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
@@ -90,14 +90,14 @@ public:
     const OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
     const OUString& GetDataStyleName() const { return sDataStyleName; }
 
-    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
-    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
-    virtual void SetDefaults() SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) override;
+    virtual void Finish( bool bOverwrite ) override;
+    virtual void SetDefaults() override;
 
     // override FillPropertySet, so we can get at the combined characters
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
 
     inline bool HasCombinedCharactersLetter()
         { return bHasCombinedCharactersLetter; }

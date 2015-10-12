@@ -62,12 +62,12 @@ protected:
     SdrModel*           pModel;
     SdrView*            pView;
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void        MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Resize() override;
+    virtual void        KeyInput(const KeyEvent& rKEvt) override;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void        MouseMove(const MouseEvent& rMEvt) override;
 
     virtual void        InitSdrModel();
 
@@ -81,7 +81,7 @@ public:
 
     GraphCtrl( vcl::Window* pParent, WinBits nStyle );
     virtual ~GraphCtrl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void                SetWinStyle( WinBits nWinBits );
 
@@ -109,7 +109,7 @@ public:
 
     void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 };
 
 
@@ -126,7 +126,7 @@ public:
     virtual ~GraphCtrlUserCall()
     {}
 
-    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) SAL_OVERRIDE;
+    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;
 };
 
 SdrObjUserCall* GraphCtrl::GetSdrUserCall()
@@ -140,7 +140,7 @@ class GraphCtrlView : public SdrView
 
 protected:
 
-    virtual void MarkListHasChanged() SAL_OVERRIDE
+    virtual void MarkListHasChanged() override
     {
         SdrView::MarkListHasChanged();
         rGraphCtrl.MarkListHasChanged();

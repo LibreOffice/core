@@ -54,13 +54,13 @@ private:
     bool                        m_bROCTLCursorMovement;
     bool                        m_bROCTLTextNumerals;
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
     SvtCTLOptions_Impl();
     virtual ~SvtCTLOptions_Impl();
 
-    virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) override;
     void            Load();
 
     bool            IsLoaded() { return m_bIsLoaded; }

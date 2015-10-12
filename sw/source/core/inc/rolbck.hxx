@@ -97,8 +97,8 @@ class SwHistorySetFormat : public SwHistoryHint
 public:
     SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNode );
     virtual ~SwHistorySetFormat();
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
-    virtual OUString GetDescription() const SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
+    virtual OUString GetDescription() const override;
 
 };
 
@@ -109,7 +109,7 @@ class SwHistoryResetFormat : public SwHistoryHint
 
 public:
     SwHistoryResetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNodeIdx );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -125,7 +125,7 @@ class SwHistorySetText : public SwHistoryHint
 public:
     SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNode );
     virtual ~SwHistorySetText();
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -143,9 +143,9 @@ class SwHistorySetTextField : public SwHistoryHint
 public:
     SwHistorySetTextField( SwTextField* pTextField, sal_uLong nNode );
     virtual ~SwHistorySetTextField();
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
-    virtual OUString GetDescription() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const override;
 
 };
 
@@ -158,7 +158,7 @@ class SwHistorySetRefMark : public SwHistoryHint
 
 public:
     SwHistorySetRefMark( SwTextRefMark* pTextHt, sal_uLong nNode );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -173,7 +173,7 @@ class SwHistorySetTOXMark : public SwHistoryHint
 
 public:
     SwHistorySetTOXMark( SwTextTOXMark* pTextHt, sal_uLong nNode );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     bool IsEqual( const SwTOXMark& rCmp ) const;
 
 };
@@ -188,7 +188,7 @@ class SwHistoryResetText : public SwHistoryHint
 public:
     SwHistoryResetText( sal_uInt16 nWhich, sal_Int32 nStt, sal_Int32 nEnd,
                        sal_uLong nNode );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
     sal_uInt16 GetWhich() const         { return m_nAttr; }
     sal_uLong GetNode() const           { return m_nNodeIndex; }
@@ -208,9 +208,9 @@ public:
     SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_uLong nNode );
     SwHistorySetFootnote( const SwTextFootnote& );
     virtual ~SwHistorySetFootnote();
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
-    virtual OUString GetDescription() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const override;
 
 };
 
@@ -222,7 +222,7 @@ class SwHistoryChangeFormatColl : public SwHistoryHint
 
 public:
     SwHistoryChangeFormatColl( SwFormatColl* pColl, sal_uLong nNode, sal_uInt8 nNodeWhich );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -233,7 +233,7 @@ class SwHistoryTextFlyCnt : public SwHistoryHint
 public:
     SwHistoryTextFlyCnt( SwFrameFormat* const pFlyFormat );
     virtual ~SwHistoryTextFlyCnt();
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     SwUndoDelLayFormat* GetUDelLFormat() { return m_pUndo.get(); }
 
 };
@@ -243,7 +243,7 @@ class SwHistoryBookmark : public SwHistoryHint
     public:
         SwHistoryBookmark(const ::sw::mark::IMark& rBkmk,
                         bool bSavePos, bool bSaveOtherPos);
-        virtual void SetInDoc(SwDoc * pDoc, bool) SAL_OVERRIDE;
+        virtual void SetInDoc(SwDoc * pDoc, bool) override;
 
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
         const OUString& GetName() const { return m_aName;}
@@ -272,7 +272,7 @@ class SwHistorySetAttrSet : public SwHistoryHint
 public:
     SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
                          const std::set<sal_uInt16> &rSetArr );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -287,7 +287,7 @@ public:
     SwHistoryResetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
                         sal_Int32 nStt,
                         sal_Int32 nEnd);
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
     const std::vector<sal_uInt16>& GetArr() const { return m_Array; }
     sal_uLong GetNode() const               { return m_nNodeIndex; }
@@ -303,7 +303,7 @@ class SwHistoryChangeFlyAnchor : public SwHistoryHint
 
 public:
     SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 };
 
 class SwHistoryChangeFlyChain : public SwHistoryHint
@@ -314,7 +314,7 @@ class SwHistoryChangeFlyChain : public SwHistoryHint
 
 public:
     SwHistoryChangeFlyChain( SwFlyFrameFormat& rFormat, const SwFormatChain& rAttr );
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 };
 
 class SwHistoryChangeCharFormat : public SwHistoryHint
@@ -324,7 +324,7 @@ class SwHistoryChangeCharFormat : public SwHistoryHint
 
 public:
     SwHistoryChangeCharFormat( const SfxItemSet& rSet, const OUString & sFormat);
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) SAL_OVERRIDE;
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
 
@@ -398,7 +398,7 @@ private:
     void _MakeSetWhichIds();
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     SwRegHistory( SwHistory* pHst );

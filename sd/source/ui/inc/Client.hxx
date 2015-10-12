@@ -35,9 +35,9 @@ class Client : public SfxInPlaceClient
     SdrOle2Obj*     pSdrOle2Obj;
     SdrGrafObj*     pSdrGrafObj;
 
-    virtual void    ObjectAreaChanged() SAL_OVERRIDE;
-    virtual void    RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
-    virtual void    ViewChanged() SAL_OVERRIDE;
+    virtual void    ObjectAreaChanged() override;
+    virtual void    RequestNewObjectArea( Rectangle& ) override;
+    virtual void    ViewChanged() override;
 
 public:
     Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);

@@ -62,7 +62,7 @@ namespace dbaui
                             IController& _rController,
                             const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// late construction
         void Construct(const css::uno::Reference< css::awt::XControlModel >& xModel);
@@ -82,10 +82,10 @@ namespace dbaui
         css::uno::Reference< css::awt::XControlContainer >     getContainer() { return m_xMe; }
 
     protected:
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
-        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void GetFocus() override;
+        virtual void resizeDocumentView(Rectangle& rRect) override;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     private:
         using ODataView::Construct;

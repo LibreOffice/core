@@ -48,17 +48,17 @@ namespace svt { namespace uno
         );
 
         // Dialog overridables
-        virtual short   Execute() SAL_OVERRIDE;
+        virtual short   Execute() override;
 
         // OWizardMachine overridables
-        virtual VclPtr<TabPage> createPage( WizardState i_nState ) SAL_OVERRIDE;
-        virtual void        enterState( WizardState i_nState ) SAL_OVERRIDE;
-        virtual bool        leaveState( WizardState i_nState ) SAL_OVERRIDE;
-        virtual OUString    getStateDisplayName( WizardState i_nState ) const SAL_OVERRIDE;
-        virtual bool        canAdvance() const SAL_OVERRIDE;
-        virtual bool        onFinish() SAL_OVERRIDE;
+        virtual VclPtr<TabPage> createPage( WizardState i_nState ) override;
+        virtual void        enterState( WizardState i_nState ) override;
+        virtual bool        leaveState( WizardState i_nState ) override;
+        virtual OUString    getStateDisplayName( WizardState i_nState ) const override;
+        virtual bool        canAdvance() const override;
+        virtual bool        onFinish() override;
         virtual IWizardPageController*
-                            getPageController( TabPage* _pCurrentPage ) const SAL_OVERRIDE;
+                            getPageController( TabPage* _pCurrentPage ) const override;
 
         static sal_Int16 convertCommitReasonToTravelType( const CommitPageReason i_eReason );
 

@@ -728,7 +728,7 @@ private:
 
     virtual com::sun::star::uno::Any SAL_CALL getValueByName(
         OUString const & Name)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (com::sun::star::uno::RuntimeException, std::exception) override
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
             ? context_->getValueByName(Name)

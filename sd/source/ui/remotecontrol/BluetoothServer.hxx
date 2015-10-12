@@ -50,7 +50,7 @@ namespace sd
         struct Impl;
         std::unique_ptr<Impl> mpImpl;
 #endif
-        virtual void SAL_CALL run() SAL_OVERRIDE;
+        virtual void SAL_CALL run() override;
 
         void cleanupCommunicators();
         std::vector<Communicator*>* mpCommunicators;

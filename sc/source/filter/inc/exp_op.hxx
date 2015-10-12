@@ -59,7 +59,7 @@ protected:
 public:
                         ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm );
     virtual             ~ExportBiff5();
-    FltError            Write() SAL_OVERRIDE;
+    FltError            Write() override;
 };
 
 class ExportBiff8 : public ExportBiff5

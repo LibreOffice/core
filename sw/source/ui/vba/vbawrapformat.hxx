@@ -41,21 +41,21 @@ private:
 public:
     SwVbaWrapFormat(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL getSide() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setSide( ::sal_Int32 _side ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getDistanceTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDistanceTop( float _distancetop ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getDistanceBottom() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getDistanceLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getSide() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSide( ::sal_Int32 _side ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getDistanceTop() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDistanceTop( float _distancetop ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getDistanceBottom() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getDistanceLeft() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAWRAPFORMAT_HXX

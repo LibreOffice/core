@@ -56,10 +56,10 @@ private:
                    const UnoViewContainer&                      rViewContainer );
 
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
-    virtual void viewsChanged() SAL_OVERRIDE;
+    virtual void viewAdded( const UnoViewSharedPtr& rView ) override;
+    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override;
+    virtual void viewChanged( const UnoViewSharedPtr& rView ) override;
+    virtual void viewsChanged() override;
 
     ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 

@@ -37,8 +37,8 @@ typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 class TestTextSearch : public test::BootstrapFixtureBase
 {
 public:
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testICU();
     void testSearches();

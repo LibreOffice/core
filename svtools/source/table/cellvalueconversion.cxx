@@ -149,7 +149,7 @@ namespace svt
         {
         }
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
@@ -173,7 +173,7 @@ namespace svt
 
         virtual ~IntegerNormalization() {}
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             sal_Int64 value( 0 );
             OSL_VERIFY( i_value >>= value );
@@ -194,7 +194,7 @@ namespace svt
 
         virtual ~BooleanNormalization() {}
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             bool value( false );
             OSL_VERIFY( i_value >>= value );
@@ -215,7 +215,7 @@ namespace svt
 
         virtual ~DateTimeNormalization() {}
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
@@ -249,7 +249,7 @@ namespace svt
 
         virtual ~DateNormalization() {}
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
@@ -279,7 +279,7 @@ namespace svt
 
         virtual ~TimeNormalization() {}
 
-        virtual double convertToDouble( Any const & i_value ) const SAL_OVERRIDE
+        virtual double convertToDouble( Any const & i_value ) const override
         {
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );

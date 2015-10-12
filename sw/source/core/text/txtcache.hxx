@@ -46,14 +46,14 @@ class SwTextLineAccess : public SwCacheAccess
 {
 
 protected:
-    virtual SwCacheObj *NewObj() SAL_OVERRIDE;
+    virtual SwCacheObj *NewObj() override;
 
 public:
     explicit SwTextLineAccess( const SwTextFrm *pOwner );
 
     SwParaPortion *GetPara();
 
-    virtual bool IsAvailable() const SAL_OVERRIDE;
+    virtual bool IsAvailable() const override;
 };
 
 #endif

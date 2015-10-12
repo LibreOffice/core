@@ -517,7 +517,7 @@ public:
     bool    getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
     void    setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );
 
-    virtual void insertTableProperties( const PropertyMap* ) SAL_OVERRIDE;
+    virtual void insertTableProperties( const PropertyMap* ) override;
 };
 typedef std::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
 } //namespace dmapper

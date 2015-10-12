@@ -240,12 +240,12 @@ public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
     explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
     virtual                     ~ScCsvControl();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     // event handling ---------------------------------------------------------
 
-    virtual void                GetFocus() SAL_OVERRIDE;
-    virtual void                LoseFocus() SAL_OVERRIDE;
+    virtual void                GetFocus() override;
+    virtual void                LoseFocus() override;
 
     /** Sends a GetFocus or LoseFocus event to the accessibility object. */
     void                        AccSendFocusEvent( bool bFocused );
@@ -379,7 +379,7 @@ public:
 public:
     /** Creates and returns the accessible object of this control. Do not overwrite in
         derived classes, use ImplCreateAccessible() instead. */
-    virtual XAccessibleRef     CreateAccessible() SAL_OVERRIDE;
+    virtual XAccessibleRef     CreateAccessible() override;
 
 protected:
     /** Derived classes create a new accessible object here. */

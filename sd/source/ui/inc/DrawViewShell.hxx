@@ -94,12 +94,12 @@ public:
 
     virtual ~DrawViewShell();
 
-    virtual void Init (bool bIsMainViewShell) SAL_OVERRIDE;
+    virtual void Init (bool bIsMainViewShell) override;
 
-    virtual void Shutdown() SAL_OVERRIDE;
+    virtual void Shutdown() override;
 
-    void PrePaint() SAL_OVERRIDE;
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
+    void PrePaint() override;
+    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) override;
 
     /** Set the position and size of the area which contains the GUI
         elements like rulers, sliders, and buttons as well as the document
@@ -126,38 +126,38 @@ public:
         the enclosing window and current sizes of buttons, rulers, and
         sliders.
     */
-    virtual void ArrangeGUIElements() SAL_OVERRIDE;
+    virtual void ArrangeGUIElements() override;
 
     void            HidePage();
 
-    virtual bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) SAL_OVERRIDE;
-    virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
-    virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) SAL_OVERRIDE;
+    virtual bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) override;
+    virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
+    virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) override;
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
-    virtual void    SetZoom( long nZoom ) SAL_OVERRIDE;
-    virtual void    SetZoomRect( const Rectangle& rZoomRect ) SAL_OVERRIDE;
+    virtual void    SetZoom( long nZoom ) override;
+    virtual void    SetZoomRect( const Rectangle& rZoomRect ) override;
 
     void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                    const Point* pPos);
     void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                     const Point* pPos);
 
-    virtual void    SetUIUnit(FieldUnit eUnit) SAL_OVERRIDE;
+    virtual void    SetUIUnit(FieldUnit eUnit) override;
 
     void            SelectionHasChanged();
     void            ModelHasChanged();
-    virtual void    Activate(bool bIsMDIActivate) SAL_OVERRIDE;
-    virtual void    Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
-    virtual void    UIActivating( SfxInPlaceClient* ) SAL_OVERRIDE;
-    virtual void    UIDeactivated( SfxInPlaceClient* ) SAL_OVERRIDE;
+    virtual void    Activate(bool bIsMDIActivate) override;
+    virtual void    Deactivate(bool IsMDIActivate) override;
+    virtual void    UIActivating( SfxInPlaceClient* ) override;
+    virtual void    UIDeactivated( SfxInPlaceClient* ) override;
     OUString GetSelectionText( bool bCompleteWords = false );
     bool    HasSelection( bool bText = true ) const;
 
@@ -247,7 +247,7 @@ public:
         const Ruler& rRuler,
         const MouseEvent& rMEvt);
 
-    virtual bool    PrepareClose( bool bUI = true ) SAL_OVERRIDE;
+    virtual bool    PrepareClose( bool bUI = true ) override;
 
     PageKind        GetPageKind() { return mePageKind; }
     void            SetPageKind( PageKind ePageKind ) { mePageKind = ePageKind; }
@@ -255,10 +255,10 @@ public:
     void            SetMousePosFreezed( bool bIn ) { mbMousePosFreezed = bIn; }
 
     EditMode        GetEditMode() const { return meEditMode; }
-    virtual SdPage* GetActualPage() SAL_OVERRIDE { return mpActualPage; }
+    virtual SdPage* GetActualPage() override { return mpActualPage; }
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
+    virtual SdPage* getCurrentPage() const override;
 
     void            ResetActualPage();
     void            ResetActualLayer();
@@ -273,11 +273,11 @@ public:
     void            FreshNavigatrTree();
     void            MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
 
-    virtual void    ReadFrameViewData(FrameView* pView) SAL_OVERRIDE;
-    virtual void    WriteFrameViewData() SAL_OVERRIDE;
+    virtual void    ReadFrameViewData(FrameView* pView) override;
+    virtual void    WriteFrameViewData() override;
 
-    virtual ErrCode DoVerb(long nVerb) SAL_OVERRIDE;
-    virtual bool    ActivateObject(SdrOle2Obj* pObj, long nVerb) SAL_OVERRIDE;
+    virtual ErrCode DoVerb(long nVerb) override;
+    virtual bool    ActivateObject(SdrOle2Obj* pObj, long nVerb) override;
 
     void            SetZoomOnPage( bool bZoom = true ) { mbZoomOnPage = bZoom; }
     bool            IsZoomOnPage() { return mbZoomOnPage; }
@@ -296,21 +296,21 @@ public:
         Do not call this method directly.  Call the method at ViewShellBase
         instead.
     */
-    virtual void ShowUIControls (bool bVisible = true) SAL_OVERRIDE;
+    virtual void ShowUIControls (bool bVisible = true) override;
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
     bool IsLayerModeActive() const { return mbIsLayerModeActive;}
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) SAL_OVERRIDE;
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) SAL_OVERRIDE;
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
 
-    virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
-    virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
+    virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
 
-    virtual void    VisAreaChanged(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    VisAreaChanged(const Rectangle& rRect) override;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -321,7 +321,7 @@ public:
    */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
+        CreateAccessibleDocumentView (::sd::Window* pWindow) override;
 
     /** Return the number of layers managed by the layer tab control.  This
         will usually differ from the number of layers managed by the layer
@@ -374,14 +374,14 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const OUString& rLayerName, const OUString& rLayerTitle, const OUString& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     DrawView*   GetDrawView() const { return mpDrawView; }
 
     /** Relocation to a new parent window is not supported for DrawViewShell
         objects so this method always returns <FALSE/>.
     */
-    virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) SAL_OVERRIDE;
+    virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) override;
 
     OUString GetSidebarContextName() const;
 
@@ -413,11 +413,11 @@ protected:
     void            DeleteActualPage();
     void            DeleteActualLayer();
 
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) SAL_OVERRIDE;
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) SAL_OVERRIDE;
-    virtual void    UpdateHRuler() SAL_OVERRIDE;
-    virtual void    UpdateVRuler() SAL_OVERRIDE;
-    virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) SAL_OVERRIDE;
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst) override;
+    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
+    virtual void    UpdateHRuler() override;
+    virtual void    UpdateVRuler() override;
+    virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) override;
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );
@@ -462,14 +462,14 @@ private:
         SfxRequest& rRequest,
         PageKind ePageKind,
         SdPage* pPage,
-        const sal_Int32 nInsertPosition = -1) SAL_OVERRIDE;
+        const sal_Int32 nInsertPosition = -1) override;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 > mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
     TransferableClipboardListener*                                                  mpClipEvtLstnr;
     bool                                                                            mbPastePossible;
 
-    virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     /** Stop a running slide show.  The frame the show is running in is
         destroyed if

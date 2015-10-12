@@ -33,7 +33,7 @@ public:
         bool bShowProgress);
     virtual ~SdHTMLFilter();
 
-    virtual bool        Export() SAL_OVERRIDE;
+    virtual bool        Export() override;
 };
 
 #endif // INCLUDED_SD_INC_SDHTMLFILTER_HXX

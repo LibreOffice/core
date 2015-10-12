@@ -46,10 +46,10 @@ public:
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                     vcl::Window* pParent, bool bBulletItem );
     virtual ~NumberingPopup();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent )
-        throw ( css::uno::RuntimeException ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException ) override;
 };
 
 class NumberingToolBoxControl : public svt::PopupWindowController
@@ -58,22 +58,22 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 
 public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
     bool IsInImpressDraw();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent )
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     using svt::ToolboxController::createPopupWindow;
 };

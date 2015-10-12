@@ -63,14 +63,14 @@ class OTaskWindow : public vcl::Window
 public:
     explicit OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
     virtual ~OTaskWindow() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { m_pPropWin.clear(); vcl::Window::dispose(); }
+    virtual void dispose() override { m_pPropWin.clear(); vcl::Window::dispose(); }
 
     inline void setPropertyBrowser(PropBrw* _pPropWin)
     {
         m_pPropWin = _pPropWin;
     }
 
-    virtual void Resize() SAL_OVERRIDE
+    virtual void Resize() override
     {
         const Size aSize = GetOutputSizePixel();
         if ( m_pPropWin && aSize.Height() && aSize.Width() )

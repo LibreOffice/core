@@ -74,7 +74,7 @@ public:
     void SetType(const OUString& sType);
     void SetDesc(const OUString& sDesc);
     void SetPrompt(const OUString& sText);
-    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void ToXml(IXFStream *pStrm) override;
 private:
     OUString m_strType;
     OUString m_strDesc;
@@ -121,7 +121,7 @@ class XFHolderEnd : public XFContent
 public:
     XFHolderEnd();
     virtual ~XFHolderEnd();
-    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void ToXml(IXFStream *pStrm) override;
 };
 
 XFHolderEnd::XFHolderEnd()

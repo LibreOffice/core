@@ -56,7 +56,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
 
     //fill list of selection handles 'aHdl'
-    virtual void SetMarkHandles() SAL_OVERRIDE;
+    virtual void SetMarkHandles() override;
 
     SdrPageView*    GetPageView() const;
 
@@ -66,7 +66,7 @@ public:
 
     //pMarkHandleProvider can be NULL; ownership is not taken
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
-    void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) SAL_OVERRIDE;
+    void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) override;
 
     SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
@@ -77,7 +77,7 @@ public:
     SdrObject* getNamedSdrObject( const OUString& rName ) const;
     static bool IsObjectHit( SdrObject* pObj, const Point& rPnt );
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     static SdrObject* getSdrObject( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );

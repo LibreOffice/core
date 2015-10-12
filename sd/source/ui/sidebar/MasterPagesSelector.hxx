@@ -63,7 +63,7 @@ public:
         const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~MasterPagesSelector();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void LateInit();
 
@@ -104,7 +104,7 @@ public:
     void UpdateAllPreviews();
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 protected:
     mutable ::osl::Mutex maMutex;
@@ -179,7 +179,7 @@ protected:
     */
     virtual ResId GetContextMenuResId() const;
 
-    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
+    virtual void Command (const CommandEvent& rEvent) override;
 
     virtual void ProcessPopupMenu (Menu& rMenu);
     virtual void ExecuteCommand (const sal_Int32 nCommandId);

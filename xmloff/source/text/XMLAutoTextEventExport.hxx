@@ -63,13 +63,13 @@ public:
             ::com::sun::star::uno::Any> & rArguments )
         throw(
             ::com::sun::star::uno::Exception,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 protected:
 
     /// export the events off all autotexts
     virtual sal_uInt32 exportDoc(
-        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) SAL_OVERRIDE;
+        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
     /// does the document have any events ?
     bool hasEvents();
@@ -84,13 +84,13 @@ protected:
 
 
     // methods without content:
-    virtual void _ExportMeta() SAL_OVERRIDE;
-    virtual void _ExportScripts() SAL_OVERRIDE;
-    virtual void _ExportFontDecls() SAL_OVERRIDE;
-    virtual void _ExportStyles( bool bUsed ) SAL_OVERRIDE ;
-    virtual void _ExportAutoStyles() SAL_OVERRIDE;
-    virtual void _ExportMasterStyles() SAL_OVERRIDE;
-    virtual void _ExportContent() SAL_OVERRIDE;
+    virtual void _ExportMeta() override;
+    virtual void _ExportScripts() override;
+    virtual void _ExportFontDecls() override;
+    virtual void _ExportStyles( bool bUsed ) override ;
+    virtual void _ExportAutoStyles() override;
+    virtual void _ExportMasterStyles() override;
+    virtual void _ExportContent() override;
 };
 
 #endif

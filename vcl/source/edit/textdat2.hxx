@@ -229,17 +229,17 @@ private:
 public:
                     TextSelFunctionSet( TextView* pView );
 
-    virtual void    BeginDrag() SAL_OVERRIDE;
+    virtual void    BeginDrag() override;
 
-    virtual void    CreateAnchor() SAL_OVERRIDE;
+    virtual void    CreateAnchor() override;
 
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false ) SAL_OVERRIDE;
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false ) override;
 
-    virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
-    virtual void    DeselectAll() SAL_OVERRIDE;
+    virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) override;
+    virtual void    DeselectAll() override;
 
-    virtual void    DeselectAtPoint( const Point& ) SAL_OVERRIDE;
-    virtual void    DestroyAnchor() SAL_OVERRIDE;
+    virtual void    DeselectAtPoint( const Point& ) override;
+    virtual void    DestroyAnchor() override;
 };
 
 class IdleFormatter : public Idle

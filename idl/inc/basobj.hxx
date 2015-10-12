@@ -100,7 +100,7 @@ public:
             TYPEINFO_OVERRIDE();
             SvMetaReference();
 
-    const SvString &    GetName() const SAL_OVERRIDE
+    const SvString &    GetName() const override
                         {
                             return ( !aRef.Is()
                                     || !SvMetaObject::GetName().getString().isEmpty() )
@@ -108,7 +108,7 @@ public:
                                 : aRef->GetName();
                         }
 
-    const SvString &    GetHelpText() const SAL_OVERRIDE
+    const SvString &    GetHelpText() const override
                         {
                             return ( !aRef.Is()
                                     || !SvMetaObject::GetHelpText().getString().isEmpty() )
@@ -116,7 +116,7 @@ public:
                                 : aRef->GetHelpText();
                         }
 
-    const SvString &    GetConfigName() const SAL_OVERRIDE
+    const SvString &    GetConfigName() const override
                         {
                             return ( !aRef.Is()
                                     || !SvMetaObject::GetConfigName().getString().isEmpty() )
@@ -124,7 +124,7 @@ public:
                                 : aRef->GetConfigName();
                         }
 
-    const SvString &    GetDescription() const SAL_OVERRIDE
+    const SvString &    GetDescription() const override
                         {
                             return ( !aRef.Is()
                                     || !SvMetaObject::GetDescription().getString().isEmpty() )
@@ -156,10 +156,10 @@ public:
 
     const SvGlobalName &GetUUId() const;
     void                SetModule( SvIdlDataBase & rBase );
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
 protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaExternMemberList : public SvRefMemberList<SvMetaExtern *> {};

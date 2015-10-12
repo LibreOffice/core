@@ -39,8 +39,8 @@ private:
     void convertElementIdToPropertyId(sal_Int32 aElementId);
 
     // LoggedProperties
-    virtual void lcl_attribute(Id aName, Value& aValue) SAL_OVERRIDE;
-    virtual void lcl_sprm(Sprm& sprm) SAL_OVERRIDE;
+    virtual void lcl_attribute(Id aName, Value& aValue) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
 public:
     TextEffectsHandler(sal_uInt32 aElementId);

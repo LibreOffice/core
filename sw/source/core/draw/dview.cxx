@@ -64,7 +64,7 @@ class SwSdrHdl : public SdrHdl
 public:
     SwSdrHdl(const Point& rPnt, bool bTopRight ) :
         SdrHdl( rPnt, bTopRight ? HDL_ANCHOR_TR : HDL_ANCHOR ) {}
-    virtual bool IsFocusHdl() const SAL_OVERRIDE;
+    virtual bool IsFocusHdl() const override;
 };
 
 bool SwSdrHdl::IsFocusHdl() const

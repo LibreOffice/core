@@ -36,21 +36,21 @@ public:
     virtual sal_Bool SAL_CALL loadAlgorithm(
         const com::sun::star::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
         const OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
         const com::sun::star::lang::Locale& rLocale2 )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
         const com::sun::star::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     Index *index;

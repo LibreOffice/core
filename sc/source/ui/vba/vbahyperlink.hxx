@@ -45,19 +45,19 @@ public:
     virtual ~ScVbaHyperlink();
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAddress( const OUString& rAddress ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSubAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setSubAddress( const OUString& rSubAddress ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getScreenTip() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setScreenTip( const OUString& rScreenTip ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getTextToDisplay() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAddress() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAddress( const OUString& rAddress ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubAddress() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSubAddress( const OUString& rSubAddress ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getScreenTip() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setScreenTip( const OUString& rScreenTip ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getTextToDisplay() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException, std::exception) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

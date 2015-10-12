@@ -41,18 +41,18 @@ public:
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const OUString& rCaption ) SAL_OVERRIDE;
-    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
+                                               const OUString& rCaption ) override;
+    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
                                                     const OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
-                                                    Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
-    virtual bool        SupportsCairo() const SAL_OVERRIDE;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
+                                                    Rectangle &rNativeContentRegion ) override;
+    virtual bool        SupportsCairo() const override;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
     void WidgetQueueDraw() const;
 
     void updateSettings( AllSettings& rSettings );
@@ -61,7 +61,7 @@ public:
 
     cairo_t* getCairoContext() const;
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) SAL_OVERRIDE;
+    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
@@ -151,30 +151,30 @@ public:
     static  bool        bNeedTwoPasses;
 
     // native widget methods
-    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
+    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
+                                              const Point& aPos, bool& rIsInside ) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
-                                           const OUString& rCaption ) SAL_OVERRIDE;
+                                           const OUString& rCaption ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& rCaption,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
 
     //helper methods for frame's UpdateSettings
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
-    virtual void            ResetClipRegion() SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) override;
+    virtual void            ResetClipRegion() override;
 
     // some themes set the background pixmap of our window EVERY time
     // a control is painted; but presentation effects need
     // the background set to None; workaround: set the background
     // before copyBits
     virtual void            copyBits( const SalTwoRect& rPosAry,
-                                      SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+                                      SalGraphics* pSrcGraphics ) override;
 
 protected:
     typedef std::list< Rectangle > clipList;

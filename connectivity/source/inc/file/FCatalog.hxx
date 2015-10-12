@@ -40,22 +40,22 @@ namespace connectivity
                 @param  _xRow
                     The current row from the resultset given to fillNames.
             */
-            virtual OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow) SAL_OVERRIDE;
+            virtual OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow) override;
 
         public:
-            virtual void refreshTables() SAL_OVERRIDE;
-            virtual void refreshViews() SAL_OVERRIDE;
-            virtual void refreshGroups() SAL_OVERRIDE;
-            virtual void refreshUsers() SAL_OVERRIDE;
+            virtual void refreshTables() override;
+            virtual void refreshViews() override;
+            virtual void refreshGroups() override;
+            virtual void refreshUsers() override;
 
         public:
             OFileCatalog(OConnection* _pCon);
             OConnection*    getConnection() { return m_pConnection; }
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             // ::cppu::OComponentHelper
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL disposing() SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing() override;
         };
     }
 }

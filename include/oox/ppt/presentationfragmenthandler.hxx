@@ -39,8 +39,8 @@ class PresentationFragmentHandler : public ::oox::core::FragmentHandler2
 public:
     PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw();
     virtual ~PresentationFragmentHandler() throw();
-    virtual void finalizeImport() SAL_OVERRIDE;
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void finalizeImport() override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 protected:
     bool importSlide( const ::oox::core::FragmentHandlerRef& rSlideFragmentHandler,

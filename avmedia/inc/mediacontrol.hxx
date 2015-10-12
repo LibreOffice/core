@@ -58,7 +58,7 @@ public:
 
                         MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
     virtual             ~MediaControl();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     const Size&         getMinSizePixel() const;
 
@@ -69,7 +69,7 @@ protected:
     virtual void        update() = 0;
     virtual void        execute( const MediaItem& rItem ) = 0;
 
-    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Resize() override;
 
 private:
 

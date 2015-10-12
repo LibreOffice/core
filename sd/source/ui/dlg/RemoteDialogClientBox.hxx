@@ -81,7 +81,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(css::lang::EventObject const & evt)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class ClientBox : public Control
@@ -131,13 +131,13 @@ class ClientBox : public Control
 public:
     ClientBox( vcl::Window* pParent, WinBits nStyle );
     virtual ~ClientBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
-    void Resize() SAL_OVERRIDE;
-    Size GetOptimalSize() const SAL_OVERRIDE;
-    bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) override;
+    void Resize() override;
+    Size GetOptimalSize() const override;
+    bool Notify( NotifyEvent& rNEvt ) override;
 
     TClientBoxEntry GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long GetActiveEntryIndex();

@@ -51,9 +51,9 @@ public:
     explicit SequenceInputStreamService();
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) override;
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
@@ -61,19 +61,19 @@ public:
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
     // css::io::XInputStream:
-    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual ::sal_Int32 SAL_CALL available() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL closeInput() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) override;
+    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) override;
+    virtual ::sal_Int32 SAL_CALL available() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) override;
+    virtual void SAL_CALL closeInput() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) override;
 
     // css::io::XSeekable:
-    virtual void SAL_CALL seek( ::sal_Int64 location ) throw ( uno::RuntimeException, lang::IllegalArgumentException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual ::sal_Int64 SAL_CALL getPosition() throw ( uno::RuntimeException, io::IOException, std::exception ) SAL_OVERRIDE;
-    virtual ::sal_Int64 SAL_CALL getLength() throw ( uno::RuntimeException, io::IOException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL seek( ::sal_Int64 location ) throw ( uno::RuntimeException, lang::IllegalArgumentException, io::IOException, std::exception ) override;
+    virtual ::sal_Int64 SAL_CALL getPosition() throw ( uno::RuntimeException, io::IOException, std::exception ) override;
+    virtual ::sal_Int64 SAL_CALL getLength() throw ( uno::RuntimeException, io::IOException, std::exception ) override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) override;
 
 private:
     virtual ~SequenceInputStreamService() {}

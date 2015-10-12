@@ -289,7 +289,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
         //  override methods of baseclass
 
-        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) override;
 
         //  public interface
 
@@ -315,7 +315,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
                void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
     //  private types
 

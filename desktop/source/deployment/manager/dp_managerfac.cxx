@@ -52,7 +52,7 @@ class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 
 protected:
     inline void check();
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 public:
     virtual ~PackageManagerFactoryImpl();
@@ -61,7 +61,7 @@ public:
 
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
-        OUString const & context ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        OUString const & context ) throw (RuntimeException, std::exception) override;
 };
 
 

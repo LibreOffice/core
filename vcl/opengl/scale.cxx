@@ -48,8 +48,8 @@ private:
 public:
     ScaleOp( OpenGLSalBitmap* pBitmap, const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
 
-    bool Execute() SAL_OVERRIDE;
-    void GetSize( Size& rSize ) const SAL_OVERRIDE;
+    bool Execute() override;
+    void GetSize( Size& rSize ) const override;
 };
 
 bool OpenGLSalBitmap::ImplScaleFilter(

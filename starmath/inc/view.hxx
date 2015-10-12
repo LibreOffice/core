@@ -87,11 +87,11 @@ protected:
         aFormulaDrawPos = rPos;
     }
 
-    virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
-    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual void StateChanged( StateChangedType eChanged ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+    virtual void StateChanged( StateChangedType eChanged ) override;
     DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
 
 private:
@@ -103,13 +103,13 @@ private:
 public:
     SmGraphicWindow(SmViewShell* pShell);
     virtual ~SmGraphicWindow();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // Window
-    virtual void MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
-    virtual void MouseMove(const MouseEvent &rMEvt) SAL_OVERRIDE;
-    virtual void GetFocus() SAL_OVERRIDE;
-    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent &rMEvt) override;
+    virtual void MouseMove(const MouseEvent &rMEvt) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
     SmViewShell* GetView()
     {
@@ -136,7 +136,7 @@ public:
     void ApplyColorConfigValues(const svtools::ColorConfig &rColorCfg);
 
     // for Accessibility
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     using Window::GetAccessible;
     SmGraphicAccessible* GetAccessible_Impl()
@@ -153,7 +153,7 @@ public:
     SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
     virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
-                              const SfxPoolItem* pState) SAL_OVERRIDE;
+                              const SfxPoolItem* pState) override;
 };
 
 class SmEditController: public SfxControllerItem
@@ -167,7 +167,7 @@ public:
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
 class SmCmdBoxWindow : public SfxDockingWindow
@@ -183,16 +183,16 @@ class SmCmdBoxWindow : public SfxDockingWindow
 protected:
 
     // Window
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    GetFocus() override;
+    virtual void Resize() override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void StateChanged( StateChangedType nStateChange ) override;
 
-    virtual Size CalcDockingSize(SfxChildAlignment eAlign) SAL_OVERRIDE;
+    virtual Size CalcDockingSize(SfxChildAlignment eAlign) override;
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
-                                             SfxChildAlignment eWish) SAL_OVERRIDE;
+                                             SfxChildAlignment eWish) override;
 
-    virtual void    ToggleFloatingMode() SAL_OVERRIDE;
+    virtual void    ToggleFloatingMode() override;
 
 public:
     SmCmdBoxWindow(SfxBindings    *pBindings,
@@ -200,7 +200,7 @@ public:
                    Window         *pParent);
 
     virtual ~SmCmdBoxWindow ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void AdjustPosition();
 
@@ -247,7 +247,7 @@ class SmViewShell: public SfxViewShell
     bool bPasteState;
 
     DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
@@ -269,23 +269,23 @@ protected:
                   const OUString& rText,
                   sal_uInt16        MaxWidth);
 
-    virtual SfxPrinter *GetPrinter(bool bCreate = false) SAL_OVERRIDE;
+    virtual SfxPrinter *GetPrinter(bool bCreate = false) override;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
-                              SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
+                              SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) override;
 
     void Insert( SfxMedium& rMedium );
     void InsertFrom(SfxMedium &rMedium);
 
-    virtual bool HasPrintOptionsPage() const SAL_OVERRIDE;
+    virtual bool HasPrintOptionsPage() const override;
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window    *pParent,
-                                                      const SfxItemSet &rOptions) SAL_OVERRIDE;
-    virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
-    virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
-    virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) SAL_OVERRIDE;
-    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
-    virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
-    virtual void QueryObjAreaPixel( Rectangle& rRect ) const SAL_OVERRIDE;
-    virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) SAL_OVERRIDE;
+                                                      const SfxItemSet &rOptions) override;
+    virtual void Deactivate(bool IsMDIActivate) override;
+    virtual void Activate(bool IsMDIActivate) override;
+    virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) override;
+    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize) override;
+    virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) override;
+    virtual void QueryObjAreaPixel( Rectangle& rRect ) const override;
+    virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) override;
 
 public:
     TYPEINFO_OVERRIDE();

@@ -177,7 +177,7 @@ public:
                                 const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
                                     bool bExportSelection, bool bIsExportVectorFormat );
                         virtual ~ExportDialog();
-                        virtual void dispose() SAL_OVERRIDE;
+                        virtual void dispose() override;
 };
 
 

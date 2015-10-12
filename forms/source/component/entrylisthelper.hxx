@@ -82,7 +82,7 @@ namespace frm
         void        disposing( );
 
         // prevent method hiding
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override = 0;
 
         /** helper for implementing convertFastPropertyValue( StringItemList )
 
@@ -131,19 +131,19 @@ namespace frm
 
     private:
         // XListEntrySink
-        virtual void SAL_CALL setListEntrySource( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setListEntrySource( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XListEntryListener
-        virtual void SAL_CALL entryChanged( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL entryRangeInserted( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL entryRangeRemoved( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL allEntriesChanged( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL entryChanged( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL entryRangeInserted( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL entryRangeRemoved( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL allEntriesChanged( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XRefreshable
-        virtual void SAL_CALL refresh() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL refresh() throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) override;
 
     private:
         /** disconnects from the active external list source, if present

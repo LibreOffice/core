@@ -46,13 +46,13 @@ namespace vclcanvas
                       const css::uno::Reference< css::rendering::XCanvas >&   rTarget );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
     private:
         virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
                                      const css::rendering::ViewState&  rOldState,
                                      const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                              bSameViewTransform ) SAL_OVERRIDE;
+                                     bool                              bSameViewTransform ) override;
 
 
         GraphicObjectSharedPtr                                         mpGraphicObject;

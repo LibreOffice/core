@@ -157,15 +157,15 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // XContainerListener
     virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 };
 
 
@@ -1708,11 +1708,11 @@ public:
         : maName( aName ), maLanguage( aLanguage), maSource( aSource ) {}
 
     // Methods XStarBasicModuleInfo
-    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) override
         { return maName; }
-    virtual OUString SAL_CALL getLanguage() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getLanguage() throw(uno::RuntimeException, std::exception) override
         { return maLanguage; }
-    virtual OUString SAL_CALL getSource() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getSource() throw(uno::RuntimeException, std::exception) override
         { return maSource; }
 };
 
@@ -1729,9 +1729,9 @@ public:
         : maName( aName ), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
-    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) override
         { return maName; }
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getData() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Sequence< sal_Int8 > SAL_CALL getData() throw(uno::RuntimeException, std::exception) override
         { return mData; }
 };
 
@@ -1766,17 +1766,17 @@ public:
     {}
 
     // Methods XStarBasicLibraryInfo
-    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException, std::exception) override
         { return maName; }
-    virtual uno::Reference< container::XNameContainer > SAL_CALL getModuleContainer() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Reference< container::XNameContainer > SAL_CALL getModuleContainer() throw(uno::RuntimeException, std::exception) override
         { return mxModuleContainer; }
-    virtual uno::Reference< container::XNameContainer > SAL_CALL getDialogContainer() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual uno::Reference< container::XNameContainer > SAL_CALL getDialogContainer() throw(uno::RuntimeException, std::exception) override
         { return mxDialogContainer; }
-    virtual OUString SAL_CALL getPassword() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getPassword() throw(uno::RuntimeException, std::exception) override
         { return maPassword; }
-    virtual OUString SAL_CALL getExternalSourceURL() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getExternalSourceURL() throw(uno::RuntimeException, std::exception) override
         { return maExternaleSourceURL; }
-    virtual OUString SAL_CALL getLinkTargetURL() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual OUString SAL_CALL getLinkTargetURL() throw(uno::RuntimeException, std::exception) override
         { return maLinkTargetURL; }
 };
 
@@ -1792,29 +1792,29 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::NoSuchElementException,
-              lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::ElementExistException,
-              lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+              lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 };
 
 // Methods XElementAccess
@@ -1943,27 +1943,27 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
-        throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
-        throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 };
 
 // Methods XElementAccess
@@ -2100,27 +2100,27 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
-        throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
-        throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
 };
 
 
@@ -2250,16 +2250,16 @@ public:
 public:
     // Methods
     virtual uno::Reference< container::XNameContainer > SAL_CALL getLibraryContainer()
-        throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL createLibrary( const OUString& LibName, const OUString& Password,
         const OUString& ExternalSourceURL, const OUString& LinkTargetURL )
-            throw(container::ElementExistException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(container::ElementExistException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addModule( const OUString& LibraryName, const OUString& ModuleName,
         const OUString& Language, const OUString& Source )
-            throw(container::NoSuchElementException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(container::NoSuchElementException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addDialog( const OUString& LibraryName, const OUString& DialogName,
         const uno::Sequence< sal_Int8 >& Data )
-            throw(container::NoSuchElementException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(container::NoSuchElementException, uno::RuntimeException, std::exception) override;
 };
 
 uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLibraryContainer()

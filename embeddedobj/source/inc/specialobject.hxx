@@ -35,43 +35,43 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+        throw( css::uno::RuntimeException, std::exception ) override ;
 
     // XVisualObject
     virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
         throw ( css::lang::IllegalArgumentException,
                 css::embed::WrongStateException,
                 css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize )
         throw ( css::lang::IllegalArgumentException,
                 css::embed::WrongStateException,
                 css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     virtual css::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
         throw ( css::lang::IllegalArgumentException,
                 css::embed::WrongStateException,
                 css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect )
         throw ( css::uno::Exception,
-                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL changeState( sal_Int32 nNewState )
         throw ( css::embed::UnreachableStateException,
                 css::embed::WrongStateException,
                 css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID )
         throw ( css::lang::IllegalArgumentException,
                 css::embed::WrongStateException,
                 css::embed::UnreachableStateException,
                 css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

@@ -51,7 +51,7 @@ public:
 private:
     virtual ~GCThread() {}
 
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
 
     PyObject *mPyObject;
     PyInterpreterState *mPyInterpreter;

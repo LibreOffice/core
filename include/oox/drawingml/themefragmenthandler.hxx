@@ -39,7 +39,7 @@ public:
                             Theme& rTheme );
     virtual             ~ThemeFragmentHandler();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     Theme&              mrTheme;

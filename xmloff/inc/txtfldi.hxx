@@ -135,15 +135,15 @@ public:
     virtual ~XMLTextFieldImportContext();
 
     /// process character data: will be collected in member sContentBuffer
-    virtual void Characters( const OUString& sContent ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     /// create the appropriate field context from
     /// (for use in paragraph import)
@@ -212,16 +212,16 @@ protected:
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** inherit sender field because of fixed attribute in ProcessAttributes */
@@ -247,12 +247,12 @@ protected:
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
@@ -277,12 +277,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 class XMLTimeFieldImportContext : public XMLTextFieldImportContext
@@ -317,12 +317,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import date fields (<text:date>);
@@ -340,7 +340,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 };
 
 /** import page continuation fields (<text:page-continuation-string>) */
@@ -366,12 +366,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page number fields (<text:page-number>) */
@@ -400,12 +400,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** superclass for database fields: handle database and table names */
@@ -447,19 +447,19 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 
     /// handle database-location children
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 /** import database name fields (<text:database-name>) */
@@ -475,7 +475,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 };
 
 /** import database next fields (<text:database-next>) */
@@ -504,12 +504,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import database select fields (<text:database-select>) */
@@ -529,12 +529,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import database display number fields (<text:database-row-number>) */
@@ -557,12 +557,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import docinfo fields with only fixed attribute */
@@ -592,12 +592,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 
     static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
 };
@@ -627,12 +627,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import revision field (<text:editing-cycles>) */
@@ -653,7 +653,7 @@ protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import user docinfo field (<text:user-defined>) */
@@ -679,10 +679,10 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import hidden paragraph fields (<text:hidden-paragraph>) */
@@ -705,12 +705,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import conditional text fields (<text:conditional-text>) */
@@ -742,12 +742,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import conditional text fields (<text:hidden-text>) */
@@ -775,12 +775,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import file name fields (<text:file-name>) */
@@ -804,12 +804,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import document template name fields (<text:template-name>) */
@@ -830,12 +830,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import chapter fields (<text:chapter>) */
@@ -858,12 +858,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import count fields (<text:[XXX]-count>) */
@@ -888,12 +888,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 
     static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
 };
@@ -919,12 +919,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page variable fields (<text:get-page-variable>) */
@@ -947,12 +947,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import macro fields (<text:execute-macro>) */
@@ -983,16 +983,16 @@ protected:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import reference fields (<text:reference-get>) */
@@ -1024,16 +1024,16 @@ protected:
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import dde field declaration container (<text:dde-connection-decls>) */
@@ -1052,7 +1052,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 /** import dde field declaration (<text:dde-connection-decl>) */
@@ -1077,7 +1077,7 @@ public:
     // create fieldmaster
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 };
 
 /** import dde fields (<text:dde-connection>) */
@@ -1097,15 +1097,15 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// create textfield, attach master, and insert into document
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     /// empty method
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import sheet name fields (Calc) dde fields (<text:sheet-name>) */
@@ -1123,12 +1123,12 @@ public:
 protected:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// no attributes -> empty method
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page|slide name fields (<text:page-name>) */
@@ -1145,12 +1145,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
@@ -1175,12 +1175,12 @@ public:
 protected:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// no attributes -> empty method
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import bibliography info fields (<text:bibliography-mark>) */
@@ -1202,16 +1202,16 @@ protected:
     /// process attributes (fill aValues)
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
 
     /// empty method; all attributes are handled in StartElement
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// convert aValues into sequence and set property
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 
     static const sal_Char* MapBibliographyFieldName(const OUString& sName);
 };
@@ -1250,18 +1250,18 @@ public:
 protected:
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// set properties
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropertySet) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropertySet) override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+                ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
 };
 
 /** Import a script field (<text:script>) */
@@ -1288,12 +1288,12 @@ public:
 protected:
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// set properties
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import measure fields (<text:measure>) */
@@ -1312,12 +1312,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** dropdown field (filter legacy) */
@@ -1349,17 +1349,17 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+        const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
 
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import header fields (<draw:header>) */
@@ -1376,12 +1376,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import footer fields (<draw:footer>) */
@@ -1398,12 +1398,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import footer fields (<draw:date-and-time>) */
@@ -1420,12 +1420,12 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
@@ -1446,12 +1446,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) SAL_OVERRIDE;
+                                   const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
 
 #endif

@@ -39,16 +39,16 @@ public:
     SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
     void                    ForgetDrawUndo();
 
-    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction) SAL_OVERRIDE;
+    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction) override;
 
-    virtual void            Undo() SAL_OVERRIDE;
-    virtual void            Redo() SAL_OVERRIDE;
-    virtual void            Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
-    virtual bool            CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
-    virtual bool            Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
-    virtual OUString        GetComment() const SAL_OVERRIDE;
-    virtual OUString        GetRepeatComment(SfxRepeatTarget&) const SAL_OVERRIDE;
-    virtual sal_uInt16      GetId() const SAL_OVERRIDE;
+    virtual void            Undo() override;
+    virtual void            Redo() override;
+    virtual void            Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool            CanRepeat(SfxRepeatTarget& rTarget) const override;
+    virtual bool            Merge( SfxUndoAction *pNextAction ) override;
+    virtual OUString        GetComment() const override;
+    virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
+    virtual sal_uInt16      GetId() const override;
 };
 
 #endif

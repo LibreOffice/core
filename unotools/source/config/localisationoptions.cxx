@@ -60,7 +60,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
             @param      "seqPropertyNames" is the list of properties which should be updated.
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) override;
 
         /*-****************************************************************************************************
             @short      access method to get internal values
@@ -73,7 +73,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
 
     private:
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree

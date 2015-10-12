@@ -56,8 +56,8 @@ public:
     virtual ~MyApp();
 
     // Application
-    virtual int Main() SAL_OVERRIDE;
-    virtual void DeInit() SAL_OVERRIDE;
+    virtual int Main() override;
+    virtual void DeInit() override;
 };
 
 
@@ -156,14 +156,14 @@ public:
 
     // XAsynchronousExecutableDialog
     virtual void SAL_CALL setDialogTitle( OUString const & aTitle )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL startExecuteModal(
         Reference< ui::dialogs::XDialogClosedListener > const & xListener )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XJobExecutor
     virtual void SAL_CALL trigger( OUString const & event )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 

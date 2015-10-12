@@ -72,7 +72,7 @@ class ColorConfig_Impl : public utl::ConfigItem
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
 
-    virtual void                    ImplCommit() SAL_OVERRIDE;
+    virtual void                    ImplCommit() override;
 
 public:
     explicit ColorConfig_Impl(bool bEditMode = false);
@@ -82,7 +82,7 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 
     const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue)
                                                             {return m_aConfigValues[eValue];}

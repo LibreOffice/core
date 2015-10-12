@@ -145,10 +145,10 @@ class LwpPara : public LwpDLVList
 public:
     LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
 
-    void Read() SAL_OVERRIDE;
-    void RegisterStyle() SAL_OVERRIDE;
-    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    void Read() override;
+    void RegisterStyle() override;
+    void Parse(IXFStream* pOutputStream) override;
+    void XFConvert(XFContentContainer* pCont) override;
 
     LwpPara* GetParent();
     LwpObjectID& GetStoryID();

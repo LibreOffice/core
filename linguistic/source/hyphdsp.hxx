@@ -93,10 +93,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XHyphenator
     virtual ::com::sun::star::uno::Reference<
@@ -106,7 +106,7 @@ public:
                 sal_Int16 nMaxLeading,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& aWord,
@@ -114,7 +114,7 @@ public:
                 sal_Int16 nIndex,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
@@ -122,15 +122,15 @@ public:
                 const ::com::sun::star::lang::Locale& aLocale,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // LinguDispatcher
     virtual void
         SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
                 const ::com::sun::star::uno::Sequence<
-                    OUString > &rSvcImplNames ) SAL_OVERRIDE;
+                    OUString > &rSvcImplNames ) override;
     virtual ::com::sun::star::uno::Sequence< OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const SAL_OVERRIDE;
+        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const override;
 };
 
 

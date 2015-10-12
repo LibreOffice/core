@@ -34,7 +34,7 @@ class VeeWipe : public ParametricPolyPolygon
 {
 public:
     VeeWipe() {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
 };
 
 }

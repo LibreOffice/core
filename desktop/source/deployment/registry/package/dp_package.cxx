@@ -147,15 +147,15 @@ class BackendImpl : public ImplBaseT
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<ucb::XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<ucb::XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
 
 
@@ -170,7 +170,7 @@ class BackendImpl : public ImplBaseT
             OUString const & identifier);
 
         // XPackage
-        virtual sal_Bool SAL_CALL isBundle() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isBundle() throw (RuntimeException, std::exception) override;
 
         virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
             Reference<task::XAbortChannel> const & xAbortChannel,
@@ -178,14 +178,14 @@ class BackendImpl : public ImplBaseT
             throw (deployment::DeploymentException,
                    ucb::CommandFailedException,
                    ucb::CommandAbortedException,
-                   lang::IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+                   lang::IllegalArgumentException, RuntimeException, std::exception) override;
         virtual OUString SAL_CALL getDescription()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) override;
 
         virtual OUString SAL_CALL getLicenseText()
             throw (deployment::DeploymentException,
                    deployment::ExtensionRemovedException,
-                   RuntimeException, std::exception) SAL_OVERRIDE;
+                   RuntimeException, std::exception) override;
 
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
@@ -195,7 +195,7 @@ class BackendImpl : public ImplBaseT
                    ucb::CommandFailedException,
                    ucb::CommandAbortedException,
                    ucb::ContentCreationException,
-                   RuntimeException, std::exception) SAL_OVERRIDE;
+                   RuntimeException, std::exception) override;
 
         virtual ::sal_Int32 SAL_CALL checkPrerequisites(
             const Reference< task::XAbortChannel >& xAbortChannel,
@@ -205,34 +205,34 @@ class BackendImpl : public ImplBaseT
                    deployment::DeploymentException,
                    ucb::CommandFailedException,
                    ucb::CommandAbortedException,
-                   RuntimeException, std::exception) SAL_OVERRIDE;
+                   RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL checkDependencies(
             const Reference< ucb::XCommandEnvironment >& xCmdEnv )
             throw (deployment::DeploymentException,
                    deployment::ExtensionRemovedException,
                    ucb::CommandFailedException,
-                   RuntimeException, std::exception) SAL_OVERRIDE;
+                   RuntimeException, std::exception) override;
 
         virtual beans::Optional<OUString> SAL_CALL getIdentifier()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (RuntimeException, std::exception) override;
 
         virtual OUString SAL_CALL getVersion()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) override;
 
         virtual Sequence<OUString> SAL_CALL getUpdateInformationURLs()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) override;
 
         virtual beans::StringPair SAL_CALL getPublisherInfo()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) override;
 
         virtual OUString SAL_CALL getDisplayName()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) override;
 
         virtual Reference< graphic::XGraphic > SAL_CALL
         getIcon( sal_Bool bHighContrast )
             throw (deployment::ExtensionRemovedException,
-                   RuntimeException, std::exception) SAL_OVERRIDE;
+                   RuntimeException, std::exception) override;
     };
     friend class PackageImpl;
 
@@ -251,9 +251,9 @@ class BackendImpl : public ImplBaseT
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         bool bRemoved, OUString const & identifier,
-        Reference<ucb::XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
+        Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
 public:
     BackendImpl(
@@ -262,18 +262,18 @@ public:
         Reference<deployment::XPackageRegistry> const & xRootRegistry );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    getSupportedPackageTypes() throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
         throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               uno::RuntimeException, std::exception) override;
 
     using ImplBaseT::disposing;
 };

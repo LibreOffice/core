@@ -39,18 +39,18 @@ public:
             XColorItem() {}
             XColorItem(sal_uInt16 nWhich, sal_Int32 nIndex, const Color& rTheColor);
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             XColorItem(sal_uInt16 nWhich, const Color& rTheColor);
             XColorItem(sal_uInt16 nWhich, const OUString& rName, const Color& rTheColor);
             XColorItem(sal_uInt16 nWhich, SvStream& rIn);
             XColorItem(const XColorItem& rItem);
 
-    virtual bool            operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual bool            operator==(const SfxPoolItem& rItem) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
+    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
     const Color&    GetColorValue(const XColorList* pTable = 0) const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }

@@ -38,7 +38,7 @@ public:
     DependencyDialog(
         vcl::Window * parent, std::vector< OUString > const & dependencies);
     virtual ~DependencyDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 private:
     DependencyDialog(DependencyDialog &) = delete;

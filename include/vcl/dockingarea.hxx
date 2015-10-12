@@ -37,17 +37,17 @@ private:
 public:
     explicit        DockingAreaWindow( vcl::Window* pParent );
     virtual         ~DockingAreaWindow();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SetAlign( WindowAlign eNewAlign );
     WindowAlign     GetAlign() const;
     bool            IsHorizontal() const;
 
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Resize() override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    StateChanged( StateChangedType nType ) override;
 
 };
 

@@ -74,12 +74,12 @@ public:
     explicit            DiscreteFilter( const WorkbookHelper& rHelper );
 
     /** Imports filter settings from the filters and filter elements. */
-    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) SAL_OVERRIDE;
+    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
 
 private:
     typedef ::std::vector< OUString > FilterValueVector;
@@ -96,12 +96,12 @@ public:
     explicit            Top10Filter( const WorkbookHelper& rHelper );
 
     /** Imports filter settings from the filters and filter elements. */
-    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) SAL_OVERRIDE;
+    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
 
 private:
     double              mfValue;        /// Number of items or percentage.
@@ -135,12 +135,12 @@ public:
     explicit            CustomFilter( const WorkbookHelper& rHelper );
 
     /** Imports filter settings from the filters and filter elements. */
-    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) SAL_OVERRIDE;
+    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
 
 private:
     /** Appends the passed filter criteriom, if it contains valid settings. */

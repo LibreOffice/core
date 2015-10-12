@@ -62,18 +62,18 @@ namespace bib
 
             // FormControlContainer ----------
             virtual css::uno::Reference< css::awt::XControlContainer >
-                    getControlContainer() SAL_OVERRIDE;
+                    getControlContainer() override;
         public:
             css::uno::Reference< css::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception();
 
             BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
             virtual ~BibBeamer();
-            virtual void dispose() SAL_OVERRIDE;
+            virtual void dispose() override;
 
             void    SetXController(const css::uno::Reference< css::frame::XController > &);
 
-            virtual void            GetFocus() SAL_OVERRIDE;
+            virtual void            GetFocus() override;
     };
 
 

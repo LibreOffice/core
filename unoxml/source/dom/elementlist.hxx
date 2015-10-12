@@ -75,16 +75,16 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override;
         /**
         Returns the indexth item in the collection.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
     class CElementList
@@ -101,7 +101,7 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override
         {
             return m_xImpl->getLength();
         }
@@ -109,14 +109,14 @@ namespace DOM
         Returns the indexth item in the collection.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             return m_xImpl->item(index);
         }
 
         // XEventListener
         virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) override
         {
             m_xImpl->handleEvent(evt);
         }

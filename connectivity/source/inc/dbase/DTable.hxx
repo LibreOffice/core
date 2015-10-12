@@ -119,12 +119,12 @@ namespace connectivity
             void throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName);
 
         protected:
-            virtual void FileClose() SAL_OVERRIDE;
+            virtual void FileClose() override;
 //          using ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper;
 
         public:
-            virtual void refreshColumns() SAL_OVERRIDE;
-            virtual void refreshIndexes() SAL_OVERRIDE;
+            virtual void refreshColumns() override;
+            virtual void refreshIndexes() override;
 
         public:
             ODbaseTable( sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection);
@@ -136,43 +136,43 @@ namespace connectivity
                     const OUString& _CatalogName = OUString()
                 );
 
-            void construct() SAL_OVERRIDE; // can throw any exception
+            void construct() override; // can throw any exception
 
-            virtual sal_Int32 getCurrentLastPos() const SAL_OVERRIDE;
-            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
-            virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) SAL_OVERRIDE;
+            virtual sal_Int32 getCurrentLastPos() const override;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
+            virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) override;
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL disposing() SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing() override;
 
             // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
             bool    DropImpl();
             bool    CreateImpl();
 
 
-            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
-            virtual bool DeleteRow(const OSQLColumns& _rCols) SAL_OVERRIDE;
-            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
+            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
+            virtual bool DeleteRow(const OSQLColumns& _rCols) override;
+            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
 
-            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor) SAL_OVERRIDE;
-            virtual void dropColumn(sal_Int32 _nPos) SAL_OVERRIDE;
+            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor) override;
+            virtual void dropColumn(sal_Int32 _nPos) override;
 
             static OUString   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
             static bool     Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, sdbcx::OCollection* _pIndexes );
 
-            virtual void refreshHeader() SAL_OVERRIDE;
+            virtual void refreshHeader() override;
 
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const override;
         };
     }
 }

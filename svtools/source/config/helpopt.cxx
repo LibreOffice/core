@@ -60,12 +60,12 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
     static Sequence< OUString > GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_OVERRIDE;
+    virtual void    ImplCommit() override;
 
 public:
                     SvtHelpOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
     void            Load( const ::com::sun::star::uno::Sequence< OUString>& aPropertyNames);
 
     void            SetExtendedHelp( bool b )           { bExtendedHelp= b; SetModified(); }

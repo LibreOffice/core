@@ -63,16 +63,16 @@ protected:
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod)
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL recalculateRegression(
         const com::sun::star::uno::Sequence< double >& aXValues,
         const com::sun::star::uno::Sequence< double >& aYValues )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override = 0;
 
     virtual double SAL_CALL getCurveValue( double x )
         throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+               com::sun::star::uno::RuntimeException, std::exception) override = 0;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
@@ -82,18 +82,18 @@ protected:
         const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingY,
         sal_Bool bMaySkipPointsInCalculation )
         throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual double SAL_CALL getCorrelationCoefficient()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getRepresentation()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getFormattedRepresentation(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 } //  namespace chart

@@ -37,9 +37,9 @@ public:
     virtual ~AccessibleViewForwarder();
 
     // ________ IAccessibleViewforwarder ________
-    virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
-    virtual Point LogicToPixel( const Point& rPoint ) const SAL_OVERRIDE;
-    virtual Size LogicToPixel( const Size& rSize ) const SAL_OVERRIDE;
+    virtual Rectangle GetVisibleArea() const override;
+    virtual Point LogicToPixel( const Point& rPoint ) const override;
+    virtual Size LogicToPixel( const Size& rSize ) const override;
 
 private:
     AccessibleViewForwarder( AccessibleViewForwarder& ) = delete;

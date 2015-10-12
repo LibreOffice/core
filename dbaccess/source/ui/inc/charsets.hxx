@@ -56,7 +56,7 @@ namespace dbaui
         const_iterator  end() const;
 
     protected:
-        virtual bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const SAL_OVERRIDE;
+        virtual bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const override;
 
     private:
         using OCharsetDisplay_Base::find;

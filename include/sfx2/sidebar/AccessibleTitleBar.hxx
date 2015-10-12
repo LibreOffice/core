@@ -33,7 +33,7 @@ public:
     static css::uno::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
 
 protected:
-    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) SAL_OVERRIDE;
+    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
 
 private:
     explicit AccessibleTitleBar (VCLXWindow* pWindow);

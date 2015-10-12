@@ -111,22 +111,22 @@ private:
     DECL_LINK_TYPED( ScopeChangedHdl, ListBox&, void );
 
 protected:
-    virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
+    virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData,
                                const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual bool    IsRefInputMode() const override;
 
-    virtual void    SetActive() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    SetActive() override;
+    virtual bool    Close() override;
 
-    virtual void tableInitialized() SAL_OVERRIDE;
+    virtual void tableInitialized() override;
 
     void GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);

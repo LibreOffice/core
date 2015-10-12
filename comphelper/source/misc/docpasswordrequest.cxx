@@ -49,7 +49,7 @@ namespace comphelper {
 class AbortContinuation : public ::cppu::WeakImplHelper< XInteractionAbort >
 {
 public:
-    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) override {}
 };
 
 
@@ -61,16 +61,16 @@ public:
 
     inline bool     isSelected() const { return mbSelected; }
 
-    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) override { mbSelected = true; }
 
-    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { maPassword = rPass; }
-    virtual OUString SAL_CALL getPassword() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return maPassword; }
+    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException, std::exception ) override { maPassword = rPass; }
+    virtual OUString SAL_CALL getPassword() throw( RuntimeException, std::exception ) override { return maPassword; }
 
-    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { maModifyPassword = rPass; }
-    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return maModifyPassword; }
+    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException, std::exception ) override { maModifyPassword = rPass; }
+    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException, std::exception ) override { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbReadOnly = bReadOnly; }
-    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return mbReadOnly; }
+    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException, std::exception ) override { mbReadOnly = bReadOnly; }
+    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException, std::exception ) override { return mbReadOnly; }
 
 private:
     OUString            maPassword;

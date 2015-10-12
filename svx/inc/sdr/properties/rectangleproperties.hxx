@@ -32,7 +32,7 @@ namespace sdr
         {
         protected:
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
+            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
         public:
             // basic constructor
@@ -45,10 +45,10 @@ namespace sdr
             virtual ~RectangleProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+            virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
         };
     } // end of namespace properties
 } // end of namespace sdr

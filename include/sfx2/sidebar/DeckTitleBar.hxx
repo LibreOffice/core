@@ -32,14 +32,14 @@ public:
 
     void SetCloserVisible(const bool bIsCloserVisible);
 
-    virtual void DataChanged(const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
 protected:
-    virtual Rectangle GetTitleArea(const Rectangle& rTitleBarBox) SAL_OVERRIDE;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) SAL_OVERRIDE;
-    virtual sidebar::Paint GetBackgroundPaint() SAL_OVERRIDE;
-    virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) SAL_OVERRIDE;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual Rectangle GetTitleArea(const Rectangle& rTitleBarBox) override;
+    virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) override;
+    virtual sidebar::Paint GetBackgroundPaint() override;
+    virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
     const sal_uInt16 mnCloserItemIndex;

@@ -186,25 +186,25 @@ public:
         { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
 
     // XActionListener
-    virtual void SAL_CALL   disposing( const css::lang::EventObject &rObj ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL   actionPerformed( css::awt::ActionEvent const & rEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL   disposing( const css::lang::EventObject &rObj ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL   actionPerformed( css::awt::ActionEvent const & rEvent) throw( css::uno::RuntimeException, std::exception ) override;
 
     // XTopWindowListener
-    virtual void SAL_CALL   windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowClosing( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowMinimized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowNormalized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowActivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   windowDeactivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowClosing( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowMinimized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowNormalized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowActivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   windowDeactivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XInteractionHandler
     virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& Request )
-                                throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                                throw( css::uno::RuntimeException, std::exception ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& e ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& e ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX

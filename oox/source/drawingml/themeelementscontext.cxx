@@ -40,7 +40,7 @@ class FillStyleListContext : public ContextHandler2
 {
 public:
     FillStyleListContext( ContextHandler2Helper& rParent, FillStyleList& rFillStyleList );
-    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     FillStyleList& mrFillStyleList;
@@ -72,7 +72,7 @@ class LineStyleListContext : public ContextHandler2
 {
 public:
     LineStyleListContext( ContextHandler2Helper& rParent, LineStyleList& rLineStyleList );
-    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     LineStyleList& mrLineStyleList;
@@ -99,7 +99,7 @@ class EffectStyleListContext : public ContextHandler2
 {
 public:
     EffectStyleListContext( ContextHandler2Helper& rParent, EffectStyleList& rEffectStyleList );
-    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     EffectStyleList& mrEffectStyleList;
@@ -131,8 +131,8 @@ class FontSchemeContext : public ContextHandler2
 {
 public:
     FontSchemeContext( ContextHandler2Helper& rParent, FontScheme& rFontScheme );
-    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void onEndElement() override;
 
 private:
     FontScheme& mrFontScheme;

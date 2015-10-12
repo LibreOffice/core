@@ -40,14 +40,14 @@ public:
     virtual ~CoinMPSolver() {}
 
 private:
-    virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw(css::uno::RuntimeException, std::exception) override
     {
         return OUString("com.sun.star.comp.Calc.CoinMPSolver");
     }
     virtual OUString SAL_CALL getComponentDescription()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (uno::RuntimeException, std::exception) override
     {
         return SolverComponent::GetResourceString( RID_COINMP_SOLVER_COMPONENT );
     }

@@ -96,18 +96,18 @@ public:
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea( Rectangle& rRect ) SAL_OVERRIDE
+    virtual void GetWorkArea( Rectangle& rRect ) override
     {
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
-    virtual void ShowFullScreen( bool, sal_Int32 ) SAL_OVERRIDE
+    virtual void ShowFullScreen( bool, sal_Int32 ) override
     {
         SetPosSize( 0, 0, viewWidth, viewHeight,
                     SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
 
-    virtual void UpdateSettings( AllSettings &rSettings ) SAL_OVERRIDE
+    virtual void UpdateSettings( AllSettings &rSettings ) override
     {
         // Clobber the UI fonts
         vcl::Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );

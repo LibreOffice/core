@@ -184,8 +184,8 @@ protected:
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     void SelectHdl_Impl();
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual short   Execute() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual short   Execute() override;
 
 public:
     OfaTreeOptionsDialog( vcl::Window* pParent,
@@ -193,7 +193,7 @@ public:
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
     sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,
@@ -271,10 +271,10 @@ public:
             css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~ExtensionsTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void    ActivatePage() SAL_OVERRIDE;
-    virtual void    DeactivatePage() SAL_OVERRIDE;
+    virtual void    ActivatePage() override;
+    virtual void    DeactivatePage() override;
 
     void            ResetPage();
     void            SavePage();

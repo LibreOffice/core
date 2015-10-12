@@ -32,7 +32,7 @@ class SwSyncBtnDlg : public SfxFloatingWindow
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
     virtual ~SwSyncBtnDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class SwSyncChildWin : public SfxChildWindow

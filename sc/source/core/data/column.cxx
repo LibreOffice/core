@@ -2269,7 +2269,7 @@ public:
 
     virtual ~UpdateRefGroupBoundChecker() {}
 
-    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) SAL_OVERRIDE
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) override
     {
         // Check its tokens and record its reference boundaries.
         ScFormulaCell& rCell = **ppCells;
@@ -2290,7 +2290,7 @@ public:
 
     virtual ~UpdateRefExpandGroupBoundChecker() {}
 
-    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) SAL_OVERRIDE
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) override
     {
         // Check its tokens and record its reference boundaries.
         ScFormulaCell& rCell = **ppCells;
@@ -2309,12 +2309,12 @@ public:
 
     virtual ~FormulaGroupPicker() {}
 
-    virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) SAL_OVERRIDE
+    virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) override
     {
         mrGroups.push_back(sc::FormulaGroupEntry(pCell, nRow));
     }
 
-    virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength ) SAL_OVERRIDE
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength ) override
     {
         mrGroups.push_back(sc::FormulaGroupEntry(ppCells, nRow, nLength));
     }

@@ -72,7 +72,7 @@ public:
     XFFooter()
     {
     }
-    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE
+    virtual void ToXml(IXFStream *pStrm) override
     {
         IXFAttrList *pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();

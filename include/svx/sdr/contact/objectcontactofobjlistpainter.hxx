@@ -58,8 +58,8 @@ protected:
     const SdrPage*                                  mpProcessedPage;
 
     // Hierarchy access methods
-    virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
-    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetPaintObjectCount() const override;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const override;
 
 public:
     // basic constructor/destructor
@@ -70,18 +70,18 @@ public:
     virtual ~ObjectContactOfObjListPainter();
 
     // Process the whole displaying
-    virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
+    virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) override;
 
     // VirtualDevice? Default is false
-    virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
+    virtual bool isOutputToVirtualDevice() const override;
 
     // recording MetaFile? Default is false
-    virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
+    virtual bool isOutputToRecordingMetaFile() const override;
 
     // pdf export? Default is false
-    virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
+    virtual bool isOutputToPDFFile() const override;
 
-    virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
+    virtual OutputDevice* TryToGetOutputDevice() const override;
 };
 
 class ObjectContactOfPagePainter : public ObjectContactPainter
@@ -94,8 +94,8 @@ protected:
     SdrPageWeakRef                                  mxStartPage;
 
     // Hierarchy access methods
-    virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
-    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetPaintObjectCount() const override;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const override;
 
 public:
     // basic constructor
@@ -108,7 +108,7 @@ public:
     void SetStartPage(const SdrPage* pPage);
     const SdrPage* GetStartPage() const { return mxStartPage.get(); }
 
-    virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
+    virtual OutputDevice* TryToGetOutputDevice() const override;
 };
 
 }}

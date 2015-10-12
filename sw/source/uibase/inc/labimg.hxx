@@ -36,9 +36,9 @@ public:
 
     SwLabItem& operator =(const SwLabItem& rItem);
 
-    virtual bool operator ==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
+    virtual bool operator ==(const SfxPoolItem& rItem) const override;
 
-    virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const override;
 
     OUString   aLstMake; // remember last selection
     OUString   aLstType;
@@ -111,14 +111,14 @@ private:
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwLabCfgItem(bool bLabel);
 
     SwLabItem&              GetItem() {return aItem;}
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

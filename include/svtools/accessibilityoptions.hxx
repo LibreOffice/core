@@ -53,7 +53,7 @@ public:
     void        SetAutoDetectSystemHC(bool bSet);
 
     //SfxListener:
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void        SetVCLSettings();
 };
 

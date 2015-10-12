@@ -18,15 +18,15 @@ class OpBesselj: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Besselj"; }
+        const std::string &sSymName, SubArguments &vSubArguments) override;
+    virtual std::string BinFuncName() const override { return "Besselj"; }
 };
 class OpGestep: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;;
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "Gestep"; }
+        const std::string &sSymName, SubArguments &vSubArguments) override;;
+    virtual std::string BinFuncName() const override { return "Gestep"; }
 };
 
 }}

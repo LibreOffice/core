@@ -523,10 +523,10 @@ namespace
         {
         }
 
-        virtual sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Any SAL_CALL getSelection(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException, std::exception) override;
+        virtual Any SAL_CALL getSelection(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) override;
 
     protected:
         virtual ~SelectionSupplier()

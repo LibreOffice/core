@@ -70,7 +70,7 @@ public:
     LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
         const OUString& rServer, const OUString &rRealm);
     virtual ~LoginDialog();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     OUString        GetName() const                             { return m_pNameED->GetText(); }
     void            SetName( const OUString& rNewName )           { m_pNameED->SetText( rNewName ); }

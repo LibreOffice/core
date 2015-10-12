@@ -263,7 +263,7 @@ class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 
 protected:
 
-    virtual uno::Reference < style::XStyle > Create() SAL_OVERRIDE;
+    virtual uno::Reference < style::XStyle > Create() override;
 
 public:
 
@@ -279,9 +279,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
+    virtual void Finish( bool bOverwrite ) override;
 };
 
 TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
@@ -437,7 +437,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue ) SAL_OVERRIDE;
+                               const OUString& rValue ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
@@ -453,12 +453,12 @@ public:
             sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
-    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
@@ -715,17 +715,17 @@ protected:
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
     // HACK
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-        sal_uInt16 nFamily ) const SAL_OVERRIDE;
+        sal_uInt16 nFamily ) const override;
 
     virtual uno::Reference < container::XNameContainer >
-        GetStylesContainer( sal_uInt16 nFamily ) const SAL_OVERRIDE;
-    virtual OUString GetServiceName( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+        GetStylesContainer( sal_uInt16 nFamily ) const override;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const override;
     // HACK
 
 public:
@@ -739,9 +739,9 @@ public:
             bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
@@ -904,7 +904,7 @@ void SwXMLStylesContext_Impl::EndElement()
 class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 {
 protected:
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
     const SwXMLImport& GetSwImport() const
@@ -919,7 +919,7 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLMasterStylesContext_Impl();
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 };
 
 TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );

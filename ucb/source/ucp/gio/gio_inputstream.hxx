@@ -46,30 +46,30 @@ public:
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::BufferSizeExceededException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
         sal_Int32 nMaxBytesToRead )
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::BufferSizeExceededException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::BufferSizeExceededException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL available()
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL closeInput()
             throw( ::com::sun::star::io::NotConnectedException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                ::com::sun::star::uno::RuntimeException, std::exception ) override;
 };
 
 } // namespace gio

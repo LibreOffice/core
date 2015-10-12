@@ -46,7 +46,7 @@ public:
 
        @return a copy of this type
     */
-    virtual SwFieldType * Copy () const SAL_OVERRIDE;
+    virtual SwFieldType * Copy () const override;
 };
 
 /**
@@ -90,14 +90,14 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
 
        @return the expanded value of the field
     */
-    virtual OUString Expand() const SAL_OVERRIDE;
+    virtual OUString Expand() const override;
 
     /**
        Creates a copy of this field.
 
        @return the copy of this field
     */
-    virtual SwField * Copy() const SAL_OVERRIDE;
+    virtual SwField * Copy() const override;
 
 public:
     /**
@@ -126,14 +126,14 @@ public:
 
        @return the selected value
     */
-    virtual OUString GetPar1() const SAL_OVERRIDE;
+    virtual OUString GetPar1() const override;
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    virtual OUString GetPar2() const SAL_OVERRIDE;
+    virtual OUString GetPar2() const override;
 
     /**
        Sets the selected value.
@@ -142,14 +142,14 @@ public:
        selected. Otherwise no item will be selected, i.e. the
        resulting selection will be empty.
     */
-    virtual void SetPar1(const OUString & rStr) SAL_OVERRIDE;
+    virtual void SetPar1(const OUString & rStr) override;
 
     /**
        Sets the name of the field.
 
        @param rStr the new name of the field
     */
-    virtual void SetPar2(const OUString & rStr) SAL_OVERRIDE;
+    virtual void SetPar2(const OUString & rStr) override;
 
     /**
        Sets the items of the dropdown box.
@@ -248,7 +248,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const SAL_OVERRIDE;
+    virtual bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const override;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -260,7 +260,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-    virtual bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) SAL_OVERRIDE;
+    virtual bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) override;
 };
 
 #endif

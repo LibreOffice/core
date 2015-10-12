@@ -50,13 +50,13 @@
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        Select() SAL_OVERRIDE;
-    virtual void        Modify() SAL_OVERRIDE;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual void        Select() override;
+    virtual void        Modify() override;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::File );
@@ -115,7 +115,7 @@ public:
         const SfxItemSet& rItemSet
     );
     virtual ~SvxHyperlinkTabPageBase ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    SetDocumentFrame(
         const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame )
@@ -127,18 +127,18 @@ public:
     virtual void DoApply ();
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
-    virtual void Reset( const SfxItemSet& ) SAL_OVERRIDE;
-    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void ActivatePage( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
-    virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& ) override;
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void ActivatePage( const SfxItemSet& rItemSet ) override;
+    virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) override;
 
     bool IsMarkWndVisible ()      { return static_cast<vcl::Window*>(mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
-    virtual void        ActivatePage() SAL_OVERRIDE;
-    virtual void        DeactivatePage() SAL_OVERRIDE;
-    virtual bool        QueryClose() SAL_OVERRIDE;
+    virtual void        ActivatePage() override;
+    virtual void        DeactivatePage() override;
+    virtual bool        QueryClose() override;
 
 protected:
     virtual bool ShouldOpenMarkWnd();

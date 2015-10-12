@@ -71,9 +71,9 @@ public:
     explicit ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
-    OUString                                     SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
-    sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
+    OUString                                     SAL_CALL getImplementationName() throw(std::exception  ) override;
+    sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
+    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
 
     // static methods
     static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
@@ -84,7 +84,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 }
 #endif

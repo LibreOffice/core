@@ -95,7 +95,7 @@ public:
 
     void    ContentToXml(IXFStream *pStrm);
 
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 protected:
     rtl::Reference<XFContentContainer>  m_aContents;

@@ -56,8 +56,8 @@ private:
 
 protected:
     SdrView*        pView;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual bool Close() SAL_OVERRIDE;
+    virtual void Resize() override;
+    virtual bool Close() override;
 
     typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
@@ -73,7 +73,7 @@ protected:
 public:
     explicit PropBrw (DialogWindowLayout&);
     virtual ~PropBrw();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     using Window::Update;
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
     // currently

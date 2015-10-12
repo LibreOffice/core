@@ -72,7 +72,7 @@ class LwpOrderedObject : public LwpDLNFVList
 public:
     LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpOrderedObject(){}
-    void Read() SAL_OVERRIDE;
+    void Read() override;
     LwpObjectID& GetPosition(){ return m_Para;}
     LwpObjectID& GetListList(){ return m_ListList;}
 protected:
@@ -92,11 +92,11 @@ public:
     LwpSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSection();
     inline LwpPageLayout* GetPageLayout();
-    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    void Parse(IXFStream* pOutputStream) override;
     OUString GetSectionName(){return m_AtomHolder.str();}
 
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     sal_uInt16 m_Flags;
     LwpObjectID m_PageLayout;
@@ -122,7 +122,7 @@ public:
     bool IsFormatRunin();
     bool IsFormatSeparator();
 protected:
-    void Read() SAL_OVERRIDE;
+    void Read() override;
 private:
     enum{
         SEPARATORS = 0x01,

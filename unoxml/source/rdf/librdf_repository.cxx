@@ -284,15 +284,15 @@ public:
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
-            const OUString & ServiceName) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            const OUString & ServiceName) throw (uno::RuntimeException, std::exception) override;
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 
     // css::rdf::XRepository:
     virtual uno::Reference< rdf::XBlankNode > SAL_CALL createBlankNode()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Reference<rdf::XNamedGraph> SAL_CALL importGraph(
             ::sal_Int16 i_Format,
             const uno::Reference< io::XInputStream > & i_xInStream,
@@ -301,7 +301,7 @@ public:
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             datatransfer::UnsupportedFlavorException,
             container::ElementExistException, rdf::ParseException,
-            rdf::RepositoryException, io::IOException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, io::IOException, std::exception) override;
     virtual void SAL_CALL exportGraph(::sal_Int16 i_Format,
             const uno::Reference< io::XOutputStream > & i_xOutStream,
             const uno::Reference< rdf::XURI > & i_xGraphName,
@@ -309,38 +309,38 @@ public:
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             datatransfer::UnsupportedFlavorException,
             container::NoSuchElementException, rdf::RepositoryException,
-            io::IOException, std::exception) SAL_OVERRIDE;
+            io::IOException, std::exception) override;
     virtual uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
-        getGraphNames() throw (uno::RuntimeException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+        getGraphNames() throw (uno::RuntimeException, rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< rdf::XNamedGraph > SAL_CALL getGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< rdf::XNamedGraph > SAL_CALL createGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::ElementExistException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::ElementExistException, rdf::RepositoryException, std::exception) override;
     virtual void SAL_CALL destroyGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::NoSuchElementException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< rdf::XQuerySelectResult > SAL_CALL
             querySelect(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         queryConstruct(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual sal_Bool SAL_CALL queryAsk(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
 
     // css::rdf::XDocumentRepository:
     virtual void SAL_CALL setStatementRDFa(
@@ -350,27 +350,27 @@ public:
             const OUString & i_rRDFaContent,
             const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual void SAL_CALL removeStatementRDFa(
             const uno::Reference< rdf::XMetadatable > & i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
         getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         getStatementsRDFa(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            rdf::RepositoryException, std::exception) override;
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
             const uno::Sequence< css::uno::Any > & i_rArguments)
-        throw (uno::RuntimeException, uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, uno::Exception, std::exception) override;
 
     // XNamedGraph forwards ---------------------------------------------
     const NamedGraphMap_t::iterator clearGraph_NoLock(
@@ -483,10 +483,10 @@ public:
 
     // css::container::XEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
-            lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+            lang::WrappedTargetException, std::exception) override;
 
 private:
     // NB: this is not a weak pointer: streams _must_ be deleted before the
@@ -596,14 +596,14 @@ public:
 
     // css::container::XEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
-            lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+            lang::WrappedTargetException, std::exception) override;
 
     // css::rdf::XQuerySelectResult:
     virtual uno::Sequence< OUString > SAL_CALL getBindingNames()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
 
 private:
 
@@ -710,38 +710,38 @@ public:
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
 
     // css::rdf::XURI:
     virtual OUString SAL_CALL getNamespace()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getLocalName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
 
     // css::rdf::XNamedGraph:
     virtual uno::Reference<rdf::XURI> SAL_CALL getName()
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL clear()
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
     virtual void SAL_CALL addStatement(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::NoSuchElementException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
     virtual void SAL_CALL removeStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException, std::exception) SAL_OVERRIDE;
+            container::NoSuchElementException, rdf::RepositoryException, std::exception) override;
 
 private:
 

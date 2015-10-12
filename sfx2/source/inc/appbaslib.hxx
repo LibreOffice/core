@@ -87,7 +87,7 @@ public:
     */
     bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
 
-    virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 
 private:
     void    impl_releaseContainers();

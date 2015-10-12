@@ -75,8 +75,8 @@ namespace svx
         {
         }
 
-        virtual OUString getPropertyName() const SAL_OVERRIDE;
-        virtual void getCurrentValue( ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
+        virtual OUString getPropertyName() const override;
+        virtual void getCurrentValue( ::com::sun::star::uno::Any& _out_rValue ) const override;
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }

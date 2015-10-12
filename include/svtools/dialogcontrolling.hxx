@@ -213,7 +213,7 @@ namespace svt
         {
         }
 
-        virtual void operateOn( const VclWindowEvent& /*_rTrigger*/, vcl::Window& _rOperateOn ) const SAL_OVERRIDE
+        virtual void operateOn( const VclWindowEvent& /*_rTrigger*/, vcl::Window& _rOperateOn ) const override
         {
             _rOperateOn.Enable( m_rCheckable.IsChecked() );
         }
@@ -237,7 +237,7 @@ namespace svt
         {
         }
 
-        bool payAttentionTo( const VclWindowEvent& _rEvent ) const SAL_OVERRIDE
+        bool payAttentionTo( const VclWindowEvent& _rEvent ) const override
         {
             if  (   ( _rEvent.GetWindow() == &m_rWindow )
                 &&  (   ( _rEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )

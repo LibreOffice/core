@@ -36,7 +36,7 @@ class XMLFilterTabDialog: public TabDialog
 public:
     XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     bool onOk();
 

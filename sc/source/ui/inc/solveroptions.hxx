@@ -61,7 +61,7 @@ public:
                            const OUString& rEngine,
                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // already updated in selection handler
     const OUString& GetEngine() const { return maEngine; }
@@ -76,7 +76,7 @@ class ScSolverIntegerDialog : public ModalDialog
 public:
     ScSolverIntegerDialog( vcl::Window * pParent );
     virtual ~ScSolverIntegerDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
@@ -91,7 +91,7 @@ class ScSolverValueDialog : public ModalDialog
 public:
     ScSolverValueDialog( vcl::Window * pParent );
     virtual ~ScSolverValueDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );

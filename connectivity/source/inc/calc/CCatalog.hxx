@@ -30,7 +30,7 @@ namespace connectivity
         class OCalcCatalog : public file::OFileCatalog
         {
     public:
-            virtual void refreshTables() SAL_OVERRIDE;
+            virtual void refreshTables() override;
 
         public:
             OCalcCatalog(OCalcConnection* _pCon);

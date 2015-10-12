@@ -31,23 +31,23 @@ class SwHeaderFooterWin : public SwFrameMenuButtonBase
 public:
     SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrm *pFrm, bool bHeader );
     virtual ~SwHeaderFooterWin( );
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Select( ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void Select( ) override;
 
-    virtual void ShowAll( bool bShow ) SAL_OVERRIDE;
-    virtual bool Contains( const Point &rDocPt ) const SAL_OVERRIDE;
+    virtual void ShowAll( bool bShow ) override;
+    virtual bool Contains( const Point &rDocPt ) const override;
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
 
     void ExecuteCommand(sal_uInt16 nSlot);
 
-    void SetReadonly( bool bReadonly ) SAL_OVERRIDE;
+    void SetReadonly( bool bReadonly ) override;
 
 private:
     DECL_LINK_TYPED( FadeHandler, Timer *, void );

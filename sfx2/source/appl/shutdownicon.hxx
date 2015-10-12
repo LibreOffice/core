@@ -85,13 +85,13 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         virtual ~ShutdownIcon();
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         static ShutdownIcon* getInstance();
         static ShutdownIcon* createInstance();
@@ -121,21 +121,21 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static bool IsQuickstarterInstalled();
 
         // Component Helper - force override
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+            throw( ::com::sun::star::uno::Exception, std::exception ) override;
 
         // XFastPropertySet
         virtual void SAL_CALL setFastPropertyValue(       ::sal_Int32                  nHandle,
@@ -144,11 +144,11 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
                     ::com::sun::star::beans::PropertyVetoException,
                     ::com::sun::star::lang::IllegalArgumentException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
         virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle )
             throw (::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                    ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
 

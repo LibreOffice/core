@@ -99,7 +99,7 @@ struct SwSortTextElement : public SwSortElement
     SwSortTextElement( const SwNodeIndex& rPos );
     virtual ~SwSortTextElement();
 
-    virtual OUString GetKey( sal_uInt16 nKey ) const SAL_OVERRIDE;
+    virtual OUString GetKey( sal_uInt16 nKey ) const override;
 };
 
 // sort table
@@ -110,8 +110,8 @@ struct SwSortBoxElement : public SwSortElement
     SwSortBoxElement( sal_uInt16 nRC );
     virtual ~SwSortBoxElement();
 
-    virtual OUString GetKey( sal_uInt16 nKey ) const SAL_OVERRIDE;
-    virtual double GetValue( sal_uInt16 nKey ) const SAL_OVERRIDE;
+    virtual OUString GetKey( sal_uInt16 nKey ) const override;
+    virtual double GetValue( sal_uInt16 nKey ) const override;
 };
 
 // two-dimensional array of FndBoxes

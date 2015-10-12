@@ -112,8 +112,8 @@ protected:
 public:
     explicit SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
     virtual ~SwDoGetCapitalSize() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
-    virtual void Do() SAL_OVERRIDE;
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
+    virtual void Do() override;
     const Size &GetSize() const { return aTextSize; }
 };
 
@@ -165,8 +165,8 @@ public:
         ,   m_nBreak( -1 )
         { }
     virtual ~SwDoGetCapitalBreak() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
-    virtual void Do() SAL_OVERRIDE;
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
+    virtual void Do() override;
     sal_Int32 getBreak() const { return m_nBreak; }
 };
 
@@ -240,8 +240,8 @@ public:
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
     virtual ~SwDoDrawCapital() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
-    virtual void Do() SAL_OVERRIDE;
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
+    virtual void Do() override;
     void DrawSpace( Point &rPos );
 };
 
@@ -324,8 +324,8 @@ public:
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual ~SwDoCapitalCrsrOfst() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
-    virtual void Do() SAL_OVERRIDE;
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
+    virtual void Do() override;
 
     inline sal_Int32 GetCrsr(){ return nCrsr; }
 };
@@ -392,7 +392,7 @@ class SwDoDrawStretchCapital : public SwDoDrawCapital
     const sal_uInt16 nCapWidth;
     const sal_uInt16 nOrgWidth;
 public:
-    virtual void Do() SAL_OVERRIDE;
+    virtual void Do() override;
 
     SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const sal_uInt16 nCapitalWidth )
             : SwDoDrawCapital( rInfo ),

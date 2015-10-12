@@ -71,9 +71,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) override;
 
 };
 
@@ -103,12 +103,12 @@ public:
 
     virtual ~XMLNumberedParaContext();
 
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,
             const OUString& i_rLocalName,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList ) SAL_OVERRIDE;
+                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList ) override;
 
     sal_Int16 GetLevel() const { return m_Level; }
     const ::com::sun::star::uno::Reference <

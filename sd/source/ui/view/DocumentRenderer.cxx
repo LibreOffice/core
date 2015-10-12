@@ -724,7 +724,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
+            const SetOfByte& rPrintableLayers) const override
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -779,7 +779,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
+            const SetOfByte& rPrintableLayers) const override
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -864,7 +864,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
+            const SetOfByte& rPrintableLayers) const override
         {
             (void)rViewShell;
             MapMode aMap (maMap);
@@ -934,7 +934,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
+            const SetOfByte& rPrintableLayers) const override
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
@@ -1080,7 +1080,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
+            const SetOfByte& rPrintableLayers) const override
         {
             (void)rViewShell;
             (void)pView;
@@ -1152,7 +1152,7 @@ public:
         EndListening(mrBase);
     }
 
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
         if (pSimpleHint != NULL

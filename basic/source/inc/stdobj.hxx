@@ -32,11 +32,11 @@ class SbiStdObject : public SbxObject
     virtual ~SbiStdObject();
     using SbxVariable::GetInfo;
     static SbxInfo* GetInfo( short );
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
     SbiStdObject( const OUString&, StarBASIC* );
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
-    virtual void SetModified( bool ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
+    virtual void SetModified( bool ) override;
 };
 
 #endif

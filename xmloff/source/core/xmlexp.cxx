@@ -155,18 +155,18 @@ public:
     }
 
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  const OUString& i_rValue ) SAL_OVERRIDE;
+                                  const OUString& i_rValue ) override;
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  enum ::xmloff::token::XMLTokenEnum i_eValue ) SAL_OVERRIDE;
+                                  enum ::xmloff::token::XMLTokenEnum i_eValue ) override;
 
     virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
-    virtual void    EndElement(   const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
+                                  const bool i_bIgnoreWhitespace ) override;
+    virtual void    EndElement(   const bool i_bIgnoreWhitespace ) override;
 
-    virtual void    Characters( const OUString& i_rCharacters ) SAL_OVERRIDE;
+    virtual void    Characters( const OUString& i_rCharacters ) override;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                    GetComponentContext() const SAL_OVERRIDE;
+                    GetComponentContext() const override;
 private:
     SvXMLExport&                    m_rExport;
     ::std::stack< OUString > m_aElements;
@@ -217,7 +217,7 @@ public:
     virtual                 ~SvXMLExportEventListener();
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
 SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)

@@ -37,64 +37,64 @@ namespace sw {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
             // IDocumentMarkAccess
-            virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const OUString& rName, IDocumentMarkAccess::MarkType eMark) SAL_OVERRIDE;
+            virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const OUString& rName, IDocumentMarkAccess::MarkType eMark) override;
 
             virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
-                const OUString& rType) SAL_OVERRIDE;
+                const OUString& rType) override;
             virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
-                const OUString& rType) SAL_OVERRIDE;
+                const OUString& rType) override;
 
-            virtual ::sw::mark::IMark* getMarkForTextNode(const SwTextNode& rTextNode, IDocumentMarkAccess::MarkType eMark) SAL_OVERRIDE;
+            virtual ::sw::mark::IMark* getMarkForTextNode(const SwTextNode& rTextNode, IDocumentMarkAccess::MarkType eMark) override;
 
             virtual sw::mark::IMark* makeAnnotationMark(
                 const SwPaM& rPaM,
-                const OUString& rName ) SAL_OVERRIDE;
+                const OUString& rName ) override;
 
-            virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM) SAL_OVERRIDE;
-            virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName) SAL_OVERRIDE;
-            virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) SAL_OVERRIDE;
-            virtual void correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) SAL_OVERRIDE;
+            virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM) override;
+            virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName) override;
+            virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
+            virtual void correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
 
-            virtual void deleteMarks(const SwNodeIndex& rStt, const SwNodeIndex& rEnd, ::std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, const SwIndex* pSttIdx, const SwIndex* pEndIdx) SAL_OVERRIDE;
+            virtual void deleteMarks(const SwNodeIndex& rStt, const SwNodeIndex& rEnd, ::std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, const SwIndex* pSttIdx, const SwIndex* pEndIdx) override;
 
             // deleters
             virtual std::shared_ptr<ILazyDeleter>
-                deleteMark(const const_iterator_t& ppMark) SAL_OVERRIDE;
-            virtual void deleteMark(const ::sw::mark::IMark* const pMark) SAL_OVERRIDE;
-            virtual void clearAllMarks() SAL_OVERRIDE;
+                deleteMark(const const_iterator_t& ppMark) override;
+            virtual void deleteMark(const ::sw::mark::IMark* const pMark) override;
+            virtual void clearAllMarks() override;
 
             // marks
-            virtual const_iterator_t getAllMarksBegin() const SAL_OVERRIDE;
-            virtual const_iterator_t getAllMarksEnd() const SAL_OVERRIDE;
-            virtual sal_Int32 getAllMarksCount() const SAL_OVERRIDE;
-            virtual const_iterator_t findMark(const OUString& rName) const SAL_OVERRIDE;
+            virtual const_iterator_t getAllMarksBegin() const override;
+            virtual const_iterator_t getAllMarksEnd() const override;
+            virtual sal_Int32 getAllMarksCount() const override;
+            virtual const_iterator_t findMark(const OUString& rName) const override;
 
             // bookmarks
-            virtual const_iterator_t getBookmarksBegin() const SAL_OVERRIDE;
-            virtual const_iterator_t getBookmarksEnd() const SAL_OVERRIDE;
-            virtual sal_Int32 getBookmarksCount() const SAL_OVERRIDE;
-            virtual const_iterator_t findBookmark(const OUString& rName) const SAL_OVERRIDE;
+            virtual const_iterator_t getBookmarksBegin() const override;
+            virtual const_iterator_t getBookmarksEnd() const override;
+            virtual sal_Int32 getBookmarksCount() const override;
+            virtual const_iterator_t findBookmark(const OUString& rName) const override;
 
             // Fieldmarks
-            virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const SAL_OVERRIDE;
-            virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const SAL_OVERRIDE;
-            virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const SAL_OVERRIDE;
+            virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const override;
+            virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const override;
+            virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const override;
 
-            virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const SAL_OVERRIDE;
-            virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const SAL_OVERRIDE;
+            virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
+            virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
 
             void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
             // Annotation Marks
-            virtual const_iterator_t getAnnotationMarksBegin() const SAL_OVERRIDE;
-            virtual const_iterator_t getAnnotationMarksEnd() const SAL_OVERRIDE;
-            virtual sal_Int32 getAnnotationMarksCount() const SAL_OVERRIDE;
-            virtual const_iterator_t findAnnotationMark( const OUString& rName ) const SAL_OVERRIDE;
-            virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPos) const SAL_OVERRIDE;
+            virtual const_iterator_t getAnnotationMarksBegin() const override;
+            virtual const_iterator_t getAnnotationMarksEnd() const override;
+            virtual sal_Int32 getAnnotationMarksCount() const override;
+            virtual const_iterator_t findAnnotationMark( const OUString& rName ) const override;
+            virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPos) const override;
 
-            virtual void assureSortedMarkContainers() const SAL_OVERRIDE;
+            virtual void assureSortedMarkContainers() const override;
 
         private:
             // make names

@@ -62,7 +62,7 @@ namespace sdr
         // this method is called form the destructor of the referenced page.
         // do all necessary action to forget the page. It is not necessary to call
         // RemovePageUser(), that is done form the destructor.
-        virtual void PageInDestruction(const SdrPage& rPage) SAL_OVERRIDE;
+        virtual void PageInDestruction(const SdrPage& rPage) override;
 
         // member access to UsedPage
         SdrPage& GetUsedPage() const { return maUsedPage; }

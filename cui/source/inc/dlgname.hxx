@@ -41,7 +41,7 @@ private:
 public:
     SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
     virtual ~SvxNameDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    GetName( OUString& rName ){rName = pEdtName->GetText();}
 
@@ -91,7 +91,7 @@ public:
     // constructor
     SvxObjectNameDialog(vcl::Window* pWindow, const OUString& rName);
     virtual ~SvxObjectNameDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     // data access
     void GetName(OUString& rName) {rName = pEdtName->GetText(); }
@@ -123,7 +123,7 @@ public:
     // constructor
     SvxObjectTitleDescDialog(vcl::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
     virtual ~SvxObjectTitleDescDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     // data access
     void GetTitle(OUString& rTitle) {rTitle = pEdtTitle->GetText(); }
     void GetDescription(OUString& rDescription) {rDescription = pEdtDescription->GetText(); }
@@ -145,7 +145,7 @@ private:
 public:
     SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
     virtual ~SvxMessDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );
 };

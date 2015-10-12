@@ -88,7 +88,7 @@ public:
     virtual ~SbUnoStructRefObject();
 
     // override Find to support e. g. NameAccess
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     // Force creation of all properties for debugging
     void createAllProperties()
@@ -96,7 +96,7 @@ public:
 
     // give out value
     css::uno::Any getUnoAny();
-    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 };
 
 class SbUnoObject: public SbxObject
@@ -127,7 +127,7 @@ public:
     void doIntrospection();
 
     // override Find to support e. g. NameAccess
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     // Force creation of all properties for debugging
     void createAllProperties()
@@ -138,7 +138,7 @@ public:
     css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
     css::uno::Reference< css::script::XInvocation > getInvocation()         { return mxInvocation; }
 
-    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
     bool isNativeCOMObject()
         { return bNativeCOMObject; }
@@ -170,7 +170,7 @@ public:
     SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod();
-    virtual SbxInfo* GetInfo() SAL_OVERRIDE;
+    virtual SbxInfo* GetInfo() override;
 
     const css::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
 
@@ -210,8 +210,8 @@ public:
 class SbUnoFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX ) SAL_OVERRIDE;
-    virtual SbxObject* CreateObject( const OUString& ) SAL_OVERRIDE;
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX ) override;
+    virtual SbxObject* CreateObject( const OUString& ) override;
 };
 
 // wrapper for an uno-class
@@ -230,7 +230,7 @@ public:
     {}
 
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
 
     const css::uno::Reference< css::reflection::XIdlClass >& getUnoClass() { return m_xClass; }
@@ -258,9 +258,9 @@ public:
             , m_bNeedsInit( true )
     {}
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
-    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 };
 
 SbUnoService* findUnoService( const OUString& rName );
@@ -282,7 +282,7 @@ public:
 
     SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
-    virtual SbxInfo* GetInfo() SAL_OVERRIDE;
+    virtual SbxInfo* GetInfo() override;
 
     css::uno::Reference< css::reflection::XServiceConstructorDescription > getServiceCtorDesc()
         { return m_xServiceCtorDesc; }
@@ -299,7 +299,7 @@ public:
     SbUnoSingleton( const OUString& aName_,
         const css::uno::Reference< css::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
-    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 };
 
 SbUnoSingleton* findUnoSingleton( const OUString& rName );
@@ -369,7 +369,7 @@ class BasicCollection : public SbxObject
 
     void Initialize();
     virtual ~BasicCollection();
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     sal_Int32 implGetIndex( SbxVariable* pIndexVar );
     sal_Int32 implGetIndexForName( const OUString& rName );
     void CollAdd( SbxArray* pPar_ );
@@ -379,8 +379,8 @@ class BasicCollection : public SbxObject
 public:
     TYPEINFO_OVERRIDE();
     BasicCollection( const OUString& rClassname );
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
-    virtual void Clear() SAL_OVERRIDE;
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
+    virtual void Clear() override;
 };
 
 typedef std::unordered_map< OUString, css::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;

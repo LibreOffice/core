@@ -76,7 +76,7 @@ class DomainMapperTableManager : public TableManager
     std::unique_ptr<TablePropertiesHandler> m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
-    virtual void clearData() SAL_OVERRIDE;
+    virtual void clearData() override;
 
 public:
 
@@ -87,14 +87,14 @@ public:
     // but in the provided properties map.
     inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
 
-    virtual bool sprm(Sprm & rSprm) SAL_OVERRIDE;
+    virtual bool sprm(Sprm & rSprm) override;
     bool attribute(Id nName, Value & val);
 
-    virtual void startLevel( ) SAL_OVERRIDE;
-    virtual void endLevel( ) SAL_OVERRIDE;
+    virtual void startLevel( ) override;
+    virtual void endLevel( ) override;
 
-    virtual void endOfCellAction() SAL_OVERRIDE;
-    virtual void endOfRowAction() SAL_OVERRIDE;
+    virtual void endOfCellAction() override;
+    virtual void endOfRowAction() override;
 
     IntVectorPtr getCurrentGrid( );
     IntVectorPtr getCurrentSpans( );
@@ -105,7 +105,7 @@ public:
     const css::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
     TablePositionHandler* getCurrentTableRealPosition();
 
-    virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void cellProps(TablePropertyMapPtr pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -113,7 +113,7 @@ public:
            TableManager::cellProps( pProps );
     };
 
-    virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -121,7 +121,7 @@ public:
            TableManager::cellPropsByCell( i, pProps );
     };
 
-    virtual void insertRowProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void insertRowProps(TablePropertyMapPtr pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -129,7 +129,7 @@ public:
            TableManager::insertRowProps( pProps );
     };
 
-    virtual void insertTableProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void insertTableProps(TablePropertyMapPtr pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);

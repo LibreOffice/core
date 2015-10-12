@@ -65,11 +65,11 @@ public:
     virtual ~SwPagePreviewWin();
 
     // calls SwViewShell::Paint
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent & ) SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void KeyInput( const KeyEvent & ) override;
+    virtual void Command( const CommandEvent& rCEvt ) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual void DataChanged( const DataChangedEvent& ) override;
 
     void SetViewShell( SwViewShell* pShell );
 
@@ -141,7 +141,7 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    void Scroll(long nXMove, long nYMove, ScrollFlags nFlags = ScrollFlags::NONE) SAL_OVERRIDE;
+    void Scroll(long nXMove, long nYMove, ScrollFlags nFlags = ScrollFlags::NONE) override;
 
     /** Method to enable/disable book preview
         @param _bBookPreview
@@ -152,7 +152,7 @@ public:
     */
     bool SetBookPreviewMode( const bool _bBookPreview );
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 };
 
 /**
@@ -200,10 +200,10 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     DECL_DLLPRIVATE_LINK_TYPED(EndScrollHdl, ScrollBar*, void);
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
-    SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
+    SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) override;
+    SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const override;
+    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 
     SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
 
@@ -220,8 +220,8 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
                              SfxRequest* _pReq = 0 );
 
 protected:
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;
+    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
     void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);
 

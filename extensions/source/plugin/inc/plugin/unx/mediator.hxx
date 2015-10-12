@@ -138,8 +138,8 @@ private:
     MediatorListener( Mediator* );
     virtual ~MediatorListener();
 
-    virtual void run() SAL_OVERRIDE;
-    virtual void onTerminated() SAL_OVERRIDE;
+    virtual void run() override;
+    virtual void onTerminated() override;
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_MEDIATOR_HXX

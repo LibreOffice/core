@@ -49,7 +49,7 @@ namespace utl
         const Reference< XComponent >&  getComponent() const { return m_xComponent; }
 
     protected:
-        virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception) override;
     };
 
     OEventListenerImpl::OEventListenerImpl( OEventListenerAdapter* _pAdapter, const Reference< XComponent >& _rxComp )

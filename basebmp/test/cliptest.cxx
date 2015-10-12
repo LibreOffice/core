@@ -186,7 +186,7 @@ private:
     }
 
 public:
-    void setUp() SAL_OVERRIDE
+    void setUp() override
     {
         const basegfx::B2ISize aSize(11,11);
         sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.getX());

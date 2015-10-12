@@ -71,7 +71,7 @@ namespace frm
             const std::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
         );
         virtual ~NavigationToolBar( );
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /** sets the dispatcher which is to be used for the features
 
@@ -118,8 +118,8 @@ namespace frm
 
     protected:
         // Window overridables
-        virtual void        Resize() SAL_OVERRIDE;
-        virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+        virtual void        Resize() override;
+        virtual void        StateChanged( StateChangedType nType ) override;
 
         /// ctor implementation
         void implInit( );
@@ -168,8 +168,8 @@ namespace frm
 
     protected:
         // Window overridables
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
+        virtual void LoseFocus() override;
+        virtual void KeyInput( const KeyEvent& rKeyEvent ) override;
 
     private:
         void FirePosition( bool _bForce );

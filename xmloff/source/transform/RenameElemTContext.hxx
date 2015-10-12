@@ -55,8 +55,8 @@ public:
     // EndElement instead if this is required.
     virtual ~XMLRenameElemTransformerContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-    virtual void EndElement() SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
 };
 
 #endif  //  _XMLOFF_RENAMEELEMCONTEXT_HXX

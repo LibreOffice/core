@@ -85,11 +85,11 @@ namespace dbaccess
         };
 
         // ODefinitionContainer
-        virtual css::uno::Reference< css::ucb::XContent > createObject( const OUString& _rName) SAL_OVERRIDE;
-        virtual bool checkExistence(const OUString& _rName) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::ucb::XContent > createObject( const OUString& _rName) override;
+        virtual bool checkExistence(const OUString& _rName) override;
 
         // helper
-        virtual void SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void SAL_CALL disposing() override;
         virtual ~OQueryContainer();
 
         /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
@@ -125,38 +125,38 @@ namespace dbaccess
         DECLARE_SERVICE_INFO();
 
     // css::container::XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XContainerApproveListener
-        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveInsertElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveReplaceElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveRemoveElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveInsertElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveReplaceElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveRemoveElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // css::lang::XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     // css::sdbcx::XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // css::sdbcx::XAppend
-        virtual void SAL_CALL appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
 
     // css::sdbcx::XDrop
-        virtual void SAL_CALL dropByName( const OUString& elementName ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dropByName( const OUString& elementName ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
     // css::container::XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) override;
     // css::container::XNameAccess
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     private:
         // OContentHelper overridables
-        virtual OUString determineContentType() const SAL_OVERRIDE;
+        virtual OUString determineContentType() const override;
 
         // helper
         /** create a query object wrapping a CommandDefinition given by name. To retrieve the object, the CommandDescription

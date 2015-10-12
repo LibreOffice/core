@@ -135,7 +135,7 @@ class LCInfoNode : public LocaleNode {
 public:
     inline LCInfoNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 
@@ -144,7 +144,7 @@ public:
     inline LCCTYPENode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCFormatNode : public LocaleNode {
@@ -154,7 +154,7 @@ public:
     inline LCFormatNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCCollationNode : public LocaleNode {
@@ -162,7 +162,7 @@ public:
     inline LCCollationNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCIndexNode : public LocaleNode {
@@ -170,7 +170,7 @@ public:
     inline LCIndexNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCSearchNode : public LocaleNode {
@@ -178,7 +178,7 @@ public:
     inline LCSearchNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCCalendarNode : public LocaleNode {
@@ -186,7 +186,7 @@ public:
     inline LCCalendarNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCCurrencyNode : public LocaleNode {
@@ -194,7 +194,7 @@ public:
     inline LCCurrencyNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCTransliterationNode : public LocaleNode {
@@ -202,7 +202,7 @@ public:
     inline LCTransliterationNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCMiscNode : public LocaleNode {
@@ -210,7 +210,7 @@ public:
     inline LCMiscNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCNumberingLevelNode : public LocaleNode {
@@ -218,7 +218,7 @@ public:
     inline LCNumberingLevelNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 class LCOutlineNumberingLevelNode : public LocaleNode {
@@ -226,7 +226,7 @@ public:
     inline LCOutlineNumberingLevelNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
-    virtual void generateCode (const OFileWriter &of) const SAL_OVERRIDE;
+    virtual void generateCode (const OFileWriter &of) const override;
 };
 
 #endif

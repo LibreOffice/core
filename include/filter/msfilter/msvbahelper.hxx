@@ -65,30 +65,30 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual OUString SAL_CALL
-                        getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rService )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                        getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                        getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // com.sun.star.script.vba.XVBAMacroResolver interface --------------------
 
     virtual OUString SAL_CALL
                         resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
                         resolveScriptURLtoVBAMacro( const OUString& rScriptURL )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;

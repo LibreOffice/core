@@ -577,7 +577,7 @@ public:
     void EndAllAction();
 
     /// To enable set up of StartActions and EndActions.
-    virtual void CalcLayout() SAL_OVERRIDE;
+    virtual void CalcLayout() override;
 
     /// Determine form of content. Return Type at CurCrsr->SPoint.
     sal_uInt16 GetCntType() const;
@@ -586,7 +586,7 @@ public:
     bool HasOtherCnt() const;
 
     /// Apply ViewOptions with Start-/EndAction.
-    virtual void ApplyViewOptions( const SwViewOption &rOpt ) SAL_OVERRIDE;
+    virtual void ApplyViewOptions( const SwViewOption &rOpt ) override;
 
     /** Query text within selection.
      @returns FALSE, if selected range is too large to be copied

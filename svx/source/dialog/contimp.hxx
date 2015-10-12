@@ -35,7 +35,7 @@ class SvxContourDlgItem : public SfxControllerItem
 
 protected:
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
 
 public:
 
@@ -81,7 +81,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     sal_uInt16          mnRedoId;
     sal_uInt16          mnPipetteId;
 
-    virtual bool        Close() SAL_OVERRIDE;
+    virtual bool        Close() override;
 
                         DECL_LINK_TYPED( Tbx1ClickHdl, ToolBox*, void );
                         DECL_LINK_TYPED( MousePosHdl, GraphCtrl*, void );
@@ -99,7 +99,7 @@ public:
                         SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                            vcl::Window* pParent);
                         virtual ~SvxSuperContourDlg();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void        dispose() override;
 
     void                SetExecState( bool bEnable );
 

@@ -293,7 +293,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
     /** Used by both RectangleShape and ComplexShape. */
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape>createPictureObject(
             const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rxShapes,
@@ -315,7 +315,7 @@ protected:
     virtual com::sun::star::uno::Reference<com::sun::star::drawing::XShape>
                         implConvertAndInsert(
                             const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& rxShapes,
-                            const com::sun::star::awt::Rectangle& rShapeRect) const SAL_OVERRIDE;
+                            const com::sun::star::awt::Rectangle& rShapeRect) const override;
 };
 
 
@@ -340,7 +340,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 };
 
 /** A Line shape object. */
@@ -351,9 +351,9 @@ public:
 
 protected:
     /** Returns the absolute shape rectangle. */
-    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const SAL_OVERRIDE;
+    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const override;
     /** Returns the rectangle relative to the parent coordinate system. */
-    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const SAL_OVERRIDE;
+    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const override;
 };
 
 /** Bezier shape object that supports to, from, control1 and control2
@@ -368,7 +368,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -384,7 +384,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -401,7 +401,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -419,19 +419,19 @@ public:
     const ShapeContainer& getChildren() const { return *mxChildren; }
 
     /** Final processing after import of the drawing fragment. */
-    virtual void        finalizeFragmentImport() SAL_OVERRIDE;
+    virtual void        finalizeFragmentImport() override;
 
     /** Returns the shape template with the passed identifier from the child shapes. */
-    virtual const ShapeType* getChildTypeById( const OUString& rShapeId ) const SAL_OVERRIDE;
+    virtual const ShapeType* getChildTypeById( const OUString& rShapeId ) const override;
     /** Returns the shape with the passed identifier from the child shapes. */
-    virtual const ShapeBase* getChildById( const OUString& rShapeId ) const SAL_OVERRIDE;
+    virtual const ShapeBase* getChildById( const OUString& rShapeId ) const override;
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
 
 private:
     typedef ::std::unique_ptr< ShapeContainer > ShapeContainerPtr;

@@ -46,7 +46,7 @@ public:
                                 SfxMedium* pSfxMedium,
                                 const OUString& rFileName );
                 virtual ~SdInsertPagesObjsDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     /** returns the list
           nType == 0 -> pages

@@ -58,12 +58,12 @@ namespace dbaui
         VclPtr<OJoinTableView>     m_pTableView;
 
     protected:
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
     public:
         OScrollWindowHelper( vcl::Window* pParent);
         virtual ~OScrollWindowHelper();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         void setTableView(OJoinTableView* _pTableView);
 
@@ -114,15 +114,15 @@ namespace dbaui
     public:
         OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // window override
-        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nStateChange ) override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
+        virtual void KeyInput( const KeyEvent& rEvt ) override;
         // Accessibility
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         // own methods
         ScrollBar& GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
@@ -226,11 +226,11 @@ namespace dbaui
 
         /** @note used by AddTabDlg to see if more tables can be added */
         virtual bool IsAddAllowed();
-        virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+        virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
         // DnD stuff
-        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
         /** @note can be used for special ui handling after d&d */
         virtual void lookForUiActivities();
@@ -269,20 +269,20 @@ namespace dbaui
                                             ,const OUString& _rWinName);
 
     protected:
-        virtual void MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
-        virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void MouseButtonUp( const MouseEvent& rEvt ) override;
+        virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
+        virtual void Tracking( const TrackingEvent& rTEvt ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
-        virtual void dragFinished( ) SAL_OVERRIDE;
+        virtual void dragFinished( ) override;
         /// @note here the physical position (that can be changed while
         ///     resizing) is used, as no scrolling can take place while resizing
-        virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
+        virtual void Command(const CommandEvent& rEvt) override;
 
         virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName

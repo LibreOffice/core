@@ -43,7 +43,7 @@ public:
     void testTdf88935();
 
 
-    virtual void setUp() SAL_OVERRIDE
+    virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
 

@@ -42,8 +42,8 @@ class Test : public test::BootstrapFixture
 public:
     Test();
 
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testConstruction();
 
@@ -237,47 +237,47 @@ public:
 private:
     OUString & m_rText;
     LanguageType m_eLang;
-    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
         m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
-    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE
+    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
         m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
-    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE
+    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
         return ReplaceRange( nPos, rTxt.getLength(), rTxt );
     }
-    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) SAL_OVERRIDE
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
-    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& ) SAL_OVERRIDE
+    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
         return true;
     }
-    virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& ) SAL_OVERRIDE
+    virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;
     }
-    virtual OUString const* GetPrevPara(bool) SAL_OVERRIDE
+    virtual OUString const* GetPrevPara(bool) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
         return 0;
     }
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
                 sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
-                OUString* pPara ) SAL_OVERRIDE
+                OUString* pPara ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
 
@@ -349,7 +349,7 @@ namespace {
     public:
         explicit UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
 
-        virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) SAL_OVERRIDE
+        virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) override
         {
             return OUString("jim@bob.com"); // a sophisticated view of value:
         }

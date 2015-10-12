@@ -98,7 +98,7 @@ private:
     DECL_LINK(SourceEditModified,  void*);
     void ToggleSource();
     void ToggleDestination();
-    virtual bool Close() SAL_OVERRIDE;
+    virtual bool Close() override;
 
     ScPivotParam maPivotParameters;
 
@@ -114,11 +114,11 @@ public:
     ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) SAL_OVERRIDE;
-    virtual void SetActive() SAL_OVERRIDE;
-    virtual bool IsRefInputMode() const SAL_OVERRIDE;
+    virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) override;
+    virtual void SetActive() override;
+    virtual bool IsRefInputMode() const override;
 
     void ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType);
 

@@ -65,15 +65,15 @@ public:
                                 // XNumberFormatsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
                                 getNumberFormatSettings()
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL
                                 getNumberFormats()
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
                                 // XUnoTunnel
     virtual sal_Int64 SAL_CALL  getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static SvNumberFormatsSupplierObj* getImplementation( const com::sun::star::uno::Reference<

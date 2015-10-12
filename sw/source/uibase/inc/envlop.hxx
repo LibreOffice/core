@@ -42,15 +42,15 @@ class Printer;
 
 class SwEnvPreview : public vcl::Window
 {
-    void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
 
 public:
 
     SwEnvPreview(vcl::Window * pParent, WinBits nStyle);
 
 protected:
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual Size GetOptimalSize() const override;
 };
 
 class SwEnvDlg : public SfxTabDialog
@@ -67,13 +67,13 @@ friend class SwEnvPreview;
     SfxItemSet      *pSenderSet;
     sal_uInt16      m_nEnvPrintId;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
-    virtual short   Ok() SAL_OVERRIDE;
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual short   Ok() override;
 
 public:
      SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 class SwEnvPage : public SfxTabPage
@@ -104,15 +104,15 @@ class SwEnvPage : public SfxTabPage
 public:
     SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwEnvPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = 0) override;
             void FillItem(SwEnvItem& rItem);
-    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rSet) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 };
 
 #endif

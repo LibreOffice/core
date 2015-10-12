@@ -72,22 +72,22 @@ namespace dbaui
         bool                m_bHasMaxRowScan;
 
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
         SpecialSettingsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
     protected:
         virtual ~SpecialSettingsPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // OGenericAdministrationPage overridables
-        virtual void implInitControls (const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void implInitControls (const SfxItemSet& _rSet, bool _bSaveValue ) override;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     private:
         void    impl_initBooleanSettings();
@@ -110,23 +110,23 @@ namespace dbaui
                     m_aControlDependencies;
 
     public:
-        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
+        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
 
         // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~GeneratedValuesPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // subclasses must override this, but it isn't pure virtual
-        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
 }

@@ -313,8 +313,8 @@ public:
     {
     }
 
-    virtual void    LastPoint() SAL_OVERRIDE;
-    virtual void    Input( const Point& rPoint ) SAL_OVERRIDE;
+    virtual void    LastPoint() override;
+    virtual void    Input( const Point& rPoint ) override;
 
     ImplPolygon*    release() { return mxPoly.release(); }
 };
@@ -366,8 +366,8 @@ public:
     bool                IsPolygon() const
                             { return maFirstPoint == maLastPoint; }
 
-    virtual void        Input( const Point& rPoint ) SAL_OVERRIDE;
-    virtual void        LastPoint() SAL_OVERRIDE;
+    virtual void        Input( const Point& rPoint ) override;
+    virtual void        LastPoint() override;
 };
 
 inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const

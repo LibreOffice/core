@@ -103,7 +103,7 @@ namespace
         // parent window, Query text, initial value
         QueryString(vcl::Window*, OUString &, OUString &);
         virtual ~QueryString() { disposeOnce(); }
-        virtual void dispose() SAL_OVERRIDE
+        virtual void dispose() override
         {
             m_pOKButton.clear();
             m_pFixedText.clear();

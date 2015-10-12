@@ -46,7 +46,7 @@ namespace connectivity
         public:
             KabSimpleOrder(OUString &sColumnName, bool bAscending);
 
-            virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const SAL_OVERRIDE;
+            virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const override;
         };
 
         class KabComplexOrder : public KabOrder
@@ -58,7 +58,7 @@ namespace connectivity
             virtual ~KabComplexOrder();
 
             void addOrder(KabOrder *pOrder);
-            virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const SAL_OVERRIDE;
+            virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const override;
         };
     }
 }

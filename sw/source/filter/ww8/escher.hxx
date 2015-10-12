@@ -31,7 +31,7 @@ class SwFormatVertOrient;
 class WinwordAnchoring : public EscherExClientRecord_Base
 {
 public:
-    void WriteData(EscherEx& rEx) const SAL_OVERRIDE;
+    void WriteData(EscherEx& rEx) const override;
     void SetAnchoring(const SwFrameFormat& rFormat);
 
     /** method to perform conversion of positioning attributes with the help
@@ -81,7 +81,7 @@ public:
 
 private:
     /** Override to create a new memory stream for picture data. */
-    virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
+    virtual SvStream*   ImplQueryPictureStream() override;
 
 private:
     std::shared_ptr< SvStream > mxPicStrm;
@@ -154,23 +154,23 @@ private:
         sal_uInt32 nTextBox, DrawObjPointerVector &rPVec);
     void WriteOCXControl(const SwFrameFormat& rFormat,sal_uInt32 nShapeId);
     virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,
-        EscherPropertyContainer& rPropOpt) SAL_OVERRIDE;
+        EscherPropertyContainer& rPropOpt) override;
 
     virtual sal_uInt32 QueryTextID(
         const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &,sal_uInt32) SAL_OVERRIDE;
+        com::sun::star::drawing::XShape > &,sal_uInt32) override;
     virtual void SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
-        EscherPropertyContainer &rPropOpt) SAL_OVERRIDE;
+        EscherPropertyContainer &rPropOpt) override;
 public:
     SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );
     virtual ~SwEscherEx();
     void FinishEscher();
-    virtual void WritePictures() SAL_OVERRIDE;
+    virtual void WritePictures() override;
 
-    virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) SAL_OVERRIDE;
+    virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) override;
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return &aHostData;}
+        com::sun::star::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
 private:
     SwEscherEx(const SwEscherEx&) = delete;
     SwEscherEx &operator=(const SwEscherEx&) = delete;

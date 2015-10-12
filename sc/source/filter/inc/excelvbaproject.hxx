@@ -39,7 +39,7 @@ public:
 
 protected:
     /** Adds dummy modules for sheets without imported code name. */
-    virtual void        prepareImport() SAL_OVERRIDE;
+    virtual void        prepareImport() override;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >

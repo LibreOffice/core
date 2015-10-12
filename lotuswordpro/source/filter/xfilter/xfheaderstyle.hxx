@@ -116,7 +116,7 @@ public:
     /**
      * @descr   Output header style object.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 
 protected:
     bool    m_bIsFooter;

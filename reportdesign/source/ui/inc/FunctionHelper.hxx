@@ -45,10 +45,10 @@ class FunctionManager : public formula::IFunctionManager
 public:
             FunctionManager(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionManager>& _xMgr);
     virtual ~FunctionManager();
-    virtual sal_uInt32                              getCount() const SAL_OVERRIDE;
-    virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const SAL_OVERRIDE;
-    virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const SAL_OVERRIDE;
-    virtual sal_Unicode                             getSingleToken(const EToken _eToken) const SAL_OVERRIDE;
+    virtual sal_uInt32                              getCount() const override;
+    virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const override;
+    virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
+    virtual sal_Unicode                             getSingleToken(const EToken _eToken) const override;
 
     std::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
 };
@@ -62,19 +62,19 @@ public:
     FunctionDescription(const formula::IFunctionCategory* _pFunctionCategory,const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription);
     virtual ~FunctionDescription(){}
 
-    virtual OUString getFunctionName() const SAL_OVERRIDE ;
-    virtual const formula::IFunctionCategory* getCategory() const SAL_OVERRIDE ;
-    virtual OUString getDescription() const SAL_OVERRIDE ;
-    virtual sal_Int32 getSuppressedArgumentCount() const SAL_OVERRIDE ;
-    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const SAL_OVERRIDE ;
-    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const SAL_OVERRIDE ;
-    virtual void initArgumentInfo()  const SAL_OVERRIDE;
-    virtual OUString getSignature() const SAL_OVERRIDE ;
-    virtual OString getHelpId() const SAL_OVERRIDE ;
-    virtual sal_uInt32 getParameterCount() const SAL_OVERRIDE ;
-    virtual OUString getParameterName(sal_uInt32 _nPos) const SAL_OVERRIDE ;
-    virtual OUString getParameterDescription(sal_uInt32 _nPos) const SAL_OVERRIDE ;
-    virtual bool isParameterOptional(sal_uInt32 _nPos) const SAL_OVERRIDE ;
+    virtual OUString getFunctionName() const override ;
+    virtual const formula::IFunctionCategory* getCategory() const override ;
+    virtual OUString getDescription() const override ;
+    virtual sal_Int32 getSuppressedArgumentCount() const override ;
+    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const override ;
+    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const override ;
+    virtual void initArgumentInfo()  const override;
+    virtual OUString getSignature() const override ;
+    virtual OString getHelpId() const override ;
+    virtual sal_uInt32 getParameterCount() const override ;
+    virtual OUString getParameterName(sal_uInt32 _nPos) const override ;
+    virtual OUString getParameterDescription(sal_uInt32 _nPos) const override ;
+    virtual bool isParameterOptional(sal_uInt32 _nPos) const override ;
 };
 
 class FunctionCategory : public formula::IFunctionCategory
@@ -88,10 +88,10 @@ public:
     FunctionCategory(const FunctionManager* _pFMgr,sal_uInt32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionCategory>& _xCategory);
     virtual ~FunctionCategory() {}
 
-    virtual sal_uInt32                              getCount() const SAL_OVERRIDE;
-    virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const SAL_OVERRIDE;
-    virtual sal_uInt32                              getNumber() const SAL_OVERRIDE;
-    virtual OUString                                getName() const SAL_OVERRIDE;
+    virtual sal_uInt32                              getCount() const override;
+    virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const override;
+    virtual sal_uInt32                              getNumber() const override;
+    virtual OUString                                getName() const override;
 };
 
 } // rptui

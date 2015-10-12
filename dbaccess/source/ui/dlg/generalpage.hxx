@@ -66,7 +66,7 @@ namespace dbaui
 
     public:
         virtual ~OGeneralPage();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// set a handler which gets called every time the user selects a new type
         void            SetTypeSelectHandler( const Link<OGeneralPage&,void>& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
@@ -76,16 +76,16 @@ namespace dbaui
 
     protected:
         // SfxTabPage overridables
-        virtual void Reset( const SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual void Reset( const SfxItemSet* _rCoreAttrs ) override;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) override;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
@@ -107,10 +107,10 @@ namespace dbaui
         OGeneralPageDialog( vcl::Window* pParent, const SfxItemSet& _rItems );
 
     protected:
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
-        virtual void setParentTitle( const OUString& _sURLPrefix ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) override;
+        virtual void setParentTitle( const OUString& _sURLPrefix ) override;
     };
 
     // OGeneralPageWizard
@@ -119,7 +119,7 @@ namespace dbaui
     public:
         OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
         virtual ~OGeneralPageWizard();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
     public:
         enum CreationMode
         {
@@ -170,13 +170,13 @@ namespace dbaui
         DocumentDescriptor      GetSelectedDocument() const;
 
     protected:
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
 
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void GetFocus() override;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
-        virtual OUString getDatasourceName( const SfxItemSet& _rSet ) SAL_OVERRIDE;
-        virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) override;
+        virtual OUString getDatasourceName( const SfxItemSet& _rSet ) override;
+        virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) override;
 
         ::std::vector< OUString>
                             m_aEmbeddedURLPrefixes;

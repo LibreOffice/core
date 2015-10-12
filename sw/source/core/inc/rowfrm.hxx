@@ -29,10 +29,10 @@ class SwBorderAttrs;
 /// SwRowFrm is one table row in the document layout.
 class SwRowFrm: public SwLayoutFrm
 {
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
     /// Only change the Frame size, not the PrtArea SSize
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
     const SwTableLine * m_pTabLine;
     SwRowFrm * m_pFollowRow;
@@ -45,17 +45,17 @@ class SwRowFrm: public SwLayoutFrm
     bool m_bIsRepeatedHeadline;
     bool m_bIsRowSpanLine;
 
-    virtual void DestroyImpl() SAL_OVERRIDE;
+    virtual void DestroyImpl() override;
     virtual ~SwRowFrm();
 
 protected:
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
     SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
 
-    virtual void Cut() SAL_OVERRIDE;
+    virtual void Cut() override;
 
     /**
      * Register Flys after a line was created _AND_ inserted

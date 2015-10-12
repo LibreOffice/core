@@ -40,7 +40,7 @@ public:
     static void SetLayer(com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType);
     virtual void finishShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
-            com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes) SAL_OVERRIDE;
+            com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes) override;
 
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const bool bTempOnTable) { bOnTable = bTempOnTable; }

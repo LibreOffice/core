@@ -33,8 +33,8 @@ class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
 private:
-    virtual void initStatic() SAL_OVERRIDE;
-    virtual void initDynamic() SAL_OVERRIDE;
+    virtual void initStatic() override;
+    virtual void initDynamic() override;
 
 public:
     DynamicResultSet(

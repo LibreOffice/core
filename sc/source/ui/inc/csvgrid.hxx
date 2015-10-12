@@ -109,7 +109,7 @@ private:
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
     virtual                     ~ScCsvGrid();
-    virtual void                dispose() SAL_OVERRIDE;
+    virtual void                dispose() override;
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
@@ -258,22 +258,22 @@ public:
 
     // event handling ---------------------------------------------------------
 protected:
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual void                GetFocus() SAL_OVERRIDE;
-    virtual void                LoseFocus() SAL_OVERRIDE;
+    virtual void                Resize() override;
+    virtual void                GetFocus() override;
+    virtual void                LoseFocus() override;
 
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void                Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void                Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void                Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void                Command( const CommandEvent& rCEvt ) override;
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
+    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
 
 public:
     /** Redraws the entire data grid. */
@@ -323,7 +323,7 @@ private:
     // accessibility ----------------------------------------------------------
 protected:
     /** Creates a new accessible object. */
-    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() SAL_OVERRIDE;
+    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() override;
 };
 
 #endif

@@ -828,7 +828,7 @@ private:
 public:
     SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM );
     virtual ~SwFieldDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :

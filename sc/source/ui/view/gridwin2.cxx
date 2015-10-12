@@ -390,7 +390,7 @@ public:
     explicit DPFieldPopupOKAction(ScGridWindow* p) :
         mpGridWindow(p) {}
 
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         mpGridWindow->UpdateDPFromFieldPopupMenu();
     }
@@ -406,7 +406,7 @@ public:
     explicit PopupSortAction(const ScAddress& rPos, SortType eType, sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell) :
         maPos(rPos), meType(eType), mnUserListIndex(nUserListIndex), mpViewShell(pViewShell) {}
 
-    virtual void execute() SAL_OVERRIDE
+    virtual void execute() override
     {
         switch (meType)
         {

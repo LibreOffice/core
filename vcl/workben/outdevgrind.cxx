@@ -58,8 +58,8 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual int Main() SAL_OVERRIDE;
-    virtual sal_uInt16 Exception( sal_uInt16 nError ) SAL_OVERRIDE;
+    virtual int Main() override;
+    virtual sal_uInt16 Exception( sal_uInt16 nError ) override;
 };
 
 class TestWindow : public Dialog
@@ -73,7 +73,7 @@ class TestWindow : public Dialog
             Show();
         }
 
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 };
 
 typedef std::function<void (OutputDevice*)>   functor_type;

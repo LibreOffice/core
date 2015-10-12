@@ -267,10 +267,10 @@ public:
         return mbModKey;
     }
 
-    virtual bool PreNotify(NotifyEvent& rNotifyEvent) SAL_OVERRIDE;
-    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-    virtual void Command(const CommandEvent& rCommandEvent) SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rNotifyEvent) override;
+    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
+    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
+    virtual void Command(const CommandEvent& rCommandEvent) override;
 };
 
 void ImplTabButton::MouseButtonDown(const MouseEvent& rMouseEvent)
@@ -319,10 +319,10 @@ public:
 private:
     void            ImplTrack( const Point& rScreenPos );
 
-    virtual void    dispose() SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    dispose() override;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
 
     Point           maStartPos;
     long            mnStartWidth;
@@ -406,8 +406,8 @@ public:
     void            SetPostEvent() { mbPostEvt = true; }
     void            ResetPostEvent() { mbPostEvt = false; }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual void    LoseFocus() override;
 };
 
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :

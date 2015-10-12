@@ -49,7 +49,7 @@ namespace dbaui
 
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         DECLARE_SERVICE_INFO_STATIC( );
 
@@ -57,8 +57,8 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
-        virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE;
+        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
+        virtual void implInitialize(const css::uno::Any& _rValue) override;
     };
 
 }   // namespace dbaui

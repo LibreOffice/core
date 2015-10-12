@@ -59,7 +59,7 @@ namespace ucbhelper
             throw( css::io::NotConnectedException,
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
-                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         readSomeBytes(css::uno::Sequence< sal_Int8 >& aData,
@@ -67,26 +67,26 @@ namespace ucbhelper
             throw( css::io::NotConnectedException,
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
-                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         skipBytes(sal_Int32 nBytesToSkip)
             throw(css::io::NotConnectedException,
                   css::io::BufferSizeExceededException,
                   css::io::IOException,
-                  css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int32 SAL_CALL
         available()
             throw(css::io::NotConnectedException,
                   css::io::IOException,
-                  css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         closeInput()
             throw(css::io::NotConnectedException,
                   css::io::IOException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 
 
         /** XSeekable
@@ -96,19 +96,19 @@ namespace ucbhelper
         seek(sal_Int64 location)
             throw(css::lang::IllegalArgumentException,
                   css::io::IOException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 
 
         virtual sal_Int64 SAL_CALL
         getPosition()
             throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 
 
         virtual sal_Int64 SAL_CALL
         getLength()
             throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                  css::uno::RuntimeException, std::exception) override;
 
     private:
         oslFileHandle m_tmpfl;

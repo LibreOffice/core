@@ -36,8 +36,8 @@ class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
 public:
     EditUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
 
-    virtual bool Undo() SAL_OVERRIDE;
-    virtual bool Redo() SAL_OVERRIDE;
+    virtual bool Undo() override;
+    virtual bool Redo() override;
 };
 
 
@@ -55,12 +55,12 @@ public:
 
     EditEngine* GetEditEngine() { return mpEditEngine;}
 
-    virtual void    Undo() SAL_OVERRIDE      = 0;
-    virtual void    Redo() SAL_OVERRIDE      = 0;
+    virtual void    Undo() override      = 0;
+    virtual void    Redo() override      = 0;
 
-    virtual bool    CanRepeat(SfxRepeatTarget&) const SAL_OVERRIDE;
-    virtual OUString GetComment() const SAL_OVERRIDE;
-    virtual sal_uInt16  GetId() const SAL_OVERRIDE;
+    virtual bool    CanRepeat(SfxRepeatTarget&) const override;
+    virtual OUString GetComment() const override;
+    virtual sal_uInt16  GetId() const override;
 };
 
 #endif // INCLUDED_EDITENG_EDITUND2_HXX

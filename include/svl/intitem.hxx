@@ -32,9 +32,9 @@ public:
     explicit SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
     { return new SfxByteItem(*this); }
 };
 
@@ -57,25 +57,25 @@ public:
 
     virtual ~SfxInt16Item() {}
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
+    virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const SAL_OVERRIDE;
+        const override;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+                             sal_uInt8 nMemberId = 0 ) const override;
 
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           sal_uInt8 nMemberId ) SAL_OVERRIDE;
+                           sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
 
     sal_Int16 GetValue() const { return m_nValue; }
 
@@ -100,13 +100,13 @@ public:
     SfxUInt16Item(sal_uInt16 which, SvStream & rStream):
         CntUInt16Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxUInt16Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
     { return new SfxUInt16Item(*this); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 
@@ -121,10 +121,10 @@ public:
     SfxInt32Item(sal_uInt16 which, SvStream & rStream):
         CntInt32Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxInt32Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
     { return new SfxInt32Item(*this); }
 
 };
@@ -141,10 +141,10 @@ public:
     SfxUInt32Item(sal_uInt16 which, SvStream & rStream):
         CntUInt32Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxUInt32Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
     { return new SfxUInt32Item(*this); }
 };
 

@@ -108,7 +108,7 @@ public:
     virtual ~PresenterCanvas();
 
     virtual void SAL_CALL disposing()
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException) override;
 
     css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
 
@@ -134,54 +134,54 @@ public:
 
     virtual void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XCanvas
 
     virtual void SAL_CALL clear()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL drawPoint (
         const css::geometry::RealPoint2D& aPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL drawLine (
         const css::geometry::RealPoint2D& aStartPoint,
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL drawBezier (
         const css::geometry::RealBezierSegment2D& aBezierSegment,
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL drawPolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL strokePolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState,
         const css::rendering::StrokeAttributes& aStrokeAttributes)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         strokeTexturedPolyPolygon (
@@ -192,7 +192,7 @@ public:
             const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         strokeTextureMappedPolyPolygon(
@@ -204,7 +204,7 @@ public:
             const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
         queryStrokeShapes(
@@ -212,7 +212,7 @@ public:
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState,
             const css::rendering::StrokeAttributes& aStrokeAttributes)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillPolyPolygon(
@@ -220,7 +220,7 @@ public:
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillTexturedPolyPolygon(
@@ -230,7 +230,7 @@ public:
             const css::uno::Sequence<css::rendering::Texture>& xTextures)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillTextureMappedPolyPolygon(
@@ -241,7 +241,7 @@ public:
             const css::uno::Reference< css::geometry::XMapping2D >& xMapping)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         createFont(
@@ -249,13 +249,13 @@ public:
             const css::uno::Sequence< css::beans::PropertyValue >& aExtraFontProperties,
             const css::geometry::Matrix2D& aFontMatrix)
         throw (css::lang::IllegalArgumentException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
         queryAvailableFonts(
             const css::rendering::FontInfo& aFilter,
             const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawText(
@@ -264,14 +264,14 @@ public:
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState,
             ::sal_Int8 nTextDirection)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawTextLayout(
             const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawBitmap(
@@ -280,7 +280,7 @@ public:
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawBitmapModulated(
@@ -289,18 +289,18 @@ public:
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
         getDevice()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSpriteCanvas
 
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
         createSpriteFromAnimation (
             const css::uno::Reference< css::rendering::XAnimation >& animation)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
         createSpriteFromBitmaps (
@@ -309,54 +309,54 @@ public:
             ::sal_Int8 interpolationMode)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) override;
 
     css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
         createCustomSprite (
             const css::geometry::RealSize2D& spriteSize)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     css::uno::Reference< css::rendering::XSprite > SAL_CALL
         createClonedSprite (
             const css::uno::Reference< css::rendering::XSprite >& original)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL updateScreen (sal_Bool bUpdateAll)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XWindowListener
 
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XBitmap
 
     virtual css::geometry::IntegerSize2D SAL_CALL getSize()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL hasAlpha()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
         const css::geometry::RealSize2D& rNewSize,
         sal_Bool bFast)
         throw (css::uno::RuntimeException,
             css::lang::IllegalArgumentException,
-            css::rendering::VolatileContentDestroyedException, std::exception) SAL_OVERRIDE;
+            css::rendering::VolatileContentDestroyedException, std::exception) override;
 
 private:
     css::uno::Reference<css::rendering::XSpriteCanvas> mxUpdateCanvas;

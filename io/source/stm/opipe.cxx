@@ -61,50 +61,50 @@ public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
         throw(  NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException, std::exception ) SAL_OVERRIDE;
+                RuntimeException, std::exception ) override;
     virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
         throw( NotConnectedException,
                BufferSizeExceededException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
     virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
         throw( NotConnectedException,
                BufferSizeExceededException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
     virtual sal_Int32 SAL_CALL available()
         throw( NotConnectedException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
     virtual void SAL_CALL closeInput()
         throw( NotConnectedException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
 
 public: // XOutputStream
 
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw( NotConnectedException,
                BufferSizeExceededException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
     virtual void SAL_CALL flush()
         throw( NotConnectedException,
                BufferSizeExceededException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
     virtual void SAL_CALL closeOutput()
         throw( NotConnectedException,
                BufferSizeExceededException,
-               RuntimeException, std::exception ) SAL_OVERRIDE;
+               RuntimeException, std::exception ) override;
 
 public: // XConnectable
     virtual void SAL_CALL setPredecessor(const Reference< XConnectable >& aPredecessor)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Reference< XConnectable > SAL_CALL getPredecessor() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
+    virtual Reference< XConnectable > SAL_CALL getPredecessor() throw( RuntimeException, std::exception ) override;
     virtual void SAL_CALL setSuccessor(const Reference < XConnectable > & aSuccessor)
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual Reference < XConnectable > SAL_CALL getSuccessor() throw( RuntimeException, std::exception ) SAL_OVERRIDE ;
+        throw( RuntimeException, std::exception ) override;
+    virtual Reference < XConnectable > SAL_CALL getSuccessor() throw( RuntimeException, std::exception ) override ;
 
 
 public: // XServiceInfo
-    OUString                    SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames() throw(std::exception  ) SAL_OVERRIDE;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
+    OUString                    SAL_CALL getImplementationName() throw(std::exception  ) override;
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
 
 private:
 

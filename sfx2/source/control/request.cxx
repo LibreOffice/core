@@ -89,7 +89,7 @@ struct SfxRequest_Impl: public SfxListener
 
 
     void                SetPool( SfxItemPool *pNewPool );
-    virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint ) SAL_OVERRIDE;
+    virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint ) override;
     void                Record( const uno::Sequence < beans::PropertyValue >& rArgs );
 };
 

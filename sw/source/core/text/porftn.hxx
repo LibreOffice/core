@@ -36,10 +36,10 @@ public:
                   sal_uInt16 nOrig = USHRT_MAX );
     sal_uInt16& Orig() { return nOrigHeight; }
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
@@ -63,19 +63,19 @@ class SwQuoVadisPortion : public SwFieldPortion
     OUString   aErgo;
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     void SetNumber( const OUString& rStr ) { aErgo = rStr; }
     const OUString GetQuoText() const { return aExpand; }
     const OUString &GetContText() const { return aErgo; }
 
     // Field cloner for SplitGlue
-    virtual SwFieldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -84,11 +84,11 @@ class SwErgoSumPortion : public SwFieldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
-    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue
-    virtual SwFieldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

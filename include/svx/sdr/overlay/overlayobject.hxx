@@ -149,7 +149,7 @@ namespace sdr
 
             // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
-            virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
+            virtual void Trigger(sal_uInt32 nTime) override;
 
             // access to AllowsAnimation flag
             bool allowsAnimation() const { return mbAllowsAnimation; }

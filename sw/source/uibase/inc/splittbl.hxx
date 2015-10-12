@@ -36,12 +36,12 @@ class SwSplitTableDlg : public SvxStandardDialog
     sal_uInt16          m_nSplit;
 
 protected:
-    virtual void Apply() SAL_OVERRIDE;
+    virtual void Apply() override;
 
 public:
     SwSplitTableDlg( vcl::Window *pParent, SwWrtShell &rSh );
     virtual ~SwSplitTableDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     sal_uInt16 GetSplitMode() const { return m_nSplit; }
 };

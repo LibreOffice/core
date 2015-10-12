@@ -58,8 +58,8 @@ private:
     Rectangle           Lines[9];
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual Size GetOptimalSize() const override;
 
     void DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll);
 
@@ -98,7 +98,7 @@ public:
     {
         eLine = eNew; nLineVal = nNew;
     }
-    void SetText( const OUString& rStr ) SAL_OVERRIDE
+    void SetText( const OUString& rStr ) override
     {
         aText = rStr;
     }
@@ -106,7 +106,7 @@ public:
     {
         aSize = aNew;
     }
-    OUString GetText() const SAL_OVERRIDE
+    OUString GetText() const override
     {
         return aText;
     }

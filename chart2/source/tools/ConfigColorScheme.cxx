@@ -60,8 +60,8 @@ public:
 
 protected:
     // ____ ::utl::ConfigItem ____
-    virtual void ImplCommit() SAL_OVERRIDE;
-    virtual void Notify( const Sequence< OUString > & aPropertyNames ) SAL_OVERRIDE;
+    virtual void ImplCommit() override;
+    virtual void Notify( const Sequence< OUString > & aPropertyNames ) override;
 
 private:
     ConfigColorScheme &      m_rListener;

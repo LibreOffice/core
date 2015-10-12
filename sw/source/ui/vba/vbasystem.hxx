@@ -37,8 +37,8 @@ public:
     void Initialize( const OUString& rFileName, const OString& rGroupName, const OString& rKey );
 
     //PropListener
-    virtual void setValueEvent( const css::uno::Any& value ) SAL_OVERRIDE;
-    virtual css::uno::Any getValueEvent() SAL_OVERRIDE;
+    virtual void setValueEvent( const css::uno::Any& value ) override;
+    virtual css::uno::Any getValueEvent() override;
 };
 
 class SwVbaSystem : public SwVbaSystem_BASE
@@ -51,13 +51,13 @@ public:
     virtual ~SwVbaSystem();
 
     // XSystem
-    virtual sal_Int32 SAL_CALL getCursor() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setCursor( sal_Int32 _cursor ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getCursor() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setCursor( sal_Int32 _cursor ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XHelperInterface
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBASYSTEM_HXX
 

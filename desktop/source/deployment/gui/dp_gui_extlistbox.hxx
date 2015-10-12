@@ -102,7 +102,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(css::lang::EventObject const& evt)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -174,13 +174,13 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 public:
     explicit ExtensionBox_Impl(vcl::Window* pParent);
     virtual ~ExtensionBox_Impl();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
-    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) override;
+    virtual void Resize() override;
+    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual Size GetOptimalSize() const override;
 
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
@@ -209,12 +209,12 @@ public:
     //These functions are used for automatic testing
 
     /** @return  The count of the entries in the list box. */
-    virtual sal_Int32 getItemCount() const SAL_OVERRIDE;
+    virtual sal_Int32 getItemCount() const override;
 
     /** @return  The index of the first selected entry in the list box.
         When nothing is selected, which is the case when getItemCount returns '0',
         then this function returns ENTRY_NOTFOUND */
-    virtual sal_Int32 getSelIndex() const SAL_OVERRIDE;
+    virtual sal_Int32 getSelIndex() const override;
 };
 
 }

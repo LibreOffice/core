@@ -42,15 +42,15 @@ public:
     ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
     SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxPersonalizationTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window *pParent, const SfxItemSet *rSet );
 
     /// Apply the settings ([OK] button).
-    virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet *rSet ) override;
 
     /// Reset to default settings ([Revert] button).
-    virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet *rSet ) override;
 
     void SetPersonaSettings( const OUString& );
 
@@ -94,7 +94,7 @@ private:
 public:
     explicit SelectPersonaDialog( vcl::Window *pParent );
     virtual ~SelectPersonaDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
     ::rtl::Reference< SearchAndParseThread > m_rSearchThread;
 
     OUString GetSelectedPersona() const;
@@ -122,7 +122,7 @@ private:
     bool m_bExecute;
 
     virtual ~SearchAndParseThread();
-    virtual void execute() SAL_OVERRIDE;
+    virtual void execute() override;
     void getPreviewFile( const OUString&, OUString *, OUString * );
 
 public:

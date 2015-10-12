@@ -132,12 +132,12 @@ public:
 
     // XEventListener (base of XDialogClosedListener)
     virtual void SAL_CALL disposing( lang::EventObject const & Source )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 
     // XDialogClosedListener
     virtual void SAL_CALL dialogClosed(
         ui::dialogs::DialogClosedEvent const & aEvent )
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (RuntimeException, std::exception) override;
 };
 
 // XEventListener (base of XDialogClosedListener)

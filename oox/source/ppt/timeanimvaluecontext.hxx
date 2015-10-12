@@ -36,9 +36,9 @@ namespace oox { namespace ppt {
 
         virtual ~TimeAnimValueListContext( );
 
-        virtual void onEndElement() SAL_OVERRIDE;
+        virtual void onEndElement() override;
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
         TimeAnimationValueList & maTavList;

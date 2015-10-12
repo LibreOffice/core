@@ -29,7 +29,7 @@ public:
     virtual             ~XMLPageMasterPropHdlFactory();
 
     virtual const XMLPropertyHandler*
-                        GetPropertyHandler( sal_Int32 nType ) const SAL_OVERRIDE;
+                        GetPropertyHandler( sal_Int32 nType ) const override;
 };
 
 #endif

@@ -60,9 +60,9 @@ public:
                                     CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
     virtual                         ~CoreTextFontData();
 
-    PhysicalFontFace*               Clone() const SAL_OVERRIDE;
-    ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
-    sal_IntPtr                      GetFontId() const SAL_OVERRIDE;
+    PhysicalFontFace*               Clone() const override;
+    ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const override;
+    sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
@@ -226,127 +226,127 @@ public:
     // InvalidateContext does an UnsetState and sets mrContext to 0
     void                    InvalidateContext();
 
-    virtual SalGraphicsImpl* GetImpl() const SAL_OVERRIDE;
+    virtual SalGraphicsImpl* GetImpl() const override;
 
-    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) override;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void            drawPixel( long nX, long nY ) SAL_OVERRIDE;
-    virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) SAL_OVERRIDE;
-    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) SAL_OVERRIDE;
-    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
-    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
-    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) SAL_OVERRIDE;
-    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) SAL_OVERRIDE;
-    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) SAL_OVERRIDE;
+    virtual void            drawPixel( long nX, long nY ) override;
+    virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
+    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) override;
+    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
+    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
+    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) override;
     virtual bool            drawPolyLine(
                                 const ::basegfx::B2DPolygon&,
                                 double fTransparency,
                                 const ::basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
-                                com::sun::star::drawing::LineCap eLineCap) SAL_OVERRIDE;
-    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
+                                com::sun::star::drawing::LineCap eLineCap) override;
+    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void            copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                      long nSrcHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;
+                                      long nSrcHeight, sal_uInt16 nFlags ) override;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void            copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
-    virtual void            drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
+    virtual void            copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
+    virtual void            drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rTransparentBitmap ) SAL_OVERRIDE;
+                                        const SalBitmap& rTransparentBitmap ) override;
     virtual void            drawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,
-                                      SalColor nMaskColor ) SAL_OVERRIDE;
+                                      SalColor nMaskColor ) override;
 
-    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual SalColor        getPixel( long nX, long nY ) SAL_OVERRIDE;
+    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual SalColor        getPixel( long nX, long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) SAL_OVERRIDE;
-    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) SAL_OVERRIDE;
+    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
+    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 
-    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) override;
 
     virtual bool            blendBitmap( const SalTwoRect&,
-                                         const SalBitmap& rBitmap ) SAL_OVERRIDE;
+                                         const SalBitmap& rBitmap ) override;
 
     virtual bool            blendAlphaBitmap( const SalTwoRect&,
                                               const SalBitmap& rSrcBitmap,
                                               const SalBitmap& rMaskBitmap,
-                                              const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
+                                              const SalBitmap& rAlphaBitmap ) override;
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
-                                             const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
+                                             const SalBitmap& rAlphaBitmap ) override;
 
     bool                    drawTransformedBitmap(
                                             const basegfx::B2DPoint& rNull,
                                             const basegfx::B2DPoint& rX,
                                             const basegfx::B2DPoint& rY,
                                             const SalBitmap& rSourceBitmap,
-                                            const SalBitmap* pAlphaBitmap) SAL_OVERRIDE;
+                                            const SalBitmap* pAlphaBitmap) override;
 
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
-                                           long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
+                                           long nHeight, sal_uInt8 nTransparency ) override;
 
     // native widget rendering methods that require mirroring
 #ifdef MACOSX
     virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                                  const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
+                                                  const Point& aPos, bool& rIsInside ) override;
     virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const OUString& aCaption ) SAL_OVERRIDE;
+                                               const OUString& aCaption ) override;
     virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
-                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
 #endif
 
     // get device resolution
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     // get the depth of the device
-    virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
+    virtual sal_uInt16      GetBitCount() const override;
     // get the width of the device
-    virtual long            GetGraphicsWidth() const SAL_OVERRIDE;
+    virtual long            GetGraphicsWidth() const override;
 
     // set the clip region to empty
-    virtual void            ResetClipRegion() SAL_OVERRIDE;
+    virtual void            ResetClipRegion() override;
 
     // set the line color to transparent (= don't draw lines)
-    virtual void            SetLineColor() SAL_OVERRIDE;
+    virtual void            SetLineColor() override;
     // set the line color to a specific color
-    virtual void            SetLineColor( SalColor nSalColor ) SAL_OVERRIDE;
+    virtual void            SetLineColor( SalColor nSalColor ) override;
     // set the fill color to transparent (= don't fill)
-    virtual void            SetFillColor() SAL_OVERRIDE;
+    virtual void            SetFillColor() override;
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void            SetFillColor( SalColor nSalColor ) SAL_OVERRIDE;
+    virtual void            SetFillColor( SalColor nSalColor ) override;
     // enable/disable XOR drawing
-    virtual void            SetXORMode( bool bSet, bool bInvertOnly ) SAL_OVERRIDE;
+    virtual void            SetXORMode( bool bSet, bool bInvertOnly ) override;
     // set line color for raster operations
-    virtual void            SetROPLineColor( SalROPColor nROPColor ) SAL_OVERRIDE;
+    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
     // set fill color for raster operations
-    virtual void            SetROPFillColor( SalROPColor nROPColor ) SAL_OVERRIDE;
+    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
     // set the text color to a specific color
-    virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
+    virtual void            SetTextColor( SalColor nSalColor ) override;
     // set the font
-    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) override;
     // get the repertoire of the current font
-    virtual const FontCharMapPtr GetFontCharMap() const SAL_OVERRIDE;
-    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual const FontCharMapPtr GetFontCharMap() const override;
+    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
     // graphics must fill supplied font list
-    virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
+    virtual void            GetDevFontList( PhysicalFontCollection* ) override;
     // graphics must drop any cached font info
-    virtual void            ClearDevFontCache() SAL_OVERRIDE;
-    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
+    virtual void            ClearDevFontCache() override;
+    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns TRUE if creation of subset was successful
@@ -366,7 +366,7 @@ public:
                                                   sal_Int32* pWidths,
                                                   int nGlyphs,
                                                   FontSubsetInfo& rInfo // out parameter
-                                                  ) SAL_OVERRIDE;
+                                                  ) override;
 
     // GetFontEncodingVector: a method to get the encoding map Unicode
     // to font encoded character; this is only used for type1 fonts and
@@ -375,7 +375,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const** ) SAL_OVERRIDE;
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const** ) override;
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -389,29 +389,29 @@ public:
                                               sal_Int32* pWidths,
                                               size_t nLen,
                                               FontSubsetInfo& rInfo,
-                                              long* pDataLen ) SAL_OVERRIDE;
+                                              long* pDataLen ) override;
     // frees the font data again
-    virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) SAL_OVERRIDE;
+    virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
 
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             Int32Vector& rWidths,
-                                            Ucs2UIntMap& rUnicodeEnc ) SAL_OVERRIDE;
+                                            Ucs2UIntMap& rUnicodeEnc ) override;
 
-    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) SAL_OVERRIDE;
-    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) SAL_OVERRIDE;
+    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
+    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
 
-    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual void            DrawServerFontLayout( const ServerFontLayout& ) SAL_OVERRIDE;
-    virtual bool            supportsOperation( OutDevSupportType ) const SAL_OVERRIDE;
+    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
+    virtual void            DrawServerFontLayout( const ServerFontLayout& ) override;
+    virtual bool            supportsOperation( OutDevSupportType ) const override;
 
 #ifdef MACOSX
     // Query the platform layer for control support
-    virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
+    virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
 #endif
 
     virtual SystemGraphicsData
-                            GetGraphicsData() const SAL_OVERRIDE;
+                            GetGraphicsData() const override;
 
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems

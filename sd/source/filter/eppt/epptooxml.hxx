@@ -70,14 +70,14 @@ public:
     virtual ~PowerPointExport();
 
     // from FilterBase
-    virtual bool importDocument() throw() SAL_OVERRIDE;
-    virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual bool importDocument() throw() override;
+    virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) override;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
-    virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE { return NULL; }
-    virtual const oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE { return NULL; }
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return oox::drawingml::table::TableStyleListPtr(); }
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE { return NULL; }
+    virtual oox::vml::Drawing* getVmlDrawing() override { return NULL; }
+    virtual const oox::drawingml::Theme* getCurrentTheme() const override { return NULL; }
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override { return oox::drawingml::table::TableStyleListPtr(); }
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() override { return NULL; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );
@@ -87,16 +87,16 @@ public:
 protected:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                 bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
-    virtual void ImplWriteNotes( sal_uInt32 nPageNum ) SAL_OVERRIDE;
-    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
-    virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) SAL_OVERRIDE;
+                                 bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) override;
+    virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
+    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) override;
+    virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
     void WriteTheme( sal_Int32 nThemeNum );
 
-    virtual bool ImplCreateDocument() SAL_OVERRIDE;
-    virtual bool ImplCreateMainNotes() SAL_OVERRIDE;
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
+    virtual bool ImplCreateDocument() override;
+    virtual bool ImplCreateMainNotes() override;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     bool WriteNotesMaster();
 
     static void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const css::uno::Any& rValue, const OUString& rAttributeName );
@@ -132,7 +132,7 @@ private:
 
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );
 
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 

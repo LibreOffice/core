@@ -42,17 +42,17 @@ namespace dbaui
     class OQueryTableView : public OJoinTableView
     {
     protected:
-        virtual void ConnDoubleClicked(OTableConnection* pConnection) SAL_OVERRIDE;
-        virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+        virtual void ConnDoubleClicked(OTableConnection* pConnection) override;
+        virtual void KeyInput(const KeyEvent& rEvt) override;
 
-        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
+        virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) override;
 
         /** called when init fails at the tablewindowdata because the m_xTable
             object could not provide columns, but no exception was thrown.
             Expected to throw. */
-        virtual void    onNoColumns_throw() SAL_OVERRIDE;
+        virtual void    onNoColumns_throw() override;
 
-        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const SAL_OVERRIDE;
+        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const override;
 
     public:
         OQueryTableView(vcl::Window* pParent,OQueryDesignView* pView);
@@ -60,8 +60,8 @@ namespace dbaui
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)
         bool ContainsTabWin(const OTableWindow& rTabWin); // #i122589# Allow to check if OTableWindow is registered
-        virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, bool bNewTable = false ) SAL_OVERRIDE;
-        virtual void RemoveTabWin(OTableWindow* pTabWin) SAL_OVERRIDE;
+        virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, bool bNewTable = false ) override;
+        virtual void RemoveTabWin(OTableWindow* pTabWin) override;
 
         /// AddTabWin, setting an alias
         void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, bool bNewTable = false);
@@ -70,9 +70,9 @@ namespace dbaui
         bool                FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
         /// base class overwritten: create and delete Connections
-        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;
+        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) override;
 
-        virtual bool RemoveConnection( OTableConnection* _pConn ,bool _bDelete) SAL_OVERRIDE;
+        virtual bool RemoveConnection( OTableConnection* _pConn ,bool _bDelete) override;
 
         // transfer of connections from and to UndoAction
 
@@ -90,7 +90,7 @@ namespace dbaui
         void HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         /// ensure visibility of TabWins (+ and invalidate connections)
-        virtual void EnsureVisible(const OTableWindow* _pWin) SAL_OVERRIDE;
+        virtual void EnsureVisible(const OTableWindow* _pWin) override;
 
         /// how many tables with a certain alias do I already have?
         sal_Int32 CountTableAlias(const OUString& rName, sal_Int32& rMax);
@@ -100,10 +100,10 @@ namespace dbaui
 
         /// rebuild everything (TabWins, Connections)
         /// (PRECONDITION: ClearAll was called previously)
-        virtual void ReSync() SAL_OVERRIDE;
+        virtual void ReSync() override;
 
         /// delete everything hard (TabWins, Connections), without any notifications
-        virtual void ClearAll() SAL_OVERRIDE;
+        virtual void ClearAll() override;
 
         // used by AddTabDlg to see if tables can still be added
         //virtual sal_Bool IsAddAllowed();
@@ -115,7 +115,7 @@ namespace dbaui
 
         virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName
-                                            ,const OUString& _rWinName) SAL_OVERRIDE;
+                                            ,const OUString& _rWinName) override;
 
         /** opens the join dialog and allows to create a new join connection */
         void createNewConnection();

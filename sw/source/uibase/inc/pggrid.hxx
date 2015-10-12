@@ -86,16 +86,16 @@ class SwTextGridPage: public SfxTabPage
 public:
     SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwTextGridPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
-    virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
+    virtual bool    FillItemSet(SfxItemSet *rSet) override;
+    virtual void    Reset(const SfxItemSet *rSet) override;
 
-    virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void    ActivatePage( const SfxItemSet& rSet ) override;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) override;
 };
 
 #endif

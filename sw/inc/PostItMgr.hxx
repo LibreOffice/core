@@ -102,7 +102,7 @@ class SwNoteProps: public utl::ConfigItem
     private:
         bool bIsShowAnchor;
 
-        virtual void ImplCommit() SAL_OVERRIDE;
+        virtual void ImplCommit() override;
 
     public:
         SwNoteProps()
@@ -133,7 +133,7 @@ class SwNoteProps: public utl::ConfigItem
             return aNames;
         }
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 class SwPostItMgr: public SfxListener
@@ -197,7 +197,7 @@ class SwPostItMgr: public SfxListener
         const_iterator begin()  const { return mvPostItFields.begin(); }
         const_iterator end()    const { return mvPostItFields.end();  }
 
-        void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+        void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
         void LayoutPostIts();
         bool CalcRects();

@@ -31,7 +31,7 @@ public:
     ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
         const OUString& rStrLabel, bool bColDefault = true);
     virtual ~ScColOrRowDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 private:
     VclPtr<VclFrame>       m_pFrame;
     VclPtr<RadioButton>    m_pBtnRows;

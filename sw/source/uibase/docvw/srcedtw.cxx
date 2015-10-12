@@ -219,7 +219,7 @@ private:
     virtual ~ChangesListener() {}
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         osl::MutexGuard g(editor_.mutex_);
         editor_.notifier_.clear();
@@ -227,7 +227,7 @@ private:
 
     virtual void SAL_CALL propertiesChange(
         css::uno::Sequence< css::beans::PropertyChangeEvent > const &)
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) override
     {
         SolarMutexGuard g;
         editor_.SetFont();

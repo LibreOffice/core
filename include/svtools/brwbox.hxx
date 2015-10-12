@@ -347,7 +347,7 @@ protected:
     // (with the help of RowInserted and RowRemoved), so overriding of
     // the method is needless
 public:
-    virtual long    GetRowCount() const SAL_OVERRIDE;
+    virtual long    GetRowCount() const override;
 
 protected:
     // for display in VScrollBar set it e.g. on  "?"
@@ -420,24 +420,24 @@ public:
                     BrowseBox( vcl::Window* pParent, const ResId& rId,
                                BrowserMode nMode = BrowserMode::NONE );
     virtual         ~BrowseBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     // override inherited handler
-    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
-    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rEvt ) override;
+    virtual void    MouseButtonUp( const MouseEvent& rEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rEvt ) override;
+    virtual void    LoseFocus() override;
+    virtual void    GetFocus() override;
+    virtual void    Resize() override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void    Command( const CommandEvent& rEvt ) override;
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;     // will forward everything got to the second AcceptDrop method
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;   // will forward everything got to the second ExecuteDrop method
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;     // will forward everything got to the second AcceptDrop method
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;   // will forward everything got to the second ExecuteDrop method
 
     virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
@@ -510,16 +510,16 @@ public:
     bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
 
     // selections
-    virtual void    SetNoSelection() SAL_OVERRIDE;
-    virtual void    SelectAll() SAL_OVERRIDE;
-    virtual void    SelectRow( long nRow, bool _bSelect = true, bool bExpand = true ) SAL_OVERRIDE;
+    virtual void    SetNoSelection() override;
+    virtual void    SelectAll() override;
+    virtual void    SelectRow( long nRow, bool _bSelect = true, bool bExpand = true ) override;
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect = true )
                         { SelectColumnPos( nCol, _bSelect, true); }
     void            SelectColumnId( sal_uInt16 nColId, bool _bSelect = true )
                         { SelectColumnPos( GetColumnPos(nColId), _bSelect, true); }
     long            GetSelectRowCount() const;
     sal_uInt16          GetSelectColumnCount() const;
-    virtual bool    IsRowSelected( long nRow ) const SAL_OVERRIDE;
+    virtual bool    IsRowSelected( long nRow ) const override;
     bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
     long            FirstSelectedRow( bool bInverse = false );
     long            LastSelectedRow();
@@ -596,7 +596,7 @@ public:
     /** @return
             the current column count
     */
-    sal_uInt16 GetColumnCount() const SAL_OVERRIDE { return ColCount(); }
+    sal_uInt16 GetColumnCount() const override { return ColCount(); }
 
     /** commitBrowseBoxEvent commit the event at all listeners of the browsebox
         @param nEventId
@@ -645,7 +645,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true) SAL_OVERRIDE;
+    virtual Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true) override;
 
     /** calculates the Rectangle of the table
         @param  _bOnScreen
@@ -653,7 +653,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcTableRect(bool _bOnScreen = true) SAL_OVERRIDE;
+    virtual Rectangle calcTableRect(bool _bOnScreen = true) override;
 
     /**
         @param  _nRowId
@@ -665,7 +665,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true) SAL_OVERRIDE;
+    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true) override;
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     bool isAccessibleAlive( ) const;
@@ -674,7 +674,7 @@ public:
 public:
     /** Creates and returns the accessible object of the whole BrowseBox. */
     virtual css::uno::Reference<
-        css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        css::accessibility::XAccessible > CreateAccessible() override;
 
     // Children ---------------------------------------------------------------
 
@@ -684,31 +684,31 @@ public:
         @return  The XAccessible interface of the specified cell. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible >
-    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos ) SAL_OVERRIDE;
+    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos ) override;
 
     /** Creates the accessible object of a row header.
         @param nRow  The row index of the header.
         @return  The XAccessible interface of the specified row header. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible >
-    CreateAccessibleRowHeader( sal_Int32 nRow ) SAL_OVERRIDE;
+    CreateAccessibleRowHeader( sal_Int32 nRow ) override;
 
     /** Creates the accessible object of a column header.
         @param nColumnId  The column ID of the header.
         @return  The XAccessible interface of the specified column header. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible >
-    CreateAccessibleColumnHeader( sal_uInt16 nColumnPos ) SAL_OVERRIDE;
+    CreateAccessibleColumnHeader( sal_uInt16 nColumnPos ) override;
 
     /** @return  The count of additional controls of the control area. */
-    virtual sal_Int32 GetAccessibleControlCount() const SAL_OVERRIDE;
+    virtual sal_Int32 GetAccessibleControlCount() const override;
 
     /** Creates the accessible object of an additional control.
         @param nIndex  The 0-based index of the control.
         @return  The XAccessible interface of the specified control. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible >
-    CreateAccessibleControl( sal_Int32 nIndex ) SAL_OVERRIDE;
+    CreateAccessibleControl( sal_Int32 nIndex ) override;
 
     // Conversions ------------------------------------------------------------
 
@@ -718,28 +718,28 @@ public:
         @param rPoint  The position in pixels relative to the data window.
         @return <TRUE/>, if the point could be converted to a valid address. */
     virtual bool ConvertPointToCellAddress(
-        sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint ) SAL_OVERRIDE;
+        sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint ) override;
 
     /** Converts a point relative to the row header bar origin to a row header
         index.
         @param rnRow  Out-parameter that takes the row index.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint ) SAL_OVERRIDE;
+    virtual bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint ) override;
 
     /** Converts a point relative to the column header bar origin to a column
         header index.
         @param rnColumnId  Out-parameter that takes the column ID.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint ) SAL_OVERRIDE;
+    virtual bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint ) override;
 
     /** Converts a point relative to the BrowseBox origin to the index of an
         existing control.
         @param rnRow  Out-parameter that takes the 0-based control index.
         @param rPoint  The position in pixels relative to the BrowseBox.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint ) SAL_OVERRIDE;
+    virtual bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint ) override;
 
     // Object data and state --------------------------------------------------
 
@@ -751,7 +751,7 @@ public:
         @return
             The name of the specified object.
     */
-    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
+    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
     /** return the description of the specified object.
         @param  eObjType
@@ -761,48 +761,48 @@ public:
         @return
             The description of the specified object.
     */
-    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
     /** @return  The header text of the specified row. */
-    virtual OUString GetRowDescription( sal_Int32 nRow ) const SAL_OVERRIDE;
+    virtual OUString GetRowDescription( sal_Int32 nRow ) const override;
 
     /** @return  The header text of the specified column. */
-    virtual OUString GetColumnDescription( sal_uInt16 _nColumn ) const SAL_OVERRIDE;
+    virtual OUString GetColumnDescription( sal_uInt16 _nColumn ) const override;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
         the accessible object), depending on the specified object type. */
     virtual void FillAccessibleStateSet(
             ::utl::AccessibleStateSetHelper& rStateSet,
-            ::svt::AccessibleBrowseBoxObjType eObjType ) const SAL_OVERRIDE;
+            ::svt::AccessibleBrowseBoxObjType eObjType ) const override;
 
     /** Fills the StateSet with all states for one cell (except DEFUNC and SHOWING, done by
         the accessible object). */
     virtual void FillAccessibleStateSetForCell(
             ::utl::AccessibleStateSetHelper& _rStateSet,
-            sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
+            sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
 
     /** Sets focus to current cell of the data table. */
-    virtual void GrabTableFocus() SAL_OVERRIDE;
+    virtual void GrabTableFocus() override;
 
     // IAccessibleTableProvider
-    virtual sal_Int32               GetCurrRow() const SAL_OVERRIDE;
-    virtual sal_uInt16              GetCurrColumn() const SAL_OVERRIDE;
-    virtual bool                    HasRowHeader() const SAL_OVERRIDE;
-    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) SAL_OVERRIDE;
-    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) SAL_OVERRIDE;
-    virtual bool                    IsColumnSelected( long _nColumn ) const SAL_OVERRIDE;
-    virtual sal_Int32               GetSelectedRowCount() const SAL_OVERRIDE;
-    virtual sal_Int32               GetSelectedColumnCount() const SAL_OVERRIDE;
-    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const SAL_OVERRIDE;
-    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const SAL_OVERRIDE;
-    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
-    virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const SAL_OVERRIDE;
-    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) SAL_OVERRIDE;
-    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
-    virtual void                    GrabFocus() SAL_OVERRIDE;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-    virtual vcl::Window*            GetAccessibleParentWindow() const SAL_OVERRIDE;
-    virtual vcl::Window*            GetWindowInstance() SAL_OVERRIDE;
+    virtual sal_Int32               GetCurrRow() const override;
+    virtual sal_uInt16              GetCurrColumn() const override;
+    virtual bool                    HasRowHeader() const override;
+    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
+    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) override;
+    virtual bool                    IsColumnSelected( long _nColumn ) const override;
+    virtual sal_Int32               GetSelectedRowCount() const override;
+    virtual sal_Int32               GetSelectedColumnCount() const override;
+    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
+    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
+    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
+    virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const override;
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) override;
+    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+    virtual void                    GrabFocus() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) override;
+    virtual vcl::Window*            GetAccessibleParentWindow() const override;
+    virtual vcl::Window*            GetWindowInstance() override;
 
 private:
     // the following declares some Window/OutputDevice methods private. This happened in the course

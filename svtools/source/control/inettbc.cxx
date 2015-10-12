@@ -109,7 +109,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     DECL_LINK_TYPED(                Select_Impl, void*, void );
 
     virtual                         ~SvtMatchContext_Impl();
-    virtual void                    execute() SAL_OVERRIDE;
+    virtual void                    execute() override;
     void                            doExecute();
     void                            Insert( const OUString& rCompletion, const OUString& rURL, bool bForce = false);
     void                            ReadFolder( const OUString& rURL, const OUString& rMatch, bool bSmart );

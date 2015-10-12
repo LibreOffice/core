@@ -34,14 +34,14 @@ public:
     virtual ~BreakIterator_CTL();
     virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
-        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL nextCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
-        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) override;
     virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(com::sun::star::uno::RuntimeException, std::exception) override;
 protected:
     OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;

@@ -38,10 +38,10 @@ namespace dbaui
         bool            m_bSDNum;
 
     protected:
-        virtual void        NextToken( int nToken ) SAL_OVERRIDE; // base class
-        virtual bool        CreateTable(int nToken) SAL_OVERRIDE;
+        virtual void        NextToken( int nToken ) override; // base class
+        virtual bool        CreateTable(int nToken) override;
         virtual TypeSelectionPageFactory
-                            getTypeSelectionPageFactory() SAL_OVERRIDE;
+                            getTypeSelectionPageFactory() override;
 
         void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(css::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
@@ -67,8 +67,8 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     bool _bAutoIncrementEnabled);
 
-        virtual SvParserState CallParser() SAL_OVERRIDE;// base class
-        virtual void release() SAL_OVERRIDE;
+        virtual SvParserState CallParser() override;// base class
+        virtual void release() override;
         ///< @attention recovers only valid data if 1. CTOR has been used
     };
 

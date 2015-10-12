@@ -35,8 +35,8 @@ class ColorScaleContext : public WorksheetContextBase
 public:
     explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
     CondFormatRuleRef mxRule;
@@ -47,8 +47,8 @@ class DataBarContext : public WorksheetContextBase
 public:
     explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
     CondFormatRuleRef mxRule;
@@ -59,10 +59,10 @@ class IconSetContext : public WorksheetContextBase
 public:
     explicit IconSetContext( WorksheetContextBase& rParent, IconSetRule* pIconSet );
 
-    virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters(const OUString& rChars) SAL_OVERRIDE;
-    virtual void onEndElement() SAL_OVERRIDE;
+    virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void onStartElement( const AttributeList& rAttribs ) override;
+    virtual void onCharacters(const OUString& rChars) override;
+    virtual void onEndElement() override;
 
 private:
     IconSetRule* mpIconSet;
@@ -75,14 +75,14 @@ public:
     explicit            CondFormatContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual void        onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
-    virtual void        onStartRecord( SequenceInputStream& rStrm ) SAL_OVERRIDE;
-    virtual void        onEndRecord() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
+    virtual void        onEndRecord() override;
 
 private:
     CondFormatRef       mxCondFmt;

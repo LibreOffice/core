@@ -53,13 +53,13 @@ private:
 public:
     SvxOnlineUpdateTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxOnlineUpdateTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
-    virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void            FillUserData() SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* rSet ) override;
+    virtual void            Reset( const SfxItemSet* rSet ) override;
+    virtual void            FillUserData() override;
 };
 
 

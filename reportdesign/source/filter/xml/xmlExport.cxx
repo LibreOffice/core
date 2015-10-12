@@ -175,7 +175,7 @@ namespace rptxml
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
                 const ::std::vector< XMLPropertyState >* /*pProperties*/ = 0,
-                sal_uInt32 /*nIdx*/ = 0 ) const SAL_OVERRIDE
+                sal_uInt32 /*nIdx*/ = 0 ) const override
         {
             // nothing to do here
         }

@@ -66,7 +66,7 @@ public:
 
     // XFilter
     virtual sal_Bool SAL_CALL filter(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &rDescriptor)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override
     {
         utl::MediaDescriptor aDescriptor(rDescriptor);
         css::uno::Reference < css::io::XInputStream > xInputStream;
@@ -102,20 +102,20 @@ public:
     }
 
     virtual void SAL_CALL cancel()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override
     {
     }
 
     // XImporter
     virtual void SAL_CALL setTargetDocument(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xDoc)
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override
     {
         mxDoc = xDoc;
     }
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    throw(com::sun::star::uno::RuntimeException, std::exception) override
     {
         OUString sTypeName;
         sal_Int32 nLength = Descriptor.getLength();
@@ -153,7 +153,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &aArguments)
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override
     {
         css::uno::Sequence < css::beans::PropertyValue > aAnySeq;
         sal_Int32 nLength = aArguments.getLength();

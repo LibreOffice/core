@@ -52,7 +52,7 @@ public:
     virtual storeError initialize (
         ILockBytes *    pLockBytes,
         storeAccessMode eAccessMode,
-        sal_uInt16 &    rnPageSize) SAL_OVERRIDE;
+        sal_uInt16 &    rnPageSize) override;
 
     /** isValid.
      *  @return sal_True  upon successful initialization,
@@ -130,7 +130,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
+    virtual bool isKindOf (sal_uInt32 nTypeId) override;
 
 protected:
     /** Destruction.

@@ -57,24 +57,24 @@ private:
     static EPathType GetPathType ( const OUString& rStrPath );
 
 protected:
-    void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
+    void FillDlgFields(const OUString& rStrURL) override;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
-                             SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
-    virtual bool   ShouldOpenMarkWnd () SAL_OVERRIDE {return mbMarkWndOpen;}
-    virtual void   SetMarkWndShouldOpen (bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
+                             SvxLinkInsertMode& eMode ) override;
+    virtual bool   ShouldOpenMarkWnd () override {return mbMarkWndOpen;}
+    virtual void   SetMarkWndShouldOpen (bool bOpen) override {mbMarkWndOpen=bOpen;}
     OUString GetCurrentURL    ();
 
 public:
     SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkDocTp();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
+    virtual void        SetMarkStr ( const OUString& aStrMark ) override;
 
-    virtual void        SetInitFocus() SAL_OVERRIDE;
+    virtual void        SetInitFocus() override;
 };
 
 

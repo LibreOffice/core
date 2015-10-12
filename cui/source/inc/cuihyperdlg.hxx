@@ -44,10 +44,10 @@ private:
 
 public:
     SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                const SfxPoolItem* pState ) override;
 };
 
 
@@ -74,16 +74,16 @@ private:
     DECL_LINK_TYPED (ClickCloseHdl_Impl, Button *, void );
 
 protected:
-    virtual bool            Close() SAL_OVERRIDE;
-    virtual void            Move() SAL_OVERRIDE;
+    virtual bool            Close() override;
+    virtual void            Move() override;
     void Apply();
 
 public:
     SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings );
     virtual ~SvxHpLinkDlg ();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) SAL_OVERRIDE;
+    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) override;
 
     sal_uInt16              SetPage( SvxHyperlinkItem* pItem );
     void                    SetReadOnlyMode( bool bReadOnly );

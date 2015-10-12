@@ -65,14 +65,14 @@
 class XFRubyStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 };
 
 class XFRubyEnd : public XFContent
 {
 public:
     void SetText(const OUString& sText);
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) override;
 private:
     OUString m_strText;
 };

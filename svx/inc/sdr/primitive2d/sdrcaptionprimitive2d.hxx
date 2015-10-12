@@ -45,7 +45,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrCaptionPrimitive2D(
@@ -56,7 +56,7 @@ namespace drawinglayer
                 double fCornerRadiusY = 0.0);
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // data access
             const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

@@ -35,7 +35,7 @@ public:
         : m_nBars(nBars),
           m_unitRect( createUnitRect() )
         {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     const sal_Int32 m_nBars;
     const ::basegfx::B2DPolygon m_unitRect;

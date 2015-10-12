@@ -38,7 +38,7 @@ protected:
     // This method is responsible for creating the graphical visualisation data which is
     // stored/cached in the local primitive.
     // This method will not handle included hierarchies and not check geometric visibility.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
 public:
     ViewObjectContactOfPageObj(ObjectContact& rObjectContact, ViewContact& rViewContact);

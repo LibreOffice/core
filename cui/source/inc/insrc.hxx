@@ -46,10 +46,10 @@ public:
     SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
     virtual ~SvxInsRowColDlg();
 
-    virtual short Execute() SAL_OVERRIDE;
+    virtual short Execute() override;
 
-    virtual bool isInsertBefore() const SAL_OVERRIDE;
-    virtual sal_uInt16 getInsertCount() const SAL_OVERRIDE;
+    virtual bool isInsertBefore() const override;
+    virtual sal_uInt16 getInsertCount() const override;
 };
 
 #endif

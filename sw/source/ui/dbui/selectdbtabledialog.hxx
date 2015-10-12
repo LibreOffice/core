@@ -50,7 +50,7 @@ public:
     SwSelectDBTableDialog(vcl::Window* pParent,
         const css::uno::Reference<css::sdbc::XConnection>& xConnection);
     virtual ~SwSelectDBTableDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString    GetSelectedTable(bool& bIsTable);
     void        SetSelectedTable(const OUString& rTable, bool bIsTable);

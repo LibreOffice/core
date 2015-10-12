@@ -29,14 +29,14 @@ private:
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
-    virtual void ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() override;
 
 public:
     SwPrintOptions(bool bWeb);
     virtual ~SwPrintOptions();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void            doSetModified( ) SAL_OVERRIDE { bModified = true; SetModified();}
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void            doSetModified( ) override { bModified = true; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {

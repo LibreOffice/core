@@ -43,7 +43,7 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual SdrPage*  AllocPage(bool bMasterPage) SAL_OVERRIDE;
+    virtual SdrPage*  AllocPage(bool bMasterPage) override;
 };
 
 } // namespace basctl

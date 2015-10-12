@@ -37,11 +37,11 @@ public:
     virtual ~IosSalInstance();
     static IosSalInstance *getInstance();
 
-    virtual SalSystem* CreateSalSystem() SAL_OVERRIDE;
+    virtual SalSystem* CreateSalSystem() override;
 
     void GetWorkArea( Rectangle& rRect );
-    SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-    SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX

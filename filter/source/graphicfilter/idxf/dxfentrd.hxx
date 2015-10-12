@@ -103,7 +103,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFPointEntity : public DXFBasicEntity {
@@ -116,7 +116,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFCircleEntity : public DXFBasicEntity {
@@ -130,7 +130,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFArcEntity : public DXFBasicEntity {
@@ -146,7 +146,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFTraceEntity : public DXFBasicEntity {
@@ -162,7 +162,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFSolidEntity : public DXFBasicEntity {
@@ -178,7 +178,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFTextEntity : public DXFBasicEntity {
@@ -201,7 +201,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFShapeEntity : public DXFBasicEntity {
@@ -219,7 +219,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFInsertEntity : public DXFBasicEntity {
@@ -242,7 +242,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFAttDefEntity : public DXFBasicEntity {
@@ -269,7 +269,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFAttribEntity : public DXFBasicEntity {
@@ -295,7 +295,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFPolyLineEntity : public DXFBasicEntity {
@@ -316,7 +316,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFLWPolyLineEntity : public DXFBasicEntity
@@ -338,7 +338,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
 
     protected:
 
-        virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+        virtual void EvaluateGroup( DXFGroupReader & rDGR ) override;
 
 };
 
@@ -359,7 +359,7 @@ struct DXFEdgeTypeLine : public DXFEdgeType
     DXFVector aEndPoint;                // 11,21
     DXFEdgeTypeLine();
     virtual ~DXFEdgeTypeLine();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeCircularArc : public DXFEdgeType
 {
@@ -370,7 +370,7 @@ struct DXFEdgeTypeCircularArc : public DXFEdgeType
     sal_Int32 nIsCounterClockwiseFlag;  // 73
     DXFEdgeTypeCircularArc();
     virtual ~DXFEdgeTypeCircularArc();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 {
@@ -383,7 +383,7 @@ struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 
     DXFEdgeTypeEllipticalArc();
     virtual ~DXFEdgeTypeEllipticalArc();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeSpline : public DXFEdgeType
 {
@@ -395,7 +395,7 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
 
     DXFEdgeTypeSpline();
     virtual ~DXFEdgeTypeSpline();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
 struct DXFBoundaryPathData
@@ -448,7 +448,7 @@ class DXFHatchEntity : public DXFBasicEntity
 
     protected:
 
-        virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+        virtual void EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
 class DXFVertexEntity : public DXFBasicEntity {
@@ -466,7 +466,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFSeqEndEntity : public DXFBasicEntity {
@@ -490,7 +490,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFDimensionEntity : public DXFBasicEntity {
@@ -503,7 +503,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 

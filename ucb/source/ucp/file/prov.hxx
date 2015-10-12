@@ -66,17 +66,17 @@ namespace fileaccess {
         virtual OUString SAL_CALL
         getImplementationName(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         supportsService(
             const OUString& ServiceName )
-            throw(com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw(com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         static com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > SAL_CALL
@@ -91,7 +91,7 @@ namespace fileaccess {
         virtual void SAL_CALL
         initialize(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // XContentProvider
@@ -99,27 +99,27 @@ namespace fileaccess {
         queryContent(
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier )
             throw( com::sun::star::ucb::IllegalIdentifierException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XContentIdentifierFactory
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
         createContentIdentifier(
             const OUString& ContentId )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
         virtual sal_Int32 SAL_CALL
         compareContentIds(
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id1,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id2 )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         // XProperySet
 
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(  )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         setPropertyValue(
@@ -129,14 +129,14 @@ namespace fileaccess {
                    com::sun::star::beans::PropertyVetoException,
                    com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addPropertyChangeListener(
@@ -144,7 +144,7 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
@@ -152,7 +152,7 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
@@ -160,7 +160,7 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         removeVetoableChangeListener(
@@ -168,21 +168,21 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
 
         // XFileIdentifierConverter
 
         virtual sal_Int32 SAL_CALL
         getFileProviderLocality( const OUString& BaseURL )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getFileURLFromSystemPath( const OUString& BaseURL,
                                                                  const OUString& SystemPath )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getSystemPathFromFileURL( const OUString& URL )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
 
 
     private:

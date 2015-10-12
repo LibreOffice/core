@@ -39,12 +39,12 @@ public:
     virtual ~ViewContactOfVirtObj();
 
     // Access to possible sub-hierarchy
-    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
+    virtual sal_uInt32 GetObjectCount() const override;
 
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

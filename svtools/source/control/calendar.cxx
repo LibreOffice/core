@@ -2049,7 +2049,7 @@ private:
 public:
                     explicit ImplCFieldFloatWin( vcl::Window* pParent );
     virtual         ~ImplCFieldFloatWin();
-    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    dispose() override;
 
     void            SetCalendar( Calendar* pCalendar )
                         { mpCalendar = pCalendar; }
@@ -2058,7 +2058,7 @@ public:
     PushButton*     EnableNoneBtn( bool bEnable );
     void            ArrangeButtons();
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) override;
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :

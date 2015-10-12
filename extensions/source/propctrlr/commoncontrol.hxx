@@ -115,25 +115,25 @@ namespace pcr
         inline CommonBehaviourControl( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
 
         // XPropertyControl - delegated to ->m_aImplControl
-        virtual ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) override
             { return CommonBehaviourControlHelper::getControlType(); }
-        virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (css::uno::RuntimeException) override
             { return CommonBehaviourControlHelper::getControlContext(); }
-        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException) override
             { CommonBehaviourControlHelper::setControlContext( _controlcontext ); }
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() throw (css::uno::RuntimeException) override
             { return VCLUnoHelper::GetInterface( m_pControlWindow ); }
-        virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) override
             { return CommonBehaviourControlHelper::isModified(); }
-        virtual void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException) override
             { CommonBehaviourControlHelper::notifyModifiedValue(); }
 
         // XComponent
-        virtual void SAL_CALL disposing() SAL_OVERRIDE
+        virtual void SAL_CALL disposing() override
             { m_pControlWindow.disposeAndClear(); }
 
        //  CommonBehaviourControlHelper::getVclWindow
-        virtual vcl::Window*  getVclWindow() SAL_OVERRIDE
+        virtual vcl::Window*  getVclWindow() override
             { return m_pControlWindow.get(); }
 
         TControlWindow*       getTypedControlWindow()

@@ -33,17 +33,17 @@ class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
 protected:
     // Create a Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // create graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
     virtual ~ViewContactOfPageObj();
 
     // #WIP# React on changes of the object of this ViewContact
-    virtual void ActionChanged() SAL_OVERRIDE;
+    virtual void ActionChanged() override;
 
     // access to SdrObject
     const SdrPageObj& GetPageObj() const

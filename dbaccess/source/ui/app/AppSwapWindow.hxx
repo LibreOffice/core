@@ -40,20 +40,20 @@ namespace dbaui
         DECL_LINK_TYPED( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
         DECL_LINK_TYPED( ChangeToLastSelected, void*, void );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
         // Window overrides
-        virtual void dispose() SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void dispose() override;
+        virtual void Resize() override;
 
-        bool isCutAllowed() SAL_OVERRIDE      { return false; }
-        bool isCopyAllowed() SAL_OVERRIDE     { return false; }
-        bool isPasteAllowed() SAL_OVERRIDE    { return false; }
-        void copy() SAL_OVERRIDE  { }
-        void cut() SAL_OVERRIDE   { }
-        void paste() SAL_OVERRIDE { }
+        bool isCutAllowed() override      { return false; }
+        bool isCopyAllowed() override     { return false; }
+        bool isPasteAllowed() override    { return false; }
+        void copy() override  { }
+        void cut() override   { }
+        void paste() override { }
 
         inline sal_Int32                GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
         inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }

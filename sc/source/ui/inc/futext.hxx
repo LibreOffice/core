@@ -38,22 +38,22 @@ public:
 
     virtual ~FuText();
 
-    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() SAL_OVERRIDE;
-    virtual void Deactivate() SAL_OVERRIDE;
+    virtual void Activate() override;
+    virtual void Deactivate() override;
 
-    virtual void ForcePointer(const MouseEvent* pMEvt) SAL_OVERRIDE;
+    virtual void ForcePointer(const MouseEvent* pMEvt) override;
 
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
                             bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
     void    StopEditMode(bool bTextDirection = false);
 
     // Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
 
 private:
     SdrOutliner* MakeOutliner();

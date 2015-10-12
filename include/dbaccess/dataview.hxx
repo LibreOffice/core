@@ -47,28 +47,28 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         /// late construction
         virtual void Construct();
         // initialize will be called when after the controller finished his initialize method
         virtual void initialize(){}
         // window overridables
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        virtual void StateChanged( StateChangedType nStateChange ) override;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         inline IController& getCommandController() const { return *m_xController.get(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
-        virtual void Resize() SAL_OVERRIDE;
+        virtual void Resize() override;
 
         void attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
     protected:
         // window overridables
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) SAL_OVERRIDE;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) override;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
         virtual void resizeAll( const Rectangle& _rPlayground );

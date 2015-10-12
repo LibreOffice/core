@@ -42,11 +42,11 @@ namespace sdr
             virtual ~OleProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+            virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
+            virtual void ForceDefaultAttributes() override;
         };
     } // end of namespace properties
 } // end of namespace sdr

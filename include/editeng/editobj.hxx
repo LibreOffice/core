@@ -142,7 +142,7 @@ public:
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) SAL_OVERRIDE;
+    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) override;
 
 #if DEBUG_EDIT_ENGINE
     void Dump() const;

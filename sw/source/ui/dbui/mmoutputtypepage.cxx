@@ -142,13 +142,13 @@ public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
     virtual ~SwMailDispatcherListener_Impl();
 
-    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
-    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
-    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
+    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
+    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
+    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
     virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage) SAL_OVERRIDE;
+                uno::Reference< mail::XMailMessage> xMailMessage) override;
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) SAL_OVERRIDE;
+                uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) override;
 
     static void DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage );
 };
@@ -225,7 +225,7 @@ class SwSendWarningBox_Impl : public MessageDialog
 public:
     SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
     virtual ~SwSendWarningBox_Impl() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE
+    virtual void dispose() override
     {
         m_pDetailED.clear();
         MessageDialog::dispose();

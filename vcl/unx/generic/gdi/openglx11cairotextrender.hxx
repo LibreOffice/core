@@ -17,9 +17,9 @@ class OpenGLX11CairoTextRender : public X11CairoTextRender
 public:
     explicit OpenGLX11CairoTextRender(X11SalGraphics& rParent);
 
-    virtual cairo_t* getCairoContext() SAL_OVERRIDE;
-    virtual void getSurfaceOffset(double& nDX, double& nDY) SAL_OVERRIDE;
-    virtual void drawSurface(cairo_t* cr) SAL_OVERRIDE;
+    virtual cairo_t* getCairoContext() override;
+    virtual void getSurfaceOffset(double& nDX, double& nDY) override;
+    virtual void drawSurface(cairo_t* cr) override;
 };
 
 #endif

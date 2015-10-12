@@ -32,7 +32,7 @@ namespace connectivity
     // statis Data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const SAL_OVERRIDE;
+        virtual jclass getMyClass() const override;
         virtual ~java_lang_Exception();
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Exception( JNIEnv * pEnv, jobject myObj ) : java_lang_Throwable( pEnv, myObj ){}

@@ -39,14 +39,14 @@ public:
     explicit SvxUnoDashTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoDashTable() throw();
 
-    virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;
+    virtual NameOrIndex* createItem() const throw() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) override;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) override;
 };
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()

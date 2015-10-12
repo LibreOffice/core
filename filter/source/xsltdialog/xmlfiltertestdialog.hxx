@@ -37,7 +37,7 @@ public:
     XMLFilterTestDialog(vcl::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void test( const filter_info_impl& rFilterInfo );
 

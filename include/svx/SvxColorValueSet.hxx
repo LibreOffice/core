@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 public:
     SvxColorValueSet(vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER);
 
-    virtual void Resize() SAL_OVERRIDE;
+    virtual void Resize() override;
 
     static sal_uInt32 getMaxRowCount();
     static sal_uInt32 getEntryEdgeLength();

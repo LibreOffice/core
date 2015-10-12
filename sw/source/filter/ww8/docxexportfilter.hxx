@@ -34,19 +34,19 @@ public:
 
     // FIXME these should not even exist for the export-only filter!
     // For now, let's just do empty implementations of those.
-    virtual bool        importDocument() SAL_OVERRIDE { return false; }
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE { return NULL; }
-    virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE { return NULL; }
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE { return NULL; }
-    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return ::oox::drawingml::table::TableStyleListPtr(); }
+    virtual bool        importDocument() override { return false; }
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const override { return NULL; }
+    virtual ::oox::vml::Drawing* getVmlDrawing() override { return NULL; }
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override { return NULL; }
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() override { return ::oox::drawingml::table::TableStyleListPtr(); }
 
     // Actual export of the DOCX document
-    virtual bool        exportDocument() SAL_OVERRIDE;
+    virtual bool        exportDocument() override;
 
 private:
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const override
     {
         return NULL; // FIXME: implement me !
     }

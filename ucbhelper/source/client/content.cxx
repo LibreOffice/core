@@ -81,16 +81,16 @@ class EmptyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 public:
     virtual sal_Int32 SAL_CALL readBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
-        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL readSomeBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
-        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (IOException, RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available()
-        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (IOException, RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput()
-        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (IOException, RuntimeException, std::exception) override;
 };
 
 sal_Int32 EmptyInputStream::readBytes(
@@ -145,19 +145,19 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
-        throw() SAL_OVERRIDE;
+        throw() override;
     virtual void SAL_CALL release()
-        throw() SAL_OVERRIDE;
+        throw() override;
 
     // XContentEventListener
     virtual void SAL_CALL contentEvent( const ContentEvent& evt )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 
     // XEventListener ( base of XContentEventListener )
     virtual void SAL_CALL disposing( const EventObject& Source )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( RuntimeException, std::exception ) override;
 };
 
 

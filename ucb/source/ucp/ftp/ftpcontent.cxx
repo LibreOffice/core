@@ -252,7 +252,7 @@ public:
     {
     }
 
-    virtual ResultSetBase* createResultSet() SAL_OVERRIDE
+    virtual ResultSetBase* createResultSet() override
     {
         return new ResultSetI(m_xContext,
                               m_xProvider,
@@ -725,7 +725,7 @@ public:
     virtual ~InsertData() {}
 
     // returns the number of bytes actually read
-    virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested) SAL_OVERRIDE;
+    virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested) override;
 
 private:
 

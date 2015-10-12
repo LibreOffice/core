@@ -102,9 +102,9 @@ public:
     PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<>& rModifyHdl );
     virtual ~PresetPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId ) SAL_OVERRIDE;
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId ) override;
+    virtual Control* getControl() override;
 
 private:
     std::map< sal_uInt16, OUString > maPropertyValues;
@@ -185,9 +185,9 @@ public:
     ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~ColorPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
+    virtual Control* getControl() override;
 
 private:
     VclPtr<ColorListBox> mpControl;
@@ -264,10 +264,10 @@ public:
     FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~FontPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
 private:
     VclPtr<FontNameBox> mpControl;
@@ -336,10 +336,10 @@ class DropdownMenuBox : public Edit
 public:
     DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
-    void Resize() SAL_OVERRIDE;
-    bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    void Resize() override;
+    bool PreNotify( NotifyEvent& rNEvt ) override;
 
     void SetMenuSelectHdl( const Link<MenuButton *, void>& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
@@ -418,10 +418,10 @@ public:
     CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~CharHeightPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
 
@@ -494,10 +494,10 @@ public:
     TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~TransparencyPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
@@ -596,10 +596,10 @@ public:
     RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~RotationPropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
@@ -719,10 +719,10 @@ public:
     ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~ScalePropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
     DECL_LINK(implModifyHdl, void *);
@@ -880,10 +880,10 @@ public:
     FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl );
     virtual ~FontStylePropertyBox();
 
-    virtual Any getValue() SAL_OVERRIDE;
-    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
+    virtual Any getValue() override;
+    virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    virtual Control* getControl() SAL_OVERRIDE;
+    virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
 
@@ -998,7 +998,7 @@ class CustomAnimationEffectTabPage : public TabPage
 public:
     CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationEffectTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
     DECL_LINK_TYPED( implSelectHdl, ListBox&, void );
@@ -1604,7 +1604,7 @@ class CustomAnimationDurationTabPage : public TabPage
 public:
     CustomAnimationDurationTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationDurationTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
 
@@ -1999,7 +1999,7 @@ class CustomAnimationTextAnimTabPage : public TabPage
 public:
     CustomAnimationTextAnimTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationTextAnimTabPage();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
 

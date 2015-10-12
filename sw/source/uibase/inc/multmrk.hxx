@@ -38,11 +38,11 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
     SwTOXMgr&          rMgr;
     sal_uInt16              nPos;
 
-    void                Apply() SAL_OVERRIDE;
+    void                Apply() override;
 public:
     SwMultiTOXMarkDlg( vcl::Window* pParent, SwTOXMgr &rTOXMgr );
     virtual ~SwMultiTOXMarkDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX

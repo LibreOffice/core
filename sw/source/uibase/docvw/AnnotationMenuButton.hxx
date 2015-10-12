@@ -33,15 +33,15 @@ class AnnotationMenuButton : public MenuButton
     public:
         AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin );
         virtual ~AnnotationMenuButton();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
         // override MenuButton methods
-        virtual void Select() SAL_OVERRIDE;
+        virtual void Select() override;
 
         // override vcl::Window methods
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
 
     private:
         sw::sidebarwindows::SwSidebarWin& mrSidebarWin;

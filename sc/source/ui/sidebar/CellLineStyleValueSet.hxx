@@ -35,11 +35,11 @@ private:
 public:
     CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId);
     virtual ~CellLineStyleValueSet();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
-    virtual void UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
 
 } } // end of namespace svx::sidebar

@@ -57,24 +57,24 @@ namespace fileaccess {
         // XTypeProvider
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw( com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         virtual void SAL_CALL
         release(
             void )
-            throw() SAL_OVERRIDE;
+            throw() override;
 
         virtual sal_Int32 SAL_CALL
         readBytes(
@@ -83,7 +83,7 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         readSomeBytes(
@@ -92,7 +92,7 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         skipBytes(
@@ -100,40 +100,40 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int32 SAL_CALL
         available(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         closeInput(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         seek(
             sal_Int64 location )
             throw( com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
         getPosition(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
         getLength(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+                   com::sun::star::uno::RuntimeException, std::exception ) override;
 
     private:
 

@@ -29,7 +29,7 @@ public:
     SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
     virtual ~SwMessageAndEditDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX

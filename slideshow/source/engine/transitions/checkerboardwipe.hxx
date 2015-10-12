@@ -37,7 +37,7 @@ public:
         : m_unitsPerEdge(unitsPerEdge),
           m_unitRect( createUnitRect() )
         { OSL_ASSERT( (unitsPerEdge % 2) == 0 ); }
-    virtual ::basegfx::B2DPolyPolygon operator () ( double x ) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon operator () ( double x ) override;
 private:
     const sal_Int32 m_unitsPerEdge;
     const ::basegfx::B2DPolyPolygon m_unitRect;

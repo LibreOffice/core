@@ -33,10 +33,10 @@ public:
     virtual ~SwVbaDialog() {}
 
     // Methods
-    virtual OUString mapIndexToName( sal_Int32 nIndex ) SAL_OVERRIDE;
+    virtual OUString mapIndexToName( sal_Int32 nIndex ) override;
     // XHelperInterface
-    virtual OUString getServiceImplName() SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
+    virtual OUString getServiceImplName() override;
+    virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADIALOG_HXX

@@ -86,27 +86,27 @@ public:
     // XTopWindowListener
     using cppu::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 public:
     RunDialog(GtkWidget *pDialog,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit,

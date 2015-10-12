@@ -34,13 +34,13 @@ public:
 
     /** Creates an external data provider that is able to use spreadsheet data. */
     virtual void        createDataProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc ) SAL_OVERRIDE;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc ) override;
 
     /** Creates a data sequence from the passed formula. */
     virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequence(
             const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
-            const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) SAL_OVERRIDE;
+            const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) override;
 };
 
 } // namespace xls

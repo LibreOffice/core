@@ -113,13 +113,13 @@ namespace pcr
         void    UpdateVScroll();
         void    ShowEntry(sal_uInt16 nPos);
         void    MoveThumbTo(sal_Int32 nNewThumbPos);
-        void    Resize() SAL_OVERRIDE;
+        void    Resize() override;
 
     public:
                                     OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
 
                                     virtual ~OBrowserListBox();
-        virtual void                dispose() SAL_OVERRIDE;
+        virtual void                dispose() override;
 
         void                        UpdateAll();
 
@@ -128,8 +128,8 @@ namespace pcr
         sal_uInt16                  CalcVisibleLines();
         void                        EnableUpdate();
         void                        DisableUpdate();
-        bool                        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
-        virtual bool                PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+        bool                        Notify( NotifyEvent& _rNEvt ) override;
+        virtual bool                PreNotify( NotifyEvent& _rNEvt ) override;
 
         void                        SetListener( IPropertyLineListener* _pListener );
         void                        SetObserver( IPropertyControlObserver* _pObserver );
@@ -161,12 +161,12 @@ namespace pcr
 
     protected:
         // IControlContext
-        virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) override;
+        virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) override;
+        virtual void SAL_CALL activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException) override;
 
         // IButtonClickListener
-        void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) SAL_OVERRIDE;
+        void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) override;
 
         using Window::SetHelpText;
     private:

@@ -39,10 +39,10 @@ public:
     virtual ~AccObjectContainerEventListener();
 
     virtual void HandleStateChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
+            css::uno::Any oldValue, css::uno::Any newValue) override;
 
     //for visible data changed event, for shapes, the visiabledatachanged should be mapped to LOCATION_CHANGED
-    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
+    virtual void HandleVisibleDataChangedEvent() override;
 };
 
 #endif

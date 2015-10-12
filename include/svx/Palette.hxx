@@ -52,10 +52,10 @@ public:
     PaletteASE( const OUString &rFPath, const OUString &rFName );
     virtual ~PaletteASE();
 
-    virtual const OUString&     GetName() SAL_OVERRIDE;
-    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
+    virtual const OUString&     GetName() override;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
-    virtual bool                IsValid() SAL_OVERRIDE;
+    virtual bool                IsValid() override;
 };
 
 class PaletteGPL : public Palette
@@ -74,10 +74,10 @@ public:
     PaletteGPL( const OUString &rFPath, const OUString &rFName );
     virtual ~PaletteGPL();
 
-    virtual const OUString&     GetName() SAL_OVERRIDE;
-    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
+    virtual const OUString&     GetName() override;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
-    virtual bool                IsValid() SAL_OVERRIDE;
+    virtual bool                IsValid() override;
 };
 
 class PaletteSOC : public Palette
@@ -90,10 +90,10 @@ public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );
     virtual ~PaletteSOC();
 
-    virtual const OUString&     GetName() SAL_OVERRIDE;
-    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
+    virtual const OUString&     GetName() override;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
-    virtual bool                IsValid() SAL_OVERRIDE;
+    virtual bool                IsValid() override;
 };
 
 #endif // INCLUDED_SVX_PALETTE_HXX

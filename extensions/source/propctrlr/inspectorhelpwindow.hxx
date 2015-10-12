@@ -42,9 +42,9 @@ namespace pcr
     public:
         InspectorHelpWindow( vcl::Window* _pParent );
         virtual ~InspectorHelpWindow();
-        virtual void dispose() SAL_OVERRIDE;
+        virtual void dispose() override;
 
-        virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
+        virtual void    SetText( const OUString& rStr ) override;
 
         void            SetLimits( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
         long            GetMinimalHeightPixel();
@@ -52,7 +52,7 @@ namespace pcr
 
     protected:
         // Window overridables
-        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    Resize() override;
 
     private:
         long            impl_getMinimalTextWindowHeight();

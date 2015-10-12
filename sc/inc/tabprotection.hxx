@@ -85,19 +85,19 @@ public:
     explicit ScDocProtection(const ScDocProtection& r);
     virtual ~ScDocProtection();
 
-    virtual bool isProtected() const SAL_OVERRIDE;
-    virtual bool isProtectedWithPass() const SAL_OVERRIDE;
-    virtual void setProtected(bool bProtected) SAL_OVERRIDE;
+    virtual bool isProtected() const override;
+    virtual bool isProtectedWithPass() const override;
+    virtual void setProtected(bool bProtected) override;
 
-    virtual bool isPasswordEmpty() const SAL_OVERRIDE;
-    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const SAL_OVERRIDE;
-    virtual void setPassword(const OUString& aPassText) SAL_OVERRIDE;
+    virtual bool isPasswordEmpty() const override;
+    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
+    virtual void setPassword(const OUString& aPassText) override;
     virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
-        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const SAL_OVERRIDE;
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
         const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
-        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) SAL_OVERRIDE;
-    virtual bool verifyPassword(const OUString& aPassText) const SAL_OVERRIDE;
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+    virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
@@ -171,19 +171,19 @@ public:
     explicit ScTableProtection(const ScTableProtection& r);
     virtual ~ScTableProtection();
 
-    virtual bool isProtected() const SAL_OVERRIDE;
-    virtual bool isProtectedWithPass() const SAL_OVERRIDE;
-    virtual void setProtected(bool bProtected) SAL_OVERRIDE;
+    virtual bool isProtected() const override;
+    virtual bool isProtectedWithPass() const override;
+    virtual void setProtected(bool bProtected) override;
 
-    virtual bool isPasswordEmpty() const SAL_OVERRIDE;
-    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const SAL_OVERRIDE;
-    virtual void setPassword(const OUString& aPassText) SAL_OVERRIDE;
+    virtual bool isPasswordEmpty() const override;
+    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
+    virtual void setPassword(const OUString& aPassText) override;
     virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
-        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const SAL_OVERRIDE;
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
         const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
-        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) SAL_OVERRIDE;
-    virtual bool verifyPassword(const OUString& aPassText) const SAL_OVERRIDE;
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+    virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);

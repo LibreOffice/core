@@ -32,13 +32,13 @@ namespace sdr
         {
         protected:
             // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) SAL_OVERRIDE;
+            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) override;
 
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
+            virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
         public:
             // basic constructor
@@ -51,17 +51,17 @@ namespace sdr
             virtual ~PageProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
+            virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // get itemset. Override here to allow creating the empty itemset
             // without asserting
-            virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
+            virtual const SfxItemSet& GetObjectItemSet() const override;
 
             // get the installed StyleSheet
-            virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
+            virtual SfxStyleSheet* GetStyleSheet() const override;
 
             // clear single item
-            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
+            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
         };
     } // end of namespace properties
 } // end of namespace sdr

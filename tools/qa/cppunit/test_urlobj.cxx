@@ -44,11 +44,11 @@ namespace tools_urlobj
 
       public:
         // initialise your test code values here.
-        void setUp(  ) SAL_OVERRIDE
+        void setUp(  ) override
         {
         }
 
-        void tearDown(  ) SAL_OVERRIDE
+        void tearDown(  ) override
         {
         }
 

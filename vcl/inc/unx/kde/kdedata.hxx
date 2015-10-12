@@ -30,9 +30,9 @@ public:
     KDEData( SalInstance *pInstance ) : X11SalData( SAL_DATA_KDE3, pInstance ) {}
     virtual ~KDEData();
 
-    virtual void Init() SAL_OVERRIDE;
-    virtual void initNWF() SAL_OVERRIDE;
-    virtual void deInitNWF() SAL_OVERRIDE;
+    virtual void Init() override;
+    virtual void initNWF() override;
+    virtual void deInitNWF() override;
 };
 
 class SalKDEDisplay : public SalX11Display
@@ -62,11 +62,11 @@ public:
     KDESalFrame( SalFrame* pParent, SalFrameStyleFlags );
     virtual ~KDESalFrame();
 
-    virtual SalGraphics* AcquireGraphics() SAL_OVERRIDE;
-    virtual void ReleaseGraphics( SalGraphics *pGraphics ) SAL_OVERRIDE;
-    virtual void updateGraphics( bool bClear ) SAL_OVERRIDE;
-    virtual void UpdateSettings( AllSettings& rSettings ) SAL_OVERRIDE;
-    virtual void Show( bool bVisible, bool bNoActivate ) SAL_OVERRIDE;
+    virtual SalGraphics* AcquireGraphics() override;
+    virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
+    virtual void updateGraphics( bool bClear ) override;
+    virtual void UpdateSettings( AllSettings& rSettings ) override;
+    virtual void Show( bool bVisible, bool bNoActivate ) override;
 };
 
 class KDESalInstance : public X11SalInstance
@@ -75,13 +75,13 @@ public:
     KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
-    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
 
-    virtual bool hasNativeFileSelection() const SAL_OVERRIDE { return true; }
+    virtual bool hasNativeFileSelection() const override { return true; }
 
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
         createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& ) SAL_OVERRIDE;
+                              com::sun::star::uno::XComponentContext >& ) override;
 };
 
 class KDEXLib : public SalXLib
@@ -100,7 +100,7 @@ public:
         m_nFakeCmdLineArgs( 0 )
         {}
     virtual ~KDEXLib();
-    virtual void Init() SAL_OVERRIDE;
+    virtual void Init() override;
 
     void doStartup();
 };

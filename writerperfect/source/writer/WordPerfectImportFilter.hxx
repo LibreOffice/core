@@ -50,29 +50,29 @@ public:
 
     // XFilter
     virtual sal_Bool SAL_CALL filter(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xDoc)
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
-    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw(com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &aArguments)
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 };
 
@@ -104,28 +104,28 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle(const OUString &aTitle)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL execute()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-    SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL    setPropertyValues(const ::com::sun::star::uno::Sequence<
                                                ::com::sun::star::beans::PropertyValue >& aProps)
     throw (::com::sun::star::beans::UnknownPropertyException,
            ::com::sun::star::beans::PropertyVetoException,
            ::com::sun::star::lang::IllegalArgumentException,
            ::com::sun::star::lang::WrappedTargetException,
-           ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+           ::com::sun::star::uno::RuntimeException, std::exception) override;
 
 public:
     explicit WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext);

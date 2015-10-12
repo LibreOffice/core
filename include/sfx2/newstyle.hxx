@@ -46,7 +46,7 @@ private:
 public:
     SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );
     virtual ~SfxNewStyleDlg();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }
 };

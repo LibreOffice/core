@@ -29,7 +29,7 @@ namespace oox { namespace drawingml {
 
     public:
         GuidContext( ::oox::core::ContextHandler2Helper& rParent, OUString& rGuidId );
-        virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+        virtual void onCharacters( const OUString& aChars ) override;
 
     private:
         OUString& mrGuidId;
