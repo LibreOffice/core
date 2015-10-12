@@ -3263,8 +3263,8 @@ if test "$GCC" = "yes"; then
 
     if test "$COM_GCC_IS_CLANG" = TRUE; then
         AC_MSG_CHECKING([the Clang version])
-        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P -`
-        CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P -`
+        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P /dev/stdin`
+        CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P /dev/stdin`
         CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
         AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
         AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
