@@ -389,7 +389,6 @@ void SdTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT_EQUAL(true, m_bFound);
 
     // This should trigger the not-found callback.
-    Application::EnableHeadlessMode(false);
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
