@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -370,6 +371,35 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+}
+
+DECLARE_ODFEXPORT_TEST(testDuplicateCrossRefHeadingBookmark, "CrossRefHeadingBookmark.fodt")
+{
+    // the file contains invalid duplicate heading cross reference bookmarks
+    // but we have to round trip them, tdf#94804
+
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent,
+        uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarks(
+        xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark1(
+        xBookmarks->getByName("__RefHeading__8284_1826734303"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBookmark1.is());
+    uno::Reference<text::XTextContent> xBookmark2(
+        xBookmarks->getByName("__RefHeading__1673_25705824"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBookmark2.is());
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Any aField1 = xFields->nextElement();
+    uno::Reference<text::XTextField> xField1(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"), xField1->getPresentation(false));
+    uno::Any aField2 = xFields->nextElement();
+    uno::Reference<text::XTextField> xField2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"), xField2->getPresentation(false));
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo60769, "fdo60769.odt")
