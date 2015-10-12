@@ -224,6 +224,11 @@ void PagePropertyPanel::dispose()
     m_aSwPageColControl.dispose();
     m_aSwPagePgMetricControl.dispose();
 
+    maColumnPopup.dispose();
+    maSizePopup.dispose();
+    maMarginPopup.dispose();
+    maOrientationPopup.dispose();
+
     PanelLayout::dispose();
 }
 
