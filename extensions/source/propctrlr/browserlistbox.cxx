@@ -131,15 +131,15 @@ namespace pcr
         };
 
     private:
-        IControlContext*    m_pContext;
-        NotificationMode     m_eMode;
+        VclPtr<OBrowserListBox>     m_pContext;
+        NotificationMode            m_eMode;
 
     public:
         /** creates an instance
             @param _rContextImpl
                 the instance to delegate events to
         */
-        PropertyControlContext_Impl( IControlContext& _rContextImpl );
+        PropertyControlContext_Impl( OBrowserListBox& _rContextImpl );
 
         /** disposes the context.
 
@@ -150,7 +150,7 @@ namespace pcr
         void SAL_CALL dispose();
 
         /** sets the notification mode, so that notifications received from the controls are
-            forwarded to our IControlContext either synchronously or asynchronously
+            forwarded to our OBrowserListBox either synchronously or asynchronously
             @param  _eMode
                 the new notification mode
         */
@@ -172,7 +172,7 @@ namespace pcr
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
 
     private:
-        /** processes the given event, i.e. notifies it to our IControlContext
+        /** processes the given event, i.e. notifies it to our OBrowserListBox
             @param  _rEvent
                 the event no notify
             @precond
@@ -200,7 +200,7 @@ namespace pcr
     };
 
 
-    PropertyControlContext_Impl::PropertyControlContext_Impl( IControlContext& _rContextImpl )
+    PropertyControlContext_Impl::PropertyControlContext_Impl( OBrowserListBox& _rContextImpl )
         :m_pContext( &_rContextImpl )
         ,m_eMode( eAsynchronously )
     {

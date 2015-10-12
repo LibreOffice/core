@@ -135,7 +135,6 @@ merge oox::ole::OleObjectInfo with oox::vml::OleObjectInfo
 merge oox::xls::IWorksheetProgress with oox::xls::WorksheetGlobals
 merge pcr::(anonymous namespace)::ISQLCommandPropertyUI with pcr::(anonymous namespace)::SQLCommandPropertyUI
 merge pcr::IButtonClickListener with pcr::OBrowserListBox
-merge pcr::IControlContext with pcr::OBrowserListBox
 merge pcr::IModifyListener with pcr::CommonBehaviourControl
 merge pcr::IPropertyControlObserver with pcr::OPropertyBrowserController
 merge pcr::IPropertyInfoService with pcr::OPropertyInfoService

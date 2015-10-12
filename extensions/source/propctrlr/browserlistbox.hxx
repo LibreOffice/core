@@ -69,22 +69,8 @@ namespace pcr
     typedef ::std::vector< ListBoxLine > ListBoxLines;
 
 
-    /** non-UNO version of XPropertyControlContext
-    */
-    class SAL_NO_VTABLE IControlContext
-    {
-    public:
-        virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) = 0;
-        virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) = 0;
-        virtual void SAL_CALL activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException) = 0;
-
-    protected:
-        ~IControlContext() {}
-    };
-
     class OBrowserListBox   :public Control
                             ,public IButtonClickListener
-                            ,public IControlContext
                             ,public PcrClient
     {
     protected:
@@ -156,15 +142,14 @@ namespace pcr
         sal_Int32                   GetMinimumHeight();
 
 
-        bool    IsModified( ) const;
-        void        CommitModified( );
+        bool                        IsModified( ) const;
+        void                        CommitModified( );
+
+        void SAL_CALL               focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException);
+        void SAL_CALL               valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException);
+        void SAL_CALL               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException);
 
     protected:
-        // IControlContext
-        virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) override;
-        virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException) override;
-        virtual void SAL_CALL activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException) override;
-
         // IButtonClickListener
         void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) override;
 
