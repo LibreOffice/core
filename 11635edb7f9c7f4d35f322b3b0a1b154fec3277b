@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_56b0c58b",
+        "filename": "slideshow/source/inc/listenercontainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-12T02:23:45Z",
+      "side": 1,
+      "message": "This is used instead of F::result_type in order to allow for the use of lambdas",
+      "revId": "11635edb7f9c7f4d35f322b3b0a1b154fec3277b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
