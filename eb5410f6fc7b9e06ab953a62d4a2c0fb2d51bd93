@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_f67119e2",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-10-12T06:13:29Z",
+      "side": 1,
+      "message": "Hi Irem, these accelerator changes are unrelated to the bug. and should not be in this patch.\nYou might create a new patch with them.",
+      "revId": "eb5410f6fc7b9e06ab953a62d4a2c0fb2d51bd93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
