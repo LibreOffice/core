@@ -510,6 +510,10 @@ void ScFormulaCfg::ImplCommit()
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
+
+    Sequence<Any> aOldValues = GetProperties(aNames);
+    Any* pOldValues = aOldValues.getArray();
+
     bool bSetOpenCL = false;
 
     for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
@@ -546,34 +550,57 @@ void ScFormulaCfg::ImplCommit()
             case SCFORMULAOPT_STRING_REF_SYNTAX:
             {
                 sal_Int32 nVal = -1;
-                switch (GetCalcConfig().meStringRefAddressSyntax)
+
+                if (GetCalcConfig().mbCurrentDocOnly)
                 {
-                    case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
-                    case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
-                    case ::formula::FormulaGrammar::CONV_XL_R1C1: nVal = 2; break;
-                    case ::formula::FormulaGrammar::CONV_A1_XL_A1: nVal = 3; break;
-                    default: break;
+                    pValues[nProp] = pOldValues[nProp];
                 }
-                pValues[nProp] <<= nVal;
+                else
+                {
+                    switch (GetCalcConfig().meStringRefAddressSyntax)
+                    {
+                        case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
+                        case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
+                        case ::formula::FormulaGrammar::CONV_XL_R1C1: nVal = 2; break;
+                        case ::formula::FormulaGrammar::CONV_A1_XL_A1: nVal = 3; break;
+                        default: break;
+                    }
+                    pValues[nProp] <<= nVal;
+                }
             }
             break;
             case SCFORMULAOPT_STRING_CONVERSION:
             {
-                sal_Int32 nVal = 3;
-                switch (GetCalcConfig().meStringConversion)
+                if (GetCalcConfig().mbCurrentDocOnly)
                 {
-                case ScCalcConfig::StringConversion::ILLEGAL:     nVal = 0; break;
-                case ScCalcConfig::StringConversion::ZERO:        nVal = 1; break;
-                case ScCalcConfig::StringConversion::UNAMBIGUOUS: nVal = 2; break;
-                case ScCalcConfig::StringConversion::LOCALE:      nVal = 3; break;
+                    pValues[nProp] = pOldValues[nProp];
                 }
-                pValues[nProp] <<= nVal;
+                else
+                {
+                    sal_Int32 nVal = 3;
+
+                    switch (GetCalcConfig().meStringConversion)
+                    {
+                        case ScCalcConfig::StringConversion::ILLEGAL:     nVal = 0; break;
+                        case ScCalcConfig::StringConversion::ZERO:        nVal = 1; break;
+                        case ScCalcConfig::StringConversion::UNAMBIGUOUS: nVal = 2; break;
+                        case ScCalcConfig::StringConversion::LOCALE:      nVal = 3; break;
+                    }
+                    pValues[nProp] <<= nVal;
+                }
             }
             break;
             case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
             {
-                bool bVal = GetCalcConfig().mbEmptyStringAsZero;
-                pValues[nProp] <<= bVal;
+                if (GetCalcConfig().mbCurrentDocOnly)
+                {
+                    pValues[nProp] = pOldValues[nProp];
+                }
+                else
+                {
+                    bool bVal = GetCalcConfig().mbEmptyStringAsZero;
+                    pValues[nProp] <<= bVal;
+                }
             }
             break;
             case SCFORMULAOPT_OOXML_RECALC:
