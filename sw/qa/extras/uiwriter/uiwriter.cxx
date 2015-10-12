@@ -166,6 +166,7 @@ public:
     void testTdf89720();
     void testTdf88986();
     void testTdf87922();
+    void testTdf77014();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -241,6 +242,7 @@ public:
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST(testTdf87922);
+    CPPUNIT_TEST(testTdf77014);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2694,6 +2696,54 @@ void SwUiWriterTest::testTdf87922()
     vcl::Font aFont;
     aDrawTextInfo.ApplyAutoColor(&aFont);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor().GetColor());
+}
+
+void SwUiWriterTest::testTdf77014()
+{
+    // The problem described in the bug tdf#77014 is that the input
+    // field text ("ThisIsAllOneWord") is broken up on linebreak, but
+    // it should be in one piece (like normal text).
+
+    // This test checks that the input field is in one piece.
+
+    load(DATA_DIRECTORY, "tdf77014.odt");
+
+    // First paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[1]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[4]/Text[1]", "nLength"));
+
+    // The "Unknown" is the input field:
+    // which is 16 chars + 2 hidden chars (start & end input field) = 18 chars
+    // If this is correct then the input field is in one piece
+    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[4]/Text[2]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("18"),      parseDump("/root/page/body/txt[4]/Text[2]", "nLength"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[3]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[4]/Text[3]", "nLength"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[1]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[4]/Text[1]", "nLength"));
+
+    // Second paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[1]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[5]/Text[1]", "nLength"));
+
+    // The input field here has more words ("One Two Three Four Five")
+    // and it should break after "Two".
+    // "One Two" = 7 chars + 1 start input field hidden character = 8 chars
+    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[5]/Text[2]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("8"),       parseDump("/root/page/body/txt[5]/Text[2]", "nLength"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_HOLE"), parseDump("/root/page/body/txt[5]/Text[3]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"),        parseDump("/root/page/body/txt[5]/Text[3]", "nLength"));
+
+    // In new line..
+    // "Three Four Five" = 16 chars + 1 end input field hidden character = 16 chars
+    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[5]/Text[4]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("16"),      parseDump("/root/page/body/txt[5]/Text[4]", "nLength"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[5]", "nType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[5]/Text[5]", "nLength"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

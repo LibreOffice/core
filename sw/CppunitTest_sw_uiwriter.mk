@@ -22,18 +22,18 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     cppu \
     cppuhelper \
     editeng \
-	msword \
+    msword \
     sal \
     sfx \
     svl \
     svt \
-	svxcore \
+    svxcore \
     sw \
     test \
     unotest \
     vcl \
     tl \
-	utl \
+    utl \
     $(gb_UWINAPI) \
 ))
 
