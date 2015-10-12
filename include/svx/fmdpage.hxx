@@ -47,7 +47,17 @@ public:
     virtual ~SvxFmDrawPage() throw () override;
 
     // UNO connection
-    DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)
+    virtual void SAL_CALL SAL_DLLPUBLIC_EXPORT acquire( ) /* SAL_DLLPUBLIC_EXPORT to be a public symbol explicitly */
+        throw( ) override
+    { SvxDrawPage::acquire( ); }
+
+    virtual void SAL_CALL release( )
+        throw( ) override
+    { SvxDrawPage::release( ); }
+
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rrType )
+        throw ( css::uno::RuntimeException, std::exception ) override
+    { return SvxDrawPage::queryInterface( rrType ); }
 
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
