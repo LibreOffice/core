@@ -1158,7 +1158,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             while( aIter != aEndIter )
             {
-                bool bMarked = false;
                 SwAccessibleChild pFrm( (*aIter).first );
 
                 const SwFrameFormat *pFrameFormat = (*aIter).first ? ::FindFrameFormat( (*aIter).first ) : nullptr;
@@ -1188,6 +1187,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 if( pPos->nNode.GetNode().GetTextNode() )
                 {
                     int pIndex = pPos->nContent.GetIndex();
+                    bool bMarked = false;
                     if( pCrsr != NULL )
                     {
                         const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();

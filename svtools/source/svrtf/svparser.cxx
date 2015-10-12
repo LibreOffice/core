@@ -159,7 +159,7 @@ sal_Unicode SvParser::GetNextChar()
     bool bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
-        unsigned char c1, c2;
+        unsigned char c1;
         bool bSeekBack = true;
 
         rInput.ReadUChar( c1 );
@@ -168,6 +168,7 @@ sal_Unicode SvParser::GetNextChar()
         {
             if( 0xff == c1 || 0xfe == c1 )
             {
+                unsigned char c2;
                 rInput.ReadUChar( c2 );
                 bErr = rInput.IsEof() || rInput.GetError();
                 if( !bErr )
@@ -188,6 +189,7 @@ sal_Unicode SvParser::GetNextChar()
             }
             else if( 0xef == c1 || 0xbb == c1 ) // check for UTF-8 BOM
             {
+                unsigned char c2;
                 rInput.ReadUChar( c2 );
                 bErr = rInput.IsEof() || rInput.GetError();
                 if( !bErr )

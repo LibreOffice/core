@@ -476,7 +476,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     sal_Int32* pConvertPos = new sal_Int32[nTextLen+2];
     sal_Int32* pConvertPara = new sal_Int32[nTextLen+2];
 
-    int ndbg = 0;
     const sal_Unicode* pText = aText.getStr();
 
     sal_Int32* pPos = pConvertPos;
@@ -494,6 +493,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
         while(xParaEnum->hasMoreElements())
         {
+            int ndbg = 0;
             uno::Reference< text::XTextContent >  xParagraph( xParaEnum->nextElement(), uno::UNO_QUERY );
             if( xParagraph.is() )
                 xEnumAccess.set(xParagraph, css::uno::UNO_QUERY);

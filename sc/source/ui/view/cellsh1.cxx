@@ -1926,11 +1926,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool        bManaged    = false;
 
                 // Get the pool item stored it by Conditional Format Manager Dialog.
-                const SfxPoolItem* pItem = nullptr;
                 sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_STRING ));
                 for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
                 {
-                    if( nullptr != (pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter ) ) )
+                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter );
+                    if( pItem != nullptr )
                     {
                         if ( ScCondFormatDlg::ParseXmlString(
                                 static_cast<const SfxStringItem*>(pItem)->GetValue(),

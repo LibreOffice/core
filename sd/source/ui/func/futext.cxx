@@ -582,8 +582,6 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
 bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     bool bReturn = false;
-    SdrObject* pObj;
-    SdrPageView* pPV;
     if (aDragTimer.IsActive())
     {
         aDragTimer.Stop();
@@ -655,6 +653,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             /*************************************************************
             * From text mode, you don't want to rotate immediately.
             **************************************************************/
+            SdrObject* pObj;
+            SdrPageView* pPV;
             if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
             {
                 if (pPV->IsObjSelectable(pObj))

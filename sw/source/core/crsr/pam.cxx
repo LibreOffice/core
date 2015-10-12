@@ -753,10 +753,10 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                       bool bInReadOnly )
 {
     SwContentNode * pNd = 0;
-    SwContentFrm* pFrm;
     if( ((*rPam.GetPoint()).*fnMove->fnCmpOp)( *rPam.GetMark() ) ||
         ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )
     {
+        SwContentFrm* pFrm;
         if( rbFirst )
         {
             rbFirst = false;

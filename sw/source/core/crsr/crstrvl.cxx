@@ -372,11 +372,11 @@ bool SwCrsrShell::GotoTOXMarkBase()
         // for the actual index
         const SwTOXType* pType = aMarks[0]->GetTOXType();
         SwIterator<SwTOXBase,SwTOXType> aIter( *pType );
-        const SwSectionNode* pSectNd;
         const SwSectionFormat* pSectFormat;
 
         for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
         {
+            const SwSectionNode* pSectNd;
             if( dynamic_cast<const SwTOXBaseSection*>( pTOX) !=  nullptr &&
                 0 != ( pSectFormat = static_cast<SwTOXBaseSection*>(pTOX)->GetFormat() ) &&
                 0 != ( pSectNd = pSectFormat->GetSectionNode() ))
@@ -439,11 +439,12 @@ bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetContentNode()->getLayoutFrm( GetLayout(),
                                 &aPt, &rPos, false ) );
     {
-        const SfxPoolItem* pItem;
-        const SwTableBox* pTBox;
         sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
 
         for( n = 0; n < nMaxItems; ++n )
+        {
+            const SwTableBox* pTBox;
+            const SfxPoolItem* pItem;
             if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_BOXATR_FORMULA, n ) ) &&
                 0 != (pTBox = static_cast<const SwTableBoxFormula*>(pItem)->GetTableBox() ) &&
@@ -469,6 +470,7 @@ bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                     }
                 }
             }
+        }
     }
 
     if( bFnd )

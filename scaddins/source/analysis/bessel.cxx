@@ -333,7 +333,6 @@ double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     double u = alpha;
 
     double k = 1.0;
-    double m_bar = 0.0;
     double g_bar_delta_u = 0.0;
     double g_bar = -2.0 / fX;
     double delta_u = g_bar_delta_u / g_bar;
@@ -341,13 +340,12 @@ double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     double f_bar = -1 * g;
 
     double sign_alpha = 1.0;
-    double km1mod2;
     bool bHasFound = false;
     k = k + 1;
     do
     {
-        km1mod2 = fmod(k-1.0,2.0);
-        m_bar=(2.0*km1mod2) * f_bar;
+        double km1mod2 = fmod(k-1.0, 2.0);
+        double m_bar = (2.0*km1mod2) * f_bar;
         if (km1mod2 == 0.0)
             alpha = 0.0;
         else
@@ -387,7 +385,6 @@ double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     double f_bar = -1.0;
     double u = alpha;
     double k = 1.0;
-    double m_bar = 0.0;
     alpha = 1.0 - EulerGamma - log(fX/2.0);
     double g_bar_delta_u = -alpha;
     double g_bar = -2.0 / fX;
@@ -396,15 +393,13 @@ double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     double g = -1.0/g_bar;
     f_bar = f_bar * g;
     double sign_alpha = -1.0;
-    double km1mod2; //will be (k-1) mod 2
-    double q; // will be (k-1) div 2
     bool bHasFound = false;
     k = k + 1.0;
     do
     {
-        km1mod2 = fmod(k-1.0,2.0);
-        m_bar=(2.0*km1mod2) * f_bar;
-        q = (k-1.0)/2.0;
+        double km1mod2 = fmod(k-1.0,2.0);
+        double m_bar = (2.0*km1mod2) * f_bar;
+        double q = (k-1.0)/2.0;
         if (km1mod2 == 0.0) // k is odd
         {
            alpha = sign_alpha * (1.0/q + 1.0/(q+1.0));

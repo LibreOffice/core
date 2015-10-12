@@ -410,9 +410,10 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     const OUString& rFieldNm = rFieldTyp.GetName();
-    SwFieldType* pFnd;
 
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
+    {
+        SwFieldType* pFnd;
         if( nFieldWhich == (pFnd = (*mpFieldTypes)[i])->Which() &&
             rSCmp.isEqual( rFieldNm, pFnd->GetName() ) )
         {
@@ -434,6 +435,7 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
             } while( true );
             break;
         }
+    }
 
     // not found, so insert and delete flag
     mpFieldTypes->insert( mpFieldTypes->begin() + nSize, &rFieldTyp );
@@ -1171,14 +1173,16 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 void DocumentFieldsManager::UpdateUsrFields()
 {
     SwCalc* pCalc = 0;
-    const SwFieldType* pFieldType;
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < mpFieldTypes->size(); ++i )
+    {
+        const SwFieldType* pFieldType;
         if( RES_USERFLD == ( pFieldType = (*mpFieldTypes)[i] )->Which() )
         {
             if( !pCalc )
                 pCalc = new SwCalc( m_rDoc );
             const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->GetValue( *pCalc );
         }
+    }
 
     if( pCalc )
     {

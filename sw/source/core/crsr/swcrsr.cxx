@@ -1336,7 +1336,6 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
     SwCrsrSaveState aSave( *this );
 
     bool bRet = false;
-    bool bForward = true;
     DeleteMark();
     const SwRootFrm* pLayout = pViewShell->GetLayout();
     if( pPt && 0 != pLayout )
@@ -1372,6 +1371,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
         }
         else
         {
+            bool bForward = true;
             sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTextNd->GetText(), nPtPos,

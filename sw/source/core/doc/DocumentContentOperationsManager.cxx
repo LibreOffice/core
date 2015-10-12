@@ -3629,7 +3629,6 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         SwpHints* pHts;
         if( pTextNd &&  0 != ( pHts = pTextNd->GetpSwpHints()) && pHts->Count() )
         {
-            const sal_Int32 *pEndIdx;
             const sal_Int32 nMkCntPos = rPam.GetMark()->nContent.GetIndex();
             for( size_t n = pHts->Count(); n; )
             {
@@ -3637,6 +3636,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
                 if( nMkCntPos > pAttr->GetStart() )
                     break;
 
+                const sal_Int32 *pEndIdx;
                 if( nMkCntPos == pAttr->GetStart() &&
                     0 != (pEndIdx = pAttr->End()) &&
                     *pEndIdx == pAttr->GetStart() )

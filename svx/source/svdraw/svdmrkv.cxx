@@ -1694,12 +1694,11 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 }
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
 {
-    bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-    bool bBefMrk(nOptions & SdrSearchOptions::BEFOREMARK);
     SdrObject* pRet=NULL;
     rpRootObj=NULL;
     if (pOL!=NULL)
     {
+        bool bBack(nOptions & SdrSearchOptions::BACKWARD);
         bool bRemap(pOL->GetOwnerObj() && dynamic_cast< const E3dScene* >(pOL->GetOwnerObj()) != nullptr);
         E3dScene* pRemapScene = (bRemap ? static_cast<E3dScene*>(pOL->GetOwnerObj()) : 0L);
 
@@ -1717,7 +1716,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             {
                 pObj = pOL->GetObj(nObjNum);
             }
-            if (bBefMrk)
+            if (nOptions & SdrSearchOptions::BEFOREMARK)
             {
                 if ((pMarkList)!=NULL)
                 {
