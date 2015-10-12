@@ -92,8 +92,7 @@ void SAL_CALL DynamicResultSetWrapper::impl_deinit()
     m_pMyListenerImpl->impl_OwnerDies();
 }
 
-void SAL_CALL DynamicResultSetWrapper
-::impl_EnsureNotDisposed()
+void SAL_CALL DynamicResultSetWrapper::impl_EnsureNotDisposed()
     throw( DisposedException, RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -102,8 +101,7 @@ void SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
+void SAL_CALL DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultOne.is(), "Source ResultSet One is set already" );
@@ -112,8 +110,7 @@ void SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
+void SAL_CALL DynamicResultSetWrapper::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultTwo.is(), "Source ResultSet Two is set already" );
@@ -137,8 +134,8 @@ css::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::
 // XComponent methods.
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL DynamicResultSetWrapper::dispose()
+    throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -173,8 +170,7 @@ void SAL_CALL DynamicResultSetWrapper
 
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::addEventListener( const Reference< XEventListener >& Listener )
+void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -189,8 +185,7 @@ void SAL_CALL DynamicResultSetWrapper
 
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::removeEventListener( const Reference< XEventListener >& Listener )
+void SAL_CALL DynamicResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -205,8 +200,7 @@ void SAL_CALL DynamicResultSetWrapper
 
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::impl_disposing( const EventObject& )
+void SAL_CALL DynamicResultSetWrapper::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -225,8 +219,7 @@ void SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::impl_notify( const ListEvent& Changes )
+void SAL_CALL DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -293,8 +286,7 @@ void SAL_CALL DynamicResultSetWrapper
 // XSourceInitialization
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::setSource( const Reference< XInterface > & Source )
+void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > & Source )
     throw( AlreadyInitializedException, RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -335,8 +327,7 @@ void SAL_CALL DynamicResultSetWrapper
 // XDynamicResultSet
 
 //virtual
-Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
-    ::getStaticResultSet()
+Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
     throw( ListenerAlreadySetException, RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -367,9 +358,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::setListener( const Reference<
-    XDynamicResultSetListener > & Listener )
+void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicResultSetListener > & Listener )
     throw( ListenerAlreadySetException, RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -396,8 +385,7 @@ void SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper
-    ::connectToCache( const Reference< XDynamicResultSet > & xCache )
+void SAL_CALL DynamicResultSetWrapper::connectToCache( const Reference< XDynamicResultSet > & xCache )
     throw( ListenerAlreadySetException, AlreadyInitializedException, ServiceNotFoundException, RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -434,8 +422,7 @@ void SAL_CALL DynamicResultSetWrapper
 }
 
 //virtual
-sal_Int16 SAL_CALL DynamicResultSetWrapper
-    ::getCapabilities()
+sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -495,8 +482,7 @@ css::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const cs
 // XDynamicResultSetListener methods:
 
 //virtual
-void SAL_CALL DynamicResultSetWrapperListener
-    ::disposing( const EventObject& rEventObject )
+void SAL_CALL DynamicResultSetWrapperListener::disposing( const EventObject& rEventObject )
     throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -506,8 +492,7 @@ void SAL_CALL DynamicResultSetWrapperListener
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapperListener
-    ::notify( const ListEvent& Changes )
+void SAL_CALL DynamicResultSetWrapperListener::notify( const ListEvent& Changes )
     throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -520,8 +505,7 @@ void SAL_CALL DynamicResultSetWrapperListener
 // own methods:
 
 
-void SAL_CALL DynamicResultSetWrapperListener
-    ::impl_OwnerDies()
+void SAL_CALL DynamicResultSetWrapperListener::impl_OwnerDies()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
