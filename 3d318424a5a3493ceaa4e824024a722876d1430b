@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_19a5de03",
+        "filename": "setup_native/source/win32/customactions/shellextensions/checkdirectory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T11:05:01Z",
+      "side": 1,
+      "message": "There is no such file. Or where is it supposed to come from? Did you forget to git add it before the git commit?",
+      "revId": "3d318424a5a3493ceaa4e824024a722876d1430b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
