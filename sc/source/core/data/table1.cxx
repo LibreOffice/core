@@ -1800,7 +1800,6 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     if (!aCell.hasString())
         return;
 
-    bool bFormula = false;  //TODO: pass as parameter
     long nPixel = aCol[rCol].GetTextWidth(nRow);
 
     // Width already calculated in Idle-Handler ?
@@ -1808,7 +1807,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     {
         ScNeededSizeOptions aOptions;
         aOptions.bTotalSize  = true;
-        aOptions.bFormula    = bFormula;
+        aOptions.bFormula    = false; //TODO: pass as parameter
         aOptions.bSkipMerged = false;
 
         Fraction aZoom(1,1);

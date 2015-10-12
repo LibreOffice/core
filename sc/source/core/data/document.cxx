@@ -5798,10 +5798,9 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
-    ScPatternAttr* pPattern;
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
         if (pPattern)
             pPattern->UpdateStyleSheet(this);
     }
@@ -5813,10 +5812,9 @@ void ScDocument::StylesToNames()
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
-    ScPatternAttr* pPattern;
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
         if (pPattern)
             pPattern->StyleToName();
     }

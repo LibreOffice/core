@@ -842,13 +842,13 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > xChartDoc
 
     // get Properties of ChartDocument
     bool bHasMainTitle = false;
-    bool bHasSubTitle = false;
     bool bHasLegend = false;
     Reference< beans::XPropertySet > xDocPropSet( xChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
     {
         try
         {
+            bool bHasSubTitle = false;
             Any aAny( xDocPropSet->getPropertyValue(
                 OUString(  "HasMainTitle" )));
             aAny >>= bHasMainTitle;

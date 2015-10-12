@@ -1025,7 +1025,6 @@ bool SVGFilter::implGenerateMetaData()
                             bool bPageNumberVisibility    = false;    // default: hidden
                             bool bDateTimeVisibility      = true;     // default: visible
                             bool bFooterVisibility        = true;     // default: visible
-                            bool bDateTimeFixed           = true;     // default: fixed
 
                             /*
                              *  Page Number Field
@@ -1042,6 +1041,7 @@ bool SVGFilter::implGenerateMetaData()
                             xPropSet->getPropertyValue( "IsDateTimeVisible" ) >>= bDateTimeVisibility;
                             if( bDateTimeVisibility ) // visibility default value: 'visible'
                             {
+                                bool bDateTimeFixed           = true;     // default: fixed
                                 xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
                                 if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
                                 {

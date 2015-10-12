@@ -66,8 +66,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
 
-    static const sal_Char *kNoSpecificMessage = "No additional information" ;
-    OUStringBuffer message ;
+    OUStringBuffer message;
 
     if (aOperation != NULL)
     {
@@ -89,7 +88,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         // This call is thus disabled for the moment.
         //ldap_memfree(stub) ;
     }
-    else { message.appendAscii(kNoSpecificMessage) ; }
+    else { message.appendAscii("No additional information") ; }
     message.append(")") ;
     throw ldap::LdapGenericException(message.makeStringAndClear(),
                                      NULL, aRetCode) ;

@@ -198,7 +198,6 @@ refresh_product_info_block(const char *path,
   uint32_t numSignatures, additionalBlockSize, additionalBlockID,
     offsetAdditionalBlocks, numAdditionalBlocks, i;
   int additionalBlocks, hasSignatureBlock;
-  int64_t oldPos;
 
   rv = get_mar_file_info(path,
                          &hasSignatureBlock,
@@ -230,7 +229,7 @@ refresh_product_info_block(const char *path,
 
   for (i = 0; i < numAdditionalBlocks; ++i) {
     /* Get the position of the start of this block */
-    oldPos = ftello(fp);
+    int64_t oldPos = ftello(fp);
 
     /* Read the additional block size */
     if (fread(&additionalBlockSize,

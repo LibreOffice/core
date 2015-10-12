@@ -789,7 +789,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     const _pair *language = 0;
     char locale_buf[64] = "";
-    char *cp;
 
     /* default to process locale if pLocale == NULL */
     if( NULL == pLocale )
@@ -808,7 +807,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
              *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
              *  charset to use
              */
-            cp = strrchr( locale_buf, '.' );
+            char* cp = strrchr( locale_buf, '.' );
 
             if( NULL != cp )
             {

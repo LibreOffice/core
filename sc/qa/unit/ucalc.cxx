@@ -1216,17 +1216,14 @@ void Test::testValueIterator()
     for (SCCOL i = 1; i <= 3; ++i)
         m_pDoc->SetValue(ScAddress(i,2,0), i);
 
-    double fVal;
-    sal_uInt16 nErr;
-
     {
         const double aChecks[] = { 1.0, 2.0, 3.0 };
         size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
-
         ScValueIterator aIter(m_pDoc, ScRange(1,2,0,3,2,0));
         bool bHas = false;
-
         size_t nCheckPos = 0;
+        double fVal;
+        sal_uInt16 nErr;
         for (bHas = aIter.GetFirst(fVal, nErr); bHas; bHas = aIter.GetNext(fVal, nErr), ++nCheckPos)
         {
             CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
