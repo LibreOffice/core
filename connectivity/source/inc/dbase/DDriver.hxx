@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DDRIVER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/compbase2.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "file/FDriver.hxx"
 
