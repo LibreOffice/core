@@ -291,6 +291,10 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_UNICODE_NOTATION_TOGGLE
+    [
+        ExecMethod = Execute;
+    ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_TOOLBOXWINDOW //idlpp ole : no , status : no
     [
