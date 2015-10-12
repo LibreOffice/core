@@ -77,6 +77,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     // Get the decimal separator for current locale.
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
+
+    maSavedDocOptions = ScDocOptions(
+        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
+            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions());
 }
 
 ScTpFormulaOptions::~ScTpFormulaOptions()
@@ -139,10 +143,12 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
 {
-    ScopedVclPtrInstance< ScCalcOptionsDialog > aDlg(this, maCurrentConfig);
+    ScopedVclPtrInstance< ScCalcOptionsDialog > aDlg(this, maCurrentConfig,
+                                                     maCurrentDocOptions.IsWriteCalcConfig());
     if (aDlg->Execute() == RET_OK)
     {
         maCurrentConfig = aDlg->GetConfig();
+        maCurrentDocOptions.SetWriteCalcConfig( aDlg->GetWriteCalcConfig());
     }
 }
 
@@ -260,7 +266,8 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
          || static_cast<OUString>(mpEdSepArrayRow->GetSavedValue()) != aSepArrayRow
          || mpLbOOXMLRecalcOptions->GetSavedValue() != nOOXMLRecalcMode
          || mpLbODFRecalcOptions->GetSavedValue() != nODFRecalcMode
-         || maSavedConfig != maCurrentConfig )
+         || maSavedConfig != maCurrentConfig
+         || maSavedDocOptions != maCurrentDocOptions )
     {
         ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
 
@@ -288,8 +295,11 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
         aOpt.SetCalcConfig(maCurrentConfig);
         aOpt.SetOOXMLRecalcOptions(eOOXMLRecalc);
         aOpt.SetODFRecalcOptions(eODFRecalc);
+        aOpt.SetWriteCalcConfig( maCurrentDocOptions.IsWriteCalcConfig());
 
         rCoreSet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
+        rCoreSet->Put( ScTpCalcItem( SID_SCDOCOPTIONS, maCurrentDocOptions ) );
+
         bRet = true;
     }
     return bRet;
@@ -362,6 +372,8 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     UpdateCustomCalcRadioButtons(bDefault);
 
     maCurrentConfig = maSavedConfig;
+
+    maCurrentDocOptions = maSavedDocOptions;
 }
 
 SfxTabPage::sfxpg ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)

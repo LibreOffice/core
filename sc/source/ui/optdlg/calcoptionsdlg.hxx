@@ -34,7 +34,7 @@
 class ScCalcOptionsDialog : public ModalDialog
 {
 public:
-    ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig);
+    ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig);
     virtual ~ScCalcOptionsDialog();
     virtual void dispose() override;
 
@@ -45,10 +45,12 @@ public:
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
+    DECL_LINK_TYPED( CurrentDocOnlyHdl, Button*, void);
     DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
     DECL_LINK_TYPED( SpinOpenCLMinSizeHdl, Edit&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
+    bool GetWriteCalcConfig() const { return mbWriteConfig;}
 
 private:
     void OpenCLAutomaticSelectionChanged();
@@ -59,6 +61,7 @@ private:
     VclPtr<CheckBox> mpEmptyAsZero;
     VclPtr<ListBox> mpConversion;
     VclPtr<ListBox> mpSyntax;
+    VclPtr<CheckBox> mpCurrentDocOnly;
 
     VclPtr<CheckBox> mpUseOpenCL;
     VclPtr<NumericField> mpSpinButton;
@@ -81,6 +84,7 @@ private:
 #endif
 
     bool mbSelectedEmptyStringAsZero;
+    bool mbWriteConfig;
 };
 
 #endif
