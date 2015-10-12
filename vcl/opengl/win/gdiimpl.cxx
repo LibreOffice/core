@@ -87,19 +87,25 @@ bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
 
     const std::unique_ptr<TextureCombo>& pCombo = iterator->second;
 
+    bool bRet = false;
+
     PreDraw();
 
-    OpenGLTexture& rTexture = *pCombo->mpTexture;
-
-    SalTwoRect aPosAry(0,  0,  rTexture.GetWidth(), rTexture.GetHeight(),
-                       nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
-
-    if (pCombo->mpMask)
-        DrawTextureDiff(rTexture, *pCombo->mpMask, aPosAry);
-    else
-        DrawTexture(rTexture, aPosAry);
+    bRet = RenderTextureCombo(*pCombo, nX, nY);
 
     PostDraw();
+
+    return bRet;
+}
+
+bool WinOpenGLSalGraphicsImpl::RenderTextureCombo(TextureCombo& rCombo, int nX, int nY)
+{
+    OpenGLTexture& rTexture = *rCombo.mpTexture;
+
+    SalTwoRect aPosAry(0,   0, rTexture.GetWidth(), rTexture.GetHeight(),
+                       nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
+
+    DrawTextureDiff(rTexture, *rCombo.mpMask, aPosAry);
 
     return true;
 }
@@ -107,24 +113,17 @@ bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
 bool WinOpenGLSalGraphicsImpl::RenderCompatibleDC(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
                                                   int nX, int nY, TextureCombo& rCombo)
 {
+    bool bRet = false;
+
     PreDraw();
 
     rCombo.mpTexture.reset(rWhite.getTexture());
     rCombo.mpMask.reset(rBlack.getTexture());
 
-
-    if (rCombo.mpTexture && rCombo.mpMask)
-    {
-        OpenGLTexture& rTexture = *rCombo.mpTexture;
-
-        SalTwoRect aPosAry(0,   0, rTexture.GetWidth(), rTexture.GetHeight(),
-                           nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
-
-        DrawTextureDiff(*rCombo.mpTexture, *rCombo.mpMask, aPosAry);
-    }
+    bRet = RenderTextureCombo(rCombo, nX, nY);
 
     PostDraw();
-    return true;
+    return bRet;
 }
 
 bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
