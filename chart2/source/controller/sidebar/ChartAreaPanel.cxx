@@ -247,7 +247,9 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mbModelValid(true),
     maFillColorWrapper(mxModel, getColorToolBoxControl(mpToolBoxColor.get()), "FillColor")
 {
-    std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
+    std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
+        OBJECTTYPE_DATA_SERIES, OBJECTTYPE_DATA_POINT,
+        OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
     Initialize();
 }
