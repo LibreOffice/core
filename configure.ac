@@ -6191,28 +6191,6 @@ CXXFLAGS=$save_CXXFLAGS
 
 AC_SUBST(CXXFLAGS_CXX11)
 
-dnl ===================================================================
-dnl Check for C++11 perfect forwarding support
-dnl ===================================================================
-AC_MSG_CHECKING([whether $CXX supports C++11 perfect forwarding])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    #include <utility>
-    template<typename T, typename... Args> T * f(Args &&... v) {
-        return new T(std::forward<Args>(v)...);
-    }
-    ]], [[
-    f<int>(0);
-    ]])], [perfect_forwarding=yes], [perfect_forwarding=no])
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$perfect_forwarding])
-if test "$perfect_forwarding" = yes; then
-    AC_DEFINE([HAVE_CXX11_PERFECT_FORWARDING])
-fi
-
 AC_MSG_CHECKING([whether $CXX supports C++11 constexpr])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
