@@ -38,42 +38,13 @@
 namespace dbaui
 {
 
-// OOdbcLibWrapper
-/** base for helper classes wrapping functionality from an ODBC library
-*/
-class OOdbcLibWrapper
-{
-    oslModule           m_pOdbcLib;     // the library handle
-    OUString     m_sLibPath;     // the path to the library
-
-public:
-#ifdef HAVE_ODBC_SUPPORT
-    bool    isLoaded() const { return NULL != m_pOdbcLib; }
-#else
-    sal_Bool    isLoaded() const { return sal_False; }
-#endif
-    OUString getLibraryName() const { return m_sLibPath; }
-
-protected:
-#ifndef HAVE_ODBC_SUPPORT
-    OOdbcLibWrapper() : m_pOdbcLib(NULL) { }
-#else
-    OOdbcLibWrapper();
-#endif
-    ~OOdbcLibWrapper();
-
-    oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
-
-    /// load the lib
-    bool    load(const sal_Char* _pLibPath);
-    /// unload the lib
-    void        unload();
-};
-
 // OOdbcEnumeration
 struct OdbcTypesImpl;
-class OOdbcEnumeration : public OOdbcLibWrapper
+class OOdbcEnumeration
 {
+    oslModule        m_pOdbcLib;     // the library handle
+    OUString         m_sLibPath;     // the path to the library
+
 #ifdef HAVE_ODBC_SUPPORT
     // entry points for ODBC administration
     oslGenericFunction  m_pAllocHandle;
@@ -90,11 +61,24 @@ public:
     OOdbcEnumeration();
     ~OOdbcEnumeration();
 
+#ifdef HAVE_ODBC_SUPPORT
+    bool        isLoaded() const { return NULL != m_pOdbcLib; }
+#else
+    bool        isLoaded() const { return false; }
+#endif
+    OUString    getLibraryName() const { return m_sLibPath; }
+
     void        getDatasourceNames(StringBag& _rNames);
 
 protected:
+    oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
+
+    /// load the lib
+    bool        load(const sal_Char* _pLibPath);
+    /// unload the lib
+    void        unload();
     /// ensure that an ODBC environment is allocated
-    bool    allocEnv();
+    bool        allocEnv();
     /// free any allocated ODBC environment
     void        freeEnv();
 };

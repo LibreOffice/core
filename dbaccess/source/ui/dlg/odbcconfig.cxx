@@ -69,16 +69,8 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 #endif
 
 // OOdbcLibWrapper
-#ifdef HAVE_ODBC_SUPPORT
-OOdbcLibWrapper::OOdbcLibWrapper()
-    :m_pOdbcLib(NULL)
-{
 
-}
-
-#endif
-
-bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
+bool OOdbcEnumeration::load(const sal_Char* _pLibPath)
 {
     m_sLibPath = OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
@@ -90,7 +82,7 @@ bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 #endif
 }
 
-void OOdbcLibWrapper::unload()
+void OOdbcEnumeration::unload()
 {
 #ifdef HAVE_ODBC_SUPPORT
     if (isLoaded())
@@ -101,18 +93,12 @@ void OOdbcLibWrapper::unload()
 #endif
 }
 
-oslGenericFunction OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
+oslGenericFunction OOdbcEnumeration::loadSymbol(const sal_Char* _pFunctionName)
 {
     return osl_getFunctionSymbol(m_pOdbcLib, OUString::createFromAscii(_pFunctionName).pData);
 }
 
-OOdbcLibWrapper::~OOdbcLibWrapper()
-{
-    unload();
 
-}
-
-// OOdbcEnumeration
 struct OdbcTypesImpl
 {
 #ifdef HAVE_ODBC_SUPPORT
@@ -124,8 +110,9 @@ struct OdbcTypesImpl
 };
 
 OOdbcEnumeration::OOdbcEnumeration()
+    :m_pOdbcLib(NULL)
 #ifdef HAVE_ODBC_SUPPORT
-    :m_pAllocHandle(NULL)
+    ,m_pAllocHandle(NULL)
     ,m_pFreeHandle(NULL)
     ,m_pSetEnvAttr(NULL)
     ,m_pDataSources(NULL)
@@ -161,9 +148,10 @@ OOdbcEnumeration::~OOdbcEnumeration()
 {
     freeEnv();
     delete m_pImpl;
-
+    unload();
 }
 
+// OOdbcEnumeration
 bool OOdbcEnumeration::allocEnv()
 {
     OSL_ENSURE(isLoaded(), "OOdbcEnumeration::allocEnv: not loaded!");
