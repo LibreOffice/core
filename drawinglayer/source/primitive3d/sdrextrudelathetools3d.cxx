@@ -635,9 +635,9 @@ namespace drawinglayer
 
                 if(nLoopCount)
                 {
+                    double fTexHeightPos(0.0);
                     for(a = 0L; a < nLoopCount; a++)
                     {
-                        double fTexHeightPos(0.0);
                         const Slice3D& rSliceA(rSliceVector[a]);
                         const Slice3D& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
                         const bool bAcceptPair(SLICETYPE3D_REGULAR == rSliceA.getSliceType() && SLICETYPE3D_REGULAR == rSliceB.getSliceType());
