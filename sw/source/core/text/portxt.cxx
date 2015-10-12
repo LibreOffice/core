@@ -656,56 +656,7 @@ SwTxtInputFldPortion::SwTxtInputFldPortion()
 
 bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
 {
-    mbContainsInputFieldStart =
-        rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART;
-    mbContainsInputFieldEnd =
-        rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND;
-
-    bool bRet = false;
-    if ( rInf.GetLen() == 1
-         && ( mbContainsInputFieldStart || mbContainsInputFieldEnd ) )
-    {
-        Width( 0 );
-    }
-    else
-    {
-        SwTxtSlot aFormatTxt( &rInf, this, true, true );
-        if ( rInf.GetLen() == 0 )
-        {
-            Width( 0 );
-        }
-        else
-        {
-            const sal_Int32 nFormerLineStart = rInf.GetLineStart();
-            if ( !mbContainsInputFieldStart )
-            {
-                rInf.SetLineStart( 0 );
-            }
-
-            bRet = SwTxtPortion::Format( rInf );
-
-            if ( mbContainsInputFieldEnd )
-            {
-                // adjust portion length accordingly, if complete text fits into the portion
-                if ( GetLen() == rInf.GetLen() )
-                {
-                    SetLen( GetLen() + 1 );
-                }
-            }
-
-            if ( mbContainsInputFieldStart )
-            {
-                // adjust portion length accordingly
-                SetLen( GetLen() + 1 );
-            }
-            else
-            {
-                rInf.SetLineStart( nFormerLineStart );
-            }
-        }
-    }
-
-    return bRet;
+    return SwTxtPortion::Format(rInf);
 }
 
 void SwTxtInputFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
