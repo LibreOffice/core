@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABHEADER_HXX
 
 #include "MacabRecord.hxx"
-#include <cppuhelper/compbase3.hxx>
 
 namespace connectivity
 {

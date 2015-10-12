@@ -24,7 +24,6 @@
 #include <uno/mapping.hxx>
 #include <uno/environment.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/component_context.hxx>
 #include "accesslog.hxx"
 #include <com/sun/star/embed/XTransactedObject.hpp>

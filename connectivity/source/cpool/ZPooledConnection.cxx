@@ -24,7 +24,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/compbase1.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
