@@ -349,7 +349,8 @@ namespace sw { namespace mark
 
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
-        const IDocumentMarkAccess::MarkType eType)
+        const IDocumentMarkAccess::MarkType eType,
+        bool const isHorribleHackIgnoreDuplicates)
     {
 #if 0
         {
@@ -372,7 +373,8 @@ namespace sw { namespace mark
             " - more than USHRT_MAX marks are not supported correctly");
         // There should only be one CrossRefBookmark per Textnode per Type
         if ((eType == MarkType::CROSSREF_NUMITEM_BOOKMARK || eType == MarkType::CROSSREF_HEADING_BOOKMARK)
-            && (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.Start(), eType) != m_vBookmarks.end()))
+            && (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.Start(), eType) != m_vBookmarks.end())
+            && !isHorribleHackIgnoreDuplicates)
         {   // this can happen via UNO API
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - refusing to create duplicate CrossRefBookmark");

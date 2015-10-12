@@ -226,6 +226,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     SwUnoInternalPaM aPam(*m_pImpl->m_pDoc);
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(m_pImpl->m_pDoc);
+    bool isHorribleHackIgnoreDuplicates(false);
     if (m_pImpl->m_sMarkName.isEmpty())
     {
          m_pImpl->m_sMarkName = "Bookmark";
@@ -240,10 +241,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aPam ) )
     {
         eType = IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK;
+        // tdf#94804 LO 4.2-5.0 create invalid duplicates that must be preserved
+        // note: do not check meta:generator, may be preserved by other versions
+        if (m_pImpl->m_pDoc->IsInXMLImport())
+        {
+            isHorribleHackIgnoreDuplicates = true;
+        }
     }
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
-            aPam, m_pImpl->m_sMarkName, eType));
+            aPam, m_pImpl->m_sMarkName, eType, isHorribleHackIgnoreDuplicates));
     // #i81002#
     // Check, if bookmark has been created.
     // E.g., the creation of a cross-reference bookmark is suppress,

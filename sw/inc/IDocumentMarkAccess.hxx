@@ -77,7 +77,7 @@ class IDocumentMarkAccess
         */
         virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
             const OUString& rProposedName,
-            MarkType eMark) =0;
+            MarkType eMark, bool = false) = 0;
 
         virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
