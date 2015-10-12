@@ -800,6 +800,31 @@ SfxStringItem TextStatus SID_TEXTSTATUS
 ]
 
 
+SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+
 SfxVoidItem ToolBoxWindow SID_TOOLBOXWINDOW
 ()
 [
