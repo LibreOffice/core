@@ -240,6 +240,7 @@
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE                     "SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE"
 
 #define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
+#define HID_JUMP_TO_SPEC_PAGE                                   "SW_HID_JUMP_TO_SPEC_PAGE"
 
 
 #define HID_NID_TBL                                             "SW_HID_NID_TBL"
