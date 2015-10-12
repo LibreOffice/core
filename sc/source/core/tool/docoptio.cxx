@@ -71,7 +71,8 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             bMatchWholeCell( rCpy.bMatchWholeCell ),
             bDoAutoSpell( rCpy.bDoAutoSpell ),
             bLookUpColRowNames( rCpy.bLookUpColRowNames ),
-            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled )
+            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled ),
+            bWriteCalcConfig( rCpy.bWriteCalcConfig )
 {
 }
 
@@ -96,6 +97,7 @@ void ScDocOptions::ResetDocOptions()
     bDoAutoSpell        = false;
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= true;
+    bWriteCalcConfig    = true;
 }
 
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
