@@ -54,6 +54,7 @@
 #define RID_PVIEW_ZOOM_LB           (RC_RIBBAR_BEGIN + 32)
 
 #define STR_IMGBTN_START            (RC_RIBBAR_BEGIN + 33)
+#define RID_JUMP_TO_SPEC_PAGE       (RC_RIBBAR_BEGIN + 34)
 
 #define STR_IMGBTN_NEXT_DOWN        (STR_IMGBTN_START + 0)
 #define STR_IMGBTN_PREV_DOWN        (STR_IMGBTN_START + 1)

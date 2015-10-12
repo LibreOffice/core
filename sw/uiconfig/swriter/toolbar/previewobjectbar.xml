@@ -26,6 +26,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc" toolbar:helpid="20907"/>
  <toolbar:toolbaritem xlink:href=".uno:PageUp" toolbar:helpid="20937"/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpToSpecificPage" />
  <toolbar:toolbaritem xlink:href=".uno:PageDown" toolbar:helpid="20938"/>
  <toolbar:toolbaritem xlink:href=".uno:GoToEndOfDoc" toolbar:helpid="20908"/>
  <toolbar:toolbarseparator/>
