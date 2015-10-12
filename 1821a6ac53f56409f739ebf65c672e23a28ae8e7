@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d9d24634",
+        "filename": "include/sfx2/sidebar/DeckDescriptor.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-12T16:45:43Z",
+      "side": 1,
+      "message": "Is this still the case ? I recall another patch of yours renaming Impress nodes and even enforcing some constraint on this (node name must be the same as node ID) ... if not, then we perhaps don\u0027t need this variable?",
+      "revId": "1821a6ac53f56409f739ebf65c672e23a28ae8e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_99c8ce76",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-12T16:45:43Z",
+      "side": 1,
+      "message": "This hard-coded string constant looks a bit fishy. Is this the only possible value to test? \n\nMaybe add some big FIXME here (to remove the real cause of this behaviour)",
+      "revId": "1821a6ac53f56409f739ebf65c672e23a28ae8e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_79c5fa59",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-12T16:45:43Z",
+      "side": 1,
+      "message": "same here ...",
+      "revId": "1821a6ac53f56409f739ebf65c672e23a28ae8e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

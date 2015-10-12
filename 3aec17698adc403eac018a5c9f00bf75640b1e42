@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_59e75612",
+        "filename": "include/sfx2/sidebar/ResourceManager.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-12T16:45:43Z",
+      "side": 0,
+      "message": "To be honest, I\u0027d prefer those methods to stay. It\u0027s more modular design (ravioli code, if you wish) to have them here and call them from UnoPanel, UnoDeck etc. than to scatter the functionality all over the place\n\n+ who knows, maybe we\u0027ll need to reuse this code in the future?",
+      "revId": "3aec17698adc403eac018a5c9f00bf75640b1e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
