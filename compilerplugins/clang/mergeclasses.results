@@ -109,7 +109,6 @@ merge cppcanvas::Renderer with cppcanvas::internal::ImplRenderer
 merge cppu::PropertySetMixinImpl with cppu::PropertySetMixin
 merge dbaccess::IPropertyContainer with dbaccess::OColumn
 merge dbaccess::IRefreshListener with dbaccess::OConnection
-merge dbaui::(anonymous namespace)::ILabelProvider with dbaui::(anonymous namespace)::LabelProvider
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::OOdbcLibWrapper with dbaui::OOdbcEnumeration
 merge dbaui::SbaGridListener with dbaui::SbaXDataBrowserController

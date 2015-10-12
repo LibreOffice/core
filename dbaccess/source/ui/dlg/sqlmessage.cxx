@@ -55,14 +55,6 @@ namespace dbaui
 
 namespace
 {
-    class ILabelProvider
-    {
-    public:
-        virtual OUString  getLabel() const = 0;
-
-        virtual ~ILabelProvider() { };
-    };
-
     class ImageProvider
     {
     private:
@@ -84,7 +76,7 @@ namespace
         }
     };
 
-    class LabelProvider : public ILabelProvider
+    class LabelProvider
     {
     private:
         OUString  m_label;
@@ -94,7 +86,7 @@ namespace
         {
         }
 
-        virtual OUString  getLabel() const override
+        OUString  getLabel() const
         {
             return m_label;
         }
@@ -106,9 +98,9 @@ namespace
         mutable std::shared_ptr< ImageProvider >   m_pErrorImage;
         mutable std::shared_ptr< ImageProvider >   m_pWarningsImage;
         mutable std::shared_ptr< ImageProvider >   m_pInfoImage;
-        mutable std::shared_ptr< ILabelProvider >   m_pErrorLabel;
-        mutable std::shared_ptr< ILabelProvider >   m_pWarningsLabel;
-        mutable std::shared_ptr< ILabelProvider >   m_pInfoLabel;
+        mutable std::shared_ptr< LabelProvider >   m_pErrorLabel;
+        mutable std::shared_ptr< LabelProvider >   m_pWarningsLabel;
+        mutable std::shared_ptr< LabelProvider >   m_pInfoLabel;
 
     public:
         ProviderFactory()
@@ -141,9 +133,9 @@ namespace
             return *ppProvider;
         }
 
-        std::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
+        std::shared_ptr< LabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
-            std::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
+            std::shared_ptr< LabelProvider >* ppProvider( &m_pErrorLabel );
             sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
@@ -174,7 +166,7 @@ namespace
         SQLExceptionInfo::TYPE                  eType;
 
         std::shared_ptr< ImageProvider >        pImageProvider;
-        std::shared_ptr< ILabelProvider >       pLabelProvider;
+        std::shared_ptr< LabelProvider >        pLabelProvider;
 
         bool                                    bSubEntry;
 
