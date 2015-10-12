@@ -7148,7 +7148,7 @@ if test "$enable_epm" = "yes"; then
             AC_PATH_PROG(EPM, epm, no)
         fi
         if test "$EPM" = "no" -o "$EPM" = "internal"; then
-            echo "EPM will be built."
+            AC_MSG_NOTICE([EPM will be built.])
             BUILD_TYPE="$BUILD_TYPE EPM"
             EPM=${WORKDIR}/UnpackedTarball/epm/epm
         else
@@ -8296,9 +8296,9 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         AC_MSG_ERROR([GSSAPI needs OpenSSL, but --disable-openssl was given.])
     fi
 
-    AC_MSG_CHECKING([PostgreSQL C interface])
+    postgres_interface=""
     if test "$with_system_postgresql" = "yes"; then
-        AC_MSG_RESULT([external PostgreSQL])
+        postgres_interface="external PostgreSQL"
         SYSTEM_POSTGRESQL=TRUE
         if test "$_os" = Darwin; then
             supp_path=''
@@ -8393,17 +8393,21 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
 
         if test -n "$with_libpq_path"; then
             SYSTEM_POSTGRESQL=TRUE
-            AC_MSG_RESULT([external libpq])
+            postgres_interface="external libpq"
             POSTGRESQL_LIB="-L${with_libpq_path}/lib/"
             POSTGRESQL_INC=-I"${with_libpq_path}/include/"
         else
             SYSTEM_POSTGRESQL=
-            AC_MSG_RESULT([internal])
+            postgres_interface="internal"
             POSTGRESQL_LIB=""
             POSTGRESQL_INC="%OVERRIDE_ME%"
             BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
         fi
     fi
+
+    AC_MSG_CHECKING([PostgreSQL C interface])
+    AC_MSG_RESULT([$postgres_interface])
+
     if test "${SYSTEM_POSTGRESQL}" = "TRUE"; then
         AC_MSG_NOTICE([checking system PostgreSQL prerequisites])
         save_CFLAGS=$CFLAGS
@@ -8530,8 +8534,6 @@ if test "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=TRUE
 
-    AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
-
     # First try PKGCONFIG and then fall back
     PKG_CHECK_MODULES(CURL, libcurl >= 7.19.4,, [:])
 
@@ -8544,17 +8546,18 @@ if test "$with_system_curl" = "yes"; then
         CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")
         curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
 
+        AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
         case $curl_version in
         dnl brackets doubled below because Autoconf uses them as m4 quote characters,
         dnl so they need to be doubled to end up in the configure script
         7.19.4|7.19.[[5-9]]|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
+            AC_MSG_RESULT([yes])
             ;;
         *)
             AC_MSG_ERROR([no, you have $curl_version])
             ;;
         esac
     fi
-    AC_MSG_RESULT([yes])
 
     libo_MINGW_CHECK_DLL([libcurl])
     libo_MINGW_TRY_DLL([libintl])
@@ -9901,7 +9904,6 @@ dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
-AC_MSG_CHECKING([which VCLplugs shall be built])
 if test "$USING_X11" != TRUE; then
     enable_gtk=no
     enable_gtk3=no
@@ -9959,18 +9961,18 @@ fi
 AC_SUBST(ENABLE_KDE4)
 
 ENABLE_HEADLESS=""
-if test "x$with_x" = "xno" -o $CXX = "emcc"; then
+if test "x$with_x" = "xno" -o "$CXX" = "emcc"; then
     ENABLE_HEADLESS="TRUE"
     SCPDEFS="$SCPDEFS -DLIBO_HEADLESS"
     R="headless"
 fi
 AC_SUBST(ENABLE_HEADLESS)
 
-if test -z "$R"; then
-    AC_MSG_RESULT([none])
-else
-    AC_MSG_RESULT([$R])
+build_vcl_plugins="$R"
+if test -z "$build_vcl_plugins"; then
+    build_vcl_plugins="none"
 fi
+AC_MSG_NOTICE([VCLplugs to be built: $build_vcl_plugins])
 
 dnl ===================================================================
 dnl GCONF check
@@ -12685,7 +12687,7 @@ AC_SUBST(MPL_SUBSET)
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
-echo "setting up the build environment variables..."
+AC_MSG_NOTICE([setting up the build environment variables...])
 
 AC_SUBST(COMPATH)
 
