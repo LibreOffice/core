@@ -419,11 +419,11 @@ namespace css = ::com::sun::star;
 
 /** C++11 "final" feature.
 
-    With HAVE_CXX11_FINAL, mark a class as non-derivable or a method as non-overridable.
+    For LIBO_INTERNAL_ONLY, mark a class as non-derivable or a method as non-overridable.
 
     @since LibreOffice 4.1
 */
-#if HAVE_CXX11_FINAL
+#if defined LIBO_INTERNAL_ONLY
 #define SAL_FINAL final
 #else
 #define SAL_FINAL
