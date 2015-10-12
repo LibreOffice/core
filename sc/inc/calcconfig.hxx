@@ -45,6 +45,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
     bool mbHasStringRefSyntax:1;
+    bool mbCurrentDocOnly:1;
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;

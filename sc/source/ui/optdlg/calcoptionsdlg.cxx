@@ -103,6 +103,10 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     mpSyntax->SelectEntryPos( toSelectedItem(rConfig.meStringRefAddressSyntax) );
     mpSyntax->SetSelectHdl(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
 
+    get(mpCurrentDocOnly,"current_doc");
+    mpCurrentDocOnly->Check(rConfig.mbCurrentDocOnly);
+    mpCurrentDocOnly->SetClickHdl(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
+
     get(mpUseOpenCL,"CBUseOpenCL");
     mpUseOpenCL->Check(rConfig.mbOpenCLSubsetOnly);
     mpUseOpenCL->SetClickHdl(LINK(this, ScCalcOptionsDialog, CBUseOpenCLHdl));
@@ -231,6 +235,11 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, voi
 IMPL_LINK_TYPED(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 {
     maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectEntryPos()));
+}
+
+IMPL_LINK_TYPED(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
+{
+    maConfig.mbCurrentDocOnly = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
 IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
