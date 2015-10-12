@@ -25,6 +25,7 @@ private:
     bool bUseEnglishFuncName;     // use English function name even if the locale is not English.
     formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
     ScCalcConfig aCalcConfig;
+    bool mbWriteCalcConfig;
 
     OUString aFormulaSepArg;
     OUString aFormulaSepArrayRow;
@@ -49,6 +50,9 @@ public:
 
     void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
     bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
+
+    void SetWriteCalcConfig( bool bVal ) { mbWriteCalcConfig = bVal; }
+    bool GetWriteCalcConfig() const { return mbWriteCalcConfig; }
 
     void SetFormulaSepArg(const OUString& rSep) { aFormulaSepArg = rSep; }
     OUString GetFormulaSepArg() const { return aFormulaSepArg; }
