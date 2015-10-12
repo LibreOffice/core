@@ -76,11 +76,12 @@ sal_Int32 toSelectedItem( formula::FormulaGrammar::AddressConvention eConv )
 
 }
 
-ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig)
+ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig)
     : ModalDialog(pParent, "FormulaCalculationOptions",
         "modules/scalc/ui/formulacalculationoptions.ui")
     , maConfig(rConfig)
     , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
+    , mbWriteConfig(bWriteConfig)
 {
     get(mpTestButton, "test");
     get(mpOpenclInfoList, "opencl_list");
@@ -102,6 +103,10 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpSyntax,"comboSyntaxRef");
     mpSyntax->SelectEntryPos( toSelectedItem(rConfig.meStringRefAddressSyntax) );
     mpSyntax->SetSelectHdl(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
+
+    get(mpCurrentDocOnly,"current_doc");
+    mpCurrentDocOnly->Check(!mbWriteConfig);
+    mpCurrentDocOnly->SetClickHdl(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
 
     get(mpUseOpenCL,"CBUseOpenCL");
     mpUseOpenCL->Check(rConfig.mbOpenCLSubsetOnly);
@@ -231,6 +236,11 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, voi
 IMPL_LINK_TYPED(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 {
     maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectEntryPos()));
+}
+
+IMPL_LINK_TYPED(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
+{
+    mbWriteConfig = !(static_cast<CheckBox*>(pCheckBox)->IsChecked());
 }
 
 IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
