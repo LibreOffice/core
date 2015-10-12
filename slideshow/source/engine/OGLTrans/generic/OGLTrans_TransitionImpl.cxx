@@ -545,19 +545,19 @@ boost::shared_ptr<OGLTransitionImpl> makeIris()
 
     Primitive irisPart, part;
     int i, nSteps = 24, nParts = 7;
-    double t = 1.0/nSteps, cx, cy, lcx, lcy, lx = 1, ly = 0, x, y, cxo, cyo, lcxo, lcyo, of=2.2, f=1.42;
+    double t = 1.0/nSteps, lx = 1, ly = 0, of=2.2, f=1.42;
 
     for (i=1; i<=nSteps; i++) {
-        x = cos ((3*2*M_PI*t)/nParts);
-        y = -sin ((3*2*M_PI*t)/nParts);
-        cx = (f*x + 1)/2;
-        cy = (f*y + 1)/2;
-        lcx = (f*lx + 1)/2;
-        lcy = (f*ly + 1)/2;
-        cxo = (of*x + 1)/2;
-        cyo = (of*y + 1)/2;
-        lcxo = (of*lx + 1)/2;
-        lcyo = (of*ly + 1)/2;
+        double x = cos ((3*2*M_PI*t)/nParts);
+        double y = -sin ((3*2*M_PI*t)/nParts);
+        double cx = (f*x + 1)/2;
+        double cy = (f*y + 1)/2;
+        double lcx = (f*lx + 1)/2;
+        double lcy = (f*ly + 1)/2;
+        double cxo = (of*x + 1)/2;
+        double cyo = (of*y + 1)/2;
+        double lcxo = (of*lx + 1)/2;
+        double lcyo = (of*ly + 1)/2;
         irisPart.pushTriangle (glm::vec2 (lcx, lcy),
                                glm::vec2 (lcxo, lcyo),
                                glm::vec2 (cx, cy));
@@ -1192,14 +1192,14 @@ boost::shared_ptr<OGLTransitionImpl> makeDiamond()
 boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts )
 {
     static double t30 = tan( M_PI/6.0 );
-    double n, ln = 0;
+    double ln = 0;
     double p = 1.0/parts;
 
     Primitives_t aLeavingSlide;
     Primitives_t aEnteringSlide;
     for( int i=0; i<parts; i++ ) {
         Primitive Slide;
-        n = (i + 1)/(double)parts;
+        double n = (i + 1)/(double)parts;
         if( vertical ) {
             Slide.pushTriangle (glm::vec2 (ln,0), glm::vec2 (n,0), glm::vec2 (ln,1));
             Slide.pushTriangle (glm::vec2 (n,0), glm::vec2 (ln,1), glm::vec2 (n,1));

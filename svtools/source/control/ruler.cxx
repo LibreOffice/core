@@ -484,8 +484,6 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, long nMin, long nM
     long nTickWidth;
     bool bNoTicks = false;
 
-    double nAcceptanceDelta = 0.0001;
-
     Size aPixSize = rRenderContext.LogicToPixel(Size(nTick4, nTick4), maMapMode);
 
     if (mnUnitIndex == RULER_UNIT_CHAR)
@@ -627,6 +625,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, long nMin, long nM
                 // Tick4 - Output (Text)
                 double aStep = (nTick / nTick4);
                 double aRest = std::abs(aStep - std::floor(aStep));
+                double nAcceptanceDelta = 0.0001;
 
                 if (aRest < nAcceptanceDelta)
                 {

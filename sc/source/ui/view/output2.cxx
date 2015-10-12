@@ -4699,7 +4699,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
                         long nPosY = nRowPosY;
-                        bool bVisChanged = false;
 
                         //! rest from merged cells further up do not work!
 
@@ -5084,7 +5083,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 }
 
                                 long nClipStartY = nStartY;
-                                if (nArrY==0 || bVisChanged)
+                                if (nArrY==0)
                                 {
                                     if ( nClipStartY < nRowPosY )
                                     {

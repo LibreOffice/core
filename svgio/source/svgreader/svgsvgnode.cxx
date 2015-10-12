@@ -481,9 +481,6 @@ namespace svgio
                 }
                 else // Outermost SVG element
                 {
-                    double fW = 0.0; // effective value depends on viewBox
-                    double fH = 0.0;
-
                     // Svg defines that a negative value is an error and that 0.0 disables rendering
                     // isPositive() not usable because it allows 0.0 in contrast to mathematical definition of 'positive'
                     const bool bWidthInvalid(getWidth().isSet() && basegfx::fTools::lessOrEqual(getWidth().getNumber(), 0.0));
@@ -491,6 +488,8 @@ namespace svgio
                     if(!bWidthInvalid && !bHeightInvalid)
                     {
                         basegfx::B2DRange aSvgCanvasRange; // effective value depends on viewBox
+                        double fW = 0.0; // effective value depends on viewBox
+                        double fH = 0.0;
                         if(getViewBox())
                         {
                             // SVG 1.1 defines in section 7.7 that a negative value for width or height
@@ -740,13 +739,13 @@ namespace svgio
                 {
                     // If width or height is not provided, the default would be 100%, see SVG 1.1 section 5.1.2
                     // But here it cannot be resolved and no fallback exists.
-                    // SVG 1.1 defines in section 5.1.2 that x,y has no meanig for the outermost SVG element.
+                    // SVG 1.1 defines in section 5.1.2 that x,y has no meaning for the outermost SVG element.
                     bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
-                    double fW( bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : 0.0);
                     bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
-                    double fH( bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : 0.0);
                     if (bWidthIsAbsolute && bHeightIsAbsolute)
                     {
+                        double fW( getWidth().solveNonPercentage(*this) );
+                        double fH( getHeight().solveNonPercentage(*this) );
                         return basegfx::B2DRange(0.0, 0.0, fW, fH);
                     }
                     else // no fallback exists
@@ -754,7 +753,7 @@ namespace svgio
                             return SvgNode::getCurrentViewPort();
                     }
                 }
-// ToDo: Is it possible to decompose and use the bounding box of the children, if even the
+// TODO: Is it possible to decompose and use the bounding box of the children, if even the
 //       outermost svg has no information to resolve percentage? Is it worth, how expensive is it?
 
             }

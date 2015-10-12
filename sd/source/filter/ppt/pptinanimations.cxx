@@ -3358,15 +3358,15 @@ void AnimationImporter::dump( Any& rAny )
     }
     else if( rAny >>= aEvent )
     {
-        static const char* triggers[] =
-        {
-            "none","onbegin","onend","begin",
-            "end","onclick","ondoubleclick","onmouseenter",
-            "onmouseleave","onpptnext","onpptprev","onstopaudio"
-        };
-
         if( aEvent.Trigger != EventTrigger::NONE )
         {
+            static const char* triggers[] =
+            {
+                "none","onbegin","onend","begin",
+                "end","onclick","ondoubleclick","onmouseenter",
+                "onmouseleave","onpptnext","onpptprev","onstopaudio"
+            };
+
             if( aEvent.Source.hasValue() )
             {
                 dump_target( aEvent.Source );

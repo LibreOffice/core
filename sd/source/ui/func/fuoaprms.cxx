@@ -626,7 +626,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         pUndoGroup->SetComment(aComment);
 
         // for the path effect, remember some stuff
-        SdrObject*  pRunningObj = NULL;
         SdrPathObj* pPath       = NULL;
         if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
         {
@@ -635,6 +634,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
             SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
+            SdrObject* pRunningObj = NULL;
 
             if (pObject1->GetObjInventor() == SdrInventor &&
                 ((eKind1 == OBJ_LINE) ||        // 2 point line

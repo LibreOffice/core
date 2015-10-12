@@ -2228,7 +2228,6 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     case css::util::NumberFormat::DATE:
         while (i < nAnzStrings)
         {
-            int nCalRet;
             switch (nTypeArray[i])
             {
             case NF_SYMBOLTYPE_BLANK:
@@ -2238,6 +2237,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 i++;
                 break;
             case NF_SYMBOLTYPE_DEL:
+                int nCalRet;
                 if (sStrArray[i] == sOldDateSep)
                 {
                     nTypeArray[i] = NF_SYMBOLTYPE_DATESEP;

@@ -351,7 +351,6 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
            First, insert pages */
         std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
         bool bLink = pDlg->IsLink();
-        bool bReplace = false;
         SdPage* pPage = NULL;
         ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : NULL;
 
@@ -394,6 +393,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                necessary.
                bNameOK is sal_False if the user has canceled. */
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
+            bool bReplace = false;
 
             if( bNameOK )
                 bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,

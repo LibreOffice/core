@@ -3078,16 +3078,15 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                             ATTR_PATTERN_START,
                                             ATTR_PATTERN_END ));
 
-            const SvxBorderLine*    pBoxLine = NULL;
             SvxBorderLine           aLine;
-
-            // here pBoxLine is used
 
             if( pBorderAttr )
             {
+                const SvxBorderLine*    pBoxLine = NULL;
                 SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
                 SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
+                // here pBoxLine is used
                 SET_LINE_ATTRIBUTES(Top,SvxBoxItemLine::TOP)
                 SET_LINE_ATTRIBUTES(Bottom,SvxBoxItemLine::BOTTOM)
                 SET_LINE_ATTRIBUTES(Left,SvxBoxItemLine::LEFT)
