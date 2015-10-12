@@ -992,7 +992,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 }
                 else
                 {
-                    pNewPageView->SetHelpLines( mpFrameView->GetStandardHelpLines() );
+                    bool bInvalidate = !comphelper::LibreOfficeKit::isActive();
+                    pNewPageView->SetHelpLines( mpFrameView->GetStandardHelpLines(), bInvalidate );
                 }
             }
 
