@@ -327,28 +327,11 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
     }
 }
 
-void ImplImageBmp::ImplUpdateDisplayBmp( OutputDevice*
-#if defined WNT
-pOutDev
-#endif
-)
+void ImplImageBmp::ImplUpdateDisplayBmp(OutputDevice*)
 {
-    if( !mpDisplayBmp && !maBmpEx.IsEmpty() )
+    if (!mpDisplayBmp && !maBmpEx.IsEmpty())
     {
-#if defined WNT
-        if( !maBmpEx.IsAlpha() )
-        {
-            // FIXME: this looks like rather an obsolete code-path to me.
-            const Bitmap aBmp( maBmpEx.GetBitmap().CreateDisplayBitmap( pOutDev ) );
-
-            if( maBmpEx.IsTransparent() )
-                mpDisplayBmp = new BitmapEx( aBmp, maBmpEx.GetMask().CreateDisplayBitmap( pOutDev ) );
-            else
-                mpDisplayBmp = new BitmapEx( aBmp );
-        }
-        else
-#endif
-            mpDisplayBmp = new BitmapEx( maBmpEx );
+        mpDisplayBmp = new BitmapEx(maBmpEx);
     }
 }
 
