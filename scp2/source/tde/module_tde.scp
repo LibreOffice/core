@@ -19,6 +19,8 @@ Module gid_Module_Optional_Tde
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_TDE);
     Styles = ();
-    Files = (auto_tde_ALL);
+    Files = (auto_tde_ALL,
+        gid_File_Bin_Tde_Open_Url
+    );
 End
 

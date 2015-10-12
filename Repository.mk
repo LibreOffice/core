@@ -146,7 +146,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter TRUE-TRUE,$(USING_X11)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
-	$(if $(ENABLE_TDE),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	ui-previewer \
 	$(if $(filter WNT,$(OS)), \
@@ -223,6 +222,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,tde, \
 	$(if $(ENABLE_TDE),tdebe1) \
+	$(if $(USING_X11), \
+		$(if $(ENABLE_TDE),vclplug_tde) \
+	) \
+))
+
+$(eval $(call gb_Helper_register_executables_for_install,OOO,tde, \
+       $(if $(ENABLE_TDE),tdefilepicker) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
@@ -426,7 +432,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	vclcanvas \
 	$(if $(USING_X11), \
 		vclplug_gen \
-		$(if $(ENABLE_TDE),vclplug_tde) \
 	) \
 	writerperfect \
 	xmlscript \

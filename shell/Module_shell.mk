@@ -114,6 +114,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Package_scripts \
 	Package_scripts_gnome \
 	Package_scripts_kde \
+	Package_scripts_tde \
 ))
 endif
 

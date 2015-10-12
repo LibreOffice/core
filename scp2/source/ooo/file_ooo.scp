@@ -82,6 +82,13 @@ File gid_File_Bin_Kde_Open_Url
     Styles = (FILELIST, PACKED);
 End
 
+File gid_File_Bin_Tde_Open_Url
+    BIN_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "shell_scripts_tde.filelist";
+    Styles = (FILELIST, PACKED);
+End
+
 #endif
 
 #if defined UNX
