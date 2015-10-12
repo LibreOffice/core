@@ -12,7 +12,6 @@ Any change in this header will cause a rebuild of almost everything.
 #ifndef CONFIG_GLOBAL_H
 #define CONFIG_GLOBAL_H
 
-#define HAVE_CXX11_OVERRIDE 0
 #define HAVE_CXX11_FINAL 0
 #define HAVE_CXX11_PERFECT_FORWARDING 0
 #define HAVE_CXX11_CONSTEXPR 0
