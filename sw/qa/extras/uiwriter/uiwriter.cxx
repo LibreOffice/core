@@ -2721,9 +2721,6 @@ void SwUiWriterTest::testTdf77014()
     CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[3]", "nType"));
     CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[4]/Text[3]", "nLength"));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[1]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[4]/Text[1]", "nLength"));
-
     // Second paragraph
     CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[1]", "nType"));
     CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[5]/Text[1]", "nLength"));
