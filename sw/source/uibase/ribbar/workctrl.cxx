@@ -612,4 +612,67 @@ VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent
     return pRet.get();
 }
 
+class SwJumpToSpecificBox_Impl : public NumericField
+{
+    sal_uInt16          nSlotId;
+    uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
+
+public:
+    SwJumpToSpecificBox_Impl(
+        vcl::Window* pParent,
+        sal_uInt16 nSlot,
+        const Reference< XDispatchProvider >& rDispatchProvider );
+    virtual ~SwJumpToSpecificBox_Impl();
+
+protected:
+    virtual void    Select();
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+};
+
+SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(
+    vcl::Window* pParent,
+    sal_uInt16 nSlot,
+    const Reference< XDispatchProvider >& rDispatchProvider ):
+    NumericField( pParent, SW_RES(RID_JUMP_TO_SPEC_PAGE)),
+    nSlotId(nSlot),
+    m_xDispatchProvider( rDispatchProvider )
+{}
+
+SwJumpToSpecificBox_Impl::~SwJumpToSpecificBox_Impl()
+{}
+
+void SwJumpToSpecificBox_Impl::Select()
+{
+    OUString sEntry(GetText());
+    SfxUInt16Item aPageNum(nSlotId);
+    aPageNum.SetValue((sal_uInt16)sEntry.toInt32());
+    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+    pCurrentShell->GetDispatcher()->Execute(nSlotId, SfxCallMode::ASYNCHRON, &aPageNum, 0L);
+}
+
+bool SwJumpToSpecificBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        Select();
+    return NumericField::Notify( rNEvt );
+}
+
+SFX_IMPL_TOOLBOX_CONTROL( SwJumpToSpecificPageControl, SfxUInt16Item);
+
+SwJumpToSpecificPageControl::SwJumpToSpecificPageControl(
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
+    ToolBox& rTbx) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
+{}
+
+SwJumpToSpecificPageControl::~SwJumpToSpecificPageControl()
+{}
+
+VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *pParent )
+{
+    VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+    return pRet.get();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

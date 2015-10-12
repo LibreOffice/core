@@ -383,6 +383,7 @@ void SwDLL::RegisterControls()
     SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pMod);
+    SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }
 
 // Load Module (only dummy for linking of the DLL)
