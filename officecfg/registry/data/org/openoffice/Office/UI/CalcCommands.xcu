@@ -111,7 +111,7 @@
           <value xml:lang="en-US">A~utoRefresh Traces</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~AutoRefresh</value>
+          <value xml:lang="en-US">A~utoRefresh</value>
         </prop>
       </node>
       <node oor:name=".uno:ChooseDesign" oor:op="replace">
@@ -2021,7 +2021,7 @@
       </node>
       <node oor:name=".uno:CompressGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Compress Image...</value>
+          <value xml:lang="en-US">Co~mpress Image...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
@@ -2029,7 +2029,7 @@
       </node>
       <node oor:name=".uno:SaveGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-         <value xml:lang="en-US">~Save Image...</value>
+         <value xml:lang="en-US">Save Image...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
