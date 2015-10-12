@@ -637,8 +637,7 @@ void XclImpAutoFilterData::ReadAutoFilter(
 
     sal_uInt8   nType, nOper, nBoolErr, nVal;
     sal_Int32   nRK;
-    double  fVal;
-    bool bIgnore;
+    double      fVal;
 
     sal_uInt8 nStrLen[2] = { 0, 0 };
     ScQueryEntry aEntries[2];
@@ -647,7 +646,7 @@ void XclImpAutoFilterData::ReadAutoFilter(
     {
         ScQueryEntry& rEntry = aEntries[nE];
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-        bIgnore = false;
+        bool bIgnore = false;
 
         nType = rStrm.ReaduInt8();
         nOper = rStrm.ReaduInt8();

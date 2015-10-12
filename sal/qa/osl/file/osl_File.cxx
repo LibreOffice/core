@@ -1566,32 +1566,32 @@ namespace osl_FileStatus
 
         void check_FileType(osl::FileStatus const& _rFileStatus )
         {
-            bool bOK = false;
-                if ( _rFileStatus.isValid(osl_FileStatus_Mask_FileName))
+            if ( _rFileStatus.isValid(osl_FileStatus_Mask_FileName))
+            {
+                rtl::OUString suFilename = _rFileStatus.getFileName();
+
+                if ( _rFileStatus.isValid(osl_FileStatus_Mask_Type))
                 {
-                    rtl::OUString suFilename = _rFileStatus.getFileName();
+                    osl::FileStatus::Type eType = _rFileStatus.getFileType();
+                    bool bOK = false;
 
-                    if ( _rFileStatus.isValid(osl_FileStatus_Mask_Type))
+                    if ( compareFileName( suFilename, aTmpName2) )
                     {
-                        osl::FileStatus::Type eType = _rFileStatus.getFileType();
+                        // regular
+                        bOK = ( eType == osl::FileStatus::Regular );
+                    }
+                    if ( compareFileName( suFilename, aTmpName1) )
+                    {
+                        // directory
+                        bOK = ( eType == ::osl::FileStatus::Directory );
+                    }
 
-                        if ( compareFileName( suFilename, aTmpName2) )
-                        {
-                            // regular
-                            bOK = ( eType == osl::FileStatus::Regular );
-                        }
-                        if ( compareFileName( suFilename, aTmpName1) )
-                        {
-                            // directory
-                            bOK = ( eType == ::osl::FileStatus::Directory );
-                        }
-
-                        CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: ",
-                                     bOK );
-        }
+                    CPPUNIT_ASSERT_MESSAGE( "test for getFileType function: ",
+                                 bOK );
                 }
-                // LLA: it's not a bug, if a FileStatus not exist, so no else
             }
+            // LLA: it's not a bug, if a FileStatus not exist, so no else
+        }
 
         void getFileType_002()
         {

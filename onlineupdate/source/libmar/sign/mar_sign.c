@@ -159,13 +159,12 @@ WriteAndUpdateSignatures(FILE *fpDest, void *buffer,
 void
 AdjustIndexContentOffsets(char *indexBuf, uint32_t indexLength, uint32_t offsetAmount)
 {
-  uint32_t *offsetToContent;
   char *indexBufLoc = indexBuf;
 
   /* Consume the index and adjust each index by the specified amount */
   while (indexBufLoc != (indexBuf + indexLength)) {
     /* Adjust the offset */
-    offsetToContent = (uint32_t *)indexBufLoc;
+    uint32_t* offsetToContent = (uint32_t *)indexBufLoc;
     *offsetToContent = ntohl(*offsetToContent);
     *offsetToContent += offsetAmount;
     *offsetToContent = htonl(*offsetToContent);

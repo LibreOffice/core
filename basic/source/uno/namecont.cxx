@@ -3225,22 +3225,20 @@ Sequence< Type > SfxLibrary::getTypes()
     throw( RuntimeException, std::exception )
 {
     static OTypeCollection * s_pTypes_NameContainer = 0;
+    if( !s_pTypes_NameContainer )
     {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
         if( !s_pTypes_NameContainer )
         {
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-            if( !s_pTypes_NameContainer )
-            {
-                static OTypeCollection s_aTypes_NameContainer(
-                    cppu::UnoType<XNameContainer>::get(),
-                    cppu::UnoType<XContainer>::get(),
-                    cppu::UnoType<XChangesNotifier>::get(),
-                    OComponentHelper::getTypes() );
-                s_pTypes_NameContainer = &s_aTypes_NameContainer;
-            }
+            static OTypeCollection s_aTypes_NameContainer(
+                cppu::UnoType<XNameContainer>::get(),
+                cppu::UnoType<XContainer>::get(),
+                cppu::UnoType<XChangesNotifier>::get(),
+                OComponentHelper::getTypes() );
+            s_pTypes_NameContainer = &s_aTypes_NameContainer;
         }
-        return s_pTypes_NameContainer->getTypes();
     }
+    return s_pTypes_NameContainer->getTypes();
 }
 
 

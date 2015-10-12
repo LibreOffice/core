@@ -594,53 +594,53 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange)
         return;
     sal_Int32 nPrevIndex = -1;
     bool bPrevAutoStyle = true;
+
+    sal_uInt32 nPrevStartCol(rFormatRange.nStartColumn);
+    OSL_ENSURE( static_cast<size_t>(nPrevStartCol) < pColDefaults->size(), "nPrevStartCol out of bounds");
+    sal_uInt32 nRepeat;
+    if (static_cast<size_t>(nPrevStartCol) < pColDefaults->size())
     {
-        sal_uInt32 nPrevStartCol(rFormatRange.nStartColumn);
-        OSL_ENSURE( static_cast<size_t>(nPrevStartCol) < pColDefaults->size(), "nPrevStartCol out of bounds");
-        sal_uInt32 nRepeat;
-        if (static_cast<size_t>(nPrevStartCol) < pColDefaults->size())
+        nRepeat = (*pColDefaults)[nPrevStartCol].nRepeat;
+        nPrevIndex = (*pColDefaults)[nPrevStartCol].nIndex;
+        bPrevAutoStyle = (*pColDefaults)[nPrevStartCol].bIsAutoStyle;
+    }
+    else
+    {
+        /* Again, this is to prevent out-of-bounds accesses, so FIXME
+         * elsewhere! */
+        if (pColDefaults->empty())
         {
-            nRepeat = (*pColDefaults)[nPrevStartCol].nRepeat;
-            nPrevIndex = (*pColDefaults)[nPrevStartCol].nIndex;
-            bPrevAutoStyle = (*pColDefaults)[nPrevStartCol].bIsAutoStyle;
+            nRepeat = 1;
+            nPrevIndex = -1;
+            bPrevAutoStyle = false;
         }
         else
         {
-            /* Again, this is to prevent out-of-bounds accesses, so FIXME
-             * elsewhere! */
-            if (pColDefaults->empty())
-            {
-                nRepeat = 1;
-                nPrevIndex = -1;
-                bPrevAutoStyle = false;
-            }
-            else
-            {
-                nRepeat = (*pColDefaults)[pColDefaults->size()-1].nRepeat;
-                nPrevIndex = (*pColDefaults)[pColDefaults->size()-1].nIndex;
-                bPrevAutoStyle = (*pColDefaults)[pColDefaults->size()-1].bIsAutoStyle;
-            }
+            nRepeat = (*pColDefaults)[pColDefaults->size()-1].nRepeat;
+            nPrevIndex = (*pColDefaults)[pColDefaults->size()-1].nIndex;
+            bPrevAutoStyle = (*pColDefaults)[pColDefaults->size()-1].bIsAutoStyle;
         }
-        sal_uInt32 nEnd = nPrevStartCol + rFormatRange.nRepeatColumns;
-        for(sal_uInt32 i = nPrevStartCol + nRepeat; i < nEnd && i < pColDefaults->size(); i += (*pColDefaults)[i].nRepeat)
-        {
-            OSL_ENSURE(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
-            if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
-                (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
-            {
-                AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
-                nPrevStartCol = i;
-                nRepeat = (*pColDefaults)[i].nRepeat;
-                nPrevIndex = (*pColDefaults)[i].nIndex;
-                bPrevAutoStyle = (*pColDefaults)[i].bIsAutoStyle;
-            }
-            else
-                nRepeat += (*pColDefaults)[i].nRepeat;
-        }
-        if (sal_uInt32(nPrevStartCol + nRepeat) > nEnd)
-            nRepeat = nEnd - nPrevStartCol;
-        AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
     }
+    sal_uInt32 nEnd = nPrevStartCol + rFormatRange.nRepeatColumns;
+    for(sal_uInt32 i = nPrevStartCol + nRepeat; i < nEnd && i < pColDefaults->size(); i += (*pColDefaults)[i].nRepeat)
+    {
+        OSL_ENSURE(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
+        if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
+            (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
+        {
+            AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
+            nPrevStartCol = i;
+            nRepeat = (*pColDefaults)[i].nRepeat;
+            nPrevIndex = (*pColDefaults)[i].nIndex;
+            bPrevAutoStyle = (*pColDefaults)[i].bIsAutoStyle;
+        }
+        else
+            nRepeat += (*pColDefaults)[i].nRepeat;
+    }
+    if (sal_uInt32(nPrevStartCol + nRepeat) > nEnd)
+        nRepeat = nEnd - nPrevStartCol;
+    AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
+
 }
 
 bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)

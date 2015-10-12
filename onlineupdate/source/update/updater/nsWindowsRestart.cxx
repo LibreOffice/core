@@ -304,7 +304,6 @@ private:
  */
 static int ArgStrLen(const wchar_t *s)
 {
-  int backslashes = 0;
   int i = wcslen(s);
   BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
   // Only add doublequotes if the string contains a space or a tab
@@ -315,6 +314,7 @@ static int ArgStrLen(const wchar_t *s)
   }
 
   if (hasDoubleQuote) {
+    int backslashes = 0;
     while (*s) {
       if (*s == '\\') {
         ++backslashes;

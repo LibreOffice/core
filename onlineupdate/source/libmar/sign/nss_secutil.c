@@ -25,7 +25,6 @@ static char consoleName[] =  {
 #if defined(_WINDOWS)
 static char * quiet_fgets (char *buf, int length, FILE *input)
 {
-  int c;
   char *end = buf;
 
   /* fflush (input); */
@@ -37,6 +36,7 @@ static char * quiet_fgets (char *buf, int length, FILE *input)
 
   while (1)
   {
+    int c;
 #if defined (_WIN32_WCE)
     c = getchar();      /* gets a character from stdin */
 #else

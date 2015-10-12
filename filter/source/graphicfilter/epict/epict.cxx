@@ -872,7 +872,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     sal_uLong   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
     sal_uLong   nDstRowPos, nEqu3, nPos, nDstMapPos;
     sal_uInt16  nBitsPerPixel, nPackType;
-    sal_uInt8   *pComp[4], *pTemp;
+    sal_uInt8   *pComp[4];
     sal_uInt8    nEquData = 0;
     sal_uInt8    nFlagCounterByte, nRed, nGreen, nBlue;
 
@@ -1149,6 +1149,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         // loop through rows:
         for ( ny = 0; ny < nHeight; ny++ )
         {
+            sal_uInt8* pTemp;
             // read line ny of source into the buffer:
             switch ( nBitsPerPixel )
             {
