@@ -53,13 +53,9 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
     virtual short   Execute() SAL_OVERRIDE ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
-Class::~Class()                                     \
-{                                                   \
-}                                                   \
 short Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
