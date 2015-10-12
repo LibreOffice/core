@@ -8811,6 +8811,11 @@ AS_IF([test "$with_system_glew" = "yes"],
     [AC_DEFINE([HAVE_GLEW_1_12])])
 
 dnl ===================================================================
+dnl Check for system glyphy
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/include"])
+
+dnl ===================================================================
 dnl Check for system vigra
 dnl ===================================================================
 AC_MSG_CHECKING([which vigra to use])
