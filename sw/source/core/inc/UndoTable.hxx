@@ -103,7 +103,7 @@ class SwUndoTableToText : public SwUndo
     OUString sTableNm;
     SwDDEFieldType* pDDEFieldType;
     _SaveTable* pTableSave;
-    SwTableToTextSaves* pBoxSaves;
+    SwTableToTextSaves* m_pBoxSaves;
     SwHistory* pHistory;
     sal_uLong nSttNd, nEndNd;
     sal_Unicode cTrenner;

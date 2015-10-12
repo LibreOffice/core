@@ -91,10 +91,7 @@ public:
 class SwUndoMoves : public std::vector<std::unique_ptr<SwUndoMove>> {};
 
 struct SwTableToTextSave;
-class SwTableToTextSaves : public boost::ptr_vector<SwTableToTextSave> {
-public:
-    explicit SwTableToTextSaves(size_type n) : boost::ptr_vector<SwTableToTextSave>(n) {}
-};
+class SwTableToTextSaves : public std::vector<std::unique_ptr<SwTableToTextSave>> {};
 
 struct _UndoTableCpyTable_Entry
 {
@@ -406,7 +403,8 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     cTrenner( cCh ), nHdlnRpt( rTable.GetRowsToRepeat() )
 {
     pTableSave = new _SaveTable( rTable );
-    pBoxSaves = new SwTableToTextSaves( (SwTableToTextSaves::size_type)rTable.GetTabSortBoxes().size() );
+    m_pBoxSaves = new SwTableToTextSaves;
+    m_pBoxSaves->reserve(rTable.GetTabSortBoxes().size());
 
     if( dynamic_cast<const SwDDETable *>(&rTable) != nullptr )
         pDDEFieldType = static_cast<SwDDEFieldType*>(static_cast<const SwDDETable&>(rTable).GetDDEFieldType()->Copy());
@@ -441,7 +439,7 @@ SwUndoTableToText::~SwUndoTableToText()
 {
     delete pDDEFieldType;
     delete pTableSave;
-    delete pBoxSaves;
+    delete m_pBoxSaves;
     delete pHistory;
 }
 
@@ -463,7 +461,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNode2Layout aNode2Layout( aFrmIdx.GetNode() );
 
     // create TableNode structure
-    SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *pBoxSaves );
+    SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *m_pBoxSaves );
     pTableNd->GetTable().SetTableModel( pTableSave->IsNewModel() );
     SwTableFormat* pTableFormat = rDoc.MakeTableFrameFormat( sTableNm, rDoc.GetDfltFrameFormat() );
     pTableNd->GetTable().RegisterToFormat( *pTableFormat );
@@ -547,7 +545,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
     for( size_t n = rSavedData.size(); n; )
     {
-        const SwTableToTextSave* pSave = &rSavedData[ --n ];
+        const SwTableToTextSave *const pSave = rSavedData[ --n ].get();
         // if the start node was merged with last from prev. cell,
         // subtract 1 from index to get the merged paragraph, and split that
         aSttIdx = pSave->m_nSttNd - ( ( SAL_MAX_INT32 != pSave->m_nContent ) ? 1 : 0);
@@ -681,8 +679,9 @@ void SwUndoTableToText::SetRange( const SwNodeRange& rRg )
 
 void SwUndoTableToText::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, sal_Int32 nContentIdx )
 {
-    SwTableToTextSave* pNew = new SwTableToTextSave( rDoc, nNdIdx, nEndIdx, nContentIdx );
-    pBoxSaves->push_back( pNew );
+    std::unique_ptr<SwTableToTextSave> pNew(
+            new SwTableToTextSave(rDoc, nNdIdx, nEndIdx, nContentIdx));
+    m_pBoxSaves->push_back(std::move(pNew));
 }
 
 SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
