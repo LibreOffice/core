@@ -66,14 +66,10 @@
 
 #include <hash_map>
 #include <string.h>
-#ifdef WNT
 #include <stdlib.h>
 #include <ctype.h>
-#endif
 
 #include "rtl/bootstrap.h"
-
-#include <string.h> // memcmp
 
 #ifndef PDFI_IMPL_IDENTIFIER
 # error define implementation name for pdfi extension, please!
