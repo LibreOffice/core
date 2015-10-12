@@ -26,5 +26,7 @@ Module gid_Module_Optional_Kde
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_KDE);
     Styles = ();
-    Files = (auto_kde_ALL);
+    Files = (auto_kde_ALL,
+        gid_File_Bin_Kde_Open_Url
+    );
 End
