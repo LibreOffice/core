@@ -13,13 +13,7 @@
 #include <gtk/gtk.h>
 
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
-#if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
-#else
-#include <gtk/gtkprintjob.h>
-#include <gtk/gtkpagesetupunixdialog.h>
-#include <gtk/gtkprintunixdialog.h>
-#endif
 
 #include <osl/module.hxx>
 #include <sal/types.h>

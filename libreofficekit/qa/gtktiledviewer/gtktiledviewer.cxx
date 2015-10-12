@@ -102,7 +102,6 @@ const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 /// Get the visible area of the scrolled window
 static void getVisibleAreaTwips(GtkWidget* pDocView, GdkRectangle* pArea)
 {
-#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
 
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
@@ -116,7 +115,6 @@ static void getVisibleAreaTwips(GtkWidget* pDocView, GdkRectangle* pArea)
                                                gtk_adjustment_get_page_size(pHAdjustment));
     pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
                                                gtk_adjustment_get_page_size(pVAdjustment));
-#endif
 }
 
 static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )

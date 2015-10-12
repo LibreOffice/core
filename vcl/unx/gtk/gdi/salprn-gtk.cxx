@@ -318,15 +318,9 @@ lcl_setHelpText(
         const uno::Sequence<OUString>& i_rHelpTexts,
         const sal_Int32 i_nIndex)
 {
-#if GTK_CHECK_VERSION(2,12,0)
     if (i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength())
         gtk_widget_set_tooltip_text(io_pWidget,
             OUStringToOString(i_rHelpTexts.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8).getStr());
-#else
-    (void)io_pWidget;
-    (void)i_rHelpTexts;
-    (void)i_nIndex;
-#endif
 }
 
 static GtkWidget*
@@ -429,12 +423,8 @@ GtkPrintDialog::impl_initDialog()
             | GTK_PRINT_CAPABILITY_COLLATE
             | GTK_PRINT_CAPABILITY_REVERSE
             | GTK_PRINT_CAPABILITY_GENERATE_PS
-#if GTK_CHECK_VERSION(2,12,0)
             | GTK_PRINT_CAPABILITY_NUMBER_UP
-#endif
-#if GTK_CHECK_VERSION(2,14,0)
             | GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT
-#endif
        ));
 }
 
@@ -787,11 +777,9 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
                 ePrintPages = GTK_PRINT_PAGES_RANGES;
                 break;
             case 2:
-#if GTK_CHECK_VERSION(2,14,0)
                 if (m_xWrapper->supportsPrintSelection())
                     ePrintPages = GTK_PRINT_PAGES_SELECTION;
                 else
-#endif
                     SAL_INFO("vcl.gtk", "the application wants to print a selection, but the present gtk version does not support it");
                 break;
             default:
@@ -999,7 +987,6 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
             }
             catch (...) {}
         }
-#if GTK_CHECK_VERSION(2,17,5)
         if (gtk_print_unix_dialog_get_has_selection(GTK_PRINT_UNIX_DIALOG(m_pDialog)))
         {
             uno::Any aSelection;
@@ -1022,7 +1009,6 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
                 aFilterData[aFilterData.getLength()-1].Value <<= aSelection;
             }
         }
-#endif
         uno::Sequence<beans::PropertyValue> aArgs(2);
         aArgs[0].Name = "FilterData";
         aArgs[0].Value <<= aFilterData;
