@@ -838,10 +838,8 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
     if( !xNewData.is() )
         return;
 
-    // /-- locked controllers
     ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
     m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
-    // \-- locked controllers
 }
 
 // ____ XModel ____

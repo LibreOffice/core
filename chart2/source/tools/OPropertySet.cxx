@@ -90,7 +90,7 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 
 #define LCL_PROP_CPPUTYPE(t) (cppu::UnoType<t>::get())
 
-// // ____ XTypeProvider ____
+//  ____ XTypeProvider ____
 Sequence< uno::Type > SAL_CALL
     OPropertySet::getTypes()
     throw (uno::RuntimeException, std::exception)

@@ -491,7 +491,7 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
     aESel(rESel), aNewAttribs(rNewItems)
 {
     // When EditUndoSetAttribs actually is a RemoveAttribs this could be
-    // /recognize by the empty itemset, but then it would have to be caught in
+    // recognize by the empty itemset, but then it would have to be caught in
     // its own place, which possible a setAttribs does with an empty itemset.
     bSetIsRemove = false;
     bRemoveParaAttribs = false;

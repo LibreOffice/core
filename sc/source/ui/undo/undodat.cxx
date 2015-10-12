@@ -1189,7 +1189,7 @@ void ScUndoImportData::Redo()
                                                     nCol1, nRow1, nCol2, nRow2 );
     }
     bool bMoveCells = pUndoDBData && pRedoDBData &&
-                        pRedoDBData->IsDoSize();        // // the same in old and new
+                        pRedoDBData->IsDoSize();        // the same in old and new
     if (bMoveCells)
     {
         //  Redo: FitBlock, then delete data (needed for CopyToDocument)

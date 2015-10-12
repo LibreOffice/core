@@ -771,9 +771,9 @@ ComponentContext::ComponentContext(
         {
             // singleton entry
             m_map[ rEntry.name ] = new ContextEntry( Any(), true );
-            // /service
+            // service
             m_map[ rEntry.name + "/service" ] = new ContextEntry( rEntry.value, false );
-            // /initial-arguments are provided as optional context entry
+            // initial-arguments are provided as optional context entry
         }
         else
         {

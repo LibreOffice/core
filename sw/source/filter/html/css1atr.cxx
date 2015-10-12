@@ -591,7 +591,6 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
           OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, pTemplate,
                                 nFirstRefPoolId, false );
     }
-// /Feature: PrintExt
 
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style

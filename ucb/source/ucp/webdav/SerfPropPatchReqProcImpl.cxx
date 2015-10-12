@@ -123,7 +123,6 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                 }
                 else
                 {
-                    // />
                     aBuffer.append( "/>" );
                 }
 

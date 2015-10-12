@@ -510,10 +510,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         }
     }
 
-// Feature: PrintExt
     if( !bCharLvl )
         pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
-// /Feature: PrintExt
 
     OSL_ENSURE(aContexts.size() <= nContextStAttrMin ||
             aContexts.back() != pContext,

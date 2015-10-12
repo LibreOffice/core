@@ -214,7 +214,6 @@ static CSS1PropertyEnum const aPageBreakTable[] =
     { 0,                    0                           }
 };
 
-// /Feature: PrintExt
 
 static sal_uInt16 const aBorderWidths[] =
 {
@@ -371,11 +370,9 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     eTopType( rProp.eTopType ),
     eWidthType( rProp.eWidthType ),
     eHeightType( rProp.eHeightType ),
-// Feature: PrintExt
     eSizeType( rProp.eSizeType ),
     ePageBreakBefore( rProp.ePageBreakBefore ),
     ePageBreakAfter( rProp.ePageBreakAfter )
-// /Feature: PrintExt
 {
     for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
         aBorderInfos[i] = rProp.aBorderInfos[i]
@@ -483,8 +480,6 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
 
     if( rProp.ePageBreakAfter != SVX_CSS1_PBREAK_NONE )
         ePageBreakAfter = rProp.ePageBreakAfter;
-
-// /Feature: PrintExt
 
     if( rProp.eLeftType != SVX_CSS1_LTYPE_NONE )
     {
@@ -2937,10 +2932,6 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
     }
 }
 
-// /Feature: PrintExt
-
-// Feature: PrintExt
-
 static void ParseCSS1_page_break_xxx( const CSS1Expression *pExpr,
                                       SvxCSS1PageBreak& rPBreak )
 {
@@ -3026,7 +3017,6 @@ static void ParseCSS1_orphans( const CSS1Expression *pExpr,
         rItemSet.Put( aOrphansItem );
     }
 }
-// /Feature: PrintExt
 
 static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                SfxItemSet &rItemSet,
@@ -3118,14 +3108,12 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(top),
     CSS1_PROP_ENTRY(width),
     CSS1_PROP_ENTRY(height),
-// Feature: PrintExt
     CSS1_PROP_ENTRY(size),
     CSS1_PROP_ENTRY(page_break_before),
     CSS1_PROP_ENTRY(page_break_after),
     CSS1_PROP_ENTRY(page_break_inside),
     CSS1_PROP_ENTRY(widows),
     CSS1_PROP_ENTRY(orphans),
-// /Feature: PrintExt
     CSS1_PROP_ENTRY(so_language)
 };
 

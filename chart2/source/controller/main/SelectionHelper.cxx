@@ -385,7 +385,6 @@ OUString SelectionHelper::getHitObjectCID(
     DrawViewWrapper& rDrawViewWrapper,
     bool bGetDiagramInsteadOf_Wall )
 {
-    // //- solar mutex
     SolarMutexGuard aSolarGuard;
     OUString aRet;
 

@@ -73,7 +73,6 @@ enum SvxCSS1PageBreak
     SVX_CSS1_PBREAK_END
 };
 
-// /Feature: PrintExt
 
 #define CSS1_SCRIPT_WESTERN 0x01
 #define CSS1_SCRIPT_CJK     0x02
@@ -128,12 +127,10 @@ public:
     SvxCSS1LengthType eLeftType, eTopType;
     SvxCSS1LengthType eWidthType, eHeightType;
 
-// Feature: PrintExt
     SvxCSS1SizeType eSizeType;
 
     SvxCSS1PageBreak ePageBreakBefore;
     SvxCSS1PageBreak ePageBreakAfter;
-// /Feature: PrintExt
 
     SvxCSS1PropertyInfo();
     SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp );

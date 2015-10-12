@@ -680,7 +680,7 @@ interface TextDrawFont
         StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_ATTR_CHAR_AUTOKERN // // status(final|play)
+    SID_ATTR_CHAR_AUTOKERN // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;

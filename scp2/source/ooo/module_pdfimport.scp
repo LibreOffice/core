@@ -13,8 +13,7 @@
 // module as an individual, optional part, so that the core installation does
 // not feature a dependency on a poppler package.
 
-// The
-// /org.openoffice.TypeDetection.Types/Types/pdf_Portable_Document_Format
+// The /org.openoffice.TypeDetection.Types/Types/pdf_Portable_Document_Format
 // configuration node contained in pdfimport.xcd needs to override a
 // node with the same name but which lacks import functionality and
 // which is duplicated across calc, draw, impress, math, writer .xcd

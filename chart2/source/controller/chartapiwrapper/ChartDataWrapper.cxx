@@ -682,7 +682,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
-    // /-- locked controllers
+    // -- locked controllers
     ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
 
     // create and attach new data source

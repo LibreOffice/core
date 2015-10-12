@@ -182,7 +182,6 @@ bool SwCSS1Parser::SetFormatBreak( SfxItemSet& rItemSet,
 
     return bSetBreak;
 }
-// /Feature: PrintExt
 
 static void SetCharFormatAttrs( SwCharFormat *pCharFormat, SfxItemSet& rItemSet )
 {
@@ -331,9 +330,7 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
         }
     }
 
-// Feature: PrintExt
     pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
-// /Feature: PrintExt
 
     pColl->SetFormatAttr( rItemSet );
 }
@@ -554,7 +551,6 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     if( bChanged )
         ChgPageDesc( pPageDesc, aNewPageDesc );
 }
-// /Feature: PrintExt
 
 SvxBrushItem SwCSS1Parser::makePageDescBackground() const
 {

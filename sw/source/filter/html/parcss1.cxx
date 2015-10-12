@@ -161,13 +161,11 @@ CSS1Token CSS1Parser::GetNextToken()
                         if( aToken.equalsIgnoreAsciiCase( "import" ) )
                             nRet = CSS1_IMPORT_SYM;
                         break;
-// /Feature: PrintExt
                     case 'p':
                     case 'P':
                         if( aToken.equalsIgnoreAsciiCase( "page" ) )
                             nRet = CSS1_PAGE_SYM;
                         break;
-// /Feature: PrintExt
                     }
 
                     // Fehlerbehandlung: '@ident' und alles bis
@@ -691,9 +689,7 @@ void CSS1Parser::ParseStyleSheet()
         case CSS1_IDENT:            // Look-Aheads
         case CSS1_DOT_W_WS:
         case CSS1_HASH:
-// /Feature: PrintExt
         case CSS1_PAGE_SYM:
-// /Feature: PrintExt
             // rule
             bDone = true;
             break;
@@ -718,9 +714,7 @@ void CSS1Parser::ParseStyleSheet()
         case CSS1_IDENT:        // Look-Aheads
         case CSS1_DOT_W_WS:
         case CSS1_HASH:
-// /Feature: PrintExt
         case CSS1_PAGE_SYM:
-// /Feature: PrintExt
             // rule
             ParseRule();
             break;
@@ -917,14 +911,12 @@ CSS1Selector *CSS1Parser::ParseSelector()
             }
             break;
 
-// /Feature: PrintExt
         case CSS1_PAGE_SYM:
             {
                 //  @page
                 pNew = new CSS1Selector( CSS1_SELTYPE_PAGE, aToken );
             }
             break;
-// /Feature: PrintExt
 
         default:
             // wir wissen nicht was kommt, also aufhoehren

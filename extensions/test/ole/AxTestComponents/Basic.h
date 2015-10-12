@@ -143,12 +143,10 @@ public:
 
     STDMETHOD(defaultvalue1)(/*[in, defaultvalue(10)]*/ long val1,
         /*[in, defaultvalue(3.14)]*/ double* val2,
-        // /*[in, defaultvalue(10)]*/ VARIANT val3,
         /*[in, defaultvalue(100)]*/ VARIANT* val4);
 
         STDMETHOD(defaultvalue2)(/*[in, out, defaultvalue(10)]*/ long* val1,
         /*[in, out, defaultvalue(3.14)]*/ double* val2,
-        // /*[in, out, defaultvalue(10)]*/ VARIANT* val3,
         /*[in, out, defaultvalue(100)]*/ VARIANT* val4);
 
         STDMETHOD(varargfunc1)(/*[in]*/ long val1,/*[in]*/ LPSAFEARRAY val2);

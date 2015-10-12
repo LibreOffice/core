@@ -565,13 +565,6 @@ Assembly ^ TypeEmitter::type_resolve(
     ::System::Type ^ ret_type = get_type( cts_name, false /* no exc */ );
     if (nullptr == ret_type)
     {
-//         Emit::EnumBuilder * enum_builder =
-//             m_module_builder->DefineEnum(
-//                 cts_name,
-//                 (TypeAttributes) (TypeAttributes::Public |
-// //                                   TypeAttributes::Sealed |
-//                                   TypeAttributes::AnsiClass),
-//                 __typeof (::System::Int32) );
         // workaround enum builder bug
         Emit::TypeBuilder ^ enum_builder =
             m_module_builder->DefineType(

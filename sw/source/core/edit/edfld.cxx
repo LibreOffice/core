@@ -251,7 +251,7 @@ void SwEditShell::UpdateFields( SwField &rField )
     SET_CURR_SHELL( this );
     StartAllAction();
     {
-        // // If there are no selections so take the value of the current cursor position.
+        // If there are no selections so take the value of the current cursor position.
         SwMsgPoolItem* pMsgHint = 0;
         SwRefMarkFieldUpdate aRefMkHt( GetOut() );
         sal_uInt16 nFieldWhich = rField.GetTyp()->Which();
