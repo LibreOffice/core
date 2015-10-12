@@ -284,6 +284,7 @@ SdrModel::~SdrModel()
 
     delete pLayerAdmin;
 
+    delete pTextChain;
     // Delete DrawOutliner only after deleting ItemPool, because ItemPool
     // references Items of the DrawOutliner!
     delete pChainingOutliner;
