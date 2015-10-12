@@ -1221,7 +1221,7 @@ SwTextAttr* SwTextNode::InsertItem(
     const sal_Int32 nEnd,
     const SetAttrMode nMode )
 {
-   // character attributes will be inserted as automatic styles:
+    // character attributes will be inserted as automatic styles:
     OSL_ENSURE( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
         "SwTextNode::InsertItem should not be called with character attributes");
 
