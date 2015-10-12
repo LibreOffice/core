@@ -3531,11 +3531,24 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             }
             break;
         case 0x7:
-            bNewParaEnd = true;
-            if (m_pPlcxMan->GetPapPLCF()->Where() == nCpOfs+nPosCp+1)
-                TabCellEnd();       // Table cell/row end
-            else
-                bParaMark = true;
+            {
+                bNewParaEnd = true;
+                WW8PLCFxDesc* pPap = m_pPlcxMan->GetPap();
+                //The last paragraph of each cell is terminated by a special
+                //paragraph mark called a cell mark. Following the cell mark
+                //that ends the last cell of a table row, the table row is
+                //terminated by a special paragraph mark called a row mark
+                //
+                //So the 0x7 should be right at the end of the previous
+                //range to be a real cell-end.
+                if (pPap->nOrigStartPos == nCpOfs+nPosCp+1 ||
+                    pPap->nOrigStartPos == WW8_CP_MAX)
+                {
+                    TabCellEnd();       // Table cell/row end
+                }
+                else
+                    bParaMark = true;
+            }
             break;
         case 0xf:
             if( !m_bSpec )        // "Satellite"
