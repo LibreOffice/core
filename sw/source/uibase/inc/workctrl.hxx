@@ -157,6 +157,17 @@ public:
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
+
+class SwJumpToSpecificPageControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    SwJumpToSpecificPageControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    virtual ~SwJumpToSpecificPageControl();
+
+    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
