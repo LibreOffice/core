@@ -174,7 +174,7 @@ class SwUndoTableNdsChg : public SwUndo, private boost::noncopyable
         bool operator<(const _BoxMove& other) const { return index < other.index; };
     };
     std::unique_ptr< std::set<_BoxMove> > pNewSttNds;
-    std::unique_ptr< SwUndoSaveSections > pDelSects;
+    std::unique_ptr<SwUndoSaveSections> m_pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;

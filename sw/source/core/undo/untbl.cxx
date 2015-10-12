@@ -64,8 +64,6 @@
 #include <unochart.hxx>
 #include <calbck.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <memory>
 #include <vector>
 
@@ -83,10 +81,7 @@
 
 typedef std::vector<std::shared_ptr<SfxItemSet> > SfxItemSets;
 
-class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
-public:
-    explicit SwUndoSaveSections(size_type n) : boost::ptr_vector<SwUndoSaveSection>(n) {}
-};
+class SwUndoSaveSections : public std::vector<std::unique_ptr<SwUndoSaveSection>> {};
 
 class SwUndoMoves : public std::vector<std::unique_ptr<SwUndoMove>> {};
 
@@ -1662,14 +1657,14 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
 void SwUndoTableNdsChg::SaveSection( SwStartNode* pSttNd )
 {
     OSL_ENSURE( IsDelBox(), "wrong Action" );
-    if( pDelSects.get() == NULL )
-        pDelSects.reset( new SwUndoSaveSections( 10 ) );
+    if (m_pDelSects.get() == nullptr)
+        m_pDelSects.reset(new SwUndoSaveSections);
 
     SwTableNode* pTableNd = pSttNd->FindTableNode();
-    SwUndoSaveSection* pSave = new SwUndoSaveSection;
+    std::unique_ptr<SwUndoSaveSection> pSave(new SwUndoSaveSection);
     pSave->SaveSection( SwNodeIndex( *pSttNd ));
 
-    pDelSects->push_back( pSave );
+    m_pDelSects->push_back(std::move(pSave));
     nSttNode = pTableNd->GetIndex();
 }
 
@@ -1701,9 +1696,9 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
         // restore sections
-        for( size_t n = pDelSects->size(); n; )
+        for (size_t n = m_pDelSects->size(); n; )
         {
-            SwUndoSaveSection* pSave = &(*pDelSects)[ --n ];
+            SwUndoSaveSection *const pSave = (*m_pDelSects)[ --n ].get();
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
@@ -1711,7 +1706,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                                                 pCpyBox->GetUpper() );
             rLnBoxes.push_back( pBox );
         }
-        pDelSects->clear();
+        m_pDelSects->clear();
     }
     else if( !pNewSttNds->empty() )
     {
@@ -1909,7 +1904,12 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             if( pUndo )
             {
-                pDelSects->transfer( pDelSects->begin(), *static_cast<SwUndoTableNdsChg *>(pUndo)->pDelSects.get() );
+                m_pDelSects->insert(m_pDelSects->begin(),
+                    std::make_move_iterator(
+                        static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->begin()),
+                    std::make_move_iterator(
+                        static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->end()));
+                static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->clear();
                 delete pUndo;
             }
             rDoc.GetIDocumentUndoRedo().DoUndo( false );
