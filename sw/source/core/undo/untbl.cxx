@@ -88,7 +88,7 @@ public:
     explicit SwUndoSaveSections(size_type n) : boost::ptr_vector<SwUndoSaveSection>(n) {}
 };
 
-class SwUndoMoves : public boost::ptr_vector<SwUndoMove> {};
+class SwUndoMoves : public std::vector<std::unique_ptr<SwUndoMove>> {};
 
 struct SwTableToTextSave;
 class SwTableToTextSaves : public boost::ptr_vector<SwTableToTextSave> {
@@ -1927,19 +1927,20 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoTableMerge::SwUndoTableMerge( const SwPaM& rTableSel )
-    : SwUndo( UNDO_TABLE_MERGE ), SwUndRng( rTableSel ), pHistory( 0 )
+    : SwUndo( UNDO_TABLE_MERGE ), SwUndRng( rTableSel )
+    , m_pMoves(new SwUndoMoves)
+    , pHistory(nullptr)
 {
     const SwTableNode* pTableNd = rTableSel.GetNode().FindTableNode();
     OSL_ENSURE( pTableNd, "Where is the TableNode?" );
     pSaveTable = new _SaveTable( pTableNd->GetTable() );
-    pMoves = new SwUndoMoves;
     nTableNode = pTableNd->GetIndex();
 }
 
 SwUndoTableMerge::~SwUndoTableMerge()
 {
     delete pSaveTable;
-    delete pMoves;
+    delete m_pMoves;
     delete pHistory;
 }
 
@@ -2003,11 +2004,11 @@ CHECKTABLE(pTableNd->GetTable())
                     *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
 
             // this was the separator -> restore moved ones
-            for( size_t i = pMoves->size(); i; )
+            for (size_t i = m_pMoves->size(); i; )
             {
                 SwTextNode* pTextNd = 0;
                 sal_Int32 nDelPos = 0;
-                SwUndoMove* pUndo = &(*pMoves)[ --i ];
+                SwUndoMove *const pUndo = (*m_pMoves)[ --i ].get();
                 if( !pUndo->IsMoveRange() )
                 {
                     pTextNd = rDoc.GetNodes()[ pUndo->GetDestSttNode() ]->GetTextNode();
@@ -2097,7 +2098,7 @@ void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoTableMerge::MoveBoxContent( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
-    SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
+    std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( pDoc, rRg, rPos ));
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->getIDocumentContentOperations().MoveNodeRange( rRg, rPos, pSaveTable->IsNewModel() ?
         SwMoveFlags::NO_DELFRMS :
@@ -2106,7 +2107,7 @@ void SwUndoTableMerge::MoveBoxContent( SwDoc* pDoc, SwNodeRange& rRg, SwNodeInde
     ++aTmp2;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
 
-    pMoves->push_back( pUndo );
+    m_pMoves->push_back(std::move(pUndo));
 }
 
 void SwUndoTableMerge::SetSelBoxes( const SwSelBoxes& rBoxes )

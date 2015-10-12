@@ -220,7 +220,7 @@ class SwUndoTableMerge : public SwUndo, private SwUndRng
     _SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
     std::vector<sal_uLong> aNewSttNds;
-    SwUndoMoves* pMoves;
+    SwUndoMoves* m_pMoves;
     SwHistory* pHistory;
 
 public:
