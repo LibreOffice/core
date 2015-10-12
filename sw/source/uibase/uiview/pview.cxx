@@ -334,6 +334,11 @@ bool SwPagePreviewWin::MovePage( int eMoveMode )
         nNewSttPage = nPageCount;
         SetSelectedPage( nPageCount );
         break;
+    case MV_SPECIFIC_PAGE:
+        // correct calculation of new start page.
+        nNewSttPage = 3;
+        SetSelectedPage( 3 );
+        break;
     case MV_SELPAGE:
         // <nNewSttPage> and <SelectedPage()> are already set.
         // not start at first column, only if the
@@ -880,6 +885,9 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             _ExecPgUpAndPgDown( rReq.GetSlot() == FN_PAGEUP, &rReq );
             break;
         }
+        case SID_JUMP_TO_SPECIFIC_PAGE:
+            pViewWin->SetSelectedPage( 3 );
+            eMvMode = SwPagePreviewWin::MV_SPECIFIC_PAGE; bRetVal = true; goto MOVEPAGE;
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
             pViewWin->SetSelectedPage( 1 );
