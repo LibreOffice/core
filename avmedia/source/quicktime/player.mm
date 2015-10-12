@@ -323,7 +323,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     uno::Reference< ::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
-    OSL_TRACE( "Player::createPlayerWindow %d %d length: %d", aSize.Width, aSize.Height, aArguments.getLength() );
+    OSL_TRACE( "Player::createPlayerWindow %ld %ld length: %ld", aSize.Width, aSize.Height, aArguments.getLength() );
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
