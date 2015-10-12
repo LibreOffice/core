@@ -971,13 +971,11 @@ public:
 
 
 
-typedef ::std::vector< EscherPersistEntry* > EscherPersistTable_impl;
-
 class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
 public:
-    EscherPersistTable_impl maPersistTable;
+    ::std::vector< EscherPersistEntry* > maPersistTable;
 
     bool        PtIsID( sal_uInt32 nID );
     void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );

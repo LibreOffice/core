@@ -3885,7 +3885,7 @@ void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 
 sal_uInt32 EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    EscherPersistTable_impl::iterator it = maPersistTable.begin();
+    ::std::vector< EscherPersistEntry* >::iterator it = maPersistTable.begin();
     for( ; it != maPersistTable.end() ; ++it )
     {
         if ( (*it)->mnID == nID ) {
