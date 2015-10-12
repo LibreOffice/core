@@ -951,7 +951,11 @@ void Outliner::ProvideNextTextObject()
             // Switch to the current object only if it is a valid text object.
             if (IsValidTextObject (maCurrentPosition))
             {
-                mpObj = SetObject (maCurrentPosition);
+                // Don't set yet in case of searching: the text object may not match.
+                if (meMode != SEARCH)
+                    mpObj = SetObject(maCurrentPosition);
+                else
+                    mpObj = maCurrentPosition.mxObject.get();
             }
             ++maObjectIterator;
 
@@ -977,6 +981,10 @@ void Outliner::ProvideNextTextObject()
         }
         else
         {
+            if (meMode == SEARCH)
+                // Instead of doing a full-blown SetObject(), which would do the same -- but would also possibly switch pages.
+                mbStringFound = false;
+
             mbEndOfSearch = true;
             EndOfSearch ();
         }
@@ -1169,6 +1177,9 @@ void Outliner::PrepareSearchAndReplace()
 {
     if (HasText( *mpSearchItem ))
     {
+        // Set the object now that we know it matches.
+        mpObj = SetObject(maCurrentPosition);
+
         mbStringFound = true;
         mbMatchMayExist = true;
 
