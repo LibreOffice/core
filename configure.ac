@@ -6192,30 +6192,6 @@ CXXFLAGS=$save_CXXFLAGS
 AC_SUBST(CXXFLAGS_CXX11)
 
 dnl ==================================
-dnl Check for C++11 "= delete" support
-dnl ==================================
-
-AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-struct A
-    {
-    void test() = delete;
-    };
-]])],[HAVE_CXX11_DELETE=TRUE],[])
-
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-if test "$HAVE_CXX11_DELETE" = "TRUE"; then
-    AC_MSG_RESULT([yes])
-    AC_DEFINE([HAVE_CXX11_DELETE])
-else
-    AC_MSG_RESULT([no])
-fi
-
-dnl ==================================
 dnl Check for C++11 "override" support
 dnl ==================================
 

@@ -392,13 +392,13 @@ namespace css = ::com::sun::star;
 
 /** C++11 "= delete" feature.
 
-    With HAVE_CXX11_DELETE, calling a deleted function will cause a compile-time
+    For LIBO_INTERNAL_ONLY, calling a deleted function will cause a compile-time
     error, while otherwise it will only cause a link-time error as the declared
     function is not defined.
 
     @since LibreOffice 4.1
 */
-#if HAVE_CXX11_DELETE
+#if defined LIBO_INTERNAL_ONLY
 #define SAL_DELETED_FUNCTION = delete
 #else
 #define SAL_DELETED_FUNCTION
