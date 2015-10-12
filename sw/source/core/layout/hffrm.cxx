@@ -246,6 +246,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     pFrm->_InvalidatePos();
                     aOldFooterPrtPos = Frm().Pos() + Prt().Pos();
                 }
+                int nLoopControl = 0;
                 while( pFrm )
                 {
                     pFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
@@ -263,9 +264,14 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pFrm,
                                                                   *(pFrm->FindPageFrm()) ) )
                         {
-                            // restart format with first content
-                            pFrm = Lower();
-                            continue;
+                            if (nLoopControl++ < 20)
+                            {
+                                // restart format with first content
+                                pFrm = Lower();
+                                continue;
+                            }
+                            else
+                                SAL_WARN("sw", "SwHeadFootFrm::FormatSize: loop detection triggered");
                         }
                     }
                     pFrm = pFrm->GetNext();
