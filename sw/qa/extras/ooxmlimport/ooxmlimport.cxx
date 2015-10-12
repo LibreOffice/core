@@ -2874,6 +2874,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf90810, "tdf90810short.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), static_cast<sal_Int32>(sFtnText.getLength()));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf89165, "tdf89165.docx")
+{
+    // This must not hang in layout
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
