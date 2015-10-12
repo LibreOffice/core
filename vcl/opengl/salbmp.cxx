@@ -38,9 +38,25 @@
 namespace
 {
 
-static bool isValidBitCount( sal_uInt16 nBitCount )
+bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+}
+
+sal_uInt16 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
+{
+    switch(nBits)
+    {
+    case 1:  return (nWidth + 7) >> 3;
+    case 4:  return (nWidth + 1) >> 1;
+    case 8:  return  nWidth;
+    case 16: return  nWidth * 2;
+    case 24: return  nWidth * 3;
+    case 32: return  nWidth * 4;
+    default:
+        OSL_FAIL("vcl::OpenGLSalBitmap::AllocateUserData(), illegal bitcount!");
+    }
+    return 0;
 }
 
 static std::vector<std::unique_ptr<FixedTextureAtlasManager>> sTextureAtlases;
@@ -192,19 +208,7 @@ bool OpenGLSalBitmap::AllocateUserData()
 
     if( mnWidth && mnHeight )
     {
-        mnBytesPerRow =  0;
-
-        switch( mnBits )
-        {
-        case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
-        case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
-        case 8:     mnBytesPerRow = mnWidth; break;
-        case 16:    mnBytesPerRow = mnWidth << 1; break;
-        case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
-        case 32:    mnBytesPerRow = mnWidth << 2; break;
-        default:
-            OSL_FAIL("vcl::OpenGLSalBitmap::AllocateUserData(), illegal bitcount!");
-        }
+        mnBytesPerRow = lclBytesPerRow(mnBits, mnWidth);
     }
 
     bool alloc = false;
