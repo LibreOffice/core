@@ -136,7 +136,7 @@ const ScBreakType BREAK_PAGE   = 1;
 const ScBreakType BREAK_MANUAL = 2;
 
 // insert/delete flags - typesafe bitfield
-struct InsertDeleteFlags SAL_FINAL {
+struct InsertDeleteFlags final {
 private:
     sal_uInt16 v;
     // hidden so that it doesn't accidentally get called in constructor initialiser lists

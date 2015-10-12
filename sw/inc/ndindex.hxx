@@ -32,7 +32,7 @@ class SwNode;
 class SwNodes;
 
 /// Marks a node in the document model.
-class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
+class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
 {
     SwNode * m_pNode;
 

@@ -61,7 +61,7 @@ cppu::WeakImplHelper
     ::com::sun::star::container::XEnumerationAccess
 >
 SwXCellBaseClass;
-class SwXCell SAL_FINAL : public SwXCellBaseClass,
+class SwXCell final : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
@@ -158,7 +158,7 @@ public:
     css::uno::Any GetAny() const;
 };
 
-class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper
+class SwXTextTableRow final : public cppu::WeakImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -548,7 +548,7 @@ public:
     const SwUnoCrsr* GetTableCrsr() const;
 };
 
-class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper
+class SwXTableRows final : public cppu::WeakImplHelper
 <
     ::com::sun::star::table::XTableRows,
     ::com::sun::star::lang::XServiceInfo

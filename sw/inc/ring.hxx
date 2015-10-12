@@ -148,7 +148,7 @@ namespace sw
      * helper class that provides Svalue_typeL-style container iteration to the ring
      */
     template <typename value_type>
-    class RingContainer SAL_FINAL
+    class RingContainer final
     {
         private:
             /** the item in the ring where iteration starts */
@@ -192,7 +192,7 @@ namespace sw
     };
 
     template <typename value_type>
-    class RingIterator SAL_FINAL : public boost::iterator_facade<
+    class RingIterator final : public boost::iterator_facade<
           RingIterator<value_type>
         , value_type
         , boost::forward_traversal_tag

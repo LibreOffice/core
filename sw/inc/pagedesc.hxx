@@ -336,7 +336,7 @@ public:
 };
 
 namespace sw {
-    class PageFootnoteHint SAL_FINAL : public SfxHint {};
+    class PageFootnoteHint final : public SfxHint {};
 }
 
 #endif // INCLUDED_SW_INC_PAGEDESC_HXX

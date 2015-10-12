@@ -57,7 +57,7 @@ enum AxisLabelStaggering
     , STAGGER_AUTO
 };
 
-struct AxisLabelProperties SAL_FINAL
+struct AxisLabelProperties final
 {
     AxisLabelProperties();
 
@@ -96,7 +96,7 @@ struct AxisLabelAlignment
     AxisLabelAlignment();
 };
 
-struct AxisProperties SAL_FINAL
+struct AxisProperties final
 {
     css::uno::Reference<css::chart2::XAxis> m_xAxisModel;
 

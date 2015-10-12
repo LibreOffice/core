@@ -69,7 +69,7 @@ struct StyleSheetCallback {
  * Index-based access is required in several code portions. Hence we have to store the style sheets
  * in a vector as well as in a map.
  */
-class SVL_DLLPUBLIC IndexedStyleSheets SAL_FINAL
+class SVL_DLLPUBLIC IndexedStyleSheets final
 {
 public:
     IndexedStyleSheets();

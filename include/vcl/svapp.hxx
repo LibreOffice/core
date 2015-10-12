@@ -1521,7 +1521,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC SolarMutexClearableGuard SAL_FINAL
+class VCL_DLLPUBLIC SolarMutexClearableGuard final
 {
     SolarMutexClearableGuard( const SolarMutexClearableGuard& ) = delete;
     const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) = delete;
@@ -1559,7 +1559,7 @@ protected:
     comphelper::SolarMutex& m_solarMutex;
 };
 
-class VCL_DLLPUBLIC SolarMutexResettableGuard SAL_FINAL
+class VCL_DLLPUBLIC SolarMutexResettableGuard final
 {
     SolarMutexResettableGuard( const SolarMutexResettableGuard& ) = delete;
     const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) = delete;

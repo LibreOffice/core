@@ -1433,7 +1433,7 @@ void SwDocTest::testIntrusiveRing()
 
 namespace
 {
-    struct TestHint SAL_FINAL : SfxHint {};
+    struct TestHint final : SfxHint {};
     struct TestModify : SwModify
     {
         TYPEINFO_OVERRIDE();

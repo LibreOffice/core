@@ -39,7 +39,7 @@ class enumarray_iterator;
 /// \param E the 'enum class' type.
 /// \param V the value type to be stored in the array
 template<typename E, typename V>
-class enumarray SAL_FINAL
+class enumarray final
 {
 public:
     typedef enumarray<E, V> self_type;

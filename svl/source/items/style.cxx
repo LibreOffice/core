@@ -380,7 +380,7 @@ inline bool SfxStyleSheetIterator::IsTrivialSearch()
 
 namespace {
 
-struct DoesStyleMatchStyleSheetPredicate SAL_FINAL : public svl::StyleSheetPredicate
+struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 {
     explicit DoesStyleMatchStyleSheetPredicate(SfxStyleSheetIterator *it)
             : mIterator(it) {;}
@@ -805,7 +805,7 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 namespace
 {
 
-struct StyleSheetDisposerFunctor SAL_FINAL : public svl::StyleSheetDisposer
+struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
 {
     explicit StyleSheetDisposerFunctor(SfxStyleSheetBasePool* pool)
             : mPool(pool) {;}

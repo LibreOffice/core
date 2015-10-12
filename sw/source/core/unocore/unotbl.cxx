@@ -111,7 +111,7 @@ using ::editeng::SvxBorderLine;
 namespace
 {
     template<typename Tcoretype, typename Tunotype>
-    struct FindUnoInstanceHint SAL_FINAL : SfxHint
+    struct FindUnoInstanceHint final : SfxHint
     {
         FindUnoInstanceHint(Tcoretype* pCore) : m_pCore(pCore), m_pResult(nullptr) {};
         const Tcoretype* const m_pCore;

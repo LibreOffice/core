@@ -31,7 +31,7 @@ namespace o3tl
  *
  **/
 template<typename Key, typename Value, class KeyHash = std::hash<Key>>
-class lru_map SAL_FINAL
+class lru_map final
 {
 private:
     typedef typename std::pair<Key, Value> key_value_pair_t;

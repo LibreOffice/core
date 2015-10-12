@@ -24,7 +24,7 @@
 
 namespace sw
 {
-    struct SW_DLLPUBLIC DocDisposingHint SAL_FINAL : public SfxHint
+    struct SW_DLLPUBLIC DocDisposingHint final : public SfxHint
     {
         DocDisposingHint() {}
         virtual ~DocDisposingHint();

@@ -65,7 +65,7 @@ template<typename E, typename S> class SwIterator;
 namespace sw
 {
     class ClientIteratorBase;
-    struct SW_DLLPUBLIC LegacyModifyHint SAL_FINAL: SfxHint
+    struct SW_DLLPUBLIC LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
         virtual ~LegacyModifyHint();
@@ -207,7 +207,7 @@ public:
 /*
  * Helper class for objects that need to depend on more than one SwClient
  */
-class SW_DLLPUBLIC SwDepend SAL_FINAL : public SwClient
+class SW_DLLPUBLIC SwDepend final : public SwClient
 {
     SwClient *m_pToTell;
 
@@ -280,7 +280,7 @@ namespace sw
     };
 }
 
-template< typename TElementType, typename TSource > class SwIterator SAL_FINAL : private sw::ClientIteratorBase
+template< typename TElementType, typename TSource > class SwIterator final : private sw::ClientIteratorBase
 {
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
@@ -324,7 +324,7 @@ public:
     using sw::ClientIteratorBase::IsChanged;
 };
 
-template< typename TSource > class SwIterator<SwClient, TSource> SAL_FINAL : private sw::ClientIteratorBase
+template< typename TSource > class SwIterator<SwClient, TSource> final : private sw::ClientIteratorBase
 {
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
 public:

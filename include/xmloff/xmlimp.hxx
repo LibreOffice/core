@@ -282,11 +282,11 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_FINAL override;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_FINAL override;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_FINAL override;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics

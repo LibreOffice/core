@@ -436,7 +436,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     }
 }
 
-struct SwXParagraphEnumerationImpl SAL_FINAL : public SwXParagraphEnumeration
+struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 {
     uno::Reference< text::XText > const m_xParentText;
     const CursorType m_eCursorType;
@@ -1472,7 +1472,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwUnoCursorHelper::makeRedline( aPaM, rRedlineType, rRedlineProperties );
 }
 
-struct SwXTextRangesImpl SAL_FINAL : public SwXTextRanges
+struct SwXTextRangesImpl final : public SwXTextRanges
 {
 
     // XUnoTunnel
@@ -1597,7 +1597,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
-struct SwXParaFrameEnumerationImpl SAL_FINAL : public SwXParaFrameEnumeration
+struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 {
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override
