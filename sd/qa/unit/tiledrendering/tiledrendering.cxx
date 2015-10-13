@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
+#include <test/xmltesttools.hxx>
+#include <boost/property_tree/json_parser.hpp>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -19,9 +23,6 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <test/xmltesttools.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -78,6 +79,7 @@ private:
     std::vector<Rectangle> m_aSelection;
     bool m_bFound;
     sal_Int32 m_nPart;
+    std::vector<OString> m_aSearchResultSelection;
 #endif
 };
 
@@ -180,6 +182,16 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
         m_nPart = aPayload.toInt32();
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+    {
+        m_aSearchResultSelection.clear();
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+            m_aSearchResultSelection.push_back(rValue.second.data().c_str());
     }
     break;
     }
@@ -387,6 +399,8 @@ void SdTiledRenderingTest::testSearch()
     lcl_search("bbb");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
     CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    // This was 0; should be 1 match for "find".
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSearchResultSelection.size());
 
     // This should trigger the not-found callback.
     lcl_search("ccc");
