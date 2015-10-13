@@ -80,12 +80,10 @@ using namespace ::osl;
 /**
  * @descr       read lwp unicode string from stream to OUString per aEncoding
 */
-sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
+void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         OUString& str, sal_uInt16 strlen, rtl_TextEncoding aEncoding)
         //strlen: length of bytes
 {
-
-    sal_uInt16 readLen = 0;
     OUStringBuffer strBuf(128);
 
     if( !IsUnicodePacked(pObjStrm, strlen) )
@@ -100,11 +98,9 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
             buf[len] = '\0';
             strBuf.append( OUString(buf, len, aEncoding) );
             strlen -= len;
-            readLen += len;
             if(!len) break;
         }
         str = strBuf.makeStringAndClear();
-        return readLen;
     }
     else
     {
@@ -116,6 +112,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         bool flag = false;  //switch if unicode part reached
         sal_uInt16 sublen = 0;
 
+        sal_uInt16 readLen = 0;
         while(readLen<strlen)
         {
             if(!flag)   //Not unicode string
@@ -174,7 +171,6 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
             }
         }
         str = strBuf.makeStringAndClear();
-        return readLen;
     }
 }
 

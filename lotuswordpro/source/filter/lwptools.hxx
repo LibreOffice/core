@@ -86,7 +86,7 @@ class LwpTools
 {
 
 public:
-    static sal_uInt16 QuickReadUnicode( LwpObjectStream* pObjStrm,
+    static void QuickReadUnicode( LwpObjectStream* pObjStrm,
         OUString& str, sal_uInt16 strlen,  rtl_TextEncoding aEncoding );
     static bool IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
