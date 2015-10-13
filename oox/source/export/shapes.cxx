@@ -882,6 +882,8 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     {
         nRadius = MapSize( awt::Size( nRadius, 0 ) ).Width;
     }
+    //TODO: use nRadius value more precisely than just deciding whether to use
+    // "rect" or "roundRect" preset shape below
 
     // non visual shape properties
     if (GetDocumentType() == DOCUMENT_DOCX)
@@ -898,7 +900,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a, false, false);
-    WritePresetShape( "rect" );
+    WritePresetShape( nRadius == 0 ? "rect" : "roundRect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
     {
