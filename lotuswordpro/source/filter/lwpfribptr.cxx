@@ -90,11 +90,9 @@ LwpFribPtr::LwpFribPtr()
 
 LwpFribPtr::~LwpFribPtr()
 {
-    LwpFrib* pNextFrib = m_pFribs;
-    LwpFrib* pCurFrib = m_pFribs;
-    while(pCurFrib)
+    for (LwpFrib* pCurFrib = m_pFribs; pCurFrib;)
     {
-        pNextFrib = pCurFrib -> GetNext();
+        LwpFrib* pNextFrib = pCurFrib -> GetNext();
         delete pCurFrib;
         pCurFrib = pNextFrib;
     }
