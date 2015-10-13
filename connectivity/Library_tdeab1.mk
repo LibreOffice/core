@@ -11,6 +11,7 @@
 $(eval $(call gb_Library_Library,tdeab1))
 
 $(eval $(call gb_Library_use_externals,tdeab1,\
+	boost_headers \
 	tde \
 ))
 
