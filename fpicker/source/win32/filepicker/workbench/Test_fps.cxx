@@ -86,33 +86,33 @@ class FilePickerListener : public WeakImplHelper< XFilePickerListener >
 public:
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw(css::uno::RuntimeException);
 
     // XFilePickerListener
-    virtual void SAL_CALL fileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL directoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+        throw(css::uno::RuntimeException);
 
-    virtual OUString SAL_CALL helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+        throw(css::uno::RuntimeException);
 
     virtual void SAL_CALL dialogSizeChanged(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 };
 
-void SAL_CALL FilePickerListener::disposing( const ::com::sun::star::lang::EventObject& Source )
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FilePickerListener::disposing( const css::lang::EventObject& Source )
+    throw(css::uno::RuntimeException)
 {
 }
 
-void SAL_CALL FilePickerListener::fileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FilePickerListener::fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    throw(css::uno::RuntimeException)
 {
     try
     {
@@ -178,20 +178,20 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const ::com::sun::star::
     }
 }
 
-void SAL_CALL FilePickerListener::directoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FilePickerListener::directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    throw(css::uno::RuntimeException)
 {
     Reference< XFilePickerControlAccess > rFilePickerCtrlAccess( aEvent.Source, UNO_QUERY );
 }
 
-OUString SAL_CALL FilePickerListener::helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL FilePickerListener::helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent )
+    throw(css::uno::RuntimeException)
 {
     return OUString( );
 }
 
-void SAL_CALL FilePickerListener::controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FilePickerListener::controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
+    throw(css::uno::RuntimeException)
 {
     try
     {
@@ -225,7 +225,7 @@ void SAL_CALL FilePickerListener::controlStateChanged( const ::com::sun::star::u
 }
 
 void SAL_CALL FilePickerListener::dialogSizeChanged( )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
 }
 

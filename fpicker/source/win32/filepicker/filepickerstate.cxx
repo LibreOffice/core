@@ -370,7 +370,7 @@ CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
 void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
 {
     // we do not support SET_HELP_URL/GET_HELP_URL
-    if ( com::sun::star::ui::dialogs::ControlActions::SET_HELP_URL == aControlAction )
+    if ( css::ui::dialogs::ControlActions::SET_HELP_URL == aControlAction )
         return;
 
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
@@ -412,7 +412,7 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
 Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
     // we do not support SET_HELP_URL/GET_HELP_URL
-    if ( com::sun::star::ui::dialogs::ControlActions::GET_HELP_URL == aControlAction )
+    if ( css::ui::dialogs::ControlActions::GET_HELP_URL == aControlAction )
         return Any( );
 
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
@@ -619,7 +619,7 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
             aControlAction,
             lpfnGetValue( hwndControl ) );
 
-        aControlAction = ::com::sun::star::ui::dialogs::ControlActions::GET_SELECTED_ITEM_INDEX;
+        aControlAction = css::ui::dialogs::ControlActions::GET_SELECTED_ITEM_INDEX;
 
         lpfnGetValue = GetCtrlGetValueFunction( aCtrlClass, aControlAction );
 

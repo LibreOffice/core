@@ -40,20 +40,20 @@ public:
 
 
     virtual sal_Int16 SAL_CALL execute(  )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
 
     // XFolderPicker
 
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     virtual OUString SAL_CALL getDisplayDirectory( )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     virtual OUString SAL_CALL getDirectory( )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
 protected:
     virtual void SAL_CALL onSelChanged( const OUString& aNewPath );

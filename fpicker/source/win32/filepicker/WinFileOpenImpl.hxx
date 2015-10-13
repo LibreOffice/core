@@ -56,76 +56,76 @@ public:
 
     // XExecutableDialog
 
-    virtual sal_Int16 SAL_CALL execute(  ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int16 SAL_CALL execute(  ) throw( css::uno::RuntimeException );
 
     // XFilePicker
 
     virtual void SAL_CALL setDefaultName( const OUString& aName )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles(  )
-        throw(::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
+        throw(css::uno::RuntimeException );
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    virtual OUString SAL_CALL getDisplayDirectory( ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getDisplayDirectory( ) throw ( css::uno::RuntimeException );
 
     // XFilterManager
 
     virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     virtual void SAL_CALL setCurrentFilter( const OUString& aTitle )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     virtual OUString  SAL_CALL getCurrentFilter( )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     // XFilterGroupManager
 
-    virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     // XFilePickerControlAccess
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue )
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue )
+        throw( css::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId )
-        throw ( ::com::sun::star::uno::RuntimeException);
+        throw ( css::uno::RuntimeException);
 
     // XFilePreview
 
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getTargetColorDepth( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableWidth( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableHeight( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getShowState( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     // XCancelable
 
@@ -185,7 +185,7 @@ private:
     std::unique_ptr<CCustomControl>         m_CustomControls;
     CFilePicker*                            m_FilePicker;
     WNDPROC                                 m_pfnOldDlgProc;
-    OUString                           m_defaultName;
+    OUString                                m_defaultName;
     sal_Bool                                m_bInitialSelChanged;
     CHelpPopupWindow                        m_HelpPopupWindow;
     CFilePickerState*                       m_FilePickerState;

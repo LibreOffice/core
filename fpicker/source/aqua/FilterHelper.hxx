@@ -34,8 +34,8 @@
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-typedef ::com::sun::star::beans::StringPair UnoFilterEntry;
-typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
+typedef css::beans::StringPair UnoFilterEntry;
+typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 typedef ::std::list<NSString *> NSStringList;
 typedef ::std::list<OUString> OUStringList;
 
@@ -82,17 +82,17 @@ public:
 
     //XFilterManager delegates
     void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     void SAL_CALL setCurrentFilter( const OUString& aTitle )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     OUString SAL_CALL getCurrentFilter(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     //XFilterGroupManager delegates
-    void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
 
     //accessor

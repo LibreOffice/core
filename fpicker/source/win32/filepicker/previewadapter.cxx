@@ -462,8 +462,8 @@ CPreviewAdapter::~CPreviewAdapter()
 
 Sequence<sal_Int16> SAL_CALL CPreviewAdapter::getSupportedImageFormats()
 {
-    com::sun::star::uno::Sequence<sal_Int16> imgFormats(1);
-    imgFormats[0] = ::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP;
+    css::uno::Sequence<sal_Int16> imgFormats(1);
+    imgFormats[0] = css::ui::dialogs::FilePreviewImageFormats::BITMAP;
     return imgFormats;
 }
 

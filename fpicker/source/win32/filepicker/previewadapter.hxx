@@ -54,7 +54,7 @@ public:
 
     ~CPreviewAdapter();
 
-    ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getSupportedImageFormats();
+    css::uno::Sequence<sal_Int16> SAL_CALL getSupportedImageFormats();
 
     sal_Int32 SAL_CALL getTargetColorDepth();
 
@@ -62,8 +62,8 @@ public:
 
     sal_Int32 SAL_CALL getAvailableHeight();
 
-    void SAL_CALL setImage(sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage)
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setImage(sal_Int16 aImageFormat, const css::uno::Any& aImage)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     sal_Bool SAL_CALL setShowState(sal_Bool bShowState);
 

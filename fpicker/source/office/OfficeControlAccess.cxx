@@ -263,7 +263,7 @@ namespace svt
     }
 
 
-    void OControlAccess::setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue )
+    void OControlAccess::setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const css::uno::Any& _rValue )
     {
         // look up the control
         sal_Int16 nControlId = -1;

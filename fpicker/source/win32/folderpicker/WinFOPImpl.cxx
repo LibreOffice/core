@@ -50,7 +50,7 @@ const OUString BACKSLASH( "\\" );
 CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
    CMtaFolderPicker( BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS | BIF_EDITBOX | BIF_VALIDATE ),
    m_pFolderPicker( aFolderPicker ),
-   m_nLastDlgResult( ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL )
+   m_nLastDlgResult( css::ui::dialogs::ExecutableDialogResults::CANCEL )
 {
 }
 
@@ -134,8 +134,8 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
 sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
 {
     return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
-        ::com::sun::star::ui::dialogs::ExecutableDialogResults::OK :
-        ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+        css::ui::dialogs::ExecutableDialogResults::OK :
+        css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 

@@ -31,7 +31,7 @@ namespace svt
 
     //= OFilePickerInteractionHandler
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::task::XInteractionHandler
+    typedef ::cppu::WeakImplHelper <   css::task::XInteractionHandler
                                     >   OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
@@ -51,13 +51,13 @@ namespace svt
         };
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xMaster        ; // our master handler
-        ::com::sun::star::uno::Any                                                      m_aException     ; // the last handled request
-        bool                                                                        m_bUsed          ; // indicates using of this interaction handler instance
-        EInterceptedInteractions                                                        m_eInterceptions ; // enable/disable interception of some special interactions
+        css::uno::Reference< css::task::XInteractionHandler > m_xMaster;    // our master handler
+        css::uno::Any                                         m_aException; // the last handled request
+        bool                                                  m_bUsed;      // indicates using of this interaction handler instance
+        EInterceptedInteractions                              m_eInterceptions; // enable/disable interception of some special interactions
 
     public:
-        OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
+        OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster );
 
         // some generic functions
         void     enableInterceptions( EInterceptedInteractions eInterceptions );
@@ -70,7 +70,7 @@ namespace svt
 
     protected:
         // XInteractionHandler
-        virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _rxRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         virtual ~OFilePickerInteractionHandler();

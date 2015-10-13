@@ -52,20 +52,20 @@ namespace svt
         OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView );
 
         // XControlAccess implementation
-        void setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue );
-        ::com::sun::star::uno::Any  getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty );
+        void setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const css::uno::Any& _rValue );
+        css::uno::Any  getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XControlInformation implementation
-        ::com::sun::star::uno::Sequence< OUString >  getSupportedControls(  );
-        ::com::sun::star::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
-        static bool                                  isControlSupported( const OUString& _rControlName );
-        bool                                         isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
+        css::uno::Sequence< OUString >  getSupportedControls(  );
+        css::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
+        static bool                     isControlSupported( const OUString& _rControlName );
+        bool                            isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XFilePickerControlAccess
-        void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
-        ::com::sun::star::uno::Any  getValue( sal_Int16 _nId, sal_Int16 _nCtrlAction ) const;
+        void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const css::uno::Any& _rValue );
+        css::uno::Any               getValue( sal_Int16 _nId, sal_Int16 _nCtrlAction ) const;
         void                        setLabel( sal_Int16 _nId, const OUString& _rValue );
-        OUString             getLabel( sal_Int16 _nId ) const;
+        OUString                    getLabel( sal_Int16 _nId ) const;
         void                        enableControl( sal_Int16 _nId, bool _bEnable );
 
         static void             setHelpURL( vcl::Window* _pControl, const OUString& _rURL, bool _bFileView );
@@ -88,7 +88,7 @@ namespace svt
         */
         void                        implSetControlProperty(
                                         sal_Int16 _nControlId,
-                                        Control* _pControl, sal_Int16 _nProperty, const ::com::sun::star::uno::Any& _rValue,
+                                        Control* _pControl, sal_Int16 _nProperty, const css::uno::Any& _rValue,
                                         bool _bIgnoreIllegalArgument = true );
 
         Control* implGetControl( const OUString& _rControlName, sal_Int16* _pId = NULL, sal_Int32* _pPropertyMask = NULL ) const;
@@ -103,9 +103,9 @@ namespace svt
                 See PROPERTY_FLAG_*
             @return
         */
-        ::com::sun::star::uno::Any  implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const;
+        css::uno::Any  implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const;
 
-        static void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
+        static void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const css::uno::Any& _rValue );
 
     };
 

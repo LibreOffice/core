@@ -54,16 +54,16 @@ class CustomContainer;
 class SvtFileDialog : public SvtFileDialog_Base
 {
 private:
-    VclPtr<CheckBox>                   _pCbReadOnly;
-    VclPtr<CheckBox>                   _pCbLinkBox;
-    VclPtr<CheckBox>                   _pCbPreviewBox;
-    VclPtr<CheckBox>                   _pCbSelection;
-    VclPtr<PushButton>                 _pPbPlay;
-    VclPtr<vcl::Window>                _pPrevWin;
-    VclPtr<FixedBitmap>                _pPrevBmp;
-    VclPtr<CustomContainer>            _pContainer;
-    VclPtr<SvtFileView>                _pFileView;
-    VclPtr<Splitter>                   _pSplitter;
+    VclPtr<CheckBox>            _pCbReadOnly;
+    VclPtr<CheckBox>            _pCbLinkBox;
+    VclPtr<CheckBox>            _pCbPreviewBox;
+    VclPtr<CheckBox>            _pCbSelection;
+    VclPtr<PushButton>          _pPbPlay;
+    VclPtr<vcl::Window>         _pPrevWin;
+    VclPtr<FixedBitmap>         _pPrevBmp;
+    VclPtr<CustomContainer>     _pContainer;
+    VclPtr<SvtFileView>         _pFileView;
+    VclPtr<Splitter>            _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
     WinBits                     _nExtraBits;
@@ -72,17 +72,18 @@ private:
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
 
-    ::std::set< VclPtr<Control> >      m_aDisabledControls;
+    ::std::set< VclPtr<Control> >
+                                m_aDisabledControls;
 
     ::utl::OConfigurationNode   m_aConfiguration;
     ::rtl::Reference< ::svt::AsyncPickerAction >
                                 m_pCurrentAsyncAction;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::dialogs::XDialogClosedListener >
+    css::uno::Reference< css::ui::dialogs::XDialogClosedListener >
                                 m_xListener;
     bool                        m_bInExecuteAsync;
     bool                        m_bHasFilename;
-    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
+    css::uno::Reference < css::uno::XComponentContext >
+                                m_context;
 
     DECL_LINK_TYPED(            FilterSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED(            FilterSelectTimerHdl_Impl, Timer*, void );
@@ -171,8 +172,8 @@ public:
             void                FileSelect();
             void                FilterSelect() override;
 
-    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) override;
-    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const override;
+    void                        SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) override;
+    const css::uno::Sequence< OUString >& GetBlackList() const override;
     void                        SetStandardDir( const OUString& rStdDir ) override;
     const OUString&             GetStandardDir() const override;
     std::vector<OUString>       GetPathList() const override;        // for MultiSelection
@@ -182,7 +183,7 @@ public:
 
             void                AddFilterGroup(
                                   const OUString& _rFilter,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) override;
+                                  const css::uno::Sequence< css::beans::StringPair >& rFilters ) override;
 
             void                SetCurFilter( const OUString& rFilter ) override;
             OUString            GetCurFilter() const override;
@@ -206,7 +207,7 @@ public:
     sal_Int32                   getTargetColorDepth() override;
     sal_Int32                   getAvailableWidth() override;
     sal_Int32                   getAvailableHeight() override;
-    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) override;
+    void                        setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) override;
     bool                        getShowState() override;
     bool                        isAutoExtensionEnabled();
 
@@ -218,7 +219,7 @@ public:
 
     void                        RemovablePlaceSelected(bool enable = true);
 
-    static void                 displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
+    static void                 displayIOException( const OUString& _rURL, css::ucb::IOErrorCode _eCode );
 
     // inline
     inline void                 SetPath( const OUString& rNewURL ) override;

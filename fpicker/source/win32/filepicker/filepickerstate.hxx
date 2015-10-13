@@ -50,9 +50,9 @@ class CFilePickerState
 public:
     virtual ~CFilePickerState( );
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue ) = 0;
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue ) = 0;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) = 0;
+    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) = 0;
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable ) = 0;
 
@@ -60,7 +60,7 @@ public:
 
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId ) = 0;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog ) = 0;
+    virtual css::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog ) = 0;
 
     virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog ) = 0;
 };
@@ -76,9 +76,9 @@ public:
 
     virtual ~CNonExecuteFilePickerState( );
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue );
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
+    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
@@ -86,7 +86,7 @@ public:
 
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId );
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
+    virtual css::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
 
     virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
 
@@ -110,9 +110,9 @@ class CExecuteFilePickerState : public CFilePickerState
 public:
     CExecuteFilePickerState( HWND hwndDlg = NULL );
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue );
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
+    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
@@ -120,7 +120,7 @@ public:
 
     virtual OUString SAL_CALL getLabel( sal_Int16 aControlId );
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
+    virtual css::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
 
     virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
 

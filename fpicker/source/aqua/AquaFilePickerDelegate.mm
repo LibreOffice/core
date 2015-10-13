@@ -56,7 +56,7 @@
 {
     (void)sender;
     if (filePicker != NULL) {
-        ::com::sun::star::ui::dialogs::FilePickerEvent evt;
+        css::ui::dialogs::FilePickerEvent evt;
         filePicker->fileSelectionChanged(evt);
     }
 }
@@ -66,7 +66,7 @@
     (void)sender;
     (void)path;
     if (filePicker != NULL) {
-        ::com::sun::star::ui::dialogs::FilePickerEvent evt;
+        css::ui::dialogs::FilePickerEvent evt;
         filePicker->directoryChanged(evt);
     }
 }
@@ -107,7 +107,7 @@
     uno::Any aValue;
     aValue <<= ([((NSButton*)sender) state] == NSOnState);
     
-    filePicker->setValue(::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
+    filePicker->setValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 }
 
 @end

@@ -102,7 +102,7 @@ sal_Int16 SAL_CALL CControlCommand::getControlId( ) const
 CValueControlCommand::CValueControlCommand(
         sal_Int16 aControlId,
         sal_Int16 aControlAction,
-        const ::com::sun::star::uno::Any& aValue ) :
+        const css::uno::Any& aValue ) :
     CControlCommand( aControlId ),
     m_aControlAction( aControlAction ),
     m_aValue( aValue )
@@ -170,7 +170,7 @@ sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 
 
 
-::com::sun::star::uno::Any SAL_CALL CValueControlCommand::getValue( ) const
+css::uno::Any SAL_CALL CValueControlCommand::getValue( ) const
 {
     return m_aValue;
 }

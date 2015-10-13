@@ -45,25 +45,25 @@ FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 }
 
 ::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeExternal()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return ocExternal;
 }
 
 
 ::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeUnknown()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return FormulaCompiler::OpCodeMap::getOpCodeUnknown();
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
+css::uno::Sequence< css::sheet::FormulaToken >
 SAL_CALL FormulaOpCodeMapperObj::getMappings(
-        const ::com::sun::star::uno::Sequence< OUString >& rNames,
+        const css::uno::Sequence< OUString >& rNames,
         sal_Int32 nLanguage )
-    throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException, std::exception)
+    throw ( css::lang::IllegalArgumentException,
+            css::uno::RuntimeException, std::exception)
 {
     FormulaCompiler::OpCodeMapPtr xMap = m_pCompiler->GetOpCodeMap( nLanguage);
     if (!xMap)
@@ -72,11 +72,11 @@ SAL_CALL FormulaOpCodeMapperObj::getMappings(
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >
+css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
 SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
         sal_Int32 nLanguage, sal_Int32 nGroups )
-    throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException, std::exception)
+    throw ( css::lang::IllegalArgumentException,
+            css::uno::RuntimeException, std::exception)
 {
     FormulaCompiler::OpCodeMapPtr xMap = m_pCompiler->GetOpCodeMap( nLanguage);
     if (!xMap)

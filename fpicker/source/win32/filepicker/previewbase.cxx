@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 
 
 PreviewBase::PreviewBase() :
-    m_ImageFormat(::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP),
+    m_ImageFormat(css::ui::dialogs::FilePreviewImageFormats::BITMAP),
     m_bShowState(sal_False)
 {
 }
@@ -74,10 +74,10 @@ sal_Int32 SAL_CALL PreviewBase::getAvailableHeight() throw (RuntimeException)
 
 
 
-void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
+void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
     throw (IllegalArgumentException, RuntimeException)
 {
-    if (aImageFormat != ::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP)
+    if (aImageFormat != css::ui::dialogs::FilePreviewImageFormats::BITMAP)
         throw IllegalArgumentException(
             "unsupported image format", 0, 1);
 
@@ -94,7 +94,7 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
 
 
 
-void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage)
+void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,css::uno::Any& aImage)
 {
     aImageFormat = m_ImageFormat;
     aImage       = m_ImageData;

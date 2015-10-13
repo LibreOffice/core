@@ -43,11 +43,11 @@ namespace svt
 {
 
 
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::ui::dialogs::XControlAccess
-                                                ,   ::com::sun::star::ui::dialogs::XControlInformation
-                                                ,   ::com::sun::star::lang::XEventListener
-                                                ,   ::com::sun::star::util::XCancellable
-                                                ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakComponentImplHelper    <   css::ui::dialogs::XControlAccess
+                                                ,   css::ui::dialogs::XControlInformation
+                                                ,   css::lang::XEventListener
+                                                ,   css::util::XCancellable
+                                                ,   css::lang::XInitialization
                                                 >   OCommonPicker_Base;
     /** implements common functionality for the 2 UNO picker components
     */
@@ -58,21 +58,21 @@ namespace svt
                     ,public ::comphelper::OPropertyArrayUsageHelper< OCommonPicker >
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        css::uno::Reference< css::lang::XMultiServiceFactory >    m_xORB;
 
         // <properties>
-        OUString                                                     m_sHelpURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
+        OUString                                                  m_sHelpURL;
+        css::uno::Reference< css::awt::XWindow >                  m_xWindow;
         // </properties>
 
         VclPtr<SvtFileDialog_Base>      m_pDlg;
-        ImplSVEvent *       m_nCancelEvent;
-        bool            m_bExecuting;
+        ImplSVEvent *                   m_nCancelEvent;
+        bool                            m_bExecuting;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xDialogParent;
+        css::uno::Reference< css::awt::XWindow >      m_xDialogParent;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  m_xWindowListenerAdapter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  m_xParentListenerAdapter;
+        css::uno::Reference< css::lang::XComponent >  m_xWindowListenerAdapter;
+        css::uno::Reference< css::lang::XComponent >  m_xParentListenerAdapter;
 
     protected:
         OUString     m_aTitle;
@@ -85,7 +85,7 @@ namespace svt
         inline          ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
 
     public:
-        OCommonPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+        OCommonPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory );
 
     protected:
         virtual ~OCommonPicker();
@@ -116,14 +116,14 @@ namespace svt
 
         // XEventListner
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
 
         // property set related methods
 
 
         // XPropertySet pure methods
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
         // OPropertySetHelper pure methods
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // OPropertyArrayUsageHelper pure methods
@@ -131,38 +131,38 @@ namespace svt
 
         // OPropertySetHelper overridden methods
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception, std::exception) override;
+                sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw (css::uno::Exception, std::exception) override;
 
 
         // XExecutableDialog functions
 
-        virtual void SAL_CALL           setTitle( const OUString& _rTitle ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual sal_Int16 SAL_CALL      execute() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL           setTitle( const OUString& _rTitle ) throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Int16 SAL_CALL      execute() throw( css::uno::RuntimeException, std::exception );
 
 
         // XControlAccess functions
 
-        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const css::uno::Any& aValue ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 
         // XControlInformation functions
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isControlSupported( const OUString& aControlName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isControlSupported( const OUString& aControlName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 
         // XCancellable functions
 
-        virtual void SAL_CALL cancel(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL cancel(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
         // XInitialization functions
 
 
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
 
         // misc
@@ -180,7 +180,7 @@ namespace svt
         */
         virtual bool    implHandleInitializationArgument(
                                 const OUString& _rName,
-                                const ::com::sun::star::uno::Any& _rValue
+                                const css::uno::Any& _rValue
                             );
 
     private:

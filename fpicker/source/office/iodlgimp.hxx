@@ -124,7 +124,7 @@ private:
     const SvtFileDialogFilter_Impl* _pCurFilter;
     OUString                        m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 
-    ::com::sun::star::uno::Sequence< OUString > _aBlackList;
+    css::uno::Sequence< OUString > _aBlackList;
 
 public:
     SvtFileDialogFilterList_Impl    m_aFilter;
@@ -187,8 +187,8 @@ public:
                             ~SvtExpFileDlg_Impl();
 
 
-    inline void             SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
-    inline const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
+    inline void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
+    inline const css::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
     void                    SetStandardDir( const OUString& _rDir );
     inline const OUString&  GetStandardDir() const          { return _aStdDir; }
     inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( false ); }

@@ -60,7 +60,7 @@ void SAL_CALL SvtFolderPicker::setDialogTitle( const OUString& _rTitle) throw (R
     setTitle( _rTitle );
 }
 
-void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException, std::exception)
 {
     m_xListener = xListener;
     prepareDialog();
@@ -103,7 +103,7 @@ IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog*, pDlg )
     if ( m_xListener.is() )
     {
         sal_Int16 nRet = static_cast< sal_Int16 >( pDlg->GetResult() );
-        ::com::sun::star::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
+        css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
         m_xListener->dialogClosed( aEvent );
         m_xListener.clear();
     }
