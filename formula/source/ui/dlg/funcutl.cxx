@@ -519,8 +519,14 @@ void RefEdit::SetRefValid(bool bValid)
     }
     else
     {
+#if 0
+        // Setting background color has no effect here so we'd end up with
+        // white on white!
         SetControlForeground(COL_WHITE);
         SetControlBackground(0xff6563);
+#else
+        SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+#endif
     }
 }
 
