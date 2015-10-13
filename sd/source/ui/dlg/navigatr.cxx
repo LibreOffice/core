@@ -871,9 +871,8 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 {
     if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE )
     {
-        const SfxUInt32Item* pStateItem = dynamic_cast< const SfxUInt32Item* >( pItem );
-        DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
-        sal_uInt32 nState = pStateItem->GetValue();
+        const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
+        sal_uInt32 nState = rStateItem.GetValue();
 
         // pen
         if( nState & NAVBTN_PEN_DISABLED &&
@@ -955,9 +954,8 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
         if( pInfo && pInfo->IsActive() )
         {
-            const SfxStringItem* pStateItem = dynamic_cast<const SfxStringItem*>( pItem  );
-            DBG_ASSERT( pStateItem, "SfxStringItem expected");
-            OUString aPageName = pStateItem->GetValue();
+            const SfxStringItem& rStateItem = dynamic_cast<const SfxStringItem&>(*pItem);
+            OUString aPageName = rStateItem.GetValue();
 
             if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
             {
