@@ -1339,6 +1339,10 @@ namespace svxform
         if (!xNewForm.is())
             return;
 
+        Reference< XPropertySet >  xPropertySet(xNewForm, UNO_QUERY);
+        if (!xPropertySet.is())
+            return;
+
         FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, pParentFormData );
 
 
@@ -1346,9 +1350,6 @@ namespace svxform
         OUString aName = GenerateName(pNewFormData);
         pNewFormData->SetText(aName);
 
-        Reference< XPropertySet >  xPropertySet(xNewForm, UNO_QUERY);
-        if (!xPropertySet.is())
-            return;
         try
         {
             xPropertySet->setPropertyValue( FM_PROP_NAME, makeAny(aName) );
