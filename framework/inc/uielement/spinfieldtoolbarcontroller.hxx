@@ -39,8 +39,8 @@ class SpinfieldToolbarController : public ComplexToolbarController
 
 {
     public:
-        SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        SpinfieldToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                    const css::uno::Reference< css::frame::XFrame >& rFrame,
                                     ToolBox* pToolBar,
                                     sal_uInt16 nID,
                                     sal_Int32 nWidth,
@@ -48,7 +48,7 @@ class SpinfieldToolbarController : public ComplexToolbarController
         virtual ~SpinfieldToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
         // called from SpinfieldControl
         void Up();
@@ -63,11 +63,11 @@ class SpinfieldToolbarController : public ComplexToolbarController
         bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
+        virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
+        virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
     private:
-        bool impl_getValue( const ::com::sun::star::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
+        bool impl_getValue( const css::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
         OUString impl_formatOutputString( double fValue );
 
         bool              m_bFloat,

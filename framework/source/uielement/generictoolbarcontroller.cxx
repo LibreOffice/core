@@ -93,9 +93,9 @@ static OUString getMasterCommand( const OUString& rCommand )
 
 struct ExecuteInfo
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-    ::com::sun::star::util::URL                                                aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+    css::uno::Reference< css::frame::XDispatch >     xDispatch;
+    css::util::URL                                   aTargetURL;
+    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
 };
 
 GenericToolbarController::GenericToolbarController( const Reference< XComponentContext >&    rxContext,
@@ -157,7 +157,7 @@ throw ( RuntimeException, std::exception )
 
     if ( xDispatch.is() && xURLTransformer.is() )
     {
-        com::sun::star::util::URL aTargetURL;
+        css::util::URL aTargetURL;
         Sequence<PropertyValue>   aArgs( 1 );
 
         // Add key modifier to argument list
@@ -341,7 +341,7 @@ void SAL_CALL MenuToolbarController::click() throw (RuntimeException, std::excep
 }
 
 Reference< XWindow > SAL_CALL
-MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
+MenuToolbarController::createPopupWindow() throw (css::uno::RuntimeException, std::exception)
 {
     if ( !pMenu )
     {

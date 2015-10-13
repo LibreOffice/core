@@ -46,30 +46,30 @@ namespace framework
 
         struct ExecuteInfo
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-            ::com::sun::star::util::URL                                                aTargetURL;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+            css::uno::Reference< css::frame::XDispatch >     xDispatch;
+            css::util::URL                                   aTargetURL;
+            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
          };
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
-        OUString m_aModuleIdentifier;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
+        OUString                                              m_aModuleIdentifier;
+        css::uno::Reference< css::container::XNameAccess >    m_xUICommandLabels;
 
         public:
-            MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~MacrosMenuController();
 
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
-            void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
             OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
             void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };

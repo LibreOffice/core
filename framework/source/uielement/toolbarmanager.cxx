@@ -113,7 +113,7 @@ class ImageOrientationListener : public svt::FrameStatusListener
                                   const Reference< XFrame >& rFrame );
         virtual ~ImageOrientationListener();
 
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     private:
         Reference< XStatusListener > m_xReceiver;
@@ -143,14 +143,14 @@ static sal_Int16 getImageTypeFromBools( bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
-        n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+        n |= css::ui::ImageType::SIZE_LARGE;
     return n;
 }
 
-static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManagerFromFrame(
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
+    css::uno::Reference< css::frame::XFrame >& rFrame )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
 
     Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
     if ( xPropSet.is() )
@@ -421,7 +421,7 @@ void ToolBarManager::UpdateControllers()
         Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
         {
-            ::com::sun::star::awt::Point aPoint;
+            css::awt::Point aPoint;
             aPoint.X = aPoint.Y = SAL_MAX_INT32;
             xLayoutManager->dockWindow( m_aResourceName, DockingArea_DOCKINGAREA_DEFAULT, aPoint );
             xLayoutManager->lockWindow( m_aResourceName );
@@ -451,7 +451,7 @@ void ToolBarManager::UpdateControllers()
 }
 
 //for update toolbar controller via Support Visible
-void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController)
+void ToolBarManager::UpdateController( css::uno::Reference< css::frame::XToolbarController > xController)
 {
 
     if ( !m_bUpdateControllers )
@@ -483,8 +483,8 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL ToolBarManager::statusChanged( const css::frame::FeatureStateEvent& Event )
+throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     if ( m_bDisposed )
@@ -657,16 +657,16 @@ void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListen
 }
 
 // XUIConfigurationListener
-void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(false,Event);
 }
 
-void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(true,Event);
 }
-void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event )
+void ToolBarManager::impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event )
 {
     SolarMutexGuard g;
 
@@ -733,7 +733,7 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
     ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar.get(),_1,_aImage));
 }
 
-void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(false,Event);
 }
@@ -1120,21 +1120,21 @@ void ToolBarManager::AddImageOrientationListener()
 ToolBoxItemBits ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 {
     ToolBoxItemBits nItemBits( ToolBoxItemBits::NONE );
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
+    if ( nStyle & css::ui::ItemStyle::RADIO_CHECK )
         nItemBits |= ToolBoxItemBits::RADIOCHECK;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_LEFT )
+    if ( nStyle & css::ui::ItemStyle::ALIGN_LEFT )
         nItemBits |= ToolBoxItemBits::LEFT;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::AUTO_SIZE )
+    if ( nStyle & css::ui::ItemStyle::AUTO_SIZE )
         nItemBits |= ToolBoxItemBits::AUTOSIZE;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::DROP_DOWN )
+    if ( nStyle & css::ui::ItemStyle::DROP_DOWN )
         nItemBits |= ToolBoxItemBits::DROPDOWN;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::REPEAT )
+    if ( nStyle & css::ui::ItemStyle::REPEAT )
         nItemBits |= ToolBoxItemBits::REPEAT;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY )
+    if ( nStyle & css::ui::ItemStyle::DROPDOWN_ONLY )
         nItemBits |= ToolBoxItemBits::DROPDOWNONLY;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
+    if ( nStyle & css::ui::ItemStyle::TEXT )
         nItemBits |= ToolBoxItemBits::TEXT_ONLY;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
+    if ( nStyle & css::ui::ItemStyle::ICON )
         nItemBits |= ToolBoxItemBits::ICON_ONLY;
 
     return nItemBits;
@@ -1201,11 +1201,11 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         Sequence< PropertyValue >   aProp;
-        OUString               aCommandURL;
-        OUString               aLabel;
-        OUString               aHelpURL;
-        OUString               aTooltip;
-        sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
+        OUString                    aCommandURL;
+        OUString                    aLabel;
+        OUString                    aHelpURL;
+        OUString                    aTooltip;
+        sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_uInt32                  nStyle( 0 );
 
@@ -1271,7 +1271,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nStyle;
                 }
 
-                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
+                if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
@@ -1328,21 +1328,21 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                     ++nId;
                 }
-                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
+                else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
                 {
                     m_pToolBar->InsertSeparator();
                 }
-                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
+                else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 {
                     m_pToolBar->InsertSpace();
                 }
-                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
+                else if ( nType == css::ui::ItemType::SEPARATOR_LINEBREAK )
                 {
                     m_pToolBar->InsertBreak();
                 }
             }
         }
-        catch (const ::com::sun::star::lang::IndexOutOfBoundsException&)
+        catch (const css::lang::IndexOutOfBoundsException&)
         {
             break;
         }
@@ -1669,7 +1669,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     ImplClearPopupMenu( pToolBar );
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
-    com::sun::star::util::URL aURL;
+    css::util::URL aURL;
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
@@ -1868,7 +1868,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
             case MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR:
             {
                 Reference< XDispatch > xDisp;
-                com::sun::star::util::URL aURL;
+                css::util::URL aURL;
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
@@ -2141,7 +2141,7 @@ IMPL_STATIC_LINK_TYPED( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
         else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKTOOLBAR ) &&
                  ( pExecuteInfo->xLayoutManager.is() ))
         {
-            ::com::sun::star::awt::Point aPoint;
+            css::awt::Point aPoint;
             aPoint.X = aPoint.Y = SAL_MAX_INT32;
             pExecuteInfo->xLayoutManager->dockWindow( pExecuteInfo->aToolbarResName,
                                                       DockingArea_DOCKINGAREA_DEFAULT,
@@ -2175,7 +2175,7 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
     {
         try
         {
-            com::sun::star::awt::KeyEvent aKeyEvent;
+            css::awt::KeyEvent aKeyEvent;
             Sequence< OUString > aCommands(1);
             aCommands[0] = rCommand;
 

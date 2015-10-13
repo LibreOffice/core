@@ -67,13 +67,13 @@ using namespace ::com::sun::star;
      Describes a context string list where all contexts
      are delimited by a colon. For more information about
      the module identifier used as context strings see the
-     IDL description of com::sun::star::frame::XModuleManager
+     IDL description of css::frame::XModuleManager
 
  @param
      rModuleIdentifier
 
      A string describing a module identifier. See IDL
-     description of com::sun::star::frame::XModuleManager.
+     description of css::frame::XModuleManager.
 
  @result
      The result is true if the rContext is an empty string
@@ -382,7 +382,7 @@ bool ToolBarMerger::ProcessMergeOperation(
      false.
 */
 bool ToolBarMerger::ProcessMergeFallback(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    const css::uno::Reference< css::frame::XFrame >& xFrame,
     ToolBox*                         pToolbar,
     sal_uInt16                       /*nPos*/,
     sal_uInt16&                      rItemId,

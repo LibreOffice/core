@@ -277,11 +277,11 @@ bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aEl
             xPropertySet->getPropertyValue( m_aPropController ) >>= aServiceSpecifier;
             xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
         }
-        catch ( const com::sun::star::beans::UnknownPropertyException& )
+        catch ( const css::beans::UnknownPropertyException& )
         {
             return false;
         }
-        catch ( const com::sun::star::lang::WrappedTargetException& )
+        catch ( const css::lang::WrappedTargetException& )
         {
             return false;
         }

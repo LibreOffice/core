@@ -47,7 +47,7 @@ const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
 namespace framework
 {
 
-AddonMenu::AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
+AddonMenu::AddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame ) :
     m_xFrame( rFrame )
 {
 }
@@ -70,7 +70,7 @@ bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
     return aCmdURL.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR );
 }
 
-AddonPopupMenu::AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame ) :
+AddonPopupMenu::AddonPopupMenu( const css::uno::Reference< css::frame::XFrame >& rFrame ) :
     AddonMenu( rFrame )
 {
 }

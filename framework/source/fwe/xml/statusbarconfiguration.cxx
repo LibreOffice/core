@@ -71,7 +71,7 @@ bool StatusBarConfiguration::LoadStatusBar(
     {
         return false;
     }
-    catch( const ::com::sun::star::io::IOException& )
+    catch( const css::io::IOException& )
     {
         return false;
     }
@@ -99,7 +99,7 @@ bool StatusBarConfiguration::StoreStatusBar(
     {
         return false;
     }
-    catch ( const ::com::sun::star::io::IOException& )
+    catch ( const css::io::IOException& )
     {
         return false;
     }

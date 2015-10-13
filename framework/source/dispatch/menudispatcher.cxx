@@ -133,7 +133,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 
         if ( xFrame.is() && pMenuBar )
         {
-            uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
+            uno::Reference< css::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
             aGuard.reset();
             {
@@ -214,7 +214,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
     if ( xFrame.is() )
     {
-        uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
+        uno::Reference< css::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
         vcl::Window* pWindow = NULL;
 
         SolarMutexGuard aSolarGuard;
@@ -237,7 +237,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
                 // remove listener before we destruct ourself, so we cannot be called back afterwards
                 m_pMenuManager->RemoveListener();
 
-                (static_cast< ::com::sun::star::uno::XInterface* >(static_cast<OWeakObject*>(m_pMenuManager)))->release();
+                (static_cast< css::uno::XInterface* >(static_cast<OWeakObject*>(m_pMenuManager)))->release();
 
                 m_pMenuManager = 0;
             }

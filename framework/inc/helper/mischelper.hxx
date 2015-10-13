@@ -112,25 +112,25 @@ inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUStr
 
 class FWI_DLLPUBLIC LanguageGuessingHelper
 {
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    mutable css::uno::Reference< css::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
+    css::uno::Reference< css::uno::XComponentContext >                    m_xContext;
 
 public:
-    LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext) : m_xContext(_xContext){}
+    LanguageGuessingHelper(const css::uno::Reference< css::uno::XComponentContext >& _xContext) : m_xContext(_xContext){}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >  GetGuesser() const;
+    css::uno::Reference< css::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
 
 FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&    _xContext
-            ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
+            ,const css::uno::Reference< css::uno::XComponentContext >&    _xContext
+            ,css::uno::Reference< css::container::XNameAccess >&        _xUICommandLabels
+            ,const css::uno::Reference< css::frame::XFrame >& _xFrame
             ,OUString& _rModuleIdentifier
             ,bool& _rIni
             ,const sal_Char* _pName);
 
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rxFrame,
+        const css::uno::Reference< css::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         SvtScriptType    nScriptType,
         const OUString & rCurLang,
@@ -150,13 +150,13 @@ FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
 //OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
 //which forwards the events to the OriginalListener without taking ownership of
 //it.
-class WeakContainerListener : public ::cppu::WeakImplHelper<com::sun::star::container::XContainerListener>
+class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XContainerListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::container::XContainerListener> mxOwner;
+        css::uno::WeakReference<css::container::XContainerListener> mxOwner;
 
     public:
-        WeakContainerListener(com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner)
+        WeakContainerListener(css::uno::Reference<css::container::XContainerListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -166,52 +166,52 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<com::sun::star::cont
         }
 
         // container.XContainerListener
-        virtual void SAL_CALL elementInserted(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementInserted(rEvent);
         }
 
-        virtual void SAL_CALL elementRemoved(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementRemoved(rEvent);
         }
 
-        virtual void SAL_CALL elementReplaced(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementReplaced(rEvent);
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
         }
 };
 
-class WeakChangesListener : public ::cppu::WeakImplHelper<com::sun::star::util::XChangesListener>
+class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::util::XChangesListener> mxOwner;
+        css::uno::WeakReference<css::util::XChangesListener> mxOwner;
 
     public:
-        WeakChangesListener(com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner)
+        WeakChangesListener(css::uno::Reference<css::util::XChangesListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -221,34 +221,34 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<com::sun::star::util::
         }
 
         // util.XChangesListener
-        virtual void SAL_CALL changesOccurred(const com::sun::star::util::ChangesEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->changesOccurred(rEvent);
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
         }
 };
 
-class WeakEventListener : public ::cppu::WeakImplHelper<com::sun::star::lang::XEventListener>
+class WeakEventListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::lang::XEventListener> mxOwner;
+        css::uno::WeakReference<css::lang::XEventListener> mxOwner;
 
     public:
-        WeakEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xOwner)
+        WeakEventListener(css::uno::Reference<css::lang::XEventListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -258,24 +258,24 @@ class WeakEventListener : public ::cppu::WeakImplHelper<com::sun::star::lang::XE
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::lang::XEventListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
         }
 };
 
-class WeakDocumentEventListener : public ::cppu::WeakImplHelper<com::sun::star::document::XDocumentEventListener>
+class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::XDocumentEventListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::document::XDocumentEventListener> mxOwner;
+        css::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;
 
     public:
-        WeakDocumentEventListener(com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner)
+        WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -284,22 +284,22 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<com::sun::star::
         {
         }
 
-        virtual void SAL_CALL documentEventOccured(const com::sun::star::document::DocumentEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->documentEventOccured(rEvent);
 
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::document::XDocumentEventListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 

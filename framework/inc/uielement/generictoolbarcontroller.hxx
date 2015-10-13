@@ -35,21 +35,21 @@ struct ExecuteInfo;
 class GenericToolbarController : public svt::ToolboxController
 {
     public:
-        GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                  const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16 nID,
                                   const OUString& aCommand );
         virtual ~GenericToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         DECL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, void );
 
@@ -63,23 +63,23 @@ class GenericToolbarController : public svt::ToolboxController
 
 class MenuToolbarController : public GenericToolbarController
 {
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_xMenuDesc;
-    PopupMenu* pMenu;
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xMenuManager;
-    OUString m_aModuleIdentifier;
+    css::uno::Reference< css::container::XIndexAccess > m_xMenuDesc;
+    PopupMenu*                                          pMenu;
+    css::uno::Reference< css::lang::XComponent >        m_xMenuManager;
+    OUString                                            m_aModuleIdentifier;
     public:
-        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                  const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        MenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16 nID,
                                   const OUString& aCommand,
                                   const OUString& aModuleIdentifier,
-                                  const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );
+                                  const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc );
 
     virtual ~MenuToolbarController();
     // XToolbarController
-    virtual void SAL_CALL click() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL click() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

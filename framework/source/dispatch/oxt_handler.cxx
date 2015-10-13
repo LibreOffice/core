@@ -74,7 +74,7 @@ Oxt_Handler::~Oxt_Handler()
 }
 
 /*-************************************************************************************************************
-    @interface  ::com::sun::star::frame::XDispatch
+    @interface  css::frame::XDispatch
 
     @short      try to load audio file
     @descr      This method try to load given audio file by URL and play it. We use vcl/Sound class to do that.
@@ -127,7 +127,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
 }
 
 /*-************************************************************************************************************
-    @interface  ::com::sun::star::document::XExtendedFilterDetection
+    @interface  css::document::XExtendedFilterDetection
 
     @short      try to detect file (given as argument included in "lDescriptor")
     @descr      We try to detect, if given file could be handled by this class and is a well known one.

@@ -2670,7 +2670,7 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_LAYOUTMANAGER,
             FRAME_PROPHANDLE_LAYOUTMANAGER,
-            cppu::UnoType<com::sun::star::frame::XLayoutManager>::get(),
+            cppu::UnoType<css::frame::XLayoutManager>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 
     impl_addPropertyInfo(

@@ -105,7 +105,7 @@ class JobResult
     public:
 
                  JobResult(                                         );
-                 JobResult( const com::sun::star::uno::Any& aResult );
+                 JobResult( const css::uno::Any& aResult );
                  JobResult( const JobResult&                rCopy   );
         virtual ~JobResult(                                         );
 

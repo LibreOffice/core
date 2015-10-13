@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 namespace framework{
 
 ProgressBarWrapper::ProgressBarWrapper() :
-UIElementWrapperBase( ::com::sun::star::ui::UIElementType::PROGRESSBAR )
+UIElementWrapperBase( css::ui::UIElementType::PROGRESSBAR )
     ,   m_bOwnsInstance( false )
     ,   m_nRange( 100 )
     ,   m_nValue( 0 )
@@ -82,7 +82,7 @@ uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
     return m_xStatusBar;
 }
 
-// wrapped methods of ::com::sun::star::task::XStatusIndicator
+// wrapped methods of css::task::XStatusIndicator
 void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
     throw (uno::RuntimeException, std::exception)
 {

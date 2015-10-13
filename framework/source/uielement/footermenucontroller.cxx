@@ -56,7 +56,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FooterMenuController                
                                             IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER
                                         )
 
-FooterMenuController::FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+FooterMenuController::FooterMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     HeaderMenuController( xContext,true )
 {
 }

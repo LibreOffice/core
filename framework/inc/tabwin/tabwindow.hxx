@@ -48,20 +48,20 @@
 namespace framework
 {
 
-class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
-                   public ::com::sun::star::lang::XServiceInfo              ,
-                   public ::com::sun::star::lang::XInitialization           ,
-                   public ::com::sun::star::lang::XComponent                ,
-                   public ::com::sun::star::awt::XWindowListener            ,
-                   public ::com::sun::star::awt::XTopWindowListener         ,
-                   public ::com::sun::star::awt::XSimpleTabController       ,
+class TabWindow :  public css::lang::XTypeProvider             ,
+                   public css::lang::XServiceInfo              ,
+                   public css::lang::XInitialization           ,
+                   public css::lang::XComponent                ,
+                   public css::awt::XWindowListener            ,
+                   public css::awt::XTopWindowListener         ,
+                   public css::awt::XSimpleTabController       ,
                    private cppu::BaseMutex,
                    public ::cppu::OBroadcastHelper                          ,
                    public ::cppu::OPropertySetHelper                        ,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
                    public ::cppu::OWeakObject
 {
     public:
-        TabWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+        TabWindow( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~TabWindow();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -73,34 +73,34 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         //  XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         //  XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         //  XSimpleTabController
-        virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getActiveTabID(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL insertTab() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getActiveTabID(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
 
         //  XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XTopWindowListener
-        virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
 
         //  XWindowListener
         virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
@@ -116,18 +116,18 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         //  OPropertySetHelper
 
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any&        aConvertedValue ,
-                                                                                                       com::sun::star::uno::Any&        aOldValue       ,
+        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue( css::uno::Any&        aConvertedValue ,
+                                                                                                       css::uno::Any&        aOldValue       ,
                                                                                                        sal_Int32                        nHandle         ,
-                                                                                                       const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException ) override;
+                                                                                                       const css::uno::Any&  aValue          ) throw( css::lang::IllegalArgumentException ) override;
         virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception, std::exception                 ) override;
-        virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
+                                                                                                               const css::uno::Any&  aValue          ) throw( css::uno::Exception, std::exception                 ) override;
+        virtual void                                                SAL_CALL getFastPropertyValue( css::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (css::uno::RuntimeException, std::exception) override;
 
-        static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
+        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
     private:
         enum Notification
@@ -141,22 +141,22 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         void        implts_LayoutWindows() const;
         void        impl_SetTitle( const OUString& rTitle );
-        TabControl* impl_GetTabControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xTabControlWindow ) const;
+        TabControl* impl_GetTabControl( const css::uno::Reference< css::awt::XWindow >& xTabControlWindow ) const;
         void        implts_SendNotification( Notification eNotify, sal_Int32 ID ) const;
-        void        implts_SendNotification( Notification eNotify, sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rSeq ) const;
+        void        implts_SendNotification( Notification eNotify, sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& rSeq ) const;
 
         typedef std::vector< sal_uInt16 > PageIdVector;
 
-        bool                                                                         m_bInitialized : 1,
-                                                                                         m_bDisposed : 1;
-        sal_Int32                                                                        m_nNextTabID;
-        OUString                                                                  m_aTitlePropName;
-        OUString                                                                  m_aPosPropName;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >            m_xTopWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xContainerWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xTabControlWindow;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                       m_aListenerContainer; // container for ALL Listener
+        bool                                                   m_bInitialized : 1,
+                                                               m_bDisposed : 1;
+        sal_Int32                                              m_nNextTabID;
+        OUString                                               m_aTitlePropName;
+        OUString                                               m_aPosPropName;
+        css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+        css::uno::Reference< css::awt::XTopWindow >            m_xTopWindow;
+        css::uno::Reference< css::awt::XWindow >               m_xContainerWindow;
+        css::uno::Reference< css::awt::XWindow >               m_xTabControlWindow;
+        ::cppu::OMultiTypeInterfaceContainerHelper             m_aListenerContainer; // container for ALL Listener
 };
 
 }

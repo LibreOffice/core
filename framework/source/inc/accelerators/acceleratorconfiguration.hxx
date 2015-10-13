@@ -354,9 +354,9 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
             throw(css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual  void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual  void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual  void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual  void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // helper for derived classes
 

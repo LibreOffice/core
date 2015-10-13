@@ -67,9 +67,9 @@ namespace framework
     {
         class InfoHelperBuilder;
     }
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::frame::XLayoutManager2
-                                    ,   ::com::sun::star::awt::XWindowListener
+    typedef ::cppu::WeakImplHelper <   css::lang::XServiceInfo
+                                    ,   css::frame::XLayoutManager2
+                                    ,   css::awt::XWindowListener
                                     >   LayoutManager_Base;
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
     class LayoutManager : public  LayoutManager_Base                    ,
@@ -86,7 +86,7 @@ namespace framework
             };
             enum { DOCKINGAREAS_COUNT = 4 };
 
-            LayoutManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+            LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~LayoutManager();
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
@@ -113,43 +113,43 @@ namespace framework
             }
 
             // XLayoutManager
-            virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setDockingAreaAcceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL createElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL destroyElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL requestElement( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > SAL_CALL getElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL showElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL hideElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL dockWindow( const OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL floatWindow( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL lockWindow( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL unlockWindow( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setElementSize( const OUString& aName, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setElementPos( const OUString& aName, const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setElementPosSize( const OUString& aName, const ::com::sun::star::awt::Point& aPos, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isElementVisible( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isElementFloating( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isElementDocked( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isElementLocked( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::awt::Size SAL_CALL getElementSize( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::awt::Point SAL_CALL getElementPos( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL doLayout(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isVisible() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& Frame ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL reset() throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL createElement( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL destroyElement( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL requestElement( const OUString& ResourceURL ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL showElement( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL hideElement( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL floatWindow( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL lockWindow( const OUString& ResourceURL ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL unlockWindow( const OUString& ResourceURL ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setElementSize( const OUString& aName, const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setElementPos( const OUString& aName, const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setElementPosSize( const OUString& aName, const css::awt::Point& aPos, const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL isElementVisible( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL isElementFloating( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL isElementDocked( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL isElementLocked( const OUString& ResourceURL ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::awt::Size SAL_CALL getElementSize( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::awt::Point SAL_CALL getElementPos( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL lock(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL unlock(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL doLayout(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL isVisible() throw (css::uno::RuntimeException, std::exception) override;
 
             // XMenuBarMergingAcceptor
 
-            virtual sal_Bool SAL_CALL setMergedMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
-                                                       throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL removeMergedMenuBar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar )
+                                                       throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL removeMergedMenuBar(  ) throw (css::uno::RuntimeException, std::exception) override;
 
             //  XWindowListener
             virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
@@ -165,13 +165,13 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
             //  XUIConfigurationListener
-            virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
             //  XLayoutManagerEventBroadcaster
-            virtual void SAL_CALL addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (css::uno::RuntimeException, std::exception) override;
 
             DECL_LINK_TYPED( MenuBarClose, void *, void);
             DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
@@ -206,24 +206,24 @@ namespace framework
 
             //  query
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
+            css::uno::Reference< css::ui::XUIElement > implts_findElement( const OUString& aName );
 
             bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
             void implts_destroyElements();
             void implts_toggleFloatingUIElementsVisibility( bool bActive );
             void implts_reparentChildWindows();
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
+            css::uno::Reference< css::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
 
             bool implts_isEmbeddedLayoutManager() const;
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const OUString& aName );
+            css::uno::Reference< css::ui::XUIElement > implts_createElement( const OUString& aName );
 
             // layouting methods
-            bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
+            bool implts_resizeContainerWindow( const css::awt::Size& rContainerSize, const css::awt::Point& rComponentPos );
             ::Size  implts_getContainerWindowOutputSize();
 
             void implts_setDockingAreaWindowSizes( const css::awt::Rectangle& rBorderSpace );
-            ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
+            css::awt::Rectangle implts_calcDockingAreaSizes();
             bool implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize );
             void implts_doLayout_notify( bool bOuterResize );
 
@@ -243,10 +243,10 @@ namespace framework
             void        implts_setOffset( const sal_Int32 nBottomOffset );
 
             void    implts_setInplaceMenuBar(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception);
+                        const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar )
+                            throw (css::uno::RuntimeException, std::exception);
             void    implts_resetInplaceMenuBar()
-                            throw (::com::sun::star::uno::RuntimeException);
+                            throw (css::uno::RuntimeException);
 
             void    implts_setVisibleState( bool bShow );
             void    implts_updateUIElementsVisibleState( bool bShow );
@@ -255,59 +255,59 @@ namespace framework
 
             //  OPropertySetHelper
 
-            virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
-                                                                                                                com::sun::star::uno::Any&        aOldValue       ,
+            virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
+                                                                                                                css::uno::Any&        aOldValue       ,
                                                                                                                 sal_Int32                        nHandle         ,
-                                                                                                                const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException ) override;
+                                                                                                                const css::uno::Any&  aValue          ) throw( css::lang::IllegalArgumentException ) override;
             virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                                const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception, std::exception                 ) override;
+                                                                                                                const css::uno::Any&  aValue          ) throw( css::uno::Exception, std::exception                 ) override;
             using cppu::OPropertySetHelper::getFastPropertyValue;
-            virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
+            virtual void                                                SAL_CALL getFastPropertyValue( css::uno::Any&    aValue          ,
                                                                                                     sal_Int32                    nHandle         ) const override;
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-            virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (css::uno::RuntimeException, std::exception) override;
 
-            css::uno::Reference< css::uno::XComponentContext >                          m_xContext; /** reference to factory, which has created this instance. */
-            css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
-            css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
-            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
-            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xDocCfgMgr;
-            css::uno::WeakReference< css::frame::XModel >                               m_xModel;
-            css::uno::Reference< css::awt::XWindow >                                    m_xContainerWindow;
-            css::uno::Reference< css::awt::XTopWindow2 >                                m_xContainerTopWindow;
-            sal_Int32                                                                   m_nLockCount;
-            bool                                                                        m_bActive;
-            bool                                                                        m_bInplaceMenuSet;
-            bool                                                                        m_bMenuVisible;
-            bool                                                                        m_bComponentAttached;
-            bool                                                                        m_bDoLayout;
-            bool                                                                        m_bVisible;
-            bool                                                                        m_bParentWindowVisible;
-            bool                                                                        m_bMustDoLayout;
-            bool                                                                        m_bAutomaticToolbars;
-            bool                                                                        m_bStoreWindowState;
-            bool                                                                        m_bHideCurrentUI;
-            bool                                                                        m_bGlobalSettings;
-            bool                                                                        m_bPreserveContentSize;
-            bool                                                                        m_bMenuBarCloseButton;
-            css::awt::Rectangle                                                         m_aDockingArea;
-            css::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
-            css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
-            MenuBarManager*                                                             m_pInplaceMenuBar;
-            css::uno::Reference< ::com::sun::star::ui::XUIElement >                     m_xMenuBar;
-            UIElement                                                                   m_aStatusBarElement;
-            UIElement                                                                   m_aProgressBarElement;
-            com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
-            css::uno::Reference< ::com::sun::star::frame::XModuleManager2 >             m_xModuleManager;
-            css::uno::Reference< ::com::sun::star::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
-            css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
-            css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
-            GlobalSettings*                                                             m_pGlobalSettings;
-            OUString                                                                    m_aModuleIdentifier;
-            Timer                                                                       m_aAsyncLayoutTimer;
-            ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
-            ToolbarLayoutManager*                                                       m_pToolbarManager;
-            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
+            css::uno::Reference< css::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
+            css::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;
+            css::uno::Reference< css::frame::XFrame >                      m_xFrame;
+            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
+            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xDocCfgMgr;
+            css::uno::WeakReference< css::frame::XModel >                  m_xModel;
+            css::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
+            css::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
+            sal_Int32                                                      m_nLockCount;
+            bool                                                           m_bActive;
+            bool                                                           m_bInplaceMenuSet;
+            bool                                                           m_bMenuVisible;
+            bool                                                           m_bComponentAttached;
+            bool                                                           m_bDoLayout;
+            bool                                                           m_bVisible;
+            bool                                                           m_bParentWindowVisible;
+            bool                                                           m_bMustDoLayout;
+            bool                                                           m_bAutomaticToolbars;
+            bool                                                           m_bStoreWindowState;
+            bool                                                           m_bHideCurrentUI;
+            bool                                                           m_bGlobalSettings;
+            bool                                                           m_bPreserveContentSize;
+            bool                                                           m_bMenuBarCloseButton;
+            css::awt::Rectangle                                            m_aDockingArea;
+            css::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
+            css::uno::Reference< css::lang::XComponent >                   m_xInplaceMenuBar;
+            MenuBarManager*                                                m_pInplaceMenuBar;
+            css::uno::Reference< css::ui::XUIElement >                     m_xMenuBar;
+            UIElement                                                      m_aStatusBarElement;
+            UIElement                                                      m_aProgressBarElement;
+            css::uno::Reference< css::ui::XUIElement >                     m_xProgressBarBackup;
+            css::uno::Reference< css::frame::XModuleManager2 >             m_xModuleManager;
+            css::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
+            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;
+            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
+            GlobalSettings*                                                m_pGlobalSettings;
+            OUString                                                       m_aModuleIdentifier;
+            Timer                                                          m_aAsyncLayoutTimer;
+            ::cppu::OMultiTypeInterfaceContainerHelper                     m_aListenerContainer; // container for ALL Listener
+            ToolbarLayoutManager*                                          m_pToolbarManager;
+            css::uno::Reference< css::ui::XUIConfigurationListener >       m_xToolbarManager;
 
         friend class detail::InfoHelperBuilder;
     };

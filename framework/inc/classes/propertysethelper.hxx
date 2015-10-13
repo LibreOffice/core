@@ -100,7 +100,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  @param  aProperty
          *          describes the new property.
          *
-         *  @throw  [com::sun::star::beans::PropertyExistException]
+         *  @throw  [css::beans::PropertyExistException]
          *          if a property with the same name already exists.
          *
          *  Note:   The consistence of the whole set of properties is not checked here.

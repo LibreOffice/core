@@ -61,17 +61,17 @@ namespace framework
 {
 
 typedef ::cppu::WeakImplHelper<
-           ::com::sun::star::frame::XFrameActionListener,
-           ::com::sun::star::frame::XStatusListener,
-           ::com::sun::star::lang::XComponent,
-           ::com::sun::star::ui::XUIConfigurationListener
+           css::frame::XFrameActionListener,
+           css::frame::XStatusListener,
+           css::lang::XComponent,
+           css::ui::XUIConfigurationListener
         > ToolbarManager_Base;
 
 class ToolBarManager : public ToolbarManager_Base
 {
     public:
-        ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< css::frame::XFrame >& rFrame,
                         const OUString& rResourceName,
                         ToolBox* pToolBar );
         virtual ~ToolBarManager();
@@ -79,27 +79,27 @@ class ToolBarManager : public ToolbarManager_Base
         ToolBox* GetToolBar() const;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const com::sun::star::frame::FrameActionEvent& Action ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        void SAL_CALL addEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-        void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        void SAL_CALL addEventListener( const css::uno::Reference< XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
+        void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
 
         void CheckAndUpdateImages();
         virtual void RefreshImages();
-        void FillToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolBarData );
+        void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();
 
@@ -114,10 +114,10 @@ class ToolBarManager : public ToolbarManager_Base
 
         struct ExecuteInfo
         {
-            OUString   aToolbarResName;
-            ExecuteCommand  nCmd;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
+            OUString                                            aToolbarResName;
+            ExecuteCommand                                      nCmd;
+            css::uno::Reference< css::frame::XLayoutManager >   xLayoutManager;
+            css::uno::Reference< css::awt::XWindow >            xWindow;
         };
         struct ControllerParams
         {
@@ -147,11 +147,11 @@ class ToolBarManager : public ToolbarManager_Base
         void RemoveControllers();
         OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
         sal_Int32 RetrievePropertiesFromCommand( const OUString& aCmdURL );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
+        css::uno::Sequence< css::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
         //for update controller via Support Visiable
-        void UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController);
+        void UpdateController( css::uno::Reference< css::frame::XToolbarController > xController);
         //end
         void AddFrameActionListener();
         void AddImageOrientationListener();
@@ -159,22 +159,22 @@ class ToolBarManager : public ToolbarManager_Base
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
+        css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
         Image QueryAddonsImage( const OUString& aCommandURL, bool bBigImages );
-        long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
+        long HandleClick(void ( SAL_CALL css::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
-        void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
+        void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
-        static bool impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg, const OUString& rCommand, OUString& rShortCut );
+        static bool impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg, const OUString& rCommand, OUString& rShortCut );
         bool RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut );
 
     protected:
-        typedef std::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
-        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
+        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > > ToolBarControllerMap;
+        typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > > SubToolBarControllerVector;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
-        typedef std::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
+        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::container::XIndexAccess > > MenuDescriptionMap;
 
         bool m_bDisposed : 1,
              m_bSmallSymbols : 1,
@@ -189,22 +189,22 @@ class ToolBarManager : public ToolbarManager_Base
 
         VclPtr<ToolBox> m_pToolBar;
 
-        OUString m_aModuleIdentifier;
-        OUString m_aResourceName;
+        OUString                                                     m_aModuleIdentifier;
+        OUString                                                     m_aResourceName;
 
-        com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >              m_xURLTransformer;
-        com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
-        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;
-        ToolBarControllerMap                                                                   m_aControllerMap;
-        osl::Mutex m_mutex;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >             m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory > m_xToolbarControllerFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                 m_xImageOrientationListener;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >                m_xUICfgMgr;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >                m_xDocUICfgMgr;
+        css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
+        css::uno::Reference< css::frame::XFrame >                    m_xFrame;
+        css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
+        ToolBarControllerMap                                         m_aControllerMap;
+        osl::Mutex                                                   m_mutex;
+        ::cppu::OMultiTypeInterfaceContainerHelper                   m_aListenerContainer;   /// container for ALL Listener
+        css::uno::Reference< css::uno::XComponentContext >           m_xContext;
+        css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
+        css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
+        css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
+        css::uno::Reference< css::lang::XComponent >                 m_xImageOrientationListener;
+        css::uno::Reference< css::ui::XUIConfigurationManager >      m_xUICfgMgr;
+        css::uno::Reference< css::ui::XUIConfigurationManager >      m_xDocUICfgMgr;
 
         CommandToInfoMap                                                                       m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
@@ -212,9 +212,9 @@ class ToolBarManager : public ToolbarManager_Base
         OUString                                                                               m_sIconTheme;
         MenuDescriptionMap m_aMenuMap;
         bool                                                                               m_bAcceleratorCfg;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
 };
 
 }

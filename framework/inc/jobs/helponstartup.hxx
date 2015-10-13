@@ -41,7 +41,7 @@ namespace framework{
 
     @author as96863
  */
-class HelpOnStartup : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
+class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::lang::XEventListener,css::task::XJob >
 {
 
     // member

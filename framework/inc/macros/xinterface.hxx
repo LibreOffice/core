@@ -66,11 +66,11 @@ ________________________________________________________________________________
 //  implementation of XInterface::queryInterface() with max. 12 other interfaces!
 
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                            \
-    ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
+    css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
         /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
         /* Ask for my own supported interfaces ...                                          */                                                              \
-        ::com::sun::star::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES                                                                             \
+        css::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES                                                                             \
                                             );                                                                                                              \
         /* If searched interface not supported by this class ... */                                                                                         \
         if ( !aReturn.hasValue() )                                                                                                                          \
@@ -86,11 +86,11 @@ ________________________________________________________________________________
 //  implementation of XInterface::queryInterface() with more than 12 other interfaces!
 
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                             \
-    ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
+    css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                                       \
         /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
         /* Ask for my own supported interfaces ...                                          */                                                              \
-        ::com::sun::star::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES_FIRST                                                                       \
+        css::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES_FIRST                                                                       \
                                             );                                                                                                              \
         /* If searched interface not supported by first group ... */                                                                                        \
         if ( !aReturn.hasValue() )                                                                                                                          \
@@ -189,7 +189,7 @@ ________________________________________________________________________________
 //  declaration of XInterface
 
 #define FWK_DECLARE_XINTERFACE                                                                                                                                      \
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override; \
+    virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException, std::exception ) override; \
     virtual void                        SAL_CALL acquire       (                                            ) throw() override;  \
     virtual void                        SAL_CALL release       (                                            ) throw() override;
 

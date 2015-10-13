@@ -31,26 +31,26 @@ struct AddonStatusbarItemData;
 class GenericStatusbarController : public svt::StatusbarController
 {
     public:
-        GenericStatusbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                    const com::sun::star::uno::Reference< com::sun::star::ui::XStatusbarItem >& rxItem,
+        GenericStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                    const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                    const css::uno::Reference< css::ui::XStatusbarItem >& rxItem,
                                     AddonStatusbarItemData *pItemData );
         virtual ~GenericStatusbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle,
-                                     ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+                                     const css::awt::Rectangle& rOutputRectangle,
+                                     ::sal_Int32 nStyle ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        bool m_bEnabled;
-        bool m_bOwnerDraw;
-        AddonStatusbarItemData *m_pItemData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xGraphic;
+        bool                                              m_bEnabled;
+        bool                                              m_bOwnerDraw;
+        AddonStatusbarItemData*                           m_pItemData;
+        css::uno::Reference< css::graphic::XGraphic >     m_xGraphic;
 };
 
 }

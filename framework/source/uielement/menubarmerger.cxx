@@ -45,13 +45,13 @@ namespace framework
      Describes a context string list where all contexts
      are delimited by a colon. For more information about
      the module identifier used as context strings see the
-     IDL description of com::sun::star::frame::XModuleManager
+     IDL description of css::frame::XModuleManager
 
   @param
      rModuleIdentifier
 
      A string describing a module identifier. See IDL
-     description of com::sun::star::frame::XModuleManager.
+     description of css::frame::XModuleManager.
 
 */
 bool MenuBarMerger::IsCorrectContext( const OUString& rContext, const OUString& rModuleIdentifier )

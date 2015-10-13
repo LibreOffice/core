@@ -38,13 +38,13 @@
 #include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::frame::status;
-using namespace ::com::sun::star::util;
+using namespace css::awt;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::frame::status;
+using namespace css::util;
 
 namespace framework
 {
@@ -96,7 +96,7 @@ throw ( RuntimeException, std::exception )
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
     OUString                     aCommandURL;
-    ::com::sun::star::util::URL  aTargetURL;
+    css::util::URL  aTargetURL;
     Sequence<PropertyValue> aArgs;
 
     {
@@ -289,7 +289,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
     return xDispatch;
 }
 
-const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
+const css::util::URL& ComplexToolbarController::getInitializedURL()
 {
     if ( m_aURL.Complete.isEmpty() )
     {

@@ -43,10 +43,10 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 
 class ConfigurationAccess_ControllerFactory : // interfaces
-                                                    public  ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener>
+                                                    public  ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const OUString& _sRoot );
+                    ConfigurationAccess_ControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& _sRoot );
     virtual       ~ConfigurationAccess_ControllerFactory();
 
     void          readConfigurationData();
@@ -58,12 +58,12 @@ public:
     void          removeServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule );
 
     // container.XContainerListener
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
     // lang.XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     struct ControllerInfo
@@ -80,18 +80,18 @@ private:
     {
     };
 
-    bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
+    bool impl_getElementProps( const css::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
-    mutable osl::Mutex m_mutex;
+    mutable osl::Mutex           m_mutex;
     OUString                     m_aPropCommand;
     OUString                     m_aPropModule;
     OUString                     m_aPropController;
     OUString                     m_aPropValue;
     OUString                     m_sRoot;
-    MenuControllerMap                 m_aMenuControllerMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;
+    MenuControllerMap            m_aMenuControllerMap;
+    css::uno::Reference< css::lang::XMultiServiceFactory >    m_xConfigProvider;
+    css::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
+    css::uno::Reference< css::container::XContainerListener > m_xConfigAccessListener;
     bool                          m_bConfigAccessInitialized;
 };
 

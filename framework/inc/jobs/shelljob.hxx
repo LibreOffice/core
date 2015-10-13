@@ -45,7 +45,7 @@ namespace framework{
 
     @author as96863
  */
-class ShellJob : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,::com::sun::star::task::XJob >
+class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::task::XJob >
 {
 
     // member

@@ -163,7 +163,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
 }
 
 // XUnoTunnel
-sal_Int64 ConstItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ConstItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
     {
@@ -182,9 +182,9 @@ const Sequence< sal_Int8 >& ConstItemContainer::GetUnoTunnelId() throw()
     return theConstItemContainerUnoTunnelId::get().getSeq();
 }
 
-ConstItemContainer* ConstItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
+ConstItemContainer* ConstItemContainer::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast< ConstItemContainer* >(sal::static_int_cast< sal_IntPtr >(
                           xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ))) : NULL;
 }
@@ -214,7 +214,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -239,12 +239,12 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
 Any SAL_CALL ConstItemContainer::getPropertyValue( const OUString& PropertyName )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if ( PropertyName == PROPNAME_UINAME )
         return makeAny( m_aUIName );
@@ -252,37 +252,37 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
     throw UnknownPropertyException();
 }
 
-void SAL_CALL ConstItemContainer::addPropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ConstItemContainer::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL ConstItemContainer::removePropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
-{
-    // Only read-only properties - do nothing
-}
-
-void SAL_CALL ConstItemContainer::addVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ConstItemContainer::removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     // Only read-only properties - do nothing
 }
 
-void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ConstItemContainer::addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    // Only read-only properties - do nothing
+}
+
+void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     // Only read-only properties - do nothing
 }
 
 // XFastPropertySet
-void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const ::com::sun::star::uno::Any& )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const css::uno::Any& )
+throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
 Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
-throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if ( nHandle == PROPHANDLE_UINAME )
         return makeAny( m_aUIName );
@@ -316,7 +316,7 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
     return(*pInfoHelper);
 }
 
-const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
+const css::uno::Sequence< css::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
 {
     // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
@@ -325,14 +325,14 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItem
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const com::sun::star::beans::Property pProperties[] =
+    const css::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
+        css::beans::Property( OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
                                          cppu::UnoType<OUString>::get(),
-                                         com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY  )
+                                         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY  )
     };
     // Use it to initialize sequence!
-    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
+    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
     // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }

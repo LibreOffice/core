@@ -32,7 +32,7 @@ namespace framework
 {
 
 StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl ) :
+    const css::uno::Reference< css::lang::XComponent >& rStatusIndicatorImpl ) :
     m_xStatusIndicatorImpl( rStatusIndicatorImpl )
 {
 }
@@ -44,7 +44,7 @@ StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
 void SAL_CALL StatusIndicatorInterfaceWrapper::start(
     const OUString& sText,
     sal_Int32              nRange )
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
@@ -56,7 +56,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::end()
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
@@ -68,7 +68,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::reset()
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
@@ -81,7 +81,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::setText(
     const OUString& sText )
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
@@ -94,7 +94,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::setValue(
     sal_Int32 nValue )
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )

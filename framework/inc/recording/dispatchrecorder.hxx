@@ -72,15 +72,15 @@ class DispatchRecorder
         virtual void SAL_CALL            endRecording           () throw( css::uno::RuntimeException, std::exception ) override;
         virtual OUString SAL_CALL getRecordedMacro       () throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual sal_Bool SAL_CALL hasElements()  throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements()  throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32)  throw (css::uno::RuntimeException, css::lang::WrappedTargetException, css::lang::IndexOutOfBoundsException, std::exception) override;
 
-        virtual void SAL_CALL replaceByIndex(sal_Int32, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL replaceByIndex(sal_Int32, const css::uno::Any&)  throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // private functions
     private:

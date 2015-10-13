@@ -40,7 +40,7 @@ namespace framework
 static Sequence< sal_Int8 > impl_getStaticIdentifier()
 {
     static const sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
-    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
+    static css::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
     return seqID;
 }
 
@@ -99,7 +99,7 @@ throw ( Exception,  RuntimeException, std::exception )
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
         return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
+        throw css::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
@@ -196,13 +196,13 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 
 // XElementAccess
 Type SAL_CALL RootActionTriggerContainer::getElementType()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_pMenu )
     {

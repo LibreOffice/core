@@ -66,7 +66,7 @@ public:
      */
     ModuleAcceleratorConfiguration(
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments);
+            const css::uno::Sequence< css::uno::Any >& lArguments);
 
     /** TODO */
     virtual ~ModuleAcceleratorConfiguration();
@@ -104,7 +104,7 @@ private:
 
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
+        const css::uno::Sequence< css::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
     SolarMutexGuard g;

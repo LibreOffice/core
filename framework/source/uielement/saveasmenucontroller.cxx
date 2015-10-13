@@ -79,12 +79,12 @@ public:
     virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
 
 private:
     virtual void impl_setPopupMenu() override;
 
-    void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
 
     bool                  m_bDisabled : 1;
 };

@@ -45,7 +45,7 @@ namespace framework{
                 All these steps are done inside one method call here.
 */
 
-class DispatchHelper : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
+class DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::frame::XDispatchHelper,css::frame::XDispatchResultListener >
 {
 
     // member

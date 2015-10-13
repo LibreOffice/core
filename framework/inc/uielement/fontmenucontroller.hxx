@@ -44,30 +44,30 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            FontMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            FontMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~FontMenuController();
 
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL updatePopupMenu() throw (css::uno::RuntimeException, std::exception) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             // XMenuListener
-            virtual void SAL_CALL itemActivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
             virtual void impl_setPopupMenu() override;
-            void fillPopupMenu( const com::sun::star::uno::Sequence< OUString >& rFontNameSeq, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( const css::uno::Sequence< OUString >& rFontNameSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
 
-            OUString                                                       m_aFontFamilyName;
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >  m_xFontListDispatch;
+            OUString                                        m_aFontFamilyName;
+            css::uno::Reference< css::frame::XDispatch >    m_xFontListDispatch;
     };
 }
 

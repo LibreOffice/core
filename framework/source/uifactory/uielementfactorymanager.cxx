@@ -330,11 +330,11 @@ bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aEleme
             xPropertySet->getPropertyValue( m_aPropModule ) >>= rModule;
             xPropertySet->getPropertyValue( m_aPropFactory ) >>= rServiceSpecifier;
         }
-        catch ( const com::sun::star::beans::UnknownPropertyException& )
+        catch ( const css::beans::UnknownPropertyException& )
         {
             return false;
         }
-        catch ( const com::sun::star::lang::WrappedTargetException& )
+        catch ( const css::lang::WrappedTargetException& )
         {
             return false;
         }
@@ -424,7 +424,7 @@ void SAL_CALL UIElementFactoryManager::disposing()
 Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
     Reference< XFrame > xFrame;
     OUString aModuleId;

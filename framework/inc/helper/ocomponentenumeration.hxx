@@ -50,7 +50,7 @@ namespace framework{
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class OComponentEnumeration :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
+class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::XEnumeration,css::lang::XEventListener >
 {
 
     //  public methods

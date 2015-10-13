@@ -36,12 +36,12 @@
 #include <vcl/combobox.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::frame::status;
-using namespace ::com::sun::star::util;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::frame::status;
+using namespace css::util;
 
 namespace framework
 {
@@ -252,7 +252,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+void ComboboxToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
 {
     if ( rControlCommand.Command == "SetText" )
     {
@@ -379,7 +379,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name == "Color" )
             {
-                com::sun::star::util::Color aColor(0);
+                css::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
                     ::Color aBackColor( static_cast< sal_uInt32 >( aColor ));
@@ -395,7 +395,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name == "Color" )
             {
-                com::sun::star::util::Color aColor(0);
+                css::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
                     ::Color aForeColor( static_cast< sal_uInt32 >( aColor ));

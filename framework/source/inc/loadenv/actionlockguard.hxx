@@ -26,7 +26,7 @@
 namespace framework{
 
 /** @short  implements a guard, which can use the interface
-            <type scope="com::sun::star::document">XActionLockable</type>.
+            <type scope="css::document">XActionLockable</type>.
 
     @descr  This guard should be used to be sure, that any lock will be
             released. Otherwise the locked document can hinder the office on shutdown!

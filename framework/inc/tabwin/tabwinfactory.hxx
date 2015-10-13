@@ -40,22 +40,22 @@
 namespace framework
 {
 
-class TabWinFactory :  public ::cppu::WeakImplHelper< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
+class TabWinFactory :  public ::cppu::WeakImplHelper< css::lang::XSingleComponentFactory, css::lang::XServiceInfo>
 {
     public:
-        TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+        TabWinFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~TabWinFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO
 
         // XSingleComponentFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit2 >             m_xToolkit;
+        css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+        css::uno::Reference< css::awt::XToolkit2 >             m_xToolkit;
 };
 
 }

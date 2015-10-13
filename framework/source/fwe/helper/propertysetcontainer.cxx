@@ -73,7 +73,7 @@ throw ( RuntimeException, std::exception )
 }
 
 // XIndexContainer
-void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
+void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
@@ -120,7 +120,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
+void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if ( (sal_Int32)m_aPropertySetVector.size() > Index )
@@ -169,7 +169,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 
 // XElementAccess
 sal_Bool SAL_CALL PropertySetContainer::hasElements()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

@@ -41,57 +41,57 @@ class ToolBox;
 namespace framework
 {
 
-class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
-                                public ::com::sun::star::frame::XToolbarController,
-                                public ::com::sun::star::lang::XInitialization,
-                                public ::com::sun::star::util::XUpdatable,
-                                public ::com::sun::star::lang::XComponent,
+class ButtonToolbarController : public css::frame::XStatusListener,
+                                public css::frame::XToolbarController,
+                                public css::lang::XInitialization,
+                                public css::util::XUpdatable,
+                                public css::lang::XComponent,
                                 public ::comphelper::OBaseMutex,
                                 public ::cppu::OWeakObject
 {
     public:
-        ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+        ButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                  ToolBox* pToolBar,
                                  const OUString& aCommand );
         virtual ~ButtonToolbarController();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL click() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL doubleClick() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
-        bool                                                                             m_bInitialized : 1,
-                                                                                         m_bDisposed : 1;
-        OUString                                                                         m_aCommandURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
-        VclPtr<ToolBox>                                                                  m_pToolbar;
+        bool                                                   m_bInitialized : 1,
+                                                               m_bDisposed : 1;
+        OUString                                               m_aCommandURL;
+        css::uno::Reference< css::frame::XFrame >              m_xFrame;
+        css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+        css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
+        VclPtr<ToolBox>                                        m_pToolbar;
 };
 
 }

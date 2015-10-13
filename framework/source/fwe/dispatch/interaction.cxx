@@ -45,7 +45,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterSelect >
+class ContinuationFilterSelect : public comphelper::OInteraction< css::document::XInteractionFilterSelect >
 {
     // c++ interface
     public:
@@ -53,8 +53,8 @@ class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::st
 
     // uno interface
     public:
-        virtual void            SAL_CALL setFilter( const OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL setFilter( const OUString& sFilter ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getFilter(                                ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // member
     private:
@@ -83,7 +83,7 @@ OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::Runtime
     return m_sFilter;
 }
 
-class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
+class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 public:
     RequestFilterSelect_Impl( const OUString& sURL );
@@ -91,14 +91,14 @@ public:
     OUString getFilter() const;
 
 public:
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::com::sun::star::uno::Any                                                                                                 m_aRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
-    comphelper::OInteractionAbort* m_pAbort;
-    ContinuationFilterSelect* m_pFilter;
+    css::uno::Any                                                                       m_aRequest;
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >    m_lContinuations;
+    comphelper::OInteractionAbort*                                                      m_pAbort;
+    ContinuationFilterSelect*                                                           m_pFilter;
 };
 
 // initialize instance with all necessary information
@@ -187,14 +187,14 @@ uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
     return uno::Reference < task::XInteractionRequest > (pImp);
 }
 
-class InteractionRequest_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
+class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
     uno::Any m_aRequest;
-    uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
+    uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
 
 public:
-    InteractionRequest_Impl( const ::com::sun::star::uno::Any& aRequest,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations )
+    InteractionRequest_Impl( const css::uno::Any& aRequest,
+        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
     {
         m_aRequest = aRequest;
         m_lContinuations = lContinuations;

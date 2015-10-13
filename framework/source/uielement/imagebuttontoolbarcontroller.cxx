@@ -88,7 +88,7 @@ throw ( RuntimeException, std::exception )
     ComplexToolbarController::dispose();
 }
 
-void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+void ImageButtonToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
 {
     SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!

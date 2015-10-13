@@ -133,7 +133,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController              
 
 DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
-ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext ),
     m_aPropUIName( "UIName" ),
@@ -255,7 +255,7 @@ OUString ToolbarsMenuController::getUINameFromCommand( const OUString& rCommandU
     return aLabel;
 }
 
-static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::PropertyValue > >& rSeqToolBars,
+static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >& rSeqToolBars,
                          ToolbarHashMap& rHashMap )
 {
     for ( sal_Int32 i = 0; i < rSeqToolBars.getLength(); i++ )
@@ -278,7 +278,7 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
 }
 
 // private function
-Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager )
+Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< css::frame::XLayoutManager >& rLayoutManager )
 {
     std::vector< ToolBarInfo > aToolBarArray;
     Sequence< Reference< XUIElement > > aUIElements = rLayoutManager->getElements();
@@ -295,7 +295,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
                 xPropSet->getPropertyValue("Type") >>= nType;
                 xPropSet->getPropertyValue("ResourceURL") >>= aResName;
 
-                if (( nType == ::com::sun::star::ui::UIElementType::TOOLBAR ) &&
+                if (( nType == css::ui::UIElementType::TOOLBAR ) &&
                     !aResName.isEmpty() )
                 {
                     ToolBarInfo aToolBarInfo;
@@ -317,11 +317,11 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
         }
     }
 
-    Sequence< com::sun::star::beans::PropertyValue > aTbSeq( 2 );
+    Sequence< css::beans::PropertyValue > aTbSeq( 2 );
     aTbSeq[0].Name = m_aPropUIName;
     aTbSeq[1].Name = m_aPropResourceURL;
 
-    Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeq( aToolBarArray.size() );
+    Sequence< Sequence< css::beans::PropertyValue > > aSeq( aToolBarArray.size() );
     const sal_uInt32 nCount = aToolBarArray.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -355,14 +355,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         if ( m_xDocCfgMgr.is() )
         {
-            Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqDocToolBars =
+            Sequence< Sequence< css::beans::PropertyValue > > aSeqDocToolBars =
                 m_xDocCfgMgr->getUIElementsInfo( UIElementType::TOOLBAR );
             fillHashMap( aSeqDocToolBars, aToolbarHashMap );
         }
 
         if ( m_xModuleCfgMgr.is() )
         {
-            Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqToolBars =
+            Sequence< Sequence< css::beans::PropertyValue > > aSeqToolBars =
                 m_xModuleCfgMgr->getUIElementsInfo( UIElementType::TOOLBAR );
             fillHashMap( aSeqToolBars, aToolbarHashMap );
         }
@@ -370,7 +370,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         std::vector< ToolBarEntry > aSortedTbs;
         OUString               aStaticCmdPart( STATIC_CMD_PART );
 
-        Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqFrameToolBars = getLayoutManagerToolbars( xLayoutManager );
+        Sequence< Sequence< css::beans::PropertyValue > > aSeqFrameToolBars = getLayoutManagerToolbars( xLayoutManager );
         fillHashMap( aSeqFrameToolBars, aToolbarHashMap );
 
         ToolbarHashMap::const_iterator pIter = aToolbarHashMap.begin();
@@ -819,7 +819,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
         if ( m_bInitialized )
         {
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::theWindowStateConfiguration::get( m_xContext );
+            Reference< XNameAccess > xPersistentWindowStateSupplier = css::ui::theWindowStateConfiguration::get( m_xContext );
 
             // Retrieve persistent window state reference for our module
             OUString aModuleIdentifier;

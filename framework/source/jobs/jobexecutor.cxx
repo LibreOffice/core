@@ -77,7 +77,7 @@ private:
     ConfigAccess m_aConfig;
 
     /** helper to allow us listen to the configuration without a cyclic dependency */
-    com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
+    css::uno::Reference<css::container::XContainerListener> m_xConfigListener;
 
     virtual void SAL_CALL disposing() override;
 

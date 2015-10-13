@@ -28,33 +28,33 @@
 
 namespace framework
 {
-    class GraphicNameAccess : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameAccess >
+    class GraphicNameAccess : public ::cppu::WeakImplHelper< css::container::XNameAccess >
     {
         public:
             GraphicNameAccess();
             virtual ~GraphicNameAccess();
 
-            void addElement( const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rElement );
+            void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
 
             // XNameAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-                throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+                throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+                    css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+                throw(css::uno::RuntimeException, std::exception) override;
             virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::uno::RuntimeException, std::exception) override;
 
             // XElementAccess
             virtual sal_Bool SAL_CALL hasElements()
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Type SAL_CALL getElementType(  )
+                throw(css::uno::RuntimeException, std::exception) override;
 
         private:
-            typedef BaseHash< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > NameGraphicHashMap;
-            NameGraphicHashMap m_aNameToElementMap;
-            ::com::sun::star::uno::Sequence< OUString > m_aSeq;
+            typedef BaseHash< css::uno::Reference< css::graphic::XGraphic > > NameGraphicHashMap;
+            NameGraphicHashMap              m_aNameToElementMap;
+            css::uno::Sequence< OUString >  m_aSeq;
     };
 }
 

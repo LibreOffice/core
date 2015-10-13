@@ -104,23 +104,23 @@ static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
     sal_uInt16 nItemBits( 0 );
 
-    if (( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_RIGHT ) == ::com::sun::star::ui::ItemStyle::ALIGN_RIGHT )
+    if (( nStyle & css::ui::ItemStyle::ALIGN_RIGHT ) == css::ui::ItemStyle::ALIGN_RIGHT )
         nItemBits |= SIB_RIGHT;
-    else if ( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_LEFT )
+    else if ( nStyle & css::ui::ItemStyle::ALIGN_LEFT )
         nItemBits |= SIB_LEFT;
     else
         nItemBits |= SIB_CENTER;
 
-    if (( nStyle & ::com::sun::star::ui::ItemStyle::DRAW_FLAT ) == ::com::sun::star::ui::ItemStyle::DRAW_FLAT )
+    if (( nStyle & css::ui::ItemStyle::DRAW_FLAT ) == css::ui::ItemStyle::DRAW_FLAT )
         nItemBits |= SIB_FLAT;
-    else if ( nStyle & ::com::sun::star::ui::ItemStyle::DRAW_OUT3D )
+    else if ( nStyle & css::ui::ItemStyle::DRAW_OUT3D )
         nItemBits |= SIB_OUT;
     else
         nItemBits |= SIB_IN;
 
-    if (( nStyle & ::com::sun::star::ui::ItemStyle::AUTO_SIZE ) == ::com::sun::star::ui::ItemStyle::AUTO_SIZE )
+    if (( nStyle & css::ui::ItemStyle::AUTO_SIZE ) == css::ui::ItemStyle::AUTO_SIZE )
         nItemBits |= SIB_AUTOSIZE;
-    if ( nStyle & ::com::sun::star::ui::ItemStyle::OWNER_DRAW )
+    if ( nStyle & css::ui::ItemStyle::OWNER_DRAW )
         nItemBits |= SIB_USERDRAW;
 
     return nItemBits;
@@ -437,12 +437,12 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         uno::Sequence< beans::PropertyValue >   aProp;
-        OUString                           aCommandURL;
-        OUString                           aHelpURL;
+        OUString                                aCommandURL;
+        OUString                                aHelpURL;
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
         sal_Int16                               nWidth( 0 );
-        sal_uInt16                              nType( ::com::sun::star::ui::ItemType::DEFAULT );
+        sal_uInt16                              nType( css::ui::ItemType::DEFAULT );
 
         try
         {
@@ -476,7 +476,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                     }
                 }
 
-                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
+                if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     OUString aString( RetrieveLabelFromCommand( aCommandURL ));
                     sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
@@ -488,7 +488,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 }
             }
         }
-        catch ( const ::com::sun::star::lang::IndexOutOfBoundsException& )
+        catch ( const css::lang::IndexOutOfBoundsException& )
         {
             break;
         }
@@ -620,7 +620,7 @@ void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseMove);
 }
 
-void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&))
+void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&))
 {
     SolarMutexGuard g;
 
@@ -633,7 +633,7 @@ void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL
             uno::Reference< frame::XStatusbarController > xController( it->second );
             if ( xController.is() )
             {
-                ::com::sun::star::awt::MouseEvent aMouseEvent;
+                css::awt::MouseEvent aMouseEvent;
                 aMouseEvent.Buttons = rMEvt.GetButtons();
                 aMouseEvent.X = rMEvt.GetPosPixel().X();
                 aMouseEvent.Y = rMEvt.GetPosPixel().Y();

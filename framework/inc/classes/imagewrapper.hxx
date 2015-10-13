@@ -31,8 +31,8 @@ namespace framework
 {
 
 class FWE_DLLPUBLIC ImageWrapper :
-                     public ::cppu::WeakImplHelper< ::com::sun::star::awt::XBitmap,
-                                                    ::com::sun::star::lang::XUnoTunnel >
+                     public ::cppu::WeakImplHelper< css::awt::XBitmap,
+                                                    css::lang::XUnoTunnel >
 {
     public:
         ImageWrapper( const Image& aImage );
@@ -43,15 +43,15 @@ class FWE_DLLPUBLIC ImageWrapper :
             return m_aImage;
         }
 
-        static ::com::sun::star::uno::Sequence< sal_Int8 > GetUnoTunnelId();
+        static css::uno::Sequence< sal_Int8 > GetUnoTunnelId();
 
         // XBitmap
-        virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         Image   m_aImage;

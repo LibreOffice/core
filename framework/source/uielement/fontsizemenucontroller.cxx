@@ -58,7 +58,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontSizeMenuController              
 
 DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
-FontSizeMenuController::FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_pHeightArray( 0 )
 {
@@ -70,7 +70,7 @@ FontSizeMenuController::~FontSizeMenuController()
 }
 
 // private function
-OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame )
+OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame >& rFrame )
 {
     OUString aPrinterName;
 
@@ -253,8 +253,8 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( Ru
 // XStatusListener
 void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
-    com::sun::star::awt::FontDescriptor                 aFontDescriptor;
-    ::com::sun::star::frame::status::FontHeight   aFontHeight;
+    css::awt::FontDescriptor                 aFontDescriptor;
+    css::frame::status::FontHeight   aFontHeight;
 
     if ( Event.State >>= aFontDescriptor )
     {
@@ -282,21 +282,21 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 void FontSizeMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     // Register for font name updates which gives us info about the current font!
     aTargetURL.Complete = ".uno:CharFontName";
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( css::uno::RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aLock( m_aMutex );
 
     throwIfDisposed();
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     aTargetURL.Complete = ".uno:CharFontName";
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();

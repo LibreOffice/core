@@ -110,7 +110,7 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
 {
     OUString aTarget;
 
-    com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
+    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
     m_aStatements.push_back( aStatement );
 }
 
@@ -120,7 +120,7 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
     OUString aTarget;
 
     // last parameter must be set to true -> it's a comment
-        com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_True );
+    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_True );
     m_aStatements.push_back( aStatement );
 }
 
@@ -150,7 +150,7 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeE
     aScriptBuffer.append("document   = ThisComponent.CurrentController.Frame\n");
     aScriptBuffer.append("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
-    std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
+    std::vector< css::frame::DispatchStatement>::iterator p;
     for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
     OUString sScript = aScriptBuffer.makeStringAndClear();
@@ -374,53 +374,53 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     /* } */
 }
 
-com::sun::star::uno::Type SAL_CALL DispatchRecorder::getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL DispatchRecorder::getElementType() throw (css::uno::RuntimeException, std::exception)
 {
-    return cppu::UnoType<com::sun::star::frame::DispatchStatement>::get();
+    return cppu::UnoType<css::frame::DispatchStatement>::get();
 }
 
-sal_Bool SAL_CALL DispatchRecorder::hasElements()  throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DispatchRecorder::hasElements()  throw (css::uno::RuntimeException, std::exception)
 {
     return (! m_aStatements.empty());
 }
 
-sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (css::uno::RuntimeException, std::exception)
 {
     return m_aStatements.size();
 }
 
-com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if (idx >= (sal_Int32)m_aStatements.size()) {
-        throw com::sun::star::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
+        throw css::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
    }
 
     Any element(&m_aStatements[idx],
-        cppu::UnoType<com::sun::star::frame::DispatchStatement>::get());
+        cppu::UnoType<css::frame::DispatchStatement>::get());
 
     return element;
 }
 
-void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::star::uno::Any& element) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::Any& element) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if (element.getValueType() !=
-        cppu::UnoType<com::sun::star::frame::DispatchStatement>::get()) {
-                        throw com::sun::star::lang::IllegalArgumentException(
+        cppu::UnoType<css::frame::DispatchStatement>::get()) {
+                        throw css::lang::IllegalArgumentException(
                           "Illegal argument in dispatch recorder",
                           Reference< XInterface >(), 2 );
     }
 
     if (idx >= (sal_Int32)m_aStatements.size()) {
-                throw com::sun::star::lang::IndexOutOfBoundsException(
+                throw css::lang::IndexOutOfBoundsException(
                         "Dispatch recorder out of bounds"  );
 
         }
 
-    com::sun::star::frame::DispatchStatement const *pStatement;
+    css::frame::DispatchStatement const *pStatement;
 
-    pStatement = static_cast<com::sun::star::frame::DispatchStatement const *>(element.getValue());
+    pStatement = static_cast<css::frame::DispatchStatement const *>(element.getValue());
 
-    com::sun::star::frame::DispatchStatement aStatement(
+    css::frame::DispatchStatement aStatement(
         pStatement->aCommand,
         pStatement->aTarget,
         pStatement->aArgs,

@@ -66,7 +66,7 @@ public:
         throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 };
 
-ToolBarFactory::ToolBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+ToolBarFactory::ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     MenuBarFactory( xContext )
 {
 }
@@ -75,9 +75,9 @@ ToolBarFactory::ToolBarFactory( const ::com::sun::star::uno::Reference< ::com::s
 Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::ui::XUIElement > xToolBar(
+    Reference< css::ui::XUIElement > xToolBar(
            static_cast<OWeakObject *>(new ToolBarWrapper(m_xContext)), UNO_QUERY);
     CreateUIElement(ResourceURL, Args, "PopupMode", "private:resource/toolbar/", xToolBar, m_xContext);
     return xToolBar;

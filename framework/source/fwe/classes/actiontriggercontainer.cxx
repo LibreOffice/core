@@ -71,7 +71,7 @@ void ActionTriggerContainer::release() throw()
 
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
-throw ( ::com::sun::star::uno::Exception, RuntimeException, std::exception)
+throw ( css::uno::Exception, RuntimeException, std::exception)
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
         return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
@@ -80,7 +80,7 @@ throw ( ::com::sun::star::uno::Exception, RuntimeException, std::exception)
     else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
         return static_cast<OWeakObject *>( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
+        throw css::uno::RuntimeException("Unknown service specifier!", static_cast<OWeakObject *>(this) );
 }
 
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )

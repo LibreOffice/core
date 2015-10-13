@@ -54,7 +54,7 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumerationAccess >
+class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnumerationAccess >
 {
 
     //  public methods

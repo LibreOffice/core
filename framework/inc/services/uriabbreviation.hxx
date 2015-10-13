@@ -34,15 +34,15 @@
 namespace framework
 {
 
-class UriAbbreviation:    public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringAbbreviation, css::lang::XServiceInfo>
+class UriAbbreviation:    public ::cppu::WeakImplHelper< css::util::XStringAbbreviation, css::lang::XServiceInfo>
 {
 public:
-    explicit UriAbbreviation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
+    explicit UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & context);
 
     DECLARE_XSERVICEINFO
 
-    // ::com::sun::star::util::XStringAbbreviation:
-    virtual OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XStringAbbreviation:
+    virtual OUString SAL_CALL abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     UriAbbreviation(UriAbbreviation &) = delete;
@@ -50,7 +50,7 @@ private:
 
     virtual ~UriAbbreviation() {}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
 
 } //    namespace framework

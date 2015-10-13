@@ -37,11 +37,11 @@
 
 //  Defines
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::beans;
+using namespace css::util;
 
 using namespace std;
 
@@ -62,7 +62,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontMenuController                  
 
 DEFINE_INIT_SERVICE                     (   FontMenuController, {} )
 
-FontMenuController::FontMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+FontMenuController::FontMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }
@@ -130,7 +130,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
 // XStatusListener
 void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
-    com::sun::star::awt::FontDescriptor aFontDescriptor;
+    css::awt::FontDescriptor aFontDescriptor;
     Sequence< OUString >           aFontNameSeq;
 
     if ( Event.State >>= aFontDescriptor )
@@ -188,20 +188,20 @@ void FontMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     // Register for font list updates to get the current font list from the controller
     aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL FontMenuController::updatePopupMenu() throw ( css::uno::RuntimeException, std::exception )
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();

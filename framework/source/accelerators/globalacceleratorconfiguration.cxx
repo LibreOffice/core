@@ -78,7 +78,7 @@ public:
     }
 
     // XComponent
-    virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
     /// This has to be called after when the instance is acquire()'d.
     void fillCache();

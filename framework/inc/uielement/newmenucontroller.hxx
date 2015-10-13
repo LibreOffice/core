@@ -48,9 +48,9 @@ namespace framework
 {
     struct NewDocument
     {
-        ::com::sun::star::util::URL                                                 aTargetURL;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aArgSeq;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      xDispatch;
+        css::util::URL                                    aTargetURL;
+        css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
+        css::uno::Reference< css::frame::XDispatch >      xDispatch;
     };
 
     class NewMenuController :  public svt::PopupMenuControllerBase
@@ -58,33 +58,33 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            NewMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~NewMenuController();
 
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XInitialization
-            virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             // XMenuListener
-            virtual void SAL_CALL itemSelected( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemActivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             DECL_STATIC_LINK_TYPED( NewMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
             virtual void impl_setPopupMenu() override;
 
-            void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
-                                                     const ::com::sun::star::uno::Sequence< OUString >& rCommands,
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
+                                                     const css::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const vcl::KeyCode& rKeyCode );
@@ -92,17 +92,17 @@ namespace framework
 
         private:
             // members
-            bool            m_bShowImages : 1,
-                                m_bNewMenu    : 1,
-                                m_bModuleIdentified : 1,
-                                m_bAcceleratorCfg : 1;
-            OUString       m_aTargetFrame;
-            OUString       m_aModuleIdentifier;
-            OUString       m_aEmptyDocURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
+            bool                                                      m_bShowImages : 1,
+                                                                      m_bNewMenu    : 1,
+                                                                      m_bModuleIdentified : 1,
+                                                                      m_bAcceleratorCfg : 1;
+            OUString                                                  m_aTargetFrame;
+            OUString                                                  m_aModuleIdentifier;
+            OUString                                                  m_aEmptyDocURL;
+            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
     };
 }
 

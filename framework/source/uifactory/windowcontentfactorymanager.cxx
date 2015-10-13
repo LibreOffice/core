@@ -41,8 +41,8 @@ using namespace framework;
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper<
-    com::sun::star::lang::XServiceInfo,
-    com::sun::star::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
+    css::lang::XServiceInfo,
+    css::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
 
 class WindowContentFactoryManager : private cppu::BaseMutex,
                                     public WindowContentFactoryManager_BASE
