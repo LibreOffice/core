@@ -1270,12 +1270,13 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
                         FrameworkHelper::msCenterPaneURL).get();
                     bool bMasterPageMode (false);
-                    if (pCenterViewShell!=NULL && dynamic_cast< DrawViewShell *>( pCenterViewShell ) !=  nullptr)
-                        if (dynamic_cast< DrawViewShell *>( pCenterViewShell )->GetEditMode()
-                            == EM_MASTERPAGE)
+                    if (DrawViewShell* pShell = dynamic_cast<DrawViewShell*>(pCenterViewShell))
+                    {
+                        if (pShell->GetEditMode() == EM_MASTERPAGE)
                         {
                             bMasterPageMode = true;
                         }
+                    }
 
                     bState &= !bMasterPageMode;
                     break;
