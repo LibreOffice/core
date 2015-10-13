@@ -568,11 +568,11 @@ DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
     //the save must survive without asserting
 }
 
-// DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
-// {
-//     // TODO: assert here that the 2nd page has the right size even after
-//     // the save as .doc
-// }
+DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
+{
+    // TODO: assert here that the 2nd page has the right size even after
+    // the save as .doc
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
