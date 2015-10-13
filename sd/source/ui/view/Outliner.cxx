@@ -18,6 +18,7 @@
  */
 
 #include "Outliner.hxx"
+#include <boost/property_tree/json_parser.hpp>
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 
@@ -71,6 +72,7 @@
 #include <svx/svxids.hrc>
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -714,11 +716,32 @@ bool Outliner::SearchAndReplaceOnce()
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
-    // notify LibreOfficeKit about changed page
     if (pViewShell && pViewShell->GetDoc()->isTiledRendering() && mbStringFound)
     {
+        // notify LibreOfficeKit about changed page
         OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
         pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+
+        // also about search result selections
+        std::vector<Rectangle> aLogicRects;
+        pOutlinerView->GetSelectionRectangles(aLogicRects);
+
+        boost::property_tree::ptree aTree;
+        aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+
+        std::vector<OString> aLogicRectStrings;
+        std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const Rectangle& rRectangle) { return rRectangle.toString(); });
+        OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);
+        boost::property_tree::ptree aChildren;
+        boost::property_tree::ptree aChild;
+        aChild.put("", sRectangles.getStr());
+        aChildren.push_back(std::make_pair("", aChild));
+        aTree.add_child("searchResultSelection", aChildren);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        aPayload = aStream.str().c_str();
+        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
     }
 
     return mbEndOfSearch;
