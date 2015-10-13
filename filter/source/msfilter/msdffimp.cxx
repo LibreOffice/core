@@ -4525,7 +4525,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             }
                             else
                             {
-                                fNumber = 270.0;
                                 //normal situation:if endAngle != 90,there will be a direct_value,but for damaged curve,the endAngle need to recalculate.
                                 Point cent = aPolyBoundRect.Center();
                                 if ( aStartPt.Y() == cent.Y() )
