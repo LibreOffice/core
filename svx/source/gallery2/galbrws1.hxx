@@ -113,8 +113,8 @@ private:
                             DECL_LINK_TYPED( SelectThemeHdl, ListBox&, void );
                             DECL_LINK_TYPED( ShowContextMenuHdl, void*, void );
                             DECL_LINK_TYPED( PopupMenuHdl, Menu*, bool );
-                            DECL_LINK( EndNewThemePropertiesDlgHdl, VclAbstractDialog2* );
-                            DECL_LINK( EndThemePropertiesDlgHdl, VclAbstractDialog2* );
+                            DECL_LINK_TYPED( EndNewThemePropertiesDlgHdl, Dialog&, void );
+                            DECL_LINK_TYPED( EndThemePropertiesDlgHdl, Dialog&, void );
                             DECL_LINK_TYPED( DestroyThemePropertiesDlgHdl, void*, void );
 
 public:

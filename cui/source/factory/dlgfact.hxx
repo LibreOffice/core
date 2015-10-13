@@ -78,14 +78,14 @@ short Class::Execute()                              \
 class VclAbstractDialog2_Impl : public VclAbstractDialog2
 {
     ScopedVclPtr<Dialog> m_pDlg;
-    Link<>          m_aEndDlgHdl;
+    Link<Dialog&,void>   m_aEndDlgHdl;
 public:
     explicit        VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
     virtual         ~VclAbstractDialog2_Impl();
-    virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) override;
+    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual long    GetResult() override;
 private:
-                    DECL_LINK( EndDialogHdl, Dialog* );
+    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
 };
 
 class CuiVclAbstractDialog_Impl : public VclAbstractDialog

@@ -2884,7 +2884,7 @@ void ScCellShell::ExecuteFillSingleEdit()
     SC_MOD()->SetInputMode(SC_INPUT_TABLE, &aInit);
 }
 
-IMPL_LINK_NOARG(ScCellShell, DialogClosed)
+IMPL_LINK_NOARG_TYPED(ScCellShell, DialogClosed, Dialog&, void)
 {
     assert(pImpl->m_pLinkedDlg && "ScCellShell::DialogClosed(): invalid request");
     assert(pImpl->m_pRequest && "ScCellShell::DialogClosed(): invalid request");
@@ -2911,7 +2911,6 @@ IMPL_LINK_NOARG(ScCellShell, DialogClosed)
     }
 
     ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

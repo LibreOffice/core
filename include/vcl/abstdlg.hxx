@@ -25,6 +25,7 @@
 
 namespace vcl { class Window; }
 class ResId;
+class Dialog;
 
 class VCL_DLLPUBLIC VclAbstractDialog
 {
@@ -39,7 +40,7 @@ class VCL_DLLPUBLIC VclAbstractDialog2
 public:
     virtual             ~VclAbstractDialog2();
 
-    virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) = 0;
+    virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
     virtual long        GetResult() = 0;
 };
 

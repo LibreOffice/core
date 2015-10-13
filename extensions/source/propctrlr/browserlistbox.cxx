@@ -189,7 +189,7 @@ namespace pcr
 
         /** checks whether the instance is already disposed
         */
-        bool impl_isDisposed_nothrow() const { return m_pContext == NULL; }
+        bool impl_isDisposed_nothrow() const { return m_pContext.get() == nullptr; }
 
         /** notifies the given event originating from the given control
         @throws DisposedException

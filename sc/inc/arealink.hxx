@@ -28,6 +28,7 @@
 
 class SfxObjectShell;
 struct AreaLink_Impl;
+class Dialog;
 
 class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
@@ -75,7 +76,7 @@ public:
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK_TYPED( RefreshHdl, Timer*, void );
-    DECL_LINK( AreaEndEditHdl, void* );
+    DECL_LINK_TYPED( AreaEndEditHdl, Dialog&, void );
 };
 
 #endif

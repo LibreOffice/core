@@ -327,16 +327,14 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
     Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog, true );
 }
 
-IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+IMPL_LINK_TYPED( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
-    ImplEndGalleryThemeProperties( pDialog, true );
-    return 0L;
+    ImplEndGalleryThemeProperties( dynamic_cast<VclAbstractDialog2*>(&rDialog), true );
 }
 
-IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+IMPL_LINK_TYPED( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
-    ImplEndGalleryThemeProperties( pDialog, false );
-    return 0L;
+    ImplEndGalleryThemeProperties( dynamic_cast<VclAbstractDialog2*>(&rDialog), false );
 }
 
 IMPL_LINK_TYPED( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
