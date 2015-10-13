@@ -839,15 +839,14 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BREAK:
         {
-            const SvxFormatBreakItem* pFormatBreak = dynamic_cast<const SvxFormatBreakItem*>( &rItem );
-            OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
+            const SvxFormatBreakItem& rFormatBreak = dynamic_cast<const SvxFormatBreakItem&>(rItem);
 
             unsigned int eEnum = 0;
 
             switch( nMemberId )
             {
             case MID_BREAK_BEFORE:
-                switch( pFormatBreak->GetValue() )
+                switch (rFormatBreak.GetValue())
                 {
                     case SVX_BREAK_COLUMN_BEFORE:
                         eEnum = 1;
@@ -863,7 +862,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 }
                 break;
             case MID_BREAK_AFTER:
-                switch( pFormatBreak->GetValue() )
+                switch (rFormatBreak.GetValue())
                 {
                     case SVX_BREAK_COLUMN_AFTER:
                         eEnum = 1;
