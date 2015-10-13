@@ -490,7 +490,7 @@ oslSocket __osl_createSocketImpl(int Socket)
     pSocket->m_CallbackArg = 0;
     pSocket->m_nRefCount = 1;
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pSocket->m_bIsAccepting = sal_False;
 #endif
 
@@ -1824,13 +1824,13 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 {
     if( pSocket && 0 == osl_decrementInterlockedCount( &(pSocket->m_nRefCount) ) )
     {
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     if ( pSocket->m_bIsAccepting == sal_True )
     {
         OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
         osl_closeSocket( pSocket );
         __osl_destroySocketImpl( pSocket );
     }
@@ -1858,7 +1858,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pSocket->m_bIsInShutdown = sal_True;
 
     if ( pSocket->m_bIsAccepting == sal_True )
@@ -1904,7 +1904,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         }
         pSocket->m_bIsAccepting = sal_False;
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
     /* registrierten Callback ausfuehren */
     if (pSocket->m_CloseCallback != NULL)
@@ -2185,9 +2185,9 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     }
 
     pSocket->m_nLastError=0;
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pSocket->m_bIsAccepting = sal_True;
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
     if( ppAddr && *ppAddr )
     {
@@ -2208,23 +2208,23 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         pSocket->m_nLastError=errno;
         OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'\n",strerror(errno));
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
         pSocket->m_bIsAccepting = sal_False;
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
         return 0;
     }
 
     OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     if ( pSocket->m_bIsInShutdown == sal_True )
     {
         close(Connection);
         OSL_TRACE("osl_acceptConnectionOnSocket : close while accept\n");
         return 0;
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
 
     if(ppAddr)
@@ -2253,11 +2253,11 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     pConnectionSockImpl->m_nLastError       = 0;
     pConnectionSockImpl->m_CloseCallback    = NULL;
     pConnectionSockImpl->m_CallbackArg      = NULL;
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pConnectionSockImpl->m_bIsAccepting     = sal_False;
 
     pSocket->m_bIsAccepting = sal_False;
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
     return pConnectionSockImpl;
 }
 
