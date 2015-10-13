@@ -1415,7 +1415,7 @@ AC_ARG_ENABLE(lotuswordpro,
 AC_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-,enable_firebird_sdbc=yes)
+)
 
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
@@ -8440,7 +8440,15 @@ dnl ===================================================================
 dnl Check for Firebird stuff
 dnl ===================================================================
 ENABLE_FIREBIRD_SDBC=""
-if test "x$enable_firebird_sdbc" = "xyes"; then
+if test -z "$enable_firebird_sdbc" ; then
+    if test "$_os" = "Darwin" -a "$MACOSX_SDK_VERSION" -ge 101100 ; then
+        AC_MSG_NOTICE([firebird does not build on 10.11.. default to --disable-firebird-sdbc ])
+        enable_firebird_sdbc="no"
+    else
+        enable_firebird_sdbc="yes"
+    fi
+fi
+if test "$enable_firebird_sdbc" = "yes" ; then
     SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
 
     dnl ===================================================================
