@@ -221,7 +221,7 @@ public:
     const SetOfByte& GetLockedLayers() const { return aLayerLock; }
 
     const SdrHelpLineList& GetHelpLines() const { return aHelpLines; }
-    void SetHelpLines(const SdrHelpLineList& rHLL, bool bInvalidate = true);
+    void SetHelpLines(const SdrHelpLineList& rHLL);
     //void SetHelpLinePos(sal_uInt16 nNum, const Point& rNewPos);
     void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
     void DeleteHelpLine(sal_uInt16 nNum);

@@ -1006,6 +1006,10 @@ Selection Window::GetSurroundingTextSelection() const
 
 void Window::LogicInvalidate(const Rectangle* pRectangle)
 {
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
+    if (pDrawViewShell && pDrawViewShell->IsInSwitchPage())
+        return;
+
     OString sRectangle;
     if (!pRectangle)
         sRectangle = "EMPTY";
