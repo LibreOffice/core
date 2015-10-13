@@ -433,8 +433,8 @@ namespace dbp
 
         m_pValueListField->SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
         m_pTableField->SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
-        m_pValueListField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
-        m_pTableField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
+        m_pValueListField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModifiedCombBox));
+        m_pTableField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModifiedCombBox));
     }
 
     OLinkFieldsPage::~OLinkFieldsPage()
@@ -494,6 +494,10 @@ namespace dbp
         return 0L;
     }
 
+    IMPL_LINK_NOARG_TYPED(OLinkFieldsPage, OnSelectionModifiedCombBox, ComboBox&, void)
+    {
+        implCheckFinish();
+    }
 
     bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {

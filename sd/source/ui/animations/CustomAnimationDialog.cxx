@@ -271,14 +271,16 @@ public:
 
 private:
     VclPtr<FontNameBox> mpControl;
+    Link<>              maModifyHdl;
+    DECL_LINK_TYPED(ControlSelectHdl, ComboBox&, void);
 };
 
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl )
-: PropertySubControl( nControlType )
+: PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
 {
     mpControl = VclPtr<FontNameBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
-    mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetSelectHdl( LINK(this, FontPropertyBox, ControlSelectHdl) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -303,6 +305,11 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
 
     OUString aPresetId;
     setValue( rValue, aPresetId );
+}
+
+IMPL_LINK_TYPED(FontPropertyBox, ControlSelectHdl, ComboBox&, rBox, void)
+{
+    maModifyHdl.Call(&rBox);
 }
 
 void FontPropertyBox::setValue( const Any& rValue, const OUString& )

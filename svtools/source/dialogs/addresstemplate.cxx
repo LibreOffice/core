@@ -1119,13 +1119,12 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_LINK(AddressBookSourceDialog, OnComboSelect, ComboBox*, _pBox)
+    IMPL_LINK_TYPED(AddressBookSourceDialog, OnComboSelect, ComboBox&, _rBox, void)
     {
-        if (_pBox == m_pDatasource)
+        if (&_rBox == m_pDatasource)
             resetTables();
         else
             resetFields();
-        return 0;
     }
 
 

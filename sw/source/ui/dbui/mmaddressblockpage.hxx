@@ -226,6 +226,7 @@ private:
     DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
     DECL_LINK(FieldChangeHdl_Impl, void *);
+    DECL_LINK_TYPED(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
 
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();

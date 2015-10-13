@@ -145,7 +145,7 @@ public:
     DECL_LINK_TYPED( ReplaceBtnHdl_Impl, Button *, void );
     DECL_LINK_TYPED( LeftBtnHdl_Impl, Button *, void );
     DECL_LINK_TYPED( LanguageHdl_Impl, ListBox&, void );
-    DECL_LINK( WordSelectHdl_Impl, ComboBox * );
+    DECL_LINK_TYPED( WordSelectHdl_Impl, ComboBox&, void );
     DECL_LINK_TYPED( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
 

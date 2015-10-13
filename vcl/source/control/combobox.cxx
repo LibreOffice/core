@@ -59,8 +59,8 @@ struct ComboBox::Impl
     bool                m_isSyntheticModify   : 1;
     bool                m_isMatchCase         : 1;
     sal_Int32           m_nMaxWidthChars;
-    Link<>              m_SelectHdl;
-    Link<>              m_DoubleClickHdl;
+    Link<ComboBox&,void>               m_SelectHdl;
+    Link<ComboBox&,void>               m_DoubleClickHdl;
     boost::signals2::scoped_connection m_AutocompleteConnection;
 
     explicit Impl(ComboBox & rThis)
@@ -547,12 +547,12 @@ void ComboBox::ToggleDropDown()
 
 void ComboBox::Select()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_SELECT, [this] () { m_pImpl->m_SelectHdl.Call(this); } );
+    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_SELECT, [this] () { m_pImpl->m_SelectHdl.Call(*this); } );
 }
 
 void ComboBox::DoubleClick()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_DOUBLECLICK, [this] () { m_pImpl->m_DoubleClickHdl.Call(this); } );
+    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_DOUBLECLICK, [this] () { m_pImpl->m_DoubleClickHdl.Call(*this); } );
 }
 
 bool ComboBox::IsAutoSizeEnabled() const { return m_pImpl->m_isDDAutoSize; }
@@ -1053,13 +1053,13 @@ bool ComboBox::IsMultiSelectionEnabled() const
     return m_pImpl->m_pImplLB->IsMultiSelectionEnabled();
 }
 
-void ComboBox::SetSelectHdl(const Link<>& rLink) { m_pImpl->m_SelectHdl = rLink; }
+void ComboBox::SetSelectHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_SelectHdl = rLink; }
 
-const Link<>& ComboBox::GetSelectHdl() const { return m_pImpl->m_SelectHdl; }
+const Link<ComboBox&,void>& ComboBox::GetSelectHdl() const { return m_pImpl->m_SelectHdl; }
 
-void ComboBox::SetDoubleClickHdl(const Link<>& rLink) { m_pImpl->m_DoubleClickHdl = rLink; }
+void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_DoubleClickHdl = rLink; }
 
-const Link<>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
+const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
 
 long ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
 {

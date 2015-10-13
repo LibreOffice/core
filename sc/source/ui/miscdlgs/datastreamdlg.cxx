@@ -39,7 +39,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
     get(m_pVclFrameLimit, "framelimit");
     get(m_pVclFrameMove, "framemove");
 
-    m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateComboBoxHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
     m_pRBAddressValue->Enable(false);
     m_pRBScriptData->Enable(false);
@@ -90,6 +90,10 @@ IMPL_LINK_NOARG_TYPED(DataStreamDlg, BrowseHdl, Button*, void)
 }
 
 IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateClickHdl, Button*, void)
+{
+    UpdateEnable();
+}
+IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateComboBoxHdl, ComboBox&, void)
 {
     UpdateEnable();
 }

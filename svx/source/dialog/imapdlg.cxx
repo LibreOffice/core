@@ -177,7 +177,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     pIMapWnd->SetUpdateLink( LINK( this, SvxIMapDlg, StateHdl ) );
 
     m_pURLBox->SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    m_pURLBox->SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
+    m_pURLBox->SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyComboBoxHdl ) );
     m_pURLBox->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
     m_pEdtText->SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
     m_pCbbTarget->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
@@ -682,6 +682,11 @@ IMPL_LINK_TYPED( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
     m_pStbStatus->SetItemText( 3, aStr );
 }
 
+
+IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyComboBoxHdl, ComboBox&, void)
+{
+    URLModifyHdl(nullptr);
+}
 IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
 {
     NotifyInfo  aNewInfo;

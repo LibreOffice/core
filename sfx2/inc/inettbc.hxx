@@ -35,7 +35,7 @@ private:
     void                    OpenURL( const OUString& rName, bool bNew ) const;
 
     DECL_LINK_TYPED(        OpenHdl, SvtURLBox*, void );
-    DECL_LINK(              SelectHdl, void* );
+    DECL_LINK_TYPED(        SelectHdl, ComboBox&, void );
 
     struct ExecuteInfo
     {

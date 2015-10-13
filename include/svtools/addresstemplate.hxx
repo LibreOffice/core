@@ -130,7 +130,7 @@ namespace svt
         DECL_LINK_TYPED(OnAdministrateDatasources, Button*, void);
         DECL_STATIC_LINK_TYPED(AddressBookSourceDialog, OnComboGetFocus, Control&, void);
         DECL_LINK_TYPED(OnComboLoseFocus, Control&, void);
-        DECL_LINK(OnComboSelect, ComboBox*);
+        DECL_LINK_TYPED(OnComboSelect, ComboBox&, void);
         DECL_LINK_TYPED(OnOkClicked, Button*, void);
         DECL_LINK_TYPED(OnDelayedInitialize, void*, void);
     };

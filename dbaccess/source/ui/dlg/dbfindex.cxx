@@ -248,12 +248,12 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, OnListEntrySelected, ListBox&, void )
     checkButtons();
 }
 
-IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
+IMPL_LINK_TYPED( ODbaseIndexDialog, TableSelectHdl, ComboBox&, rComboBox, void )
 {
     // search the table
     TableInfoList::iterator aTablePos;
-    if (!GetTable(pComboBox->GetText(), aTablePos))
-        return 0L;
+    if (!GetTable(rComboBox.GetText(), aTablePos))
+        return;
 
     // fill the listbox for the indexes
     m_pLB_TableIndexes->Clear();
@@ -267,7 +267,6 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
         m_pLB_TableIndexes->SelectEntryPos(0);
 
     checkButtons();
-    return 0;
 }
 
 void ODbaseIndexDialog::Init()
@@ -414,7 +413,7 @@ void ODbaseIndexDialog::SetCtrls()
     if( m_aFreeIndexList.size() )
         m_pLB_FreeIndexes->SelectEntryPos( 0 );
 
-    TableSelectHdl(m_pCB_Tables);
+    TableSelectHdl(*m_pCB_Tables);
     checkButtons();
 }
 

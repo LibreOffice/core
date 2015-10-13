@@ -168,6 +168,7 @@ namespace dbp
         void implCheckFinish();
 
         DECL_LINK(OnSelectionModified, void*);
+        DECL_LINK_TYPED(OnSelectionModifiedCombBox, ComboBox&, void);
     };
 
     class OComboDBFieldPage : public ODBFieldPage

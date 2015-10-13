@@ -1582,11 +1582,9 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 
 
 
-IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, EntrySelectHdl_Impl, ComboBox&, void)
 {
     FileSelect();
-
-    return 0;
 }
 
 

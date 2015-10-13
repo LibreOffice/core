@@ -336,7 +336,7 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        DECL_LINK( OnEntrySelected, void* );
+        DECL_LINK_TYPED( OnEntrySelected, ComboBox&, void );
     };
 
 

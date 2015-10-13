@@ -427,7 +427,7 @@ void SvxCharNamePage::Initialize()
     m_pWestFontNameLB->SetModifyHdl( aLink );
     m_pWestFontStyleLB->SetModifyHdl( aLink );
     m_pWestFontSizeLB->SetModifyHdl( aLink );
-    m_pWestFontLanguageLB->SetSelectHdl( aLink );
+    m_pWestFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyComboBoxHdl_Impl ) );
     m_pEastFontNameLB->SetModifyHdl( aLink );
     m_pEastFontStyleLB->SetModifyHdl( aLink );
     m_pEastFontSizeLB->SetModifyHdl( aLink );
@@ -1183,6 +1183,10 @@ IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
 
 
 
+IMPL_LINK_TYPED( SvxCharNamePage, FontModifyComboBoxHdl_Impl, ComboBox&, rBox, void )
+{
+    FontModifyHdl_Impl(&rBox);
+}
 IMPL_LINK_TYPED( SvxCharNamePage, FontModifyListBoxHdl_Impl, ListBox&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);

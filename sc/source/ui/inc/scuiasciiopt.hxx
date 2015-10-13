@@ -105,6 +105,7 @@ private:
                                 DECL_LINK_TYPED( RbSepFixHdl, Button*, void );
                                 DECL_LINK( SeparatorHdl, Control* );
                                 DECL_LINK_TYPED( SeparatorClickHdl, Button*, void );
+                                DECL_LINK_TYPED( SeparatorComboBoxHdl, ComboBox&, void );
                                 DECL_LINK_TYPED( LbColTypeHdl, ListBox&, void );
                                 DECL_LINK_TYPED( UpdateTextHdl, ScCsvTableBox&, void );
                                 DECL_LINK_TYPED( ColTypeHdl, ScCsvTableBox&, void );

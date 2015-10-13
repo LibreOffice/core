@@ -149,7 +149,7 @@ public:
     virtual void        ActivatePage() override;
     virtual Control*    GetLastFocusControl() override;
 
-    void                SetDoubleClickHdl( const Link<>& rLink );
+    void                SetDoubleClickHdl( const Link<ComboBox&,void>& rLink );
     void                SetFactory( const OUString& rFactory );
     inline OUString     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
@@ -288,9 +288,9 @@ private:
     Idle                aIdle;
 
     Link<SfxHelpIndexWindow_Impl*,void> aSelectFactoryLink;
-    Link<>              aPageDoubleClickLink;
+    Link<Control*,bool>                 aPageDoubleClickLink;
     Link<IndexTabPage_Impl&,void>       aIndexKeywordLink;
-    OUString            sKeyword;
+    OUString                            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
 
@@ -319,6 +319,7 @@ private:
     DECL_LINK_TYPED(KeywordHdl, IndexTabPage_Impl&, void);
     DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK_TYPED(TabPageDoubleClickHdl, ListBox&, void);
+    DECL_LINK_TYPED(IndexTabPageDoubleClickHdl, ComboBox&, void);
 
 public:
     explicit SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -330,7 +331,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void                SetDoubleClickHdl( const Link<>& rLink );
+    void                SetDoubleClickHdl( const Link<Control*,bool>& rLink );
     inline void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
     inline OUString     GetFactory() const { return pIPage->GetFactory(); }
@@ -364,7 +365,7 @@ IndexTabPage_Impl* SfxHelpIndexWindow_Impl::GetIndexPage()
     if ( !pIPage )
     {
         pIPage = VclPtr<IndexTabPage_Impl>::Create( m_pTabCtrl, this );
-        pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
+        pIPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl) );
         pIPage->SetKeywordHdl( aIndexKeywordLink );
     }
     return pIPage;
@@ -523,7 +524,7 @@ friend class SfxHelpIndexWindow_Impl;
     void                ShowStartPage();
 
     DECL_LINK_TYPED(    SelectHdl, ToolBox*, void );
-    DECL_LINK(OpenHdl, void *);
+    DECL_LINK_TYPED(    OpenHdl, Control*, bool );
     DECL_LINK_TYPED(    SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void );
     DECL_LINK_TYPED(    ChangeHdl, HelpListener_Impl&, void );
 

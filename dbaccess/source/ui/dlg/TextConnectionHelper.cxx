@@ -96,9 +96,9 @@ namespace dbaui
 
         // set the modify handlers
         m_pFieldSeparator->SetUpdateDataHdl(getControlModifiedLink());
-        m_pFieldSeparator->SetSelectHdl(getControlModifiedLink());
+        m_pFieldSeparator->SetSelectHdl(LINK(this, OTextConnectionHelper, ComboBoxSelectHdl));
         m_pTextSeparator->SetUpdateDataHdl(getControlModifiedLink());
-        m_pTextSeparator->SetSelectHdl(getControlModifiedLink());
+        m_pTextSeparator->SetSelectHdl(LINK(this, OTextConnectionHelper, ComboBoxSelectHdl));
         m_pCharSet->SetSelectHdl(LINK(this, OTextConnectionHelper, CharsetSelectHdl));
 
         m_pFieldSeparator->SetModifyHdl(getControlModifiedLink());
@@ -154,6 +154,11 @@ namespace dbaui
     IMPL_LINK_TYPED(OTextConnectionHelper, CharsetSelectHdl, ListBox&, rListBox, void)
     {
         getControlModifiedLink().Call(&rListBox);
+    }
+
+    IMPL_LINK_TYPED(OTextConnectionHelper, ComboBoxSelectHdl, ComboBox&, rBox, void)
+    {
+        getControlModifiedLink().Call(&rBox);
     }
 
     OTextConnectionHelper::~OTextConnectionHelper()

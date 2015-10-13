@@ -370,9 +370,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
     pCbTextSep->SetText( sTextSeparators );
 
-    Link<> aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
+    Link<> aSeparatorHdl = LINK( this, ScImportAsciiDlg, SeparatorHdl );
     Link<Button*,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
-    pCbTextSep->SetSelectHdl( aSeparatorHdl );
+    pCbTextSep->SetSelectHdl( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
     pCbTextSep->SetModifyHdl( aSeparatorHdl );
     pCkbTab->SetClickHdl( aSeparatorClickHdl );
     pCkbSemicolon->SetClickHdl( aSeparatorClickHdl );
@@ -679,6 +679,10 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
 IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorClickHdl, Button*, pCtrl, void )
 {
     SeparatorHdl(pCtrl);
+}
+IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorComboBoxHdl, ComboBox&, rCtrl, void )
+{
+    SeparatorHdl(&rCtrl);
 }
 IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {

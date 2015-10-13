@@ -153,7 +153,7 @@ private:
     SwFieldMgr* pMgr;
     bool bHTMLMode;
 
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
     DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, void * = 0);
     DECL_LINK_TYPED( OrderHdl, ListBox&, void );

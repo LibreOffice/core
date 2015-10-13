@@ -114,7 +114,7 @@ private:
     DECL_LINK_TYPED( FillTypeCheckHdl_Impl, Button*, void );
     DECL_LINK_TYPED( TabTypeCheckHdl_Impl, Button*, void );
 
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED( SelectHdl_Impl, ComboBox&, void );
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK_TYPED( GetFillCharHdl_Impl, Control&, void );
     DECL_LINK_TYPED( GetDezCharHdl_Impl, Control&, void );

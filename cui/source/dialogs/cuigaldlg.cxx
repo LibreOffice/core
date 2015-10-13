@@ -999,7 +999,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
+IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
 {
     OUString aText( m_pCbbFileType->GetText() );
 
@@ -1010,8 +1010,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
         if( ScopedVclPtrInstance<MessageDialog>::Create( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" )->Execute() == RET_YES )
             SearchFiles();
     }
-
-    return 0L;
 }
 
 

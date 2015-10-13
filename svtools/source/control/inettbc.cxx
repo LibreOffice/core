@@ -1038,7 +1038,7 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
         else if ( GetSelectHdl().IsSet() )
         {
             bHandled = true;
-            GetSelectHdl().Call(this);
+            GetSelectHdl().Call(*this);
         }
 
         bCtrlClick = false;

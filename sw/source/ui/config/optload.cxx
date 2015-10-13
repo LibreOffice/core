@@ -841,10 +841,9 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SelectHdl, ComboBox&, void)
 {
     InvalidatePreview();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SelectListBoxHdl, ListBox&, void)

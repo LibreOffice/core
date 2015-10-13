@@ -136,8 +136,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     m_pNumberingSeparatorED->SetModifyHdl ( aLk );
     m_pSepEdit->SetModifyHdl( aLk );
 
-    aLk = LINK(this, SwCaptionDialog, SelectHdl);
-    m_pCategoryBox->SetSelectHdl( aLk );
+    m_pCategoryBox->SetSelectHdl( LINK(this, SwCaptionDialog, SelectHdl) );
     m_pFormatBox->SetSelectHdl( LINK(this, SwCaptionDialog, SelectListBoxHdl) );
     m_pOptionButton->SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
@@ -306,10 +305,9 @@ IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectListBoxHdl, ListBox&, void)
 {
     DrawSample();
 }
-IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectHdl, ComboBox&, void)
 {
     DrawSample();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)

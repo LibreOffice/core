@@ -83,7 +83,7 @@ protected:
     VclPtr<PushButton>     m_pAddAll;
     VclPtr<PushButton>     m_pRemoveAll;
 
-    DECL_LINK( TableSelectHdl, ComboBox* );
+    DECL_LINK_TYPED( TableSelectHdl, ComboBox&, void );
     DECL_LINK_TYPED( AddClickHdl, Button*, void );
     DECL_LINK_TYPED( RemoveClickHdl, Button*, void );
     DECL_LINK_TYPED( AddAllClickHdl, Button*, void );

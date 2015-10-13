@@ -943,12 +943,11 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG( OComboboxControl, OnEntrySelected )
+    IMPL_LINK_NOARG_TYPED( OComboboxControl, OnEntrySelected, ComboBox&, void )
     {
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
             notifyModifiedValue();
-        return 0L;
     }
 
 

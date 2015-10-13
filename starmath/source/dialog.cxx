@@ -295,11 +295,10 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
     Invalidate();
 }
 
-IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
 {
-    maFont.SetName(pComboBox->GetText());
+    maFont.SetName(rComboBox.GetText());
     m_pShowFont->SetFont(maFont);
-    return 0;
 }
 
 IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
@@ -308,7 +307,7 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
     sal_Int32 nPos = pComboBox->GetEntryPos( pComboBox->GetText() );
     if (COMBOBOX_ENTRY_NOTFOUND != nPos)
     {
-        FontSelectHdl( pComboBox );
+        FontSelectHdl( *pComboBox );
     }
     return 0;
 }
@@ -1791,25 +1790,23 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, void )
 {
-    (void) pComboBox;
+    (void) rComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pComboBox == pOldSymbols, "Sm : wrong argument");
+    OSL_ENSURE(&rComboBox == pOldSymbols, "Sm : wrong argument");
 #endif
     SelectSymbol(*pOldSymbols, pOldSymbols->GetText(), false);
-    return 0;
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox, void )
 {
-    (void) pComboBox;
+    (void) rComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pComboBox == pOldSymbolSets, "Sm : wrong argument");
+    OSL_ENSURE(&rComboBox == pOldSymbolSets, "Sm : wrong argument");
 #endif
     SelectSymbolSet(*pOldSymbolSets, pOldSymbolSets->GetText(), false);
-    return 0;
 }
 
 
@@ -1867,15 +1864,14 @@ IMPL_LINK_NOARG_TYPED( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
 {
-    (void) pComboBox;
+    (void) rComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pComboBox == pStyles, "Sm : falsches Argument");
+    OSL_ENSURE(&rComboBox == pStyles, "Sm : falsches Argument");
 #endif
 
     SelectStyle(pStyles->GetText());
-    return 0;
 }
 
 

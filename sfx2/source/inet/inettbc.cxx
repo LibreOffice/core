@@ -159,15 +159,13 @@ VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pP
     return pURLBox.get();
 }
 
-IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, SelectHdl, ComboBox&, void)
 {
     SvtURLBox* pURLBox = GetURLBox();
     OUString aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && !aName.isEmpty() )
         OpenURL( aName, false );
-
-    return 1L;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)

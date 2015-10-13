@@ -89,13 +89,14 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
 
     aTextColor = m_pCheckLB->GetTextColor();
     Link<> aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
+    Link<ComboBox&,void> aLink2(LINK(this, SvxFontSubstTabPage, SelectComboBoxHdl));
     Link<Button*,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
 
     m_pCheckLB->SetSelectHdl(LINK(this, SvxFontSubstTabPage, TreeListBoxSelectHdl));
     m_pUseTableCB->SetClickHdl(aClickLink);
-    m_pFont1CB->SetSelectHdl(aLink);
+    m_pFont1CB->SetSelectHdl(aLink2);
     m_pFont1CB->SetModifyHdl(aLink);
-    m_pFont2CB->SetSelectHdl(aLink);
+    m_pFont2CB->SetSelectHdl(aLink2);
     m_pFont2CB->SetModifyHdl(aLink);
     m_pApply->SetClickHdl(aClickLink);
     m_pDelete->SetClickHdl(aClickLink);
@@ -264,6 +265,10 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
 IMPL_LINK_TYPED(SvxFontSubstTabPage, TreeListBoxSelectHdl, SvTreeListBox*, pButton, void)
 {
     SelectHdl(pButton);
+}
+IMPL_LINK_TYPED(SvxFontSubstTabPage, SelectComboBoxHdl, ComboBox&, rBox, void)
+{
+    SelectHdl(&rBox);
 }
 IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 {

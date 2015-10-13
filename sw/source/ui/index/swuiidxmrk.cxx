@@ -992,7 +992,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
     bool            m_bNewEntryMode;
     bool            m_bNameAllowed;
 
-    DECL_LINK(IdentifierHdl, ComboBox*);
+    DECL_LINK_TYPED(IdentifierHdl, ComboBox&, void);
     DECL_LINK(ShortNameHdl, Edit*);
     DECL_LINK_TYPED(EnableHdl, ListBox&, void);
 
@@ -1553,14 +1553,14 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     return OUString();
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
+IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                 rWrtSh.GetFieldType(RES_AUTHORITY, OUString()));
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(
-                                                        pBox->GetText());
+                                                        rBox.GetText());
         if(pEntry)
         {
             for(int i = 0; i < AUTH_FIELD_END; i++)
@@ -1577,7 +1577,6 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
             }
         }
     }
-    return 0;
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)

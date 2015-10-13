@@ -551,7 +551,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_pDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
     Link<> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
     m_pFieldCB->SetModifyHdl(aFieldsLink);
-    m_pFieldCB->SetSelectHdl(aFieldsLink);
+    m_pFieldCB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl));
     Link<Button*,void> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
     m_pInsertFieldIB->SetClickHdl(aImgButtonHdl);
     m_pRemoveFieldIB->SetClickHdl(aImgButtonHdl);
@@ -720,6 +720,10 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
     bOnEntry = false;
 }
 
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, ComboBox&, void)
+{
+    FieldChangeHdl_Impl(nullptr);
+}
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
 {
     //changing the field content changes the related members, too

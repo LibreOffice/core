@@ -169,7 +169,7 @@ protected:
 private:
 
     DECL_LINK_TYPED( DelayedPaste, void*, void );
-    DECL_LINK( CBChangeHdl, ComboBox*);
+    DECL_LINK_TYPED( CBChangeHdl, ComboBox&, void);
 
     void InsertRows( long nRow );
 
@@ -417,11 +417,10 @@ void OFieldExpressionControl::lateInit()
 }
 
 
-IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
+IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, CBChangeHdl, ComboBox&, void )
 {
 
     SaveModified();
-    return 0L;
 }
 
 

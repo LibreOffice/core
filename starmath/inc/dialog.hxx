@@ -102,7 +102,7 @@ class SmFontDialog : public ModalDialog
 
     vcl::Font maFont;
 
-    DECL_LINK(FontSelectHdl, ComboBox *);
+    DECL_LINK_TYPED(FontSelectHdl, ComboBox&, void);
     DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK_TYPED(AttrChangeHdl, Button *, void);
 
@@ -434,12 +434,12 @@ class SmSymDefineDialog : public ModalDialog
     std::unique_ptr<SubsetMap> pSubsetMap;
     FontList           *pFontList;
 
-    DECL_LINK(OldSymbolChangeHdl, ComboBox *);
-    DECL_LINK(OldSymbolSetChangeHdl, ComboBox *);
+    DECL_LINK_TYPED(OldSymbolChangeHdl, ComboBox&, void);
+    DECL_LINK_TYPED(OldSymbolSetChangeHdl, ComboBox&, void);
     DECL_LINK(ModifyHdl, ComboBox *);
     DECL_LINK_TYPED(FontChangeHdl, ListBox&, void);
     DECL_LINK_TYPED(SubsetChangeHdl, ListBox&, void);
-    DECL_LINK(StyleChangeHdl, ComboBox *);
+    DECL_LINK_TYPED(StyleChangeHdl, ComboBox&, void);
     DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(AddClickHdl, Button *, void);
     DECL_LINK_TYPED(ChangeClickHdl, Button *, void);

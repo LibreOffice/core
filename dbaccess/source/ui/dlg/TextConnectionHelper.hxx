@@ -86,6 +86,7 @@ namespace dbaui
         DECL_LINK(OnControlModified,Control*);
         DECL_LINK(OnEditModified,Edit*);
         DECL_LINK_TYPED(CharsetSelectHdl,ListBox&,void);
+        DECL_LINK_TYPED(ComboBoxSelectHdl,ComboBox&,void);
 
     private:
         OUString    GetSeparator( const ComboBox& rBox, const OUString& rList );

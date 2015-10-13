@@ -50,7 +50,7 @@ private:
 
     SfxObjectShellRef   aSourceRef;
 
-    DECL_LINK(FileHdl, void *);
+    DECL_LINK_TYPED(FileHdl, ComboBox&, void);
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
     DECL_LINK_TYPED(RangeHdl, ListBox&, void);
     DECL_LINK_TYPED(ReloadHdl, Button*, void);

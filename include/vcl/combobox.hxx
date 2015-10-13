@@ -123,10 +123,10 @@ public:
     bool            IsMultiSelectionEnabled() const;
     sal_Unicode     GetMultiSelectionSeparator() const;
 
-    void            SetSelectHdl(const Link<>& rLink);
-    const Link<>&   GetSelectHdl() const;
-    void            SetDoubleClickHdl(const Link<>& rLink);
-    const Link<>&   GetDoubleClickHdl() const;
+    void            SetSelectHdl(const Link<ComboBox&,void>& rLink);
+    const Link<ComboBox&,void>&   GetSelectHdl() const;
+    void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
+    const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
 
     Size            CalcMinimumSize() const override;
     virtual Size    GetOptimalSize() const override;

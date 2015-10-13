@@ -381,18 +381,16 @@ void SvxThesaurusDialog::LookUp_Impl()
     m_pLeftBtn->Enable( aLookUpHistory.size() > 1 );
 }
 
-IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
+IMPL_LINK_TYPED( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox&, rBox, void )
 {
-    if (pBox && !m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
+    if (!m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
-        const sal_Int32 nPos = pBox->GetSelectEntryPos();
-        OUString aStr( pBox->GetEntry( nPos ) );
+        const sal_Int32 nPos = rBox.GetSelectEntryPos();
+        OUString aStr( rBox.GetEntry( nPos ) );
         aStr = linguistic::GetThesaurusReplaceText( aStr );
         m_pWordCB->SetText( aStr );
         LookUp_Impl();
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *, pBox, void )
