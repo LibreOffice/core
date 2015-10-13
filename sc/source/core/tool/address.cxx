@@ -1152,7 +1152,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
         else
             nBits = 0;
 
-        if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
+        if (nCol > MAXCOL || (*p && *p != '$' && !rtl::isAsciiDigit( *p )))
             nBits = 0;
         nRes |= nBits;
         if( !nBits )
