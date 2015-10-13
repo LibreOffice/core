@@ -689,7 +689,7 @@ void ViewShellBase::ReadUserDataSequence (
             case ViewShell::ST_HANDOUT:
             {
                 OUString sViewURL;
-                switch (dynamic_cast<DrawViewShell*>( pShell)->GetPageKind() )
+                switch (dynamic_cast<DrawViewShell&>(*pShell).GetPageKind())
                 {
                     default:
                     case PK_STANDARD:
