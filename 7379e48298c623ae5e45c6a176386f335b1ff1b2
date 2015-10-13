@@ -16,6 +16,24 @@
       "revId": "7379e48298c623ae5e45c6a176386f335b1ff1b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f40471c7",
+        "filename": "vcl/source/outdev/wallpaper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2015-10-13T19:43:53Z",
+      "side": 0,
+      "message": "I can: that\u0027s how patch and gerrit work together\nGerrit color highlighting decided that it\u0027s part of previous function removed, leaving trailing part of function which was actually removed",
+      "parentUuid": "9a061dce_b9cb121e",
+      "revId": "7379e48298c623ae5e45c6a176386f335b1ff1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
