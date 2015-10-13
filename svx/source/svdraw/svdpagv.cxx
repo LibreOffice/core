@@ -741,11 +741,10 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
     }
 }
 
-void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL, bool bInvalidate)
+void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
 {
     aHelpLines=rHLL;
-    if (bInvalidate)
-        InvalidateAllWin();
+    InvalidateAllWin();
 }
 
 void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)

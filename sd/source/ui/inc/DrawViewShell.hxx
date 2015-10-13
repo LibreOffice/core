@@ -378,6 +378,7 @@ public:
 
     const Color& GetAppBackgroundColor() const { return mnAppBackgroundColor; }
     void SetAppBackgroundColor( Color nNewColor )  { mnAppBackgroundColor = nNewColor; }
+    bool IsInSwitchPage() { return mbIsInSwitchPage; }
 
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
