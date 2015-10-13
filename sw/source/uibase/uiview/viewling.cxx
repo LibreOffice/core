@@ -651,7 +651,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             // This makes it possible to suggest spelling corrections for
             // wrong words independent of the spell-checking idle job.
             if (pNode && pNode->IsWrongDirty() &&
-                dynamic_cast< const SwCrsrShell *>( m_pWrtShell ) !=  nullptr && !pCrsrShell->IsTableMode() &&
+                !pCrsrShell->IsTableMode() &&
                 !pCrsr->HasMark() && !pCrsr->IsMultiSelection())
             {
                 SwContentFrm *pFrm = pCrsr->GetContentNode()->getLayoutFrm(
