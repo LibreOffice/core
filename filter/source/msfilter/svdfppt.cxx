@@ -1506,10 +1506,10 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 pE->bStarDrawFiller = true;     // this is a dummy master page
             m_pMasterPages->insert(m_pMasterPages->begin(), std::move(pE));
 
-            sal_uInt16 nPageListNum = 0;
             DffRecordHeader* pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText );
             PptSlidePersistEntry* pPreviousPersist = NULL;
-            while ( pSlideListWithTextHd && ( nPageListNum < 3 ) )
+            for (sal_uInt16 nPageListNum = 0;
+                 pSlideListWithTextHd && nPageListNum < 3; ++nPageListNum)
             {
                 pSlideListWithTextHd->SeekToContent( rStCtrl );
                 PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
@@ -1528,7 +1528,6 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 if ( pPreviousPersist )
                     pPreviousPersist->nSlidePersistEndOffset = nSlideListWithTextHdEndOffset;
                 pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText, SEEK_FROM_CURRENT );
-                nPageListNum++;
             }
 
             // we will ensure that there is at least one master page
@@ -1556,8 +1555,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             }
 
             // read for each page the SlideAtom respectively the NotesAtom if it exists
-            nPageListNum = 0;
-            for ( nPageListNum = 0; nPageListNum < 3; nPageListNum++ )
+            for (sal_uInt16 nPageListNum = 0; nPageListNum < 3; ++nPageListNum)
             {
                 PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
                 for ( size_t nPageNum = 0; nPageNum < pPageList->size(); nPageNum++ )
