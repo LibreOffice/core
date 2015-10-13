@@ -24,11 +24,15 @@
 #include <osl/socket.h>
 #include <osl/interlck.h>
 
+#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
+#define CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT 1
+#endif
+
 struct oslSocketImpl {
     int                 m_Socket;
     int                 m_nLastError;
     oslInterlockedCount m_nRefCount;
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     bool                m_bIsAccepting;
     bool                m_bIsInShutdown;
 #endif
