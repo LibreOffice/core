@@ -7420,7 +7420,11 @@ dnl and has no pkg-config for it at least on some tinderboxes,
 dnl so leaving that out for now
 dnl libo_CHECK_SYSTEM_MODULE([zlib],[ZLIB],[zlib])
 AC_MSG_CHECKING([which zlib to use])
-if test "$with_system_zlib" = "yes"; then
+if test "$_os" = "Emscripten"; then
+    # Emscripten provides its own zlib
+    AC_MSG_RESULT([Emscripten provided])
+    SYSTEM_ZLIB=TRUE
+elif test "$with_system_zlib" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_ZLIB=TRUE
     AC_CHECK_HEADER(zlib.h, [],
