@@ -50,35 +50,35 @@ namespace framework
 //  XInterface, XTypeProvider
 DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
                             UIConfigElementWrapperBase                                        ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider          ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement               ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementSettings       ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet      ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet          ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization        ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent             ),
-                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable             ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XNameAccess, ::com::sun::star::container::XElementAccess )
+                            DIRECT_INTERFACE( css::lang::XTypeProvider          ),
+                            DIRECT_INTERFACE( css::ui::XUIElement               ),
+                            DIRECT_INTERFACE( css::ui::XUIElementSettings       ),
+                            DIRECT_INTERFACE( css::beans::XMultiPropertySet     ),
+                            DIRECT_INTERFACE( css::beans::XFastPropertySet      ),
+                            DIRECT_INTERFACE( css::beans::XPropertySet          ),
+                            DIRECT_INTERFACE( css::lang::XInitialization        ),
+                            DIRECT_INTERFACE( css::lang::XComponent             ),
+                            DIRECT_INTERFACE( css::util::XUpdatable             ),
+                            DIRECT_INTERFACE( css::ui::XUIConfigurationListener ),
+                            DERIVED_INTERFACE( css::container::XNameAccess, css::container::XElementAccess )
                         )
 
 DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
-                            ::com::sun::star::lang::XTypeProvider           ,
-                            ::com::sun::star::ui::XUIElement                ,
-                            ::com::sun::star::ui::XUIElementSettings        ,
-                            ::com::sun::star::beans::XMultiPropertySet      ,
-                            ::com::sun::star::beans::XFastPropertySet       ,
-                            ::com::sun::star::beans::XPropertySet           ,
-                            ::com::sun::star::lang::XInitialization         ,
-                            ::com::sun::star::lang::XComponent              ,
-                            ::com::sun::star::util::XUpdatable              ,
-                            ::com::sun::star::ui::XUIConfigurationListener  ,
-                            ::com::sun::star::container::XNameAccess
+                            css::lang::XTypeProvider           ,
+                            css::ui::XUIElement                ,
+                            css::ui::XUIElementSettings        ,
+                            css::beans::XMultiPropertySet      ,
+                            css::beans::XFastPropertySet       ,
+                            css::beans::XPropertySet           ,
+                            css::lang::XInitialization         ,
+                            css::lang::XComponent              ,
+                            css::util::XUpdatable              ,
+                            css::ui::XUIConfigurationListener  ,
+                            css::container::XNameAccess
                         )
 
 MenuBarWrapper::MenuBarWrapper(
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext
     )
 :    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
      m_bRefreshPopupControllerCache( true ),
@@ -90,11 +90,11 @@ MenuBarWrapper::~MenuBarWrapper()
 {
 }
 
-void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MenuBarWrapper::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    com::sun::star::lang::EventObject aEvent( xThis );
+    css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;
@@ -250,13 +250,13 @@ void MenuBarWrapper::fillPopupControllerCache()
 
 // XElementAccess
 Type SAL_CALL MenuBarWrapper::getElementType()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDispatchProvider>::get();
 }
 
 sal_Bool SAL_CALL MenuBarWrapper::hasElements()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -293,7 +293,7 @@ throw ( container::NoSuchElementException,
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -317,7 +317,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 
 sal_Bool SAL_CALL MenuBarWrapper::hasByName(
     const OUString& aName )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

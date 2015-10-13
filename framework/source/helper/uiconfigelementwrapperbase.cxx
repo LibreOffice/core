@@ -93,12 +93,12 @@ Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  ) throw(Runtime
 }
 
 // XComponent
-void SAL_CALL UIConfigElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), aListener );
 }
@@ -145,22 +145,22 @@ throw ( Exception, RuntimeException, std::exception )
 }
 
 // XUpdatable
-void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::update() throw (css::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::elementInserted( const css::ui::ConfigurationEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const css::ui::ConfigurationEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const css::ui::ConfigurationEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
@@ -169,7 +169,7 @@ void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::sta
 sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
                                                                         Any&       aOldValue       ,
                                                                         sal_Int32  nHandle         ,
-                                                                        const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
+                                                                        const Any& aValue             ) throw( css::lang::IllegalArgumentException )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
     {
         case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bConfigListener),
+                        css::uno::makeAny(m_bConfigListener),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_xConfigSource),
+                        css::uno::makeAny(m_xConfigSource),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
         {
             Reference< XFrame > xFrame( m_xWeakFrame );
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(xFrame),
+                        css::uno::makeAny(xFrame),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_PERSISTENT:
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bPersistent),
+                        css::uno::makeAny(m_bPersistent),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_RESOURCEURL:
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_aResourceURL),
+                        css::uno::makeAny(m_aResourceURL),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_TYPE :
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_nType),
+                        css::uno::makeAny(m_nType),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -230,7 +230,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_XMENUBAR :
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_xMenuBar),
+                        css::uno::makeAny(m_xMenuBar),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_NOCLOSE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bNoClose),
+                        css::uno::makeAny(m_bNoClose),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -250,7 +250,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 }
 
 void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
-                                                                        const com::sun::star::uno::Any&    aValue  ) throw( com::sun::star::uno::Exception, std::exception )
+                                                                        const css::uno::Any&    aValue  ) throw( css::uno::Exception, std::exception )
 {
     switch( nHandle )
     {
@@ -338,7 +338,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
     }
 }
 
-void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( com::sun::star::uno::Any& aValue  ,
+void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( css::uno::Any& aValue  ,
                                                                 sal_Int32                 nHandle   ) const
 {
     switch( nHandle )
@@ -399,12 +399,12 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( com::sun::star::
     return(*pInfoHelper);
 }
 
-com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrapperBase::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrapperBase::getPropertySetInfo() throw (css::uno::RuntimeException, std::exception)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >* pInfo = NULL;
+    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
@@ -415,7 +415,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CA
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)
-            static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
         }
     }
@@ -423,7 +423,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CA
     return (*pInfo);
 }
 
-const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
+const css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
 {
     // Create property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
@@ -432,19 +432,19 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const com::sun::star::beans::Property pProperties[] =
+    const css::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGLISTENER), UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGSOURCE), UIELEMENT_PROPHANDLE_CONFIGSOURCE   , cppu::UnoType<com::sun::star::ui::XUIConfigurationManager>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_FRAME), UIELEMENT_PROPHANDLE_FRAME          , cppu::UnoType<com::sun::star::frame::XFrame>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_NOCLOSE), UIELEMENT_PROPHANDLE_NOCLOSE        , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_PERSISTENT), UIELEMENT_PROPHANDLE_PERSISTENT     , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_RESOURCEURL), UIELEMENT_PROPHANDLE_RESOURCEURL    , cppu::UnoType<OUString>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_TYPE), UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_XMENUBAR), UIELEMENT_PROPHANDLE_XMENUBAR       , cppu::UnoType<com::sun::star::awt::XMenuBar>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGLISTENER), UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGSOURCE), UIELEMENT_PROPHANDLE_CONFIGSOURCE   , cppu::UnoType<css::ui::XUIConfigurationManager>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_FRAME), UIELEMENT_PROPHANDLE_FRAME          , cppu::UnoType<css::frame::XFrame>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_NOCLOSE), UIELEMENT_PROPHANDLE_NOCLOSE        , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_PERSISTENT), UIELEMENT_PROPHANDLE_PERSISTENT     , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_RESOURCEURL), UIELEMENT_PROPHANDLE_RESOURCEURL    , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_TYPE), UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( OUString(UIELEMENT_PROPNAME_XMENUBAR), UIELEMENT_PROPHANDLE_XMENUBAR       , cppu::UnoType<css::awt::XMenuBar>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY )
     };
     // Use it to initialize sequence!
-    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
+    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
     // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }

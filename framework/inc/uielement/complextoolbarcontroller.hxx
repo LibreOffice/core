@@ -38,61 +38,61 @@ namespace framework
 
 struct ExecuteInfo
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-    ::com::sun::star::util::URL                                                aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+    css::uno::Reference< css::frame::XDispatch >     xDispatch;
+    css::util::URL                                   aTargetURL;
+    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
 };
 
 struct NotifyInfo
 {
-    OUString                                                                           aEventName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XControlNotificationListener > xNotifyListener;
-    ::com::sun::star::util::URL                                                               aSourceURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >                    aInfoSeq;
+    OUString                                                        aEventName;
+    css::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
+    css::util::URL                                                  aSourceURL;
+    css::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
 };
 
 class ComplexToolbarController : public svt::ToolboxController
 
 {
     public:
-        ComplexToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                  const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        ComplexToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16       nID,
                                   const OUString& aCommand );
         virtual ~ComplexToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         DECL_STATIC_LINK_TYPED( ComplexToolbarController, ExecuteHdl_Impl, void*, void );
         DECL_STATIC_LINK_TYPED( ComplexToolbarController, Notify_Impl, void*, void);
 
     protected:
         static sal_Int32 getFontSizePixel( const vcl::Window* pWindow );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
+        css::uno::Reference< css::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
         void addNotifyInfo( const OUString&                                                        aEventName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rInfo );
+                            const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                            const css::uno::Sequence< css::beans::NamedValue >& rInfo );
 
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) = 0;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
-        const ::com::sun::star::util::URL& getInitializedURL();
+        virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) = 0;
+        virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
+        const css::util::URL& getInitializedURL();
         void notifyFocusGet();
         void notifyFocusLost();
         void notifyTextChanged( const OUString& aText );
 
-        VclPtr<ToolBox>                                                             m_pToolbar;
-        sal_uInt16                                                                  m_nID;
-        bool                                                                        m_bMadeInvisible;
-        mutable ::com::sun::star::util::URL                                         m_aURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
+        VclPtr<ToolBox>                                      m_pToolbar;
+        sal_uInt16                                           m_nID;
+        bool                                                 m_bMadeInvisible;
+        mutable css::util::URL                               m_aURL;
+        css::uno::Reference< css::util::XURLTransformer >    m_xURLTransformer;
 };
 
 }

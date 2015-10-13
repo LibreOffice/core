@@ -34,14 +34,14 @@
 
 namespace framework
 {
-typedef ::cppu::WeakComponentImplHelper< com::sun::star::lang::XServiceInfo,
-        com::sun::star::container::XNameAccess > UICommandDescription_BASE;
+typedef ::cppu::WeakComponentImplHelper< css::lang::XServiceInfo,
+        css::container::XNameAccess > UICommandDescription_BASE;
 
 class UICommandDescription : private cppu::BaseMutex,
                              public UICommandDescription_BASE
 {
     public:
-        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        UICommandDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription();
 
         virtual OUString SAL_CALL getImplementationName()
@@ -66,20 +66,20 @@ class UICommandDescription : private cppu::BaseMutex,
 
 private:
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+            throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
 public:
         typedef std::unordered_map< OUString,
@@ -93,16 +93,16 @@ public:
                                     std::equal_to< OUString > > UICommandsHashMap;
 
     protected:
-        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, bool  );
+        UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );
         void impl_fillElements(const sal_Char* _pName);
 
-        bool                                                                                m_bConfigRead;
-        OUString                                                                            m_aPrivateResourceURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
-        UICommandsHashMap                                                                   m_aUICommandsHashMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericUICommands;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
+        bool                                                      m_bConfigRead;
+        OUString                                                  m_aPrivateResourceURL;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        ModuleToCommandFileMap                                    m_aModuleToCommandFileMap;
+        UICommandsHashMap                                         m_aUICommandsHashMap;
+        css::uno::Reference< css::container::XNameAccess >        m_xGenericUICommands;
+        css::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
 };
 
 } // namespace framework

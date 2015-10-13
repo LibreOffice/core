@@ -61,7 +61,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   HeaderMenuController                
 
 DEFINE_INIT_SERVICE                     (   HeaderMenuController, {} )
 
-HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, bool _bFooter ) :
+HeaderMenuController::HeaderMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext, bool _bFooter ) :
     svt::PopupMenuControllerBase( xContext )
     ,m_bFooter(_bFooter)
 {
@@ -72,7 +72,7 @@ HeaderMenuController::~HeaderMenuController()
 }
 
 // private function
-void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::frame::XModel >& rModel, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >& rModel, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*           pVCLPopupMenu     = 0;
@@ -175,7 +175,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 }
             }
         }
-        catch ( const com::sun::star::container::NoSuchElementException& )
+        catch ( const css::container::NoSuchElementException& )
         {
         }
     }
@@ -198,7 +198,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( Runt
 // XStatusListener
 void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
-    Reference< com::sun::star::frame::XModel > xModel;
+    Reference< css::frame::XModel > xModel;
 
     if ( Event.State >>= xModel )
     {
@@ -210,13 +210,13 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL HeaderMenuController::updatePopupMenu() throw (css::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
     throwIfDisposed();
 
-    Reference< com::sun::star::frame::XModel > xModel( m_xModel );
+    Reference< css::frame::XModel > xModel( m_xModel );
     aLock.clear();
 
     if ( !xModel.is() )

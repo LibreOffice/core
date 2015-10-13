@@ -39,7 +39,7 @@ typedef ::cppu::WeakImplHelper<
     class MenuBarFactory : public MenuBarFactory_BASE
     {
         public:
-            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~MenuBarFactory();
 
             virtual OUString SAL_CALL getImplementationName()
@@ -63,17 +63,17 @@ typedef ::cppu::WeakImplHelper<
             }
 
             // XUIElementFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 
             static void CreateUIElement(const OUString& ResourceURL
-                        ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args
+                        ,const css::uno::Sequence< css::beans::PropertyValue >& Args
                         ,const char* _pExtraMode
                         ,const OUString& ResourceType
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+                        ,const css::uno::Reference< css::ui::XUIElement >& _xMenuBar
+                        ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
+            css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     };
 }
 

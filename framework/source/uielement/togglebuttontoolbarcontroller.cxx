@@ -93,7 +93,7 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
 }
 
 uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
 
@@ -123,7 +123,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return xWindow;
 }
 
-void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+void ToggleButtonToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
 {
     SolarMutexGuard aSolarMutexGuard;
 

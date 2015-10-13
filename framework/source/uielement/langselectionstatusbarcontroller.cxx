@@ -206,8 +206,8 @@ throw (css::uno::RuntimeException, std::exception)
     // now display the popup menu and execute every command ...
 
     Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
-    com::sun::star::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
-    sal_Int16 nId = xPopupMenu->execute( xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    css::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
+    sal_Int16 nId = xPopupMenu->execute( xParent, aRect, css::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
     if ( nId && m_xFrame.is() )
     {

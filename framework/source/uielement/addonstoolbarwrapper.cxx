@@ -67,7 +67,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException, std::exc
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    com::sun::star::lang::EventObject aEvent( xThis );
+    css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;
@@ -142,7 +142,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

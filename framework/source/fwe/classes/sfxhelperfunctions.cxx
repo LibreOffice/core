@@ -89,7 +89,7 @@ pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars p
     return pOldFunc;
 }
 
-void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame >& rFrame )
 {
     pfunc_getRefreshToolbars pCallback = NULL;
     {
@@ -110,7 +110,7 @@ pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingW
     return pOldFunc;
 }
 
-void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rResourceURL )
+void SAL_CALL CreateDockingWindow( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rResourceURL )
 {
     pfunc_createDockingWindow pFactory = NULL;
     {
@@ -131,7 +131,7 @@ pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDocking
     return pOldFunc;
 }
 
-bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rResourceURL )
+bool SAL_CALL IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rResourceURL )
 {
     pfunc_isDockingWindowVisible pCall = NULL;
     {
@@ -153,7 +153,7 @@ pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i
     return pOldFunc;
 }
 
-void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
+void SAL_CALL ActivateToolPanel( const css::uno::Reference< css::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
 {
     pfunc_activateToolPanel pActivator = NULL;
     {

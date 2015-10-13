@@ -35,10 +35,10 @@
 
 namespace framework {
 
-    class ConfigurationAccess_FactoryManager : public ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener>
+    class ConfigurationAccess_FactoryManager : public ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
     public:
-                      ConfigurationAccess_FactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const OUString& _sRoot );
+                      ConfigurationAccess_FactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const OUString& _sRoot );
         virtual       ~ConfigurationAccess_FactoryManager();
 
         void          readConfigurationData();
@@ -46,15 +46,15 @@ namespace framework {
         OUString                           getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const;
         void                                    addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& aServiceSpecifier );
         void                                    removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >   getFactoriesDescription() const;
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >   getFactoriesDescription() const;
 
         // container.XContainerListener
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
     // lang.XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         class FactoryManagerMap : public std::unordered_map<OUString,
@@ -64,19 +64,19 @@ namespace framework {
         {
         };
 
-        bool impl_getElementProps( const ::com::sun::star::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
+        bool impl_getElementProps( const css::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
 
-        mutable osl::Mutex m_aMutex;
+        mutable osl::Mutex           m_aMutex;
         OUString                     m_aPropType;
         OUString                     m_aPropName;
         OUString                     m_aPropModule;
         OUString                     m_aPropFactory;
-        OUString                   m_sRoot;
-        FactoryManagerMap                 m_aFactoryManagerMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigListener;
-        bool                          m_bConfigAccessInitialized;
+        OUString                     m_sRoot;
+        FactoryManagerMap            m_aFactoryManagerMap;
+        css::uno::Reference< css::lang::XMultiServiceFactory >     m_xConfigProvider;
+        css::uno::Reference< css::container::XNameAccess >         m_xConfigAccess;
+        css::uno::Reference< css::container::XContainerListener >  m_xConfigListener;
+        bool                         m_bConfigAccessInitialized;
 };
 
 } // namespace framework

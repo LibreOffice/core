@@ -87,21 +87,21 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual                   ~ConfigurationAccess_UICommand();
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+            throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // container.XContainerListener
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
@@ -112,7 +112,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception) override;
 
     protected:
-        ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
+        css::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
 
         struct CmdToInfoMap
         {
@@ -120,9 +120,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                              bCommandNameCreated( false ),
                              nProperties( 0 ) {}
 
-            OUString       aLabel;
-            OUString       aContextLabel;
-            OUString       aCommandName;
+            OUString            aLabel;
+            OUString            aContextLabel;
+            OUString            aCommandName;
             bool                bPopup : 1,
                                 bCommandNameCreated : 1;
             sal_Int32           nProperties;
@@ -263,7 +263,7 @@ throw ( RuntimeException, std::exception )
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return getByNameImpl( rCommandURL ).hasValue();
 }
@@ -347,10 +347,10 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                         aImageMirrorVector.push_back( aNameSeq[i] );
                 }
             }
-            catch (const com::sun::star::lang::WrappedTargetException&)
+            catch (const css::lang::WrappedTargetException&)
             {
             }
-            catch (const com::sun::star::container::NoSuchElementException&)
+            catch (const css::container::NoSuchElementException&)
             {
             }
         }
@@ -434,19 +434,19 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandU
                 {
                     return m_xGenericUICommands->getByName( rCommandURL );
                 }
-                catch (const com::sun::star::lang::WrappedTargetException&)
+                catch (const css::lang::WrappedTargetException&)
                 {
                 }
-                catch (const com::sun::star::container::NoSuchElementException&)
+                catch (const css::container::NoSuchElementException&)
                 {
                 }
             }
         }
     }
-    catch (const com::sun::star::container::NoSuchElementException&)
+    catch (const css::container::NoSuchElementException&)
     {
     }
-    catch (const com::sun::star::lang::WrappedTargetException&)
+    catch (const css::lang::WrappedTargetException&)
     {
     }
 
@@ -489,10 +489,10 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 
             return aNameSeq;
         }
-        catch (const com::sun::star::container::NoSuchElementException&)
+        catch (const css::container::NoSuchElementException&)
         {
         }
-        catch (const com::sun::star::lang::WrappedTargetException&)
+        catch (const css::lang::WrappedTargetException&)
         {
         }
     }
@@ -658,7 +658,7 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 }
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
-throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     Any a;
 
@@ -699,7 +699,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 }
 
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -717,7 +717,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -727,13 +727,13 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 
 // XElementAccess
 Type SAL_CALL UICommandDescription::getElementType()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return( cppu::UnoType<XNameAccess>::get());
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     // generic UI commands are always available!
     return sal_True;

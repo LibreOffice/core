@@ -802,7 +802,7 @@ throw( css::lang::IllegalArgumentException )
     {
         case TABWINDOW_PROPHANDLE_PARENTWINDOW :
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny( m_xContainerWindow ),
+                        css::uno::makeAny( m_xContainerWindow ),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -810,7 +810,7 @@ throw( css::lang::IllegalArgumentException )
 
         case TABWINDOW_PROPHANDLE_TOPWINDOW :
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny( m_xTopWindow ),
+                        css::uno::makeAny( m_xTopWindow ),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -901,18 +901,18 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const com::sun::star::beans::Property pProperties[] =
+    const css::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( TABWINDOW_PROPNAME_PARENTWINDOW,
+        css::beans::Property( TABWINDOW_PROPNAME_PARENTWINDOW,
                                          TABWINDOW_PROPHANDLE_PARENTWINDOW,
                                          cppu::UnoType<css::awt::XWindow>::get(),
-                                         com::sun::star::beans::PropertyAttribute::READONLY  ),
-        com::sun::star::beans::Property( TABWINDOW_PROPNAME_TOPWINDOW,
+                                         css::beans::PropertyAttribute::READONLY  ),
+        css::beans::Property( TABWINDOW_PROPNAME_TOPWINDOW,
                                          TABWINDOW_PROPHANDLE_TOPWINDOW,
                                          cppu::UnoType<css::awt::XWindow>::get(),
-                                         com::sun::star::beans::PropertyAttribute::READONLY  )
+                                         css::beans::PropertyAttribute::READONLY  )
     };  // Use it to initialize sequence!
-    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
+    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
 
     // Return "PropertyDescriptor"
     return lPropertyDescriptor;

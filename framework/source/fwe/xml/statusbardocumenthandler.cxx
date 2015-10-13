@@ -385,7 +385,7 @@ throw(  SAXException, RuntimeException, std::exception )
                             aStatusbarItemProp[2].Value <<= nOffset;
                             aStatusbarItemProp[3].Value <<= nItemBits;
                             aStatusbarItemProp[4].Value <<= nWidth;
-                            aStatusbarItemProp[5].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
+                            aStatusbarItemProp[5].Value = makeAny( css::ui::ItemType::DEFAULT );
 
                             m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
                        }

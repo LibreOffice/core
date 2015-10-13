@@ -88,11 +88,11 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper<
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) throw( css::uno::Exception       ,
                                                                                                          css::uno::RuntimeException, std::exception) override;
         // XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
-            const ::com::sun::star::util::URL&  aURL        ,
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+            const css::util::URL&  aURL        ,
             const OUString& sTarget     ,
             sal_Int32              nFlags      )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
@@ -128,7 +128,7 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
-        osl::Mutex m_mutex;
+        osl::Mutex                                              m_mutex;
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
         bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
         bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation

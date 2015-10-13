@@ -44,31 +44,31 @@
 namespace framework
 {
 
-bool hasEmptySize( const ::com::sun::star::awt::Size& rSize );
-bool hasDefaultPosValue( const ::com::sun::star::awt::Point& rPos );
-bool isDefaultPos( const ::com::sun::star::awt::Point& rPos );
+bool hasEmptySize( const css::awt::Size& rSize );
+bool hasDefaultPosValue( const css::awt::Point& rPos );
+bool isDefaultPos( const css::awt::Point& rPos );
 bool isToolboxHorizontalAligned( ToolBox* pToolBox );
 bool isReverseOrderDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const sal_Int32 nDockArea );
-bool isHorizontalDockingArea( const ::com::sun::star::ui::DockingArea& nDockArea );
+bool isHorizontalDockingArea( const css::ui::DockingArea& nDockArea );
 OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow );
 ToolBox* getToolboxPtr( vcl::Window* pWindow );
-vcl::Window* getWindowFromXUIElement( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement );
-SystemWindow* getTopSystemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xWindow );
+vcl::Window* getWindowFromXUIElement( const css::uno::Reference< css::ui::XUIElement >& xUIElement );
+SystemWindow* getTopSystemWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
 void setZeroRectangle( ::Rectangle& rRect );
-bool lcl_checkUIElement(const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement,::com::sun::star::awt::Rectangle& _rPosSize, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xWindow);
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent, const char* pService );
+bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
+css::uno::Reference< css::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
 OUString getElementTypeFromResourceURL( const OUString& aResourceURL );
 void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName );
-::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect );
-::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect );
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > impl_getModelFromFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-bool implts_isPreviewModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-bool implts_isFrameOrWindowTop( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
-void impl_setDockingWindowVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible );
-void impl_addWindowListeners( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xThis, const ::com::sun::star::uno::Reference< css::ui::XUIElement >& xUIElement );
+::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect );
+css::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect );
+css::uno::Reference< css::frame::XModel > impl_getModelFromFrame( const css::uno::Reference< css::frame::XFrame >& rFrame );
+bool implts_isPreviewModel( const css::uno::Reference< css::frame::XModel >& xModel );
+bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame::XFrame >& xFrame );
+void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible );
+void impl_addWindowListeners( const css::uno::Reference< css::uno::XInterface >& xThis, const css::uno::Reference< css::ui::XUIElement >& xUIElement );
 
 }
 

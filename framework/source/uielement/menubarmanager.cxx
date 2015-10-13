@@ -126,7 +126,7 @@ static sal_Int16 getImageTypeFromBools( bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
-        n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+        n |= css::ui::ImageType::SIZE_LARGE;
     return n;
 }
 
@@ -176,12 +176,12 @@ Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( Runtim
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                (static_cast< ::com::sun::star::frame::XStatusListener* >(this)),
-                (static_cast< ::com::sun::star::frame::XFrameActionListener* >(this)),
-                (static_cast< ::com::sun::star::ui::XUIConfigurationListener* >(this)),
+                (static_cast< css::frame::XStatusListener* >(this)),
+                (static_cast< css::frame::XFrameActionListener* >(this)),
+                (static_cast< css::ui::XUIConfigurationListener* >(this)),
                 (static_cast< XEventListener* >(static_cast<XStatusListener *>(this))),
                 (static_cast< XComponent* >(this)),
-                (static_cast< ::com::sun::star::awt::XSystemDependentMenuPeer* >(this)));
+                (static_cast< css::awt::XSystemDependentMenuPeer* >(this)));
 
     if ( a.hasValue() )
         return a;
@@ -204,7 +204,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
     SolarMutexGuard aSolarGuard;
 
     if ( m_bDisposed )
-        throw com::sun::star::lang::DisposedException();
+        throw css::lang::DisposedException();
 
     Any a;
 
@@ -336,7 +336,7 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
     m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
 throw (RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -352,13 +352,13 @@ throw (RuntimeException, std::exception)
         RequestImages();
 }
 
-void SAL_CALL MenuBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
 throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
 }
 
-void SAL_CALL MenuBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
 throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
@@ -371,7 +371,7 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        throw com::sun::star::lang::DisposedException();
+        throw css::lang::DisposedException();
 
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
     {
@@ -561,7 +561,7 @@ void MenuBarManager::RemoveListener()
                     m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
                 }
 
-                Reference< com::sun::star::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
+                Reference< css::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
                 if ( xEventListener.is() )
                 {
                     EventObject aEventObject;
@@ -646,7 +646,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
             pMenuItemDisposing->xMenuItemDispatch.clear();
             if ( pMenuItemDisposing->xPopupMenu.is() )
             {
-                Reference< com::sun::star::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
+                Reference< css::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
                 if ( xEventListener.is() )
                     xEventListener->disposing( Source );
 
@@ -714,28 +714,28 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 namespace {
 
 class QuietInteractionContext:
-    public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >,
+    public cppu::WeakImplHelper< css::uno::XCurrentContext >,
     private boost::noncopyable
 {
 public:
     QuietInteractionContext(
-        com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext >
+        css::uno::Reference< css::uno::XCurrentContext >
             const & context):
         context_(context) {}
 
 private:
     virtual ~QuietInteractionContext() {}
 
-    virtual com::sun::star::uno::Any SAL_CALL getValueByName(
+    virtual css::uno::Any SAL_CALL getValueByName(
         OUString const & Name)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override
+        throw (css::uno::RuntimeException, std::exception) override
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
             ? context_->getValueByName(Name)
-            : com::sun::star::uno::Any();
+            : css::uno::Any();
     }
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext >
+    css::uno::Reference< css::uno::XCurrentContext >
         context_;
 };
 
@@ -745,9 +745,9 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
-        com::sun::star::uno::ContextLayer layer(
+        css::uno::ContextLayer layer(
             new QuietInteractionContext(
-                com::sun::star::uno::getCurrentContext()));
+                css::uno::getCurrentContext()));
 
         // set/unset hiding disabled menu entries
         bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
@@ -1223,7 +1223,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
-                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( pItemHandler );
                 delete pPopup;
@@ -1353,7 +1353,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
-                pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                 if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler ) )
                 {
@@ -1399,7 +1399,7 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
     {
         try
         {
-            com::sun::star::awt::KeyEvent aKeyEvent;
+            css::awt::KeyEvent aKeyEvent;
             Sequence< Any > aSeqKeyCode = rAccelCfg->getPreferredKeyEventsForCommandList( rCommands );
             for ( sal_Int32 i = 0; i < aSeqKeyCode.getLength(); i++ )
             {
@@ -1648,7 +1648,7 @@ void MenuBarManager::FillMenu(
                         aProp[i].Value >>= bEnabled;
                 }
 
-                if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
+                if ( nType == css::ui::ItemType::DEFAULT )
                 {
                     pMenu->InsertItem( nId, aLabel );
                     pMenu->SetItemCommand( nId, aCommandURL );
@@ -1656,11 +1656,11 @@ void MenuBarManager::FillMenu(
                     if ( nStyle )
                     {
                         MenuItemBits nBits = pMenu->GetItemBits( nId );
-                        if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
+                        if ( nStyle & css::ui::ItemStyle::ICON )
                            nBits |= MenuItemBits::ICON;
-                        if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
+                        if ( nStyle & css::ui::ItemStyle::TEXT )
                            nBits |= MenuItemBits::TEXT;
-                        if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
+                        if ( nStyle & css::ui::ItemStyle::RADIO_CHECK )
                            nBits |= MenuItemBits::RADIOCHECK;
                         pMenu->SetItemBits( nId, nBits );
                     }
@@ -1957,7 +1957,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                         PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                         pAddonMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
-                        pMenuItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                        pMenuItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                     }
                 }

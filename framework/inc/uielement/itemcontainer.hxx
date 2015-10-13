@@ -38,57 +38,57 @@
 namespace framework
 {
 class ConstItemContainer;
-class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XIndexContainer>
+class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< css::container::XIndexContainer>
 {
     friend class ConstItemContainer;
 
     public:
         ItemContainer( const ShareableMutex& );
         ItemContainer( const ConstItemContainer& rConstItemContainer, const ShareableMutex& rMutex );
-        ItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
+        ItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
         virtual ~ItemContainer();
 
         //  XInterface, XTypeProvider
 
         // XUnoTunnel
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static ItemContainer*                                       GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+        static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+        static ItemContainer*                                       GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
+            throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL removeByIndex( sal_Int32 Index )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
+            throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+            throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException, std::exception) override
         {
-            return cppu::UnoType<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >>::get();
+            return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         ItemContainer();
-        void copyItemContainer( const std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
-        com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > deepCopyContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
+        void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
+        css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
 
         mutable ShareableMutex                                                               m_aShareMutex;
-        std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aItemVector;
+        std::vector< css::uno::Sequence< css::beans::PropertyValue > > m_aItemVector;
 };
 
 }

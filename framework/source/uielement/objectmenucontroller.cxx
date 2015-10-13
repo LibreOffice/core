@@ -92,7 +92,7 @@ private:
     css::uno::Reference< css::frame::XDispatch >  m_xObjectUpdateDispatch;
 };
 
-ObjectMenuController::ObjectMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }
@@ -102,7 +102,7 @@ ObjectMenuController::~ObjectMenuController()
 }
 
 // private function
-void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
     VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
@@ -119,8 +119,8 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
         const OUString aVerbCommand( ".uno:ObjectMenue?VerbID:short=" );
         for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
         {
-            const com::sun::star::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
-            if ( rVerb.VerbAttributes & com::sun::star::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
+            const css::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
+            if ( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
             {
                 m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
                 // use VCL popup menu pointer to set vital information that are not part of the awt implementation
@@ -151,7 +151,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& ) throw ( Runt
 // XStatusListener
 void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
-    Sequence < com::sun::star::embed::VerbDescriptor > aVerbCommandSeq;
+    Sequence < css::embed::VerbDescriptor > aVerbCommandSeq;
     if ( Event.State >>= aVerbCommandSeq )
     {
         osl::MutexGuard aLock( m_aMutex );

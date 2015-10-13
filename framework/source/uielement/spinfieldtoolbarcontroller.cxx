@@ -323,7 +323,7 @@ bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+void SpinfieldToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
 {
     OUString aValue;
     OUString aMax;

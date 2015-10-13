@@ -100,9 +100,9 @@ struct MenuStyleItem
 };
 
 MenuStyleItem MenuItemStyles[ ] = {
-    { ::com::sun::star::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
-    { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
-    { ::com::sun::star::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
+    { css::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
+    { css::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
+    { css::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
 };
 
 sal_Int32 nMenuStyleItemEntries = (sizeof (MenuItemStyles) / sizeof (MenuItemStyles[0]));
@@ -211,7 +211,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[2].Value <<= Reference< XIndexContainer >();
     rProps[3].Value <<= rLabel;
     rProps[4].Value <<= nItemStyleBits;
-    rProps[5].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
+    rProps[5].Value <<= css::ui::ItemType::DEFAULT;
 }
 
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
@@ -364,11 +364,11 @@ throw( SAXException, RuntimeException, std::exception )
                         if ( !aToken.isEmpty() )
                         {
                             if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
-                                nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                                nItemBits |= css::ui::ItemStyle::TEXT;
                             else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
-                                nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                                nItemBits |= css::ui::ItemStyle::ICON;
                             else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
-                                nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
+                                nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
                         }
                     }
                     while ( nIndex >= 0 );
@@ -575,11 +575,11 @@ throw( SAXException, RuntimeException, std::exception )
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                            nItemBits |= css::ui::ItemStyle::TEXT;
                         else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                            nItemBits |= css::ui::ItemStyle::ICON;
                         else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
+                            nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
                 while ( nIndex >= 0 );
@@ -632,11 +632,11 @@ throw( SAXException, RuntimeException, std::exception )
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                            nItemBits |= css::ui::ItemStyle::TEXT;
                         else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                            nItemBits |= css::ui::ItemStyle::ICON;
                         else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
+                            nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
                 while ( nIndex >= 0 );
@@ -659,7 +659,7 @@ throw( SAXException, RuntimeException, std::exception )
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
         aMenuSeparator[0].Name = ITEM_DESCRIPTOR_TYPE;
-        aMenuSeparator[0].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
+        aMenuSeparator[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
         m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
 
@@ -792,7 +792,7 @@ throw ( SAXException, RuntimeException )
             OUString    aCommandURL;
             OUString    aLabel;
             OUString    aHelpURL;
-            sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nType( css::ui::ItemType::DEFAULT );
             sal_Int16   nItemBits( 0 );
             Reference< XIndexAccess > xSubMenu;
 
@@ -837,7 +837,7 @@ throw ( SAXException, RuntimeException )
             }
             else
             {
-                if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
+                if ( nType == css::ui::ItemType::DEFAULT )
                 {
                     if ( !aCommandURL.isEmpty() )
                     {

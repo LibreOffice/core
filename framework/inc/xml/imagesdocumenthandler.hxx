@@ -35,7 +35,7 @@ namespace framework{
 
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
+class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
         enum Image_XML_Entry
@@ -68,42 +68,42 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< ::com::sun::st
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw (::com::sun::star::xml::sax::SAXException,
-               ::com::sun::star::uno::RuntimeException,
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw (css::xml::sax::SAXException,
+               css::uno::RuntimeException,
                std::exception) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw (::com::sun::star::xml::sax::SAXException,
-               ::com::sun::star::uno::RuntimeException,
+        throw (css::xml::sax::SAXException,
+               css::uno::RuntimeException,
                std::exception) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                     const OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDocumentLocator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XLocator > &xLocator)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     private:
         OUString getErrorLineString();
@@ -115,21 +115,21 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< ::com::sun::st
         {
         };
 
-        bool                                                                    m_bImageContainerStartFound;
-        bool                                                                    m_bImageContainerEndFound;
-        bool                                                                    m_bImagesStartFound;
-        bool                                                                    m_bImagesEndFound;
-        bool                                                                    m_bImageStartFound;
-        bool                                                                    m_bExternalImagesStartFound;
-        bool                                                                    m_bExternalImagesEndFound;
-        bool                                                                    m_bExternalImageStartFound;
-        sal_Int32                                                                   m_nHashMaskModeBitmap;
-        sal_Int32                                                                   m_nHashMaskModeColor;
-        ImageHashMap                                                                m_aImageMap;
-        ImageListsDescriptor&                                                       m_aImageList;
-        ImageListItemDescriptor*                                                    m_pImages;
-        ExternalImageItemListDescriptor*                                            m_pExternalImages;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        bool                                                m_bImageContainerStartFound;
+        bool                                                m_bImageContainerEndFound;
+        bool                                                m_bImagesStartFound;
+        bool                                                m_bImagesEndFound;
+        bool                                                m_bImageStartFound;
+        bool                                                m_bExternalImagesStartFound;
+        bool                                                m_bExternalImagesEndFound;
+        bool                                                m_bExternalImageStartFound;
+        sal_Int32                                           m_nHashMaskModeBitmap;
+        sal_Int32                                           m_nHashMaskModeColor;
+        ImageHashMap                                        m_aImageMap;
+        ImageListsDescriptor&                               m_aImageList;
+        ImageListItemDescriptor*                            m_pImages;
+        ExternalImageItemListDescriptor*                    m_pExternalImages;
+        css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };
 
 class OWriteImagesDocumentHandler
@@ -137,38 +137,38 @@ class OWriteImagesDocumentHandler
     public:
         OWriteImagesDocumentHandler(
             const ImageListsDescriptor& aItems,
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > );
+            css::uno::Reference< css::xml::sax::XDocumentHandler > );
         virtual ~OWriteImagesDocumentHandler();
 
         void WriteImagesDocument() throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException,
+              css::uno::RuntimeException );
 
     protected:
         void WriteImageList( const ImageListItemDescriptor* ) throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException,
+              css::uno::RuntimeException );
 
         void WriteExternalImageList( const ExternalImageItemListDescriptor* ) throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException,
+              css::uno::RuntimeException );
 
         void WriteImage( const ImageItemDescriptor* ) throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException,
+              css::uno::RuntimeException );
 
         void WriteExternalImage( const ExternalImageItemDescriptor* ) throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException,
+              css::uno::RuntimeException );
 
-        const ImageListsDescriptor&                                                         m_aImageListsItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        OUString                                                                     m_aXMLXlinkNS;
-        OUString                                                                     m_aXMLImageNS;
-        OUString                                                                     m_aAttributeType;
-        OUString                                                                     m_aAttributeXlinkType;
-        OUString                                                                     m_aAttributeValueSimple;
+        const ImageListsDescriptor&                               m_aImageListsItems;
+        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
+        css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
+        OUString                                                  m_aXMLXlinkNS;
+        OUString                                                  m_aXMLImageNS;
+        OUString                                                  m_aAttributeType;
+        OUString                                                  m_aAttributeXlinkType;
+        OUString                                                  m_aAttributeValueSimple;
 };
 
 } // namespace framework

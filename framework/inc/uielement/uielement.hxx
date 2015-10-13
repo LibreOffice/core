@@ -34,11 +34,11 @@ namespace framework
 struct DockedData
 {
     DockedData() : m_aPos( SAL_MAX_INT32, SAL_MAX_INT32 ),
-                   m_nDockedArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
+                   m_nDockedArea( css::ui::DockingArea_DOCKINGAREA_TOP ),
                    m_bLocked( false ) {}
 
-    com::sun::star::awt::Point m_aPos;
-    com::sun::star::awt::Size m_aSize;
+    css::awt::Point m_aPos;
+    css::awt::Size m_aSize;
     sal_Int16 m_nDockedArea;
     bool      m_bLocked;
 };
@@ -49,10 +49,10 @@ struct FloatingData
                      m_nLines( 1 ),
                      m_bIsHorizontal( true ) {}
 
-    com::sun::star::awt::Point m_aPos;
-    com::sun::star::awt::Size m_aSize;
-    sal_Int16 m_nLines;
-    bool      m_bIsHorizontal;
+    css::awt::Point  m_aPos;
+    css::awt::Size   m_aSize;
+    sal_Int16        m_nLines;
+    bool             m_bIsHorizontal;
 };
 
 struct UIElement
@@ -73,7 +73,7 @@ struct UIElement
 
     UIElement( const OUString& rName,
                const OUString& rType,
-               const com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement,
+               const css::uno::Reference< css::ui::XUIElement >& rUIElement,
                bool bFloating = false
                ) : m_aType( rType ),
                    m_aName( rName ),
@@ -97,7 +97,7 @@ struct UIElement
     OUString                                                      m_aType;
     OUString                                                      m_aName;
     OUString                                                      m_aUIName;
-    com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > m_xUIElement;
+    css::uno::Reference< css::ui::XUIElement >                    m_xUIElement;
     bool                                                               m_bFloating,
                                                                        m_bVisible,
                                                                        m_bUserActive,

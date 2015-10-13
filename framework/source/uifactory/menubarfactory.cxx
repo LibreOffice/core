@@ -43,7 +43,7 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+MenuBarFactory::MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
 {
 }
@@ -56,9 +56,9 @@ MenuBarFactory::~MenuBarFactory()
 Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::ui::XUIElement > xMenuBar(
+    Reference< css::ui::XUIElement > xMenuBar(
             static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);
     CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, m_xContext);
     return xMenuBar;
@@ -68,8 +68,8 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      ,const Sequence< PropertyValue >& Args
                                      ,const char* _pExtraMode
                                      ,const OUString& ResourceType
-                                     ,const Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+                                     ,const Reference< css::ui::XUIElement >& _xMenuBar
+                                     ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
 {
     Reference< XUIConfigurationManager > xCfgMgr;
     Reference< XUIConfigurationManager > xConfigSource;
@@ -116,7 +116,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 
         if ( !bHasSettings )
         {
-            Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager =
+            Reference< css::frame::XModuleManager2 > xModuleManager =
                 ModuleManager::create( _rxContext );
             OUString aModuleIdentifier = xModuleManager->identify( Reference<XInterface>( xFrame, UNO_QUERY ) );
             if ( !aModuleIdentifier.isEmpty() )

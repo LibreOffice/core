@@ -57,7 +57,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   MacrosMenuController                
 
 DEFINE_INIT_SERVICE                     (   MacrosMenuController, {} )
 
-MacrosMenuController::MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+MacrosMenuController::MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext)
 {

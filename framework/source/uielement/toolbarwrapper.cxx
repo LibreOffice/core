@@ -74,11 +74,11 @@ void SAL_CALL ToolBarWrapper::release() throw()
 }
 
 uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::uno::RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                (static_cast< ::com::sun::star::ui::XUIFunctionListener* >(this)) );
+                (static_cast< css::ui::XUIFunctionListener* >(this)) );
 
     if( a.hasValue() )
         return a;
@@ -97,7 +97,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException, std::exception
             return;
     }
 
-    com::sun::star::lang::EventObject aEvent( xThis );
+    css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;
@@ -192,13 +192,13 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 }
 
 // XEventListener
-void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarWrapper::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     // nothing todo
 }
 
 // XUpdatable
-void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarWrapper::update() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -211,7 +211,7 @@ void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeExce
 }
 
 // XUIElementSettings
-void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarWrapper::updateSettings() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -250,7 +250,7 @@ void ToolBarWrapper::impl_fillNewData()
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -271,7 +271,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
 void SAL_CALL ToolBarWrapper::functionExecute(
     const OUString& aUIElementName,
     const OUString& aCommand )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -283,7 +283,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception )
+void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue ) throw( css::uno::Exception, std::exception )
 {
     SolarMutexResettableGuard aLock;
     bool bNoClose( m_bNoClose );

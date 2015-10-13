@@ -33,12 +33,12 @@ namespace framework
 {
 
 class MenuBarWrapper : public UIConfigElementWrapperBase,
-                       public ::com::sun::star::container::XNameAccess
+                       public css::container::XNameAccess
 
 {
     public:
         MenuBarWrapper(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+            const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~MenuBarWrapper();
 
         //  XInterface, XTypeProvider
@@ -49,34 +49,34 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUIElement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL updateSettings(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         virtual void impl_fillNewData() override;
         void fillPopupControllerCache();
 
-        bool                                                                                m_bRefreshPopupControllerCache : 1;
-        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
-        PopupControllerCache                                                                    m_aPopupControllerCache;
-        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >              m_xContext;
+        bool                                                            m_bRefreshPopupControllerCache : 1;
+        css::uno::Reference< css::lang::XComponent >                    m_xMenuBarManager;
+        PopupControllerCache                                            m_aPopupControllerCache;
+        css::uno::Reference< css::uno::XComponentContext >              m_xContext;
 };
 
 } // namespace framework

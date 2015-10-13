@@ -27,7 +27,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >";
+const char WRONG_TYPE_EXCEPTION[] = "Type must be css::uno::Sequence< css::beans::PropertyValue >";
 
 namespace framework
 {
@@ -139,9 +139,9 @@ const Sequence< sal_Int8 >& ItemContainer::GetUnoTunnelId() throw()
     return theItemContainerUnoTunnelId::get().getSeq();
 }
 
-ItemContainer* ItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
+ItemContainer* ItemContainer::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast< ItemContainer* >(sal::static_int_cast< sal_IntPtr >(
                           xUT->getSomething( ItemContainer::GetUnoTunnelId() ))) : NULL;
 }

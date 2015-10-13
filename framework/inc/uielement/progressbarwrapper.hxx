@@ -43,10 +43,10 @@ class ProgressBarWrapper : public UIElementWrapperBase
         virtual ~ProgressBarWrapper();
 
         // public interfaces
-        void setStatusBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getStatusBar() const;
+        void setStatusBar( const css::uno::Reference< css::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );
+        css::uno::Reference< css::awt::XWindow > getStatusBar() const;
 
-        // wrapped methods of ::com::sun::star::task::XStatusIndicator
+        // wrapped methods of css::task::XStatusIndicator
         void start( const OUString& Text, ::sal_Int32 Range ) throw (css::uno::RuntimeException, std::exception);
         void end() throw (css::uno::RuntimeException, std::exception);
         void setText( const OUString& Text ) throw (css::uno::RuntimeException, std::exception);
@@ -55,27 +55,27 @@ class ProgressBarWrapper : public UIElementWrapperBase
 
         // UNO interfaces
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUIElement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() throw (css::uno::RuntimeException, std::exception) override;
 
     //  variables
     //  (should be private everyway!)
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >  m_xProgressBarIfacWrapper;
-        bool                                                                   m_bOwnsInstance; // Indicator that we are owner of the XWindow
-        sal_Int32                                                                  m_nRange;
-        sal_Int32                                                                  m_nValue;
-        OUString                                                              m_aText;
+        css::uno::Reference< css::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
+        css::uno::WeakReference< css::uno::XInterface >  m_xProgressBarIfacWrapper;
+        bool                                             m_bOwnsInstance; // Indicator that we are owner of the XWindow
+        sal_Int32                                        m_nRange;
+        sal_Int32                                        m_nValue;
+        OUString                                         m_aText;
 };      //  class ProgressBarWrapper
 
 }       //  namespace framework

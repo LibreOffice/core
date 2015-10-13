@@ -41,8 +41,8 @@ namespace framework
 {
 
 bool ImagesConfiguration::LoadImages(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::io::XInputStream >& rInputStream,
     ImageListsDescriptor& rItems )
 {
     Reference< XParser > xParser = Parser::create( rxContext );
@@ -72,15 +72,15 @@ bool ImagesConfiguration::LoadImages(
     {
         return false;
     }
-    catch( const ::com::sun::star::io::IOException& )
+    catch( const css::io::IOException& )
     {
         return false;
     }
 }
 
 bool ImagesConfiguration::StoreImages(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
     const ImageListsDescriptor& rItems )
 {
     Reference< XWriter > xWriter = Writer::create(rxContext);
@@ -100,7 +100,7 @@ bool ImagesConfiguration::StoreImages(
     {
         return false;
     }
-    catch ( const ::com::sun::star::io::IOException& )
+    catch ( const css::io::IOException& )
     {
         return false;
     }

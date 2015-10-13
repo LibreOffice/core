@@ -33,7 +33,7 @@
 
 namespace framework{
 
-class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< ::com::sun::star::ui::XDockingAreaAcceptor >
+class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< css::ui::XDockingAreaAcceptor >
 {
     public:
 

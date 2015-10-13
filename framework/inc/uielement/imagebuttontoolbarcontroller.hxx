@@ -36,18 +36,18 @@ class ImageButtonToolbarController : public ComplexToolbarController
 
 {
     public:
-        ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                      const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        ImageButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                      const css::uno::Reference< css::frame::XFrame >& rFrame,
                                       ToolBox* pToolBar,
                                       sal_uInt16 nID,
                                       const OUString& aCommand );
         virtual ~ImageButtonToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
     protected:
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) override;
+        virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
 
     private:
         bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );

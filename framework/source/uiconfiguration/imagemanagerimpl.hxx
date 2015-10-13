@@ -55,7 +55,7 @@ namespace framework
     class CmdImageList
     {
         public:
-            CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+            CmdImageList( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                           const OUString& aModuleIdentifier );
             virtual ~CmdImageList();
 
@@ -69,65 +69,65 @@ namespace framework
             std::vector< OUString >&        impl_getImageCommandNameVector() { return m_aImageCommandNameVector;}
 
         private:
-            bool                                                                         m_bVectorInit;
-            OUString                                                                    m_aModuleIdentifier;
-            ImageList*                                                                       m_pImageList[ImageType_COUNT];
-            CommandToImageNameMap                                                            m_aCommandToImageNameMap;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
-            ::std::vector< OUString >                                                   m_aImageNameVector;
-            ::std::vector< OUString >                                                   m_aImageCommandNameVector;
-            OUString                                                                    m_sIconTheme;
+            bool                                                   m_bVectorInit;
+            OUString                                               m_aModuleIdentifier;
+            ImageList*                                             m_pImageList[ImageType_COUNT];
+            CommandToImageNameMap                                  m_aCommandToImageNameMap;
+            css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+            ::std::vector< OUString >                              m_aImageNameVector;
+            ::std::vector< OUString >                              m_aImageCommandNameVector;
+            OUString                                               m_sIconTheme;
     };
 
     class GlobalImageList : public CmdImageList, public salhelper::SimpleReferenceObject
     {
         public:
-            GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            GlobalImageList( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
             virtual ~GlobalImageList();
 
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) override;
             virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) override;
-            virtual ::std::vector< OUString >& getImageCommandNames() override;
+            virtual ::std::vector< OUString >&      getImageCommandNames() override;
     };
 
     class ImageManagerImpl
     {
         public:
-            ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
+            ImageManagerImpl(const css::uno::Reference< css::uno::XComponentContext >& rxContext
                 ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
 
             void dispose();
-            void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
-            void addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-            void removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+            void initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
+            void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException);
+            void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException);
 
             // XImageManager
-            void reset() throw (::com::sun::star::uno::RuntimeException, css::lang::IllegalAccessException);
-            ::com::sun::star::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (::com::sun::star::uno::RuntimeException);
-            bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            void replaceImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicsSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception);
-            void removeImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aResourceURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-            void insertImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicSequence ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            void reset() throw (css::uno::RuntimeException, css::lang::IllegalAccessException);
+            css::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (css::uno::RuntimeException);
+            bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+            css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+            void replaceImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) throw (css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception);
+            void removeImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aResourceURLSequence ) throw (css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+            void insertImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) throw (css::container::ElementExistException, css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
 
             // XUIConfiguration
-            void addConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-            void removeConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+            void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
+            void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
 
             // XUIConfigurationPersistence
             void reload() throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
             void store()
-                throw (::com::sun::star::uno::Exception,
-                       ::com::sun::star::uno::RuntimeException,
+                throw (css::uno::Exception,
+                       css::uno::RuntimeException,
                        std::exception);
-            void storeToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage )
-                throw (::com::sun::star::uno::Exception,
-                       ::com::sun::star::uno::RuntimeException,
+            void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage )
+                throw (css::uno::Exception,
+                       css::uno::RuntimeException,
                        std::exception);
-            bool isModified() throw (::com::sun::star::uno::RuntimeException);
-            bool isReadOnly() throw (::com::sun::star::uno::RuntimeException);
+            bool isModified() throw (css::uno::RuntimeException);
+            bool isReadOnly() throw (css::uno::RuntimeException);
 
             void clear();
 
@@ -150,25 +150,25 @@ namespace framework
                 NotifyOp_Replace
             };
 
-            typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+            typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
 
             void                                      implts_initialize();
-            void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
+            void                                      implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             ImageList*                                implts_getUserImageList( ImageType nImageType );
             bool                                  implts_loadUserImages( ImageType nImageType,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
+                                                                             const css::uno::Reference< css::embed::XStorage >& xUserImageStorage,
+                                                                             const css::uno::Reference< css::embed::XStorage >& xUserBitmapsStorage );
             bool                                  implts_storeUserImages( ImageType nImageType,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
+                                                                              const css::uno::Reference< css::embed::XStorage >& xUserImageStorage,
+                                                                              const css::uno::Reference< css::embed::XStorage >& xUserBitmapsStorage );
             const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();
             CmdImageList*                             implts_getDefaultImageList();
 
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserImageStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
-            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
+            css::uno::Reference< css::embed::XStorage >               m_xUserConfigStorage;
+            css::uno::Reference< css::embed::XStorage >               m_xUserImageStorage;
+            css::uno::Reference< css::embed::XStorage >               m_xUserBitmapsStorage;
+            css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
+            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
             ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;

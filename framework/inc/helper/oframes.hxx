@@ -54,7 +54,7 @@ namespace framework{
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
-class OFrames   :   public ::cppu::WeakImplHelper< ::com::sun::star::frame::XFrames >
+class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 {
     public:
 

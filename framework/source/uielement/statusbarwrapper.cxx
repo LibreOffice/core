@@ -51,7 +51,7 @@ namespace framework
 {
 
 StatusBarWrapper::StatusBarWrapper(
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext
     )
  :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
     m_xContext( rxContext )
@@ -62,11 +62,11 @@ StatusBarWrapper::~StatusBarWrapper()
 {
 }
 
-void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL StatusBarWrapper::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    com::sun::star::lang::EventObject aEvent( xThis );
+    css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;

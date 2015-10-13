@@ -215,7 +215,7 @@ class PresetHandler
                     cached then internally till the last instance of such PresetHandler
                     dies.
 
-            @return com::sun::star::embed::XStorage
+            @return css::embed::XStorage
                     which represent a root storage.
          */
         css::uno::Reference< css::embed::XStorage > getOrCreateRootStorageShare();
@@ -226,7 +226,7 @@ class PresetHandler
             @descr  Working storages are the "lowest" storages, where the
                     preset and target files exists.
 
-            @return com::sun::star::embed::XStorage
+            @return css::embed::XStorage
                     which the current working storage.
          */
         css::uno::Reference< css::embed::XStorage > getWorkingStorageShare();
@@ -238,7 +238,7 @@ class PresetHandler
             @param  xChild
                     the child storage where a paranet storage should be searched for.
 
-            @return com::sun::star::embed::XStorage
+            @return css::embed::XStorage
                     A valid storage if a paranet exists. NULL otherwise.
          */
         css::uno::Reference< css::embed::XStorage > getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& xChild);
@@ -275,7 +275,7 @@ class PresetHandler
                     will work in default mode - means "no locale" - automatically.
                     e.g. "/default.xml"
 
-            @throw  com::sun::star::uno::RuntimeException(!)
+            @throw  css::uno::RuntimeException(!)
                     if the specified resource couldn't be located.
          */
         void connectToResource(      EConfigType                                  eConfigType   ,
@@ -298,10 +298,10 @@ class PresetHandler
             @param  sTarget
                     the ALIAS name of the target.
 
-            @throw  com::sun::star::container::NoSuchElementException
+            @throw  css::container::NoSuchElementException
                     if the specified preset does not exists.
 
-            @throw  com::sun::star::io::IOException
+            @throw  css::io::IOException
                     if copying failed.
          */
         void copyPresetToTarget(const OUString& sPreset,

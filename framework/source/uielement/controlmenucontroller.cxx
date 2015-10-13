@@ -166,10 +166,10 @@ static const char* aCommands[] =
 };
 
 using namespace css;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::beans;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::beans;
 
 namespace {
 
@@ -240,7 +240,7 @@ private:
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
 
-ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+ControlMenuController::ControlMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_pResPopupMenu( 0 )
 {
@@ -407,7 +407,7 @@ void ControlMenuController::impl_setPopupMenu()
     } // if ( m_pResPopupMenu == 0 )
 }
 
-void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlMenuController::updatePopupMenu() throw (css::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 

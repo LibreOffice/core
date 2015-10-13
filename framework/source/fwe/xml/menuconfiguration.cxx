@@ -44,7 +44,7 @@ namespace framework
 {
 
 MenuConfiguration::MenuConfiguration(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext )
 :   m_xContext( rxContext )
 {
 }
@@ -94,7 +94,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
         else
             throw WrappedTargetException( aWrappedSAXException.Message, Reference< XInterface >(), Any() );
     }
-    catch( const ::com::sun::star::io::IOException& e )
+    catch( const css::io::IOException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
@@ -133,7 +133,7 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
-    catch ( const ::com::sun::star::io::IOException& e )
+    catch ( const css::io::IOException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }

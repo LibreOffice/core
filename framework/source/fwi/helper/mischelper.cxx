@@ -122,7 +122,7 @@ OUString RetrieveLabelFromCommand(
                 aLabel = aStr;
             }
         }
-        catch ( const com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -166,7 +166,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( rLangGuessHelper.GetGuesser() );
     if ( xLangGuesser.is() && !rGuessedTextLang.isEmpty())
     {
-        ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( rGuessedTextLang, 0, rGuessedTextLang.getLength()) );
+        css::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( rGuessedTextLang, 0, rGuessedTextLang.getLength()) );
         LanguageType nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
             && IsScriptTypeMatchingToLanguage( nScriptType, nLang ))
@@ -181,10 +181,10 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 
     //6--all languages used in current document
-    Reference< com::sun::star::frame::XModel > xModel;
+    Reference< css::frame::XModel > xModel;
     if ( rxFrame.is() )
     {
-       Reference< com::sun::star::frame::XController > xController( rxFrame->getController(), UNO_QUERY );
+       Reference< css::frame::XController > xController( rxFrame->getController(), UNO_QUERY );
        if ( xController.is() )
            xModel = xController->getModel();
     }

@@ -45,31 +45,31 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~FontSizeMenuController();
 
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL updatePopupMenu() throw (css::uno::RuntimeException, std::exception) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
             virtual void impl_setPopupMenu() override;
-            void setCurHeight( long nHeight, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            OUString retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+            void setCurHeight( long nHeight, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame >& rFrame );
 
-            long*                                                               m_pHeightArray;
-            com::sun::star::awt::FontDescriptor                                 m_aFontDescriptor;
-            ::com::sun::star::frame::status::FontHeight                   m_aFontHeight;
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >  m_xCurrentFontDispatch;
+            long*                                            m_pHeightArray;
+            css::awt::FontDescriptor                         m_aFontDescriptor;
+            css::frame::status::FontHeight                   m_aFontHeight;
+            css::uno::Reference< css::frame::XDispatch >     m_xCurrentFontDispatch;
     };
 }
 

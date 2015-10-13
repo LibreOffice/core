@@ -47,23 +47,23 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            LanguageSelectionMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~LanguageSelectionMenuController();
 
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL updatePopupMenu() throw (css::uno::RuntimeException, std::exception) override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
             virtual void impl_setPopupMenu() override;
@@ -74,22 +74,22 @@ namespace framework
                 MODE_SetLanguageAllTextMenu
             };
 
-            bool                                                               m_bShowMenu;
-            OUString                                                        m_aLangStatusCommandURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
-            OUString                                                        m_aMenuCommandURL_Lang;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Lang;
-            OUString                                                        m_aMenuCommandURL_Font;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Font;
-            OUString                                                        m_aMenuCommandURL_CharDlgForParagraph;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_CharDlgForParagraph;
-            OUString       m_aCurLang;
-            SvtScriptType  m_nScriptType;
-            OUString       m_aKeyboardLang;
-            OUString       m_aGuessedTextLang;
-            LanguageGuessingHelper      m_aLangGuessHelper;
+            bool                                             m_bShowMenu;
+            OUString                                         m_aLangStatusCommandURL;
+            css::uno::Reference< css::frame::XDispatch >     m_xLanguageDispatch;
+            OUString                                         m_aMenuCommandURL_Lang;
+            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Lang;
+            OUString                                         m_aMenuCommandURL_Font;
+            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Font;
+            OUString                                         m_aMenuCommandURL_CharDlgForParagraph;
+            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_CharDlgForParagraph;
+            OUString                                         m_aCurLang;
+            SvtScriptType                                    m_nScriptType;
+            OUString                                         m_aKeyboardLang;
+            OUString                                         m_aGuessedTextLang;
+            LanguageGuessingHelper                           m_aLangGuessHelper;
 
-            void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
     };
 }
 

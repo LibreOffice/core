@@ -39,17 +39,17 @@ using namespace com::sun::star;
 namespace framework
 {
 
-bool hasEmptySize( const ::com::sun::star::awt::Size& rSize )
+bool hasEmptySize( const css::awt::Size& rSize )
 {
     return ( rSize.Width == 0 ) && ( rSize.Height == 0 );
 }
 
-bool hasDefaultPosValue( const ::com::sun::star::awt::Point& rPos )
+bool hasDefaultPosValue( const css::awt::Point& rPos )
 {
     return (( rPos.X == SAL_MAX_INT32 ) || ( rPos.Y == SAL_MAX_INT32 ));
 }
 
-bool isDefaultPos( const ::com::sun::star::awt::Point& rPos )
+bool isDefaultPos( const css::awt::Point& rPos )
 {
     return (( rPos.X == SAL_MAX_INT32 ) && ( rPos.Y == SAL_MAX_INT32 ));
 }
@@ -224,7 +224,7 @@ void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUS
     }
 }
 
-::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
+css::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
 {
     css::awt::Rectangle aRect;
     aRect.X = rRect.Left();
@@ -235,7 +235,7 @@ void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUS
     return aRect;
 }
 
-::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect )
+::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect )
 {
     ::Rectangle aRect;
     aRect.Left() = rRect.X;

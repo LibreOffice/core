@@ -66,7 +66,7 @@ public:
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 };
 
-StatusBarFactory::StatusBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+StatusBarFactory::StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     MenuBarFactory( xContext )
 {
 }
@@ -75,9 +75,9 @@ StatusBarFactory::StatusBarFactory( const ::com::sun::star::uno::Reference< ::co
 Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::ui::XUIElement > xStatusBar(
+    Reference< css::ui::XUIElement > xStatusBar(
             static_cast<OWeakObject *>(new StatusBarWrapper(m_xContext)), UNO_QUERY);
     MenuBarFactory::CreateUIElement(ResourceURL, Args, NULL, "private:resource/statusbar/", xStatusBar, m_xContext);
     return xStatusBar;

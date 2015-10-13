@@ -32,49 +32,49 @@ namespace framework
 {
 
 class ToolBarManager;
-class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
+class ToolBarWrapper : public css::ui::XUIFunctionListener,
                        public UIConfigElementWrapperBase
 {
     public:
-        ToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+        ToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~ToolBarWrapper();
 
         // XInterface
         virtual void SAL_CALL acquire() throw() override;
         virtual void SAL_CALL release() throw() override;
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUIElement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL updateSettings() throw (css::uno::RuntimeException, std::exception) override;
 
         // XUIFunctionListener
-        virtual void SAL_CALL functionExecute( const OUString& aUIElementName, const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL functionExecute( const OUString& aUIElementName, const OUString& aCommand ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     //  protected methods
 
     protected:
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue ) throw( css::uno::Exception, std::exception ) override;
         virtual void impl_fillNewData() override;
 
     private:
-        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
-        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< css::lang::XComponent >            m_xToolBarManager;
+        css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 };
 
 }

@@ -98,7 +98,7 @@ public:
     virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) throw( uno::RuntimeException, std::exception ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
 
     DECL_STATIC_LINK_TYPED( RecentFilesMenuController, ExecuteHdl_Impl, void*, void );
 
@@ -110,12 +110,12 @@ private:
         OUString aTitle;
     };
 
-    void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
     std::vector< RecentFile > m_aRecentFilesItems;
-    bool                  m_bDisabled : 1;
-    bool m_bShowRemote;
+    bool                      m_bDisabled : 1;
+    bool                      m_bShowRemote;
 };
 
 RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
@@ -361,7 +361,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
             SvtHistoryOptions().Clear( ePICKLIST );
             dispatchCommand(
                 "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+                css::uno::Sequence< css::beans::PropertyValue >() );
         }
         else if ( aCommand == CMD_OPEN_REMOTE )
         {

@@ -90,7 +90,7 @@ private:
 };
 
 AddonsToolBarFactory::AddonsToolBarFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     m_xContext( xContext )
     , m_xModuleManager( ModuleManager::create( xContext ) )
 {
@@ -172,9 +172,9 @@ bool AddonsToolBarFactory::hasButtonsInContext(
 Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::lang::IllegalArgumentException,
-        ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::container::NoSuchElementException,
+        css::lang::IllegalArgumentException,
+        css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -196,7 +196,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         throw IllegalArgumentException();
 
     // Identify frame and determine module identifier to look for context based buttons
-    Reference< ::com::sun::star::ui::XUIElement > xToolBar;
+    Reference< css::ui::XUIElement > xToolBar;
     if ( xFrame.is() &&
          ( aConfigData.getLength()> 0 ) &&
          hasButtonsInContext( aConfigData, xFrame ))
@@ -215,7 +215,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
         SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
-        xToolBar = Reference< ::com::sun::star::ui::XUIElement >( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
+        xToolBar = Reference< css::ui::XUIElement >( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
         xInit->initialize( aPropSeq );
     }

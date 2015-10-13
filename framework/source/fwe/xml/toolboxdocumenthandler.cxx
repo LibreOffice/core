@@ -96,14 +96,14 @@ struct ToolboxStyleItem
 };
 
 ToolboxStyleItem Styles[ ] = {
-    { ::com::sun::star::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO },
-    { ::com::sun::star::ui::ItemStyle::ALIGN_LEFT, ATTRIBUTE_ITEMSTYLE_LEFT },
-    { ::com::sun::star::ui::ItemStyle::AUTO_SIZE, ATTRIBUTE_ITEMSTYLE_AUTO },
-    { ::com::sun::star::ui::ItemStyle::REPEAT, ATTRIBUTE_ITEMSTYLE_REPEAT },
-    { ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY, ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY },
-    { ::com::sun::star::ui::ItemStyle::DROP_DOWN, ATTRIBUTE_ITEMSTYLE_DROPDOWN },
-    { ::com::sun::star::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
-    { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
+    { css::ui::ItemStyle::RADIO_CHECK,   ATTRIBUTE_ITEMSTYLE_RADIO },
+    { css::ui::ItemStyle::ALIGN_LEFT,    ATTRIBUTE_ITEMSTYLE_LEFT },
+    { css::ui::ItemStyle::AUTO_SIZE,     ATTRIBUTE_ITEMSTYLE_AUTO },
+    { css::ui::ItemStyle::REPEAT,        ATTRIBUTE_ITEMSTYLE_REPEAT },
+    { css::ui::ItemStyle::DROPDOWN_ONLY, ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY },
+    { css::ui::ItemStyle::DROP_DOWN,     ATTRIBUTE_ITEMSTYLE_DROPDOWN },
+    { css::ui::ItemStyle::ICON,          ATTRIBUTE_ITEMSTYLE_IMAGE },
+    { css::ui::ItemStyle::TEXT,          ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
 sal_Int32 nStyleItemEntries = sizeof (Styles) / sizeof (Styles[0]);
@@ -372,21 +372,21 @@ throw(  SAXException, RuntimeException, std::exception )
                                     {
                                         sal_Int32 nHashCode = aToken.hashCode();
                                         if ( nHashCode == m_nHashCode_Style_Radio )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
+                                            nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
                                         else if ( nHashCode == m_nHashCode_Style_Left )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::ALIGN_LEFT;
+                                            nItemBits |= css::ui::ItemStyle::ALIGN_LEFT;
                                         else if ( nHashCode == m_nHashCode_Style_AutoSize )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::AUTO_SIZE;
+                                            nItemBits |= css::ui::ItemStyle::AUTO_SIZE;
                                         else if ( nHashCode == m_nHashCode_Style_Repeat )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::REPEAT;
+                                            nItemBits |= css::ui::ItemStyle::REPEAT;
                                         else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY;
+                                            nItemBits |= css::ui::ItemStyle::DROPDOWN_ONLY;
                                         else if ( nHashCode == m_nHashCode_Style_DropDown )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROP_DOWN;
+                                            nItemBits |= css::ui::ItemStyle::DROP_DOWN;
                                         else if ( nHashCode == m_nHashCode_Style_Text )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                                            nItemBits |= css::ui::ItemStyle::TEXT;
                                         else if ( nHashCode == m_nHashCode_Style_Image )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                                            nItemBits |= css::ui::ItemStyle::ICON;
                                     }
                                 }
                                 while ( nIndex >= 0 );
@@ -438,7 +438,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     aToolbarItemProp[0].Value <<= aCommandURL;
                     aToolbarItemProp[1].Value <<= aHelpURL;
                     aToolbarItemProp[2].Value <<= aLabel;
-                    aToolbarItemProp[3].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
+                    aToolbarItemProp[3].Value = makeAny( css::ui::ItemType::DEFAULT );
                     aToolbarItemProp[4].Value <<= nItemBits;
                     aToolbarItemProp[5].Value <<= bVisible;
                     aToolbarItemProp[6].Value <<= aTooltip;
@@ -467,7 +467,7 @@ throw(  SAXException, RuntimeException, std::exception )
                 aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_SPACE;
+                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_SPACE;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -492,7 +492,7 @@ throw(  SAXException, RuntimeException, std::exception )
                 aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK;
+                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINEBREAK;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -517,7 +517,7 @@ throw(  SAXException, RuntimeException, std::exception )
                 aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
+                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -729,18 +729,18 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aHelpURL;
             OUString    aTooltip;
             bool    bVisible( true );
-            sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nType( css::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
             sal_Int16   nStyle( 0 );
 
             ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, nType );
-            if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
+            if ( nType == css::ui::ItemType::DEFAULT )
                 WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible );
-            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
+            else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
-            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
+            else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
                 WriteToolBoxSeparator();
-            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
+            else if ( nType == css::ui::ItemType::SEPARATOR_LINEBREAK )
                 WriteToolBoxBreak();
         }
     }

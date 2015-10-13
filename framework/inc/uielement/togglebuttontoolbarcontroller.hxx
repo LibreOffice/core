@@ -44,8 +44,8 @@ class ToggleButtonToolbarController : public ComplexToolbarController
             STYLE_TOGGLE_DROPDOWNBUTTON
         };
 
-        ToggleButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        ToggleButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                       const css::uno::Reference< css::frame::XFrame >& rFrame,
                                        ToolBox* pToolBar,
                                        sal_uInt16 nID,
                                        Style eStyle,
@@ -53,19 +53,19 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         virtual ~ToggleButtonToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XToolbarController
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
+        virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
+        virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
     private:
         DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool);
 
-        Style                        m_eStyle;
+        Style                   m_eStyle;
         OUString                m_aCurrentSelection;
         std::vector< OUString > m_aDropdownMenuList;
 };

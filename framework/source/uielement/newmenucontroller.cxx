@@ -281,7 +281,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
     {
         try
         {
-            com::sun::star::awt::KeyEvent aKeyEvent;
+            css::awt::KeyEvent aKeyEvent;
             Sequence< Any > aSeqKeyCode = rAccelCfg->getPreferredKeyEventsForCommandList( rCommands );
             for ( sal_Int32 i = 0; i < aSeqKeyCode.getLength(); i++ )
             {
@@ -295,7 +295,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
     }
 }
 
-NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+NewMenuController::NewMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bShowImages( true ),
     m_bNewMenu( false ),

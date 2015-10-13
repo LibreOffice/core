@@ -70,21 +70,21 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         virtual                   ~ConfigurationAccess_UICategory();
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+            throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // container.XContainerListener
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
@@ -108,14 +108,14 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
 
         bool initializeConfigAccess();
 
-        OUString                     m_aConfigCategoryAccess;
-        OUString                     m_aPropUIName;
+        OUString                          m_aConfigCategoryAccess;
+        OUString                          m_aPropUIName;
         Reference< XNameAccess >          m_xGenericUICategories;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
-        bool                          m_bConfigAccessInitialized;
-        bool                          m_bCacheFilled;
+        bool                              m_bConfigAccessInitialized;
+        bool                              m_bCacheFilled;
         IdToInfoCache                     m_aIdCache;
 };
 
@@ -172,7 +172,7 @@ throw ( RuntimeException, std::exception )
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return getByName( rId ).hasValue();
 }
@@ -214,10 +214,10 @@ bool ConfigurationAccess_UICategory::fillCache()
                 m_aIdCache.insert( IdToInfoCache::value_type( aNameSeq[i], aUIName ));
             }
         }
-        catch ( const com::sun::star::lang::WrappedTargetException& )
+        catch ( const css::lang::WrappedTargetException& )
         {
         }
-        catch ( const com::sun::star::container::NoSuchElementException& )
+        catch ( const css::container::NoSuchElementException& )
         {
         }
     }
@@ -243,19 +243,19 @@ Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
                 {
                     return m_xGenericUICategories->getByName( rId );
                 }
-                catch ( const com::sun::star::lang::WrappedTargetException& )
+                catch ( const css::lang::WrappedTargetException& )
                 {
                 }
-                catch ( const com::sun::star::container::NoSuchElementException& )
+                catch ( const css::container::NoSuchElementException& )
                 {
                 }
             }
         }
     }
-    catch( const com::sun::star::container::NoSuchElementException& )
+    catch( const css::container::NoSuchElementException& )
     {
     }
-    catch ( const com::sun::star::lang::WrappedTargetException& )
+    catch ( const css::lang::WrappedTargetException& )
     {
     }
 
@@ -309,10 +309,10 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
             return aNameSeq;
         }
-        catch( const com::sun::star::container::NoSuchElementException& )
+        catch( const css::container::NoSuchElementException& )
         {
         }
-        catch ( const com::sun::star::lang::WrappedTargetException& )
+        catch ( const css::lang::WrappedTargetException& )
         {
         }
     }

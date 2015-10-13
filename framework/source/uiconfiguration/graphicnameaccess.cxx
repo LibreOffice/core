@@ -53,7 +53,7 @@ throw( container::NoSuchElementException,
 }
 
 uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
-throw(::com::sun::star::uno::RuntimeException, std::exception)
+throw(css::uno::RuntimeException, std::exception)
 {
     if ( m_aSeq.getLength() == 0 )
     {
@@ -72,7 +72,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL GraphicNameAccess::hasByName( const OUString& aName )
-throw(::com::sun::star::uno::RuntimeException, std::exception)
+throw(css::uno::RuntimeException, std::exception)
 {
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );
     return ( pIter != m_aNameToElementMap.end() );

@@ -35,7 +35,7 @@
 namespace framework{
 
 class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
-                                    public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
+                                    public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
         ReadMenuDocumentHandlerBase();
@@ -43,47 +43,47 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                     const OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDocumentLocator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XLocator > &xLocator)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     protected:
         OUString getErrorLineString();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> m_xReader;
-        void initPropertyCommon( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rProps,
+        css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
+        css::uno::Reference< css::xml::sax::XDocumentHandler> m_xReader;
+        void initPropertyCommon( css::uno::Sequence< css::beans::PropertyValue > &rProps,
                                  const OUString &rCommandURL, const OUString &rHelpId,
                                  const OUString &rLabel, sal_Int16 nItemStyleBits );
     private:
@@ -99,176 +99,176 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 {
     public:
         OReadMenuDocumentHandler(
-            const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
+            const css::uno::Reference< css::container::XIndexContainer >& rItemContainer );
         virtual ~OReadMenuDocumentHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     private:
           int       m_nElementDepth;
           bool  m_bMenuBarMode;
-          com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
-          com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
+          css::uno::Reference< css::container::XIndexContainer > m_xMenuBarContainer;
+          css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuDocumentHandler
 
 class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuBarHandler(
-            const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuBarContainer,
-            const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
+            const css::uno::Reference< css::container::XIndexContainer >& rMenuBarContainer,
+            const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuBarHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     private:
         int         m_nElementDepth;
         bool    m_bMenuMode;
-        com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
-        com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
+        css::uno::Reference< css::container::XIndexContainer > m_xMenuBarContainer;
+        css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuBarHandler
 
 class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
-                          const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
+        OReadMenuHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,
+                          const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     private:
         int                 m_nElementDepth;
         bool            m_bMenuPopupMode;
-        com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
-        com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
+        css::uno::Reference< css::container::XIndexContainer > m_xMenuContainer;
+        css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 }; // OReadMenuHandler
 
 class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuPopupHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
-                               const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
+        OReadMenuPopupHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,
+                               const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuPopupHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException,
+                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException,
+                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference<
+                css::xml::sax::XAttributeList > &xAttribs)
+            throw ( css::xml::sax::SAXException,
+                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException,
+                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException,
+                    css::uno::RuntimeException, std::exception ) override;
 
     private:
         enum NextElementClose { ELEM_CLOSE_NONE, ELEM_CLOSE_MENUITEM, ELEM_CLOSE_MENUSEPARATOR };
 
-        int                 m_nElementDepth;
-        bool            m_bMenuMode;
-        com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
-        com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
-        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xComponentContext;
-        NextElementClose    m_nNextElementExpected;
+        int                                                        m_nElementDepth;
+        bool                                                       m_bMenuMode;
+        css::uno::Reference< css::container::XIndexContainer >     m_xMenuContainer;
+        css::uno::Reference< css::lang::XSingleComponentFactory >  m_xContainerFactory;
+        css::uno::Reference< css::uno::XComponentContext >         m_xComponentContext;
+        NextElementClose                                           m_nNextElementExpected;
 }; // OReadMenuPopupHandler
 
 class FWE_DLLPUBLIC OWriteMenuDocumentHandler
 {
     public:
         OWriteMenuDocumentHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rMenuBarContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rDocumentHandler );
+            const css::uno::Reference< css::container::XIndexAccess >& rMenuBarContainer,
+            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
         virtual ~OWriteMenuDocumentHandler();
 
         void WriteMenuDocument() throw
-            ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            ( css::xml::sax::SAXException, css::uno::RuntimeException );
     protected:
-        void WriteMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rSubMenuContainer ) throw
-            ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+        void WriteMenu( const css::uno::Reference< css::container::XIndexAccess >& rSubMenuContainer ) throw
+            ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
         void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle = 0 );
         void WriteMenuSeparator();
 
-        com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > m_xMenuBarContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > m_xEmptyList;
+        css::uno::Reference< css::container::XIndexAccess > m_xMenuBarContainer;
+        css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
+        css::uno::Reference< css::xml::sax::XAttributeList > m_xEmptyList;
         OUString m_aAttributeType;
 };
 

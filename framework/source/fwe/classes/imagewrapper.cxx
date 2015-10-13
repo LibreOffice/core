@@ -35,7 +35,7 @@ namespace framework
 static Sequence< sal_Int8 > impl_getStaticIdentifier()
 {
     static const sal_uInt8 pGUID[16] = { 0x46, 0xAD, 0x69, 0xFB, 0xA7, 0xBE, 0x44, 0x83, 0xB2, 0xA7, 0xB3, 0xEC, 0x59, 0x4A, 0xB7, 0x00 };
-    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
+    static css::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
     return seqID;
 }
 
@@ -53,14 +53,14 @@ Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 }
 
 // XBitmap
-com::sun::star::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException, std::exception )
+css::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
     BitmapEx    aBitmapEx( m_aImage.GetBitmapEx() );
     Size        aBitmapSize( aBitmapEx.GetSizePixel() );
 
-    return com::sun::star::awt::Size( aBitmapSize.Width(), aBitmapSize.Height() );
+    return css::awt::Size( aBitmapSize.Width(), aBitmapSize.Height() );
 }
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException, std::exception )

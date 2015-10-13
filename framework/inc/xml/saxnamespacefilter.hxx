@@ -33,58 +33,58 @@ namespace framework
 {
 
 class FWE_DLLPUBLIC SaxNamespaceFilter :
-                           public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
+                           public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
-        SaxNamespaceFilter( ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rSax1DocumentHandler );
+        SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler >& rSax1DocumentHandler );
         virtual ~SaxNamespaceFilter();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-        throw ( ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endDocument()
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL endElement(const OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                     const OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDocumentLocator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XLocator > &xLocator)
+        throw(  css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception ) override;
 
     protected:
         typedef ::std::stack< XMLNamespaces > NamespaceStack;
 
         OUString getErrorLineString();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
-        NamespaceStack  m_aNamespaceStack;
-        sal_Int32       m_nDepth;
+        css::uno::Reference< css::xml::sax::XLocator >          m_xLocator;
+        css::uno::Reference< css::xml::sax::XDocumentHandler>   xDocumentHandler;
+        NamespaceStack                                          m_aNamespaceStack;
+        sal_Int32                                               m_nDepth;
 
         OUString m_aXMLAttributeNamespace;
         OUString m_aXMLAttributeType;

@@ -70,7 +70,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LanguageSelectionMenuController     
 
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
-LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+LanguageSelectionMenuController::LanguageSelectionMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : svt::PopupMenuControllerBase(xContext)
     , m_bShowMenu(true)
     , m_nScriptType(SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX)
@@ -133,7 +133,7 @@ void LanguageSelectionMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
 
     // Register for language updates
     aTargetURL.Complete = m_aLangStatusCommandURL;
@@ -240,14 +240,14 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
 
-void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( css::uno::RuntimeException, std::exception )
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 
     // Force status update to get information about the current languages
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();

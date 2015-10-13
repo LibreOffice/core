@@ -42,7 +42,7 @@ namespace framework
 class GlobalSettings
 {
     public:
-        GlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        GlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         ~GlobalSettings();
 
         enum UIElementType
@@ -60,13 +60,13 @@ class GlobalSettings
 
         // settings access
         bool HasStatesInfo( UIElementType eElementType );
-        bool GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
+        bool GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, css::uno::Any& aValue );
 
     private:
         GlobalSettings(const GlobalSettings&) = delete;
         GlobalSettings& operator=(const GlobalSettings& ) = delete;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 } // namespace framework

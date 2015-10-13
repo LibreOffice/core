@@ -76,17 +76,17 @@ ModuleImageManager::~ModuleImageManager()
 }
 
 // XComponent
-void SAL_CALL ModuleImageManager::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ModuleImageManager::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->dispose();
 }
 
-void SAL_CALL ModuleImageManager::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ModuleImageManager::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->addEventListener(xListener);
 }
 
-void SAL_CALL ModuleImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ModuleImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->removeEventListener(xListener);
@@ -108,13 +108,13 @@ void SAL_CALL ModuleImageManager::reset()
 }
 
 Sequence< OUString > SAL_CALL ModuleImageManager::getAllImageNames( ::sal_Int16 nImageType )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return m_pImpl->getAllImageNames( nImageType );
 }
 
 sal_Bool SAL_CALL ModuleImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
-throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);
 }
@@ -122,7 +122,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 Sequence< uno::Reference< XGraphic > > SAL_CALL ModuleImageManager::getImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence )
-throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
     SAL_INFO( "fwk", "framework: ModuleImageManager::getImages" );
     return m_pImpl->getImages(nImageType,aCommandURLSequence);
@@ -132,70 +132,70 @@ void SAL_CALL ModuleImageManager::replaceImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
-throw ( ::com::sun::star::lang::IllegalArgumentException,
-        ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+throw ( css::lang::IllegalArgumentException,
+        css::lang::IllegalAccessException,
+        css::uno::RuntimeException, std::exception)
 {
     m_pImpl->replaceImages(nImageType,aCommandURLSequence,aGraphicsSequence);
 }
 
 void SAL_CALL ModuleImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
-throw ( ::com::sun::star::lang::IllegalArgumentException,
-        ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+throw ( css::lang::IllegalArgumentException,
+        css::lang::IllegalAccessException,
+        css::uno::RuntimeException, std::exception)
 {
     m_pImpl->removeImages(nImageType,aCommandURLSequence);
 }
 
 void SAL_CALL ModuleImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
-throw ( ::com::sun::star::container::ElementExistException,
-        ::com::sun::star::lang::IllegalArgumentException,
-        ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+throw ( css::container::ElementExistException,
+        css::lang::IllegalArgumentException,
+        css::lang::IllegalAccessException,
+        css::uno::RuntimeException, std::exception)
 {
     m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 // XUIConfiguration
-void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
+throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->addConfigurationListener(xListener);
 }
 
-void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
+throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->removeConfigurationListener(xListener);
 }
 
 // XUIConfigurationPersistence
 void SAL_CALL ModuleImageManager::reload()
-throw ( ::com::sun::star::uno::Exception,
-        ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::uno::Exception,
+        css::uno::RuntimeException, std::exception )
 {
     m_pImpl->reload();
 }
 
 void SAL_CALL ModuleImageManager::store()
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_pImpl->store();
 }
 
 void SAL_CALL ModuleImageManager::storeToStorage( const uno::Reference< XStorage >& Storage )
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_pImpl->storeToStorage(Storage);
 }
 
 sal_Bool SAL_CALL ModuleImageManager::isModified()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return m_pImpl->isModified();
 }
 
-sal_Bool SAL_CALL ModuleImageManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ModuleImageManager::isReadOnly() throw (css::uno::RuntimeException, std::exception)
 {
     return m_pImpl->isReadOnly();
 }

@@ -49,7 +49,7 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   TabWinFactory                       
 
 DEFINE_INIT_SERVICE                     (   TabWinFactory, {} )
 
-TabWinFactory::TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+TabWinFactory::TabWinFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     m_xContext( xContext )
 {
 }

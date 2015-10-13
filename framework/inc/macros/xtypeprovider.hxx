@@ -53,7 +53,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getImplementationId()
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                               \
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception )          \
+    css::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( css::uno::RuntimeException, std::exception )          \
     {                                                                                                                                           \
         return css::uno::Sequence<sal_Int8>();                                                                                                  \
     }
@@ -62,7 +62,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getTypes() with max. 12 interfaces!
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )                                                                                   \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
+    css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes() throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
         /* We initialize a static variable only one time.               */                                                                      \
@@ -91,14 +91,14 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getTypes() with more than 12 interfaces!
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                         \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
+    css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes() throw( css::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
         /* We initialize a static variable only one time.               */                                                                      \
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL;                                         \
+        static css::uno::Sequence< css::uno::Type >* pTypeCollection = NULL;                                         \
         if ( pTypeCollection == NULL )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
@@ -111,13 +111,13 @@ ________________________________________________________________________________
                 ::cppu::OTypeCollection aTypeCollection1 TYPES_FIRST;                                                                       \
                 ::cppu::OTypeCollection aTypeCollection2 TYPES_SECOND;                                                                       \
                 /* Copy all items from both sequences to one result list! */                                                                    \
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes1   = aTypeCollection1.getTypes();              \
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes2   = aTypeCollection2.getTypes();              \
-                sal_Int32                                                               nCount1     = seqTypes1.getLength();                    \
-                sal_Int32                                                               nCount2     = seqTypes2.getLength();                    \
-                static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >   seqResult   ( nCount1+nCount2 );                        \
-                sal_Int32                                                               nSource     = 0;                                        \
-                sal_Int32                                                               nDestination= 0;                                        \
+                css::uno::Sequence< css::uno::Type >          seqTypes1   = aTypeCollection1.getTypes();              \
+                css::uno::Sequence< css::uno::Type >          seqTypes2   = aTypeCollection2.getTypes();              \
+                sal_Int32                                     nCount1     = seqTypes1.getLength();                    \
+                sal_Int32                                     nCount2     = seqTypes2.getLength();                    \
+                static css::uno::Sequence< css::uno::Type >   seqResult   ( nCount1+nCount2 );                        \
+                sal_Int32                                     nSource     = 0;                                        \
+                sal_Int32                                     nDestination= 0;                                        \
                 while( nSource<nCount1 )                                                                                                        \
                 {                                                                                                                               \
                     seqResult[nDestination] = seqTypes1[nSource];                                                                               \
@@ -203,8 +203,8 @@ ________________________________________________________________________________
 //  declaration of XTypeProvider
 
 #define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;\
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes           () throw( css::uno::RuntimeException, std::exception ) override;\
+    virtual css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( css::uno::RuntimeException, std::exception ) override;
 
 //  public
 //  implementation of XTypeProvider

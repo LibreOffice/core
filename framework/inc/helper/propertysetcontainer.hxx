@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIndexContainer    ,
+class FWE_DLLPUBLIC PropertySetContainer : public css::container::XIndexContainer    ,
                              public ::cppu::OWeakObject
 {
     public:
@@ -40,41 +40,41 @@ class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIn
         virtual ~PropertySetContainer();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
+            throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL removeByIndex( sal_Int32 Index )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
+            throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+            throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException, std::exception) override
         {
-            return cppu::UnoType<com::sun::star::beans::XPropertySet>::get();
+            return cppu::UnoType<css::beans::XPropertySet>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     private:
-        typedef std::vector< com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > > PropertySetVector;
+        typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;
         PropertySetVector                                                               m_aPropertySetVector;
 
 };
