@@ -944,7 +944,7 @@ namespace xmloff
             // we have exactly 2 properties where this type class is allowed:
             OSL_ENSURE(
                     _rPropValue.Name != PROPERTY_EFFECTIVE_VALUE
-                ||  _rPropValue.Name != PROPERTY_EFFECTIVE_DEFAULT,
+                &&  _rPropValue.Name != PROPERTY_EFFECTIVE_DEFAULT,
                 "OControlImport::implTranslateValueProperty: invalid property type/name combination!");
 
             // Both properties are allowed to have a double or a string value,
