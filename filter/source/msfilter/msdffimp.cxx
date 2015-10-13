@@ -1424,7 +1424,6 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
 
     if ( bVerticalText )
     {
-        eTVA = SDRTEXTVERTADJUST_BLOCK;
         eTHA = SDRTEXTHORZADJUST_CENTER;
 
         // read text anchor
@@ -1470,7 +1469,6 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     else
     {
         eTVA = SDRTEXTVERTADJUST_CENTER;
-        eTHA = SDRTEXTHORZADJUST_BLOCK;
 
         // read text anchor
         sal_uInt32 eTextAnchor = GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
