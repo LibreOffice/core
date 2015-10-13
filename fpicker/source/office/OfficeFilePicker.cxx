@@ -217,16 +217,15 @@ void SvtFilePicker::prepareExecute()
 }
 
 
-IMPL_LINK( SvtFilePicker, DialogClosedHdl, Dialog*, pDlg )
+IMPL_LINK_TYPED( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
 {
     if ( m_xDlgClosedListener.is() )
     {
-        sal_Int16 nRet = static_cast< sal_Int16 >( pDlg->GetResult() );
+        sal_Int16 nRet = static_cast< sal_Int16 >( rDlg.GetResult() );
         css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
         m_xDlgClosedListener->dialogClosed( aEvent );
         m_xDlgClosedListener.clear();
     }
-    return 0;
 }
 
 

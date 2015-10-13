@@ -195,7 +195,7 @@ public:
     void                RemoveStandardButton();
 
     short               Execute() override;
-    void                StartExecuteModal( const Link<>& rEndDialogHdl ) override;
+    void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     void                Start( bool bShow = true );
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }

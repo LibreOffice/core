@@ -267,7 +267,7 @@ short SearchProgress::Execute()
 
 
 
-void SearchProgress::StartExecuteModal( const Link<>& rEndDialogHdl )
+void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     assert(!maSearchThread.is());
     maSearchThread = new SearchThread(
@@ -439,7 +439,7 @@ short TakeProgress::Execute()
 
 
 
-void TakeProgress::StartExecuteModal( const Link<>& rEndDialogHdl )
+void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     assert(!maTakeThread.is());
     maTakeThread = new TakeThread(
@@ -1079,7 +1079,7 @@ void TPGalleryThemeProperties::TakeFiles()
         pTakeProgress->Update();
 
         pTakeProgress->StartExecuteModal(
-            Link<>() /* no postprocessing needed, pTakeProgress
+            Link<Dialog&,void>() /* no postprocessing needed, pTakeProgress
                       will be disposed in TakeProgress::CleanupHdl */ );
     }
 }
@@ -1224,7 +1224,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
 
 
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
+IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
 {
   if( !aFoundList.empty() )
   {
@@ -1240,7 +1240,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
       m_pCbxPreview->Disable();
       bEntriesFound = false;
   }
-  return 0L;
 }
 
 

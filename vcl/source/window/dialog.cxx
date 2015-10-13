@@ -334,7 +334,7 @@ struct DialogImpl
 {
     long    mnResult;
     bool    mbStartedModal;
-    Link<>  maEndDialogHdl;
+    Link<Dialog&,void>  maEndDialogHdl;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 };
@@ -915,7 +915,7 @@ short Dialog::Execute()
 }
 
 // virtual
-void Dialog::StartExecuteModal( const Link<>& rEndDialogHdl )
+void Dialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     if ( !ImplStartExecuteModal() )
         return;
@@ -972,8 +972,8 @@ void Dialog::EndDialog( long nResult )
             ImplEndExecuteModal();
             if (mpDialogImpl->maEndDialogHdl.IsSet())
             {
-                mpDialogImpl->maEndDialogHdl.Call( this );
-                mpDialogImpl->maEndDialogHdl = Link<>();
+                mpDialogImpl->maEndDialogHdl.Call( *this );
+                mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
             }
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;

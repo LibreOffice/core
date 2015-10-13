@@ -167,7 +167,7 @@ public:
     virtual void                dispose() override;
 
     virtual short               Execute() override;
-    virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) override;
+    virtual void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
 
             void                FileSelect();
             void                FilterSelect() override;
