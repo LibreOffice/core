@@ -264,6 +264,11 @@ SvtScriptType EditView::GetSelectedScriptType() const
     return pImpEditView->pEditEngine->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
+void EditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
+{
+    return pImpEditView->GetSelectionRectangles(rLogicRects);
+}
+
 void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     pImpEditView->pEditEngine->pImpEditEngine->Paint( pImpEditView, rRect, pTargetDevice );
