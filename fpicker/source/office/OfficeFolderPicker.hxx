@@ -46,7 +46,7 @@ private:
                             m_xListener;
 
     void                            prepareExecute( );
-    DECL_LINK(                      DialogClosedHdl, Dialog* );
+    DECL_LINK_TYPED(                DialogClosedHdl, Dialog&, void );
 
 public:
                                     SvtFolderPicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );

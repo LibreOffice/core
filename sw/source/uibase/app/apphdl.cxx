@@ -267,7 +267,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
     AbstractMailMergeWizard* m_pWizard;     // always owner
 
-    DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
+    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
     DECL_LINK_TYPED( DestroyDialogHdl, void*, void );
     DECL_STATIC_LINK_TYPED( SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void );
     DECL_LINK_TYPED( CancelHdl, void*, void );
@@ -437,11 +437,8 @@ void SwMailMergeWizardExecutor::ExecuteWizard()
         LINK( this, SwMailMergeWizardExecutor, EndDialogHdl ) );
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pDialog )
+IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
 {
-    OSL_ENSURE( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
-    (void) pDialog;
-
     long nRet = m_pWizard->GetResult();
     sal_uInt16 nRestartPage = m_pWizard->GetRestartPage();
 
@@ -570,8 +567,6 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         }
 
     } // switch
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
