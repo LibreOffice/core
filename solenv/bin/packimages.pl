@@ -507,13 +507,19 @@ sub write_links($)
 sub check_links($)
 {
     my $links = shift;
+    my $stop_die = 0;
 
     for my $link (keys %{$links}) {
         my $value = $links->{$link};
         if (defined $links->{$value}) {
-            die "Link to another link: $link -> $value -> " . $links->{$value};
+            print STDERR "\nLink: $link -> $value -> " . $links->{$value};
+            $stop_die = 1;
         }
     }
+    if ( $stop_die ) {
+        die "\nSome icons in links.txt were found to link to other linked icons.\n\n";
+    }
+
 }
 
 # remove any files from our zip list that are linked
