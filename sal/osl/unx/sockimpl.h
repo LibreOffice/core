@@ -36,6 +36,8 @@ typedef void* (*oslCloseCallback) (void*);
 
 #if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
 #define CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT 1
+#else
+#define CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT 0
 #endif
 
 struct oslSocketImpl {
