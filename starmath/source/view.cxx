@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <i18nutil/unicode.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -52,6 +53,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/decoview.hxx>
@@ -1841,6 +1843,51 @@ void SmViewShell::Execute(SfxRequest& rReq)
             GetViewFrame()->GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
 
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_UNICODE_NOTATION_TOGGLE:
+        {
+            EditEngine* pEditEngine = 0;
+            if( pWin )
+                pEditEngine = pWin->GetEditEngine();
+
+            EditView* pEditView = 0;
+            if( pEditEngine )
+                pEditView = pEditEngine->GetView();
+
+            if( pEditView )
+            {
+                const OUString sInput = pEditView->GetSurroundingText();
+                ESelection aSel(  pWin->GetSelection() );
+
+                if ( aSel.nStartPos > aSel.nEndPos )
+                    aSel.nEndPos = aSel.nStartPos;
+
+                //calculate a valid end-position by reading logical characters
+                sal_Int32 nUtf16Pos=0;
+                while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                {
+                    sInput.iterateCodePoints(&nUtf16Pos);
+                    if( nUtf16Pos > aSel.nEndPos )
+                        aSel.nEndPos = nUtf16Pos;
+                }
+
+                ToggleUnicodeCodepoint aToggle;
+                while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+                    --nUtf16Pos;
+                const OUString sReplacement = aToggle.ReplacementString();
+                if( !sReplacement.isEmpty() )
+                {
+                    pEditView->SetSelection( aSel );
+                    pEditEngine->UndoActionStart(EDITUNDO_REPLACEALL);
+                    aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+                    pWin->SetSelection( aSel );
+                    pEditView->InsertText( sReplacement, true );
+                    pEditEngine->UndoActionEnd(EDITUNDO_REPLACEALL);
+                    pWin->Flush();
+                }
+            }
         }
         break;
 
