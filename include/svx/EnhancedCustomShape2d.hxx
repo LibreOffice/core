@@ -192,6 +192,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SdrObject*              CreateObject( bool bLineGeometryNeededOnly );
         void                    ApplyGluePoints( SdrObject* pObj );
         Rectangle               GetTextRect() const;
+        Rectangle               GetLogicRect() const { return aLogicRect; }
 
         sal_uInt32              GetHdlCount() const;
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;

@@ -18,6 +18,8 @@
  */
 
 #include <sfx2/app.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
@@ -430,6 +432,15 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     get(m_pFlAngle, "FL_SLANT");
     get(m_pMtrAngle, "MTR_FLD_ANGLE");
 
+    for (int i = 0; i < 2; ++i)
+    {
+        get(m_aControlGroups[i], "controlgroups" + OString::number(i+1));
+        get(m_aControlGroupX[i], "controlgroupx" + OString::number(i+1));
+        get(m_aControlX[i], "controlx" + OString::number(i+1));
+        get(m_aControlGroupY[i], "controlgroupy" + OString::number(i+1));
+        get(m_aControlY[i], "controly" + OString::number(i+1));
+    }
+
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
@@ -450,6 +461,14 @@ void SvxSlantTabPage::dispose()
     m_pMtrRadius.clear();
     m_pFlAngle.clear();
     m_pMtrAngle.clear();
+    for (int i = 0; i < 2; ++i)
+    {
+        m_aControlGroups[i].clear();
+        m_aControlGroupX[i].clear();
+        m_aControlX[i].clear();
+        m_aControlGroupY[i].clear();
+        m_aControlY[i].clear();
+    }
     SvxTabPage::dispose();
 }
 
@@ -505,10 +524,56 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         rAttrs->Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
     }
 
+    bool bControlPointsChanged = false;
+    for (int i = 0; i < 2; ++i)
+    {
+        bControlPointsChanged |= (m_aControlX[i]->IsValueChangedFromSaved() ||
+                                  m_aControlY[i]->IsValueChangedFromSaved());
+    }
+
+    if (!bControlPointsChanged)
+        return bModified;
+
+    SdrObject* pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SdrModel* pModel = pObj->GetModel();
+    SdrUndoAction* pUndo = pModel->IsUndoEnabled() ?
+                pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj) :
+                nullptr;
+
+    if (pUndo)
+        pModel->BegUndo(pUndo->GetComment());
+
+    EnhancedCustomShape2d aShape(pObj);
+    Rectangle aLogicRect = aShape.GetLogicRect();
+
+    for (int i = 0; i < 2; ++i)
+    {
+        if (m_aControlX[i]->IsValueChangedFromSaved() || m_aControlY[i]->IsValueChangedFromSaved())
+        {
+            Point aNewPosition(GetCoreValue(*m_aControlX[i], ePoolUnit),
+                               GetCoreValue(*m_aControlY[i], ePoolUnit));
+            aNewPosition.Move(aLogicRect.Left(), aLogicRect.Top());
+
+            css::awt::Point aPosition;
+            aPosition.X = aNewPosition.X();
+            aPosition.Y = aNewPosition.Y();
+
+            aShape.SetHandleControllerPosition(i, aPosition);
+        }
+    }
+
+    pObj->SetChanged();
+    pObj->BroadcastObjectChange();
+    bModified = true;
+
+    if (pUndo)
+    {
+        pModel->AddUndo(pUndo);
+        pModel->EndUndo();
+    }
+
     return bModified;
 }
-
-
 
 void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 {
@@ -560,16 +625,75 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
 
     m_pMtrAngle->SaveValue();
+
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 1)
+    {
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
+        if (eKind == OBJ_CUSTOMSHAPE)
+        {
+            EnhancedCustomShape2d aShape(pObj);
+            Point aInitialPosition;
+            for (int i = 0; i < 2; ++i)
+            {
+                if (!aShape.GetHandlePosition(i, aInitialPosition))
+                    break;
+                m_aControlGroups[i]->Enable();
+                css::awt::Point aPosition;
+
+                aPosition.X = SAL_MAX_INT32;
+                aPosition.Y = SAL_MAX_INT32;
+                aShape.SetHandleControllerPosition(i, aPosition);
+                Point aMaxPosition;
+                aShape.GetHandlePosition(i, aMaxPosition);
+
+                aPosition.X = SAL_MIN_INT32;
+                aPosition.Y = SAL_MIN_INT32;
+                aShape.SetHandleControllerPosition(i, aPosition);
+                Point aMinPosition;
+                aShape.GetHandlePosition(i, aMinPosition);
+
+                Rectangle aLogicRect = aShape.GetLogicRect();
+                aMaxPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+                aMinPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+
+                aPosition.X = aInitialPosition.X();
+                aPosition.Y = aInitialPosition.Y();
+                aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+                aShape.SetHandleControllerPosition(i, aPosition);
+
+                SetMetricValue(*m_aControlX[i], aInitialPosition.X(), ePoolUnit);
+                SetMetricValue(*m_aControlY[i], aInitialPosition.Y(), ePoolUnit);
+
+                if (aMaxPosition.X() == aMinPosition.X())
+                    m_aControlGroupX[i]->Disable();
+                else
+                {
+                    m_aControlX[i]->SetMin(aMinPosition.X(), FUNIT_MM);
+                    m_aControlX[i]->SetMax(aMaxPosition.X(), FUNIT_MM);
+                }
+                if (aMaxPosition.Y() == aMinPosition.Y())
+                    m_aControlGroupY[i]->Disable();
+                else
+                {
+                    m_aControlY[i]->SetMin(aMinPosition.Y(), FUNIT_MM);
+                    m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
+                }
+            }
+        }
+    }
+    for (int i = 0; i < 2; ++i)
+    {
+        m_aControlX[i]->SaveValue();
+        m_aControlY[i]->SaveValue();
+    }
 }
-
-
 
 VclPtr<SfxTabPage> SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxSlantTabPage>::Create( pWindow, *rOutAttrs );
 }
-
-
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -618,7 +742,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     , mfOldWidth(0.0)
     , mfOldHeight(0.0)
 {
-
     get(m_pFlPosition, "FL_POSITION");
     get(m_pMtrPosX, "MTR_FLD_POS_X");
     get(m_pMtrPosY, "MTR_FLD_POS_Y");

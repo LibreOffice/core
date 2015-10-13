@@ -237,6 +237,12 @@ private:
     VclPtr<VclFrame>            m_pFlAngle;
     VclPtr<MetricField>         m_pMtrAngle;
 
+    VclPtr<VclFrame>            m_aControlGroups[2];
+    VclPtr<VclContainer>        m_aControlGroupX[2];
+    VclPtr<MetricField>         m_aControlX[2];
+    VclPtr<VclContainer>        m_aControlGroupY[2];
+    VclPtr<MetricField>         m_aControlY[2];
+
     const SfxItemSet&   rOutAttrs;
 
     const SdrView*      pView;
