@@ -11745,7 +11745,8 @@ dnl ===================================================================
 ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
-if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS \); then
+if test "$enable_liblangtag" = "yes" -o
+        \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS -a $_os != Emscripten\); then
     ENABLE_LIBLANGTAG=TRUE
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
