@@ -213,13 +213,6 @@ public:
     {
         return (m_rInnerRef < handle.m_rInnerRef);
     }
-
-    /** Needed to place VclPtr's into STL collection.
-     */
-    inline bool operator> (const VclPtr<reference_type> & handle) const
-    {
-        return (m_rInnerRef > handle.m_rInnerRef);
-    }
 }; // class VclPtr
 
 template<typename T1, typename T2>
