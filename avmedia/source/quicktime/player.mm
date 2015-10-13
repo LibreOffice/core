@@ -97,9 +97,9 @@ bool Player::create( const ::rtl::OUString& rURL )
         }
         if( pErr )
         {
-            OSL_TRACE( "NSMovie create failed with error %ld (%s)",
-                       (long)[pErr code],
-                       [[pErr localizedDescription] UTF8String]
+            SAL_INFO ( "avmedia.quicktime",
+                       "NSMovie create failed with error " << (long)[pErr code] <<
+                       " (" << [[pErr localizedDescription] UTF8String] << ")"
                        );
         }
         [pool release];
@@ -113,7 +113,7 @@ bool Player::create( const ::rtl::OUString& rURL )
 void SAL_CALL Player::start(  )
     throw (uno::RuntimeException)
 {
-  OSL_TRACE ("Player::start");
+  SAL_INFO ( "avmedia.quicktime", "Player::start" );
 
   if( mpMovie )
   {
@@ -126,7 +126,7 @@ void SAL_CALL Player::start(  )
 void SAL_CALL Player::stop(  )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Player::stop");
+    SAL_INFO ( "avmedia.quicktime", "Player::stop" );
     if( mpMovie )
     {
         [mpMovie stop];
@@ -173,7 +173,7 @@ double SAL_CALL Player::getDuration(  )
 void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Player::setMediaTime");
+    SAL_INFO ( "avmedia.quicktime", "Player::setMediaTime" );
 
     if ( mpMovie )
     {
@@ -205,7 +205,8 @@ double SAL_CALL Player::getMediaTime(  )
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Player::setPlaybackLoop? %s", bSet?"True":"False" );
+    SAL_INFO ( "avmedia.quicktime",
+               "Player::setPlaybackLoop ? " << ( bSet?"True":"False" ) );
 
     if(bSet)
     {
@@ -224,7 +225,8 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 {
     bool bRet = [[mpMovie attributeForKey:QTMovieLoopsAttribute] boolValue];
 
-    OSL_TRACE ("Player::isPlaybackLoop ? %s", bRet?"True":"False" );
+    SAL_INFO ( "avmedia.quicktime",
+               "Player::isPlaybackLoop ? " << ( bRet?"True":"False" ) );
 
     return bRet;
 }
@@ -234,7 +236,10 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 void SAL_CALL Player::setMute( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE( "set mute: %d muted: %d unmuted volume: %lf", bSet, mbMuted, mnUnmutedVolume );
+    SAL_INFO ( "avmedia.quicktime",
+               "set mute: " << bSet <<
+               " muted: " << mbMuted <<
+               " unmuted volume: " << mnUnmutedVolume );
 
     // change the volume to 0 or the unmuted volume
     if(  mpMovie && mbMuted != bool(bSet) )
@@ -250,7 +255,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 sal_Bool SAL_CALL Player::isMute(  )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Player::isMuted");
+    SAL_INFO ( "avmedia.quicktime", "Player::isMuted" );
 
     return mbMuted;
 }
@@ -271,7 +276,9 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
         mnUnmutedVolume = pow( 10.0, nVolumeDB / 20.0 );
     }
 
-    OSL_TRACE( "set volume: %d gst volume: %f", nVolumeDB, mnUnmutedVolume );
+    SAL_INFO ( "avmedia.quicktime",
+               "set volume: " << nVolumeDB <<
+               " gst volume: " << mnUnmutedVolume );
 
     // change volume
     if( !mbMuted && mpMovie )
@@ -323,7 +330,9 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     uno::Reference< ::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
-    OSL_TRACE( "Player::createPlayerWindow %d %d length: %d", aSize.Width, aSize.Height, aArguments.getLength() );
+    SAL_INFO ( "avmedia.quicktime",
+               "Player::createPlayerWindow " << aSize.Width << " x " << aSize.Height <<
+               " length: " << aArguments.getLength() );
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
@@ -344,7 +353,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     throw (css::uno::RuntimeException)
 {
   uno::Reference< media::XFrameGrabber > xRet;
-  OSL_TRACE ("Player::createFrameGrabber");
+  SAL_INFO ( "avmedia.quicktime", "Player::createFrameGrabber" );
 
   if( !maURL.isEmpty() )
   {

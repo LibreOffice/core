@@ -32,7 +32,7 @@ namespace avmedia { namespace quicktime {
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
-    OSL_TRACE( "avmediaquicktime: Manager::Manager" );
+    SAL_INFO( "avmedia.quicktime", "Manager::Manager" );
 }
 
 
@@ -50,7 +50,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     uno::Reference< media::XPlayer >    xRet( pPlayer );
     INetURLObject                       aURL( rURL );
 
-    OSL_TRACE( "avmediaquicktime: Manager::createPlayer" );
+    SAL_INFO( "avmedia.quicktime", "Manager::createPlayer" );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
         xRet = uno::Reference< media::XPlayer >();
