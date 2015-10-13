@@ -462,8 +462,6 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
         {
             eXPos = enumXFFrameXPosFromLeft;
             eXRel = enumXFFrameXRelPage;
-            eYPos = enumXFFrameYPosBelow;   //below
-            eYRel = enumXFFrameYRelChar; //from char
             //set vertical position
             LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
             if(pContainer && pContainer->IsPage())//in page
