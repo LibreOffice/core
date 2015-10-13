@@ -590,9 +590,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BREAK:
         {
-            SvxFormatBreakItem* pFormatBreak = dynamic_cast<SvxFormatBreakItem*>( &rItem );
-            OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
-
+            SvxFormatBreakItem& rFormatBreak = dynamic_cast<SvxFormatBreakItem&>(rItem);
             sal_uInt16 eEnum;
 
             if( !SvXMLUnitConverter::convertEnum( eEnum, rValue, psXML_BreakType ) )
@@ -600,7 +598,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
             if( eEnum == 0 )
             {
-                pFormatBreak->SetValue( SVX_BREAK_NONE );
+                rFormatBreak.SetValue( SVX_BREAK_NONE );
                 bOk = true;
             }
             else
@@ -608,12 +606,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 switch( nMemberId )
                 {
                     case MID_BREAK_BEFORE:
-                        pFormatBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
+                        rFormatBreak.SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_BEFORE :
                                              SVX_BREAK_PAGE_BEFORE) );
                         break;
                     case MID_BREAK_AFTER:
-                        pFormatBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
+                        rFormatBreak.SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_AFTER :
                                              SVX_BREAK_PAGE_AFTER) );
                         break;
