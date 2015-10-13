@@ -254,7 +254,6 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
         case FN_DIVISIONGROUP_SEPARATE:
         {
             pDivision = pPrev->GetLastInGroupWithContents();
-            pPrev = pDivision;
             break;
         }
         case FN_DOCUMENT:
@@ -263,7 +262,6 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
             pDivision = pFootnoteDivision->GetRootDocument();
             if (pDivision)
                 pDivision = pDivision->GetLastDivisionWithContents();
-            pPrev = pDivision;
             break;
         }
 
