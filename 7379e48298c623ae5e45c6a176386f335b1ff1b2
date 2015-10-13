@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_b9cb121e",
+        "filename": "vcl/source/outdev/wallpaper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-10-13T06:47:54Z",
+      "side": 0,
+      "message": "Can you explain why you removed these lines?",
+      "revId": "7379e48298c623ae5e45c6a176386f335b1ff1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
