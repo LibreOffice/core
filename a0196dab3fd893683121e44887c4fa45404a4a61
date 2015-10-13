@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_746861bb",
+        "filename": "sw/sdi/viewsh.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-13T14:04:22Z",
+      "side": 1,
+      "message": "The slot id is not handled in GetState(). The slot should at least be disabled in single page documents.",
+      "revId": "a0196dab3fd893683121e44887c4fa45404a4a61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_d4784d92",
+        "filename": "sw/source/uibase/uiview/pview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-13T14:04:22Z",
+      "side": 1,
+      "message": "I think this MV_SPECIFIC_PAGE part is not needed.",
+      "revId": "a0196dab3fd893683121e44887c4fa45404a4a61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f473d1b2",
+        "filename": "sw/source/uibase/uiview/pview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-13T14:04:22Z",
+      "side": 1,
+      "message": "Some lines above you can see how arguments are requested from rReq. After the \u0027goto\u0027 you will call ChgPage() that might need the page number as add. parameter. The same applies to SwPagePreviewWin::MovePage() which is called there.",
+      "revId": "a0196dab3fd893683121e44887c4fa45404a4a61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_346ee9c9",
+        "filename": "sw/uiconfig/swriter/toolbar/previewobjectbar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-13T14:04:22Z",
+      "side": 1,
+      "message": "What\u0027s the reason for the dropdown? Wouldn\u0027t a simple numeric field make more sense? Especially in large documents.\nApart from that you would also need the page count to fill the dropdown.",
+      "revId": "a0196dab3fd893683121e44887c4fa45404a4a61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
