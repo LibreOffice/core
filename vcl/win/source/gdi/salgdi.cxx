@@ -659,7 +659,7 @@ WinSalGraphics::~WinSalGraphics()
     }
 
     // delete cache data
-    delete [] mpStdClipRgnData;
+    delete [] (BYTE*)mpStdClipRgnData;
 }
 
 SalGraphicsImpl* WinSalGraphics::GetImpl() const
