@@ -260,17 +260,15 @@ void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
     }
 }
 
-
 void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter)
 {
-    if (m_pCell && dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr)
-        dynamic_cast<FmXFilterCell*>( m_pCell)->Update( );
+    if (FmXFilterCell* pCell = dynamic_cast<FmXFilterCell*>(m_pCell))
+        pCell->Update();
     else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell && pRow->HasField(m_nFieldPos))
     {
-        dynamic_cast<FmXDataCell*>( m_pCell)->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter  );
+        dynamic_cast<FmXDataCell&>(*m_pCell).UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter  );
     }
 }
-
 
 bool DbGridColumn::Commit()
 {
