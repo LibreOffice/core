@@ -926,7 +926,7 @@ bool ORowSetCache::moveWindow()
                 {
                     ORowSetMatrix::iterator aIter(aEnd);
                     sal_Int32 nPos = m_nStartPos + 1;
-                    bCheck = fill(aIter, aNewEnd, nPos, bCheck);
+                    fill(aIter, aNewEnd, nPos, bCheck);
                 }
 
                 ::std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
