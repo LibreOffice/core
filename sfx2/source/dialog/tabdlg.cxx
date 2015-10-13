@@ -545,7 +545,7 @@ short SfxTabDialog::Execute()
 
 
 
-void SfxTabDialog::StartExecuteModal( const Link<>& rEndDialogHdl )
+void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     if ( !m_pTabCtrl->GetPageCount() )
         return;

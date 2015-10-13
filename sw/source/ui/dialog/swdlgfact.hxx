@@ -345,15 +345,15 @@ class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
     VclPtr<SwMailMergeWizard> pDlg;
-    Link<>             aEndDlgHdl;
+    Link<Dialog&,void>        aEndDlgHdl;
 
-    DECL_LINK( EndDialogHdl, SwMailMergeWizard* );
+    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
 public:
     explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
      : pDlg(p)
      {}
     virtual         ~AbstractMailMergeWizard_Impl();
-    virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) override;
+    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual long    GetResult() override;
 
     virtual OUString            GetReloadDocument() const override;

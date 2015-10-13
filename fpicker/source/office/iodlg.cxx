@@ -1804,7 +1804,7 @@ short SvtFileDialog::Execute()
 }
 
 
-void SvtFileDialog::StartExecuteModal( const Link<>& rEndDialogHdl )
+void SvtFileDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     PrepareExecute();
 

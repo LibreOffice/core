@@ -487,7 +487,7 @@ IMPL_LINK_NOARG_TYPED(ScAreaLink, RefreshHdl, Timer *, void)
     Refresh( aFileName, aFilterName, aSourceArea, GetRefreshDelay() );
 }
 
-IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl)
+IMPL_LINK_NOARG_TYPED(ScAreaLink, AreaEndEditHdl, Dialog&, void)
 {
     //  #i76514# can't use link argument to access the dialog,
     //  because it's the ScLinkedAreaDlg, not AbstractScLinkedAreaDlg
@@ -504,8 +504,6 @@ IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl)
         SetName( aNewLinkName );
     }
     pImpl->m_pDialog = NULL;    // dialog is deleted with parent
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

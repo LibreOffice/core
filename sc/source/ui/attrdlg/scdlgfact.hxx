@@ -73,7 +73,7 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) override; \
+    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override; \
     long            GetResult() override;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
@@ -89,7 +89,7 @@ short Class::Execute()                              \
 Class::~Class()                                     \
 {                                                   \
 }                                                   \
-void Class::StartExecuteModal( const Link<>& rEndDialogHdl ) \
+void Class::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) \
 {                                                   \
     pDlg->StartExecuteModal( rEndDialogHdl ) ;      \
 }                                                   \

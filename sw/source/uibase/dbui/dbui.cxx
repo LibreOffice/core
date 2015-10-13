@@ -135,7 +135,7 @@ void CancelableDialog::SetCancelHdl( const Link<Button*,void>& rLink )
 void CancelableDialog::Show()
 {
     if (mbModal)
-        StartExecuteModal( Link<>() );
+        StartExecuteModal( Link<Dialog&,void>() );
     else
         Dialog::Show();
 }
