@@ -61,27 +61,27 @@ public:
 
 class StgStrm {                         // base class for all streams
 protected:
-    StgIo& rIo;                         // I/O system
+    StgIo& m_rIo;                         // I/O system
     StgFAT* m_pFat;                       // FAT stream for allocations
-    StgDirEntry* pEntry;                // dir entry (for ownership)
-    sal_Int32 nStart;                       // 1st data page
-    sal_Int32 nSize;                        // stream size in bytes
+    StgDirEntry* m_pEntry;                // dir entry (for ownership)
+    sal_Int32 m_nStart;                       // 1st data page
+    sal_Int32 m_nSize;                        // stream size in bytes
     sal_Int32 m_nPos;                         // current byte position
-    sal_Int32 nPage;                        // current logical page
+    sal_Int32 m_nPage;                        // current logical page
     short m_nOffset;                      // offset into current page
-    short nPageSize;                    // logical page size
+    short m_nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
     void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
     bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     explicit StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
-    StgIo&  GetIo()     { return rIo;    }
+    StgIo&  GetIo()     { return m_rIo;    }
     sal_Int32   GetPos() const   { return m_nPos;   }
-    sal_Int32   GetStart() const { return nStart; }
-    sal_Int32   GetSize() const  { return nSize;  }
-    sal_Int32   GetPage() const  { return nPage;  }
-    sal_Int32   GetPages() const { return ( nSize + nPageSize - 1 ) / nPageSize;}
+    sal_Int32   GetStart() const { return m_nStart; }
+    sal_Int32   GetSize() const  { return m_nSize;  }
+    sal_Int32   GetPage() const  { return m_nPage;  }
+    sal_Int32   GetPages() const { return ( m_nSize + m_nPageSize - 1 ) / m_nPageSize;}
     short       GetOffset() const { return m_nOffset;}
     void        SetEntry( StgDirEntry& );
     virtual bool SetSize( sal_Int32 );

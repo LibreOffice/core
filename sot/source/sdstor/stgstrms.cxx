@@ -305,14 +305,14 @@ bool StgFAT::FreePages( sal_Int32 nStart, bool bAll )
 // and accessing the data on a physical basis. It uses the built-in
 // FAT class for the page allocations.
 
-StgStrm::StgStrm( StgIo& r ) : rIo( r )
+StgStrm::StgStrm( StgIo& r ) : m_rIo( r )
 {
     m_pFat    = NULL;
-    nStart  = nPage = STG_EOF;
+    m_nStart  = m_nPage = STG_EOF;
     m_nOffset = 0;
-    pEntry  = NULL;
-    m_nPos = nSize = 0;
-    nPageSize = rIo.GetPhysPageSize();
+    m_pEntry  = NULL;
+    m_nPos = m_nSize = 0;
+    m_nPageSize = m_rIo.GetPhysPageSize();
 }
 
 StgStrm::~StgStrm()
@@ -324,9 +324,9 @@ StgStrm::~StgStrm()
 
 void StgStrm::SetEntry( StgDirEntry& r )
 {
-    r.m_aEntry.SetLeaf( STG_DATA, nStart );
-    r.m_aEntry.SetSize( nSize );
-    pEntry = &r;
+    r.m_aEntry.SetLeaf( STG_DATA, m_nStart );
+    r.m_aEntry.SetSize( m_nSize );
+    m_pEntry = &r;
     r.SetDirty();
 }
 
@@ -338,11 +338,11 @@ void StgStrm::SetEntry( StgDirEntry& r )
  */
 void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
 {
-    if (nSize > 0)
-        m_aPagesCache.reserve(nSize/nPageSize);
+    if (m_nSize > 0)
+        m_aPagesCache.reserve(m_nSize/m_nPageSize);
 
     bool bError = false;
-    sal_Int32 nBgn = nStart;
+    sal_Int32 nBgn = m_nStart;
     sal_Int32 nOptSize = 0;
 
     // Track already scanned PageNumbers here and use them to
@@ -362,13 +362,13 @@ void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
             bError = true;
         }
 
-        nOptSize += nPageSize;
+        nOptSize += m_nPageSize;
     }
     if (bError)
     {
         SAL_WARN("sot", "returning wrong format error");
         if (pOptionalCalcSize)
-            rIo.SetError( ERRCODE_IO_WRONGFORMAT );
+            m_rIo.SetError( ERRCODE_IO_WRONGFORMAT );
         m_aPagesCache.clear();
     }
     if (pOptionalCalcSize)
@@ -384,11 +384,11 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         return false;
 
     // Values < 0 seek to the end
-    if( nBytePos < 0 || nBytePos >= nSize )
-        nBytePos = nSize;
+    if( nBytePos < 0 || nBytePos >= m_nSize )
+        nBytePos = m_nSize;
     // Adjust the position back to offset 0
     m_nPos -= m_nOffset;
-    sal_Int32 nMask = ~( nPageSize - 1 );
+    sal_Int32 nMask = ~( m_nPageSize - 1 );
     sal_Int32 nOld = m_nPos & nMask;
     sal_Int32 nNew = nBytePos & nMask;
     m_nOffset = (short) ( nBytePos & ~nMask );
@@ -401,14 +401,14 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 
     // Please Note: we build the pagescache incrementally as we go if necessary,
     // so that a corrupted FAT doesn't poison the stream state for earlier reads
-    size_t nIdx = nNew / nPageSize;
+    size_t nIdx = nNew / m_nPageSize;
     if( nIdx >= m_aPagesCache.size() )
     {
         // Extend the FAT cache ! ...
         size_t nToAdd = nIdx + 1;
 
         if (m_aPagesCache.empty())
-            m_aPagesCache.push_back( nStart );
+            m_aPagesCache.push_back( m_nStart );
 
         nToAdd -= m_aPagesCache.size();
 
@@ -431,7 +431,7 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         SAL_WARN("sot", "seek to index " << nIdx <<
                  " beyond page cache size " << m_aPagesCache.size());
         // fdo#84229 - handle seek to end and back as eg. XclImpStream expects
-        nPage = STG_EOF;
+        m_nPage = STG_EOF;
         m_nOffset = 0;
         // Intriguingly in the past we didn't reset nPos to match the real
         // length of the stream thus:
@@ -443,20 +443,20 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 
     // special case: seek to 1st byte of new, unallocated page
     // (in case the file size is a multiple of the page size)
-    if( nBytePos == nSize && !m_nOffset && nIdx > 0 && nIdx == m_aPagesCache.size() )
+    if( nBytePos == m_nSize && !m_nOffset && nIdx > 0 && nIdx == m_aPagesCache.size() )
     {
         nIdx--;
-        m_nOffset = nPageSize;
+        m_nOffset = m_nPageSize;
     }
     else if ( nIdx == m_aPagesCache.size() )
     {
-        nPage = STG_EOF;
+        m_nPage = STG_EOF;
         return false;
     }
 
-    nPage = m_aPagesCache[ nIdx ];
+    m_nPage = m_aPagesCache[ nIdx ];
 
-    return nPage >= 0;
+    return m_nPage >= 0;
 }
 
 // Copy an entire stream. Both streams are allocated in the FAT.
@@ -469,22 +469,22 @@ bool StgStrm::Copy( sal_Int32 nFrom, sal_Int32 nBytes )
 
     m_aPagesCache.clear();
 
-    sal_Int32 nTo = nStart;
-    sal_Int32 nPgs = ( nBytes + nPageSize - 1 ) / nPageSize;
+    sal_Int32 nTo = m_nStart;
+    sal_Int32 nPgs = ( nBytes + m_nPageSize - 1 ) / m_nPageSize;
     while( nPgs-- )
     {
         if( nTo < 0 )
         {
-            rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
+            m_rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
             return false;
         }
-        rIo.Copy( nTo, nFrom );
+        m_rIo.Copy( nTo, nFrom );
         if( nFrom >= 0 )
         {
             nFrom = m_pFat->GetNextPage( nFrom );
             if( nFrom < 0 )
             {
-                rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
+                m_rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
                 return false;
             }
         }
@@ -501,35 +501,35 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
     m_aPagesCache.clear();
 
     // round up to page size
-    sal_Int32 nOld = ( ( nSize + nPageSize - 1 ) / nPageSize ) * nPageSize;
-    sal_Int32 nNew = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
+    sal_Int32 nOld = ( ( m_nSize + m_nPageSize - 1 ) / m_nPageSize ) * m_nPageSize;
+    sal_Int32 nNew = ( ( nBytes + m_nPageSize - 1 ) / m_nPageSize ) * m_nPageSize;
     if( nNew > nOld )
     {
-        if( !Pos2Page( nSize ) )
+        if( !Pos2Page( m_nSize ) )
             return false;
-        sal_Int32 nBgn = m_pFat->AllocPages( nPage, ( nNew - nOld ) / nPageSize );
+        sal_Int32 nBgn = m_pFat->AllocPages( m_nPage, ( nNew - nOld ) / m_nPageSize );
         if( nBgn == STG_EOF )
             return false;
-        if( nStart == STG_EOF )
-            nStart = nPage = nBgn;
+        if( m_nStart == STG_EOF )
+            m_nStart = m_nPage = nBgn;
     }
     else if( nNew < nOld )
     {
         bool bAll = ( nBytes == 0 );
-        if( !Pos2Page( nBytes ) || !m_pFat->FreePages( nPage, bAll ) )
+        if( !Pos2Page( nBytes ) || !m_pFat->FreePages( m_nPage, bAll ) )
             return false;
         if( bAll )
-            nStart = nPage = STG_EOF;
+            m_nStart = m_nPage = STG_EOF;
     }
-    if( pEntry )
+    if( m_pEntry )
     {
         // change the dir entry?
-        if( !nSize || !nBytes )
-            pEntry->m_aEntry.SetLeaf( STG_DATA, nStart );
-        pEntry->m_aEntry.SetSize( nBytes );
-        pEntry->SetDirty();
+        if( !m_nSize || !nBytes )
+            m_pEntry->m_aEntry.SetLeaf( STG_DATA, m_nStart );
+        m_pEntry->m_aEntry.SetSize( nBytes );
+        m_pEntry->SetDirty();
     }
-    nSize = nBytes;
+    m_nSize = nBytes;
     m_pFat->SetLimit( GetPages() );
     return true;
 }
@@ -546,19 +546,19 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
 StgFATStrm::StgFATStrm( StgIo& r ) : StgStrm( r )
 {
     m_pFat = new StgFAT( *this, true );
-    nSize = rIo.m_aHdr.GetFATSize() * nPageSize;
+    m_nSize = m_rIo.m_aHdr.GetFATSize() * m_nPageSize;
 }
 
 bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
 {
     // Values < 0 seek to the end
-    if( nBytePos < 0 || nBytePos >= nSize  )
-        nBytePos = nSize ? nSize - 1 : 0;
-    nPage   = nBytePos / nPageSize;
-    m_nOffset = (short) ( nBytePos % nPageSize );
+    if( nBytePos < 0 || nBytePos >= m_nSize  )
+        nBytePos = m_nSize ? m_nSize - 1 : 0;
+    m_nPage   = nBytePos / m_nPageSize;
+    m_nOffset = (short) ( nBytePos % m_nPageSize );
     m_nPos    = nBytePos;
-    nPage   = GetPage( (short) nPage, false );
-    return nPage >= 0;
+    m_nPage   = GetPage( (short) m_nPage, false );
+    return m_nPage >= 0;
 }
 
 // Get the page number entry for the given page offset.
@@ -568,18 +568,18 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
     OSL_ENSURE( nOff >= 0, "The offset may not be negative!" );
     if( pnMasterAlloc ) *pnMasterAlloc = 0;
     if( nOff < StgHeader::GetFAT1Size() )
-        return rIo.m_aHdr.GetFATPage( nOff );
-    sal_Int32 nMaxPage = nSize >> 2;
+        return m_rIo.m_aHdr.GetFATPage( nOff );
+    sal_Int32 nMaxPage = m_nSize >> 2;
     nOff = nOff - StgHeader::GetFAT1Size();
     // Anzahl der Masterpages, durch die wir iterieren muessen
-    sal_uInt16 nMasterCount =  ( nPageSize >> 2 ) - 1;
+    sal_uInt16 nMasterCount =  ( m_nPageSize >> 2 ) - 1;
     sal_uInt16 nBlocks = nOff / nMasterCount;
     // Offset in letzter Masterpage
     nOff = nOff % nMasterCount;
 
     rtl::Reference< StgPage > pOldPage;
     rtl::Reference< StgPage > pMaster;
-    sal_Int32 nFAT = rIo.m_aHdr.GetFATChain();
+    sal_Int32 nFAT = m_rIo.m_aHdr.GetFATChain();
     for( sal_uInt16 nCount = 0; nCount <= nBlocks; nCount++ )
     {
         if( nFAT == STG_EOF || nFAT == STG_FREE )
@@ -590,18 +590,18 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
 
                 // create a new master page
                 nFAT = nMaxPage++;
-                pMaster = rIo.Copy( nFAT );
+                pMaster = m_rIo.Copy( nFAT );
                 if ( pMaster.is() )
                 {
-                    for( short k = 0; k < (short)( nPageSize >> 2 ); k++ )
-                        rIo.SetToPage( pMaster, k, STG_FREE );
+                    for( short k = 0; k < (short)( m_nPageSize >> 2 ); k++ )
+                        m_rIo.SetToPage( pMaster, k, STG_FREE );
                     // Verkettung herstellen
                     if( !pOldPage.is() )
-                        rIo.m_aHdr.SetFATChain( nFAT );
+                        m_rIo.m_aHdr.SetFATChain( nFAT );
                     else
-                        rIo.SetToPage( pOldPage, nMasterCount, nFAT );
-                    if( nMaxPage >= rIo.GetPhysPages() )
-                        if( !rIo.SetSize( nMaxPage ) )
+                        m_rIo.SetToPage( pOldPage, nMasterCount, nFAT );
+                    if( nMaxPage >= m_rIo.GetPhysPages() )
+                        if( !m_rIo.SetSize( nMaxPage ) )
                             return STG_EOF;
                     // mark the page as used
                     // Platz fuer Masterpage schaffen
@@ -609,21 +609,21 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                     {
                         if( !Pos2Page( nFAT << 2 ) )
                             return STG_EOF;
-                        rtl::Reference< StgPage > pPg = rIo.Get( nPage, true );
+                        rtl::Reference< StgPage > pPg = m_rIo.Get( m_nPage, true );
                         if( !pPg.is() )
                             return STG_EOF;
-                        rIo.SetToPage( pPg, m_nOffset >> 2, STG_MASTER );
+                        m_rIo.SetToPage( pPg, m_nOffset >> 2, STG_MASTER );
                     }
                     else
                         (*pnMasterAlloc)++;
-                    rIo.m_aHdr.SetMasters( nCount + 1 );
+                    m_rIo.m_aHdr.SetMasters( nCount + 1 );
                     pOldPage = pMaster;
                 }
             }
         }
         else
         {
-            pMaster = rIo.Get( nFAT, true );
+            pMaster = m_rIo.Get( nFAT, true );
             if ( pMaster.is() )
             {
                 nFAT = StgCache::GetFromPage( pMaster, nMasterCount );
@@ -633,7 +633,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
     }
     if( pMaster.is() )
         return StgCache::GetFromPage( pMaster, nOff );
-    rIo.SetError( SVSTREAM_GENERALERROR );
+    m_rIo.SetError( SVSTREAM_GENERALERROR );
     return STG_EOF;
 }
 
@@ -647,18 +647,18 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 
     bool bRes = true;
     if( nOff < StgHeader::GetFAT1Size() )
-        rIo.m_aHdr.SetFATPage( nOff, nNewPage );
+        m_rIo.m_aHdr.SetFATPage( nOff, nNewPage );
     else
     {
         nOff = nOff - StgHeader::GetFAT1Size();
         // Anzahl der Masterpages, durch die wir iterieren muessen
-        sal_uInt16 nMasterCount =  ( nPageSize >> 2 ) - 1;
+        sal_uInt16 nMasterCount =  ( m_nPageSize >> 2 ) - 1;
         sal_uInt16 nBlocks = nOff / nMasterCount;
         // Offset in letzter Masterpage
         nOff = nOff % nMasterCount;
 
         rtl::Reference< StgPage > pMaster;
-        sal_Int32 nFAT = rIo.m_aHdr.GetFATChain();
+        sal_Int32 nFAT = m_rIo.m_aHdr.GetFATChain();
         for( sal_uInt16 nCount = 0; nCount <= nBlocks; nCount++ )
         {
             if( nFAT == STG_EOF || nFAT == STG_FREE )
@@ -666,15 +666,15 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
                 pMaster = 0;
                 break;
             }
-            pMaster = rIo.Get( nFAT, true );
+            pMaster = m_rIo.Get( nFAT, true );
             if ( pMaster.is() )
                 nFAT = StgCache::GetFromPage( pMaster, nMasterCount );
         }
         if( pMaster.is() )
-            rIo.SetToPage( pMaster, nOff, nNewPage );
+            m_rIo.SetToPage( pMaster, nOff, nNewPage );
         else
         {
-            rIo.SetError( SVSTREAM_GENERALERROR );
+            m_rIo.SetError( SVSTREAM_GENERALERROR );
             bRes = false;
         }
     }
@@ -683,9 +683,9 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
     if( bRes )
     {
         Pos2Page( nNewPage << 2 );
-        rtl::Reference< StgPage > pPg = rIo.Get( nPage, true );
+        rtl::Reference< StgPage > pPg = m_rIo.Get( m_nPage, true );
         if( pPg.is() )
-            rIo.SetToPage( pPg, m_nOffset >> 2, STG_FAT );
+            m_rIo.SetToPage( pPg, m_nOffset >> 2, STG_FAT );
         else
             bRes = false;
     }
@@ -700,9 +700,9 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
     m_aPagesCache.clear();
 
     // Set the number of entries to a multiple of the page size
-    short nOld = (short) ( ( nSize + ( nPageSize - 1 ) ) / nPageSize );
+    short nOld = (short) ( ( m_nSize + ( m_nPageSize - 1 ) ) / m_nPageSize );
     short nNew = (short) (
-        ( nBytes + ( nPageSize - 1 ) ) / nPageSize ) ;
+        ( nBytes + ( m_nPageSize - 1 ) ) / m_nPageSize ) ;
     if( nNew < nOld )
     {
         // release master pages
@@ -732,31 +732,31 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
                 // no free pages found; create a new page
                 // Since all pages are allocated, extend
                 // the file size for the next page!
-                nNewPage = nSize >> 2;
+                nNewPage = m_nSize >> 2;
                 // if a MegaMasterPage was created avoid taking
                 // the same Page
                 nNewPage += nMasterAlloc;
                 // adjust the file size if necessary
-                if( nNewPage >= rIo.GetPhysPages() )
-                    if( !rIo.SetSize( nNewPage + 1 ) )
+                if( nNewPage >= m_rIo.GetPhysPages() )
+                    if( !m_rIo.SetSize( nNewPage + 1 ) )
                         return false;
             }
             // Set up the page with empty entries
-            rtl::Reference< StgPage > pPg = rIo.Copy( nNewPage );
+            rtl::Reference< StgPage > pPg = m_rIo.Copy( nNewPage );
             if ( !pPg.is() )
                 return false;
-            for( short j = 0; j < (short)( nPageSize >> 2 ); j++ )
-                rIo.SetToPage( pPg, j, STG_FREE );
+            for( short j = 0; j < (short)( m_nPageSize >> 2 ); j++ )
+                m_rIo.SetToPage( pPg, j, STG_FREE );
 
             // store the page number into the master FAT
             // Set the size before so the correct FAT can be found
-            nSize = ( nOld + 1 ) * nPageSize;
+            m_nSize = ( nOld + 1 ) * m_nPageSize;
             SetPage( nOld, nNewPage );
 
             // MegaMasterPages were created, mark it them as used
 
-            sal_uInt32 nMax = rIo.m_aHdr.GetMasters( );
-            sal_uInt32 nFAT = rIo.m_aHdr.GetFATChain();
+            sal_uInt32 nMax = m_rIo.m_aHdr.GetMasters( );
+            sal_uInt32 nFAT = m_rIo.m_aHdr.GetFATChain();
             if( nMasterAlloc )
                 for( sal_uInt32 nCount = 0; nCount < nMax; nCount++ )
                 {
@@ -764,25 +764,25 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
                         return false;
                     if( nMax - nCount <= nMasterAlloc )
                     {
-                        rtl::Reference< StgPage > piPg = rIo.Get( nPage, true );
+                        rtl::Reference< StgPage > piPg = m_rIo.Get( m_nPage, true );
                         if( !piPg.is() )
                             return false;
-                        rIo.SetToPage( piPg, m_nOffset >> 2, STG_MASTER );
+                        m_rIo.SetToPage( piPg, m_nOffset >> 2, STG_MASTER );
                     }
-                    rtl::Reference< StgPage > pPage = rIo.Get( nFAT, true );
+                    rtl::Reference< StgPage > pPage = m_rIo.Get( nFAT, true );
                     if( !pPage.is() ) return false;
-                    nFAT = StgCache::GetFromPage( pPage, (nPageSize >> 2 ) - 1 );
+                    nFAT = StgCache::GetFromPage( pPage, (m_nPageSize >> 2 ) - 1 );
                 }
 
             nOld++;
             // We have used up 4 bytes for the STG_FAT entry
             nBytes += 4;
             nNew = (short) (
-                ( nBytes + ( nPageSize - 1 ) ) / nPageSize );
+                ( nBytes + ( m_nPageSize - 1 ) ) / m_nPageSize );
         }
     }
-    nSize = nNew * nPageSize;
-    rIo.m_aHdr.SetFATSize( nNew );
+    m_nSize = nNew * m_nPageSize;
+    m_rIo.m_aHdr.SetFATSize( nNew );
     return true;
 }
 
@@ -800,27 +800,27 @@ StgDataStrm::StgDataStrm( StgIo& r, sal_Int32 nBgn, sal_Int32 nLen ) : StgStrm( 
 
 StgDataStrm::StgDataStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 {
-    pEntry = &p;
+    m_pEntry = &p;
     Init( p.m_aEntry.GetLeaf( STG_DATA ),
           p.m_aEntry.GetSize() );
 }
 
 void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
-    if ( rIo.m_pFAT )
-        m_pFat = new StgFAT( *rIo.m_pFAT, true );
+    if ( m_rIo.m_pFAT )
+        m_pFat = new StgFAT( *m_rIo.m_pFAT, true );
 
     OSL_ENSURE( m_pFat, "The pointer should not be empty!" );
 
-    nStart = nPage = nBgn;
-    nSize  = nLen;
+    m_nStart = m_nPage = nBgn;
+    m_nSize  = nLen;
     m_nIncr  = 1;
     m_nOffset = 0;
     if( nLen < 0 && m_pFat )
     {
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
-        scanBuildPageChainCache( &nSize );
+        scanBuildPageChainCache( &m_nSize );
     }
 }
 
@@ -832,23 +832,23 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
         return false;
 
     nBytes = ( ( nBytes + m_nIncr - 1 ) / m_nIncr ) * m_nIncr;
-    sal_Int32 nOldSz = nSize;
+    sal_Int32 nOldSz = m_nSize;
     if( ( nOldSz != nBytes ) )
     {
         if( !StgStrm::SetSize( nBytes ) )
             return false;
         sal_Int32 nMaxPage = m_pFat->GetMaxPage();
-        if( nMaxPage > rIo.GetPhysPages() )
-            if( !rIo.SetSize( nMaxPage ) )
+        if( nMaxPage > m_rIo.GetPhysPages() )
+            if( !m_rIo.SetSize( nMaxPage ) )
                 return false;
         // If we only allocated one page or less, create this
         // page in the cache for faster throughput. The current
         // position is the former EOF point.
-        if( ( nSize - 1 )  / nPageSize - ( nOldSz - 1 ) / nPageSize == 1 )
+        if( ( m_nSize - 1 )  / m_nPageSize - ( nOldSz - 1 ) / m_nPageSize == 1 )
         {
             Pos2Page( nBytes );
-            if( nPage >= 0 )
-                rIo.Copy( nPage );
+            if( m_nPage >= 0 )
+                m_rIo.Copy( m_nPage );
         }
     }
     return true;
@@ -862,11 +862,11 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bForce, bool bDirty )
 {
     if( Pos2Page( Pos ) )
     {
-        rtl::Reference< StgPage > pPg = rIo.Get( nPage, bForce );
+        rtl::Reference< StgPage > pPg = m_rIo.Get( m_nPage, bForce );
         if (pPg.is() && m_nOffset < pPg->GetSize())
         {
             if( bDirty )
-                rIo.SetDirty( pPg );
+                m_rIo.SetDirty( pPg );
             return static_cast<sal_uInt8 *>(pPg->GetData()) + m_nOffset;
         }
     }
@@ -882,12 +882,12 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
     if ( n < 0 )
         return 0;
 
-    if( ( m_nPos + n ) > nSize )
-        n = nSize - m_nPos;
+    if( ( m_nPos + n ) > m_nSize )
+        n = m_nSize - m_nPos;
     sal_Int32 nDone = 0;
     while( n )
     {
-        short nBytes = nPageSize - m_nOffset;
+        short nBytes = m_nPageSize - m_nOffset;
         rtl::Reference< StgPage > pPg;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
@@ -895,9 +895,9 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
         {
             short nRes;
             void *p = static_cast<sal_uInt8 *>(pBuf) + nDone;
-            if( nBytes == nPageSize )
+            if( nBytes == m_nPageSize )
             {
-                pPg = rIo.Find( nPage );
+                pPg = m_rIo.Find( m_nPage );
                 if( pPg.is() )
                 {
                     // data is present, so use the cached data
@@ -906,12 +906,12 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 }
                 else
                     // do a direct (unbuffered) read
-                    nRes = (short) rIo.Read( nPage, p, 1 ) * nPageSize;
+                    nRes = (short) m_rIo.Read( m_nPage, p, 1 ) * m_nPageSize;
             }
             else
             {
                 // partial block read through the cache.
-                pPg = rIo.Get( nPage, false );
+                pPg = m_rIo.Get( m_nPage, false );
                 if( !pPg.is() )
                     break;
                 memcpy( p, static_cast<sal_uInt8*>(pPg->GetData()) + m_nOffset, nBytes );
@@ -925,7 +925,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 break;  // read error or EOF
         }
         // Switch to next page if necessary
-        if( m_nOffset >= nPageSize && !Pos2Page( m_nPos ) )
+        if( m_nOffset >= m_nPageSize && !Pos2Page( m_nPos ) )
             break;
     }
     return nDone;
@@ -937,7 +937,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
         return 0;
 
     sal_Int32 nDone = 0;
-    if( ( m_nPos + n ) > nSize )
+    if( ( m_nPos + n ) > m_nSize )
     {
         sal_Int32 nOld = m_nPos;
         if( !SetSize( m_nPos + n ) )
@@ -946,7 +946,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
     }
     while( n )
     {
-        short nBytes = nPageSize - m_nOffset;
+        short nBytes = m_nPageSize - m_nOffset;
         rtl::Reference< StgPage > pPg;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
@@ -954,28 +954,28 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
         {
             short nRes;
             const void *p = static_cast<const sal_uInt8 *>(pBuf) + nDone;
-            if( nBytes == nPageSize )
+            if( nBytes == m_nPageSize )
             {
-                pPg = rIo.Find( nPage );
+                pPg = m_rIo.Find( m_nPage );
                 if( pPg.is() )
                 {
                     // data is present, so use the cached data
                     memcpy( pPg->GetData(), p, nBytes );
-                    rIo.SetDirty( pPg );
+                    m_rIo.SetDirty( pPg );
                     nRes = nBytes;
                 }
                 else
                     // do a direct (unbuffered) write
-                    nRes = (short) rIo.Write( nPage, const_cast<void*>(p), 1 ) * nPageSize;
+                    nRes = (short) m_rIo.Write( m_nPage, const_cast<void*>(p), 1 ) * m_nPageSize;
             }
             else
             {
                 // partial block read through the cache.
-                pPg = rIo.Get( nPage, false );
+                pPg = m_rIo.Get( m_nPage, false );
                 if( !pPg.is() )
                     break;
                 memcpy( static_cast<sal_uInt8*>(pPg->GetData()) + m_nOffset, p, nBytes );
-                rIo.SetDirty( pPg );
+                m_rIo.SetDirty( pPg );
                 nRes = nBytes;
             }
             nDone += nRes;
@@ -986,7 +986,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 break;  // read error
         }
         // Switch to next page if necessary
-        if( m_nOffset >= nPageSize && !Pos2Page( m_nPos ) )
+        if( m_nOffset >= m_nPageSize && !Pos2Page( m_nPos ) )
             break;
     }
     return nDone;
@@ -1006,22 +1006,22 @@ StgSmallStrm::StgSmallStrm( StgIo& r, sal_Int32 nBgn, sal_Int32 nLen ) : StgStrm
 
 StgSmallStrm::StgSmallStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 {
-    pEntry = &p;
+    m_pEntry = &p;
     Init( p.m_aEntry.GetLeaf( STG_DATA ),
           p.m_aEntry.GetSize() );
 }
 
 void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
-    if ( rIo.m_pDataFAT )
-        m_pFat = new StgFAT( *rIo.m_pDataFAT, false );
-    m_pData = rIo.m_pDataStrm;
+    if ( m_rIo.m_pDataFAT )
+        m_pFat = new StgFAT( *m_rIo.m_pDataFAT, false );
+    m_pData = m_rIo.m_pDataStrm;
     OSL_ENSURE( m_pFat && m_pData, "The pointers should not be empty!" );
 
-    nPageSize = rIo.GetDataPageSize();
-    nStart =
-    nPage  = nBgn;
-    nSize  = nLen;
+    m_nPageSize = m_rIo.GetDataPageSize();
+    m_nStart =
+    m_nPage  = nBgn;
+    m_nSize  = nLen;
 }
 
 // This could easily be adapted to a better algorithm by determining
@@ -1032,17 +1032,17 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
 {
     // We can safely assume that reads are not huge, since the
     // small stream is likely to be < 64 KBytes.
-    if( ( m_nPos + n ) > nSize )
-        n = nSize - m_nPos;
+    if( ( m_nPos + n ) > m_nSize )
+        n = m_nSize - m_nPos;
     short nDone = 0;
     while( n )
     {
-        short nBytes = nPageSize - m_nOffset;
+        short nBytes = m_nPageSize - m_nOffset;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
-            if( !m_pData || !m_pData->Pos2Page( nPage * nPageSize + m_nOffset ) )
+            if( !m_pData || !m_pData->Pos2Page( m_nPage * m_nPageSize + m_nOffset ) )
                 break;
             // all reading through the stream
             short nRes = (short) m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
@@ -1055,7 +1055,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
                 break;
         }
         // Switch to next page if necessary
-        if( m_nOffset >= nPageSize && !Pos2Page( m_nPos ) )
+        if( m_nOffset >= m_nPageSize && !Pos2Page( m_nPos ) )
             break;
     }
     return nDone;
@@ -1066,7 +1066,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
     // you can safely assume that reads are not huge, since the
     // small stream is likely to be < 64 KBytes.
     short nDone = 0;
-    if( ( m_nPos + n ) > nSize )
+    if( ( m_nPos + n ) > m_nSize )
     {
         sal_Int32 nOld = m_nPos;
         if( !SetSize( m_nPos + n ) )
@@ -1075,13 +1075,13 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
     }
     while( n )
     {
-        short nBytes = nPageSize - m_nOffset;
+        short nBytes = m_nPageSize - m_nOffset;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
             // all writing goes through the stream
-            sal_Int32 nDataPos = nPage * nPageSize + m_nOffset;
+            sal_Int32 nDataPos = m_nPage * m_nPageSize + m_nOffset;
             if ( !m_pData
               || ( m_pData->GetSize() < ( nDataPos + nBytes )
                 && !m_pData->SetSize( nDataPos + nBytes ) ) )
@@ -1098,7 +1098,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
                 break;
         }
         // Switch to next page if necessary
-        if( m_nOffset >= nPageSize && !Pos2Page( m_nPos ) )
+        if( m_nOffset >= m_nPageSize && !Pos2Page( m_nPos ) )
             break;
     }
     return nDone;

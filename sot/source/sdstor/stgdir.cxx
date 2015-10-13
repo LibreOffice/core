@@ -725,8 +725,8 @@ StgDirStrm::StgDirStrm( StgIo& r )
 {
     if( r.GetError() )
         return;
-    m_nEntries = nPageSize / STGENTRY_SIZE;
-    if( nStart == STG_EOF )
+    m_nEntries = m_nPageSize / STGENTRY_SIZE;
+    if( m_nStart == STG_EOF )
     {
         StgEntry aRoot;
         aRoot.Init();
@@ -739,9 +739,9 @@ StgDirStrm::StgDirStrm( StgIo& r )
     {
         // temporarily use this instance as owner, so
         // the TOC pages can be removed.
-        pEntry = reinterpret_cast<StgDirEntry*>(this); // just for a bit pattern
+        m_pEntry = reinterpret_cast<StgDirEntry*>(this); // just for a bit pattern
         SetupEntry( 0, m_pRoot );
-        pEntry = NULL;
+        m_pEntry = NULL;
     }
 }
 
@@ -757,7 +757,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
     void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
     if( p )
     {
-        SvStream *pUnderlyingStream = rIo.GetStrm();
+        SvStream *pUnderlyingStream = m_rIo.GetStrm();
         sal_uInt64 nCur = pUnderlyingStream->Tell();
         sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->Seek(STREAM_SEEK_TO_END);
         pUnderlyingStream->Seek(nCur);
@@ -768,7 +768,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
         if( !bOk )
         {
             delete pCur;
-            rIo.SetError( SVSTREAM_GENERALERROR );
+            m_rIo.SetError( SVSTREAM_GENERALERROR );
             // an error occurred
             return;
         }
@@ -787,7 +787,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             if (nLeaf != STG_FREE && nLeaf == n)
             {
                 delete pCur;
-                rIo.SetError( SVSTREAM_GENERALERROR );
+                m_rIo.SetError( SVSTREAM_GENERALERROR );
                 return;
             }
         }
@@ -847,7 +847,7 @@ bool StgDirStrm::SetSize( sal_Int32 nBytes )
     if ( nBytes < 0 )
         nBytes = 0;
 
-    nBytes = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
+    nBytes = ( ( nBytes + m_nPageSize - 1 ) / m_nPageSize ) * m_nPageSize;
     return StgStrm::SetSize( nBytes );
 }
 
@@ -857,16 +857,16 @@ bool StgDirStrm::Store()
 {
     if( !m_pRoot || !m_pRoot->IsDirty() )
         return true;
-    if( !m_pRoot->StoreStreams( rIo ) )
+    if( !m_pRoot->StoreStreams( m_rIo ) )
         return false;
     // After writing all streams, the data FAT stream has changed,
     // so we have to commit the root again
     m_pRoot->Commit();
     // We want a completely new stream, so fake an empty stream
-    sal_Int32 nOldStart = nStart;       // save for later deletion
-    sal_Int32 nOldSize  = nSize;
-    nStart = nPage = STG_EOF;
-    nSize  = m_nPos = 0;
+    sal_Int32 nOldStart = m_nStart;       // save for later deletion
+    sal_Int32 nOldSize  = m_nSize;
+    m_nStart = m_nPage = STG_EOF;
+    m_nSize  = m_nPos = 0;
     m_nOffset = 0;
     // Delete all temporary entries
     m_pRoot->DelTemp( false );
@@ -875,12 +875,12 @@ bool StgDirStrm::Store()
     m_pRoot->Enum( n );
     if( !SetSize( n * STGENTRY_SIZE ) )
     {
-        nStart = nOldStart; nSize = nOldSize;
+        m_nStart = nOldStart; m_nSize = nOldSize;
         m_pRoot->RevertAll();
         return false;
     }
     // set up the cache elements for the new stream
-    if( !Copy( STG_FREE, nSize ) )
+    if( !Copy( STG_FREE, m_nSize ) )
     {
         m_pRoot->RevertAll();
         return false;
@@ -892,7 +892,7 @@ bool StgDirStrm::Store()
         return false;
     }
     // fill any remaining entries with empty data
-    sal_Int32 ne = nSize / STGENTRY_SIZE;
+    sal_Int32 ne = m_nSize / STGENTRY_SIZE;
     StgEntry aEmpty;
     aEmpty.Init();
     while( n < ne )
@@ -907,7 +907,7 @@ bool StgDirStrm::Store()
     }
     // Now we can release the old stream
     m_pFat->FreePages( nOldStart, true );
-    rIo.m_aHdr.SetTOCStart( nStart );
+    m_rIo.m_aHdr.SetTOCStart( m_nStart );
     return true;
 }
 
@@ -915,7 +915,7 @@ bool StgDirStrm::Store()
 
 void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 {
-    return n < 0 || n >= nSize / STGENTRY_SIZE
+    return n < 0 || n >= m_nSize / STGENTRY_SIZE
         ? NULL : GetPtr( n * STGENTRY_SIZE, true, bDirty );
 }
 
@@ -929,7 +929,7 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
         aEntry.Init();
         if( !aEntry.SetName( rName ) )
         {
-            rIo.SetError( SVSTREAM_GENERALERROR );
+            m_rIo.SetError( SVSTREAM_GENERALERROR );
             return NULL;
         }
         // Look in the directory attached to the entry
@@ -949,7 +949,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     aEntry.SetType( eType );
     if( !aEntry.SetName( rName ) )
     {
-        rIo.SetError( SVSTREAM_GENERALERROR );
+        m_rIo.SetError( SVSTREAM_GENERALERROR );
         return NULL;
     }
     StgDirEntry* pRes = Find( rStg, rName );
@@ -957,7 +957,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     {
         if( !pRes->m_bInvalid )
         {
-            rIo.SetError( SVSTREAM_CANNOT_MAKE );
+            m_rIo.SetError( SVSTREAM_CANNOT_MAKE );
             return NULL;
         }
         pRes->m_bInvalid =
@@ -978,7 +978,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         }
         else
         {
-            rIo.SetError( SVSTREAM_CANNOT_MAKE );
+            m_rIo.SetError( SVSTREAM_CANNOT_MAKE );
             delete pRes; pRes = NULL;
         }
     }
