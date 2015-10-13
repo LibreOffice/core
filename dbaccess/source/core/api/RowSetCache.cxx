@@ -1551,13 +1551,16 @@ bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,con
         {
             bOk = false;
         }
-        OUString sColumnName,sTableRange;
-        OSQLParseTreeIterator::getColumnRange( pNode->getChild(0), _xConnection, sColumnName, sTableRange );
-        bOk = sTableRange == _sUpdateTableName;
-        if ( !bOk )
+        else
         {
-            OSQLParseTreeIterator::getColumnRange( pNode->getChild(2), _xConnection, sColumnName, sTableRange );
-            bOk =  sTableRange == _sUpdateTableName;
+            OUString sColumnName,sTableRange;
+            OSQLParseTreeIterator::getColumnRange( pNode->getChild(0), _xConnection, sColumnName, sTableRange );
+            bOk = sTableRange == _sUpdateTableName;
+            if ( !bOk )
+            {
+                OSQLParseTreeIterator::getColumnRange( pNode->getChild(2), _xConnection, sColumnName, sTableRange );
+                bOk =  sTableRange == _sUpdateTableName;
+            }
         }
     }
     return bOk;
