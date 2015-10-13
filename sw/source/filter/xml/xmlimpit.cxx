@@ -625,19 +625,18 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_KEEP:
         {
-            SvxFormatKeepItem* pFormatKeep = dynamic_cast<SvxFormatKeepItem*>( &rItem );
-            OSL_ENSURE( pFormatKeep != NULL, "Wrong Which-ID" );
+            SvxFormatKeepItem& rFormatKeep = dynamic_cast<SvxFormatKeepItem&>(rItem);
 
             if( IsXMLToken( rValue, XML_ALWAYS ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {
-                pFormatKeep->SetValue( true );
+                rFormatKeep.SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_AUTO ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
-                pFormatKeep->SetValue( false );
+                rFormatKeep.SetValue( false );
                 bOk = true;
             }
         }
