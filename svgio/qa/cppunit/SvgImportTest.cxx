@@ -31,14 +31,15 @@ using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
 using drawinglayer::primitive2d::arePrimitive2DSequencesEqual;
+using drawinglayer::primitive2d::Primitive2DSequence;
 
 class Test : public test::BootstrapFixture, public XmlTestTools
 {
-    void checkRectPrimitive(css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& rPrimitive);
+    void checkRectPrimitive(Primitive2DSequence& rPrimitive);
 
     void testStyles();
 
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > parseSvg(const char* aSource);
+    Primitive2DSequence parseSvg(const char* aSource);
 
 public:
     virtual void setUp() override;
@@ -49,7 +50,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > Test::parseSvg(const char* aSource)
+Primitive2DSequence Test::parseSvg(const char* aSource)
 {
     const Reference<XSvgParser> xSvgParser = SvgTools::create(m_xContext);
 
@@ -78,7 +79,7 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
-void Test::checkRectPrimitive(css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& rPrimitive)
+void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
 {
     Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(rPrimitive);
@@ -96,28 +97,26 @@ void Test::checkRectPrimitive(css::uno::Sequence< css::uno::Reference< css::grap
 // however the end result should be the same.
 void Test::testStyles()
 {
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
+    Primitive2DSequence aSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRect.getLength());
     checkRectPrimitive(aSequenceRect);
 
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aSequenceRectWithStyle = parseSvg("/svgio/qa/cppunit/data/RectWithStyles.svg");
+    Primitive2DSequence aSequenceRectWithStyle = parseSvg("/svgio/qa/cppunit/data/RectWithStyles.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithStyle.getLength());
     checkRectPrimitive(aSequenceRectWithStyle);
 
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
+    Primitive2DSequence aSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithParentStyle.getLength());
     checkRectPrimitive(aSequenceRectWithParentStyle);
 
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
+    Primitive2DSequence aSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithStylesByGroup.getLength());
     checkRectPrimitive(aSequenceRectWithStylesByGroup);
 
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithParentStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStylesByGroup));
-
 }
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
