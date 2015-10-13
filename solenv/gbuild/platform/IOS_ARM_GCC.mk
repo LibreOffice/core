@@ -44,7 +44,6 @@ gb_OSDEFS := \
 
 gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
-	-Wshadow \
 	-fno-strict-aliasing \
 
 gb_CXXFLAGS := \

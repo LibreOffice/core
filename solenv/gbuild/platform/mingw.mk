@@ -40,7 +40,6 @@ gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-Wno-ctor-dtor-privacy \
 	-Wreturn-type \
-	-Wshadow \
 	-Wuninitialized \
 	-fno-strict-aliasing \
 	-std=gnu++0x \

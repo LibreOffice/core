@@ -44,13 +44,11 @@ gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
 	-fno-strict-aliasing \
-	-Wshadow
 
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Woverloaded-virtual \
-	-Wshadow \
 	-Wno-ctor-dtor-privacy \
 	-fno-strict-aliasing \
 	-fsigned-char \

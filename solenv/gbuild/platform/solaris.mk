@@ -42,12 +42,10 @@ gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
 	-Wdeclaration-after-statement \
-	-Wshadow \
 
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
-	-Wshadow \
 	-Woverloaded-virtual \
 	$(CXXFLAGS_CXX11) \
 

@@ -55,6 +55,8 @@ gb_CFLAGS_COMMON := \
 	-Wstrict-prototypes \
 	-Wundef \
 	-Wunused-macros \
+	-Wno-deprecated-declarations \
+	-Wno-shadow \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
@@ -67,6 +69,8 @@ gb_CXXFLAGS_COMMON := \
 	-Wextra \
 	-Wundef \
 	-Wunused-macros \
+	-Wno-deprecated-declarations \
+	-Wno-shadow \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
