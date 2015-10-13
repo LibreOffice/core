@@ -59,6 +59,7 @@ private:
 
     DECL_LINK(LinkedFieldModifyHdl, NumericField*);
     DECL_LINK_TYPED(LinkedFieldLoseFocusHdl, Control&, void);
+    DECL_LINK_TYPED(LinkedFieldSpinnerHdl, SpinField&, void);
 
     using Control::ImplInitSettings;
     using Window::ImplInit;

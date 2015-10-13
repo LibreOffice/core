@@ -236,18 +236,16 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     m_pPagePropertiesPB->SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, UpHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, UpHdl, SpinField&, void)
 {
     if (m_pPageCountNF->GetValue() == 2)
         FillList();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, DownHdl, SpinField&, void)
 {
     if (m_pPageCountNF->GetValue() == 1)
         FillList();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, RestartNumberingHdl, Button*, void)

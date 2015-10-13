@@ -57,8 +57,8 @@ private:
     DECL_LINK_TYPED(EditHdl, Button*, void);
     DECL_LINK_TYPED(RestartNumberingHdl, Button*, void);
     DECL_LINK_TYPED(SetPageNumberHdl, Button*, void);
-    DECL_LINK(UpHdl, void *);
-    DECL_LINK(DownHdl, void *);
+    DECL_LINK_TYPED(UpHdl, SpinField&, void);
+    DECL_LINK_TYPED(DownHdl, SpinField&, void);
     DECL_LINK_TYPED(StartPageHdl, Button*, void);
 public:
     SwTitlePageDlg( vcl::Window *pParent );

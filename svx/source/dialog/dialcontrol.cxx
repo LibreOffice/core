@@ -472,10 +472,19 @@ void DialControl::ImplSetFieldLink( const Link<>& rLink )
     {
         NumericField& rField = *mpImpl->mpLinkField;
         rField.SetModifyHdl( rLink );
-        rField.SetUpHdl( rLink );
-        rField.SetDownHdl( rLink );
-        rField.SetFirstHdl( rLink );
-        rField.SetLastHdl( rLink );
+        rField.SetUpHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetDownHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetFirstHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetLastHdl( LINK(this, DialControl, SpinFieldHdl) );
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(DialControl, SpinFieldHdl, SpinField&, void)
+{
+    if( mpImpl->mpLinkField )
+    {
+        NumericField& rField = *mpImpl->mpLinkField;
+        rField.GetModifyHdl().Call(&rField);
     }
 }
 

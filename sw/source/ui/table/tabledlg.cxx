@@ -145,7 +145,7 @@ void  SwFormatTablePage::Init()
     m_pRightBtn->SetClickHdl( aLk2 );
     m_pCenterBtn->SetClickHdl( aLk2 );
 
-    Link<> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
+    Link<SpinField&,void> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
     m_pTopMF->SetUpHdl( aLk );
     m_pBottomMF->SetUpHdl( aLk );
     m_aRightMF.SetUpHdl( aLk );
@@ -286,19 +286,17 @@ void SwFormatTablePage::RightModify()
 
 IMPL_LINK_TYPED( SwFormatTablePage, LoseFocusHdl, Control&, rControl, void )
 {
-    UpDownHdl(static_cast<MetricField*>(&rControl));
+    UpDownHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK( SwFormatTablePage, UpDownHdl, MetricField *, pEdit )
+IMPL_LINK_TYPED( SwFormatTablePage, UpDownHdl, SpinField&, rEdit, void )
 {
-    if( m_aRightMF.get() == pEdit)
+    if( m_aRightMF.get() == &rEdit)
         RightModify();
-    ModifyHdl( pEdit );
-    return 0;
+    ModifyHdl( &rEdit );
 }
 
 void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 {
-
     SwTwips nCurWidth  = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
     SwTwips nPrevWidth = nCurWidth;
     SwTwips nRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
@@ -848,8 +846,8 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
 void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
-    Link<> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
-    Link<> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
+    Link<SpinField&,void> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
+    Link<SpinField&,void> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
     Link<Control&,void> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
@@ -907,18 +905,16 @@ IMPL_LINK_TYPED( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
     UpdateCols(0);
 }
 
-IMPL_LINK( SwTableColumnPage, UpHdl, MetricField*, pEdit )
+IMPL_LINK_TYPED( SwTableColumnPage, UpHdl, SpinField&, rEdit, void )
 {
     bModified = true;
-    ModifyHdl( pEdit );
-    return 0;
+    ModifyHdl( static_cast<MetricField*>(&rEdit) );
 }
 
-IMPL_LINK( SwTableColumnPage, DownHdl, MetricField*, pEdit )
+IMPL_LINK_TYPED( SwTableColumnPage, DownHdl, SpinField&, rEdit, void )
 {
     bModified = true;
-    ModifyHdl( pEdit );
-    return 0;
+    ModifyHdl( static_cast<MetricField*>(&rEdit) );
 }
 
 IMPL_LINK_TYPED( SwTableColumnPage, LoseFocusHdl, Control&, rControl, void )

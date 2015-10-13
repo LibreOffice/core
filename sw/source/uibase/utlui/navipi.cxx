@@ -1256,12 +1256,11 @@ IMPL_LINK_NOARG_TYPED(SwNavigationPI, ChangePageHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
 {
     if(aPageChgIdle.IsActive())
         aPageChgIdle.Stop();
     aPageChgIdle.Start();
-    return 0;
 }
 
 SwView*  SwNavigationPI::GetCreateView() const

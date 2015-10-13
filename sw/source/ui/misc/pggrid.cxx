@@ -76,7 +76,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     get(m_pPrintCB,"checkCB_PRINT");
     get(m_pColorLB,"listLB_COLOR");
 
-    Link<> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
+    Link<SpinField&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     Link<Control&,void> aLink2 = LINK(this, SwTextGridPage, CharorLineLoseFocusdHdl);
     m_pCharsPerLineNF->SetUpHdl(aLink);
     m_pCharsPerLineNF->SetDownHdl(aLink);
@@ -85,7 +85,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     m_pLinesPerPageNF->SetDownHdl(aLink);
     m_pLinesPerPageNF->SetLoseFocusHdl(aLink2);
 
-    Link<> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
+    Link<SpinField&,void> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
     Link<Control&,void> aSizeLink2 = LINK(this, SwTextGridPage, TextSizeLoseFocusHdl);
     m_pTextSizeMF->SetUpHdl(aSizeLink);
     m_pTextSizeMF->SetDownHdl(aSizeLink);
@@ -389,14 +389,14 @@ const sal_uInt16* SwTextGridPage::GetRanges()
 
 IMPL_LINK_TYPED(SwTextGridPage, CharorLineLoseFocusdHdl, Control&, rControl, void)
 {
-    CharorLineChangedHdl(static_cast<SpinField*>(&rControl));
+    CharorLineChangedHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
+IMPL_LINK_TYPED(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
 {
     //if in squared mode
     if ( m_bSquaredMode )
     {
-        if(m_pCharsPerLineNF == pField)
+        if(m_pCharsPerLineNF == &rField)
         {
             long nWidth = (long)(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nWidth), FUNIT_TWIP);
@@ -413,11 +413,11 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             m_pLinesPerPageNF->SetMax(nMaxLines);
         }
         SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
-    SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+        SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
     }
     else//in normal mode
     {
-        if(m_pLinesPerPageNF == pField)
+        if(m_pLinesPerPageNF == &rField)
         {
             long nHeight = static_cast< sal_Int32 >(m_aPageSize.Height() / m_pLinesPerPageNF->GetValue());
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nHeight), FUNIT_TWIP);
@@ -427,7 +427,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             m_nRubyUserValue = nHeight;
             m_bRubyUserValue = true;
         }
-        else if (m_pCharsPerLineNF == pField)
+        else if (m_pCharsPerLineNF == &rField)
         {
             long nWidth = static_cast< sal_Int32 >(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
             m_pCharWidthMF->SetValue(m_pCharWidthMF->Normalize(nWidth), FUNIT_TWIP);
@@ -435,19 +435,18 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
         }
     }
     GridModifyHdl(*m_pColorLB);
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwTextGridPage, TextSizeLoseFocusHdl, Control&, rControl, void)
 {
-    TextSizeChangedHdl(static_cast<SpinField*>(&rControl));
+    TextSizeChangedHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
+IMPL_LINK_TYPED(SwTextGridPage, TextSizeChangedHdl, SpinField&, rField, void)
 {
     //if in squared mode
     if( m_bSquaredMode )
     {
-        if (m_pTextSizeMF == pField)
+        if (m_pTextSizeMF == &rField)
         {
             m_bRubyUserValue = false;
 
@@ -472,14 +471,14 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
     }
     else
     {
-        if (m_pTextSizeMF == pField)
+        if (m_pTextSizeMF == &rField)
         {
             sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
             m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
             m_bRubyUserValue = false;
             SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
         }
-        else if (m_pCharWidthMF == pField)
+        else if (m_pCharWidthMF == &rField)
         {
             sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP)));
             sal_Int32 nMaxChar = 45 ;
@@ -491,7 +490,6 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
         //rubySize is disabled
     }
     GridModifyHdl(*m_pColorLB);
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwTextGridPage, GridTypeHdl, Button*, pButton, void)

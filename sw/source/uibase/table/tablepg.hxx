@@ -74,7 +74,7 @@ class SwFormatTablePage : public SfxTabPage
     DECL_LINK_TYPED( AutoClickHdl, Button*, void );
     DECL_LINK_TYPED( RelWidthClickHdl, Button*, void );
     void RightModify();
-    DECL_LINK( UpDownHdl, MetricField * );
+    DECL_LINK_TYPED( UpDownHdl, SpinField&, void );
     DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
 
     using TabPage::ActivatePage;
@@ -120,8 +120,8 @@ class SwTableColumnPage : public SfxTabPage
     void        Init(bool bWeb);
     DECL_LINK_TYPED( AutoClickHdl, Button *, void );
     void        ModifyHdl( MetricField* pEdit );
-    DECL_LINK( UpHdl, MetricField * );
-    DECL_LINK( DownHdl, MetricField * );
+    DECL_LINK_TYPED( UpHdl, SpinField&, void );
+    DECL_LINK_TYPED( DownHdl, SpinField&, void );
     DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( ModeHdl, Button *, void );
     void        UpdateCols( sal_uInt16 nAktPos );

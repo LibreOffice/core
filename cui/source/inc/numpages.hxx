@@ -429,7 +429,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     DECL_LINK_TYPED( LevelHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( EditModifyHdl_Impl, ListBox&, void);
-    DECL_LINK( DistanceHdl_Impl, MetricField * );
+    DECL_LINK_TYPED( DistanceHdl_Impl, SpinField&, void );
     DECL_LINK_TYPED( DistanceFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( RelativeHdl_Impl, Button*, void );
     DECL_LINK_TYPED( StandardHdl_Impl, Button*, void);
@@ -438,9 +438,9 @@ class SvxNumPositionTabPage : public SfxTabPage
     void ShowControlsDependingOnPosAndSpaceMode();
 
     DECL_LINK_TYPED(LabelFollowedByHdl_Impl, ListBox&, void);
-    DECL_LINK( ListtabPosHdl_Impl, MetricField* );
-    DECL_LINK( AlignAtHdl_Impl, MetricField* );
-    DECL_LINK( IndentAtHdl_Impl, MetricField* );
+    DECL_LINK_TYPED( ListtabPosHdl_Impl, SpinField&, void );
+    DECL_LINK_TYPED( AlignAtHdl_Impl, SpinField&, void );
+    DECL_LINK_TYPED( IndentAtHdl_Impl, SpinField&, void );
 
 public:
         SvxNumPositionTabPage(vcl::Window* pParent,

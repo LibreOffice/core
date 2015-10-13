@@ -34,10 +34,10 @@ protected:
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
     Rectangle       maDropDownRect; // noch nicht angebunden...
-    Link<>          maUpHdlLink;
-    Link<>          maDownHdlLink;
-    Link<>          maFirstHdlLink;
-    Link<>          maLastHdlLink;
+    Link<SpinField&,void>  maUpHdlLink;
+    Link<SpinField&,void>  maDownHdlLink;
+    Link<SpinField&,void>  maFirstHdlLink;
+    Link<SpinField&,void>  maLastHdlLink;
     bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
@@ -89,11 +89,11 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
-    void            SetUpHdl( const Link<>& rLink ) { maUpHdlLink = rLink; }
-    void            SetDownHdl( const Link<>& rLink ) { maDownHdlLink = rLink; }
-    const Link<>&   GetDownHdl() const { return maDownHdlLink; }
-    void            SetFirstHdl( const Link<>& rLink ) { maFirstHdlLink = rLink; }
-    void            SetLastHdl( const Link<>& rLink ) { maLastHdlLink = rLink; }
+    void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
+    void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
+    const Link<SpinField&,void>&   GetDownHdl() const { return maDownHdlLink; }
+    void            SetFirstHdl( const Link<SpinField&,void>& rLink ) { maFirstHdlLink = rLink; }
+    void            SetLastHdl( const Link<SpinField&,void>& rLink ) { maLastHdlLink = rLink; }
 
     virtual Size    CalcMinimumSize() const override;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;

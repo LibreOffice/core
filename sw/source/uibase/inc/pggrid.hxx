@@ -72,9 +72,9 @@ class SwTextGridPage: public SfxTabPage
     static void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
 
     DECL_LINK_TYPED(GridTypeHdl, Button*, void);
-    DECL_LINK(CharorLineChangedHdl, SpinField*);
+    DECL_LINK_TYPED(CharorLineChangedHdl, SpinField&, void);
     DECL_LINK_TYPED(CharorLineLoseFocusdHdl, Control&, void);
-    DECL_LINK(TextSizeChangedHdl, SpinField*);
+    DECL_LINK_TYPED(TextSizeChangedHdl, SpinField&, void);
     DECL_LINK_TYPED(TextSizeLoseFocusHdl, Control&, void);
     DECL_LINK_TYPED(GridModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(GridModifyClickHdl, Button*, void);

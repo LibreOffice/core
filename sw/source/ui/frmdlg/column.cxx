@@ -672,7 +672,7 @@ VclPtr<SfxTabPage> SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *
 bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
-        m_pCLNrEdt->GetDownHdl().Call(m_pCLNrEdt);
+        m_pCLNrEdt->GetDownHdl().Call(*m_pCLNrEdt);
     // set in ItemSet setzen
     // the current settings are already present
 

@@ -287,12 +287,12 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_aStrDateInfo = m_pToYearFT->GetText();
     m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
-    Link<> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
+    Link<SpinField&,void> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
     m_pYearValueField->SetDownHdl( aLink );
     m_pYearValueField->SetUpHdl( aLink );
     m_pYearValueField->SetLoseFocusHdl( LINK( this, OfaMiscTabPage, TwoFigureConfigFocusHdl ) );
     m_pYearValueField->SetFirstHdl( aLink );
-    TwoFigureConfigHdl(m_pYearValueField);
+    TwoFigureConfigHdl(*m_pYearValueField);
 
     SetExchangeSupport();
 }
@@ -400,7 +400,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
     {
         m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
-        TwoFigureConfigHdl(m_pYearValueField);
+        TwoFigureConfigHdl(*m_pYearValueField);
     }
     else
     {
@@ -435,16 +435,15 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 
 IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
 {
-    TwoFigureConfigHdl(static_cast<NumericField*>(&rControl));
+    TwoFigureConfigHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
+IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigHdl, SpinField&, rEd, void )
 {
     sal_Int64 nNum = m_pYearValueField->GetValue();
     OUString aOutput(OUString::number(nNum));
     m_pYearValueField->SetText(aOutput);
     m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
-    TwoFigureHdl( pEd );
-    return 0;
+    TwoFigureHdl( static_cast<NumericField*>(&rEd) );
 }
 
 class CanvasSettings

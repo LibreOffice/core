@@ -842,13 +842,18 @@ void Slider::ImplSetFieldLink(const Link<>& rLink)
     if (mpLinkedField != nullptr)
     {
         mpLinkedField->SetModifyHdl(rLink);
-        mpLinkedField->SetUpHdl(rLink);
-        mpLinkedField->SetDownHdl(rLink);
-        mpLinkedField->SetFirstHdl(rLink);
-        mpLinkedField->SetLastHdl(rLink);
+        mpLinkedField->SetUpHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
+        mpLinkedField->SetDownHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
+        mpLinkedField->SetFirstHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
+        mpLinkedField->SetLastHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
     }
 }
 
+IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldSpinnerHdl, SpinField&, void)
+{
+    if (mpLinkedField)
+        mpLinkedField->GetModifyHdl().Call(&mpLinkedField);
+}
 IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldLoseFocusHdl, Control&, void)
 {
     if (mpLinkedField)

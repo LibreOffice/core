@@ -141,7 +141,7 @@ SwEnvFormatPage::SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pSizeHeightField, aMetric);
 
     // Install handlers
-    Link<> aLk = LINK(this, SwEnvFormatPage, ModifyHdl);
+    Link<SpinField&,void> aLk = LINK(this, SwEnvFormatPage, ModifyHdl);
     m_pAddrLeftField->SetUpHdl( aLk );
     m_pAddrTopField->SetUpHdl( aLk );
     m_pSendLeftField->SetUpHdl( aLk );
@@ -220,9 +220,9 @@ void SwEnvFormatPage::dispose()
 
 IMPL_LINK_TYPED( SwEnvFormatPage, LoseFocusHdl, Control&, rControl, void )
 {
-    ModifyHdl(static_cast<Edit*>(&rControl));
+    ModifyHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
 {
     long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
     long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
@@ -230,7 +230,7 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
     long lWidth  = std::max(lWVal, lHVal);
     long lHeight = std::min(lWVal, lHVal);
 
-    if (pEdit == m_pSizeWidthField || pEdit == m_pSizeHeightField)
+    if (&rEdit == m_pSizeWidthField || &rEdit == m_pSizeHeightField)
     {
         long nRotatedWidth = lHeight;
         long nRotatedHeight = lWidth;
@@ -255,7 +255,6 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
         SetMinMax();
         m_pPreview->Invalidate();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )

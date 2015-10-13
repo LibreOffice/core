@@ -2785,37 +2785,37 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
     }
     m_pAlign2LB->SetDropDownLineCount( m_pAlign2LB->GetEntryCount() );
 
-    Link<> aLk = LINK(this, SvxNumPositionTabPage, DistanceHdl_Impl);
+    Link<SpinField&,void> aLk3 = LINK(this, SvxNumPositionTabPage, DistanceHdl_Impl);
     Link<Control&,void> aLk2 = LINK(this, SvxNumPositionTabPage, DistanceFocusHdl_Impl);
 
-    m_pDistBorderMF->SetUpHdl(aLk);
-    m_pDistBorderMF->SetDownHdl(aLk);
+    m_pDistBorderMF->SetUpHdl(aLk3);
+    m_pDistBorderMF->SetDownHdl(aLk3);
     m_pDistBorderMF->SetLoseFocusHdl(aLk2);
 
-    m_pDistNumMF->SetUpHdl(aLk);
-    m_pDistNumMF->SetDownHdl(aLk);
+    m_pDistNumMF->SetUpHdl(aLk3);
+    m_pDistNumMF->SetDownHdl(aLk3);
     m_pDistNumMF->SetLoseFocusHdl(aLk2);
 
-    m_pIndentMF->SetUpHdl(aLk);
-    m_pIndentMF->SetDownHdl(aLk);
+    m_pIndentMF->SetUpHdl(aLk3);
+    m_pIndentMF->SetDownHdl(aLk3);
     m_pIndentMF->SetLoseFocusHdl(aLk2);
 
     m_pLabelFollowedByLB->SetDropDownLineCount( m_pLabelFollowedByLB->GetEntryCount() );
     m_pLabelFollowedByLB->SetSelectHdl( LINK(this, SvxNumPositionTabPage, LabelFollowedByHdl_Impl) );
 
-    aLk = LINK(this, SvxNumPositionTabPage, ListtabPosHdl_Impl);
-    m_pListtabMF->SetUpHdl(aLk);
-    m_pListtabMF->SetDownHdl(aLk);
+    aLk3 = LINK(this, SvxNumPositionTabPage, ListtabPosHdl_Impl);
+    m_pListtabMF->SetUpHdl(aLk3);
+    m_pListtabMF->SetDownHdl(aLk3);
     m_pListtabMF->SetLoseFocusHdl(aLk2);
 
-    aLk = LINK(this, SvxNumPositionTabPage, AlignAtHdl_Impl);
-    m_pAlignedAtMF->SetUpHdl(aLk);
-    m_pAlignedAtMF->SetDownHdl(aLk);
+    aLk3 = LINK(this, SvxNumPositionTabPage, AlignAtHdl_Impl);
+    m_pAlignedAtMF->SetUpHdl(aLk3);
+    m_pAlignedAtMF->SetDownHdl(aLk3);
     m_pAlignedAtMF->SetLoseFocusHdl(aLk2);
 
-    aLk = LINK(this, SvxNumPositionTabPage, IndentAtHdl_Impl);
-    m_pIndentAtMF->SetUpHdl(aLk);
-    m_pIndentAtMF->SetDownHdl(aLk);
+    aLk3 = LINK(this, SvxNumPositionTabPage, IndentAtHdl_Impl);
+    m_pIndentAtMF->SetUpHdl(aLk3);
+    m_pIndentAtMF->SetDownHdl(aLk3);
     m_pIndentAtMF->SetLoseFocusHdl(aLk2);
 
     m_pLevelLB->EnableMultiSelection(true);
@@ -3137,8 +3137,8 @@ SfxTabPage::sfxpg SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
     if(_pSet)
     {
         if(m_pDistBorderMF->IsEnabled())
-            DistanceHdl_Impl(m_pDistBorderMF);
-        DistanceHdl_Impl(m_pIndentMF);
+            DistanceHdl_Impl(*m_pDistBorderMF);
+        DistanceHdl_Impl(*m_pIndentMF);
         FillItemSet(_pSet);
     }
     return LEAVE_PAGE;
@@ -3383,20 +3383,20 @@ IMPL_LINK_TYPED( SvxNumPositionTabPage, LevelHdl_Impl, ListBox&, rBox, void )
 
 IMPL_LINK_TYPED( SvxNumPositionTabPage, DistanceFocusHdl_Impl, Control&, rControl, void )
 {
-    DistanceHdl_Impl(static_cast<MetricField*>(&rControl));
+    DistanceHdl_Impl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
+IMPL_LINK_TYPED( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
 {
     if(bInInintControl)
-        return 0;
-    long nValue = GetCoreValue(*pFld, eCoreUnit);
+        return;
+    long nValue = GetCoreValue(static_cast<MetricField&>(rFld), eCoreUnit);
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt( pActNum->GetLevel( i ) );
-            if (pFld == m_pDistBorderMF)
+            if (&rFld == m_pDistBorderMF)
             {
 
                 if(m_pRelativeCB->IsChecked())
@@ -3420,11 +3420,11 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
                     aNumFmt.SetAbsLSpace( (short)nValue - aNumFmt.GetFirstLineOffset());
                 }
             }
-            else if (pFld == m_pDistNumMF)
+            else if (&rFld == m_pDistNumMF)
             {
                 aNumFmt.SetCharTextDistance( (short)nValue );
             }
-            else if (pFld == m_pIndentMF)
+            else if (&rFld == m_pIndentMF)
             {
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
@@ -3443,8 +3443,6 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
     {
         m_pDistBorderMF->SetText("");
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxNumPositionTabPage, RelativeHdl_Impl, Button*, pBox, void )
@@ -3545,10 +3543,10 @@ IMPL_LINK_NOARG_TYPED(SvxNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, 
     SetModified();
 }
 
-IMPL_LINK( SvxNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
+IMPL_LINK_TYPED( SvxNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue( *pFld, eCoreUnit );
+    const long nValue = GetCoreValue( static_cast<MetricField&>(rFld), eCoreUnit );
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3564,14 +3562,12 @@ IMPL_LINK( SvxNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
     }
 
     SetModified();
-
-    return 0;
 }
 
-IMPL_LINK( SvxNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
+IMPL_LINK_TYPED( SvxNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue( *pFld, eCoreUnit );
+    const long nValue = GetCoreValue( static_cast<MetricField&>(rFld), eCoreUnit );
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3588,14 +3584,12 @@ IMPL_LINK( SvxNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
     }
 
     SetModified();
-
-    return 0;
 }
 
-IMPL_LINK( SvxNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
+IMPL_LINK_TYPED( SvxNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue( *pFld, eCoreUnit );
+    const long nValue = GetCoreValue( static_cast<MetricField&>(rFld), eCoreUnit );
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3615,8 +3609,6 @@ IMPL_LINK( SvxNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
     }
 
     SetModified();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxNumPositionTabPage, StandardHdl_Impl, Button*, void)

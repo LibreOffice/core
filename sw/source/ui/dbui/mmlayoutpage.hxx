@@ -67,7 +67,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     DECL_LINK_TYPED(PreviewLoadedHdl_Impl, SwOneExampleFrame&, void);
     DECL_LINK_TYPED(ZoomHdl_Impl, ListBox&, void);
-    DECL_LINK(ChangeAddressHdl_Impl, void *);
+    DECL_LINK_TYPED(ChangeAddressHdl_Impl, SpinField&, void);
     DECL_LINK_TYPED(ChangeAddressLoseFocusHdl_Impl, Control&, void);
     DECL_LINK_TYPED(GreetingsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(AlignToTextHdl_Impl, Button*, void);

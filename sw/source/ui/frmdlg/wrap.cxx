@@ -95,7 +95,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    Link<> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
+    Link<SpinField&,void> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
     Link<Control&,void> aLk3 = LINK(this, SwWrapTabPage, RangeLoseFocusHdl);
     m_pLeftMarginED->SetUpHdl(aLk);
     m_pLeftMarginED->SetDownHdl(aLk);
@@ -491,8 +491,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pTopMarginED->SetMax(m_pTopMarginED->Normalize(nTop), FUNIT_TWIP);
         m_pBottomMarginED->SetMax(m_pBottomMarginED->Normalize(nBottom), FUNIT_TWIP);
 
-        RangeModifyHdl(m_pLeftMarginED);
-        RangeModifyHdl(m_pTopMarginED);
+        RangeModifyHdl(*m_pLeftMarginED);
+        RangeModifyHdl(*m_pTopMarginED);
     }
 
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
@@ -589,19 +589,20 @@ SfxTabPage::sfxpg SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 // range check
 IMPL_LINK_TYPED( SwWrapTabPage, RangeLoseFocusHdl, Control&, rControl, void )
 {
-    RangeModifyHdl( static_cast<MetricField*>(&rControl) );
+    RangeModifyHdl( static_cast<SpinField&>(rControl) );
 }
-IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField*, pEdit )
+IMPL_LINK_TYPED( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
 {
-    sal_Int64 nValue = pEdit->GetValue();
+    MetricField& rEdit = static_cast<MetricField&>(rSpin);
+    sal_Int64 nValue = rEdit.GetValue();
     MetricField *pOpposite = 0;
-    if (pEdit == m_pLeftMarginED)
+    if (&rEdit == m_pLeftMarginED)
         pOpposite = m_pRightMarginED;
-    else if (pEdit == m_pRightMarginED)
+    else if (&rEdit == m_pRightMarginED)
         pOpposite = m_pLeftMarginED;
-    else if (pEdit == m_pTopMarginED)
+    else if (&rEdit == m_pTopMarginED)
         pOpposite = m_pBottomMarginED;
-    else if (pEdit == m_pBottomMarginED)
+    else if (&rEdit == m_pBottomMarginED)
         pOpposite = m_pTopMarginED;
 
     OSL_ASSERT(pOpposite);
@@ -610,10 +611,9 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField*, pEdit )
     {
         sal_Int64 nOpposite = pOpposite->GetValue();
 
-        if (nValue + nOpposite > std::max(pEdit->GetMax(), pOpposite->GetMax()))
+        if (nValue + nOpposite > std::max(rEdit.GetMax(), pOpposite->GetMax()))
             pOpposite->SetValue(pOpposite->GetMax() - nValue);
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
