@@ -320,7 +320,7 @@ Any SAL_CALL AccessibleGridControlTable::queryInterface( const uno::Type& rType 
 {
     Any aAny( AccessibleGridControlTableBase::queryInterface( rType ) );
     return aAny.hasValue() ?
-        aAny : AccessibleGridControlTableSelectionImplHelper::queryInterface( rType );
+        aAny : AccessibleGridControlTableImplHelper1::queryInterface( rType );
 }
 
 void SAL_CALL AccessibleGridControlTable::acquire() throw ()

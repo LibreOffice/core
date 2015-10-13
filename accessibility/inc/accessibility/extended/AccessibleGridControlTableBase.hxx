@@ -22,14 +22,14 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLEBASE_HXX
 
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 
 
 namespace accessibility {
 
-typedef ::cppu::ImplHelper < css::accessibility::XAccessibleTable >
+typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleTable >
         AccessibleGridControlTableImplHelper;
 
 /** The Grid Control accessible table objects inherit from this base class. It
