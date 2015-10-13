@@ -310,13 +310,13 @@ void FilterHelper::SetFilters()
 }
 
 void FilterHelper::appendFilter(const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilterString)
-throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) {
+throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle, "filter", aFilterString);
 
     SolarMutexGuard aGuard;
 
     if( FilterNameExists( aTitle ) ) {
-        throw com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
     // ensure that we have a filter list
@@ -331,7 +331,7 @@ throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 }
 
 void FilterHelper::setCurrentFilter( const ::rtl::OUString& aTitle )
-throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) {
+throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aTitle", OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8).getStr());
 
     SetCurFilter(aTitle);
@@ -340,7 +340,7 @@ throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 }
 
 ::rtl::OUString SAL_CALL FilterHelper::getCurrentFilter(  )
-throw( ::com::sun::star::uno::RuntimeException ) {
+throw( css::uno::RuntimeException ) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
     ::rtl::OUString sReturn = (m_aCurrentFilter);
@@ -350,8 +350,8 @@ throw( ::com::sun::star::uno::RuntimeException ) {
     return sReturn;
 }
 
-void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
-throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) {
+void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters )
+throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) {
 
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", OUStringToOString(sGroupTitle, RTL_TEXTENCODING_UTF8).getStr());
 
@@ -373,8 +373,8 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
         m_pFilterList->push_back(FilterEntry(dash, emptyList));
     }
 
-    const com::sun::star::beans::StringPair* pSubFilters   = aFilters.getConstArray();
-    const com::sun::star::beans::StringPair* pSubFiltersEnd = pSubFilters + aFilters.getLength();
+    const css::beans::StringPair* pSubFilters   = aFilters.getConstArray();
+    const css::beans::StringPair* pSubFiltersEnd = pSubFilters + aFilters.getLength();
     for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters ) {
         appendFilter(pSubFilters->First, pSubFilters->Second);
     }

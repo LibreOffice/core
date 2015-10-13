@@ -73,13 +73,13 @@ protected:
     NavigationServices_DialogType m_nDialogType;
 
     void implsetTitle( const OUString& aTitle )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     void implsetDisplayDirectory( const OUString& rDirectory )
-        throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     OUString implgetDisplayDirectory(  )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     void implInitialize( );
 

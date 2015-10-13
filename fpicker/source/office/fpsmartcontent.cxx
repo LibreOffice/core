@@ -231,7 +231,7 @@ namespace svt
             // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
             // now we're definitely invalid
             m_eState = INVALID;

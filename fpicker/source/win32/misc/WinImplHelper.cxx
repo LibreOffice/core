@@ -350,7 +350,7 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
 
 
 void SAL_CALL CheckboxSetState(
-    HWND hwnd, const ::com::sun::star::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    HWND hwnd, const css::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );

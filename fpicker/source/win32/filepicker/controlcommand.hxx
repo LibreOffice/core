@@ -75,7 +75,7 @@ public:
     CValueControlCommand(
         sal_Int16 aControlId,
         sal_Int16 aControlAction,
-        const ::com::sun::star::uno::Any& aValue );
+        const css::uno::Any& aValue );
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState );
 
@@ -83,11 +83,11 @@ public:
 
     sal_Int16 SAL_CALL getControlAction( ) const;
 
-    ::com::sun::star::uno::Any SAL_CALL getValue( ) const;
+    css::uno::Any SAL_CALL getValue( ) const;
 
 private:
-    sal_Int16                  m_aControlAction;
-    ::com::sun::star::uno::Any m_aValue;
+    sal_Int16     m_aControlAction;
+    css::uno::Any m_aValue;
 };
 
 

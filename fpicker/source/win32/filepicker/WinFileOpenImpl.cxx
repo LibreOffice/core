@@ -184,9 +184,9 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
     sal_Int16 rc = CFileOpenDialog::doModal();
 
     if (1 == rc)
-        rc = ::com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
+        rc = css::ui::dialogs::ExecutableDialogResults::OK;
     else if (0 == rc)
-        rc = ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+        rc = css::ui::dialogs::ExecutableDialogResults::CANCEL;
     else
         throw uno::RuntimeException(
             "Error executing dialog",

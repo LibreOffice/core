@@ -46,7 +46,7 @@ namespace svt
     using namespace     ::comphelper;
 
 
-    OCommonPicker::OCommonPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory )
+    OCommonPicker::OCommonPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory )
         :OCommonPicker_Base( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xORB( _rxFactory )

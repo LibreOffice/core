@@ -123,7 +123,7 @@ void SAL_CALL CFilePicker::removeFilePickerListener(const uno::Reference<XFilePi
 
 void SAL_CALL CFilePicker::disposing(const lang::EventObject& aEvent) throw(uno::RuntimeException)
 {
-    uno::Reference<XFilePickerListener> xFilePickerListener(aEvent.Source, ::com::sun::star::uno::UNO_QUERY);
+    uno::Reference<XFilePickerListener> xFilePickerListener(aEvent.Source, css::uno::UNO_QUERY);
 
     if (xFilePickerListener.is())
         removeFilePickerListener(xFilePickerListener);

@@ -62,14 +62,12 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( OUString( "applicat.rdb" ), sal_True );
+    Reference< XMultiServiceFactory > xMS = cppu::createRegistryServiceFactory( OUString( "applicat.rdb" ), sal_True );
 
-   com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> xMSch;
-   com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xComponentContext;
-           xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
-       xMSch.set(xComponentContext->getServiceManager(), com::sun::star::uno::UNO_QUERY);
-       comphelper::setProcessServiceFactory(xMSch);
+    css::uno::Reference< css::uno::XComponentContext > xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+    css::uno::Reference< css::lang::XMultiServiceFactory> xMSch;
+    xMSch.set(xComponentContext->getServiceManager(), css::uno::UNO_QUERY);
+    comphelper::setProcessServiceFactory(xMSch);
 
     comphelper::setProcessServiceFactory(xMS);
 

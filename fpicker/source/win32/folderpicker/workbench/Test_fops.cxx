@@ -117,7 +117,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
         rootDir = xFolderPicker->getDisplayDirectory( );
         selectedDir = xFolderPicker->getDirectory( );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         MessageBox( NULL, "Exception caught!", "Error", MB_OK );
     }

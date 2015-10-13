@@ -31,10 +31,6 @@
 
 #include <set>
 
-// @@@ using namespace com::sun::star::ucb;
-
-
-
 class SvTabListBox;
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
@@ -73,8 +69,8 @@ public:
     virtual SvtFileView* GetView() = 0;
 
     virtual void SetHasFilename( bool bHasFilename ) = 0;
-    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) = 0;
-    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const = 0;
+    virtual void SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) = 0;
+    virtual const css::uno::Sequence< OUString >& GetBlackList() const = 0;
     virtual void SetStandardDir( const OUString& rStdDir ) = 0;
     virtual const OUString& GetStandardDir() const = 0;
     virtual void SetPath( const OUString& rNewURL ) = 0;
@@ -87,7 +83,7 @@ public:
 
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) = 0;
     virtual void AddFilterGroup( const OUString& _rFilter,
-                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) = 0;
+                                const css::uno::Sequence< css::beans::StringPair >& rFilters ) = 0;
     virtual OUString GetCurFilter() const = 0;
     virtual void SetCurFilter( const OUString& rFilter ) = 0;
     virtual void FilterSelect() = 0;
@@ -103,7 +99,7 @@ public:
     virtual sal_Int32 getAvailableWidth() = 0;
     virtual sal_Int32 getAvailableHeight() = 0;
 
-    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) = 0;
+    virtual void setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) = 0;
 
     virtual bool getShowState() = 0;
 };

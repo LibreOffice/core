@@ -222,7 +222,7 @@ namespace
                         {
                             bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         }
-                        catch( const ::com::sun::star::uno::Exception& )
+                        catch( const css::uno::Exception& )
                         {
                             DBG_WARNING( "Exception in lcl_autoUpdateFileExtension" );
                         }
@@ -1866,7 +1866,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
 
         // let and interaction handler handle this exception
         ::comphelper::OInteractionRequest* pRequest = NULL;
-        Reference< ::com::sun::star::task::XInteractionRequest > xRequest = pRequest =
+        Reference< css::task::XInteractionRequest > xRequest = pRequest =
             new ::comphelper::OInteractionRequest( makeAny( aException ) );
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
@@ -2157,14 +2157,14 @@ void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
     _pImp->SetStandardDir( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
-void SvtFileDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+void SvtFileDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
 {
     _pImp->SetBlackList( rBlackList );
 }
 
 
 
-const ::com::sun::star::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
+const css::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
 {
     return _pImp->GetBlackList();
 }

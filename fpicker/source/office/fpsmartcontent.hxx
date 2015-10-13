@@ -49,12 +49,12 @@ namespace svt
         };
 
     private:
-        OUString                                                                  m_sURL;
-        ::ucbhelper::Content*                                                            m_pContent;
-        State                                                                            m_eState;
-        ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >  m_xCmdEnv;
-        ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler > m_xOwnInteraction;
-        ::svt::OFilePickerInteractionHandler*                                            m_pOwnInteraction;
+        OUString                                               m_sURL;
+        ::ucbhelper::Content*                                  m_pContent;
+        State                                                  m_eState;
+        css::uno::Reference < css::ucb::XCommandEnvironment >  m_xCmdEnv;
+        css::uno::Reference < css::task::XInteractionHandler > m_xOwnInteraction;
+        ::svt::OFilePickerInteractionHandler*                  m_pOwnInteraction;
 
     private:
         enum Type { Folder, Document };

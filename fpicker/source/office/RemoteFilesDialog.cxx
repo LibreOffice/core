@@ -1179,13 +1179,13 @@ void RemoteFilesDialog::SetHasFilename( bool )
 {
 }
 
-void RemoteFilesDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+void RemoteFilesDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
 {
     m_aBlackList = rBlackList;
     m_pTreeView->SetBlackList( rBlackList );
 }
 
-const ::com::sun::star::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
+const css::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
 {
     return m_aBlackList;
 }
@@ -1233,7 +1233,7 @@ void RemoteFilesDialog::setCurrentFileText( const OUString& rText, bool bSelectA
 
 void RemoteFilesDialog::AddFilterGroup(
                                   const OUString& rFilter,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters )
+                                  const css::uno::Sequence< css::beans::StringPair >& rFilters )
 {
     AddFilter( rFilter, OUString() );
     const StringPair* pSubFilters       =               rFilters.getConstArray();
@@ -1446,7 +1446,7 @@ sal_Int32 RemoteFilesDialog::getAvailableHeight()
     return 0;
 }
 
-void RemoteFilesDialog::setImage( sal_Int16, const ::com::sun::star::uno::Any& )
+void RemoteFilesDialog::setImage( sal_Int16, const css::uno::Any& )
 {
     // This dialog doesn't contain preview
 }

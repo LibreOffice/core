@@ -64,7 +64,7 @@ enum SvtRemoteDlgType
 };
 
 typedef std::shared_ptr< Place > ServicePtr;
-typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
+typedef css::uno::Sequence< OUString >  OUStringList;
 
 class FileViewContainer;
 
@@ -84,8 +84,8 @@ public:
     virtual SvtFileView* GetView() override;
 
     virtual void SetHasFilename( bool ) override;
-    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) override;
-    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const override;
+    virtual void SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) override;
+    virtual const css::uno::Sequence< OUString >& GetBlackList() const override;
     virtual void SetStandardDir( const OUString& rStdDir ) override;
     virtual const OUString& GetStandardDir() const override;
     virtual void SetPath( const OUString& rNewURL ) override;
@@ -99,7 +99,7 @@ public:
 
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) override;
     virtual void AddFilterGroup( const OUString& _rFilter,
-                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) override;
+                                const css::uno::Sequence< css::beans::StringPair >& rFilters ) override;
     virtual OUString GetCurFilter() const override;
     virtual void SetCurFilter( const OUString& rFilter ) override;
     virtual void FilterSelect() override;
@@ -115,7 +115,7 @@ public:
     virtual sal_Int32 getAvailableWidth() override;
     virtual sal_Int32 getAvailableHeight() override;
 
-    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) override;
+    virtual void setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) override;
 
     virtual bool getShowState() override;
 
@@ -146,7 +146,7 @@ private:
 
     ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
 
-    ::com::sun::star::uno::Sequence< OUString > m_aBlackList;
+    css::uno::Sequence< OUString > m_aBlackList;
     ::svt::IFilePickerListener* m_pFileNotifier;
 
     VclPtr< PushButton > m_pOk_btn;

@@ -33,7 +33,7 @@ namespace svt
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-    OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )
+    OFilePickerInteractionHandler::OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
         ,m_bUsed( false )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )

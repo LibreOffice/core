@@ -56,19 +56,19 @@ private:
 class CValueCommandResult : public CControlCommandResult
 {
 public:
-    CValueCommandResult( sal_Bool bResult, const ::com::sun::star::uno::Any& aValue ) :
+    CValueCommandResult( sal_Bool bResult, const css::uno::Any& aValue ) :
         CControlCommandResult( bResult ),
         m_aValue( aValue )
     {
     }
 
-    ::com::sun::star::uno::Any SAL_CALL getValue( ) const
+    css::uno::Any SAL_CALL getValue( ) const
     {
         return m_aValue;
     }
 
 private:
-    ::com::sun::star::uno::Any m_aValue;
+    css::uno::Any m_aValue;
 };
 
 

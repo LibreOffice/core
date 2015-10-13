@@ -147,7 +147,7 @@ namespace svt
 
         if ( eTimeout == eResult )
         {
-            SvtFileDialog::displayIOException( m_sURL, ::com::sun::star::ucb::IOErrorCode_CANT_READ );
+            SvtFileDialog::displayIOException( m_sURL, css::ucb::IOErrorCode_CANT_READ );
             return;
         }
 

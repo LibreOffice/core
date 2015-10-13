@@ -37,59 +37,59 @@
 
 class CFolderPicker :
     public  cppu::WeakImplHelper<
-                com::sun::star::ui::dialogs::XFolderPicker2,
-                com::sun::star::lang::XServiceInfo >
+                css::ui::dialogs::XFolderPicker2,
+                css::lang::XServiceInfo >
 {
 public:
 
     // ctor/dtor
-    CFolderPicker( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+    CFolderPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
 
 
     // XExecutableDialog
 
 
     virtual void SAL_CALL setTitle( const OUString& aTitle )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL execute(  )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
 
     // XFolderPicker functions
 
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     virtual OUString SAL_CALL getDisplayDirectory(  )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     virtual OUString SAL_CALL getDirectory( )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setDescription( const OUString& aDescription )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
 
     // XServiceInfo
 
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 
 
     // XCancellable
 
 
     virtual void SAL_CALL cancel( )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
 
     // overwrite base class method, which is called
@@ -99,9 +99,9 @@ public:
     virtual void SAL_CALL disposing();
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-    std::unique_ptr< CWinFolderPickerImpl >   m_pFolderPickerImpl;
-    osl::Mutex  m_aMutex;
+    css::uno::Reference< css::lang::XMultiServiceFactory >  m_xServiceMgr;
+    std::unique_ptr< CWinFolderPickerImpl >                 m_pFolderPickerImpl;
+    osl::Mutex                                              m_aMutex;
 
 // prevent copy and assignment
 private:

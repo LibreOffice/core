@@ -47,33 +47,33 @@ public:
     virtual ~PreviewBase();
 
     virtual sal_Int32 SAL_CALL getTargetColorDepth()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableWidth()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableHeight()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getShowState()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage);
+    virtual void SAL_CALL getImage(sal_Int16& aImageFormat,css::uno::Any& aImage);
 
     sal_Bool SAL_CALL getImaginaryShowState() const;
 
     virtual HWND SAL_CALL getWindowHandle() const;
 
 protected:
-    ::com::sun::star::uno::Any m_ImageData;
-    sal_Int16                  m_ImageFormat;
-    sal_Bool                   m_bShowState;
+    css::uno::Any m_ImageData;
+    sal_Int16     m_ImageFormat;
+    sal_Bool      m_bShowState;
 };
 
 

@@ -32,12 +32,12 @@
 class CFilePickerEventNotification : public CEventNotification
 {
 public:
-    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)();
+    typedef void (SAL_CALL css::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)();
 
 public:
     CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod);
 
-    virtual void SAL_CALL notifyEventListener( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xListener );
+    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
 
 private:
     EventListenerMethod_t m_EventListenerMethod;
@@ -50,15 +50,15 @@ private:
 class CFilePickerParamEventNotification : public CEventNotification
 {
 public:
-    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)(const ::com::sun::star::ui::dialogs::FilePickerEvent&);
+    typedef void (SAL_CALL css::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)(const css::ui::dialogs::FilePickerEvent&);
 
-    CFilePickerParamEventNotification(EventListenerMethod_t EventListenerMethod, const ::com::sun::star::ui::dialogs::FilePickerEvent& FilePickerEvent);
+    CFilePickerParamEventNotification(EventListenerMethod_t EventListenerMethod, const css::ui::dialogs::FilePickerEvent& FilePickerEvent);
 
-    virtual void SAL_CALL notifyEventListener( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xListener );
+    virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
 
 private:
-    EventListenerMethod_t                        m_EventListenerMethod;
-    com::sun::star::ui::dialogs::FilePickerEvent m_FilePickerEvent;
+    EventListenerMethod_t             m_EventListenerMethod;
+    css::ui::dialogs::FilePickerEvent m_FilePickerEvent;
 };
 
 

@@ -631,7 +631,7 @@ void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent ) th
 
     SolarMutexGuard aGuard;
 
-    uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, ::com::sun::star::uno::UNO_QUERY );
+    uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, css::uno::UNO_QUERY );
 
     if( xFilePickerListener.is() )
         removeFilePickerListener( xFilePickerListener );

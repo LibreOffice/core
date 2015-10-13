@@ -33,8 +33,8 @@
 #endif
 #include <com/sun/star/uno/Any.hxx>
 
-typedef void ( SAL_CALL *CTRL_SETVALUE_FUNCTION_T)( HWND, const ::com::sun::star::uno::Any&, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&, sal_Int16 );
-typedef ::com::sun::star::uno::Any ( SAL_CALL *CTRL_GETVALUE_FUNCTION_T )( HWND );
+typedef void ( SAL_CALL *CTRL_SETVALUE_FUNCTION_T)( HWND, const css::uno::Any&, const css::uno::Reference< css::uno::XInterface >&, sal_Int16 );
+typedef css::uno::Any ( SAL_CALL *CTRL_GETVALUE_FUNCTION_T )( HWND );
 
 // the currently supported control classes
 enum CTRL_CLASS

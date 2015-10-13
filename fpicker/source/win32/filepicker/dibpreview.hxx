@@ -54,22 +54,22 @@ public:
     // preview interface implementation
 
     virtual sal_Int32 SAL_CALL getTargetColorDepth()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableWidth()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAvailableHeight()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage)
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const css::uno::Any& aImage)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL setShowState(sal_Bool bShowState)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getShowState()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual HWND SAL_CALL getWindowHandle() const;
 
@@ -84,7 +84,7 @@ private:
 private:
     HINSTANCE  m_Instance;
     HWND       m_Hwnd;
-    com::sun::star::uno::Sequence<sal_Int8> m_Image;
+    css::uno::Sequence<sal_Int8> m_Image;
     osl::Mutex  m_PaintLock;
 
     // the preview window class has to be registered only

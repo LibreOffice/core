@@ -62,10 +62,10 @@ public:
     // the CEventNotification instance
     void SAL_CALL notifyEvent(CEventNotification* EventNotification);
 
-    void SAL_CALL addListener   (const ::com::sun::star::uno::Type&                                           aType    ,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener);
-    void SAL_CALL removeListener(const ::com::sun::star::uno::Type&                                           aType    ,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener);
+    void SAL_CALL addListener   (const css::uno::Type&                                           aType    ,
+                                 const css::uno::Reference< css::uno::XInterface >& xListener);
+    void SAL_CALL removeListener(const css::uno::Type&                                           aType    ,
+                                 const css::uno::Reference< css::uno::XInterface >& xListener);
 
 private:
     size_t              SAL_CALL getEventListSize();
