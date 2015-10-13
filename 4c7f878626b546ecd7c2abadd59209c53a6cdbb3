@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_99060e1f",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-13T11:53:06Z",
+      "side": 1,
+      "message": "This should be a different string. For the user this is just one undo action.",
+      "revId": "4c7f878626b546ecd7c2abadd59209c53a6cdbb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f4fe3104",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-13T11:53:06Z",
+      "side": 1,
+      "message": "As mentioned in my first comment it looks a bit strange with formulas. How does MSO handle \u003d1234 with ALT+X?",
+      "revId": "4c7f878626b546ecd7c2abadd59209c53a6cdbb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
