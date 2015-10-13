@@ -1222,6 +1222,11 @@ void OutlinerView::SetSelection( const ESelection& rSel )
     pEditView->SetSelection( rSel );
 }
 
+void OutlinerView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
+{
+    pEditView->GetSelectionRectangles(rLogicRects);
+}
+
 void OutlinerView::SetReadOnly( bool bReadOnly )
 {
     pEditView->SetReadOnly( bReadOnly );

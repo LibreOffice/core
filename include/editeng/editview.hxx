@@ -122,6 +122,8 @@ public:
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
     bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    /// Returns the rectangles of the current selection in TWIPs.
+    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
 
     bool            IsInsertMode() const;
     void            SetInsertMode( bool bInsert );

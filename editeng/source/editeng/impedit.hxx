@@ -319,6 +319,7 @@ public:
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, vcl::Region* pRegion = NULL, OutputDevice* pTargetDevice = NULL );
+    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects);
 
     vcl::Window*    GetWindow() const           { return pOutWin; }
 

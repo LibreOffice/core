@@ -185,12 +185,10 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
     // pRegion: When not NULL, then only calculate Region.
 
+    vcl::Region* pOldRegion = pRegion;
     vcl::Region aRegion;
-    if (isTiledRendering())
-    {
-        assert(!pRegion);
+    if (isTiledRendering() && !pRegion)
         pRegion = &aRegion;
-    }
 
     tools::PolyPolygon* pPolyPoly = NULL;
     if ( pRegion )
@@ -326,7 +324,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     {
         *pRegion = vcl::Region( *pPolyPoly );
 
-        if (isTiledRendering())
+        if (isTiledRendering() && !pOldRegion)
         {
             bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
             OString sRectangle;
@@ -375,6 +373,20 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
             pTarget->SetClipRegion( aOldRegion );
         else
             pTarget->SetClipRegion();
+    }
+}
+
+void ImpEditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects)
+{
+    bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
+    vcl::Region aRegion;
+    DrawSelection(aEditSelection, &aRegion);
+    aRegion.GetRegionRectangles(rLogicRects);
+
+    for (Rectangle& rRectangle : rLogicRects)
+    {
+        if (bMm100ToTwip)
+            rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
     }
 }
 

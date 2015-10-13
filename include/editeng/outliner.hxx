@@ -314,6 +314,7 @@ public:
 
     void        SetVisArea( const Rectangle& rRect );
     void        SetSelection( const ESelection& );
+    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
 
     void        RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0, bool bKeepLanguages = false );
     void        RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
