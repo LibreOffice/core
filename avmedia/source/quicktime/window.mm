@@ -73,7 +73,7 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
         [mpParentView setAutoresizesSubviews: YES];
     }
 
-    OSL_TRACE ("Window::Window");
+    SAL_INFO ( "avmedia.quicktime", "Window::Window" );
 }
 
 Window::~Window()
@@ -144,7 +144,7 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 void SAL_CALL Window::setVisible( sal_Bool )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Window::setVisible");
+    SAL_INFO ( "avmedia.quicktime", "Window::setVisible" );
 
 }
 
@@ -157,7 +157,7 @@ void SAL_CALL Window::setEnable( sal_Bool )
 void SAL_CALL Window::setFocus(  )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Window::setFocus");
+    SAL_INFO ( "avmedia.quicktime", "Window::setFocus" );
 }
 
 void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
