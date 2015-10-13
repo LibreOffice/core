@@ -20,6 +20,15 @@
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
+#include <sfx2/bindings.hxx>
+#include <sfx2/request.hxx>
+
+#include <cmdid.h>
+#include <envimg.hxx>
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -52,6 +61,23 @@ protected:
             }
         }
         return false;
+    }
+
+    virtual void postLoad(const char* pFilename) SAL_OVERRIDE
+    {
+        if (OString(pFilename) == "tdf94386.odt")
+        {
+            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+            CPPUNIT_ASSERT(pTextDoc);
+            SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+            // emulate the behavior from tdf#94386 - insert an envelope to the
+            // document
+            SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), FN_ENVELOP, FN_ENVELOP);
+            aSet.Put(SwEnvItem());
+            SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
+            SW_MOD()->ExecOther(aRequest);
+        }
     }
 };
 
@@ -540,6 +566,12 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
 {
     //the save must survive without asserting
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
+{
+    // TODO: assert here that the 2nd page has the right size even after
+    // the save as .doc
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
