@@ -377,7 +377,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aGradient.YOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterY / PER_PERCENT, 30, 70 );
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
                         ::std::swap( nStartTrans, nEndTrans );
-                        nDmlAngle = nShapeRotation;
                     }
                     else
                     {
