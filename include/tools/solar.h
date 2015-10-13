@@ -106,17 +106,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<s
 #endif
 #endif
 
-// pragmas
-
-#if defined _MSC_VER
-/* deletion of pointer to incomplete type '...'; no destructor called
- serious error, memory deleted without call of dtor */
-#pragma warning( error: 4150 )
-// warning C4002: too many actual parameters for macro
-// warning C4003: not enough actual parameters for macro
-#pragma warning(error : 4002 4003)
-#endif
-
 #if defined WNT
 #define SVLIBRARY( Base ) Base "lo.dll"
 #elif defined MACOSX
