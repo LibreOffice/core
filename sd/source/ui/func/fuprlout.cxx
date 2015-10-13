@@ -93,10 +93,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
     bool bOnMaster = false;
-    if( mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+    if (DrawViewShell *pShell = dynamic_cast<DrawViewShell*>(mpViewShell))
     {
-        EditMode eEditMode =
-            static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
+        EditMode eEditMode = pShell->GetEditMode();
         if (eEditMode == EM_MASTERPAGE)
             bOnMaster = true;
     }
