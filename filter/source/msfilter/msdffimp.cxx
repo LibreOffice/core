@@ -4517,9 +4517,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sAdjustmentValues );
                         if ( pAny && ( *pAny >>= seqAdjustmentValues ) && seqAdjustmentValues.getLength() > 1 )
                         {
-                            double fNumber;
                             if ( seqAdjustmentValues[ 0 ].State == css::beans::PropertyState_DIRECT_VALUE )
                             {
+                                double fNumber;
                                 seqAdjustmentValues[ 0 ].Value >>= fNumber;
                                 nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
                             }
@@ -4527,6 +4527,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 //normal situation:if endAngle != 90,there will be a direct_value,but for damaged curve,the endAngle need to recalculate.
                                 Point cent = aPolyBoundRect.Center();
+                                double fNumber;
                                 if ( aStartPt.Y() == cent.Y() )
                                     fNumber = ( aStartPt.X() >= cent.X() ) ? 0:180.0;
                                 else if ( aStartPt.X() == cent.X() )
@@ -4543,13 +4544,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             if ( seqAdjustmentValues[ 1 ].State == css::beans::PropertyState_DIRECT_VALUE )
                             {
+                                double fNumber;
                                 seqAdjustmentValues[ 1 ].Value >>= fNumber;
                                 nStartAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
                             }
                             else
                             {
-                                fNumber = 0.0;
-                                seqAdjustmentValues[ 1 ].Value <<= fNumber;
+                                seqAdjustmentValues[ 1 ].Value <<= 0.0;
                                 seqAdjustmentValues[ 1 ].State = css::beans::PropertyState_DIRECT_VALUE;
                             }
 
