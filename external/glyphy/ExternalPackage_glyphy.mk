@@ -11,4 +11,10 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,glyphy,glyphy))
 
 $(eval $(call gb_ExternalPackage_use_external_project,glyphy,glyphy))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,glyphy,$(LIBO_LIB_FOLDER)/libglyphy.dylib,src/.libs/libglyphy.dylib))
+else ifeq ($(DISABLE_DYNLOADING),)
+$(eval $(call gb_ExternalPackage_add_file,glyphy,$(LIBO_LIB_FOLDER)/libglyphy.so.0,src/.libs/libglyphy.so.0.0.0))
+endif
+
 # vim: set noet sw=4 ts=4:
