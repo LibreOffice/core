@@ -32,27 +32,6 @@ import util.utils;
  */
 public class ControlMenuController extends TestCase {
     XInterface oObj = null;
-    XTextDocument xTextDoc;
-
-    /**
-     * Cleanup: close the created document
-     * @param tParam The test parameters.
-     * @param log The log writer.
-     * @return The test environment.
-     *
-    protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-            XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
-    }
 
     /**
      * Create test environment.
