@@ -79,11 +79,11 @@ public class CallWatchThread extends Thread
     {
         dbgPrint( "CallWatchThread(" + this + ".run(" + aTag + ") ***** STARTED *****" );
         long n = 0;
-        while ( aWatchedThread != null )
+        synchronized(this)
         {
-            dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") running #" + ++n );
-            synchronized(this)
+            while ( aWatchedThread != null )
             {
+                dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") running #" + ++n );
                 bAlive = false;
                 try
                 {
