@@ -261,7 +261,7 @@ public class _XLocaleData extends MultiMethodTest {
                 if ((str[j].equals(""))) {
                     printit = true;
                 }
-                res &= (!str.equals(""));
+                res &= (!str[j].equals(""));
             }
             if (printit) log.println("FAILED for: language=" + languages[i]
                 + " ; country=" + countries[i]);
@@ -286,7 +286,7 @@ public class _XLocaleData extends MultiMethodTest {
                 if ((str[j].equals(""))) {
                     printit = true;
                 }
-                res &= (!str.equals(""));
+                res &= (!str[j].equals(""));
             }
             if (printit) log.println("FAILED for: language=" + languages[i]
                 + " ; country=" + countries[i]);
@@ -311,7 +311,7 @@ public class _XLocaleData extends MultiMethodTest {
                 if ((str[j].equals(""))) {
                     printit = true;
                 }
-                res &= (!str.equals(""));
+                res &= (!str[j].equals(""));
             }
             if (printit) log.println("FAILED for: language=" + languages[i]
                 + " ; country=" + countries[i]);
@@ -358,7 +358,7 @@ public class _XLocaleData extends MultiMethodTest {
                 if ((str[j].equals(""))) {
                     printit = true;
                 }
-                res &= (!str.equals(""));
+                res &= (!str[j].equals(""));
             }
             if (printit) log.println("FAILED for: language=" + languages[i]
                 + " ; country=" + countries[i]);
