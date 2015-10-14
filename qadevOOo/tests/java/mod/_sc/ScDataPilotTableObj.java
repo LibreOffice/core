@@ -251,7 +251,7 @@ public class ScDataPilotTableObj extends TestCase {
                 fieldPropSet.setPropertyValue(
                     "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.COLUMN);
             }
-            else if (i%2 == 1)
+            else
             {
                 // odd number fields
                 fieldPropSet.setPropertyValue(
