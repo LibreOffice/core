@@ -66,8 +66,8 @@ public class UnoScrollBarControl extends TestCase {
         Dimension dim = new Dimension(800, 600);
 
         Rectangle newPosSize = xWin.getPosSize();
-        newPosSize.Width = new Double(dim.getWidth()).intValue();
-        newPosSize.Height = new Double(dim.getHeight()).intValue();
+        newPosSize.Width = (int) dim.getWidth();
+        newPosSize.Height = (int) dim.getHeight();
         newPosSize.X = 0;
         newPosSize.Y = 0;
 
