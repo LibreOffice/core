@@ -780,7 +780,6 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
     Broadcast( aInsertedHint );
 }
 
-
 void FmFilterModel::Remove(FmFilterData* pData)
 {
     FmParentData* pParent = pData->GetParent();
@@ -824,26 +823,25 @@ void FmFilterModel::Remove(FmFilterData* pData)
     }
     else // FormItems can not be deleted
     {
-        FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( pData );
+        FmFilterItem& rFilterItem = dynamic_cast<FmFilterItem&>(*pData);
 
         // if its the last condition remove the parent
         if (rItems.size() == 1)
-            Remove(pFilterItem->GetParent());
+            Remove(rFilterItem.GetParent());
         else
         {
             // find the position of the father within his father
             ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChildren();
-            ::std::vector<FmFilterData*>::iterator j = ::std::find(rParentParentItems.begin(), rParentParentItems.end(), pFilterItem->GetParent());
+            ::std::vector<FmFilterData*>::iterator j = ::std::find(rParentParentItems.begin(), rParentParentItems.end(), rFilterItem.GetParent());
             DBG_ASSERT(j != rParentParentItems.end(), "FmFilterModel::Remove(): unknown Item");
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
             // EmptyText removes the filter
-            FmFilterAdapter::setText(nParentPos, pFilterItem, OUString());
+            FmFilterAdapter::setText(nParentPos, &rFilterItem, OUString());
             Remove( i );
         }
     }
 }
-
 
 void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 {
