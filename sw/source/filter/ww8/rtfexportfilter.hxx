@@ -30,7 +30,10 @@
 class RtfWriter : public Writer
 {
 protected:
-    sal_uLong WriteStream() override { return 0; }
+    sal_uLong WriteStream() override
+    {
+        return 0;
+    }
 };
 
 /// The physical access to the RTF document (for writing).

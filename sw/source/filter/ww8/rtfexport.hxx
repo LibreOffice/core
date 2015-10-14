@@ -90,7 +90,10 @@ public:
     //For i120928,add an interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTextNode& rNd) override;
 
-    virtual void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/) override { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
+    virtual void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/) override
+    {
+        /* no-op for rtf, most probably should not even be in MSWordExportBase */
+    }
     virtual void WriteChar(sal_Unicode) override;
 
     /// Write the numbering table.
