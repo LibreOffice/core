@@ -64,6 +64,18 @@ static const char* publicFunc =
  "    (*p) += t?0:1;\n"
  "    return t?b:a+b;\n"
  "}\n"
+ "double fmin_count(double a, double b, __private int *p) {\n"
+ "    double result = fmin(a, b);\n"
+ "    bool t = isnan(result);\n"
+ "    (*p) += t?0:1;\n"
+ "    return result;\n"
+ "}\n"
+ "double fmax_count(double a, double b, __private int *p) {\n"
+ "    double result = fmax(a, b);\n"
+ "    bool t = isnan(result);\n"
+ "    (*p) += t?0:1;\n"
+ "    return result;\n"
+ "}\n"
  "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n"
  "double legalize(double a, double b) { return isNan(a)?b:a;}\n"
  "double fsub(double a, double b) { return a-b; }\n"
@@ -1698,7 +1710,7 @@ public:
         ss << ") {\n";
         ss << "double tmp = " << GetBottom() << ";\n";
         ss << "int gid0 = get_global_id(0);\n";
-        if (isAverage())
+        if (isAverage() || isMinOrMax())
             ss << "int nCount = 0;\n";
         ss << "double tmpBottom;\n";
         unsigned i = vSubArguments.size();
@@ -1734,13 +1746,8 @@ public:
                 assert(pCur);
                 assert(pCur->GetType() != formula::svDoubleVectorRef);
 
-                if (pCur->GetType() == formula::svSingleVectorRef)
-                {
-                    const formula::SingleVectorRefToken* pSVR =
-                        static_cast<const formula::SingleVectorRefToken*>(pCur);
-                    ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-                }
-                else if (pCur->GetType() == formula::svDouble)
+                if (pCur->GetType() == formula::svSingleVectorRef ||
+                    pCur->GetType() == formula::svDouble)
                 {
                     ss << "{\n";
                 }
@@ -1771,13 +1778,6 @@ public:
                 ss << ";\n";
                 ss << "    }\n";
                 ss << "}\n";
-                if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                        formula::svSingleVectorRef && ZeroReturnZero())
-                {
-                    ss << "else{\n";
-                    ss << "        return 0;\n";
-                    ss << "    }\n";
-                }
             }
             else
             {
@@ -1786,12 +1786,21 @@ public:
                 ss << ";\n";
             }
         }
+        if (isAverage())
+            ss <<
+                "if (nCount==0)\n"
+                "    return CreateDoubleError(errDivisionByZero);\n";
+        else if (isMinOrMax())
+            ss <<
+                "if (nCount==0)\n"
+                "    return 0;\n";
         ss << "return tmp";
         if (isAverage())
             ss << "*pow((double)nCount,-1.0)";
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
+    virtual bool isMinOrMax() const { return false; }
     virtual bool takeString() const SAL_OVERRIDE { return false; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
@@ -2134,7 +2143,7 @@ public:
         ss << "fsum_count(" << lhs << "," << rhs << ", &nCount)";
         return ss.str();
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fsum"; }
+    virtual std::string BinFuncName() const SAL_OVERRIDE { return "average"; }
     virtual bool isAverage() const SAL_OVERRIDE { return true; }
 };
 
@@ -2184,20 +2193,16 @@ public:
         {
             ss <<
                 "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue)\n"
-                "        return CreateDoubleError(errDivisionByZero);\n"
+                "    return CreateDoubleError(errDivisionByZero);\n"
                 "}\n";
             return true;
         }
         else if (argno == 0)
         {
             ss <<
-                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue) {\n"
-                "        if (" << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)\n"
-                "            return CreateDoubleError(errDivisionByZero);\n"
-                "        return 0;\n"
-                "    }\n"
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") &&\n"
+                "    !(isnan(" << vSubArguments[1]->GenSlidingWindowDeclRef() << ") || " << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)) {\n"
+                "    return 0;\n"
                 "}\n";
         }
         return false;
@@ -2210,12 +2215,13 @@ class OpMin : public Reduction
 public:
     OpMin( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "MAXFLOAT"; }
+    virtual std::string GetBottom() SAL_OVERRIDE { return "NAN"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "fmin(" + lhs + "," + rhs + ")";
+        return "fmin_count(" + lhs + "," + rhs + ", &nCount)";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "min"; }
+    virtual bool isMinOrMax() const SAL_OVERRIDE { return true; }
 };
 
 class OpMax : public Reduction
@@ -2223,12 +2229,13 @@ class OpMax : public Reduction
 public:
     OpMax( int nResultSize ) : Reduction(nResultSize) {}
 
-    virtual std::string GetBottom() SAL_OVERRIDE { return "-MAXFLOAT"; }
+    virtual std::string GetBottom() SAL_OVERRIDE { return "NAN"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "fmax(" + lhs + "," + rhs + ")";
+        return "fmax_count(" + lhs + "," + rhs + ", &nCount)";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "max"; }
+    virtual bool isMinOrMax() const SAL_OVERRIDE { return true; }
 };
 
 class OpSumProduct : public SumOfProduct
