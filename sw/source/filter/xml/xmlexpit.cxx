@@ -1010,12 +1010,11 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_PAGEDESC:
         {
-            const SwFormatPageDesc* pPageDesc = dynamic_cast<const SwFormatPageDesc*>( &rItem );
-            OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
+            const SwFormatPageDesc& rPageDesc = dynamic_cast<const SwFormatPageDesc&>(rItem);
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
-                ::boost::optional<sal_uInt16> oNumOffset = pPageDesc->GetNumOffset();
+                ::boost::optional<sal_uInt16> oNumOffset = rPageDesc.GetNumOffset();
                 if (oNumOffset && oNumOffset.get() > 0)
                 {
                     // #i114163# positiveInteger only!
