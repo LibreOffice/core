@@ -176,10 +176,10 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
             ++i
         )
     {
-        FmFilterItem* pCondition = dynamic_cast<FmFilterItem*>( *i  );
-        DBG_ASSERT( pCondition, "FmFilterItems::Find: Wrong element in container!" );
-        if ( _nFilterComponentIndex == pCondition->GetComponentIndex() )
-            return pCondition;
+        FmFilterData* pData = *i;
+        FmFilterItem& rCondition = dynamic_cast<FmFilterItem&>(*pData);
+        if ( _nFilterComponentIndex == rCondition.GetComponentIndex() )
+            return &rCondition;
     }
     return NULL;
 }
