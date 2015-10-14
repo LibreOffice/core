@@ -897,8 +897,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BACKGROUND:
         {
-            const SvxBrushItem* pBrush = dynamic_cast<const SvxBrushItem*>( &rItem );
-            OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
+            const SvxBrushItem& rBrush = dynamic_cast<const SvxBrushItem&>(rItem);
 
             // note: the graphic is only exported if nMemberId equals
             //       MID_GRAPHIC..
@@ -907,21 +906,21 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             switch( nMemberId )
             {
                 case MID_BACK_COLOR:
-                    if ( pBrush->GetColor().GetTransparency() )
+                    if ( rBrush.GetColor().GetTransparency() )
                         aOut.append( GetXMLToken(XML_TRANSPARENT) );
                     else
                     {
                         ::sax::Converter::convertColor(aOut,
-                                pBrush->GetColor().GetColor());
+                                rBrush.GetColor().GetColor());
                     }
                     bOk = true;
                     break;
 
                 case MID_GRAPHIC_LINK:
-                    if( pBrush->GetGraphicPos() != GPOS_NONE )
+                    if (rBrush.GetGraphicPos() != GPOS_NONE)
                     {
                         uno::Any aAny;
-                        pBrush->QueryValue( aAny, MID_GRAPHIC_URL );
+                        rBrush.QueryValue( aAny, MID_GRAPHIC_URL );
                         OUString sTmp;
                         aAny >>= sTmp;
                         aOut.append( sTmp );
@@ -930,7 +929,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 case MID_GRAPHIC_POSITION:
-                    switch( pBrush->GetGraphicPos() )
+                    switch (rBrush.GetGraphicPos())
                     {
                     case GPOS_LT:
                     case GPOS_MT:
@@ -958,7 +957,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     {
                         aOut.append( ' ' );
 
-                        switch( pBrush->GetGraphicPos() )
+                        switch (rBrush.GetGraphicPos())
                         {
                         case GPOS_LT:
                         case GPOS_LB:
@@ -983,7 +982,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
                 case MID_GRAPHIC_REPEAT:
                 {
-                    SvxGraphicPosition eGraphicPos = pBrush->GetGraphicPos();
+                    SvxGraphicPosition eGraphicPos = rBrush.GetGraphicPos();
                     if( GPOS_AREA == eGraphicPos )
                     {
                         aOut.append( GetXMLToken(XML_BACKGROUND_STRETCH)  );
@@ -998,10 +997,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 break;
 
                 case MID_GRAPHIC_FILTER:
-                    if( pBrush->GetGraphicPos() != GPOS_NONE &&
-                        !pBrush->GetGraphicFilter().isEmpty() )
+                    if (rBrush.GetGraphicPos() != GPOS_NONE &&
+                        !rBrush.GetGraphicFilter().isEmpty())
                     {
-                        aOut.append( pBrush->GetGraphicFilter() );
+                        aOut.append(rBrush.GetGraphicFilter());
                         bOk = true;
                     }
                     break;
