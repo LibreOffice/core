@@ -549,8 +549,6 @@ public class _XPropertySet extends MultiMethodTest {
 
             if (cont) continue;
 
-            if (name.equals(oObj))
-            log.println("Checking '"+name+"'");
             boolean isWritable = ((property.Attributes &
                 PropertyAttribute.READONLY) == 0);
             boolean isNotNull = ((property.Attributes &
