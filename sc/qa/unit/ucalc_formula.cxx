@@ -355,6 +355,10 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
 
     aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("abc_foo:abc_bar", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
