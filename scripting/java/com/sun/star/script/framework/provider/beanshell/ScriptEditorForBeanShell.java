@@ -187,13 +187,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
                 }
 
                 final ClassLoader theCl = cl;
-                String sUrl = entry.getParcelLocation();
-
-                if (!sUrl.endsWith("/")) {
-                    sUrl += "/";
-                }
-
-                sUrl +=  entry.getLanguageName();
                 final URL url = entry.getSourceURL();
                 SwingInvocation.invoke(
                 new Runnable() {
