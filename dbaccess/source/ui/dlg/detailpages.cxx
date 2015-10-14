@@ -79,7 +79,7 @@ namespace dbaui
             m_pOptionsLabel->Show();
             m_pOptions = get<Edit>("options");
             m_pOptions->Show();
-            m_pOptions->SetModifyHdl(getControlModifiedLink());
+            m_pOptions->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
@@ -94,9 +94,9 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_TYPED(OCommonBehaviourTabPage, CharsetSelectHdl, ListBox&, rListBox, void)
+    IMPL_LINK_NOARG_TYPED(OCommonBehaviourTabPage, CharsetSelectHdl, ListBox&, void)
     {
-        getControlModifiedLink().Call(&rListBox);
+        callModifiedHdl();
     }
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
@@ -433,7 +433,7 @@ namespace dbaui
         }
         if ( m_sDefaultJdbcDriverName.getLength() )
         {
-            m_pEDDriverClass->SetModifyHdl(getControlModifiedLink());
+            m_pEDDriverClass->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
             m_pEDDriverClass->SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
             m_pTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
         }
@@ -448,9 +448,9 @@ namespace dbaui
         m_pFTSocket->Show(bShowSocket && !m_bUseClass);
         m_pEDSocket->Show(bShowSocket && !m_bUseClass);
 
-        m_pEDHostname->SetModifyHdl(getControlModifiedLink());
-        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
-        m_pEDSocket->SetModifyHdl(getControlModifiedLink());
+        m_pEDHostname->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pEDSocket->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
     }
 
     OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
@@ -558,7 +558,7 @@ namespace dbaui
     // MySQLNativePage
     MySQLNativePage::MySQLNativePage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "MysqlNativePage", "dbaccess/ui/mysqlnativepage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
-        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink()) )
+        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), LINK(this,OGenericAdministrationPage,OnControlModified)) )
     {
         get(m_pSeparator1, "connectionheader");
         get(m_pSeparator2, "userheader");
@@ -566,7 +566,7 @@ namespace dbaui
         get(m_pUserName, "username");
         get(m_pPasswordRequired, "passwordrequired");
 
-        m_pUserName->SetModifyHdl(getControlModifiedLink());
+        m_pUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
 
         m_aMySQLSettings->Show();
     }
@@ -666,10 +666,10 @@ namespace dbaui
         m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pNFRowCount, "LDAPRowCountspinbutton");
 
-        m_pETBaseDN->SetModifyHdl(getControlModifiedLink());
+        m_pETBaseDN->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
         m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
-        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
-        m_pNFRowCount->SetModifyHdl(getControlModifiedLink());
+        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pNFRowCount->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
 
         m_pNFRowCount->SetUseThousandSep(false);
         m_iNormalPort = 389;

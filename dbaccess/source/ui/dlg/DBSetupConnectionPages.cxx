@@ -148,9 +148,9 @@ using namespace ::com::sun::star;
         get(m_pFTDefaultPortNumber, "portNumDefLabel");
         get(m_pCBUseSSL, "useSSLCheckbutton");
 
-        m_pETHostServer->SetModifyHdl(getControlModifiedLink());
-        m_pETBaseDN->SetModifyHdl(getControlModifiedLink());
-        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
+        m_pETHostServer->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pETBaseDN->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
         m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
         SetRoadmapStateValue(false);
     }
@@ -232,12 +232,11 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, /*_pEdit*/)
+    void OLDAPConnectionPageSetup::callModifiedHdl(void *)
     {
         bool bRoadmapState = ((!m_pETHostServer->GetText().isEmpty() ) && ( !m_pETBaseDN->GetText().isEmpty() ) && (!m_pFTPortNumber->GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
-        callModifiedHdl();
-        return 0L;
+        OGenericAdministrationPage::callModifiedHdl();
     }
 
     VclPtr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet )
@@ -322,7 +321,7 @@ using namespace ::com::sun::star;
     // MySQLNativeSetupPage
     MySQLNativeSetupPage::MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
-        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink()) )
+        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), LINK(this, OGenericAdministrationPage, OnControlModified)) )
     {
         get(m_pHelpText, "helptext");
         m_aMySQLSettings->Show();
@@ -369,14 +368,14 @@ using namespace ::com::sun::star;
 
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
 
-        OnModified( NULL );
+        callModifiedHdl();
     }
 
-    IMPL_LINK( MySQLNativeSetupPage, OnModified, Edit*, _pEdit )
+    void MySQLNativeSetupPage::callModifiedHdl(void*)
     {
         SetRoadmapStateValue( m_aMySQLSettings->canAdvance() );
 
-        return OGenericAdministrationPage::getControlModifiedLink().Call( _pEdit );
+        OGenericAdministrationPage::callModifiedHdl();
     }
 
     // OMySQLJDBCConnectionPageSetup
@@ -406,11 +405,11 @@ using namespace ::com::sun::star;
         //TODO this code snippet is redundant
         m_pHeaderText->SetText(ModuleRes(_nHeaderTextResId));
 
-        m_pETDatabasename->SetModifyHdl(getControlModifiedLink());
-        m_pETHostname->SetModifyHdl(getControlModifiedLink());
-        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
+        m_pETDatabasename->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pETHostname->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
 
-        m_pETDriverClass->SetModifyHdl(LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified));
+        m_pETDriverClass->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
         m_pPBTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
 
         SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
@@ -560,14 +559,13 @@ using namespace ::com::sun::star;
         aMsg->Execute();
     }
 
-    IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
+    void OGeneralSpecialJDBCConnectionPageSetup::callModifiedHdl(void* pControl)
     {
-        if ( _pEdit == m_pETDriverClass )
+        if ( pControl == m_pETDriverClass )
             m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().trim().isEmpty() );
         bool bRoadmapState = ((!m_pETDatabasename->GetText().isEmpty() ) && ( !m_pETHostname->GetText().isEmpty() ) && (!m_pNFPortNumber->GetText().isEmpty() ) && ( !m_pETDriverClass->GetText().trim().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
-        callModifiedHdl();
-        return 0L;
+        OGenericAdministrationPage::callModifiedHdl();
     }
 
     VclPtr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
@@ -752,8 +750,8 @@ using namespace ::com::sun::star;
         get(m_pETUserName, "generalUserNameEntry");
         get(m_pCBPasswordRequired, "passRequiredCheckbutton");
         get(m_pPBTestConnection, "testConnectionButton");
-        m_pETUserName->SetModifyHdl(getControlModifiedLink());
-        m_pCBPasswordRequired->SetClickHdl(getControlModifiedClickLink());
+        m_pETUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pCBPasswordRequired->SetClickHdl(LINK(this,OGenericAdministrationPage,OnControlModifiedClick));
         m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 
         LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
@@ -835,7 +833,7 @@ using namespace ::com::sun::star;
         get(m_pFTFinalText, "finishText");
 
         m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
-        m_pCBStartTableWizard->SetClickHdl(getControlModifiedClickLink());
+        m_pCBStartTableWizard->SetClickHdl(LINK(this,OGenericAdministrationPage,OnControlModifiedClick));
         m_pRBRegisterDataSource->SetState(true);
     }
 

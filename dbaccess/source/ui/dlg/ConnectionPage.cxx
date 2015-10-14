@@ -101,10 +101,10 @@ namespace dbaui
         get(m_pTestConnection, "connectionButton");
 
         m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pJavaDriver->SetModifyHdl(getControlModifiedLink());
+        m_pJavaDriver->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
         m_pJavaDriver->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pUserName->SetModifyHdl(getControlModifiedLink());
-        m_pPasswordRequired->SetClickHdl(getControlModifiedClickLink());
+        m_pUserName->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pPasswordRequired->SetClickHdl(LINK(this, OGenericAdministrationPage, OnControlModifiedClick));
 
         m_pTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
         m_pTestJavaDriver->SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));

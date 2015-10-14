@@ -86,13 +86,12 @@ namespace dbaui
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup();
         virtual void dispose() override;
-        virtual Link<> getControlModifiedLink() override { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
+        virtual void callModifiedHdl(void* pControl = 0) override;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        DECL_LINK(OnEditModified,Edit*);
 
     private:
         VclPtr<FixedText>          m_pFTHelpText;
@@ -127,10 +126,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
-        virtual Link<> getControlModifiedLink() override { return LINK( this, MySQLNativeSetupPage, OnModified ); }
-
-    private:
-        DECL_LINK( OnModified, Edit* );
+        virtual void callModifiedHdl(void* pControl = 0) override;
     };
 
     // OGeneralSpecialJDBCConnectionPageSetup
@@ -154,10 +150,9 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual Link<> getControlModifiedLink() override { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
+        virtual void callModifiedHdl(void* pControl = 0) override;
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK(OnEditModified,Edit*);
         VclPtr<FixedText>          m_pHeaderText;
         VclPtr<FixedText>          m_pFTHelpText;
         VclPtr<FixedText>          m_pFTDatabasename;
@@ -281,9 +276,6 @@ namespace dbaui
         bool IsDatabaseDocumentToBeOpened();
         bool IsTableWizardToBeStarted();
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
-
-        /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        Link<> getControlModifiedLink() override { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
         DECL_LINK_TYPED(OnOpenSelected, Button*, void);
     protected:

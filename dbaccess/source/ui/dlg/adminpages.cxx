@@ -102,18 +102,18 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnControlModified, Button*, /*pCtrl*/)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModified, void*, pCtrl)
     {
-        callModifiedHdl();
+        callModifiedHdl(pCtrl);
         return 0;
     }
     IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
     {
-        getControlModifiedLink().Call(pCtrl);
+        callModifiedHdl(pCtrl);
     }
     IMPL_LINK_TYPED(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
     {
-        getControlModifiedLink().Call(&rCtrl);
+        callModifiedHdl(&rCtrl);
     }
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
     {

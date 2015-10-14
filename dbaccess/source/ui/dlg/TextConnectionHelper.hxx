@@ -80,7 +80,7 @@ namespace dbaui
         short       m_nAvailableSections;
 
     protected:
-        void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call(const_cast<OTextConnectionHelper *>(this)); }
+        void callModifiedHdl() const { m_aModifiedHandler.Call(const_cast<OTextConnectionHelper *>(this)); }
         Link<> getControlModifiedLink() { return LINK(this, OTextConnectionHelper, OnControlModified); }
         DECL_LINK_TYPED(OnSetExtensionHdl,RadioButton&,void);
         DECL_LINK(OnControlModified,Control*);

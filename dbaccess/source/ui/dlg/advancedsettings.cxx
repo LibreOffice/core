@@ -100,7 +100,7 @@ namespace dbaui
             if ( rFeatures.has( nItemId ) )
             {
                 get(*setting->ppControl, setting->sControlId);
-                (*setting->ppControl)->SetClickHdl( getControlModifiedClickLink() );
+                (*setting->ppControl)->SetClickHdl( LINK(this, OGenericAdministrationPage, OnControlModifiedClick) );
                 (*setting->ppControl)->Show();
 
                 // check whether this must be a tristate check box
@@ -129,16 +129,16 @@ namespace dbaui
         {
             get(m_pMaxRowScanLabel, "rowsft");
             get(m_pMaxRowScan, "rows");
-            m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
+            m_pMaxRowScan->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
             m_pMaxRowScan->SetUseThousandSep(false);
             m_pMaxRowScanLabel->Show();
             m_pMaxRowScan->Show();
         }
     }
 
-    IMPL_LINK_TYPED(SpecialSettingsPage, BooleanComparisonSelectHdl, ListBox&, rListBox, void)
+    IMPL_LINK_TYPED(SpecialSettingsPage, BooleanComparisonSelectHdl, ListBox&, rControl, void)
     {
-        getControlModifiedLink().Call(&rListBox);
+        callModifiedHdl(&rControl);
     }
 
     SpecialSettingsPage::~SpecialSettingsPage()
@@ -341,9 +341,9 @@ namespace dbaui
         get(m_pAutoRetrievingLabel, "queryft");
         get(m_pAutoRetrieving, "query");
 
-        m_pAutoRetrievingEnabled->SetClickHdl( getControlModifiedClickLink() );
-        m_pAutoIncrement->SetModifyHdl( getControlModifiedLink() );
-        m_pAutoRetrieving->SetModifyHdl( getControlModifiedLink() );
+        m_pAutoRetrievingEnabled->SetClickHdl( LINK(this, OGenericAdministrationPage, OnControlModifiedClick) );
+        m_pAutoIncrement->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlModified) );
+        m_pAutoRetrieving->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlModified) );
 
         m_aControlDependencies.enableOnCheckMark( *m_pAutoRetrievingEnabled,
             *m_pAutoIncrementLabel, *m_pAutoIncrement, *m_pAutoRetrievingLabel, *m_pAutoRetrieving );

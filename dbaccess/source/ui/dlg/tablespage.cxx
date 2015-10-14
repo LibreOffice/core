@@ -83,7 +83,7 @@ namespace dbaui
         m_pTablesList->set_width_request(56 * m_pTablesList->approximate_char_width());
         m_pTablesList->set_height_request(12 * m_pTablesList->GetTextHeight());
 
-        m_pTablesList->SetCheckHandler(getControlModifiedLink());
+        m_pTablesList->SetCheckHandler(LINK(this,OGenericAdministrationPage,OnControlModified));
 
         // initialize the TabListBox
         m_pTablesList->SetSelectionMode( MULTIPLE_SELECTION );

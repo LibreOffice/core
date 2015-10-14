@@ -136,7 +136,7 @@ namespace dbaui
         virtual void    ActivatePage() override;
 
     protected:
-        void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call(this); }
+        virtual void callModifiedHdl(void* /*pControl*/ = 0) { m_aModifiedHandler.Call(this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
         virtual bool prepareLeave() { return true; }
@@ -206,16 +206,11 @@ namespace dbaui
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
-        DECL_LINK(OnControlModified, Button*);
-        DECL_LINK_TYPED(OnTestConnectionClickHdl, Button*, void);
-
-        /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        virtual Link<> getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
-        // calls via getControlModifiedLink()
-        Link<Button*,void> getControlModifiedClickLink() { return LINK(this, OGenericAdministrationPage, OnControlModifiedClick); }
-        DECL_LINK_TYPED(ControlModifiedCheckBoxHdl, CheckBox&, void);
-    private:
+        DECL_LINK(OnControlModified, void*);
         DECL_LINK_TYPED(OnControlModifiedClick, Button*, void);
+        DECL_LINK_TYPED(ControlModifiedCheckBoxHdl, CheckBox&, void);
+
+        DECL_LINK_TYPED(OnTestConnectionClickHdl, Button*, void);
     };
 
     // ControlRelation
