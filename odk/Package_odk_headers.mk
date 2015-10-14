@@ -36,6 +36,18 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	cppuhelper/basemutex.hxx \
 	cppuhelper/bootstrap.hxx \
 	cppuhelper/compbase.hxx \
+	cppuhelper/compbase1.hxx \
+	cppuhelper/compbase2.hxx \
+	cppuhelper/compbase3.hxx \
+	cppuhelper/compbase4.hxx \
+	cppuhelper/compbase5.hxx \
+	cppuhelper/compbase6.hxx \
+	cppuhelper/compbase7.hxx \
+	cppuhelper/compbase8.hxx \
+	cppuhelper/compbase9.hxx \
+	cppuhelper/compbase10.hxx \
+	cppuhelper/compbase11.hxx \
+	cppuhelper/compbase12.hxx \
 	cppuhelper/compbase_ex.hxx \
 	cppuhelper/component.hxx \
 	cppuhelper/component_context.hxx \
@@ -44,6 +56,19 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	cppuhelper/factory.hxx \
 	cppuhelper/findsofficepath.h \
 	cppuhelper/implbase.hxx \
+	cppuhelper/implbase1.hxx \
+	cppuhelper/implbase2.hxx \
+	cppuhelper/implbase3.hxx \
+	cppuhelper/implbase4.hxx \
+	cppuhelper/implbase5.hxx \
+	cppuhelper/implbase6.hxx \
+	cppuhelper/implbase7.hxx \
+	cppuhelper/implbase8.hxx \
+	cppuhelper/implbase9.hxx \
+	cppuhelper/implbase10.hxx \
+	cppuhelper/implbase11.hxx \
+	cppuhelper/implbase12.hxx \
+	cppuhelper/implbase13.hxx \
 	cppuhelper/implbase_ex.hxx \
 	cppuhelper/implbase_ex_post.hxx \
 	cppuhelper/implbase_ex_pre.hxx \

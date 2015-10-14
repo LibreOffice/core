@@ -36,8 +36,6 @@
 #include <rtl/instance.hxx>
 #include <sal/types.h>
 
-#if defined LIBO_INTERNAL_ONLY
-
 namespace cppu {
 
 /// @cond INTERNAL
@@ -321,8 +319,6 @@ public:
 };
 
 }
-
-#endif
 
 #endif
 

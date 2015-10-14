@@ -40,8 +40,6 @@ namespace com { namespace sun { namespace star { namespace lang {
 } } } }
 namespace osl { class Mutex; }
 
-#if defined LIBO_INTERNAL_ONLY
-
 namespace cppu {
 
 /** Implementation helper implementing interfaces
@@ -192,8 +190,6 @@ public:
 };
 
 }
-
-#endif
 
 #endif
 
