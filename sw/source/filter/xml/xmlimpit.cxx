@@ -326,8 +326,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_UL_SPACE:
         {
-            SvxULSpaceItem* pULSpace = dynamic_cast<SvxULSpaceItem*>( &rItem );
-            OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
+            SvxULSpaceItem& rULSpace = dynamic_cast<SvxULSpaceItem&>(rItem);
 
             sal_Int32 nProp = 100;
             sal_Int32 nAbs = 0;
@@ -340,10 +339,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
             switch( nMemberId )
             {
                 case MID_UP_MARGIN:
-                    pULSpace->SetUpper( (sal_uInt16)nAbs, (sal_uInt16)nProp );
+                    rULSpace.SetUpper( (sal_uInt16)nAbs, (sal_uInt16)nProp );
                     break;
                 case MID_LO_MARGIN:
-                    pULSpace->SetLower( (sal_uInt16)nAbs, (sal_uInt16)nProp );
+                    rULSpace.SetLower( (sal_uInt16)nAbs, (sal_uInt16)nProp );
                     break;
                 default:
                     OSL_FAIL("unknown MemberId");
