@@ -234,24 +234,19 @@ public class Desktop
     }
 
     /**
-     * Checks if the passed Element Name already exists in the list If yes it appends a
-     * suffix to make it unique
+     * Checks if the passed Element Name already exists in the list. If yes it appends a
+     * suffix to make it unique.
      * @return a unique Name not being in the passed list.
      */
     public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator)
     {
-        int a = 2;
+        if (_slist == null || _slist.length == 0)
+        {
+            return _sElementName;
+        }
         String scompname = _sElementName;
-        boolean bElementexists = true;
-        if (_slist == null)
-        {
-            return _sElementName;
-        }
-        if (_slist.length == 0)
-        {
-            return _sElementName;
-        }
-        while (bElementexists)
+        int a = 2;
+        while (true)
         {
             for (int i = 0; i < _slist.length; i++)
             {
@@ -262,7 +257,6 @@ public class Desktop
             }
             scompname = _sElementName + _sSuffixSeparator + a++;
         }
-        return PropertyNames.EMPTY_STRING;
     }
 
 
