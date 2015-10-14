@@ -384,60 +384,59 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_LR_SPACE:
         {
-            const SvxLRSpaceItem* pLRSpace = dynamic_cast<const SvxLRSpaceItem*>( &rItem );
-            OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
+            const SvxLRSpaceItem& rLRSpace = dynamic_cast<const SvxLRSpaceItem&>(rItem);
 
             bOk = true;
             switch( nMemberId )
             {
                 case  MID_L_MARGIN:
-                    if(pLRSpace->GetPropLeft() != 100)
+                    if (rLRSpace.GetPropLeft() != 100)
                     {
                         ::sax::Converter::convertPercent(
-                                aOut, pLRSpace->GetPropLeft() );
+                                aOut, rLRSpace.GetPropLeft() );
                     }
                     else
                     {
                         rUnitConverter.convertMeasureToXML(
-                                aOut, pLRSpace->GetLeft() );
+                                aOut, rLRSpace.GetLeft() );
                     }
                     break;
 
                 case  MID_R_MARGIN:
-                    if(pLRSpace->GetPropRight() != 100)
+                    if (rLRSpace.GetPropRight() != 100)
                     {
                         ::sax::Converter::convertPercent(
-                                aOut, pLRSpace->GetPropRight() );
+                                aOut, rLRSpace.GetPropRight() );
                     }
                     else
                     {
                         rUnitConverter.convertMeasureToXML(
-                                aOut, pLRSpace->GetRight() );
+                                aOut, rLRSpace.GetRight() );
                     }
                     break;
 
                 case MID_FIRST_AUTO:
-                    if( pLRSpace->IsAutoFirst() )
+                    if (rLRSpace.IsAutoFirst())
                     {
                         ::sax::Converter::convertBool(
-                                aOut, pLRSpace->IsAutoFirst() );
+                                aOut, rLRSpace.IsAutoFirst() );
                     }
                     else
                         bOk = false;
                     break;
 
                 case  MID_FIRST_LINE_INDENT:
-                    if( !pLRSpace->IsAutoFirst() )
+                    if (!rLRSpace.IsAutoFirst())
                     {
-                        if(pLRSpace->GetPropTextFirstLineOfst() != 100)
+                        if (rLRSpace.GetPropTextFirstLineOfst() != 100)
                         {
                             ::sax::Converter::convertPercent(
-                                aOut, pLRSpace->GetPropTextFirstLineOfst() );
+                                aOut, rLRSpace.GetPropTextFirstLineOfst() );
                         }
                         else
                         {
                             rUnitConverter.convertMeasureToXML(
-                                    aOut, pLRSpace->GetTextFirstLineOfst() );
+                                    aOut, rLRSpace.GetTextFirstLineOfst() );
                         }
                     }
                     else
