@@ -304,10 +304,10 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle, SvNumberFor
     ,m_bHasMin(false)
     ,m_bHasMax(false)
     ,m_bStrictFormat(true)
-    ,m_bValueDirty(true)
     ,m_bEnableEmptyField(true)
     ,m_bAutoColor(false)
     ,m_bEnableNaN(false)
+    ,m_ValueState(valueDirty)
     ,m_dCurrentValue(0)
     ,m_dDefaultValue(0)
     ,m_nFormatKey(0)
@@ -333,14 +333,14 @@ void FormattedField::SetText(const OUString& rStr)
 {
 
     SpinField::SetText(rStr);
-    m_bValueDirty = true;
+    m_ValueState = valueDirty;
 }
 
 void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
 
     SpinField::SetText( rStr, rNewSelection );
-    m_bValueDirty = true;
+    m_ValueState = valueDirty;
 }
 
 void FormattedField::SetTextFormatted(const OUString& rStr)
@@ -402,15 +402,15 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     else
         aNewSel = aSel; // don't use the justified version
     SpinField::SetText(sFormatted, aNewSel);
-    m_bValueDirty = false;
+    m_ValueState = valueString;
 }
 
 OUString FormattedField::GetTextValue() const
 {
-    if (m_bValueDirty)
+    if (m_ValueState != valueString )
     {
         const_cast<FormattedField*>(this)->m_sCurrentTextValue = GetText();
-        const_cast<FormattedField*>(this)->m_bValueDirty = false;
+        const_cast<FormattedField*>(this)->m_ValueState = valueString;
     }
     return m_sCurrentTextValue;
 }
@@ -444,7 +444,7 @@ void FormattedField::impl_Modify(bool makeValueDirty)
     if (!IsStrictFormat())
     {
         if(makeValueDirty)
-            m_bValueDirty = true;
+            m_ValueState = valueDirty;
         SpinField::Modify();
         return;
     }
@@ -455,7 +455,7 @@ void FormattedField::impl_Modify(bool makeValueDirty)
         m_sLastValidText = sCheck;
         m_aLastSelection = GetSelection();
         if(makeValueDirty)
-            m_bValueDirty = true;
+            m_ValueState = valueDirty;
     }
     else
     {
@@ -518,7 +518,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
         SpinField::SetText(rNew, aSel);
     }
 
-    m_bValueDirty = true; // not always necessary, but better re-evaluate for safety reasons
+    m_ValueState = valueDirty; // not always necessary, but better re-evaluate for safety reasons
 }
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
@@ -800,6 +800,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
                 {
                     ImplSetValue(m_dCurrentValue, true);
                     Modify();
+                    m_ValueState = valueDouble;
                 }
                 else
                 {
@@ -808,8 +809,8 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
                         SetTextFormatted(sNew);
                     else
                         SetTextFormatted(m_sDefaultText);
+                    m_ValueState = valueString;
                 }
-                m_bValueDirty = false;
             }
         }
         else
@@ -869,7 +870,7 @@ void FormattedField::ImplSetValue(double dVal, bool bForce)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplSetValue : can't set a value without a formatter !");
 
-    m_bValueDirty = false;
+    m_ValueState = valueDouble;
     m_dCurrentValue = dVal;
 
     OUString sNewText;
@@ -894,7 +895,7 @@ void FormattedField::ImplSetValue(double dVal, bool bForce)
     }
 
     ImplSetTextImpl(sNewText, NULL);
-    m_bValueDirty = false;
+    m_ValueState = valueDouble;
     DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
 
@@ -902,7 +903,7 @@ bool FormattedField::ImplGetValue(double& dNewVal)
 {
 
     dNewVal = m_dCurrentValue;
-    if (!m_bValueDirty)
+    if (m_ValueState == valueDouble)
         return true;
 
     dNewVal = m_dDefaultValue;
@@ -948,7 +949,7 @@ bool FormattedField::ImplGetValue(double& dNewVal)
 
 void FormattedField::SetValue(double dVal)
 {
-    ImplSetValue(dVal, m_bValueDirty);
+    ImplSetValue(dVal, m_ValueState != valueDouble);
 }
 
 double FormattedField::GetValue()
@@ -962,7 +963,7 @@ double FormattedField::GetValue()
             m_dCurrentValue = m_dDefaultValue;
     }
 
-    m_bValueDirty = false;
+    m_ValueState = valueDouble;
     return m_dCurrentValue;
 }
 
