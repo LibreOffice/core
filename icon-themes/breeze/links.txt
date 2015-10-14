@@ -186,7 +186,7 @@ cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
 
 # Annotations
 cmd/sc_insertannotation.png cmd/sc_showannotations.png
-cmd/lc_insertannotation.png cmd/sc_showannotations.png
+cmd/lc_insertannotation.png cmd/lc_showannotations.png
 
 # Template Menu
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
