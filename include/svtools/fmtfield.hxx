@@ -66,10 +66,11 @@ protected:
 
     bool                m_bStrictFormat : 1;
 
-    bool                m_bValueDirty : 1;
     bool                m_bEnableEmptyField : 1;
     bool                m_bAutoColor : 1;
     bool                m_bEnableNaN : 1;
+    enum valueState { valueDirty, valueString, valueDouble };
+    valueState          m_ValueState;
     double              m_dCurrentValue;
     double              m_dDefaultValue;
 
@@ -119,7 +120,7 @@ public:
     void    EnableEmptyField(bool bEnable);
     // If disabled, the value will be resetted to the last valid value on leave
 
-    void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_bValueDirty = true; }
+    void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_ValueState = valueDirty; }
     // If the current String is invalid, GetValue() returns this value
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
