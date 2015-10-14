@@ -955,17 +955,16 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_COLLAPSING_BORDERS:
         {
-            SfxBoolItem* pBorders = dynamic_cast<SfxBoolItem*>( &rItem );
-            OSL_ENSURE( pBorders != NULL, "Wrong Which-ID" );
+            SfxBoolItem& rBorders = dynamic_cast<SfxBoolItem&>(rItem);
 
             if( IsXMLToken( rValue, XML_COLLAPSING ) )
             {
-                pBorders->SetValue( true );
+                rBorders.SetValue(true);
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_SEPARATING ) )
             {
-                pBorders->SetValue( false );
+                rBorders.SetValue(false);
                 bOk = true;
             }
             else
