@@ -29,9 +29,8 @@ public class Union {
      *  @return the any value.
      */
     public final Object getValue() {
-        return m_value;
+        return null;
     }
 
-    protected Object m_value;
 }
 
