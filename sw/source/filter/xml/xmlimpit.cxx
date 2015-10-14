@@ -263,8 +263,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         {
         case RES_LR_SPACE:
         {
-            SvxLRSpaceItem* pLRSpace = dynamic_cast<SvxLRSpaceItem*>( &rItem );
-            OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
+            SvxLRSpaceItem& rLRSpace = dynamic_cast<SvxLRSpaceItem&>(rItem);
 
             switch( nMemberId )
             {
@@ -284,10 +283,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                pLRSpace->SetTextLeft( (sal_Int32)nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetTextLeft( (sal_Int32)nAbs, (sal_uInt16)nProp );
                                 break;
                             case MID_R_MARGIN:
-                                pLRSpace->SetRight( (sal_Int32)nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetRight( (sal_Int32)nAbs, (sal_uInt16)nProp );
                                 break;
                         }
                     }
@@ -305,7 +304,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    pLRSpace->SetTextFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
+                    rLRSpace.SetTextFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
                 }
                 break;
 
@@ -314,7 +313,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     bool bAutoFirst(false);
                     bOk = ::sax::Converter::convertBool( bAutoFirst, rValue );
                     if( bOk )
-                        pLRSpace->SetAutoFirst( bAutoFirst );
+                        rLRSpace.SetAutoFirst( bAutoFirst );
                 }
                 break;
 
