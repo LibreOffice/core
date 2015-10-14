@@ -245,13 +245,13 @@ struct my_t_list : public my_t_impl
         mpList = pList;
         return *this;
     }
-    virtual void append( const char* str, const char* stop )
+    virtual void append( const char* str, const char* stop ) override
     {
         lt_list_t* p = new lt_list_t;
         p->assign( str, stop);
         my_appendToList( &mpList, p);
     }
-    virtual void zero()
+    virtual void zero() override
     {
         my_t_impl::zero();
         my_unrefList( mpList);
@@ -398,7 +398,7 @@ static int lt_tag_parse(lt_tag_t *tag,
                         // allowed, store first as language and return ok.
                         // For i-* simply assume the same.
                         (*ppSub)->append( pStart-1, p);
-                        return !0;  // ok
+                        return 1;  // ok
                     }
                     else if (nLen == 3)
                     {
@@ -514,7 +514,7 @@ static int lt_tag_parse(lt_tag_t *tag,
             pStart = p+1;
         }
     }
-    return !0;
+    return 1;
 }
 
 static char* lt_tag_canonicalize(lt_tag_t *tag,

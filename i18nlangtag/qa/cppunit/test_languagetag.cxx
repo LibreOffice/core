@@ -102,12 +102,12 @@ void TestLanguageTag::testAllTags()
 #else
         CPPUNIT_ASSERT( klingon.getBcp47() == s_klingon );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
-        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT_EQUAL( OUString(), aLocale.Country );
         CPPUNIT_ASSERT( aLocale.Variant == s_klingon );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( klingon.getLanguageType()) );
-        CPPUNIT_ASSERT( klingon.isValidBcp47() == true );
-        CPPUNIT_ASSERT( klingon.isIsoLocale() == false );
-        CPPUNIT_ASSERT( klingon.isIsoODF() == false );
+        CPPUNIT_ASSERT( klingon.isValidBcp47() );
+        CPPUNIT_ASSERT( !klingon.isIsoLocale() );
+        CPPUNIT_ASSERT( !klingon.isIsoODF() );
         LanguageType nLang = klingon.getLanguageType();
         LanguageTag klingon_id( nLang);
         CPPUNIT_ASSERT( klingon_id.getBcp47() == s_klingon );
