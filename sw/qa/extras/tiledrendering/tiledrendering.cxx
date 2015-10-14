@@ -73,6 +73,7 @@ private:
     OString m_aTextSelection;
     bool m_bFound;
     std::vector<OString> m_aSearchResultSelection;
+    std::vector<int> m_aSearchResultPart;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -139,7 +140,10 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         std::stringstream aStream(pPayload);
         boost::property_tree::read_json(aStream, aTree);
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
-            m_aSearchResultSelection.push_back(rValue.second.data().c_str());
+        {
+            m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
+            m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
+        }
     }
     break;
     }
@@ -478,6 +482,8 @@ void SwTiledRenderingTest::testSearchAll()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
+    // Writer documents are always a single part.
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 
     comphelper::LibreOfficeKit::setActive(false);
 #endif

@@ -637,7 +637,8 @@ bool Outliner::SearchAndReplaceAll()
             for (const SearchSelection& rSelection : aSelections)
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", rSelection.m_aRectangles.getStr());
+                aChild.put("part", OString::number(rSelection.m_nPage).getStr());
+                aChild.put("rectangles", rSelection.m_aRectangles.getStr());
                 aChildren.push_back(std::make_pair("", aChild));
             }
             aTree.add_child("searchResultSelection", aChildren);
@@ -764,7 +765,8 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
 
             boost::property_tree::ptree aChildren;
             boost::property_tree::ptree aChild;
-            aChild.put("", sRectangles.getStr());
+            aChild.put("part", OString::number(maCurrentPosition.mnPageIndex).getStr());
+            aChild.put("rectangles", sRectangles.getStr());
             aChildren.push_back(std::make_pair("", aChild));
             aTree.add_child("searchResultSelection", aChildren);
 

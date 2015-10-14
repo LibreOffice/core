@@ -1865,7 +1865,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 for (const Rectangle& rLogicRect : aLogicRects)
                 {
                     boost::property_tree::ptree aSelection;
-                    aSelection.put("", rLogicRect.toString().getStr());
+                    aSelection.put("part", OString::number(nTab).getStr());
+                    aSelection.put("rectangles", rLogicRect.toString().getStr());
                     aSelections.push_back(std::make_pair("", aSelection));
                 }
                 aTree.add_child("searchResultSelection", aSelections);
