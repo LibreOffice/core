@@ -39,6 +39,20 @@ class View;
 class ViewShell;
 class Window;
 
+/// Describes a single search hit: a set of rectangles on a given page.
+struct SearchSelection
+{
+    /// 0-based index of the page that has the selection.
+    int m_nPage;
+    /**
+     * List of selection rectangles in twips -- multiple rectangles only in
+     * case the selection spans over more layout lines.
+     */
+    OString m_aRectangles;
+
+    SearchSelection(int nPage, const OString& rRectangles);
+};
+
 /** The main purpose of this class is searching and replacing as well as
     spelling of impress documents.  The main part of both tasks lies in
     iterating over the pages and view modes of a document and apply the
@@ -357,7 +371,7 @@ private:
             The return value specifies whether the search ended (</sal_True>) or
             another call to this method is required (</sal_False>).
     */
-    bool SearchAndReplaceOnce(std::vector<OString>* pSelections = 0);
+    bool SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections = 0);
 
     /** Detect changes of the document or view and react accordingly.  Such
         changes may occur because different calls to

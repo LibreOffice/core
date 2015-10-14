@@ -83,6 +83,12 @@ class SfxStyleSheetPool;
 
 namespace sd {
 
+SearchSelection::SearchSelection(int nPage, const OString& rRectangles)
+    : m_nPage(nPage),
+    m_aRectangles(rRectangles)
+{
+}
+
 class Outliner::Implementation
 {
 public:
@@ -615,7 +621,7 @@ bool Outliner::SearchAndReplaceAll()
 
         // Search/replace until the end of the document is reached.
         bool bFoundMatch;
-        std::vector<OString> aSelections;
+        std::vector<SearchSelection> aSelections;
         do
         {
             bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
@@ -628,10 +634,10 @@ bool Outliner::SearchAndReplaceAll()
             aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
 
             boost::property_tree::ptree aChildren;
-            for (const OString& rSelection : aSelections)
+            for (const SearchSelection& rSelection : aSelections)
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", rSelection.getStr());
+                aChild.put("", rSelection.m_aRectangles.getStr());
                 aChildren.push_back(std::make_pair("", aChild));
             }
             aTree.add_child("searchResultSelection", aChildren);
@@ -649,7 +655,7 @@ bool Outliner::SearchAndReplaceAll()
     return true;
 }
 
-bool Outliner::SearchAndReplaceOnce(std::vector<OString>* pSelections)
+bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
 {
     DetectChange ();
 
@@ -769,7 +775,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<OString>* pSelections)
         }
         else
         {
-            pSelections->push_back(sRectangles);
+            pSelections->push_back(SearchSelection(maCurrentPosition.mnPageIndex, sRectangles));
         }
     }
 
