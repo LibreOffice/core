@@ -254,7 +254,6 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                     pFormat->Which() == RES_CONDTXTFMTCOLL;
 
     const SwFormat *pReferenceFormat = 0; // Vergleichs-Format
-    bool bSetDefaults = true, bClearSame = true;
     if( nDeep != 0 )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
@@ -307,6 +306,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
         pItemSet->Set( pFormat->GetAttrSet() );
 
+        bool bSetDefaults = true, bClearSame = true;
         if( pReferenceFormat )
             SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(),
                                            bSetDefaults, bClearSame );

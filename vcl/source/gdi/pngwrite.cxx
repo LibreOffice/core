@@ -599,9 +599,6 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
         pDest = mpDeflateInBuf;
         *pDest++ = 4; // filter type
 
-        sal_uLong na, nb, nc;
-        long  np, npa, npb, npc;
-
         sal_uInt8* p1 = mpCurrentScan + 1; // Current Pixel
         sal_uInt8* p2 = p1 - mnBBP;        // left pixel
         sal_uInt8* p3 = mpPreviousScan;    // upper pixel
@@ -609,7 +606,8 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
 
         while (pDest < mpDeflateInBuf + mnDeflateInSize)
         {
-            nb = *p3++;
+            sal_uLong nb = *p3++;
+            sal_uLong na, nc;
             if (p2 >= mpCurrentScan + 1)
             {
                 na = *p2;
@@ -620,11 +618,10 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
                 na = nc = 0;
             }
 
-            np = na + nb;
-            np -= nc;
-            npa = np - na;
-            npb = np - nb;
-            npc = np - nc;
+            long np = na + nb - nc;
+            long npa = np - na;
+            long npb = np - nb;
+            long npc = np - nc;
 
             if (npa < 0)
                 npa =-npa;

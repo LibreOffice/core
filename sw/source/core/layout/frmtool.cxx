@@ -1248,8 +1248,6 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
     SwFrm       *pFrm = 0;
-    bool   bBreakAfter   = false;
-
     SwActualSection *pActualSection = 0;
     SwLayHelper *pPageMaker;
 
@@ -1260,6 +1258,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     {
         // Attention: the SwLayHelper class uses references to the content-,
         // page-, layout-frame etc. and may change them!
+        bool   bBreakAfter   = false;
         pPageMaker = new SwLayHelper( pDoc, pFrm, pPrv, pPage, pLay,
                 pActualSection, bBreakAfter, nIndex, 0 == nEndIndex );
         if( bStartPercent )

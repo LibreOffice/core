@@ -1699,10 +1699,10 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         // combine consecutive
         if( pTmp->GetNext() != pInsRing )
         {
-            const SwContentNode* pCNd;
             do {
                 SwPosition& rSttEnd = *pTmp->End(),
                           & rEndStt = *(pTmp->GetNext())->Start();
+                const SwContentNode* pCNd;
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
                     rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&

@@ -142,12 +142,11 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
         baseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
     assert(baseSlot);
-    float thisBoundary = 0.;
     float nextBoundary = gr_slot_origin_X(baseSlot);
     // now loop over bases
     for ( ; baseSlot; baseSlot = nextBaseSlot)
     {
-        thisBoundary = nextBoundary;
+        float thisBoundary = nextBoundary;
         int firstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot))) + mnSegCharOffset;
         nextBaseSlot = get_next_base(bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot), bRtl);
         nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);

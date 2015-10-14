@@ -241,13 +241,14 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
-        bool bTmp = false, bAutoHCMode = true;
+        bool bAutoHCMode = true;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensitive !
         if ( aNode.isValid() )
         {
             ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("AutoDetectSystemHC") );
+            bool bTmp = false;
             if( aValue >>= bTmp )
                 bAutoHCMode = bTmp;
         }

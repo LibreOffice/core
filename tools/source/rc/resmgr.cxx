@@ -750,11 +750,11 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
                                      sal_uInt32 nId )
 {
     // Returns position of the resource if found or NULL otherwise
-    RSHEADER_TYPE*  pTmp;   // Pointer to child resource
-    RSHEADER_TYPE*  pEnd;   // Pointer to the end of this resource
 
     if ( pStack->pResource && pStack->pClassRes )
     {
+        RSHEADER_TYPE*  pTmp;   // Pointer to child resource
+        RSHEADER_TYPE*  pEnd;   // Pointer to the end of this resource
         pTmp = reinterpret_cast<RSHEADER_TYPE*>
                (reinterpret_cast<sal_uInt8*>(pStack->pResource) + pStack->pResource->GetLocalOff());
         pEnd = reinterpret_cast<RSHEADER_TYPE*>

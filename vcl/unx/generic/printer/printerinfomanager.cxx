@@ -1161,7 +1161,6 @@ void SystemQueueInfo::run()
     osl_setThreadName("LPR psp::SystemQueueInfo");
 
     char pBuffer[1024];
-    FILE *pPipe;
     std::list< OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
@@ -1174,6 +1173,7 @@ void SystemQueueInfo::run()
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
         #endif
         aCmdLine.append( " 2>/dev/null" );
+        FILE *pPipe;
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {
             while( fgets( pBuffer, 1024, pPipe ) )

@@ -2607,13 +2607,10 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
 bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
 {
-    bool bDone = false;
-    const CommandModKeyData* pCData;
-
     // No keyboard processing when system handles the menu or our menubar is invisible
     if( !IsDisplayable() ||
         ( ImplGetSalMenu() && ImplGetSalMenu()->VisibleMenuBar() ) )
-        return bDone;
+        return false;
 
     // check for enabled, if this method is called from another window...
     MenuBarWindow* pWin = static_cast<MenuBarWindow*>(ImplGetWindow());
@@ -2621,7 +2618,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
     {
         if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
         {
-            pCData = rCEvent.GetModKeyData ();
+            const CommandModKeyData* pCData = rCEvent.GetModKeyData ();
             if (pWin->nHighlightedItem == ITEMPOS_INVALID)
             {
                 if (pCData && pCData->IsMod2())

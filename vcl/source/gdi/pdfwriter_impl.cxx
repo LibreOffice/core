@@ -6570,8 +6570,7 @@ my_NSS_CMSAttributeArray_FindAttrByOidTag(NSSCMSAttribute **attrs, SECOidTag oid
 SECStatus
 my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
 {
-    void **p;
-    int n;
+    int n = 0;
     void **dest;
 
     PORT_Assert(array != NULL);
@@ -6579,16 +6578,15 @@ my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
         return SECFailure;
 
     if (*array == NULL) {
-    dest = static_cast<void **>(PORT_ArenaAlloc(poolp, 2 * sizeof(void *)));
-    n = 0;
+        dest = static_cast<void **>(PORT_ArenaAlloc(poolp, 2 * sizeof(void *)));
     } else {
-    n = 0; p = *array;
-    while (*p++)
-        n++;
-    dest = static_cast<void **>(PORT_ArenaGrow (poolp,
-                  *array,
-                  (n + 1) * sizeof(void *),
-                  (n + 2) * sizeof(void *)));
+        void **p = *array;
+        while (*p++)
+            n++;
+        dest = static_cast<void **>(PORT_ArenaGrow (poolp,
+                      *array,
+                      (n + 1) * sizeof(void *),
+                      (n + 2) * sizeof(void *)));
     }
 
     if (dest == NULL)

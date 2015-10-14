@@ -629,11 +629,11 @@ tp_file_hash_to_g_checksum (TpFileHashType type)
 static void
 check_hash_incoming (EmpathyFTHandler *handler)
 {
-  HashingData *hash_data;
   EmpathyFTHandlerPriv *priv = handler->priv;
 
   if (!tp_str_empty (priv->content_hash))
     {
+      HashingData *hash_data;
       hash_data = g_slice_new0 (HashingData);
       hash_data->total_bytes = priv->total_bytes;
       hash_data->handler = g_object_ref (handler);

@@ -3198,7 +3198,6 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     long nPageSize = 0;
     const char* widthType = "dxa";
-    bool bRelBoxSize = false;
 
     // If actual width of table is relative it should export is as "pct".`
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
@@ -3227,6 +3226,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     }
     else
     {
+        bool bRelBoxSize = false;
         // Create the SwWriteTable instance to use col spans (and maybe other infos)
         GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
         if(nPageSize == 0)

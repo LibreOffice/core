@@ -131,13 +131,12 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                 pPos->nContent == rEndNdIdx.GetNode().GetContentNode()->Len() ))
                     ? 0 : 1;
 
-    const SwNodeIndex* pContentIdx;
-
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
     {
         pFormat = rFormats[n];
         pAnchor = &pFormat->GetAnchor();
         const SwPosition* pAPos = pAnchor->GetContentAnchor();
+        const SwNodeIndex* pContentIdx;
         if (pAPos &&
             ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&

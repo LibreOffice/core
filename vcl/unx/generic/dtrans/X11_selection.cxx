@@ -1222,7 +1222,6 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     bool bHaveUTF16 = false;
     Atom aUTF8Type = None;
     bool bHaveCompound = false;
-    bool bHaveText = false;
     Sequence< sal_Int8 > aAtoms;
 
     if( selection == m_nXdndSelection )
@@ -1303,6 +1302,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         aNativeTypes.resize( nAtoms );
         DataFlavor* pFlavors = rTypes.getArray();
         sal_Int32 nNativeTypesIndex = 0;
+        bool bHaveText = false;
         while( nAtoms-- )
         {
             SAL_INFO_IF(*pAtoms && *pAtoms < 0x01000000, "vcl.unx.dtrans",

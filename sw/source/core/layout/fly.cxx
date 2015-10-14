@@ -1496,10 +1496,10 @@ void CalcContent( SwLayoutFrm *pLay,
                                 pTmpPrevFlowFrm->IsKeepFwdMoveAllowed();
 
             // format floating screen objects anchored to the frame.
-            bool bRestartLayoutProcess = false;
             if ( !bPrevInvalid && pFrm->GetDrawObjs() && pLay->IsAnLower( pFrm ) )
             {
                 bool bAgain = false;
+                bool bRestartLayoutProcess = false;
                 SwPageFrm* pPageFrm = pFrm->FindPageFrm();
                 size_t nCnt = pFrm->GetDrawObjs()->size();
                 size_t i = 0;

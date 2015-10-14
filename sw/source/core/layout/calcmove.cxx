@@ -1093,7 +1093,6 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                                             // this flag is set. If it turns out that it
                                             // didn't keep it's promise, we can act in a
                                             // controlled fashion.
-    bool bMoveable;
     const bool bFly = IsInFly();
     const bool bTab = IsInTab();
     const bool bFootnote = IsInFootnote();
@@ -1196,6 +1195,8 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     SWRECTFN( this )
+
+    bool bMoveable;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {

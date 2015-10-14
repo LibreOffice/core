@@ -475,16 +475,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     sal_uInt16          nVisItems;
     sal_uInt16          nAbsItems;
     long                nCalcSize;
-    long                nSizeDelta;
-    long                nSizeWinSize;
-    long                nNewSizeWinSize;
-    long                nTemp;
-    long                nTempErr;
-    long                nErrorSum;
-    long                nCurSizeDelta;
     long                nPos;
     long                nMaxPos;
-    long*               pSize;
     ImplSplitItems&     pItems = pSet->mpItems;
     bool                bEmpty;
 
@@ -502,7 +494,6 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     else
         nCalcSize = nSetWidth;
     nCalcSize -= (nVisItems-1)*pSet->mnSplitSize;
-    long nCurSize   = 0;
     if ( pSet->mbCalcPix || (pSet->mnLastSize != nCalcSize) )
     {
         long nPercentFactor = 10;
@@ -510,6 +501,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         long nPercent       = 0;
         long nRelPercent    = 0;
         long nAbsSize       = 0;
+        long nCurSize       = 0;
         for ( i = 0; i < nItems; i++ )
         {
             if ( !(pItems[i]->mnBits & SplitWindowItemFlags::Invisible) )
@@ -542,7 +534,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         }
         if ( !nPercent )
             nPercent = 1;
-        nSizeDelta = nCalcSize-nAbsSize;
+        long nSizeDelta = nCalcSize-nAbsSize;
         for ( i = 0; i < nItems; i++ )
         {
             if ( pItems[i]->mnBits & SplitWindowItemFlags::Invisible )
@@ -574,8 +566,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         if ( nSizeDelta )
         {
             nAbsItems       = 0;
-            nSizeWinSize    = 0;
-            nNewSizeWinSize = 0;
+            long nSizeWinSize    = 0;
+            long nNewSizeWinSize = 0;
 
             // first resize absolute items relative
             for ( i = 0; i < nItems; i++ )
@@ -646,8 +638,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 }
 
                 // subtract size of individual items
-                nErrorSum       = nSizeDelta % nCalcItems;
-                nCurSizeDelta   = nSizeDelta / nCalcItems;
+                long nErrorSum       = nSizeDelta % nCalcItems;
+                long nCurSizeDelta   = nSizeDelta / nCalcItems;
                 nMins           = 0;
                 for ( i = 0; i < nItems; i++ )
                 {
@@ -655,7 +647,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                         nMins++;
                     else if ( pItems[i]->mbSubSize )
                     {
-                        pSize = &(pItems[i]->mnPixSize);
+                        long* pSize = &(pItems[i]->mnPixSize);
+                        long  nTempErr;
 
                         if ( nErrorSum )
                         {
@@ -669,7 +662,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
 
                         if ( (*pSize+nCurSizeDelta+nTempErr) <= 0 )
                         {
-                            nTemp = *pSize;
+                            long nTemp = *pSize;
                             if ( nTemp )
                             {
                                 *pSize -= nTemp;
@@ -1468,7 +1461,6 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
     // the size is determined according to MainSet
     if ( mnWinStyle & WB_SIZEABLE )
     {
-        long    nCurSize;
         long    nCalcSize = 0;
         sal_uInt16  i;
 
@@ -1484,6 +1476,7 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
         {
             long    nDelta = 0;
             Point   aPos = GetPosPixel();
+            long    nCurSize;
 
             if ( mbHorz )
                 nCurSize = aNewSize.Height()-mnTopBorder-mnBottomBorder;
@@ -1533,7 +1526,6 @@ void SplitWindow::ImplCalcLayout()
     // the size is determined according to MainSet
     if ( mnWinStyle & WB_SIZEABLE )
     {
-        long    nCurSize;
         long    nCalcSize = 0;
         sal_uInt16  i;
 
@@ -1547,6 +1539,7 @@ void SplitWindow::ImplCalcLayout()
 
         if ( i == mpMainSet->mpItems.size() )
         {
+            long    nCurSize;
             if ( mbHorz )
                 nCurSize = mnDY-mnTopBorder-mnBottomBorder;
             else

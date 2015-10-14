@@ -653,8 +653,6 @@ static bool performTest(
             static_cast< sal_Int64 >(SAL_CONST_INT64(0x8000000000000000)), 1,
             SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF) };
         sal_uInt64 _arUHyper[] = { 0, 1, SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF) };
-        float _arFloat[] = { 1.1f, 2.2f, 3.3f };
-        double _arDouble[] = { 1.11, 2.22, 3.33 };
         OUString _arString[] = {
             OUString("String 1"),
             OUString("String 2"),
@@ -691,6 +689,8 @@ static bool performTest(
             TestEnum_CHECK, STRING_TEST_CONSTANT, _arObj[2],
             Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {
+            float _arFloat[] = { 1.1f, 2.2f, 3.3f };
+            double _arDouble[] = { 1.11, 2.22, 3.33 };
             Sequence<sal_Bool> arBool(_arBool, 3);
             Sequence<sal_Unicode> arChar( _arChar, 3);
             Sequence<sal_Int8> arByte(_arByte, 3);

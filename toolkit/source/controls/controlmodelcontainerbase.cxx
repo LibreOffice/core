@@ -952,7 +952,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     Reference< XServiceInfo > xModelSI;                 // for checking for a radio button
     AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
-    bool    bIsRadioButton;                         // is it a radio button?
 
 #if OSL_DEBUG_LEVEL > 1
     ::std::vector< OUString > aCurrentGroupLabels;
@@ -962,7 +961,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     {
         // we'll need this in every state
         xModelSI.set(*pControlModels, css::uno::UNO_QUERY);
-        bIsRadioButton = xModelSI.is() && xModelSI->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" );
+        // is it a radio button?
+        bool bIsRadioButton = xModelSI.is() && xModelSI->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" );
 
         switch ( eState )
         {
