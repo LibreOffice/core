@@ -38,8 +38,6 @@ public class _XURLTransformer extends MultiMethodTest {
 
     public XURLTransformer oObj = null;
 
-    URL url;
-
     static final String user = "user";
     static final String invalidUserPrefix = "1";
     static final String password = "password";
