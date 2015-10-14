@@ -403,11 +403,8 @@ public class CalcRTL
                                 "' has changed");
 
                     try {
-                        if (!util.utils.isVoid(oldValue) &&
-                                oldValue instanceof Any) {
-                            oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
-                                               oldValue);
+                        if (!util.utils.isVoid(oldValue) && oldValue instanceof Any) {
+                            oldValue = AnyConverter.toObject( new Type(oldValue.getClass()), oldValue);
                         }
 
                         System.out.println("old = " + toString(oldValue));

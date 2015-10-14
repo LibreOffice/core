@@ -359,7 +359,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
                             {
-                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
+                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
                             }
                             log.println("result = " + toString(resValue));
                         }
@@ -393,7 +393,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
                             {
-                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
+                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
                             }
                             log.println("result = " + toString(resValue));
                         }
@@ -427,7 +427,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
                             {
-                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
+                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
                             }
                             log.println("result = " + toString(resValue));
                         }
