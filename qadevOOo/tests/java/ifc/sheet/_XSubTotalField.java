@@ -20,6 +20,8 @@ package ifc.sheet;
 
 import lib.MultiMethodTest;
 
+import java.util.Arrays;
+
 import com.sun.star.sheet.GeneralFunction;
 import com.sun.star.sheet.SubTotalColumn;
 import com.sun.star.sheet.XSubTotalField;
@@ -98,7 +100,7 @@ public class _XSubTotalField extends MultiMethodTest {
         oObj.setSubTotalColumns(columns);
         tRes.tested(
             "setSubTotalColumns()",
-            !STColumns.equals(oObj.getSubTotalColumns()) );
+            !Arrays.equals(STColumns, oObj.getSubTotalColumns()) );
     } // end of getSubTotalColumns
 
 }  // finish class _XSubTotalField
