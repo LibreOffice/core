@@ -29,7 +29,6 @@ public class BookmarkDsc extends InstDescr {
 
     private static final String service = "com.sun.star.text.Bookmark";
     private static final String ifcName = "com.sun.star.text.XTextContent";
-    private String name = null;
 
 
     public BookmarkDsc() {
@@ -38,7 +37,7 @@ public class BookmarkDsc extends InstDescr {
 
     @Override
     public String getName() {
-            return name;
+            return null;
     }
 
     @Override
