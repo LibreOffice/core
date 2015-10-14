@@ -428,15 +428,9 @@ public class CalcRTL
                     System.out.println("new = " + toString(newValue));
                     System.out.println("result = " + toString(resValue));
 
-                    if (resValue != null) {
-                        if ((!ValueComparer.equalValue(resValue, oldValue)) ||
-                                (!resValue.equals(oldValue))) {
-                            System.out.println("But it has changed.");
-
-                            return true;
-                        } else {
-                            return false;
-                        }
+                    if (!ValueComparer.equalValue(resValue, oldValue)) {
+                        System.out.println("But it has changed.");
+                        return true;
                     } else {
                         return false;
                     }
