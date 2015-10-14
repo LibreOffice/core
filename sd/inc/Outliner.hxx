@@ -350,11 +350,14 @@ private:
     bool SearchAndReplaceAll();
 
     /** Do search and replace for next match.
+        @param pSelections
+            When tiled rendering and not 0, then don't emit LOK events, instead
+            assume the caller will do so.
         @return
             The return value specifies whether the search ended (</sal_True>) or
             another call to this method is required (</sal_False>).
     */
-    bool SearchAndReplaceOnce();
+    bool SearchAndReplaceOnce(std::vector<OString>* pSelections = 0);
 
     /** Detect changes of the document or view and react accordingly.  Such
         changes may occur because different calls to

@@ -484,7 +484,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         Initialize ( ! mpSearchItem->GetBackward());
 
         const SvxSearchCmd nCommand (mpSearchItem->GetCommand());
-        if (nCommand == SvxSearchCmd::REPLACE_ALL)
+        if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
             bEndOfSearch = SearchAndReplaceAll ();
         else
         {
@@ -615,11 +615,32 @@ bool Outliner::SearchAndReplaceAll()
 
         // Search/replace until the end of the document is reached.
         bool bFoundMatch;
+        std::vector<OString> aSelections;
         do
         {
-            bFoundMatch = ! SearchAndReplaceOnce();
+            bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
         }
         while (bFoundMatch);
+
+        if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && !aSelections.empty())
+        {
+            boost::property_tree::ptree aTree;
+            aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+
+            boost::property_tree::ptree aChildren;
+            for (const OString& rSelection : aSelections)
+            {
+                boost::property_tree::ptree aChild;
+                aChild.put("", rSelection.getStr());
+                aChildren.push_back(std::make_pair("", aChild));
+            }
+            aTree.add_child("searchResultSelection", aChildren);
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            OString aPayload = aStream.str().c_str();
+            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+        }
     }
 
     RestoreStartPosition ();
@@ -628,7 +649,7 @@ bool Outliner::SearchAndReplaceAll()
     return true;
 }
 
-bool Outliner::SearchAndReplaceOnce()
+bool Outliner::SearchAndReplaceOnce(std::vector<OString>* pSelections)
 {
     DetectChange ();
 
@@ -718,30 +739,38 @@ bool Outliner::SearchAndReplaceOnce()
 
     if (pViewShell && pViewShell->GetDoc()->isTiledRendering() && mbStringFound)
     {
-        // notify LibreOfficeKit about changed page
-        OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
-        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-
-        // also about search result selections
         std::vector<Rectangle> aLogicRects;
         pOutlinerView->GetSelectionRectangles(aLogicRects);
-
-        boost::property_tree::ptree aTree;
-        aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
 
         std::vector<OString> aLogicRectStrings;
         std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const Rectangle& rRectangle) { return rRectangle.toString(); });
         OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);
-        boost::property_tree::ptree aChildren;
-        boost::property_tree::ptree aChild;
-        aChild.put("", sRectangles.getStr());
-        aChildren.push_back(std::make_pair("", aChild));
-        aTree.add_child("searchResultSelection", aChildren);
 
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        aPayload = aStream.str().c_str();
-        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+        if (!pSelections)
+        {
+            // notify LibreOfficeKit about changed page
+            OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
+            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+
+            // also about search result selections
+            boost::property_tree::ptree aTree;
+            aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+
+            boost::property_tree::ptree aChildren;
+            boost::property_tree::ptree aChild;
+            aChild.put("", sRectangles.getStr());
+            aChildren.push_back(std::make_pair("", aChild));
+            aTree.add_child("searchResultSelection", aChildren);
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            aPayload = aStream.str().c_str();
+            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+        }
+        else
+        {
+            pSelections->push_back(sRectangles);
+        }
     }
 
     return mbEndOfSearch;
