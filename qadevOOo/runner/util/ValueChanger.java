@@ -354,7 +354,7 @@ public class ValueChanger {
             if (oldValue.equals(bm2))
                 newValue = bm3;
             if (oldValue.equals(bm3))
-                newValue = bm3;
+                newValue = bm1;
         } else if (oldValue instanceof com.sun.star.drawing.TextAdjust) {
             com.sun.star.drawing.TextAdjust TA1 = com.sun.star.drawing.TextAdjust.BLOCK;
             com.sun.star.drawing.TextAdjust TA2 = com.sun.star.drawing.TextAdjust.CENTER;
