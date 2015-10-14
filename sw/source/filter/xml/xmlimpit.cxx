@@ -638,8 +638,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BACKGROUND:
         {
-            SvxBrushItem* pBrush = dynamic_cast<SvxBrushItem*>( &rItem );
-            OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
+            SvxBrushItem& rBrush = dynamic_cast<SvxBrushItem&>(rItem);
 
             sal_Int32 nTempColor(0);
             switch( nMemberId )
@@ -647,41 +646,41 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_BACK_COLOR:
                     if( IsXMLToken( rValue, XML_TRANSPARENT ) )
                     {
-                        pBrush->GetColor().SetTransparency(0xff);
+                        rBrush.GetColor().SetTransparency(0xff);
                         bOk = true;
                     }
                     else if (::sax::Converter::convertColor(nTempColor, rValue))
                     {
                         Color aTempColor(nTempColor);
                         aTempColor.SetTransparency(0);
-                        pBrush->SetColor( aTempColor );
+                        rBrush.SetColor( aTempColor );
                         bOk = true;
                     }
                     break;
 
                 case MID_GRAPHIC_LINK:
                 {
-                    SvxGraphicPosition eOldGraphicPos = pBrush->GetGraphicPos();
+                    SvxGraphicPosition eOldGraphicPos = rBrush.GetGraphicPos();
                     uno::Any aAny;
                     aAny <<= rValue;
-                    pBrush->PutValue( aAny, MID_GRAPHIC_URL );
+                    rBrush.PutValue( aAny, MID_GRAPHIC_URL );
                     if( GPOS_NONE == eOldGraphicPos &&
-                        GPOS_NONE != pBrush->GetGraphicPos() )
-                        pBrush->SetGraphicPos( GPOS_TILED );
+                        GPOS_NONE != rBrush.GetGraphicPos() )
+                        rBrush.SetGraphicPos( GPOS_TILED );
                     bOk = true;
                 }
                 break;
 
                 case MID_GRAPHIC_REPEAT:
                 {
-                    SvxGraphicPosition eGraphicPos = pBrush->GetGraphicPos();
+                    SvxGraphicPosition eGraphicPos = rBrush.GetGraphicPos();
                     sal_uInt16 nPos = GPOS_NONE;
                     if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                     psXML_BrushRepeat ) )
                     {
                         if( GPOS_MM != nPos || GPOS_NONE == eGraphicPos ||
                             GPOS_AREA == eGraphicPos || GPOS_TILED == eGraphicPos )
-                            pBrush->SetGraphicPos( (SvxGraphicPosition)nPos );
+                            rBrush.SetGraphicPos( (SvxGraphicPosition)nPos );
                         bOk = true;
                     }
                 }
@@ -767,12 +766,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( GPOS_NONE == ePos ) bOk = false;
                     if( bOk )
-                        pBrush->SetGraphicPos( ePos );
+                        rBrush.SetGraphicPos( ePos );
                 }
                 break;
 
                 case MID_GRAPHIC_FILTER:
-                    pBrush->SetGraphicFilter( rValue );
+                    rBrush.SetGraphicFilter( rValue );
                     bOk = true;
                     break;
                 }
