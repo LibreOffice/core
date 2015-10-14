@@ -835,18 +835,17 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            SwFormatVertOrient* pVertOrient = dynamic_cast<SwFormatVertOrient*>( &rItem );
-            OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
+            SwFormatVertOrient& rVertOrient = dynamic_cast<SwFormatVertOrient&>(rItem);
 
             sal_uInt16 nValue;
             bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableVAlignMap );
             if( bOk )
-                pVertOrient->SetVertOrient( nValue );
+                rVertOrient.SetVertOrient( nValue );
             //#i8855# text::VertOrientation::NONE is stored as empty string and should be applied here
             else if(rValue.isEmpty())
             {
-                pVertOrient->SetVertOrient( text::VertOrientation::NONE );
+                rVertOrient.SetVertOrient( text::VertOrientation::NONE );
                 bOk = true;
             }
         }
