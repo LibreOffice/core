@@ -230,13 +230,12 @@ public class Control extends Shape
             {
                 throw new IllegalArgumentException();
             }
-            return getPeer().getPreferredSize();
         }
         catch (Exception e)
         {
             e.printStackTrace(System.err);
-            return null;
         }
+        return getPeer().getPreferredSize();
     }
 
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
