@@ -477,7 +477,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     {
 #if HAVE_FEATURE_OPENCL
         const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
-        if (officecfg::Office::Common::Misc::UseOpenCL::get())
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get())
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect);
 #endif
         static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != NULL);
@@ -503,7 +503,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
-    bool bOpenCLEnabled = officecfg::Office::Common::Misc::UseOpenCL::get();
+    bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get();
     static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != NULL);
     if (!bOpenCLEnabled || (bAllowSoftwareInterpreter && rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
     {
@@ -526,7 +526,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     delete msInstance;
     msInstance = NULL;
 
-    if ( officecfg::Office::Common::Misc::UseOpenCL::get() )
+    if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get() )
     {
         msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
         return msInstance != NULL;
@@ -539,7 +539,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 {
     rDeviceId = -1;
     rPlatformId = -1;
-    bool bOpenCLEnabled = officecfg::Office::Common::Misc::UseOpenCL::get();
+    bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get();
     if(!bOpenCLEnabled)
         return;
 

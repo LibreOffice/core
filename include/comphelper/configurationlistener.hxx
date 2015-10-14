@@ -57,7 +57,7 @@ public:
 
     virtual inline ~ConfigurationListenerProperty();
 
-    uno_type get() { return maValue; }
+    uno_type get() const { return maValue; }
 };
 
 class COMPHELPER_DLLPUBLIC ConfigurationListener :

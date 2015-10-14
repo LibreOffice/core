@@ -60,7 +60,6 @@
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
 #include <grouparealistener.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <memory>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -3891,7 +3890,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
     }
 
-    if (!officecfg::Office::Common::Misc::UseOpenCL::get())
+    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get())
         return false;
 
     // TODO : Disable invariant formula group interpretation for now in order
