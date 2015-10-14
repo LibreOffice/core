@@ -17,6 +17,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <config_liblangtag.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
@@ -24,14 +25,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 using namespace com::sun::star;
-
-// To test the replacement code add '&& 0' and also in
-// source/languagetag/languagetag.cxx
-#if defined(ENABLE_LIBLANGTAG)
-#define USE_LIBLANGTAG 1
-#else
-#define USE_LIBLANGTAG 0
-#endif
 
 namespace {
 
@@ -58,7 +51,7 @@ void TestLanguageTag::testAllTags()
         OUString aBcp47 = de_DE.getBcp47();
         lang::Locale aLocale = de_DE.getLocale();
         LanguageType nLanguageType = de_DE.getLanguageType();
-#if USE_LIBLANGTAG
+#if ENABLE_LIBLANGTAG
         CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "de-DE" );
         CPPUNIT_ASSERT( aLocale.Language == "de" );
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
@@ -87,7 +80,7 @@ void TestLanguageTag::testAllTags()
         OUString s_klingon( "i-klingon" );
         LanguageTag klingon( s_klingon, true );
         lang::Locale aLocale = klingon.getLocale();
-#if USE_LIBLANGTAG
+#if ENABLE_LIBLANGTAG
         CPPUNIT_ASSERT( klingon.getBcp47() == "tlh" );
         CPPUNIT_ASSERT( aLocale.Language == "tlh" );
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
@@ -469,7 +462,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[4] == "en");
     }
 
-#if USE_LIBLANGTAG
+#if ENABLE_LIBLANGTAG
     // 'zh-yue-HK' uses redundant 'zh-yue' and should be preferred 'yue-HK'
 #if 0
     /* XXX Disabled because liblangtag in lt_tag_canonicalize() after replacing
@@ -623,7 +616,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized, true) && aCanonicalized == "en-US" );
         CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized, true) && aCanonicalized == "x-foobar" );
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized, true) && aCanonicalized == "qaa" );
-#if USE_LIBLANGTAG
+#if ENABLE_LIBLANGTAG
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-DE" );
         /* TODO: at least some (those we know) grandfathered tags should be
          * recognized by the replacement code. */

@@ -11768,6 +11768,7 @@ if test "$enable_liblangtag" = "yes" -o \
             LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs -llangtag"
         fi
     fi
+    AC_DEFINE(ENABLE_LIBLANGTAG)
 else
     AC_MSG_RESULT([no])
 fi

@@ -24,7 +24,7 @@
 
 //#define erDEBUG
 
-#if defined(ENABLE_LIBLANGTAG)
+#if ENABLE_LIBLANGTAG
 #if LIBLANGTAG_INLINE_FIX
 #define LT_HAVE_INLINE
 #endif

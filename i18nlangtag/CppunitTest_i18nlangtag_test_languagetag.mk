@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
 	liblangtag \
 	libxml2 \
 ))
-$(eval $(call gb_CppunitTest_add_defs,i18nlangtag_test_languagetag,-DENABLE_LIBLANGTAG))
 
 ifneq ($(SYSTEM_LIBLANGTAG),)
 $(eval $(call gb_CppunitTest_add_defs,i18nlangtag_test_languagetag,-DSYSTEM_LIBLANGTAG))
