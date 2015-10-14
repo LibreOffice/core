@@ -47,27 +47,18 @@ public class CharArrayLCSAlgorithm {
         int orgSeqlen = orgSeq.length;
         int modSeqlen = modSeq.length;
 
-        int[][] diffTable;
-
         // Diff table is used to keep track which element is the same or not
         // in those 2 sequences
-        diffTable = createDiffTable(orgSeq, modSeq);
+        int[][] diffTable = createDiffTable(orgSeq, modSeq);
 
         ArrayList<Difference> diffResult = new ArrayList<Difference>();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
 
-        Difference[] diffArray = new Difference[0];
-
-        // convert the vector to array, it has to do in here as
+        // convert the vector to array, it has to do it here as
         // generateResult is called recursively
-        if (diffResult.size() > 0) {
-            diffArray = new Difference[diffResult.size()];
-            diffResult.toArray(diffArray);
-        }
-
-        diffTable = null;
-        diffResult = null;
+        Difference[] diffArray = new Difference[diffResult.size()];
+        diffResult.toArray(diffArray);
 
         return diffArray;
     }
