@@ -778,7 +778,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         base::releasePage (aDescr);
 
         // Release and free directory page.
-        base::free (aPage.location());
+        (void)base::free (aPage.location());
     }
 
     // Remove entry.
