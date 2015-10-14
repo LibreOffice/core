@@ -4508,7 +4508,7 @@
                 <desc>Specifies whether a numbered or bulleted text is created automatically while typing.</desc>
                 <label>Apply numbering</label>
               </info>
-              <value>false</value>
+              <value>true</value>
             </prop>
             <group oor:name="SpecialCharacter">
               <info>
