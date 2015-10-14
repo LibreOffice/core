@@ -4503,10 +4503,10 @@
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
               <!-- OldPath: Writer/AutoFormat/ByInput -->
               <!-- OldLocation: Soffice.cfg -->
-              <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
+              <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Bulleted and numbered lists-->
               <info>
                 <desc>Specifies whether a numbered or bulleted text is created automatically while typing.</desc>
-                <label>Apply numbering</label>
+                <label>Bulleted and numbered lists</label>
               </info>
               <value>false</value>
             </prop>
@@ -4517,7 +4517,7 @@
               <prop oor:name="Char" oor:type="xs:int" oor:nillable="false">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Bulleted and numbered lists-->
                 <info>
                   <desc>Specifies the character code if ApplyNumbering=true.</desc>
                 </info>
@@ -4526,7 +4526,7 @@
               <prop oor:name="Font" oor:type="xs:string" oor:nillable="false">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <info>
                   <desc>Specifies the font name if ApplyNumbering=true.</desc>
                 </info>
@@ -4535,7 +4535,7 @@
               <prop oor:name="FontFamily" oor:type="xs:int" oor:nillable="false">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 0 = Symbol-->
                 <info>
                   <desc>Specifies the font family if ApplyNumbering=true.</desc>
@@ -4545,7 +4545,7 @@
               <prop oor:name="FontCharset" oor:type="xs:int" oor:nillable="false">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 10 = Symbol-->
                 <info>
                   <desc>Specifies the font character set if ApplyNumbering=true.</desc>
@@ -4555,7 +4555,7 @@
               <prop oor:name="FontPitch" oor:type="xs:int" oor:nillable="false">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 2 = Variable-->
                 <info>
                   <desc>Specifies the font pitch if ApplyNumbering=true.</desc>

@@ -165,7 +165,7 @@ String RID_SVXSTR_RIGHT_MARGIN
 };
 String RID_SVXSTR_NUM
 {
-    Text [ en-US ] = "Apply numbering - symbol: " ;
+    Text [ en-US ] = "Bulleted and numbered lists. Bullet point symbol: " ;
 };
 String RID_SVXSTR_BORDER
 {
