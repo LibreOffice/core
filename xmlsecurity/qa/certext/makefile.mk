@@ -36,12 +36,15 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE: settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUNITLIB)     \
+.ELSE
+
+APP1OBJS = $(SLO)/SanCertExt.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB)     \
               $(SALLIB)         \
               $(NEON3RDLIB)     \
               $(CPPULIB)        \
@@ -52,20 +55,12 @@ SHL1STDLIBS = $(CPPUNITLIB)     \
               $(COMPHELPERLIB) \
               $(TESTLIB)
 
-SHL1TARGET = qa_CertExt
-SHL1VERSIONMAP = $(PRJ)/qa/certext/export.map
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SLO)/SanCertExt.obj
+APP1TARGET = qa_CertExt
+APP1TEST = enabled
 
 .INCLUDE: target.mk
 .INCLUDE: installationtest.mk
 
-ALLTAR : cpptest
-
-cpptest : $(SHL1TARGETN)
-
-CPPTEST_LIBRARY = $(SHL1TARGETN)
-
-.END
-.END
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+.ENDIF # "$(OOO_SUBSEQUENT_TESTS)" == ""
+.ENDIF # "$(ENABLE_NSS_MODULE)" == "NO"
