@@ -60,11 +60,8 @@ public class PeerConfig implements XWindowListener
 
     private static class ControlTask
     {
-
         Object oModel;
         String propname;
-        Object propvalue;
-
     }
 
     private static class ImageUrlTask
@@ -106,7 +103,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.aControlTasks.size(); i++)
             {
                 ControlTask aControlTask = aControlTasks.get(i);
-                Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
+                Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, null);
             }
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
