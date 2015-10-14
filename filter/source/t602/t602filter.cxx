@@ -120,7 +120,8 @@ namespace T602ImportFilter {
     if (mxHandler.is()) \
     { \
         mxHandler->startElement(_nam, mAttrList); \
-        mpAttrList->Clear(); \
+        if (mpAttrList) \
+            mpAttrList->Clear(); \
     }
 
 #define _End(_nam) \
