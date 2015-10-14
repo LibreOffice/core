@@ -353,8 +353,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_SHADOW:
         {
-            SvxShadowItem* pShadow = dynamic_cast<SvxShadowItem*>( &rItem );
-            OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
+            SvxShadowItem& rShadow = dynamic_cast<SvxShadowItem&>(rItem);
 
             bool bColorFound = false;
             bool bOffsetFound = false;
@@ -362,14 +361,14 @@ bool SvXMLImportItemMapper::PutXMLValue(
             SvXMLTokenEnumerator aTokenEnum( rValue );
 
             Color aColor( 128,128, 128 );
-            pShadow->SetLocation( SVX_SHADOW_BOTTOMRIGHT );
+            rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
 
             OUString aToken;
             while( aTokenEnum.getNextToken( aToken ) )
             {
                 if( IsXMLToken( aToken, XML_NONE ) )
                 {
-                    pShadow->SetLocation( SVX_SHADOW_NONE );
+                    rShadow.SetLocation( SVX_SHADOW_NONE );
                     bOk = true;
                 }
                 else if( !bColorFound && aToken.startsWith("#") )
@@ -396,36 +395,36 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             if( nY < 0 )
                             {
-                                pShadow->SetLocation( SVX_SHADOW_TOPLEFT );
+                                rShadow.SetLocation( SVX_SHADOW_TOPLEFT );
                             }
                             else
                             {
-                                pShadow->SetLocation( SVX_SHADOW_BOTTOMLEFT );
+                                rShadow.SetLocation( SVX_SHADOW_BOTTOMLEFT );
                             }
                         }
                         else
                         {
                             if( nY < 0 )
                             {
-                                pShadow->SetLocation( SVX_SHADOW_TOPRIGHT );
+                                rShadow.SetLocation( SVX_SHADOW_TOPRIGHT );
                             }
                             else
                             {
-                                pShadow->SetLocation( SVX_SHADOW_BOTTOMRIGHT );
+                                rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
                             }
                         }
 
                         if( nX < 0 ) nX *= -1;
                         if( nY < 0 ) nY *= -1;
 
-                        pShadow->SetWidth( static_cast< sal_uInt16 >( (nX + nY) >> 1 ) );
+                        rShadow.SetWidth( static_cast< sal_uInt16 >( (nX + nY) >> 1 ) );
                     }
                 }
             }
 
             if( bOk && ( bColorFound || bOffsetFound ) )
             {
-                pShadow->SetColor( aColor );
+                rShadow.SetColor(aColor);
             }
             else
                 bOk = false;
