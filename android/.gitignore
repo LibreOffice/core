@@ -5,9 +5,11 @@
 /source/assets_strippedUI/
 /source/build/
 /source/captures/
+/source/jni/Application.mk
 /source/jniLibs/
 /source/jniLibs_debug/
 /source/liboSettings.gradle
+/source/libs/*/gdb.setup
 /source/local.properties
 /source/native-code.cxx
 /source/obj/

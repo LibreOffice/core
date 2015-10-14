@@ -24,7 +24,6 @@ dependencies {
     ])
     compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
-    compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
 }
 
@@ -39,18 +38,24 @@ android {
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
         main.manifest.srcFile 'AndroidManifest.xml'
+        // override the debuggable flag that needs to be in AndroidManifest.xml
+        // since ndk-gdb awks for the literal string in there :-/
+        release.manifest.srcFile 'ReleaseManifest.xml'
         main.assets.srcDirs = ['assets']
         main.res.srcDirs = ['res']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ['jniLibs']
         main.jni.srcDirs = [] // don't attempt to build native-lib via gradle
-        // gdbserver stuff from separate dir
+        // gdbserver for debugvariant
         debug.jniLibs.srcDirs "jniLibs_debug"
         // the configuration data that might be stripped or not
         fullUI.assets.srcDirs 'assets_fullUI'
         strippedUI.assets.srcDirs 'assets_strippedUI'
     }
-    // defaults for Manifest
+    lintOptions {
+        // ndk-gdb looks for the literal value in the pre-processed manifest :-(
+        disable 'HardcodedDebugMode'
+    }
     defaultConfig {
         minSdkVersion 14
         // openssl on x86 makes the native-code.so contain text-relocations,
@@ -197,16 +202,24 @@ task createStrippedConfigRegistry(type: Exec) {
     }
 }
 
+// ndk-gdb requires the gdb.setup to be in libs/<arch>/ folder - it's hardcoded in the script
+// it should in theory also be able to copy the gdbserver binary onto the device, but the matching
+// against prebuilt archs is too rudimentary and doesn't map armeabi-v7 to arm for example
 task copyNdkDebugServer(type: Copy) {
-    description "copies gdbserver into and creates gdb.setup in the debug-type only native directory"
+    description "copies gdbserver into and creates gdb.setup and Application.mk for use with ndk-gdb"
     inputs.file "liboSettings.gradle"
-    def gdbsetup = file("jniLibs_debug/${liboAndroidAppAbi}/gdb.setup")
-    outputs.file gdbsetup
+    def gdbsetup = file("libs/${liboAndroidAppAbi}/gdb.setup") // only needed on buildhost
+    // hardcoded path from ndk-gdb - reads the host architecture from that file
+    def applicationmk = file("jni/Application.mk")
+    outputs.files gdbsetup, applicationmk
     outputs.dir 'jniLibs_debug' // own the directory, so it is removed on this task's clean
+    outputs.dir 'libs' // own the directory, so it is removed on this task's clean
     into "jniLibs_debug/${liboAndroidAppAbi}"
     from "${liboNdkGdbserver}"
     doLast {
-        gdbsetup.text = "set solib-search-path ./obj/local/${liboAndroidAppAbi}"
+        file("libs/${liboAndroidAppAbi}").mkdirs()
+        gdbsetup.text = "set solib-search-path ./obj/local/${liboAndroidAppAbi}\n"
+        applicationmk.text = "APP_ABI := ${liboAndroidAppAbi}\n"
     }
 }
 
