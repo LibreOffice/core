@@ -17,6 +17,8 @@
  */
 package ifc.sheet;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.sun.star.sheet.XSpreadsheets;
 
 import lib.MultiMethodTest;
@@ -34,7 +36,7 @@ import lib.MultiMethodTest;
 * @see com.sun.star.sheet.XSpreadsheets
 */
 public class _XSpreadsheets extends MultiMethodTest {
-    protected static int uniqCount = 0;
+    private static final AtomicInteger uniqCount = new AtomicInteger(0);
     public XSpreadsheets oObj = null;
     protected int uniqNumber = 0;
 
@@ -43,7 +45,7 @@ public class _XSpreadsheets extends MultiMethodTest {
     */
     @Override
     protected synchronized void before() {
-        uniqNumber = uniqCount++;
+        uniqNumber = uniqCount.getAndIncrement();
     }
 
     /**
