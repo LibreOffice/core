@@ -571,8 +571,13 @@ public class utils {
                 continue;
             }
             try {
-                new Socket("localhost", port);
+                Socket sock = new Socket("localhost", port);
                 System.out.println(" -> socket: occupied port: " + port);
+                try {
+                    sock.close();
+                } catch (IOException ex) {
+                    // ignore close exception
+                }
             } catch (IOException e) {
                 System.out.println(" -> free port");
                 return port;
