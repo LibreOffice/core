@@ -198,16 +198,25 @@ Building with all symbols is also possible but the linking is currently
 slow (around 10 to 15 minutes) and you need lots of memory (around 16GB + some
 swap).
 
-You also want to avoid --with-android-package-name (or when you use
-that, you must set it to "org.libreoffice"), otherwise ndk-gdb will complain:
-
-	ERROR: Could not extract package's data directory. Are you sure that
-	       your installed application is debuggable?
-
 When you have all this, install the .apk to the device, and:
 
         cd android/source
-        <android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
+        <ndk-bundle>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb [--start]
+
+In case you used --with-android-package-name, add --package=your.package.name
+to the invocation
+
+If you get the error
+
+        ERROR: Could not find gdb.setup under ./libs/
+
+(and an empty "Compatible device ABI:" when run with --verbose), you need to fix
+the quoting in the ndk-gdb script:
+
+@@ -574 +574 @@
+-adb_var_shell BCFILES run-as $PACKAGE_NAME /system/bin/sh -c "ls lib/*.bc"
++adb_var_shell BCFILES run-as $PACKAGE_NAME /system/bin/sh -c \"ls lib/*.bc\"
+
 
 Pretty printers aren't loaded automatically due to the single shared
 object, but you can still load them manually. E.g. to have a pretty-printer for
