@@ -74,8 +74,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
 {
     public void handle( com.sun.star.task.XInteractionRequest xRequest )
     {
-        Object request = xRequest.getRequest();
-
         boolean approve = true;
         boolean abort = false;
 
