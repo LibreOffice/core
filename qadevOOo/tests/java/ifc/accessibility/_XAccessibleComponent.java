@@ -209,170 +209,166 @@ public class _XAccessibleComponent extends MultiMethodTest {
         boolean result = true;
         XAccessibleComponent[] children = getChildrenComponents();
 
-        if (children.length > 0) {
-            for (int i = 0; i < children.length; i++) {
-                Rectangle chBnd = children[i].getBounds();
+        if (children.length == 0) {
+            log.println("There are no children supporting XAccessibleComponent");
+            tRes.tested("getAccessibleAtPoint()", result);
+            return;
+        }
 
-                if (chBnd.X == -1) {
-                    continue;
-                }
+        for (int i = 0; i < children.length; i++) {
+            Rectangle chBnd = children[i].getBounds();
 
-                log.println("Checking child with bounds " + "(" + chBnd.X +
-                            "," + chBnd.Y + "),(" + chBnd.Width + "," +
-                            chBnd.Height + "): " +
-                            util.AccessibilityTools.accessibleToString(
-                                    children[i]));
+            if (chBnd.X == -1) {
+                continue;
+            }
 
-                XAccessibleContext xAc = UnoRuntime.queryInterface(
-                                                 XAccessibleContext.class,
-                                                 children[i]);
+            log.println("Checking child with bounds " + "(" + chBnd.X +
+                        "," + chBnd.Y + "),(" + chBnd.Width + "," +
+                        chBnd.Height + "): " +
+                        util.AccessibilityTools.accessibleToString(
+                                children[i]));
 
-                boolean MightBeCovered = false;
-                boolean isShowing = xAc.getAccessibleStateSet()
-                                       .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
-                log.println("\tStateType containsPoint SHOWING: " +
-                            isShowing);
+            XAccessibleContext xAc = UnoRuntime.queryInterface(
+                                             XAccessibleContext.class,
+                                             children[i]);
 
-                if (!isShowing) {
-                    log.println("Child is invisible - OK");
+            boolean MightBeCovered = false;
+            boolean isShowing = xAc.getAccessibleStateSet()
+                                   .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+            log.println("\tStateType containsPoint SHOWING: " +
+                        isShowing);
 
-                    continue;
-                }
+            if (!isShowing) {
+                log.println("Child is invisible - OK");
+                continue;
+            }
 
-                log.println("finding the point which lies on the component");
+            log.println("finding the point which lies on the component");
 
-                int curX = chBnd.Width / 2;
-                int curY = chBnd.Height / 2;
+            int curX = chBnd.Width / 2;
+            int curY = chBnd.Height / 2;
 
-                while (!children[i].containsPoint(new Point(curX, curY)) &&
-                       (curX > 0) && (curY > 0)) {
-                    curX--;
-                    curY--;
-                }
+            while (!children[i].containsPoint(new Point(curX, curY)) &&
+                   (curX > 0) && (curY > 0)) {
+                curX--;
+                curY--;
+            }
 
-                if ((curX == chBnd.Width) && isShowing) {
-                    log.println("Couldn't find a point with containsPoint");
+            if (curX == chBnd.Width) {
+                log.println("Couldn't find a point with containsPoint");
 
-                    continue;
-                }
+                continue;
+            }
 
-                // trying the point laying on child
-                XAccessible xAcc = oObj.getAccessibleAtPoint(
-                                           new Point(chBnd.X + curX,
-                                                     chBnd.Y + curY));
+            // trying the point laying on child
+            XAccessible xAcc = oObj.getAccessibleAtPoint(
+                                       new Point(chBnd.X + curX,
+                                                 chBnd.Y + curY));
 
 
-                Point p = new Point(chBnd.X + curX,chBnd.X + curX);
+            Point p = new Point(chBnd.X + curX,chBnd.X + curX);
 
-                if (isCovered(p) && isShowing) {
-                    log.println(
-                            "Child might be covered by another and can't be reached");
-                    MightBeCovered = true;
-                }
+            if (isCovered(p)) {
+                log.println(
+                        "Child might be covered by another and can't be reached");
+                MightBeCovered = true;
+            }
 
-                KnownBounds.add(chBnd);
+            KnownBounds.add(chBnd);
 
-                if (xAcc == null) {
-                    log.println("The child not found at point (" +
-                                (chBnd.X + curX) + "," + (chBnd.Y + curY) +
-                                ") - FAILED");
+            if (xAcc == null) {
+                log.println("The child not found at point (" +
+                            (chBnd.X + curX) + "," + (chBnd.Y + curY) +
+                            ") - FAILED");
 
-                    if (isShowing) {
-                        result = false;
-                    } else {
-                        result &= true;
-                    }
+                 result = false;
+            } else {
+                XAccessible xAccCh = UnoRuntime.queryInterface(
+                                             XAccessible.class,
+                                             children[i]);
+                XAccessibleContext xAccC = UnoRuntime.queryInterface(
+                                                   XAccessibleContext.class,
+                                                   children[i]);
+                log.println("Child found at point (" + (chBnd.X + curX) +
+                            "," + (chBnd.Y + curY) + ") - OK");
+
+                boolean res = false;
+                int expIndex;
+                String expName;
+                String expDesc;
+
+                if (xAccCh != null) {
+                    res = util.AccessibilityTools.equals(xAccCh, xAcc);
+                    expIndex = xAccCh.getAccessibleContext()
+                                     .getAccessibleIndexInParent();
+                    expName = xAccCh.getAccessibleContext()
+                                    .getAccessibleName();
+                    expDesc = xAccCh.getAccessibleContext()
+                                    .getAccessibleDescription();
                 } else {
-                    XAccessible xAccCh = UnoRuntime.queryInterface(
-                                                 XAccessible.class,
-                                                 children[i]);
-                    XAccessibleContext xAccC = UnoRuntime.queryInterface(
-                                                       XAccessibleContext.class,
-                                                       children[i]);
-                    log.println("Child found at point (" + (chBnd.X + curX) +
-                                "," + (chBnd.Y + curY) + ") - OK");
+                    res = xAccC.getAccessibleName()
+                               .equals(xAcc.getAccessibleContext()
+                                           .getAccessibleName());
+                    expIndex = xAccC.getAccessibleIndexInParent();
+                    expName = xAccC.getAccessibleName();
+                    expDesc = xAccC.getAccessibleDescription();
+                }
 
-                    boolean res = false;
-                    int expIndex;
-                    String expName;
-                    String expDesc;
+                if (!res) {
+                    int gotIndex = xAcc.getAccessibleContext()
+                                       .getAccessibleIndexInParent();
 
-                    if (xAccCh != null) {
-                        res = util.AccessibilityTools.equals(xAccCh, xAcc);
-                        expIndex = xAccCh.getAccessibleContext()
-                                         .getAccessibleIndexInParent();
-                        expName = xAccCh.getAccessibleContext()
-                                        .getAccessibleName();
-                        expDesc = xAccCh.getAccessibleContext()
-                                        .getAccessibleDescription();
+                    if (expIndex < gotIndex) {
+                        log.println("The children found is not the same");
+                        log.println("The expected child " + expName);
+                        log.print("is hidden behind the found Child ");
+                        log.println(xAcc.getAccessibleContext()
+                                        .getAccessibleName() + " - OK");
                     } else {
-                        res = xAccC.getAccessibleName()
-                                   .equals(xAcc.getAccessibleContext()
-                                               .getAccessibleName());
-                        expIndex = xAccC.getAccessibleIndexInParent();
-                        expName = xAccC.getAccessibleName();
-                        expDesc = xAccC.getAccessibleDescription();
-                    }
-
-                    if (!res) {
-                        int gotIndex = xAcc.getAccessibleContext()
-                                           .getAccessibleIndexInParent();
-
-                        if (expIndex < gotIndex) {
-                            log.println("The children found is not the same");
-                            log.println("The expected child " + expName);
-                            log.print("is hidden behind the found Child ");
-                            log.println(xAcc.getAccessibleContext()
-                                            .getAccessibleName() + " - OK");
+                        log.println(
+                                "The children found is not the same");
+                        log.println("Expected: " + expName);
+                        log.println("Description:  " + expDesc);
+                        log.println("Found: " +
+                                    xAcc.getAccessibleContext()
+                                        .getAccessibleName());
+                        log.println("Description:  " +
+                                    xAcc.getAccessibleContext()
+                                        .getAccessibleDescription());
+                        if (MightBeCovered) {
+                            log.println("... Child is covered by another - OK");
                         } else {
-                            log.println(
-                                    "The children found is not the same");
-                            log.println("Expected: " + expName);
-                            log.println("Description:  " + expDesc);
-                            log.println("Found: " +
-                                        xAcc.getAccessibleContext()
-                                            .getAccessibleName());
-                            log.println("Description:  " +
-                                        xAcc.getAccessibleContext()
-                                            .getAccessibleDescription());
-                            if (MightBeCovered) {
-                                log.println("... Child is covered by another - OK");
-                            } else {
-                                log.println("... FAILED");
-                                result = false;
-                            }
-
+                            log.println("... FAILED");
+                            result = false;
                         }
-                    }
-                }
 
-
-                // trying the point NOT laying on child
-                xAcc = oObj.getAccessibleAtPoint(
-                               new Point(chBnd.X - 1, chBnd.Y - 1));
-
-                if (xAcc == null) {
-                    log.println("No children found at point (" +
-                                (chBnd.X - 1) + "," + (chBnd.Y - 1) +
-                                ") - OK");
-                    result &= true;
-                } else {
-                    XAccessible xAccCh = UnoRuntime.queryInterface(
-                                                 XAccessible.class,
-                                                 children[i]);
-                    boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
-
-                    if (res) {
-                        log.println("The same child found outside " +
-                                    "its bounds at (" + (chBnd.X - 1) + "," +
-                                    (chBnd.Y - 1) + ") - FAILED");
-                        result = false;
                     }
                 }
             }
-        } else {
-            log.println("There are no children supporting " +
-                        "XAccessibleComponent");
+
+
+            // trying the point NOT laying on child
+            xAcc = oObj.getAccessibleAtPoint(
+                           new Point(chBnd.X - 1, chBnd.Y - 1));
+
+            if (xAcc == null) {
+                log.println("No children found at point (" +
+                            (chBnd.X - 1) + "," + (chBnd.Y - 1) +
+                            ") - OK");
+                result &= true;
+            } else {
+                XAccessible xAccCh = UnoRuntime.queryInterface(
+                                             XAccessible.class,
+                                             children[i]);
+                boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
+
+                if (res) {
+                    log.println("The same child found outside " +
+                                "its bounds at (" + (chBnd.X - 1) + "," +
+                                (chBnd.Y - 1) + ") - FAILED");
+                    result = false;
+                }
+            }
         }
 
         tRes.tested("getAccessibleAtPoint()", result);
