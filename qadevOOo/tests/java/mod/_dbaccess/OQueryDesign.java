@@ -67,25 +67,15 @@ public class OQueryDesign extends TestCase {
 
         log.println( "creating a test environment" );
 
-        XInterface oObj = null;
-
         XDispatchProvider aProv = UnoRuntime.queryInterface(XDispatchProvider.class,xDesk);
-
-        XDispatch getting = null;
         XMultiServiceFactory xMSF = Param.getMSF();
 
-        XNameAccess xNameAccess = null;
-
         // we use the first datasource
-        XDataSource xDS = null;
-        xNameAccess = UnoRuntime.queryInterface(
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(
                     XNameAccess.class,
                     xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
-        xDS = UnoRuntime.queryInterface(
+        XDataSource xDS = UnoRuntime.queryInterface(
                 XDataSource.class, xNameAccess.getByName( "Bibliography" ));
-        xNameAccess = UnoRuntime.queryInterface(
-                    XNameAccess.class,
-                    xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
 
         log.println("check XMultiServiceFactory");
 
@@ -94,7 +84,7 @@ public class OQueryDesign extends TestCase {
         log.println( "opening QueryDesign" );
         URL the_url = new URL();
         the_url.Complete = ".component:DB/QueryDesign";
-        getting = aProv.queryDispatch(the_url,"Query",12);
+        XDispatch getting = aProv.queryDispatch(the_url,"Query",12);
         PropertyValue[] Args = new PropertyValue[2];
         PropertyValue param1 = new PropertyValue();
         param1.Name = "DataSourceName";
@@ -145,7 +135,7 @@ public class OQueryDesign extends TestCase {
         params[2] = param3;
 
 
-        oObj = xFrame.getController();
+        XInterface oObj = xFrame.getController();
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
