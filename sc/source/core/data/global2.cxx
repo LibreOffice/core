@@ -541,10 +541,7 @@ Label_fallback_to_unambiguous:
                                 case fraction:
                                     eState = done;
                                     break;
-                                case year:
-                                case done:
-                                case blank:
-                                case stop:
+                                default:
                                     rError = nStringNoValueError;
                                     break;
                             }
