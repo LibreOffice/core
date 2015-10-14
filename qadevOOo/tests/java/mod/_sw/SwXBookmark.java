@@ -53,7 +53,6 @@ import com.sun.star.uno.XInterface;
  */
 public class SwXBookmark extends TestCase {
     XTextDocument xTextDoc;
-    SOfficeFactory SOF;
 
     /**
     * Creates text document.
