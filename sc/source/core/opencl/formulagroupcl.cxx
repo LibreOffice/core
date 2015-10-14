@@ -2177,20 +2177,16 @@ public:
         {
             ss <<
                 "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue)\n"
-                "        return CreateDoubleError(errDivisionByZero);\n"
+                "    return CreateDoubleError(errDivisionByZero);\n"
                 "}\n";
             return true;
         }
         else if (argno == 0)
         {
             ss <<
-                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue) {\n"
-                "        if (" << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)\n"
-                "            return CreateDoubleError(errDivisionByZero);\n"
-                "        return 0;\n"
-                "    }\n"
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") &&\n"
+                "    !(isnan(" << vSubArguments[1]->GenSlidingWindowDeclRef() << ") || " << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)) {\n"
+                "    return 0;\n"
                 "}\n";
         }
         return false;
