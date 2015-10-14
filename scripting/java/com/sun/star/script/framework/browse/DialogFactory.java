@@ -46,15 +46,12 @@ public class DialogFactory {
     // singleton
     private DialogFactory(XComponentContext xComponentContext) {
         this.xComponentContext = xComponentContext;
-        factory = this;
     }
 
     public static void createDialogFactory(XComponentContext xComponentContext) {
-        if (factory == null) {
-            synchronized (DialogFactory.class) {
-                if (factory == null) {
-                    factory = new DialogFactory(xComponentContext);
-                }
+        synchronized (DialogFactory.class) {
+            if (factory == null) {
+                factory = new DialogFactory(xComponentContext);
             }
         }
     }
@@ -63,7 +60,6 @@ public class DialogFactory {
         if (factory == null) {
             throw new java.lang.Exception("DialogFactory not initialized");
         }
-
         return factory;
     }
 
