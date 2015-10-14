@@ -155,10 +155,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getAllCalendars() {
         boolean res = true;
         boolean printit = false;
-        Calendar[] calendar = new Calendar[1];
 
         for (int i=0;i<7;i++) {
-            calendar = oObj.getAllCalendars(getLocale(i));
+            Calendar[] calendar = oObj.getAllCalendars(getLocale(i));
             for (int j=0;j<calendar.length;j++) {
                 if (! goodCalendar(calendar[j]) ) {
                     printit = true;
@@ -181,10 +180,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getAllCurrencies() {
         boolean res = true;
         boolean printit = false;
-        Currency[] currency = new Currency[1];
 
         for (int i=0;i<7;i++) {
-            currency = oObj.getAllCurrencies(getLocale(i));
+            Currency[] currency = oObj.getAllCurrencies(getLocale(i));
             for (int j=0;j<currency.length;j++) {
                 if (! goodCurrency(currency[j]) ) {
                     printit=true;
@@ -207,10 +205,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getAllFormats() {
         boolean res = true;
         boolean printit = false;
-        FormatElement[] format = new FormatElement[1];
 
         for (int i=0;i<7;i++) {
-            format = oObj.getAllFormats(getLocale(i));
+            FormatElement[] format = oObj.getAllFormats(getLocale(i));
             for (int j=0;j<format.length;j++) {
                 if (! goodFormat(format[j]) ) {
                     printit = true;
@@ -232,10 +229,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getCollatorImplementations() {
         boolean res = true;
         boolean printit = false;
-        Implementation[] impl = new Implementation[1];
 
         for (int i=0;i<7;i++) {
-            impl = oObj.getCollatorImplementations(getLocale(i));
+            Implementation[] impl = oObj.getCollatorImplementations(getLocale(i));
             for (int j=0;j<impl.length;j++) {
                 if ((impl[j].unoID.equals(""))) {
                     printit = true;
@@ -258,10 +254,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getSearchOptions() {
         boolean res = true;
         boolean printit = false;
-        String[] str = new String[1];
 
         for (int i=0;i<7;i++) {
-            str = oObj.getSearchOptions(getLocale(i));
+            String[] str = oObj.getSearchOptions(getLocale(i));
             for (int j=0;j<str.length;j++) {
                 if ((str[j].equals(""))) {
                     printit = true;
@@ -284,10 +279,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getCollationOptions() {
         boolean res = true;
         boolean printit = false;
-        String[] str = new String[1];
 
         for (int i=0;i<7;i++) {
-            str = oObj.getCollationOptions(getLocale(i));
+            String[] str = oObj.getCollationOptions(getLocale(i));
             for (int j=0;j<str.length;j++) {
                 if ((str[j].equals(""))) {
                     printit = true;
@@ -310,10 +304,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getTransliterations() {
         boolean res = true;
         boolean printit = false;
-        String[] str = new String[1];
 
         for (int i=0;i<7;i++) {
-            str = oObj.getTransliterations(getLocale(i));
+            String[] str = oObj.getTransliterations(getLocale(i));
             for (int j=0;j<str.length;j++) {
                 if ((str[j].equals(""))) {
                     printit = true;
@@ -358,10 +351,9 @@ public class _XLocaleData extends MultiMethodTest {
     public void _getReservedWord() {
         boolean res = true;
         boolean printit = false;
-        String[] str = new String[1];
 
         for (int i=0;i<7;i++) {
-            str = oObj.getReservedWord(getLocale(i));
+            String[] str = oObj.getReservedWord(getLocale(i));
             for (int j=0;j<str.length;j++) {
                 if ((str[j].equals(""))) {
                     printit = true;
