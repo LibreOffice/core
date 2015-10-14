@@ -402,16 +402,9 @@ public class CalcRTL
                     System.out.println("Read only property '" + propName +
                                 "' has changed");
 
-                    try {
-                        if (!util.utils.isVoid(oldValue) && oldValue instanceof Any) {
-                            oldValue = AnyConverter.toObject( new Type(oldValue.getClass()), oldValue);
-                        }
-
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
-                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                    }
+                    System.out.println("old = " + toString(oldValue));
+                    System.out.println("new = " + toString(newValue));
+                    System.out.println("result = " + toString(resValue));
 
                     return false;
                 } else {
@@ -431,19 +424,9 @@ public class CalcRTL
                     System.out.println("Value for '" + propName +
                                 "' hasn't changed as expected");
 
-                    try {
-                        if (!util.utils.isVoid(oldValue) &&
-                                oldValue instanceof Any) {
-                            oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
-                                               oldValue);
-                        }
-
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
-                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                    }
+                    System.out.println("old = " + toString(oldValue));
+                    System.out.println("new = " + toString(newValue));
+                    System.out.println("result = " + toString(resValue));
 
                     if (resValue != null) {
                         if ((!ValueComparer.equalValue(resValue, oldValue)) ||
@@ -460,19 +443,9 @@ public class CalcRTL
                 } else {
                     System.out.println("Property '" + propName + "' OK");
 
-                    try {
-                        if (!util.utils.isVoid(oldValue) &&
-                                oldValue instanceof Any) {
-                            oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
-                                               oldValue);
-                        }
-
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
-                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                    }
+                    System.out.println("old = " + toString(oldValue));
+                    System.out.println("new = " + toString(newValue));
+                    System.out.println("result = " + toString(resValue));
 
                     return true;
                 }
