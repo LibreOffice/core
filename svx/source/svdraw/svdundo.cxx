@@ -790,8 +790,7 @@ void SdrUndoInsertObj::Redo()
         // which becomes a member of a group, because its cleared in method
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
-        if ( pObjList &&
-             dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr )
+        if (dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
         {
             aAnchorPos = pObj->GetAnchorPos();
         }
