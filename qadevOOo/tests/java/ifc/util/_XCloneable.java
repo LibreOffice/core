@@ -74,7 +74,7 @@ public class _XCloneable extends MultiMethodTest {
             log.println("ImplementationID equals the clone has the same id as the original Object");
             log.println("------------------------------------------------------------------------");
         }
-        return !res;
+        return res;
     }
 
     protected String getImplementationName(XInterface ifc) {
