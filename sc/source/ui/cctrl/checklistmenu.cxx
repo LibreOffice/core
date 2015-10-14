@@ -1254,6 +1254,9 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
         maChkToggleAll->SetState( TRISTATE_FALSE );
     else
         maChkToggleAll->SetState( TRISTATE_INDET );
+
+    if ( !maConfig.mbAllowEmptySet )
+        maBtnOk->Enable( nSelCount != 0);
 }
 
 IMPL_LINK_TYPED( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
