@@ -21,10 +21,10 @@ $(foreach product,$(PRODUCTLIST),\
 	$(product)/DEBIAN/postinst \
 	$(product)/DEBIAN/postrm \
 	$(product)/DEBIAN/prerm \
-	$(product)$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb) \
+	$(product)$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)_all.deb) \
 ))
 
-$(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb
+$(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)_all.deb
 	$(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
 
 $(deb_WORKDIR)/%/DEBIAN/postrm: $(deb_SRCDIR)/postrm
@@ -57,10 +57,10 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 	cat $< | tr -d "\015" | \
 		sed 's/%productname/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		>> $@
-	echo "Version: $(PKGVERSION)-$(LIBO_VERSION_PATCH)" >>$@
+	echo "Version: $(PKGVERSION)" >>$@
 	du -k -s $(deb_WORKDIR)/$* | $(gb_AWK) -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
 
-$(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control $(call gb_Library_get_target,getuid)
+$(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control $(call gb_Library_get_target,getuid)
 
 	chmod -R g-w $(deb_WORKDIR)/$*
 	chmod a+rx $(deb_WORKDIR)/$*/DEBIAN \

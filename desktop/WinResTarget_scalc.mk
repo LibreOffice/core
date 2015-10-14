@@ -18,7 +18,6 @@ $(eval $(call gb_WinResTarget_add_defs,scalc/launcher,\
     -DRES_APP_NAME=scalc \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Calc" \
     -DRES_APP_ICON=icons/calc_app.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 

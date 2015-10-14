@@ -87,6 +87,6 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
 		&& echo "android.defaultConfig {" \
 		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
 		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
-		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%h)/$(OOO_VENDOR)'" \
+		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%h)/$(OOO_VENDOR)'" \
 		&& echo "}" \
 	) > $@

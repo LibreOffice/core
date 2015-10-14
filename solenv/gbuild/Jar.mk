@@ -59,7 +59,7 @@ define gb_Jar__command
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
 	$(if $(JARCLASSPATH),$(SRCDIR)/solenv/bin/write_classpath.sh "$(call gb_Jar_get_manifest_target,$(1))" $(strip $(JARCLASSPATH)) &&) \
-	echo "Solar-Version: $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
+	echo "Solar-Version: $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	$(if $(MANIFEST),cat $(MANIFEST) >> $(call gb_Jar_get_manifest_target,$(1)) &&) \
 	mkdir -p $(dir $(2)) && cd $(call gb_Jar_get_workdir,$(1)) && \
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \

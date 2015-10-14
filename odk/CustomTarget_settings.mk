@@ -17,7 +17,7 @@ $(call gb_CustomTarget_get_workdir,odk/settings)/dk.mk : $(SRCDIR)/odk/settings/
 		-e 's/@@PLATFORM@@/$(firstword $(subst _, ,$(PLATFORMID)))/' \
 		-e 's/@@PROCTYPE@@/$(subst $(WHITESPACE),_,$(wordlist 2,$(words $(subst _, ,$(PLATFORMID))),$(subst _, ,$(PLATFORMID))))/' \
 		-e 's/@@RELEASE@@/$(PRODUCTVERSION)/' \
-		-e 's/@@BUILDID@@/$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)/' \
+		-e 's/@@BUILDID@@/$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)/' \
 		-e 's/@@ENABLE_DBGUTIL@@/$(ENABLE_DBGUTIL)/' > $@
 
 # vim: set noet sw=4 ts=4:

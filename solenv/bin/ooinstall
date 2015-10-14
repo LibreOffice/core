@@ -55,7 +55,7 @@ if ($help) {
     exit 1;
 }
 
-my $BUILD=$ENV{LIBO_VERSION_PATCH};
+my $BUILD=1;
 $ENV{LAST_MINOR} = 'm0';
 $ENV{OUT} = "../FIXME";
 $ENV{LOCAL_OUT} = $ENV{OUT};

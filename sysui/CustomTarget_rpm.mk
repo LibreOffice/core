@@ -15,10 +15,10 @@ rpm_SRCDIR := $(SRCDIR)/sysui/desktop
 RPMDISTROS := freedesktop
 
 define rpm_register_target
-$(call gb_CustomTarget_get_target,sysui/rpm): $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm
+$(call gb_CustomTarget_get_target,sysui/rpm): $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION).noarch.rpm
 
-$(rpm_WORKDIR)/$(1)-desktop-integration.tar.gz: $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm
-$(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm : \
+$(rpm_WORKDIR)/$(1)-desktop-integration.tar.gz: $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION).noarch.rpm
+$(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION).noarch.rpm : \
 		$(rpm_SRCDIR)/$(2)/$(2)-menus.spec \
 		$(call gb_CustomTarget_get_workdir,sysui/share)/$(1)/create_tree.sh \
 		| $(rpm_WORKDIR)/$(1)/.dir
@@ -34,7 +34,6 @@ $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSI
 			--define "productversion $(PRODUCTVERSION)" \
 			--define "iconprefix $(UNIXFILENAME.$(1))" \
 			--define "version $(PKGVERSION)" \
-			--define "release $(LIBO_VERSION_PATCH)" \
 			--define "__debug_install_post %nil" \
 		, $$@.log \
 	)
@@ -54,6 +53,6 @@ $(foreach product,$(PRODUCTLIST),\
 ))
 
 $(rpm_WORKDIR)/%-desktop-integration.tar.gz:
-	$(GNUTAR) -C $(rpm_WORKDIR)/$* -cf - $(foreach distro,$(RPMDISTROS),$*$(PKGVERSIONSHORT)-$(distro)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm) | gzip > $@
+	$(GNUTAR) -C $(rpm_WORKDIR)/$* -cf - $(foreach distro,$(RPMDISTROS),$*$(PKGVERSIONSHORT)-$(distro)-menus-$(PKGVERSION).noarch.rpm) | gzip > $@
 
 # vim: set noet sw=4 ts=4:

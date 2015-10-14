@@ -84,7 +84,7 @@ $(foreach pkgformat,$(5),\
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
 	-p $(PRODUCTNAME_no_spaces)$(3) \
 	-u $(instsetoo_OUT) \
-	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
+	-buildid 1 \
 	$(if $(filter WNT,$(OS)), \
 		-msitemplate $(dir $@)msi_templates \
 		-msilanguage $(dir $@)win_ulffiles \

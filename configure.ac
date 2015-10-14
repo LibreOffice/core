@@ -2,14 +2,7 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
-# The version number in the second argumemnt to AC_INIT should be four numbers separated by
-# periods. Some parts of the code requires the first one to be less than 128 and the others to be less
-# than 256. The four numbers can optionally be followed by a period and a free-form string containing
-# no spaces or periods, like "frobozz-mumble-42" or "alpha0". If the free-form string ends with one or
-# several non-alphanumeric characters, those are split off and used only for the
-# ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
-
-AC_INIT([LibreOffice],[5.4.0.0.alpha0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[5.4.0.alpha0+],[],[],[http://documentfoundation.org/])
 
 AC_PREREQ([2.59])
 
@@ -173,14 +166,13 @@ set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
 LIBO_VERSION_MAJOR=$1
 LIBO_VERSION_MINOR=$2
 LIBO_VERSION_MICRO=$3
-LIBO_VERSION_PATCH=$4
 
-# The CFBundleShortVersionString in Info.plist consists of three integers, so encode the third
-# as the micro version times 1000 plus the patch number. Unfortunately the LIBO_VERSION_SUFFIX can be anything so
-# no way to encode that into an integer in general.
-MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.`expr $LIBO_VERSION_MICRO '*' 1000 + $LIBO_VERSION_PATCH`
+# The CFBundleShortVersionString in Info.plist consists of three integers.
+# Unfortunately the LIBO_VERSION_SUFFIX can be anything so no way to encode that
+# into an integer in general.
+MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.$LIBO_VERSION_MICRO
 
-LIBO_VERSION_SUFFIX=$5
+LIBO_VERSION_SUFFIX=$4
 # Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
 # openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
 # they get undoubled before actually passed to sed.
@@ -192,7 +184,6 @@ test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
 AC_SUBST(LIBO_VERSION_MAJOR)
 AC_SUBST(LIBO_VERSION_MINOR)
 AC_SUBST(LIBO_VERSION_MICRO)
-AC_SUBST(LIBO_VERSION_PATCH)
 AC_SUBST(MACOSX_BUNDLE_SHORTVERSION)
 AC_SUBST(LIBO_VERSION_SUFFIX)
 AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
@@ -200,7 +191,6 @@ AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
-AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 
 LIBO_THIS_YEAR=`date +%Y`
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)

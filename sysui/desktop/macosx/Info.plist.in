@@ -1828,7 +1828,7 @@
     <key>CFBundleExecutable</key>
     <string>soffice</string>
     <key>CFBundleGetInfoString</key>
-    <string>@PRODUCTNAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
+    <string>@PRODUCTNAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@@LIBO_VERSION_SUFFIX@</string>
     <key>CFBundleIconFile</key>
     <string>main.icns</string>
     <key>CFBundleShortVersionString</key>

@@ -18,7 +18,6 @@ $(eval $(call gb_WinResTarget_add_defs,sdraw/launcher,\
     -DRES_APP_NAME=sdraw \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Draw" \
     -DRES_APP_ICON=icons/draw_app.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 

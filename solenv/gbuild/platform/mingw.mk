@@ -228,7 +228,6 @@ define gb_Library_add_default_nativeres
 $(call gb_WinResTarget_WinResTarget_init,$(2))
 $(call gb_WinResTarget_set_rcfile,$(2),include/default)
 $(call gb_WinResTarget_add_defs,$(2),\
-		-DVERVARIANT="$(LIBO_VERSION_PATCH)" \
 		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
 		-DADDITIONAL_VERINFO1="" \
 		-DADDITIONAL_VERINFO2="" \

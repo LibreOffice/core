@@ -18,7 +18,6 @@ $(eval $(call gb_WinResTarget_add_defs,smath/launcher,\
     -DRES_APP_NAME=smath \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Math" \
     -DRES_APP_ICON=icons/math_app.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
