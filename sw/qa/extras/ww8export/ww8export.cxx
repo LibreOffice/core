@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -597,8 +598,28 @@ DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
 {
-    // TODO: assert here that the 2nd page has the right size even after
-    // the save as .doc
+    // check that the first and next page use different page styles
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    xCursor->jumpToFirstPage();
+    OUString firstPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xCursor->jumpToLastPage();
+    OUString lastPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    CPPUNIT_ASSERT_EQUAL(false, firstPageStyleName.equals(lastPageStyleName));
+
+    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles("PageStyles")->getByName(firstPageStyleName), uno::UNO_QUERY);
+    awt::Size fSize;
+    xFirstPropertySet->getPropertyValue("Size") >>= fSize;
+
+    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles("PageStyles")->getByName(lastPageStyleName), uno::UNO_QUERY);
+    awt::Size lSize;
+    xNextPropertySet->getPropertyValue("Size") >>= lSize;
+    bool isEqual = (fSize.Width == lSize.Width) || (fSize.Height == lSize.Height);
+    CPPUNIT_ASSERT_EQUAL(false, isEqual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
