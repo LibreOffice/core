@@ -20,7 +20,7 @@
 
 package net.adaptivebox.space;
 
-public class BasicPoint implements Cloneable, ILocationEngine {
+public class BasicPoint implements ILocationEngine {
   //store the location information in the search space (S)
   private final double[] location;
 

@@ -23,7 +23,7 @@ import java.awt.Color;
 /**
  * This class specifies the format for a given spreadsheet cell.
  */
-public class Format implements Cloneable {
+public class Format {
 
     /** Horizontal Alignment Constants. */
     final public static int RIGHT_ALIGN     = 0x01;
