@@ -729,8 +729,7 @@ void SdrUndoRemoveObj::Undo()
         // position of the target object.
         Point aOwnerAnchorPos(0, 0);
 
-        if(pObjList &&
-           dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
+        if (dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
         {
             aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
         }
