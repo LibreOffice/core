@@ -105,9 +105,7 @@ public class CommandName
             }
             if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
             {
-                String[] NameList;
-                NameList = new String[0];
-                NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
+                String[] NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
                 if (NameList.length > 1)
                 {
                     SchemaName = NameList[0];
