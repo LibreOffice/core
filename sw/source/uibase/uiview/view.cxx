@@ -742,18 +742,17 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_aTimer.SetTimeout( 120 );
 
-    SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( _pFrame->GetObjectShell()  );
-    OSL_ENSURE( pDocSh, "view without DocShell." );
-    bool bOldModifyFlag = pDocSh->IsEnableSetModified();
-    if(bOldModifyFlag)
-        pDocSh->EnableSetModified( false );
+    SwDocShell& rDocSh = dynamic_cast<SwDocShell&>(*_pFrame->GetObjectShell());
+    bool bOldModifyFlag = rDocSh.IsEnableSetModified();
+    if (bOldModifyFlag)
+        rDocSh.EnableSetModified( false );
     // HACK: SwDocShell has some cached font info, VCL informs about font updates,
     // but loading of docs with embedded fonts happens after SwDocShell is created
     // but before SwEditWin (which handles the VCL event) is created. So update
     // manually.
-    if( pDocSh->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
-        pDocSh->UpdateFontList();
-    bool bWebDShell = dynamic_cast< const SwWebDocShell *>( pDocSh ) !=  nullptr;
+    if (rDocSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
+        rDocSh.UpdateFontList();
+    bool bWebDShell = dynamic_cast<const SwWebDocShell*>(&rDocSh) !=  nullptr;
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
@@ -785,19 +784,17 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
 
     SAL_INFO( "sw.ui", "before create WrtShell" );
-    if(dynamic_cast<SwView*>( pExistingSh) )
+    if (SwView *pView = dynamic_cast<SwView*>(pExistingSh))
     {
-        m_pWrtShell = new SwWrtShell( *static_cast<SwView*>(pExistingSh)->m_pWrtShell,
-                                    m_pEditWin, *this);
+        m_pWrtShell = new SwWrtShell(*pView->m_pWrtShell, m_pEditWin, *this);
     }
-    else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
+    else if (SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(rDocSh.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()))
     {
-        m_pWrtShell = new SwWrtShell( *static_cast<SwWrtShell*>(pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()),
-                                    m_pEditWin, *this);
+        m_pWrtShell = new SwWrtShell(*pWrtShell, m_pEditWin, *this);
     }
     else
     {
-        SwDoc& rDoc = *static_cast<SwDocShell*>(pDocSh)->GetDoc();
+        SwDoc& rDoc = *static_cast<SwDocShell&>(rDocSh).GetDoc();
 
         if( !bOldShellWasSrcView && bWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( true );
@@ -810,7 +807,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetZoomType( SvxZoomType::PERCENT );
             aUsrPref.SetZoom( 100 );
         }
-        if(pDocSh->IsPreview())
+        if (rDocSh.IsPreview())
         {
             aUsrPref.SetZoomType( SvxZoomType::WHOLEPAGE );
             aUsrPref.SetViewLayoutBookMode( false );
@@ -859,7 +856,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // no margin for OLE!
     Size aBrwsBorder;
-    if( SfxObjectCreateMode::EMBEDDED != pDocSh->GetCreateMode() )
+    if( SfxObjectCreateMode::EMBEDDED != rDocSh.GetCreateMode() )
         aBrwsBorder = GetMargin();
 
     m_pWrtShell->SetBrowseBorder( aBrwsBorder );
@@ -879,8 +876,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         aUsrPref.SetViewVRuler(false);
     }
 
-    StartListening( *pViewFrame, true );
-    StartListening( *pDocSh, true );
+    StartListening(*pViewFrame, true);
+    StartListening(rDocSh, true);
 
     // Set Zoom-factor from HRuler
     Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
@@ -897,7 +894,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pVRuler->SetLineHeight( 551 );  // default line height
 
     // Set DocShell
-    pDocSh->SetView( this );
+    rDocSh.SetView(this);
     SW_MOD()->SetView( this );
 
     m_pPostItMgr = new SwPostItMgr(this);
@@ -910,9 +907,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         // Set AttrChangedNotify link
     m_pWrtShell->SetChgLnk(LINK(this, SwView, AttrChangedNotify));
 
-    if( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
-        !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
-        SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),false);
+    if (rDocSh.GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
+        !rDocSh.GetVisArea(ASPECT_CONTENT).IsEmpty())
+        SetVisArea(rDocSh.GetVisArea(ASPECT_CONTENT),false);
 
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
@@ -960,7 +957,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // No ResetModified, if there is already a view to this doc.
     SfxViewFrame* pVFrame = GetViewFrame();
-    SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
+    SfxViewFrame* pFirst = SfxViewFrame::GetFirst(&rDocSh);
     // Currently(360) the view is registered firstly after the CTOR,
     // the following expression is also working if this changes.
     // If the modification cannot be canceled by undo, then do NOT set
@@ -977,7 +974,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     g_bNoInterrupt = bOld;
 
     // If a new GlobalDoc will be created, the navigator will also be generated.
-    if( dynamic_cast<const SwGlobalDocShell*>(pDocSh) != nullptr &&
+    if( dynamic_cast<const SwGlobalDocShell*>(&rDocSh) != nullptr &&
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
         SfxBoolItem aNavi(SID_NAVIGATOR, true);
@@ -1004,8 +1001,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations = false;
-    if(bOldModifyFlag)
-        pDocSh->EnableSetModified();
+    if (bOldModifyFlag)
+        rDocSh.EnableSetModified();
     InvalidateBorder();
 
     if( !m_pHScrollbar->IsVisible( true ) )
