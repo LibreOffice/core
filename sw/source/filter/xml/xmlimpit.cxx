@@ -798,19 +798,18 @@ bool SvXMLImportItemMapper::PutXMLValue(
         case RES_LAYOUT_SPLIT:
         case RES_ROW_SPLIT:
         {
-            SfxBoolItem* pSplit = dynamic_cast<SfxBoolItem*>( &rItem );
-            OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
+            SfxBoolItem& rSplit = dynamic_cast<SfxBoolItem&>(rItem);
 
             if( IsXMLToken( rValue, XML_AUTO ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {
-                pSplit->SetValue( true );
+                rSplit.SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_ALWAYS ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
-                pSplit->SetValue( false );
+                rSplit.SetValue( false );
                 bOk = true;
             }
         }
