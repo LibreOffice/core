@@ -121,94 +121,93 @@ public class ComponentContext implements XComponentContext, XComponent
     public Object getValueByName( String rName )
     {
         Object o = m_table.get( rName );
-        if (o != null)
+        if (o == null)
         {
-            if (o instanceof ComponentContextEntry)
+            if (m_xDelegate != null)
             {
-                ComponentContextEntry entry = (ComponentContextEntry)o;
-                if (entry.m_lateInit != null)
-                {
-                    Object xInstance = null;
-
-                    try
-                    {
-                        String serviceName = (String)entry.m_lateInit;
-                        if (serviceName != null)
-                        {
-                            if (m_xSMgr != null)
-                            {
-                                xInstance = m_xSMgr.createInstanceWithContext( serviceName, this );
-                            }
-                            else
-                            {
-                                if (DEBUG)
-                                    System.err.println( "### no service manager instance for late init of singleton instance \"" + rName + "\"!" );
-                            }
-                        }
-                        else
-                        {
-                            XSingleComponentFactory xCompFac =
-                                UnoRuntime.queryInterface(
-                                    XSingleComponentFactory.class, entry.m_lateInit );
-                            if (xCompFac != null)
-                            {
-                                xInstance = xCompFac.createInstanceWithContext( this );
-                            }
-                            else
-                            {
-                                if (DEBUG)
-                                    System.err.println( "### neither service name nor service factory given for late init of singleton instance \"" + rName + "\"!" );
-                            }
-                        }
-                    }
-                    catch (com.sun.star.uno.Exception exc)
-                    {
-                        if (DEBUG)
-                            System.err.println( "### exception occurred on late init of singleton instance \"" + rName + "\": " + exc.getMessage() );
-                    }
-
-                    if (xInstance != null)
-                    {
-                        synchronized (entry)
-                        {
-                            if (entry.m_lateInit != null)
-                            {
-                                entry.m_value = xInstance;
-                                entry.m_lateInit = null;
-                            }
-                            else // inited in the meantime
-                            {
-                                // dispose fresh service instance
-                                XComponent xComp = UnoRuntime.queryInterface(
-                                    XComponent.class, xInstance );
-                                if (xComp != null)
-                                {
-                                    xComp.dispose();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (DEBUG)
-                            System.err.println( "### failed late init of singleton instance \"" + rName + "\"!" );
-                    }
-                }
-                return entry.m_value;
+                return m_xDelegate.getValueByName( rName );
             }
-            else // direct value in map
+            else
             {
-                return o;
+                return Any.VOID;
             }
         }
-        else if (m_xDelegate != null)
+
+        if (!(o instanceof ComponentContextEntry))
         {
-            return m_xDelegate.getValueByName( rName );
+            // direct value in map
+            return o;
+        }
+
+        ComponentContextEntry entry = (ComponentContextEntry)o;
+        if (entry.m_lateInit == null)
+        {
+            return entry.m_value;
+        }
+
+        Object xInstance = null;
+        try
+        {
+            String serviceName = (String)entry.m_lateInit;
+            if (serviceName != null)
+            {
+                if (m_xSMgr != null)
+                {
+                    xInstance = m_xSMgr.createInstanceWithContext( serviceName, this );
+                }
+                else
+                {
+                    if (DEBUG)
+                        System.err.println( "### no service manager instance for late init of singleton instance \"" + rName + "\"!" );
+                }
+            }
+            else
+            {
+                XSingleComponentFactory xCompFac = UnoRuntime.queryInterface( XSingleComponentFactory.class, entry.m_lateInit );
+                if (xCompFac != null)
+                {
+                    xInstance = xCompFac.createInstanceWithContext( this );
+                }
+                else
+                {
+                    if (DEBUG)
+                        System.err.println( "### neither service name nor service factory given for late init of singleton instance \"" + rName + "\"!" );
+                }
+            }
+        }
+        catch (com.sun.star.uno.Exception exc)
+        {
+            if (DEBUG)
+                System.err.println( "### exception occurred on late init of singleton instance \"" + rName + "\": " + exc.getMessage() );
+        }
+
+        if (xInstance != null)
+        {
+            synchronized (entry)
+            {
+                if (entry.m_lateInit != null)
+                {
+                    entry.m_value = xInstance;
+                    entry.m_lateInit = null;
+                }
+                else // inited in the meantime
+                {
+                    // dispose fresh service instance
+                    XComponent xComp = UnoRuntime.queryInterface(
+                        XComponent.class, xInstance );
+                    if (xComp != null)
+                    {
+                        xComp.dispose();
+                    }
+                }
+            }
         }
         else
         {
-            return Any.VOID;
+            if (DEBUG)
+                System.err.println( "### failed late init of singleton instance \"" + rName + "\"!" );
         }
+        return entry.m_value;
     }
 
     public XMultiComponentFactory getServiceManager()
