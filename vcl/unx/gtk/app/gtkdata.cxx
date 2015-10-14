@@ -1030,6 +1030,8 @@ void GtkSalDisplay::RefreshMenusUnity()
             pSalMenu->UpdateFull();
         }
     }
+#else
+    (void) this;
 #endif
 }
 #endif
