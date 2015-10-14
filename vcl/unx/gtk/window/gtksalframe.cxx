@@ -1449,7 +1449,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
     InitCommon();
 
-#if !GTK_CHECK_VERSION(3,0,0)
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
 #ifdef ENABLE_GMENU_INTEGRATION
@@ -1457,20 +1456,15 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         ensure_dbus_setup( this );
 #endif
 
+#if !GTK_CHECK_VERSION(3,0,0)
         guint32 nUserTime = 0;
         if( (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::TOOLWINDOW)) == SalFrameStyleFlags::NONE )
         {
             nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
         }
         lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime);
-    }
-#else
-    if( eWinType == GTK_WINDOW_TOPLEVEL )
-    {
-        // Enable DBus native menu if available.
-        ensure_dbus_setup( this );
-    }
 #endif
+    }
 
     if( bDecoHandling )
     {
