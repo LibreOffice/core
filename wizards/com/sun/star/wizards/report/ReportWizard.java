@@ -52,8 +52,6 @@ import java.util.Map;
 
 public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 {
-
-    private FieldSelection CurGroupFieldSelection;
     private SortingComponent CurSortingComponent;
     private TitlesComponent CurTitlesComponent;
     private CommandFieldSelection CurDBCommandFieldSelection;
@@ -652,11 +650,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 enableWizardSteps(NewItems);
                 toggleSortingPage();
             }
-            else
-            {
-                boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
-            }
         }
 
         public void shiftFromRightToLeft(String[] SelItems, String[] NewItems)
@@ -666,11 +659,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             {
                 enableWizardSteps(NewItems);
                 CurDBCommandFieldSelection.setModified(true);
-            }
-            else
-            {
-                boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
             }
         }
 
