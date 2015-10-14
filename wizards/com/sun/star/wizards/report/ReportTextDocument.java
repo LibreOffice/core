@@ -100,11 +100,8 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         long lDateCorrection = oNumberFormatter.getNullDateCorrection();
         oNumberFormatter.setBooleanReportDisplayNumberFormat();
         oNumberFormatter.setNullDateCorrection(lDateCorrection);
-        String sMsgTableNotExisting = oResource.getResText(UIConsts.RID_REPORT + 61);
         sMsgCommonReportError = oResource.getResText(UIConsts.RID_REPORT + 72);
         sMsgCommonReportError = JavaTools.replaceSubString(sMsgCommonReportError, String.valueOf((char) 13), "<BR>");
-        String sMsgEndAutopilot = oResource.getResText(UIConsts.RID_DB_COMMON + 33);
-        sMsgTableNotExisting = sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot;
         bIsCurLandscape = true;
         getReportPageStyles();
     }
