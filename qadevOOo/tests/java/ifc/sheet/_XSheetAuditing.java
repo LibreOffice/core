@@ -117,7 +117,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         requiredMethod("clearArrows()");
         // construct an error: square root from -3
         xPrecedentAddress.setValue(-9);
-        String cellAddress = new String(new byte[]{(byte)(precedentAddress.Column + 65)}) + (precedentAddress.Row+1);
+        String cellAddress = "" + (char)('A' + precedentAddress.Column) + (precedentAddress.Row + 1);
         xAddress.setFormula("=SQRT(" + cellAddress + ")");
         XText xText = UnoRuntime.queryInterface(XText.class, xAddress);
         // correct error in cell:
