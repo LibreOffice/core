@@ -70,7 +70,6 @@ import com.sun.star.uno.XInterface;
  */
 public class SwXFootnoteText extends TestCase {
     XTextDocument xTextDoc;
-    SOfficeFactory SOF;
 
     /**
     * Creates text document.
