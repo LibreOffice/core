@@ -648,14 +648,12 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 // recognize creation of a new 3D object inside a 3D scene
                 bool bSceneIntoScene(false);
 
-                if(pObjMerk
-                    && dynamic_cast<const E3dScene* >(pObjMerk) !=  nullptr
-                    && pCreatePV
-                    && pCreatePV->GetAktGroup()
-                    && dynamic_cast<const E3dScene* >(pCreatePV->GetAktGroup()) != nullptr)
+                E3dScene* pObjScene = dynamic_cast<E3dScene*>(pObjMerk);
+                E3dScene* pAktScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetAktGroup()) : nullptr;
+                if (pAktScene)
                 {
                     bool bDidInsert = static_cast<E3dView*>(this)->ImpCloneAll3DObjectsToDestScene(
-                        static_cast<E3dScene*>(pObjMerk), static_cast<E3dScene*>(pCreatePV->GetAktGroup()), Point(0, 0));
+                        pObjScene, pAktScene, Point(0, 0));
 
                     if(bDidInsert)
                     {
