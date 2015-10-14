@@ -25,7 +25,6 @@ PRJ=..
 
 PRJNAME=unoxml
 TARGET=tests
-TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -33,54 +32,56 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
+.ELSE
 
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:tests by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/domtest.obj
+APP1OBJS=  \
+    $(SLO)$/domtest.obj $(SLO)$/documentbuilder.obj
 
 # the following three libs are a bit of a hack: cannot link against
 # unoxml here, because not yet delivered (and does not export
 # ~anything). Need the functionality to test, so we're linking it in
 # statically. Need to keep this in sync with
 # source/services/makefile.mk
-SHL1LIBS= \
-    $(SLB)$/domimpl.lib \
-    $(SLB)$/xpathimpl.lib \
-    $(SLB)$/eventsimpl.lib
+#APP1LIBS= \
+    #$(SLB)$/domimpl.lib \
+    #$(SLB)$/xpathimpl.lib \
+    #$(SLB)$/eventsimpl.lib
 
-SHL1TARGET= tests
-SHL1STDLIBS= \
+APP1TARGET= tests
+APP1STDLIBS= \
     $(UCBHELPERLIB) \
     $(LIBXML2LIB) \
     $(TOOLSLIB)	\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
-    $(CPPUNITLIB)	 \
+    $(GTESTLIB)	 \
         $(TESTSHL2LIB)    \
     $(CPPULIB)	\
     $(SAXLIB) \
     $(SALLIB)\
-    $(EXPATASCII3RDLIB)
+    $(EXPATASCII3RDLIB) \
+    -lunoxml
 
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
+APP1RPATH = NONE
+APP1TEST = disabled
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+SLOFILES=$(APP1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
 
 # --- Fake uno bootstrap ------------------------
 
@@ -95,7 +96,11 @@ $(MISC)$/unoxml_unittest_succeeded : $(SHL1TARGETN) $(BIN)$/unoxml_unittest_test
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-                $(TESTSHL2) -forward $(BIN)$/ -sf $(mktmp ) $(SHL1TARGETN)
+        $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) \
+        UNOXML_DOMTEST_FORWARD=$(BIN)$/ \
+        $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
         $(TOUCH) $@
 
 ALLTAR : $(MISC)$/unoxml_unittest_succeeded
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
