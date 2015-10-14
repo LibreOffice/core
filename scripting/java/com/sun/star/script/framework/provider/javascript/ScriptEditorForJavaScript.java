@@ -195,7 +195,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     private ScriptEditorForJavaScript(XScriptContext context, URL url) {
         initUI();
         Scriptable scope = getScope(context);
-        this.rhinoWindow.openFile(url, scope, new closeHandler(url));
+        rhinoWindow.openFile(url, scope, new closeHandler(url));
         this.scriptURL = url;
     }
 
@@ -207,7 +207,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     public Object execute() throws Exception {
         rhinoWindow.toFront();
 
-        return this.rhinoWindow.runScriptWindow(scriptURL);
+        return rhinoWindow.runScriptWindow(scriptURL);
     }
 
     /**
@@ -215,15 +215,15 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
      *
      */
     public void indicateErrorLine(int lineNum) {
-        this.rhinoWindow.toFront();
-        this.rhinoWindow.highlighLineInScriptWindow(scriptURL, lineNum);
+        rhinoWindow.toFront();
+        rhinoWindow.highlighLineInScriptWindow(scriptURL, lineNum);
     }
     // This code is based on the main method of the Rhino Debugger Main class
     // We pass in the XScriptContext in the global scope for script execution
     private void initUI() {
         try {
             synchronized (ScriptEditorForJavaScript.class) {
-                if (this.rhinoWindow != null) {
+                if (rhinoWindow != null) {
                     return;
                 }
 
@@ -250,7 +250,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
                         shutdown();
                     }
                 });
-                this.rhinoWindow = sdb;
+                rhinoWindow = sdb;
             }
         } catch (Exception exc) {
             LogUtils.DEBUG(LogUtils.getTrace(exc));
@@ -259,7 +259,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
     private void shutdown() {
         // dereference Rhino Debugger window
-        this.rhinoWindow = null;
+        rhinoWindow = null;
         this.scriptURL = null;
 
         // remove all scripts from BEING_EDITED
