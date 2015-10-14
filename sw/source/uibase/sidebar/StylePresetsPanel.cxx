@@ -48,12 +48,11 @@ namespace {
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
                    OUString const & sName, sal_Int32 nHeight, Rectangle& aRect)
 {
-    sfx2::StylePreviewRenderer* pStylePreviewRenderer;
-
     SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SFX_STYLE_FAMILY_PARA);
 
     if (pStyleSheet)
     {
+        sfx2::StylePreviewRenderer* pStylePreviewRenderer;
         pStylePreviewRenderer = pStyleManager->CreateStylePreviewRenderer(aOutputDevice, pStyleSheet, nHeight);
         pStylePreviewRenderer->recalculate();
         pStylePreviewRenderer->render(aRect, sfx2::StylePreviewRenderer::RenderAlign::TOP);

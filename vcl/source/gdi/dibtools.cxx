@@ -553,17 +553,15 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             {
                 case( 1 ):
                 {
-                    sal_uInt8*  pTmp;
-                    sal_uInt8   cTmp;
-
                     for( ; nCount--; nY += nI )
                     {
+                        sal_uInt8*  pTmp;
                         if (rIStm.Read( pTmp = pBuf.get(), nAlignedWidth )
                             != nAlignedWidth)
                         {
                             return false;
                         }
-                        cTmp = *pTmp++;
+                        sal_uInt8   cTmp = *pTmp++;
 
                         for( long nX = 0L, nShift = 8L; nX < nWidth; nX++ )
                         {
@@ -581,17 +579,15 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                 case( 4 ):
                 {
-                    sal_uInt8*  pTmp;
-                    sal_uInt8   cTmp;
-
                     for( ; nCount--; nY += nI )
                     {
+                        sal_uInt8*  pTmp;
                         if (rIStm.Read( pTmp = pBuf.get(), nAlignedWidth )
                             != nAlignedWidth)
                         {
                             return false;
                         }
-                        cTmp = *pTmp++;
+                        sal_uInt8   cTmp = *pTmp++;
 
                         for( long nX = 0L, nShift = 2L; nX < nWidth; nX++ )
                         {
@@ -609,10 +605,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                 case( 8 ):
                 {
-                    sal_uInt8*  pTmp;
-
                     for( ; nCount--; nY += nI )
                     {
+                        sal_uInt8*  pTmp;
                         if (rIStm.Read( pTmp = pBuf.get(), nAlignedWidth )
                             != nAlignedWidth)
                         {
@@ -639,10 +634,10 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                     ColorMask   aMask(aRedMask, aGreenMask, aBlueMask);
                     BitmapColor aColor;
-                    sal_uInt16*     pTmp16;
 
                     for( ; nCount--; nY += nI )
                     {
+                        sal_uInt16*     pTmp16;
                         if (rIStm.Read( ( pTmp16 = reinterpret_cast<sal_uInt16*>(pBuf.get()) ), nAlignedWidth )
                             != nAlignedWidth)
                         {
@@ -661,10 +656,10 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 case( 24 ):
                 {
                     BitmapColor aPixelColor;
-                    sal_uInt8*      pTmp;
 
                     for( ; nCount--; nY += nI )
                     {
+                        sal_uInt8* pTmp;
                         if (rIStm.Read( pTmp = pBuf.get(), nAlignedWidth )
                             != nAlignedWidth)
                         {
@@ -989,14 +984,13 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
     sal_uLong       nCount;
     sal_uLong       nBufCount;
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ ( nWidth << 1 ) + 2 ]);
-    sal_uInt8*      pTmp;
     sal_uInt8       cPix;
     sal_uInt8       cLast;
     bool        bFound;
 
     for ( long nY = nHeight - 1L; nY >= 0L; nY-- )
     {
-        pTmp = pBuf.get();
+        sal_uInt8* pTmp = pBuf.get();
         nX = nBufCount = 0UL;
 
         while( nX < nWidth )

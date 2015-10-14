@@ -2754,7 +2754,6 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         {
             // new format
             VersionCompat* pCompat;
-            MetaAction*    pAction;
             sal_uInt32     nStmCompressMode = 0;
             sal_uInt32     nCount = 0;
 
@@ -2772,8 +2771,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
             for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
             {
-                pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
-
+                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
                 if( pAction )
                 {
                     if (pAction->GetType() == MetaActionType::COMMENT)

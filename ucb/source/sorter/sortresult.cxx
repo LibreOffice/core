@@ -1701,13 +1701,12 @@ void SortedResultSet::ResortModified( EventList* pList )
     sal_uInt32 i, j;
     sal_IntPtr nCompare, nCurPos, nNewPos;
     sal_IntPtr nStart, nEnd, nOffset, nVal;
-    SortListData *pData;
     ListAction *pAction;
 
     try {
         for ( i=0; i<maModList.Count(); i++ )
         {
-            pData = static_cast<SortListData*>(maModList.GetObject( i ));
+            SortListData *pData = static_cast<SortListData*>(maModList.GetObject( i ));
             nCompare = CompareImpl( mxOther, mxOriginal,
                                     pData->mnOldPos, pData->mnCurPos );
             pData->mbModified = false;

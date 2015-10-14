@@ -209,7 +209,6 @@ void TimerTest::testAutoTimer()
     const double exp = (nDurationMs * nEventsCount);
 
     sal_Int32 nCount = 0;
-    double dur = 0;
     std::ostringstream msg;
 
     // Repeat when we have random latencies.
@@ -224,7 +223,7 @@ void TimerTest::testAutoTimer()
         }
 
         const auto end = std::chrono::high_resolution_clock::now();
-        dur = std::chrono::duration<double, std::milli>(end - start).count();
+        double dur = std::chrono::duration<double, std::milli>(end - start).count();
 
         msg << std::setprecision(2) << std::fixed
             << "periodic multi-timer - dur: "
@@ -257,7 +256,6 @@ void TimerTest::testMultiAutoTimers()
     const double expX = (exp / nDurationMsX);
     const double expY = (exp / nDurationMsY);
 
-    double dur = 0;
     sal_Int32 nCountX = 0;
     sal_Int32 nCountY = 0;
     sal_Int32 nCount = 0;
@@ -282,7 +280,7 @@ void TimerTest::testMultiAutoTimers()
         }
 
         const auto end = std::chrono::high_resolution_clock::now();
-        dur = std::chrono::duration<double, std::milli>(end - start).count();
+        double dur = std::chrono::duration<double, std::milli>(end - start).count();
 
         msg << std::setprecision(2) << std::fixed << "periodic multi-timer - dur: "
             << dur << " (" << exp << ") ms, nCount: " << nCount

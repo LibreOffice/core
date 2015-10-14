@@ -218,13 +218,13 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 bool GIFReader::ReadExtension()
 {
     bool    bRet = false;
-    bool    bOverreadDataBlocks = false;
 
     // Extension-Label
     sal_uInt8 cFunction(0);
     rIStm.ReadUChar( cFunction );
     if( NO_PENDING( rIStm ) )
     {
+        bool    bOverreadDataBlocks = false;
         sal_uInt8 cSize(0);
         // Block length
         rIStm.ReadUChar( cSize );

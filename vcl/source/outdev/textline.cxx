@@ -125,8 +125,6 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    nDiffY = nHeight-1;
         long    nCount = nWidth;
         long    nOffY = -1;
-        long    nFreq;
-        long    i;
         long    nPixWidth;
         long    nPixHeight;
         bool    bDrawPixAsRect;
@@ -167,10 +165,10 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         else
         {
             nCurY += nDiffY;
-            nFreq = nCount / (nDiffX+nDiffY);
+            long nFreq = nCount / (nDiffX+nDiffY);
             while ( nFreq-- )
             {
-                for( i = nDiffY; i; --i )
+                for( long i = nDiffY; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -178,7 +176,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurX++;
                     nCurY += nOffY;
                 }
-                for( i = nDiffX; i; --i )
+                for( long i = nDiffX; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -190,7 +188,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             nFreq = nCount % (nDiffX+nDiffY);
             if ( nFreq )
             {
-                for( i = nDiffY; i && nFreq; --i, --nFreq )
+                for( long i = nDiffY; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -199,7 +197,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurY += nOffY;
 
                 }
-                for( i = nDiffX; i && nFreq; --i, --nFreq )
+                for( long i = nDiffX; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,

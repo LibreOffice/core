@@ -370,12 +370,12 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_POLYPOLYGON:
         {
-            bool bRecordOk = true;
             sal_uInt16 nPolyCount(0);
             // Number of polygons:
             pWMF->ReadUInt16( nPolyCount );
             if (nPolyCount && pWMF->good())
             {
+                bool bRecordOk = true;
                 if (nPolyCount > pWMF->remainingSize() / sizeof(sal_uInt16))
                 {
                     break;
@@ -1323,12 +1323,11 @@ void WMFReader::ReadWMF()
 
     if ( ReadHeader( ) )
     {
-        bool bEMFAvailable = false;
-
         nPos = pWMF->Tell();
 
         if( nEndPos - nStartPos )
         {
+           bool bEMFAvailable = false;
             while( true )
             {
                 nCurrentAction++;
