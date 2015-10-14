@@ -21,23 +21,24 @@ package com.sun.star.comp.beans;
 import java.awt.Container;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XEventListener;
-import com.sun.star.connection.XConnection;
-import com.sun.star.connection.XConnector;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
+import com.sun.star.connection.XConnection;
+import com.sun.star.connection.XConnector;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 /**
  * This class represents a connection to the local office application.
@@ -64,7 +65,7 @@ public class LocalOfficeConnection
 
     private final List<XEventListener> mComponents = new ArrayList<XEventListener>();
 
-    private static long m_nBridgeCounter = 0;
+    private static final AtomicLong m_nBridgeCounter = new AtomicLong(0);
 
     static
     {
@@ -443,7 +444,7 @@ public class LocalOfficeConnection
                 // empty string as bridge name into createBridge. Then we should always get
                 // a new bridge. This does not work because of (i51323). Therefore we
                 // create unique bridge names for the current process.
-                String sBridgeName = "OOoBean_private_bridge_" + (m_nBridgeCounter++);
+                String sBridgeName = "OOoBean_private_bridge_" + m_nBridgeCounter.getAndIncrement();
                 try {
                     mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {
