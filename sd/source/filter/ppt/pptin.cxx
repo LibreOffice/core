@@ -2576,7 +2576,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     if ( pObj )
     {
         // further setup placeholder objects
-        if( dynamic_cast< const SdrPageObj *>( pObj ) !=  nullptr && pData )
+        if (dynamic_cast<const SdrPageObj*>(pObj))
         {
             const ProcessData* pProcessData=static_cast<const ProcessData*>(pData);
             if( pProcessData->pPage.page )
