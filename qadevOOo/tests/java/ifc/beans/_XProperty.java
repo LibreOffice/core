@@ -28,8 +28,7 @@ public class _XProperty extends MultiMethodTest {
 
     public void _getAsProperty() {
         Property prop = oObj.getAsProperty();
-        boolean res = (prop.Name instanceof String);
-        res &= (prop.Type != null);
+        boolean res = (prop.Type != null);
         tRes.tested("getAsProperty()", res);
     }
 }

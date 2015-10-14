@@ -220,11 +220,8 @@ public class PentahoReportJob implements ReportJob
                                             val = reportFunction.getChildValues()[0];
                                         }
                                     }
-                                    if (val instanceof ContextLookup)
-                                    {
-                                        final ContextLookup context = (ContextLookup) val;
-                                        name = context.getName();
-                                    }
+                                    final ContextLookup context = (ContextLookup) val;
+                                    name = context.getName();
                                     break;
                                 }
                             }
