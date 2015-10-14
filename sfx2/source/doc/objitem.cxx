@@ -88,11 +88,9 @@ SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 
 bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {
-     const SfxObjectItem *pOther = dynamic_cast<const SfxObjectItem*>( &rItem );
-     return pOther->_pSh == _pSh;
+     const SfxObjectItem& rOther = dynamic_cast<const SfxObjectItem&>(rItem);
+     return rOther._pSh == _pSh;
 }
-
-
 
 SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
 {
