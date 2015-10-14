@@ -822,14 +822,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            SwFormatHoriOrient* pHoriOrient = dynamic_cast<SwFormatHoriOrient*>( &rItem );
-            OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
+            SwFormatHoriOrient& rHoriOrient = dynamic_cast<SwFormatHoriOrient&>(rItem);
 
             sal_uInt16 nValue;
             bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableAlignMap );
             if( bOk )
-                pHoriOrient->SetHoriOrient( nValue );
+                rHoriOrient.SetHoriOrient( nValue );
         }
         break;
 
