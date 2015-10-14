@@ -96,7 +96,8 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
     for (const OString& rMatch : rMatches)
     {
         boost::property_tree::ptree aChild;
-        aChild.put("", rMatch.getStr());
+        aChild.put("part", "0");
+        aChild.put("rectangles", rMatch.getStr());
         aChildren.push_back(std::make_pair("", aChild));
     }
 

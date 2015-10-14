@@ -80,6 +80,7 @@ private:
     bool m_bFound;
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
+    std::vector<int> m_aSearchResultPart;
 #endif
 };
 
@@ -187,11 +188,15 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
     {
         m_aSearchResultSelection.clear();
+        m_aSearchResultPart.clear();
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pPayload);
         boost::property_tree::read_json(aStream, aTree);
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
-            m_aSearchResultSelection.push_back(rValue.second.data().c_str());
+        {
+            m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
+            m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
+        }
     }
     break;
     }
@@ -401,6 +406,8 @@ void SdTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT_EQUAL(true, m_bFound);
     // This was 0; should be 1 match for "find".
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSearchResultSelection.size());
+    // Result is on the second slide.
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
 
     // This should trigger the not-found callback.
     lcl_search("ccc");
