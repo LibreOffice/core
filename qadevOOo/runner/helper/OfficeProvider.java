@@ -88,6 +88,11 @@ public class OfficeProvider implements AppProvider
         {
             System.out.println("User Variable '$(user)' not defined.");
         }
+        catch (com.sun.star.uno.Exception e)
+        {
+            System.out.println("Couldn't backup user layer");
+            e.printStackTrace();
+        }
         catch (java.io.IOException e)
         {
             System.out.println("Couldn't backup user layer");
@@ -578,28 +583,11 @@ public class OfficeProvider implements AppProvider
         return res;
     }
 
-    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
+    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) throws com.sun.star.uno.Exception
     {
-        Object xPathSubst = null;
-
-        try
-        {
-            xPathSubst = xMSF.createInstance(
+        Object xPathSubst = xMSF.createInstance(
                     "com.sun.star.util.PathSubstitution");
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        if (xPathSubst != null)
-        {
-            return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
-        }
-        else
-        {
-            return null;
-        }
+        return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
     }
 
     /**
