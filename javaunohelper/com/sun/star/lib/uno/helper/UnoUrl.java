@@ -206,40 +206,36 @@ public class UnoUrl {
     private static String decodeUTF8(String s)
         throws com.sun.star.lang.IllegalArgumentException {
 
+        if (!s.contains("%")) {
+            return s;
+        }
         try {
-            if (s.contains("%")) {
-                int length = s.length();
-                ByteBuffer bb = ByteBuffer.allocate(length);
-                for (int i = 0; i < length; i++) {
-                    int ch = s.charAt(i);
+            int length = s.length();
+            ByteBuffer bb = ByteBuffer.allocate(length);
+            for (int i = 0; i < length; i++) {
+                int ch = s.charAt(i);
 
-                    if (ch == '%') {
-                        if (i+3 > length)
-                            throw new com.sun.star.lang.IllegalArgumentException(
-                                "Incomplete trailing escape (%) pattern");
-                        try {
-                            ch = Integer.parseInt(s.substring(i+1,i+3),16);
-                        } catch (NumberFormatException e) {
-                            throw new com.sun.star.lang.IllegalArgumentException(e);
-                        }
-                        if (ch < 0)
-                            throw new com.sun.star.lang.IllegalArgumentException(
-                                "Illegal hex characters in escape (%) pattern - negative value");
-                        i+=2;
+                if (ch == '%') {
+                    if (i+3 > length)
+                        throw new com.sun.star.lang.IllegalArgumentException(
+                            "Incomplete trailing escape (%) pattern");
+                    try {
+                        ch = Integer.parseInt(s.substring(i+1,i+3),16);
+                    } catch (NumberFormatException e) {
+                        throw new com.sun.star.lang.IllegalArgumentException(e);
                     }
-
-                    bb.put((byte) (ch & 0xFF));
+                    if (ch < 0)
+                        throw new com.sun.star.lang.IllegalArgumentException(
+                            "Illegal hex characters in escape (%) pattern - negative value");
+                    i+=2;
                 }
 
-                byte[] bytes = new byte[bb.position()];
-                System.arraycopy(bb.array(), 0, bytes, 0, bytes.length);
-                return new String(bytes, "UTF-8");
-
-            } else {
-
-                return new String(s.getBytes(), "UTF-8");
-
+                bb.put((byte) (ch & 0xFF));
             }
+
+            byte[] bytes = new byte[bb.position()];
+            System.arraycopy(bb.array(), 0, bytes, 0, bytes.length);
+            return new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new com.sun.star.lang.IllegalArgumentException(e,
                 "Couldn't convert parameter string to UTF-8 string");
