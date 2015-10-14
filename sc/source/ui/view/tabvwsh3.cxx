@@ -565,7 +565,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // First make sure that the sidebar is visible
                 pThisFrame->ShowChildWindow(SID_SIDEBAR);
 
-                ::sfx2::sidebar::Sidebar::ShowPanel("FunctionsPanel",
+                ::sfx2::sidebar::Sidebar::ShowPanel("ScFunctionsPanel",
                                                     pThisFrame->GetFrame().GetFrameInterface());
                 rReq.Done ();
             }

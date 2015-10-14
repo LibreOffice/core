@@ -175,8 +175,8 @@
 #include <memory>
 
 namespace {
-    const char CustomAnimationPanelId[] = "CustomAnimationPanel";
-    const char SlideTransitionPanelId[] = "SlideTransitionPanel";
+    const char CustomAnimationPanelId[] = "SdCustomAnimationPanel";
+    const char SlideTransitionPanelId[] = "SdSlideTransitionPanel";
     const char GalleryPanelId[] = "GalleryPanel";
 }
 
