@@ -204,7 +204,7 @@ bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 
 bool FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
 {
-    if( (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE) && mpViewShell )
+    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         implcancel();
         return true;
