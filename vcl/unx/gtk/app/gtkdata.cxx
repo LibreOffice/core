@@ -1021,6 +1021,7 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 #if GTK_CHECK_VERSION(3,0,0)
 void GtkSalDisplay::RefreshMenusUnity()
 {
+#ifdef ENABLE_GMENU_INTEGRATION
     for(auto pSalFrame : m_aFrames) {
         auto pGtkSalFrame( static_cast<GtkSalFrame*>(pSalFrame));
         GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pGtkSalFrame->GetMenu());
@@ -1029,7 +1030,7 @@ void GtkSalDisplay::RefreshMenusUnity()
             pSalMenu->UpdateFull();
         }
     }
-
+#endif
 }
 #endif
 
