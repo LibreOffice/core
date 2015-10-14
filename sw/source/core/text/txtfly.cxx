@@ -665,10 +665,9 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #i26945#
         const SdrObject* pNew = _pAnchoredObj->GetDrawObj();
         // #102344# Ignore connectors which have one or more connections
-        if(pNew && dynamic_cast< const SdrEdgeObj *>( pNew ) !=  nullptr)
+        if (const SdrEdgeObj* pEdgeObj = dynamic_cast<const SdrEdgeObj*>(pNew))
         {
-            if(static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(true)
-                || static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(false))
+            if (pEdgeObj->GetConnectedNode(true) || pEdgeObj->GetConnectedNode(false))
             {
                 return false;
             }

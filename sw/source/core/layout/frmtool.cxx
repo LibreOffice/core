@@ -3098,19 +3098,19 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
     return pFrm;
 }
 
-bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
+bool Is_Lower_Of(const SwFrm *pCurrFrm, const SdrObject* pObj)
 {
     Point aPos;
     const SwFrm* pFrm;
-    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+    if (const SwVirtFlyDrawObj *pFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObj))
     {
-        const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(pObj )->GetFlyFrm();
+        const SwFlyFrm* pFly = pFlyDrawObj->GetFlyFrm();
         pFrm = pFly->GetAnchorFrm();
         aPos = pFly->Frm().Pos();
     }
     else
     {
-        pFrm = static_cast<SwDrawContact*>(GetUserCall(pObj) )->GetAnchorFrm(pObj);
+        pFrm = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrm(pObj);
         aPos = pObj->GetCurrentBoundRect().TopLeft();
     }
     OSL_ENSURE( pFrm, "8-( Fly is lost in Space." );
