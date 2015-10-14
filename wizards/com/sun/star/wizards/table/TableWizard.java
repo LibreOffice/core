@@ -149,7 +149,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
         boolean bScenarioiscompleted = _biscompleted;
-        boolean bFieldFormatsiscompleted = _biscompleted;
         boolean bPrimaryKeysiscompleted = _biscompleted;
         boolean bFinalPageiscompleted = _biscompleted;
         if (_ndialogpage == SOMAINPAGE)
@@ -159,14 +158,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         else
         {
             bScenarioiscompleted = iscompleted(SOMAINPAGE);
-        }
-        if (_ndialogpage != TableWizard.SOFIELDSFORMATPAGE)
-        {
-            bFieldFormatsiscompleted = iscompleted(SOFIELDSFORMATPAGE);
-            if (!bFieldFormatsiscompleted)                              // it might be that the Fieldformatter has not yet been initialized
-            {
-                bFieldFormatsiscompleted = bScenarioiscompleted;        // in this case query the scenarioselector
-            }
         }
         if (_ndialogpage != TableWizard.SOPRIMARYKEYPAGE && (this.curPrimaryKeyHandler != null))
         {
