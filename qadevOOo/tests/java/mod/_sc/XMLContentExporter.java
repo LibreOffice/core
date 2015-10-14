@@ -66,7 +66,6 @@ import com.sun.star.xml.sax.XDocumentHandler;
 public class XMLContentExporter extends TestCase {
 
     static XComponent xSheetDoc;
-    static ContentFilterChecker Filter;
 
     /**
      * New spreadsheet document created.
