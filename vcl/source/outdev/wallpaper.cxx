@@ -60,6 +60,8 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
 
     if( rWallpaper.IsBitmap() )
         DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+    else if( rWallpaper.IsGradient() )
+        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else
         DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
@@ -117,6 +119,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     const WallpaperStyle eStyle = rWallpaper.GetStyle();
     const bool bOldMap = mbMap;
     bool bDrawn = false;
+    bool bDrawGradientBackground = false;
     bool bDrawColorBackground = false;
 
     if( pCached )
@@ -131,24 +134,34 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     // draw background
     if( bTransparent )
     {
-        if( !pCached && !rWallpaper.GetColor().GetTransparency() )
+        if( rWallpaper.IsGradient() )
+            bDrawGradientBackground = true;
+        else
         {
-            ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
-            aVDev->SetBackground( rWallpaper.GetColor() );
-            aVDev->SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
-            aVDev->DrawBitmapEx( Point(), aBmpEx );
-            aBmpEx = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
-        }
+            if( !pCached && !rWallpaper.GetColor().GetTransparency() )
+            {
+                ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
+                aVDev->SetBackground( rWallpaper.GetColor() );
+                aVDev->SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
+                aVDev->DrawBitmapEx( Point(), aBmpEx );
+                aBmpEx = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
+            }
 
-        bDrawColorBackground = true;
+            bDrawColorBackground = true;
+        }
     }
     else if( eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale )
     {
-        bDrawColorBackground = true;
+        if( rWallpaper.IsGradient() )
+            bDrawGradientBackground = true;
+        else
+            bDrawColorBackground = true;
     }
 
     // background of bitmap?
-    if( bDrawColorBackground && bTransparent )
+    if( bDrawGradientBackground )
+        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+    else if( bDrawColorBackground && bTransparent )
     {
         DrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
         bDrawColorBackground = false;
@@ -324,6 +337,30 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     }
 
     rWallpaper.ImplGetImpWallpaper()->ImplSetCachedBitmap( aBmpEx );
+
+    Pop();
+    EnableMapMode( bOldMap );
+    mpMetaFile = pOldMetaFile;
+}
+
+void OutputDevice::DrawGradientWallpaper( long nX, long nY,
+                                          long nWidth, long nHeight,
+                                          const Wallpaper& rWallpaper )
+{
+    assert(!is_double_buffered_window());
+
+    Rectangle aBound;
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    const bool bOldMap = mbMap;
+
+    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+
+    mpMetaFile = NULL;
+    EnableMapMode( false );
+    Push( PushFlags::CLIPREGION );
+    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+
+    DrawGradient( aBound, rWallpaper.GetGradient() );
 
     Pop();
     EnableMapMode( bOldMap );

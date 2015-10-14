@@ -999,6 +999,9 @@ public:
     virtual void                Erase();
     virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
+protected:
+    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+
 private:
     SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     SAL_DLLPRIVATE void         DrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
