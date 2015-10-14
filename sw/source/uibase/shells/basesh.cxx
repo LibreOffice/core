@@ -1054,7 +1054,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 case FLY_AT_PARA:
                     // left, from left, right, top, no wrap, wrap left and right
-                    if(eSurround != SURROUND_LEFT || eSurround != SURROUND_RIGHT)
+                    if (eSurround != SURROUND_LEFT && eSurround != SURROUND_RIGHT)
                         aSet.Put(SwFormatSurround(SURROUND_LEFT));
 
                     if( eVOrient != text::VertOrientation::TOP)
