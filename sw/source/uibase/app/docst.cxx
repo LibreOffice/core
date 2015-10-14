@@ -272,7 +272,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
-    SwWrtShell* pActShell = 0;
     switch (nSlot)
     {
     case SID_STYLE_NEW:
@@ -347,6 +346,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             OUString aParam;
             sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
             sal_uInt16 nMask = 0;
+            SwWrtShell* pActShell = 0;
 
             if( !pArgs )
             {

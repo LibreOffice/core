@@ -63,10 +63,9 @@ throw(  SAXException, RuntimeException, std::exception )
 
 OUString OReadAccelatorDocumentHandler::getErrorLineString()
 {
-    char buffer[32];
-
     if ( m_xLocator.is() )
     {
+        char buffer[32];
         return OUString::createFromAscii( buffer );
     }
     else

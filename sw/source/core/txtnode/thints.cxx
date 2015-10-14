@@ -3111,10 +3111,10 @@ bool SwpHints::TryInsertHint(
         {
             // search for a reference with the same name
             SwTextAttr* pTmpHt;
-            sal_Int32 *pTmpHtEnd;
-            sal_Int32 *pTmpHintEnd;
             for( size_t n = 0, nEnd = Count(); n < nEnd; ++n )
             {
+                sal_Int32 *pTmpHtEnd;
+                sal_Int32 *pTmpHintEnd;
                 if (RES_TXTATR_REFMARK == (pTmpHt = Get(n))->Which() &&
                     pHint->GetAttr() == pTmpHt->GetAttr() &&
                     0 != ( pTmpHtEnd = pTmpHt->GetEnd() ) &&

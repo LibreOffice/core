@@ -334,14 +334,15 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
     SgfHeader aHead;
     SgfEntry  aEntr;
     sal_uLong     nNext;
-    bool      bRdFlag=false;         // read graphics entry?
     bool      bRet=false;            // return value
 
     nFileStart=rInp.Tell();
     ReadSgfHeader( rInp, aHead );
     if (aHead.ChkMagic() && (aHead.Typ==SgfBitImag0 || aHead.Typ==SgfBitImag1 ||
-                             aHead.Typ==SgfBitImag2 || aHead.Typ==SgfBitImgMo)) {
-        nNext=aHead.GetOffset();
+                             aHead.Typ==SgfBitImag2 || aHead.Typ==SgfBitImgMo))
+    {
+        bool bRdFlag = false;         // read graphics entry?
+        nNext = aHead.GetOffset();
         while (nNext && !bRdFlag && !rInp.GetError() && !rOut.GetError()) {
             rInp.Seek(nFileStart+nNext);
             ReadSgfEntry( rInp, aEntr );
