@@ -53,7 +53,6 @@ import java.util.StringTokenizer;
 public class XStorageHelper implements XEventListener {
 
     XStorage[] xStorages;
-    XStream xStream;
     XInputStream xIs = null;
     XOutputStream xOs = null;
     static Map<String, XModel> modelMap = new HashMap<String, XModel>();
