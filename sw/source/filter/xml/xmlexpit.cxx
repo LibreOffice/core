@@ -454,34 +454,33 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_UL_SPACE:
         {
-            const SvxULSpaceItem* pULSpace = dynamic_cast<const SvxULSpaceItem*>( &rItem );
-            OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
+            const SvxULSpaceItem& rULSpace = dynamic_cast<const SvxULSpaceItem&>(rItem);
 
             switch( nMemberId )
             {
                 case MID_UP_MARGIN:
-                    if( pULSpace->GetPropUpper() != 100 )
+                    if (rULSpace.GetPropUpper() != 100)
                     {
                         ::sax::Converter::convertPercent(
-                                aOut, pULSpace->GetPropUpper() );
+                                aOut, rULSpace.GetPropUpper() );
                     }
                     else
                     {
                         rUnitConverter.convertMeasureToXML(
-                                aOut, pULSpace->GetUpper() );
+                                aOut, rULSpace.GetUpper() );
                     }
                     break;
 
                 case MID_LO_MARGIN:
-                    if( pULSpace->GetPropLower() != 100 )
+                    if (rULSpace.GetPropLower() != 100)
                     {
                         ::sax::Converter::convertPercent(
-                                aOut, pULSpace->GetPropLower() );
+                                aOut, rULSpace.GetPropLower() );
                     }
                     else
                     {
                         rUnitConverter.convertMeasureToXML(
-                                aOut, pULSpace->GetLower() );
+                                aOut, rULSpace.GetLower() );
                     }
                     break;
 
