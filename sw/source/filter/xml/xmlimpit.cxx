@@ -781,8 +781,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_PAGEDESC:
         {
-            SwFormatPageDesc* pPageDesc = dynamic_cast<SwFormatPageDesc*>( &rItem );
-            OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
+            SwFormatPageDesc& rPageDesc = dynamic_cast<SwFormatPageDesc&>(rItem);
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
@@ -790,7 +789,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 bOk = ::sax::Converter::convertNumber(
                         nVal, rValue, 0, USHRT_MAX);
                 if( bOk )
-                    pPageDesc->SetNumOffset( (sal_uInt16)nVal );
+                    rPageDesc.SetNumOffset( (sal_uInt16)nVal );
             }
         }
         break;
