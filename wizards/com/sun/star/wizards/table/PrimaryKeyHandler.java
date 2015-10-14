@@ -60,7 +60,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     {
         this.CurUnoDialog = _CurUnoDialog;
         curTableDescriptor = _curTableDescriptor;
-        bAutoPrimaryKeysupportsAutoIncrmentation = isAutoPrimeKeyAutoIncrementationsupported();
+        bAutoPrimaryKeysupportsAutoIncrmentation = curTableDescriptor.oTypeInspector.isAutoIncrementationSupported();
         short curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = Integer.valueOf(TableWizard.SOPRIMARYKEYPAGE);
         final String sExplanations = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 26);
@@ -243,13 +243,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
             }
         }
         togglePrimeKeyFields();
-    }
-
-    private boolean isAutoPrimeKeyAutoIncrementationsupported()
-    {
-        TypeInspector.TypeInfo aAutoPrimeTypeInfo;
-        aAutoPrimeTypeInfo = curTableDescriptor.oTypeInspector.findAutomaticPrimaryKeyType();
-        return aAutoPrimeTypeInfo.bisAutoIncrementable;
     }
 
     public boolean iscompleted()

@@ -354,28 +354,13 @@ public class TypeInspector
         return (getAutoIncrementIndex(_xColPropertySet) != INVALID);
     }
 
-    /** finds the first available DataType that can be used as a primary key in a table.
-     * @return The first datatype that also supports Autoincrmentation is taken according to the following list:
-     *1) INTEGER
-     *2) FLOAT
-     *3) REAL
-     *4) DOUBLE
-     *5) NUMERIC
-     *6) DECIMAL         *
-     * If no appropriate datatype is found the first available numeric type after DataType.INTEGER
-     * according to the 'convertDataType' method is returned
+    /** Do we have a datatype that supports AutoIncrementation?
      */
-    /**TODO the fallback order is the same as implemented in the method 'convertDataType'.
-     * It's not very elegant to have the same intelligence
-     * on several spots in the class!!
-     *
-     */
-    public TypeInfo findAutomaticPrimaryKeyType()
+    public boolean isAutoIncrementationSupported()
     {
-        int nDataType;
         for (int n = 0; n < this.nNumericFallBackList.length; n++)
         {
-            nDataType = nNumericFallBackList[n];
+            int nDataType = nNumericFallBackList[n];
             boolean bleaveloop = false;
             int startindex = 0;
             while (!bleaveloop)
@@ -386,15 +371,13 @@ public class TypeInspector
                 {
                     if (this.bisAutoIncrementableInfos[i])
                     {
-                        return new TypeInfo(true);
+                        return true;
                     }
                     startindex = i + 1;
                 }
                 startindex = i + 1;
             }
         }
-        // As Autoincrementation is not supported for any numeric datatype we take the first available numeric Type;
-        nDataType = convertDataType(DataType.INTEGER);
-        return new TypeInfo(false);
+        return false;
     }
 }
