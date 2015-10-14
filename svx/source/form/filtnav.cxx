@@ -424,8 +424,9 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 
     const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
 
-    FmFilterItems* pFilter = dynamic_cast<FmFilterItems*>( pFormItem->GetChildren()[ nActiveTerm ]  );
-    FmFilterItem* pFilterItem = pFilter->Find( _Event.FilterComponent );
+    FmFilterData* pData = pFormItem->GetChildren()[nActiveTerm];
+    FmFilterItems& rFilter = dynamic_cast<FmFilterItems&>(*pData);
+    FmFilterItem* pFilterItem = rFilter.Find( _Event.FilterComponent );
     if ( pFilterItem )
     {
         if ( !_Event.PredicateExpression.isEmpty())
@@ -446,8 +447,8 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
         // searching the component by field name
         OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
 
-        pFilterItem = new FmFilterItem( pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
-        m_pModel->Insert(pFilter->GetChildren().end(), pFilterItem);
+        pFilterItem = new FmFilterItem(&rFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent);
+        m_pModel->Insert(rFilter.GetChildren().end(), pFilterItem);
     }
 
     // ensure there's one empty term in the filter, just in case the active term was previously empty
