@@ -430,7 +430,7 @@ void SdrUndoAttrObj::Undo()
 void SdrUndoAttrObj::Redo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    bool bIs3DScene(pObj && dynamic_cast< E3dScene* >(pObj) !=  nullptr);
+    bool bIs3DScene(dynamic_cast< E3dScene* >(pObj) !=  nullptr);
 
     if(!pUndoGroup || bIs3DScene)
     {
