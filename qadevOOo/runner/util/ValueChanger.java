@@ -748,7 +748,7 @@ public class ValueChanger {
                 newValue = BT4;
             if (oldValue.equals(BT4))
                 newValue = BT5;
-            if (oldValue.equals(BT6))
+            if (oldValue.equals(BT5))
                 newValue = BT6;
             if (oldValue.equals(BT6))
                 newValue = BT7;
