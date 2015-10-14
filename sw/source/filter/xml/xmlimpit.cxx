@@ -229,16 +229,16 @@ struct BoxHolder : private boost::noncopyable
     SvxBorderLine* pLeft;
     SvxBorderLine* pRight;
 
-    explicit BoxHolder(SvxBoxItem* pBox)
+    explicit BoxHolder(SvxBoxItem& rBox)
     {
-        pTop    = pBox->GetTop() == NULL ?
-            NULL : new SvxBorderLine( *pBox->GetTop() );
-        pBottom = pBox->GetBottom() == NULL ?
-            NULL : new SvxBorderLine( *pBox->GetBottom() );
-        pLeft   = pBox->GetLeft() == NULL ?
-            NULL : new SvxBorderLine( *pBox->GetLeft() );
-        pRight  = pBox->GetRight() == NULL ?
-            NULL : new SvxBorderLine( *pBox->GetRight() );
+        pTop    = rBox.GetTop() == NULL ?
+            NULL : new SvxBorderLine( *rBox.GetTop() );
+        pBottom = rBox.GetBottom() == NULL ?
+            NULL : new SvxBorderLine( *rBox.GetBottom() );
+        pLeft   = rBox.GetLeft() == NULL ?
+            NULL : new SvxBorderLine( *rBox.GetLeft() );
+        pRight  = rBox.GetRight() == NULL ?
+            NULL : new SvxBorderLine( *rBox.GetRight() );
     }
 
     ~BoxHolder()
@@ -433,11 +433,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BOX:
         {
-            SvxBoxItem* pBox = dynamic_cast<SvxBoxItem*>( &rItem );
-            OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
+            SvxBoxItem& rBox = dynamic_cast<SvxBoxItem&>(rItem);
 
             // copy SvxBorderLines
-            BoxHolder aBoxes(pBox);
+            BoxHolder aBoxes(rBox);
 
             sal_Int32 nTemp;
 
@@ -456,16 +455,16 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::LEFT );
+                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::LEFT );
                     if( nMemberId == RIGHT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::RIGHT );
+                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::RIGHT );
                     if( nMemberId == TOP_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::TOP );
+                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::TOP );
                     if( nMemberId == BOTTOM_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
-                        pBox->SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::BOTTOM);
+                        rBox.SetDistance( (sal_uInt16)nTemp, SvxBoxItemLine::BOTTOM);
                     break;
 
                 case ALL_BORDER:
@@ -578,10 +577,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
             }
 
-            pBox->SetLine( aBoxes.pTop,    SvxBoxItemLine::TOP    );
-            pBox->SetLine( aBoxes.pBottom, SvxBoxItemLine::BOTTOM );
-            pBox->SetLine( aBoxes.pLeft,   SvxBoxItemLine::LEFT   );
-            pBox->SetLine( aBoxes.pRight,  SvxBoxItemLine::RIGHT  );
+            rBox.SetLine( aBoxes.pTop,    SvxBoxItemLine::TOP    );
+            rBox.SetLine( aBoxes.pBottom, SvxBoxItemLine::BOTTOM );
+            rBox.SetLine( aBoxes.pLeft,   SvxBoxItemLine::LEFT   );
+            rBox.SetLine( aBoxes.pRight,  SvxBoxItemLine::RIGHT  );
 
             bOk = true;
         }
