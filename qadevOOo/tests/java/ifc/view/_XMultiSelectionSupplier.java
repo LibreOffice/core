@@ -51,7 +51,6 @@ import lib.StatusException;
 public class _XMultiSelectionSupplier extends MultiMethodTest {
 
     public XMultiSelectionSupplier oObj = null;
-    public boolean selectionChanged = false;
     Object[] selections = null;
     Comparator<Object> ObjCompare = null;
 
