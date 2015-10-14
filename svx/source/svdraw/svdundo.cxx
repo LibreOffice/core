@@ -792,7 +792,6 @@ void SdrUndoInsertObj::Redo()
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
         if ( pObjList &&
-             pObjList->GetOwnerObj() &&
              dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr )
         {
             aAnchorPos = pObj->GetAnchorPos();
