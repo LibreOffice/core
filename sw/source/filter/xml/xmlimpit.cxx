@@ -850,8 +850,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRM_SIZE:
         {
-            SwFormatFrmSize* pFrmSize = dynamic_cast<SwFormatFrmSize*>( &rItem );
-            OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
+            SwFormatFrmSize& rFrmSize = dynamic_cast<SwFormatFrmSize&>(rItem);
 
             bool bSetHeight = false;
             bool bSetWidth = false;
@@ -872,7 +871,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > 100 )
                             nValue = 100;
 
-                        pFrmSize->SetWidthPercent( (sal_Int8)nValue );
+                        rFrmSize.SetWidthPercent( (sal_Int8)nValue );
                     }
                 }
                 break;
@@ -907,8 +906,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > USHRT_MAX )
                             nValue = USHRT_MAX;
 
-                        pFrmSize->SetWidth( (sal_uInt16)nValue );
-                        pFrmSize->SetHeightSizeType( ATT_VAR_SIZE );
+                        rFrmSize.SetWidth( (sal_uInt16)nValue );
+                        rFrmSize.SetHeightSizeType( ATT_VAR_SIZE );
                         bOk = true;
                     }
                 }
@@ -923,11 +922,11 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 if( bOk )
                 {
                     if( bSetWidth )
-                        pFrmSize->SetWidth( (sal_uInt16)nValue );
+                        rFrmSize.SetWidth( (sal_uInt16)nValue );
                     if( bSetHeight )
-                        pFrmSize->SetHeight( (sal_uInt16)nValue );
+                        rFrmSize.SetHeight( (sal_uInt16)nValue );
                     if( bSetSizeType )
-                        pFrmSize->SetHeightSizeType( eSizeType );
+                        rFrmSize.SetHeightSizeType( eSizeType );
                 }
             }
         }
