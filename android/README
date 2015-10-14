@@ -8,8 +8,8 @@ Contains common code for all projects on Android to bootstrap LibreOffice. In
 addition it is a home to LibreOfficeKit (LOK - see libreofficekit/README) JNI
 classes.
 
-LOAndroid3 (in experimental)
-****************************
+stuff in source directory
+*************************
 
 LibreOffice Android application - the code is based on Fennec (Firefox for Android).
 It uses OpenGL ES 2 for rendering of the document tiles which are gathered from
@@ -158,7 +158,7 @@ For instructions on how to build for Android, see README.cross.
 Attach your device, so 'adb devices' shows it. Then run:
 
         cd android/source
-        ant debug install
+        make install
         adb logcat
 
 and if all goes well, you should have some nice debug output to enjoy when you
@@ -187,7 +187,8 @@ space on your emulator's or device's /data volume. You can do:
 
         adb shell stop; adb shell start
 
-* Debugging
+Debugging
+---------
 
 First of all, you need to configure the build with --enable-debug or
 --enable-dbgutil.  You may want to provide --enable-selective-debuginfo too,
@@ -197,6 +198,8 @@ during linking.
 Building with all symbols is also possible but the linking is currently
 slow (around 10 to 15 minutes) and you need lots of memory (around 16GB + some
 swap).
+
+* Using ndk-gdb
 
 When you have all this, install the .apk to the device, and:
 
@@ -225,11 +228,32 @@ rtl::OString, you need:
         (gdb) python sys.path.insert(0, "/master/solenv/gdb")
         (gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
 
+* Using Android Studio (and thus lldb)
+
+Note that both might not yield the same results - so if lldb doesn't show you
+useful info, try with the ndk-gdb method and the other way round.
+
+    - open android/source/build.gradle in Android Studio via File|New → Import Project
+    - make sure you select the right build variant (strippedUIDebug is what you want)
+    - use Run|Edit Configurations to create a new configuration of type "Android Native"
+        - on tab "General" pick module "source"
+        - on tab "Native Debugger" add android/source/obj/local/<hostarch> to
+          the Symbol directories
+
+Then you can select your new configuration and use Run | Debug to launch it.
+Note that lldb doesn't initially stop execution, so if you want to add
+breakpoints using lldb prompt, you manually have to pause execution, then you
+can witch to the lldb tab and add your breakpoints. However making use of the
+editor just using File|Open .. to open the desired file in Android Studio and
+then toggling the breakpoint by clicking on the margin is more comfortable.
+
 * Debugging the Java part
 
-At the moment the code is not organized in a way that would make Eclipse or
-Android Studio happy as-is, so the quickest way is to use the jdb command-line
-debugger. Steps to use it:
+Open android/source/build.gradle in Android studio via File|New → Import
+Project and you can use Android Studio's debugging interface.
+Just make sure you pick the correct build variant (strippedUIDebug)
+
+The alternative is to use the jdb command-line debugger. Steps to use it:
 
 1) Find out the JDWP ID of a debuggable application:
 

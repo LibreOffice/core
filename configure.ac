@@ -12311,10 +12311,6 @@ if echo "$host_os" | grep -q linux-android ; then
 
         AC_MSG_RESULT([not set, using $ANDROID_PACKAGE_NAME])
     else
-        if test -n "$ENABLE_DEBUG" -a "$with_android_package_name" != "org.libreoffice" ; then
-            AC_MSG_ERROR([The package name must be set
-to org.libreoffice when debugging, please avoid --with-android-package-name.])
-        fi
         ANDROID_PACKAGE_NAME="$with_android_package_name"
         AC_MSG_RESULT([$ANDROID_PACKAGE_NAME])
     fi
