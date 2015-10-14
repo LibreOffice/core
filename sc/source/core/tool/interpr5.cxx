@@ -26,7 +26,6 @@
 #endif
 
 #include <unotools/bootstrap.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <svl/zforlist.hxx>
 
 #include "interpre.hxx"
@@ -912,7 +911,7 @@ void ScInterpreter::ScMatInv()
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
 
-        if (officecfg::Office::Common::Misc::UseOpenCL::get())
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get())
         {
             sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
             if (pInterpreter != NULL)

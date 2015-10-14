@@ -146,7 +146,8 @@ public:
     VolatileType GetVolatileType() const { return meVolatileType;}
 
 private:
-    static ScCalcConfig maGlobalConfig;
+    static ScCalcConfig& GetOrCreateGlobalConfig();
+    static ScCalcConfig *mpGlobalConfig;
 
     static ScTokenStack*    pGlobalStack;
     static bool             bGlobalStackInUse;

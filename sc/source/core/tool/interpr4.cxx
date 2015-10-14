@@ -3503,19 +3503,26 @@ ScInterpreter::~ScInterpreter()
     delete pTokenMatrixMap;
 }
 
+ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()
+{
+    if (!mpGlobalConfig)
+        mpGlobalConfig = new ScCalcConfig();
+    return *mpGlobalConfig;
+}
+
 void ScInterpreter::SetGlobalConfig(const ScCalcConfig& rConfig)
 {
-    maGlobalConfig = rConfig;
+    GetOrCreateGlobalConfig() = rConfig;
 }
 
 const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 {
-    return maGlobalConfig;
+    return GetOrCreateGlobalConfig();
 }
 
 void ScInterpreter::MergeCalcConfig()
 {
-    maCalcConfig = maGlobalConfig;
+    maCalcConfig = GetOrCreateGlobalConfig();
     maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
 }
 

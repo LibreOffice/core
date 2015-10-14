@@ -20,6 +20,8 @@
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
 
+#include <comphelper/configurationlistener.hxx>
+
 // have to match the registry values
 enum ScRecalcOptions
 {
@@ -45,6 +47,8 @@ struct SC_DLLPUBLIC ScCalcConfig
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
     bool mbHasStringRefSyntax:1;
+
+    comphelper::ConfigurationListenerProperty<bool> mbOpenCLEnabled;
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;

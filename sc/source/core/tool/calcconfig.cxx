@@ -20,11 +20,25 @@
 #include "compiler.hxx"
 #include "docsh.hxx"
 
+#include <comphelper/configurationlistener.hxx>
+
+using comphelper::ConfigurationListener;
+
+static rtl::Reference<ConfigurationListener> getMiscListener()
+{
+    static rtl::Reference<ConfigurationListener> xListener;
+    if (!xListener.is())
+        xListener = rtl::Reference<ConfigurationListener>(
+            new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
+    return xListener;
+}
+
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     meStringConversion(StringConversion::LOCALE),     // old LibreOffice behavior
     mbEmptyStringAsZero(false),
-    mbHasStringRefSyntax(false)
+    mbHasStringRefSyntax(false),
+    mbOpenCLEnabled(getMiscListener(), "UseOpenCL")
 {
     setOpenCLConfigToDefault();
 
