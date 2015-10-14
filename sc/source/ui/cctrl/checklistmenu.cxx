@@ -1255,6 +1255,9 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
     else
         maChkToggleAll->SetState( TRISTATE_INDET );
 
+    if ( !maConfig.mbAllowEmptySet )
+        maBtnOk->Enable( nSelCount != 0);
+
     return 0;
 }
 
