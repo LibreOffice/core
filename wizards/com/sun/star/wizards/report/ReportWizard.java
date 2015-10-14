@@ -41,7 +41,6 @@ import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.RecordParser;
 import com.sun.star.wizards.db.SQLQueryComposer;
 import com.sun.star.wizards.ui.CommandFieldSelection;
-import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.SortingComponent;
 import com.sun.star.wizards.ui.TitlesComponent;
 import com.sun.star.wizards.ui.UIConsts;

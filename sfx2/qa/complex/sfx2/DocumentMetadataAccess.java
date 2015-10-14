@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import helper.StreamSimulator;
 
-import java.io.IOException;
-
 import lib.TestParameters;
 
 import org.junit.After;
