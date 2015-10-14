@@ -175,6 +175,11 @@ public final class Difference {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     /**
      * Display debug information.
      *

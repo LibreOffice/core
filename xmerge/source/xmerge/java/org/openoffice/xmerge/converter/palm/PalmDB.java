@@ -351,4 +351,10 @@ public final class PalmDB {
 
         return bool;
     }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
 }

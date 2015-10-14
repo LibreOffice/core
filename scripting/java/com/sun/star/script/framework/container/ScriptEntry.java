@@ -85,6 +85,11 @@ public class ScriptEntry implements Cloneable {
                location.equals(other.getLocation());
     }
 
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     public Map<String, String> getLanguageProperties() {
         return languagedepprops;
     }
