@@ -45,7 +45,7 @@ WHOLELIBS = \
 
 $(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lgnustl_static -lGLESv2 -landroid -ljnigraphics -llog -lz
+	$(CXX) -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lgnustl_static -lGLESv2 -landroid -ljnigraphics -llog -lz
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
