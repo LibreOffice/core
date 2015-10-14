@@ -858,6 +858,14 @@ if echo "$host_os" | grep -q linux-android ; then
         add_warning "    $ANDROID_SDK_HOME/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION"
         add_warning "or adjust $SRC_ROOT/android/source/build.gradle accordingly"
     fi
+    if test ! -f "$ANDROID_SDK_HOME/extras/android/m2repository/source.properties"; then
+        AC_MSG_WARN([android support repository not found - install with
+                         $ANDROID_SDK_HOME/tools/android update sdk -u --filter extra-android-m2repository
+                     to allow the build to download the specified version of the android support libraries])
+        add_warning "android support repository not found - install with"
+        add_warning "    $ANDROID_SDK_HOME/tools/android update sdk -u --filter extra-android-m2repository"
+        add_warning "to allow the build to download the specified version of the android support libraries"
+    fi
 fi
 
 if test "$_os" = "AIX"; then
