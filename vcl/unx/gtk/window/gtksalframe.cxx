@@ -669,7 +669,9 @@ gboolean ensure_dbus_setup( gpointer data )
         if(!pSessionBus)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if( !pSessionBus )
+        {
             return FALSE;
+        }
 
         // Create menu model and action group attached to this frame.
         GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
@@ -1461,6 +1463,12 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
             nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
         }
         lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime);
+    }
+#else
+    if( eWinType == GTK_WINDOW_TOPLEVEL )
+    {
+        // Enable DBus native menu if available.
+        ensure_dbus_setup( this );
     }
 #endif
 

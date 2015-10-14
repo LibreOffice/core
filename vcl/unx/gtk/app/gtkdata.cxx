@@ -33,6 +33,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtksalmenu.hxx>
 #include <unx/salobj.h>
 #include <generic/geninst.h>
 #include <osl/thread.h>
@@ -1016,5 +1017,20 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
     }
     SalGenericDisplay::deregisterFrame( pFrame );
 }
+
+#if GTK_CHECK_VERSION(3,0,0)
+void GtkSalDisplay::RefreshMenusUnity()
+{
+    for(auto pSalFrame : m_aFrames) {
+        auto pGtkSalFrame( static_cast<GtkSalFrame*>(pSalFrame));
+        GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pGtkSalFrame->GetMenu());
+        if(pSalMenu) {
+            pSalMenu->Activate();
+            pSalMenu->UpdateFull();
+        }
+    }
+
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

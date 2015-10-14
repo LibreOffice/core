@@ -179,6 +179,9 @@ public:
 #if !GTK_CHECK_VERSION(3,0,0)
     virtual bool Dispatch( XEvent *pEvent ) override;
 #endif
+#if GTK_CHECK_VERSION(3,0,0)
+    void RefreshMenusUnity();
+#endif
 };
 
 inline GtkData* GetGtkSalData()

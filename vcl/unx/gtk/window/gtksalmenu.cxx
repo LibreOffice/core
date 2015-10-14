@@ -13,6 +13,7 @@
 
 #include <generic/gendata.hxx>
 #include <unx/saldisp.hxx>
+#include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/menu.hxx>
@@ -375,7 +376,9 @@ static bool bInvalidMenus = false;
 static gboolean RefreshMenusUnity(gpointer)
 {
     SolarMutexGuard g;
-
+#if GTK_CHECK_VERSION(3,0,0)
+    GetGtkSalData()->GetGtkDisplay()->RefreshMenusUnity();
+#else
     SalDisplay* pSalDisplay = vcl_sal::getSalDisplay(GetGenericData());
     std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
     std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
@@ -388,6 +391,7 @@ static gboolean RefreshMenusUnity(gpointer)
             pSalMenu->UpdateFull();
         }
     }
+#endif
     bInvalidMenus = false;
     return FALSE;
 }
