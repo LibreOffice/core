@@ -3780,10 +3780,8 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
     return xGluePoints;
 }
 
-
-
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
+uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
     throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
@@ -3792,28 +3790,25 @@ uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
     {
         SdrObjList* pObjList = mpObj->GetObjList();
 
-        switch( pObjList->GetListKind() )
+        switch (pObjList->GetListKind())
         {
-        case SDROBJLIST_GROUPOBJ:
-            if(dynamic_cast<const SdrObjGroup*>( pObjList->GetOwnerObj()) != nullptr )
-                return dynamic_cast<SdrObjGroup*>( pObjList->GetOwnerObj())->getUnoShape( );
-            else if( dynamic_cast<const E3dScene* >(pObjList->GetOwnerObj() ) != nullptr)
-                return dynamic_cast< E3dScene* >(pObjList->GetOwnerObj())->getUnoShape();
-            break;
-        case SDROBJLIST_DRAWPAGE:
-        case SDROBJLIST_MASTERPAGE:
-            return dynamic_cast<SdrPage*>( pObjList )->getUnoPage( );
-        default:
-            OSL_FAIL( "SvxShape::getParent(  ): unexpected SdrObjListKind" );
-            break;
+            case SDROBJLIST_GROUPOBJ:
+                if (SdrObjGroup *pGroup = dynamic_cast<SdrObjGroup*>(pObjList->GetOwnerObj()))
+                    return pGroup->getUnoShape();
+                else if (E3dScene *pScene = dynamic_cast<E3dScene*>(pObjList->GetOwnerObj()))
+                    return pScene->getUnoShape();
+                break;
+            case SDROBJLIST_DRAWPAGE:
+            case SDROBJLIST_MASTERPAGE:
+                return dynamic_cast<SdrPage&>(*pObjList).getUnoPage();
+            default:
+                OSL_FAIL( "SvxShape::getParent(  ): unexpected SdrObjListKind" );
+                break;
         }
     }
 
-    uno::Reference< uno::XInterface > xParent;
-    return xParent;
+    return uno::Reference<uno::XInterface>();
 }
-
-
 
 void SAL_CALL SvxShape::setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& )
     throw(lang::NoSupportException, uno::RuntimeException, std::exception)
