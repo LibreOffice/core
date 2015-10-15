@@ -57,7 +57,6 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
 
     public XDataPilotDescriptor oObj = null;
     CellRangeAddress CRA = new CellRangeAddress((short)1, 1, 1, 5, 5);
-    CellRangeAddress oldCRA = null ;
     String sTag = "XDataPilotDescriptor_Tag";
     String fieldsNames[];
     int fieldsAmount = 0;
@@ -117,7 +116,7 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
         executeMethod("getHiddenFields()") ;
         executeMethod("getPageFields()") ;
 
-        oldCRA = oObj.getSourceRange() ;
+        oObj.getSourceRange();
         oObj.setSourceRange(CRA);
 
         tRes.tested("setSourceRange()", true);
