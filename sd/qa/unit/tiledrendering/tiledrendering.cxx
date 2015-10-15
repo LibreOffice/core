@@ -421,12 +421,19 @@ void SdTiledRenderingTest::testSearch()
 void SdTiledRenderingTest::testSearchAll()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("match", /*bFindAll=*/true);
 
     OString aUsedFormat;
     // This was empty: find-all did not highlight the first match.
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+
+    // We're on the first slide, search for something on the second slide and make sure we get a SET_PART.
+    m_nPart = 0;
+    lcl_search("second", /*bFindAll=*/true);
+    // This was 0: no SET_PART was emitted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
 }
 
 #endif
