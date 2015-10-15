@@ -20,7 +20,10 @@ package com.sun.star.script.framework.browse;
 
 import com.sun.star.beans.XIntrospectionAccess;
 
+import com.sun.star.container.NoSuchElementException;
+
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.WrappedTargetException;
 
 import com.sun.star.lib.uno.helper.PropertySet;
 
@@ -62,19 +65,14 @@ public class ParcelBrowseNode extends PropertySet implements
     public boolean renamable = true;
 
     public ParcelBrowseNode(ScriptProvider provider, ParcelContainer container,
-                            String parcelName) {
+                            String parcelName) throws
+        com.sun.star.container.NoSuchElementException,
+        com.sun.star.lang.WrappedTargetException {
 
         this.provider = provider;
         this.container = container;
 
-        // TODO decide whether exception is propagated out or not
-        try {
-            this.parcel = (Parcel)this.container.getByName(parcelName);
-        } catch (Exception e) {
-            LogUtils.DEBUG("** Exception: " + e);
-            LogUtils.DEBUG(" ** Failed to get parcel named " + parcelName +
-                           " from container");
-        }
+        this.parcel = (Parcel)this.container.getByName(parcelName);
 
         registerProperty("Deletable", new Type(boolean.class), (short)0, "deletable");
         registerProperty("Editable", new Type(boolean.class), (short)0, "editable");
