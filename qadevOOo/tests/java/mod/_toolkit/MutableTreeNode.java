@@ -20,7 +20,6 @@ package mod._toolkit;
 import com.sun.star.awt.tree.XMutableTreeDataModel;
 import com.sun.star.awt.tree.XMutableTreeNode;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
@@ -37,7 +36,6 @@ import util.utils;
 
 
 public class MutableTreeNode extends TestCase {
-    private static XTextDocument xTextDoc;
     private static XInterface oObj = null;
     private static XMutableTreeDataModel mXTreeDataModel;
     private static XMultiServiceFactory mxMSF;
@@ -48,16 +46,6 @@ public class MutableTreeNode extends TestCase {
     @Override
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         mxMSF = tParam.getMSF();
-    }
-
-    /**
-     * Disposes StarOffice Writer document.
-     */
-    @Override
-    protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     @Override
