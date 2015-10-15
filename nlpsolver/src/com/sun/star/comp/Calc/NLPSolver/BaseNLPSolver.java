@@ -247,7 +247,7 @@ public abstract class BaseNLPSolver extends WeakBase
         int lastSheet = -1, lastRow = -1;
         for (int i = 0; i < m_variableCount; i++) {
             if (lastSheet == m_variables[i].Sheet && lastRow == m_variables[i].Row &&
-                    currentRow.EndCol == m_variables[i].Column - 1)
+                    currentRow != null && currentRow.EndCol == m_variables[i].Column - 1)
                 currentRow.EndCol++;
             else {
                 currentRow = new RowInfo(m_variables[i].Sheet, m_variables[i].Row);
