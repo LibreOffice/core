@@ -50,7 +50,6 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
 
     XComponent xTextDoc = null;
     XDispatchRecorder recorder = null;
-    XDesktop desktop = null;
 
     /**
      * Simple <code>XDispatchRecorder</code> implementation
@@ -81,8 +80,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
 
         Object inst = tParam.getMSF().createInstance
             ("com.sun.star.frame.Desktop");
-        desktop = UnoRuntime.queryInterface
-            (XDesktop.class, inst);
+        UnoRuntime.queryInterface(XDesktop.class, inst);
     }
 
     /**
