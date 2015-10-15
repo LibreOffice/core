@@ -982,6 +982,8 @@ void ListBox::DoubleClick()
 
 void ListBox::Clear()
 {
+    if (!mpImplLB)
+        return;
     mpImplLB->Clear();
     if( IsDropDownBox() )
     {
@@ -1037,13 +1039,15 @@ void ListBox::RemoveEntry( sal_Int32 nPos )
 
 Image ListBox::GetEntryImage( sal_Int32 nPos ) const
 {
-    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+    if ( mpImplLB && mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
         return mpImplLB->GetEntryList()->GetEntryImage( nPos );
     return Image();
 }
 
 sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
 {
+    if (!mpImplLB)
+        return LISTBOX_ENTRY_NOTFOUND;
     sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
@@ -1052,6 +1056,8 @@ sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
 
 sal_Int32 ListBox::GetEntryPos( const void* pData ) const
 {
+    if (!mpImplLB)
+        return LISTBOX_ENTRY_NOTFOUND;
     sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
@@ -1060,11 +1066,15 @@ sal_Int32 ListBox::GetEntryPos( const void* pData ) const
 
 OUString ListBox::GetEntry( sal_Int32 nPos ) const
 {
+    if (!mpImplLB)
+        return OUString();
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
 sal_Int32 ListBox::GetEntryCount() const
 {
+    if (!mpImplLB)
+        return 0;
     return mpImplLB->GetEntryList()->GetEntryCount() - mpImplLB->GetEntryList()->GetMRUCount();
 }
 
@@ -1075,11 +1085,16 @@ OUString ListBox::GetSelectEntry(sal_Int32 nIndex) const
 
 sal_Int32 ListBox::GetSelectEntryCount() const
 {
+    if (!mpImplLB)
+        return 0;
     return mpImplLB->GetEntryList()->GetSelectEntryCount();
 }
 
 sal_Int32 ListBox::GetSelectEntryPos( sal_Int32 nIndex ) const
 {
+    if (!mpImplLB || !mpImplLB->GetEntryList())
+        return LISTBOX_ENTRY_NOTFOUND;
+
     sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -1107,6 +1122,9 @@ void ListBox::SelectEntry( const OUString& rStr, bool bSelect )
 
 void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
 {
+    if (!mpImplLB)
+        return;
+
     if ( 0 <= nPos && nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
         sal_Int32 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
