@@ -230,8 +230,6 @@ public final class CharacterBaseParagraphMerge implements NodeMergeAlgorithm {
                         newTextPosition += cacheLength;
 
                         // reset the markers
-                        lastDiffPosition = -1;
-                        lastDiffOperation = Difference.UNCHANGE;
                         cacheLength = 0;
                     }
                 }
