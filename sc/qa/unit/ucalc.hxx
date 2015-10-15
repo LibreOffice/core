@@ -195,6 +195,7 @@ public:
 
     void testExternalRef();
     void testExternalRefFunctions();
+    void testExternalRangeName();
 
     void testCopyToDocument();
 
@@ -531,6 +532,7 @@ public:
     CPPUNIT_TEST(testFuncLCM);
     CPPUNIT_TEST(testFuncSUMSQ);
     CPPUNIT_TEST(testExternalRef);
+    CPPUNIT_TEST(testExternalRangeName);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testFuncSHEET);

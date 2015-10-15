@@ -5157,6 +5157,37 @@ void Test::testExternalRef()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testExternalRangeName()
+{
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtSh1Name("Data1");
+    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
+                           findLoadedDocShellByName(aExtDocName) != NULL);
+
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
+    rExtDoc.InsertTab(0, aExtSh1Name);
+    rExtDoc.SetValue(0, 0, 0, 123.456);
+
+    ScRangeName* pRangeName = rExtDoc.GetRangeName();
+    ScRangeData* pRangeData = new ScRangeData(&rExtDoc, "ExternalName",
+            "$Data1.$A$1");
+    pRangeName->insert(pRangeData);
+
+    m_pDoc->InsertTab(0, "Test Sheet");
+    m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#ExternalName"));
+
+    double nVal = m_pDoc->GetValue(0, 1, 0);
+    ASSERT_DOUBLES_EQUAL(123.456, nVal);
+
+    xExtDocSh->DoClose();
+    CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
+                           findLoadedDocShellByName(aExtDocName) == NULL);
+    m_pDoc->DeleteTab(0);
+}
+
 void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
