@@ -195,7 +195,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     private ScriptEditorForJavaScript(XScriptContext context, URL url) {
         initUI();
         Scriptable scope = getScope(context);
-        rhinoWindow.openFile(url, scope, new closeHandler(url));
+        rhinoWindow.openFile(url, scope, new CloseHandler(url));
         this.scriptURL = url;
     }
 
@@ -294,11 +294,11 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
         return scope;
     }
 
-    private class closeHandler implements Runnable {
+    private static class CloseHandler implements Runnable {
 
         private final URL url;
 
-        private closeHandler(URL url) {
+        private CloseHandler(URL url) {
             this.url = url;
         }
 

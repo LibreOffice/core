@@ -739,7 +739,7 @@ public class LocalOfficeConnection
 
 
 
-    private class StreamProcessor extends Thread
+    private static class StreamProcessor extends Thread
     {
         private final java.io.InputStream m_in;
         private final java.io.PrintStream m_print;

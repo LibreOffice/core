@@ -590,7 +590,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see         com.sun.star.lang.XServiceInfo
      * @since       UDK1.0
      */
-    class ServiceEnumerationImpl implements XEnumeration {
+    static class ServiceEnumerationImpl implements XEnumeration {
         java.util.Iterator<Object> enumeration = null;
 
         /**

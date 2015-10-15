@@ -162,7 +162,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addWindowListener() and
     * removeWindowListener()
     */
-    public class TestWindowListener implements XWindowListener {
+    public static class TestWindowListener implements XWindowListener {
         public boolean resized = false ;
         public boolean moved = false ;
         public boolean hidden = false ;
@@ -323,7 +323,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addFocusListener() and
     * removeFocusListener()
     */
-    public class TestFocusListener implements XFocusListener {
+    public static class TestFocusListener implements XFocusListener {
         public boolean gained = false ;
         public boolean lost = false ;
 
@@ -405,7 +405,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addKeyListener() and
     * removeKeyListener()
     */
-    public class TestKeyListener implements XKeyListener {
+    public static class TestKeyListener implements XKeyListener {
         public boolean pressed = false;
         public boolean released = false;
         public void keyPressed(KeyEvent e) { pressed = true; }
@@ -444,7 +444,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addMouseListener() and
     * removeMouseListener()
     */
-    public class TestMouseListener implements XMouseListener {
+    public static class TestMouseListener implements XMouseListener {
         public boolean pressed = false;
         public boolean released = false;
         public boolean entered = false;
@@ -507,7 +507,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addMouseMotionListener() and
     * removeMouseMotionListener()
     */
-    public class TestMouseMotionListener implements XMouseMotionListener {
+    public static class TestMouseMotionListener implements XMouseMotionListener {
         public boolean dragged = false;
         public boolean moved = false;
 
@@ -558,7 +558,7 @@ public class _XWindow extends MultiMethodTest {
     * A class we use to test addPaintListener() and
     * removePaintListener()
     */
-    public class TestPaintListener implements XPaintListener {
+    public static class TestPaintListener implements XPaintListener {
         public boolean paint = false;
 
         public void windowPaint(PaintEvent e) {

@@ -43,7 +43,7 @@ public class _XPopupMenuController extends MultiMethodTest {
         tRes.tested("updatePopupMenu()", true);
     }
 
-    private class PopupMenuImpl implements XPopupMenu {
+    private static class PopupMenuImpl implements XPopupMenu {
 
         public void addMenuListener(com.sun.star.awt.XMenuListener xMenuListener) {
             System.out.println("addMenuListener called.");

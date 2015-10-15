@@ -476,7 +476,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
      * No functionality implemented.
      * @see com.sun.star.script.XScriptListener
      */
-    class MyScriptListener implements XScriptListener {
+    static class MyScriptListener implements XScriptListener {
         public void firing(ScriptEvent evt) {
         }
 

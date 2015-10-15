@@ -79,7 +79,7 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
     * which just detects and stores approve requipements. They are checked
     * later.
     */
-    private class TestListener implements XRowSetApproveListener {
+    private static class TestListener implements XRowSetApproveListener {
         public boolean approveRequests = true ;
         public boolean approveCursorMoveCalled = false ;
         public boolean approveRowChangeCalled = false ;

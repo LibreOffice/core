@@ -55,7 +55,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
      *
      * @see com.sun.star.bridge.XInstanceProvider
      */
-    class MyInstanceProvider implements XInstanceProvider {
+    static class MyInstanceProvider implements XInstanceProvider {
         /**
          * a MultiServiceFactory for creating instances
          *

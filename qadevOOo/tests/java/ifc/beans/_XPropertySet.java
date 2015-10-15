@@ -95,7 +95,7 @@ public class _XPropertySet extends MultiMethodTest {
     * Structure that collects the properties of different types to test :
     * Constrained, Bound and Normal.
     */
-    private final class PropsToTest {
+    private static final class PropsToTest {
         ArrayList< String > constrained = new ArrayList< String >();
         ArrayList< String > bound = new ArrayList< String >();
         ArrayList< String > normal = new ArrayList< String >();

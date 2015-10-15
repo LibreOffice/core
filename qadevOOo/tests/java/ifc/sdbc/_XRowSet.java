@@ -55,7 +55,7 @@ public class _XRowSet extends MultiMethodTest {
     private _XRowSetApproveBroadcaster.RowSetApproveChecker checker = null ;
     private final TestListener listener = new TestListener() ;
 
-    private class TestListener implements XRowSetListener {
+    private static class TestListener implements XRowSetListener {
         public boolean cursorMoved = false ;
         public boolean rowChanged = false ;
         public boolean rowSetChanged = false ;

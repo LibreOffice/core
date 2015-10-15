@@ -185,7 +185,7 @@ public abstract class BaseNLPSolver extends WeakBase
         }
     }
 
-    protected class CellMap {
+    protected static class CellMap {
         protected int Range;
         protected int Col;
         protected int Row;

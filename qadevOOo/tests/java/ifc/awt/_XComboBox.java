@@ -50,7 +50,7 @@ public class _XComboBox extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestActionListener
+    protected static class TestActionListener
         implements com.sun.star.awt.XActionListener {
         public boolean disposingCalled = false;
         public boolean actionPerformedCalled = false;
@@ -68,7 +68,7 @@ public class _XComboBox extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestItemListener
+    protected static class TestItemListener
         implements com.sun.star.awt.XItemListener {
         public boolean disposingCalled = false;
         public boolean itemStateChangedCalled = false;

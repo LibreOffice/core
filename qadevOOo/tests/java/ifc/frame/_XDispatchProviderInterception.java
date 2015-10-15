@@ -48,7 +48,7 @@ public class _XDispatchProviderInterception extends MultiMethodTest {
      * slave interceptors, and redirect all dispatch queries to the master
      * provider.
      */
-    public class TestInterceptor implements XDispatchProviderInterceptor {
+    public static class TestInterceptor implements XDispatchProviderInterceptor {
         private final PrintWriter log;
         public XDispatchProvider master = null, slave = null ;
 

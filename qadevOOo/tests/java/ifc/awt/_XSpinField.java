@@ -48,7 +48,7 @@ public class _XSpinField extends MultiMethodTest {
     * Listener implementation which set flags on appropriate
     * listener methods calls.
     */
-    protected class TestListener implements XSpinListener {
+    protected static class TestListener implements XSpinListener {
         public boolean upFl = false ;
         public boolean downFl = false ;
         public boolean firstFl = false ;

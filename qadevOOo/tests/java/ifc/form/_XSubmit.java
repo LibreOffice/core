@@ -61,7 +61,7 @@ public class _XSubmit extends MultiMethodTest {
 
     public static XSubmit oObj = null;
 
-    public class MySubmitListener implements XSubmitListener {
+    public static class MySubmitListener implements XSubmitListener {
         public int called = 0 ;
         public void disposing ( EventObject oEvent ) {
         }

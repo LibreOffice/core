@@ -45,7 +45,7 @@ public class _XImageProducer extends MultiMethodTest {
     * Consumer implementation which sets flags on appropriate
     * method calls.
     */
-    protected class TestImageConsumer implements XImageConsumer {
+    protected static class TestImageConsumer implements XImageConsumer {
         PrintWriter log = null ;
         public boolean initCalled = false ;
         public boolean setColorModelCalled = false ;

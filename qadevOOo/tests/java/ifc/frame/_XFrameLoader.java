@@ -67,7 +67,7 @@ public class _XFrameLoader extends MultiMethodTest {
     /**
     * Implemetation of load listener which geristers all its calls.
     */
-    protected class TestListener implements XLoadEventListener {
+    protected static class TestListener implements XLoadEventListener {
         public boolean finished = false ;
         public boolean cancelled = false ;
 

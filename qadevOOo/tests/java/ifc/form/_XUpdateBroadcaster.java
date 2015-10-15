@@ -87,7 +87,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     * Listener implementation, which can accept or reject update
     * requests and store event calls.
     */
-    protected class TestListener implements XUpdateListener {
+    protected static class TestListener implements XUpdateListener {
         /**
         * Indicates must listener approve update requests or not.
         */

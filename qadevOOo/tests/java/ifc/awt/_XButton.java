@@ -42,7 +42,7 @@ public class _XButton extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestActionListener implements com.sun.star.awt.XActionListener {
+    protected static class TestActionListener implements com.sun.star.awt.XActionListener {
         public boolean disposingCalled = false ;
         public boolean actionPerformedCalled = false ;
 

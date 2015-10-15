@@ -41,7 +41,7 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
      * The simple <code>XRemoteContentProviderDoneListener</code>
      * implementation.
      */
-    public class DoneListener implements XRemoteContentProviderDoneListener {
+    public static class DoneListener implements XRemoteContentProviderDoneListener {
 
         public void doneWithRemoteContentProviders
                 (XRemoteContentProviderAcceptor xRCPA) {
