@@ -144,17 +144,16 @@ public class ScriptBrowseNode extends PropertySet implements
 
     public void updateURI(Parcel p) {
         parent = p;
-        ScriptMetaData data = null;
 
         try {
-            data = (ScriptMetaData)parent.getByName(name);
+            ScriptMetaData data = (ScriptMetaData)parent.getByName(name);
+            uri = data.getShortFormScriptURL();
         }
         // TODO fix exception types to be caught here, should we rethrow?
         catch (Exception e) {
             LogUtils.DEBUG("** caught exception getting script data for " + name +
                            " ->" + e.toString());
         }
-        uri = data.getShortFormScriptURL();
     }
 
     // implementation of XInvocation interface
