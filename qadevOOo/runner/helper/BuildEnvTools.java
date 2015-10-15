@@ -64,7 +64,7 @@ public class BuildEnvTools {
             msg += PropertyName.OPERATING_SYSTEM + "\nFill this parameter with an operating system like unxsols," +
                 " unxsoli, unxlngi, unxmacxi or wntmsci.  \n\n";
         }
-        if(
+        if (mPlatform != null &&
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLS)) &&
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLI)) &&
             (!mPlatform.equalsIgnoreCase(PropertyName.UNXLNGI)) &&
