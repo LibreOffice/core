@@ -43,11 +43,9 @@ public class _XTypeProvider extends MultiMethodTest {
     * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getImplementationId() {
-        boolean result = true;
         log.println("testing getImplementationId() ... ");
 
-        log.println("The ImplementationId is "+oObj.getImplementationId());
-        result = true;
+        boolean result = oObj.getImplementationId().length > 0;
 
         tRes.tested("getImplementationId()", result);
 
