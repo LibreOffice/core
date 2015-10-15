@@ -511,8 +511,19 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
+    // Adjust aLocalParam cols/rows to used data area. Keep sticky top row or
+    // column (depending on direction) in any case, not just if it has headers,
+    // so empty leading cells will be sorted to the end.
+    bool bShrunk = false;
+    rDoc.ShrinkToUsedDataArea( bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
+            aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow, !aLocalParam.bByRow);
+
+    SCROW nStartRow = aLocalParam.nRow1;
+    if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
+        ++nStartRow;
+
     if ( aLocalParam.bIncludePattern && rDoc.HasAttrib(
-                                        aLocalParam.nCol1, aLocalParam.nRow1, nTab,
+                                        aLocalParam.nCol1, nStartRow        , nTab,
                                         aLocalParam.nCol2, aLocalParam.nRow2, nTab,
                                         HASATTR_MERGED | HASATTR_OVERLAPPED ) )
     {
@@ -525,17 +536,6 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     //      ausfuehren
 
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-
-    // Adjust aLocalParam cols/rows to used data area. Keep sticky top row or
-    // column (depending on direction) in any case, not just if it has headers,
-    // so empty leading cells will be sorted to the end.
-    bool bShrunk = false;
-    rDoc.ShrinkToUsedDataArea( bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
-            aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow, !aLocalParam.bByRow);
-
-    SCROW nStartRow = aLocalParam.nRow1;
-    if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
-        ++nStartRow;
 
     // Calculate the script types for all cells in the sort range beforehand.
     // This will speed up the row height adjustment that takes place after the
