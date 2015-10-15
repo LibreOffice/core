@@ -2663,7 +2663,14 @@ public:
         mpErrorInterpreter(pErrorInterpreter),
         maString(rString),
         mfVal(fVal)
-    { }
+    {
+        if (mpErrorInterpreter)
+        {
+            sal_uInt16 nErr = mpErrorInterpreter->GetError();
+            if (nErr)
+                mfVal = CreateDoubleError( nErr);
+        }
+    }
 
     TRet operator()(double fVal) const
     {
