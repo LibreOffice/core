@@ -98,7 +98,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         if (pActWin)
         {
             pEngine->SetPaperSize(Size(100000,100000));
-            VclPtrInstance< vcl::Window > aWin( pActWin );
+            ScopedVclPtrInstance< vcl::Window > aWin( pActWin );
             EditView aEditView( pEngine.get(), aWin.get() );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
