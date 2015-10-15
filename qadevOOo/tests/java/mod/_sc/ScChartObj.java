@@ -221,14 +221,8 @@ public class ScChartObj extends TestCase {
     */
     public static void insertIntoCell(
         int CellX, int CellY, String theValue, XSpreadsheet TT1, String flag)
-    {
-        XCell oCell = null;
-
-        try {
-            oCell = TT1.getCellByPosition(CellX, CellY);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Could not get Cell");
-        }
+            throws com.sun.star.lang.IndexOutOfBoundsException {
+        XCell oCell = TT1.getCellByPosition(CellX, CellY);
 
         if (flag.equals("V")) {
             oCell.setValue(Float.parseFloat(theValue));
