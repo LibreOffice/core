@@ -755,9 +755,10 @@ public class LocalOfficeConnection
 
         @Override
         public void run() {
-            java.io.BufferedReader r = new java.io.BufferedReader(
-                new java.io.InputStreamReader(m_in) );
             try {
+                java.io.BufferedReader r = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(m_in, "UTF-8") );
+
                 for ( ; ; ) {
                     String s = r.readLine();
                     if ( s == null ) {
@@ -765,6 +766,8 @@ public class LocalOfficeConnection
                     }
                     m_print.println(s);
                 }
+            } catch ( UnsupportedEncodingException e ) {
+                e.printStackTrace( System.err );
             } catch ( java.io.IOException e ) {
                 e.printStackTrace( System.err );
             }

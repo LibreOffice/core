@@ -310,45 +310,53 @@ final class InstallationFinder {
         StreamGobbler gobbler = new StreamGobbler( proc.getErrorStream() );
         gobbler.start();
 
-        // read the which output from standard input stream
-        BufferedReader br = new BufferedReader(
-            new InputStreamReader( proc.getInputStream() ) );
-        String line = null;
         try {
-            while ( ( line = br.readLine() ) != null ) {
-                if ( path == null ) {
-                    // get the path from the which output
-                    int index = line.lastIndexOf( SOFFICE );
-                    if ( index != -1 ) {
-                        int end = index + SOFFICE.length();
-                        for ( int i = 0; i <= index; i++ ) {
-                            File file = new File( line.substring( i, end ) );
-                            try {
-                                if ( file.exists() ) {
-                                    // resolve symlink
-                                    path = file.getCanonicalFile().getParent();
-                                    if ( path != null )
-                                        break;
+            // read the which output from standard input stream
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader( proc.getInputStream(), "UTF-8" ) );
+            String line = null;
+            try {
+                while ( ( line = br.readLine() ) != null ) {
+                    if ( path == null ) {
+                        // get the path from the which output
+                        int index = line.lastIndexOf( SOFFICE );
+                        if ( index != -1 ) {
+                            int end = index + SOFFICE.length();
+                            for ( int i = 0; i <= index; i++ ) {
+                                File file = new File( line.substring( i, end ) );
+                                try {
+                                    if ( file.exists() ) {
+                                        // resolve symlink
+                                        path = file.getCanonicalFile().getParent();
+                                        if ( path != null )
+                                            break;
+                                    }
+                                } catch ( SecurityException e ) {
+                                    return null;
                                 }
-                            } catch ( SecurityException e ) {
-                                return null;
                             }
                         }
                     }
                 }
+            } catch ( IOException e ) {
+                // if an I/O exception is thrown, return <code>null</null>
+                System.err.println( "com.sun.star.lib.loader." +
+                                    "InstallationFinder::getPathFromWhich: " +
+                                    "reading which command output failed: " + e );
+                return null;
+            } finally {
+                try {
+                    br.close();
+                } catch ( IOException e ) {
+                    // closing standard input stream failed, ignore
+                }
             }
-        } catch ( IOException e ) {
-            // if an I/O exception is thrown, return <code>null</null>
+        } catch ( UnsupportedEncodingException e ) {
+            // if an Encoding exception is thrown, return <code>null</null>
             System.err.println( "com.sun.star.lib.loader." +
                                 "InstallationFinder::getPathFromWhich: " +
-                                "reading which command output failed: " + e );
+                                "encoding failed: " + e );
             return null;
-        } finally {
-            try {
-                br.close();
-            } catch ( IOException e ) {
-                // closing standard input stream failed, ignore
-            }
         }
 
         try {
@@ -563,12 +571,14 @@ final class InstallationFinder {
         public void run() {
             try {
                 BufferedReader br = new BufferedReader(
-                    new InputStreamReader( m_istream ) );
+                    new InputStreamReader( m_istream, "UTF-8" ) );
                 // read from input stream
                 while ( br.readLine() != null ) {
                     // don't handle line content
                 }
                 br.close();
+            } catch (UnsupportedEncodingException e) {
+                // cannot read from input stream
             } catch ( IOException e ) {
                 // stop reading from input stream
             }
