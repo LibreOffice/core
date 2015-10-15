@@ -33,8 +33,6 @@
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
 
-#include <boost/bind.hpp>
-
 namespace target = slideshow::internal;
 using namespace ::com::sun::star;
 

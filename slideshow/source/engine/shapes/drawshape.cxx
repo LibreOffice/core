@@ -46,6 +46,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <canvas/canvastools.hxx>
 
+#include <boost/mem_fn.hpp>
 #include <cmath>
 #include <algorithm>
 #include <functional>
