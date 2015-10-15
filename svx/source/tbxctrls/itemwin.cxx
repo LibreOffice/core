@@ -419,16 +419,19 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
     MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        nCurPos = GetSelectEntryPos();
-    else if ( MouseNotifyEvent::LOSEFOCUS == nType
-        && Application::GetFocusWindow()
-        && !IsWindowOrChild( Application::GetFocusWindow(), true ) )
+    if (!isDisposed())
     {
-        if ( !bSelect )
-            SelectEntryPos( nCurPos );
-        else
-            bSelect = false;
+        if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
+            nCurPos = GetSelectEntryPos();
+        else if ( MouseNotifyEvent::LOSEFOCUS == nType
+                  && Application::GetFocusWindow()
+                  && !IsWindowOrChild( Application::GetFocusWindow(), true ) )
+        {
+            if ( !bSelect )
+                SelectEntryPos( nCurPos );
+            else
+                bSelect = false;
+        }
     }
 
     return FillTypeLB::PreNotify( rNEvt );
@@ -439,6 +442,9 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = FillTypeLB::Notify( rNEvt );
+
+    if (isDisposed())
+        return false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
