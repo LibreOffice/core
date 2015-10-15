@@ -119,22 +119,14 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
     * Has <b>OK</b> status if row numbers are equal and they are
     * greater then 0 (because JAR file contains at least one entry).
     */
-    public void _connectToCache() {
+    public void _connectToCache() throws Exception {
         boolean result = true ;
 
-        XCachedDynamicResultSetFactory setFac = null ;
+        Object fac = tParam.getMSF().createInstance
+            ("com.sun.star.ucb.CachedDynamicResultSetFactory") ;
 
-        try {
-            Object fac = tParam.getMSF().createInstance
-                ("com.sun.star.ucb.CachedDynamicResultSetFactory") ;
-
-            setFac = UnoRuntime.queryInterface
-                (XCachedDynamicResultSetFactory.class, fac) ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't instantiate a service") ;
-            e.printStackTrace(log) ;
-            result = false ;
-        }
+        XCachedDynamicResultSetFactory setFac = UnoRuntime.queryInterface
+            (XCachedDynamicResultSetFactory.class, fac) ;
 
         XDynamicResultSet rmtSet = setFac.createCachedDynamicResultSet(null, null) ;
 
