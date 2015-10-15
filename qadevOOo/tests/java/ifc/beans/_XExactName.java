@@ -41,13 +41,12 @@ public class _XExactName extends MultiMethodTest {
         if (getting == null) {
             res = false;
         } else {
-            res = getting.equals(expectedName);
-        }
-
-        if (!res) {
-            log.println("didn't get the expected Name:");
-            log.println("getting: " + getting);
-            log.println("Expected: " + expectedName);
+            if (!getting.equals(expectedName)) {
+                log.println("didn't get the expected Name:");
+                log.println("getting: " + getting);
+                log.println("Expected: " + expectedName);
+                res = false;
+            }
         }
 
         nameFor = expectedName.toUpperCase();
@@ -58,13 +57,12 @@ public class _XExactName extends MultiMethodTest {
         if (getting == null) {
             res = false;
         } else {
-            res &= getting.equals(expectedName);
-        }
-
-        if (!getting.equals(expectedName)) {
-            log.println("didn't get the expected Name:");
-            log.println("getting: " + getting);
-            log.println("Expected: " + expectedName);
+            if (!getting.equals(expectedName)) {
+                log.println("didn't get the expected Name:");
+                log.println("getting: " + getting);
+                log.println("Expected: " + expectedName);
+                res = false;
+            }
         }
 
         tRes.tested("getExactName()", res);
