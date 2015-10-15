@@ -171,7 +171,6 @@ private:
     ::svt::CellControllerRef    m_rTextEditController;
 
     Link<DataBrowser*,void>     m_aCursorMovedHdlLink;
-    Link<DataBrowser*,void>     m_aCellModifiedLink;
 
     void clearHeaders();
     void RenewTable();
