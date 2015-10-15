@@ -217,8 +217,7 @@ namespace dbaui
 
         switchMessage(_sURLPrefix);
 
-        if ( m_aTypeSelectHandler.IsSet() )
-            m_aTypeSelectHandler.Call(*this);
+        m_aTypeSelectHandler.Call(*this);
     }
 
     void OGeneralPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
@@ -699,16 +698,14 @@ namespace dbaui
 
     IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
     {
-        if ( m_aCreationModeHandler.IsSet() )
-            m_aCreationModeHandler.Call( *this );
+        m_aCreationModeHandler.Call( *this );
 
         OnEmbeddedDBTypeSelected( *m_pEmbeddedDBType );
     }
 
     IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
     {
-        if ( m_aCreationModeHandler.IsSet() )
-            m_aCreationModeHandler.Call( *this );
+        m_aCreationModeHandler.Call( *this );
         OnDatasourceTypeSelected(*m_pDatasourceType);
     }
 

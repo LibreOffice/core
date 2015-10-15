@@ -1596,7 +1596,7 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
                 m_pParent->SetFocus2theAllBtn();
             }
         }
-        if(bCall && aPrevNextControlLink.IsSet())
+        if(bCall)
             aPrevNextControlLink.Call(*this);
 
     }
@@ -3196,8 +3196,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
 
     SetActiveControl(pLeftEdit);
     AdjustPositions();
-    if(aModifyHdl.IsSet())
-        aModifyHdl.Call(0);
+    aModifyHdl.Call(0);
 }
 
 void SwTokenWindow::AdjustPositions()
@@ -3464,8 +3463,7 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 {
     static_cast<SwTOXEdit*>(pEdit)->AdjustSize();
     AdjustPositions();
-    if(aModifyHdl.IsSet())
-        aModifyHdl.Call(0);
+    aModifyHdl.Call(0);
     return 0;
 }
 

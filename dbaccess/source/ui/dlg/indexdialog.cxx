@@ -153,7 +153,7 @@ namespace dbaui
     {
         bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
 
-        if (m_aSelectHdl.IsSet() && !m_bSuspendSelectHdl && _bSelect)
+        if (!m_bSuspendSelectHdl && _bSelect)
             m_aSelectHdl.Call(*this);
 
         return bReturn;

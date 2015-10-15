@@ -588,8 +588,7 @@ void GalleryListView::DoubleClick( const BrowserMouseEvent& rEvt )
 
 void GalleryListView::Select()
 {
-    if( maSelectHdl.IsSet() )
-        maSelectHdl.Call( this );
+    maSelectHdl.Call( this );
 }
 
 sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )

@@ -126,15 +126,12 @@ void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* _pEntry)
 
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
-    if (m_aPreExpandHandler.IsSet())
+    if (m_aPreExpandHandler.IsSet() && !m_aPreExpandHandler.Call(pParent))
     {
-        if (!m_aPreExpandHandler.Call(pParent))
-        {
-            // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
-            // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
-            // we have to reset these flags controlling the expand ability
-            PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent, true);
-        }
+        // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
+        // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
+        // we have to reset these flags controlling the expand ability
+        PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent, true);
     }
 }
 
@@ -349,8 +346,7 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
     if ( KEY_RETURN == nCode )
     {
         bHandled = m_bHandleEnterKey;
-        if ( m_aEnterKeyHdl.IsSet() )
-            m_aEnterKeyHdl.Call(this);
+        m_aEnterKeyHdl.Call(this);
         // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
         //
         // contains a writer document, then pressing enter in the DSB would be rerouted to the writer

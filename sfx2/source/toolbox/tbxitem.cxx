@@ -1129,8 +1129,7 @@ void SfxPopupWindow::StateChanged(
 
 void SfxPopupWindow::Delete()
 {
-    if ( m_aDeleteLink.IsSet() )
-        m_aDeleteLink.Call( this );
+    m_aDeleteLink.Call( this );
     disposeOnce();
 }
 

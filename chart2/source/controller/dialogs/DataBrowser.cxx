@@ -226,9 +226,7 @@ SeriesHeader::~SeriesHeader()
 
 void SeriesHeader::notifyChanges()
 {
-    if( m_aChangeLink.IsSet())
-        m_aChangeLink.Call( m_spSeriesName.get());
-
+    m_aChangeLink.Call( m_spSeriesName.get());
     m_bSeriesNameChangePending = false;
 }
 
@@ -745,7 +743,7 @@ void DataBrowser::CursorMoved()
 {
     EditBrowseBox::CursorMoved();
 
-    if( GetUpdateMode() && m_aCursorMovedHdlLink.IsSet())
+    if( GetUpdateMode() )
         m_aCursorMovedHdlLink.Call( this );
 }
 
@@ -799,8 +797,7 @@ void DataBrowser::CellModified()
 {
     m_bDataValid = IsDataValid();
     SetDirty();
-    if( m_aCellModifiedLink.IsSet())
-        m_aCursorMovedHdlLink.Call( this );
+    m_aCursorMovedHdlLink.Call( this );
 }
 
 void DataBrowser::SetDataFromModel(

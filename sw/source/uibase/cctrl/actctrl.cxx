@@ -55,8 +55,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     if( aKeyCode.GetCode() == KEY_RETURN &&
             !nModifier)
     {
-        if(aReturnActionLink.IsSet())
-            aReturnActionLink.Call(*this);
+        aReturnActionLink.Call(*this);
     }
     else
         Edit::KeyInput(rEvt);

@@ -611,7 +611,7 @@ IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,v
         aDrawOutlLink.Call(pFI);
         bOk = !rStr.isEmpty();
     }
-    if (!bOk && aOldCalcFieldValueLink.IsSet()) {
+    if (!bOk) {
         aOldCalcFieldValueLink.Call(pFI);
     }
 }

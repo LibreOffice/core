@@ -561,14 +561,12 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == StateChangedType::Visible )
     {
         bVisible = IsReallyVisible();
-        if ( aVisibilityListener.IsSet() )
-            aVisibilityListener.Call( *this );
+        aVisibilityListener.Call( *this );
     }
     else if ( nStateChange == StateChangedType::InitShow )
     {
         bVisible = true;
-        if ( aVisibilityListener.IsSet() )
-            aVisibilityListener.Call( *this );
+        aVisibilityListener.Call( *this );
     }
 }
 
@@ -1375,8 +1373,7 @@ IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if ( maSelectedLink.IsSet() )
-        maSelectedLink.Call(aColor);
+    maSelectedLink.Call(aColor);
 
     maColorSelectFunction(maCommand, aColor);
 }
@@ -1415,8 +1412,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if ( maSelectedLink.IsSet() )
-        maSelectedLink.Call(aColor);
+    maSelectedLink.Call(aColor);
 
     maColorSelectFunction(maCommand, aColor);
 }

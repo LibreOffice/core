@@ -698,8 +698,7 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
     if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
     {
         const Link<LinkParamNone*,void>& rLink = GetCurrencyChangeLink();
-        if ( rLink.IsSet() )
-            rLink.Call( NULL );
+        rLink.Call( NULL );
     }
 
     ::utl::detail::Options::ConfigurationChanged( p, nHint );

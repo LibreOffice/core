@@ -182,8 +182,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
         changeImage();
 
         m_aVRuler->Show(!m_bCollapsed && m_bShowRuler);
-        if ( m_aCollapsedLink.IsSet() )
-            m_aCollapsedLink.Call(*this);
+        m_aCollapsedLink.Call(*this);
     }
 
     m_pParent->showProperties();

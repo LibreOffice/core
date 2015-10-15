@@ -185,8 +185,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
     {
         Control::MouseButtonUp( rMEvt );
 
-        if ( aPipetteClickLink.IsSet() )
-            aPipetteClickLink.Call( *this );
+        aPipetteClickLink.Call( *this );
     }
     else if ( bWorkplaceMode )
     {
@@ -210,8 +209,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
         Invalidate( aGraphRect );
 
-        if ( aWorkplaceClickLink.IsSet() )
-            aWorkplaceClickLink.Call( *this );
+        aWorkplaceClickLink.Call( *this );
     }
     else
         GraphCtrl::MouseButtonUp( rMEvt );

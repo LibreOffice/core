@@ -54,8 +54,7 @@ namespace frm
     private:
         inline void implInvalidateAttributes() const
         {
-            if ( m_aInvalidationHandler.IsSet() )
-                m_aInvalidationHandler.Call( NULL );
+            m_aInvalidationHandler.Call( NULL );
         }
     };
 

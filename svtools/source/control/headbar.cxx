@@ -1387,8 +1387,7 @@ Size HeaderBar::CalcWindowSizePixel() const
 {
     if ( !mxAccessible.is() )
     {
-        if ( maCreateAccessibleHdl.IsSet() )
-            maCreateAccessibleHdl.Call( this );
+        maCreateAccessibleHdl.Call( this );
 
         if ( !mxAccessible.is() )
             mxAccessible = Window::CreateAccessible();

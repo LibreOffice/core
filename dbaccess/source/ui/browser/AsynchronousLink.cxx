@@ -78,8 +78,7 @@ IMPL_LINK_TYPED(OAsynchronousLink, OnAsyncCall, void*, _pArg, void)
             m_nEventId = 0;
         }
     }
-    if (m_aHandler.IsSet())
-        m_aHandler.Call(_pArg);
+    m_aHandler.Call(_pArg);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

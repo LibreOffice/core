@@ -607,9 +607,7 @@ void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 }
 IMPL_LINK_NOARG_TYPED(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
-    if( aCheckNameHdl.IsSet() )
-        return aCheckNameHdl.Call(*this);
-    return false;
+    return aCheckNameHdl.Call(*this);
 }
 
 void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
@@ -633,12 +631,7 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObj
 
 IMPL_LINK_NOARG_TYPED(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDialog&, bool)
 {
-    if(aCheckNameHdl.IsSet())
-    {
-        return aCheckNameHdl.Call(*this);
-    }
-
-    return false;
+    return aCheckNameHdl.Call(*this);
 }
 
 void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
@@ -795,13 +788,11 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<AbstractSvxPostItDialo
 }
 IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
 {
-    if( aNextHdl.IsSet() )
-        aNextHdl.Call(*this);
+    aNextHdl.Call(*this);
 }
 IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
 {
-    if( aPrevHdl.IsSet() )
-        aPrevHdl.Call(*this);
+    aPrevHdl.Call(*this);
 }
 vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
 {

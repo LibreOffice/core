@@ -122,8 +122,7 @@ void SlotStateListener::statusChanged (
 {
     ThrowIfDisposed();
     OUString sSlotName (rState.FeatureURL.Complete);
-    if (maCallback.IsSet())
-        maCallback.Call(sSlotName);
+    maCallback.Call(sSlotName);
 }
 
 void SlotStateListener::ReleaseListeners()

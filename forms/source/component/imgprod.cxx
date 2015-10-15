@@ -289,7 +289,7 @@ void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exc
             // graphic is cleared if a new Stream is set
             if( ( mpGraphic->GetType() == GRAPHIC_NONE ) || mpGraphic->GetContext() )
             {
-                if ( ImplImportGraphic( *mpGraphic ) && maDoneHdl.IsSet() )
+                if ( ImplImportGraphic( *mpGraphic ) )
                     maDoneHdl.Call( mpGraphic );
             }
 
@@ -314,8 +314,7 @@ void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exc
                 (*iter)->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
             }
 
-            if ( maDoneHdl.IsSet() )
-                maDoneHdl.Call( NULL );
+            maDoneHdl.Call( NULL );
         }
     }
 }

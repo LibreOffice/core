@@ -271,8 +271,7 @@ void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     else if ( !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsShift() &&
                 rKEvt.GetKeyCode().IsMod2() && rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
     {
-        if (aObjectSelectLink.IsSet() )
-            aObjectSelectLink.Call(*this);
+        aObjectSelectLink.Call(*this);
     }
 }
 

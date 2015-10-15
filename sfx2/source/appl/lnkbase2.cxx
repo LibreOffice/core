@@ -253,8 +253,7 @@ IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
     if ( !ExecuteEdit( sNewName ) )
         sNewName.clear();
     bWasLastEditOK = !sNewName.isEmpty();
-    if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( *this );
+    pImpl->m_aEndEditLink.Call( *this );
 }
 
 
@@ -505,8 +504,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndE
     {
         ExecuteEdit( OUString() );
         bWasLastEditOK = false;
-        if ( pImpl->m_aEndEditLink.IsSet() )
-            pImpl->m_aEndEditLink.Call( *this );
+        pImpl->m_aEndEditLink.Call( *this );
     }
 }
 

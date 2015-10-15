@@ -418,8 +418,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
                     sFile += OUString(::sfx2::cTokenSeparator);
                     sFile += aDlg.GetCurrentFilter();
 
-                    if ( aEndEditLink.IsSet() )
-                        aEndEditLink.Call( sFile );
+                    aEndEditLink.Call( sFile );
                 }
                 else
                     sFile.clear();
@@ -525,8 +524,7 @@ IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileD
         SAL_WARN( "sfx.appl", "SvFileObject::DialogClosedHdl(): wrong file type" );
     }
 
-    if ( aEndEditLink.IsSet() )
-        aEndEditLink.Call( sFile );
+    aEndEditLink.Call( sFile );
 }
 
 /*  [Description]

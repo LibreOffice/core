@@ -289,8 +289,7 @@ namespace sfx2
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
 
-        if ( m_aEndDockingHdl.IsSet() )
-            m_aEndDockingHdl.Call( this );
+        m_aEndDockingHdl.Call( this );
     }
 
 

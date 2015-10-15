@@ -1843,7 +1843,7 @@ sal_Int32 StarBASIC::GetErl()
 
 bool StarBASIC::ErrorHdl()
 {
-    return aErrorHdl.IsSet() && aErrorHdl.Call( this );
+    return aErrorHdl.Call( this );
 }
 
 Link<StarBASIC*,bool> StarBASIC::GetGlobalErrorHdl()

@@ -368,8 +368,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         // can only be done here - the SFX changes the ScrollBar values
         disableScrollBars(xViewProps, (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) != 0);
 
-        if (aInitializedLink.IsSet())
-            aInitializedLink.Call(*this);
+        aInitializedLink.Call(*this);
 
         uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
         uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);

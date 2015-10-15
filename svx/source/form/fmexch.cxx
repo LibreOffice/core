@@ -47,8 +47,7 @@ namespace svxform
     {
         if ( m_bClipboardOwner )
         {   // simulate a lostOwnership to notify parties interested in
-            if ( m_aClipboardListener.IsSet() )
-                m_aClipboardListener.Call( *this );
+            m_aClipboardListener.Call( *this );
         }
 
         m_bClipboardOwner = true;
@@ -80,8 +79,7 @@ namespace svxform
         TransferableHelper::implCallOwnLostOwnership( _rxClipboard, _rxTrans );
         m_bClipboardOwner = false;
 
-        if ( m_aClipboardListener.IsSet() )
-            m_aClipboardListener.Call( *this );
+        m_aClipboardListener.Call( *this );
     }
 
 

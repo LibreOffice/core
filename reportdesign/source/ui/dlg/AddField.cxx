@@ -506,8 +506,7 @@ IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnClickHdl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
 {
-    if ( m_aCreateLink.IsSet() )
-        m_aCreateLink.Call(*this);
+    m_aCreateLink.Call(*this);
 
     return false;
 }

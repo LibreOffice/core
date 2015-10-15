@@ -590,8 +590,7 @@ void TransferDataContainer::StartDrag(
 
 void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 {
-    if( pImpl->aFinshedLnk.IsSet() )
-        pImpl->aFinshedLnk.Call( nDropAction );
+    pImpl->aFinshedLnk.Call( nDropAction );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,10 +74,8 @@ namespace dbaui
 
     IMPL_LINK( DbaMouseDownListBoxController, OnMultiplexModify, void*, _pArg )
     {
-        if (m_aAdditionalModifyHdl.IsSet())
-            m_aAdditionalModifyHdl.Call(_pArg);
-        if (m_aOriginalModifyHdl.IsSet())
-            m_aOriginalModifyHdl.Call(_pArg);
+        m_aAdditionalModifyHdl.Call(_pArg);
+        m_aOriginalModifyHdl.Call(_pArg);
         return 0L;
     }
 
@@ -409,7 +407,7 @@ namespace dbaui
     IMPL_LINK( IndexFieldsControl, OnListEntrySelected, void*, p )
     {
         ListBox* _pBox = static_cast<ListBox*>(p);
-        if (!_pBox->IsTravelSelect() && m_aModifyHdl.IsSet())
+        if (!_pBox->IsTravelSelect())
             m_aModifyHdl.Call(this);
 
         if (_pBox == m_pFieldNameCell)

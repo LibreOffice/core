@@ -450,8 +450,7 @@ void Splitter::Split()
 
 void Splitter::EndSplit()
 {
-    if ( maEndSplitHdl.IsSet() )
-        maEndSplitHdl.Call( this );
+    maEndSplitHdl.Call( this );
 }
 
 void Splitter::Splitting( Point& /* rSplitPos */ )

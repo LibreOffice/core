@@ -420,8 +420,7 @@ IMPL_LINK_NOARG_TYPED(ScTableLink, RefreshHdl, Timer *, void)
 
 IMPL_LINK_TYPED( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 {
-    if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( rLink );
+    pImpl->m_aEndEditLink.Call( rLink );
     bInEdit = false;
     Application::SetDefDialogParent( pImpl->m_pOldParent );
 }

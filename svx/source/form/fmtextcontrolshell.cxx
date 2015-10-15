@@ -1256,8 +1256,7 @@ namespace svx
         // #i51621# / 2005-08-19 / frank.schoenheit@sun.com
         // bool bHaveAnyServeableSlots = m_xActiveTextComponent.is() || !m_aControlFeatures.empty();
         // LEM: not calling m_aControlActivatonHandler causes fdo#63695, so disable this hack for now.
-        if ( m_aControlActivationHandler.IsSet() /* && bHaveAnyServeableSlots */ )
-            m_aControlActivationHandler.Call( NULL );
+        m_aControlActivationHandler.Call( NULL );
 
         m_bNeedClipboardInvalidation = true;
     }

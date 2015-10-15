@@ -262,8 +262,7 @@ IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*
 
     m_sFilter = m_pFileDlg->GetRealFilter();
 
-    if ( m_aDialogClosedLink.IsSet() )
-        m_aDialogClosedLink.Call( m_pFileDlg );
+    m_aDialogClosedLink.Call( m_pFileDlg );
 }
 
 } // namespace sfx2

@@ -309,8 +309,7 @@ namespace pcr
 
     void SQLCommandDesigner::impl_designerClosed_nothrow()
     {
-        if ( m_aCloseLink.IsSet() )
-            m_aCloseLink.Call( *this );
+        m_aCloseLink.Call( *this );
     }
 
 

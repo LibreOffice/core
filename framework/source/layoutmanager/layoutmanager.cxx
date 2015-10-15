@@ -2668,8 +2668,7 @@ throw( uno::RuntimeException, std::exception )
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
             const Link<Timer *, void>& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
-            if ( aLink.IsSet() )
-                aLink.Call( &m_aAsyncLayoutTimer );
+            aLink.Call( &m_aAsyncLayoutTimer );
         }
         if ( m_nLockCount == 0 )
             m_aAsyncLayoutTimer.Start();

@@ -78,8 +78,7 @@ void FmSearchThread::run()
 
 void FmSearchThread::onTerminated()
 {
-    if (m_aTerminationHdl.IsSet())
-        m_aTerminationHdl.Call(this);
+    m_aTerminationHdl.Call(this);
     delete this;
 }
 

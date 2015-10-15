@@ -1192,8 +1192,7 @@ IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
-    if(m_aValidateLink.IsSet())
-        m_aValidateLink.Call(aVal);
+    m_aValidateLink.Call(aVal);
 
     nWidth = aVal.nWidth;
     nHeight = aVal.nHeight;

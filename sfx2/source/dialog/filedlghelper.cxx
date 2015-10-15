@@ -2308,8 +2308,7 @@ void FileDialogHelper::SetContext( Context _eNewContext )
 IMPL_LINK_NOARG_TYPED(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 {
     m_nError = mpImp->execute();
-    if ( m_aDialogClosedLink.IsSet() )
-        m_aDialogClosedLink.Call( this );
+    m_aDialogClosedLink.Call( this );
 }
 
 // rDirPath has to be a directory
@@ -2573,8 +2572,7 @@ void SAL_CALL FileDialogHelper::DialogSizeChanged()
 void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 {
     m_nError = ( RET_OK == _rEvent.DialogResult ) ? ERRCODE_NONE : ERRCODE_ABORT;
-    if ( m_aDialogClosedLink.IsSet() )
-        m_aDialogClosedLink.Call( this );
+    m_aDialogClosedLink.Call( this );
 }
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,

@@ -199,8 +199,7 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
     if ( bSdrMode && bNewModel )
         InitSdrModel();
 
-    if ( aGraphSizeLink.IsSet() )
-        aGraphSizeLink.Call( this );
+    aGraphSizeLink.Call( this );
 
     Resize();
     Invalidate();
@@ -745,8 +744,7 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 
 IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
 {
-    if ( aUpdateLink.IsSet() )
-        aUpdateLink.Call( this );
+    aUpdateLink.Call( this );
 
     pTimer->Start();
 }

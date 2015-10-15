@@ -149,10 +149,7 @@ namespace pcr
 
     IMPL_LINK( FieldLinkRow, OnFieldNameChanged, ComboBox*, /*_pBox*/ )
     {
-        if ( m_aLinkChangeHandler.IsSet() )
-            return m_aLinkChangeHandler.Call( this );
-
-        return 0L;
+        return m_aLinkChangeHandler.Call( this );
     }
 
     VCL_BUILDER_FACTORY(FieldLinkRow)

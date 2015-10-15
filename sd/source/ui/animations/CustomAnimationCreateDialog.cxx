@@ -147,8 +147,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
     ReleaseMouse();
     if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
     {
-        if( maDoubleClickHdl.IsSet() )
-            maDoubleClickHdl.Call( *this );
+        maDoubleClickHdl.Call( *this );
     }
     else
     {
