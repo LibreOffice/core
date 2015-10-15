@@ -47,7 +47,6 @@ import com.sun.star.linguistic2.XThesaurus;
 public class _XLinguServiceManager extends MultiMethodTest {
 
     public XLinguServiceManager oObj = null;
-    boolean listenerCalled = false;
 
     /**
     * Class implements interface <code>XLinguServiceEventListener</code>
@@ -60,7 +59,6 @@ public class _XLinguServiceManager extends MultiMethodTest {
             log.println("Listener has been disposed");
         }
         public void processLinguServiceEvent(LinguServiceEvent aServiceEvent) {
-            listenerCalled = true;
             log.println("Listener called");
         }
     }
