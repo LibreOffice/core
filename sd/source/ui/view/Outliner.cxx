@@ -593,6 +593,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
 
 bool Outliner::SearchAndReplaceAll()
 {
+    bool bRet = true;
     // Save the current position to be restored after having replaced all
     // matches.
     RememberStartPosition ();
@@ -630,6 +631,16 @@ bool Outliner::SearchAndReplaceAll()
         do
         {
             bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
+            if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && bFoundMatch && aSelections.size() == 1)
+            {
+                // Without this, RememberStartPosition() will think it already has a remembered position.
+                mnStartPageIndex = (sal_uInt16)-1;
+
+                RememberStartPosition();
+
+                // So when RestoreStartPosition() restores the first match, then spellchecker doesn't kill the selection.
+                bRet = false;
+            }
         }
         while (bFoundMatch);
 
@@ -658,7 +669,7 @@ bool Outliner::SearchAndReplaceAll()
     RestoreStartPosition ();
     mnStartPageIndex = (sal_uInt16)-1;
 
-    return true;
+    return bRet;
 }
 
 bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
