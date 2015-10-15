@@ -96,13 +96,6 @@ public:
     }
 };
 
-template<typename T> inline T* get_pointer(PrioritizedHandlerEntry<T> const& handler)
-{
-    return handler.getHandler().get();
-}
-
-
-
 
 
 
