@@ -139,9 +139,9 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
             if (aLayer == null) {
                 log.println("\treturned Layer is NULL -- FAILED");
+            } else {
+                res &= checkLayer(aLayer);
             }
-
-            res &= checkLayer(aLayer);
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("unexpected Exception -- FAILED");
             res = false;
