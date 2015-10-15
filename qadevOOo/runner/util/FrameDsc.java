@@ -32,7 +32,6 @@ public class FrameDsc extends InstDescr {
 
     private int height = 2000;
     private int width = 2000;
-    private String name = null;
     private static final String ifcName = "com.sun.star.text.XTextFrame";
     private static final String service = "com.sun.star.text.TextFrame";
 
@@ -48,7 +47,7 @@ public class FrameDsc extends InstDescr {
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
     @Override
     public String getIfcName() {
