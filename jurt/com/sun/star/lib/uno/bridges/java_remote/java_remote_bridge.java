@@ -26,33 +26,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import com.sun.star.lib.util.DisposeListener;
-import com.sun.star.lib.util.DisposeNotifier;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.connection.XConnection;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lib.uno.environments.java.java_environment;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.IReceiver;
+import com.sun.star.lib.uno.environments.remote.IThreadPool;
 import com.sun.star.lib.uno.environments.remote.Job;
 import com.sun.star.lib.uno.environments.remote.Message;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 import com.sun.star.lib.uno.environments.remote.ThreadPoolManager;
-import com.sun.star.lib.uno.environments.remote.IThreadPool;
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.lib.util.DisposeListener;
+import com.sun.star.lib.util.DisposeNotifier;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.Any;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * This class implements a remote bridge.
@@ -156,7 +157,7 @@ public class java_remote_bridge
     protected IProtocol         _iProtocol;
     protected IEnvironment      _java_environment;
     protected MessageDispatcher _messageDispatcher;
-    protected int               _life_count = 0;    // determines if this bridge is alive, which is controlled by acquire and release calls
+    protected final AtomicInteger _life_count = new AtomicInteger();    // determines if this bridge is alive, which is controlled by acquire and release calls
 
     private final ArrayList<XEventListener> _listeners = new ArrayList<XEventListener>();
 
@@ -169,7 +170,7 @@ public class java_remote_bridge
      * This method is for testing only.
      */
     int getLifeCount() {
-        return _life_count;
+        return _life_count.get();
     }
 
     /**
@@ -447,10 +448,10 @@ public class java_remote_bridge
      *
      * @see com.sun.star.uno.IBridge#acquire
      */
-    public synchronized void acquire() {
-        ++ _life_count;
+    public void acquire() {
+        int x = _life_count.incrementAndGet();
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".acquire:" + _life_count);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".acquire:" + x);
     }
 
     /**
@@ -461,12 +462,8 @@ public class java_remote_bridge
      * @see com.sun.star.uno.IBridge#release
      */
     public void release() {
-        boolean dispose;
-        synchronized (this) {
-            --_life_count;
-            dispose = _life_count <= 0;
-        }
-        if (dispose) {
+        int x = _life_count.decrementAndGet();
+        if (x <= 0) {
             dispose(new Throwable("end of life"));
         }
     }
@@ -521,7 +518,7 @@ public class java_remote_bridge
             proxyFactory.dispose();
 
             if (DEBUG) {
-                if (_life_count != 0) {
+                if (_life_count.get() != 0) {
                     System.err.println(getClass().getName()
                                        + ".dispose - life count (proxies left):"
                                        + _life_count);
