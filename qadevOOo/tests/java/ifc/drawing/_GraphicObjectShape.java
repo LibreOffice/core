@@ -81,15 +81,13 @@ public class _GraphicObjectShape extends MultiPropertyTest {
         }
     } ;
 
-    public Any set = null;
-
     /**
      * Property tester which returns new <code>XIndexAccess</code> object.
      */
     protected PropertyTester ImapTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
-            return set;
+            return null;
         }
     } ;
 
