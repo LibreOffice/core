@@ -31,37 +31,56 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:doctok by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
        $(SLO)$/testdoctok.obj
 
-SHL1TARGET= testdoctok
-SHL1STDLIBS=\
-   $(SALLIB) \
+APP1TARGET= testdoctok
+
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)"=="OS2"
+RESOURCEMODELLIB=-lresourcemodel
+.ELIF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+RESOURCEMODELLIB=-lresourcemodel
+.ELSE
+RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
+.ENDIF
+
+APP1STDLIBS=\
+    $(SALLIB) \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-     $(TESTSHL2LIB)    \
-   $(CPPUNITLIB)
+    $(RESOURCEMODELLIB) \
+    $(GTESTLIB)
 
-SHL1LIBS=\
+.IF "$(GUI)"=="WNT"
+APP1STDLIBS+=   $(LB)$/doctok.lib
+.ELIF "$(GUI)"=="UNX" && "$(GUIBASE)"!="aqua"
+APP1STDLIBS+=$(LB)$/libdoctok.so
+.ELIF "$(GUI)"=="UNX" && "$(GUIBASE)"=="aqua"
+APP1STDLIBS+=$(LB)$/libdoctok.dylib
+.ENDIF
+
+APP1LIBS=\
     $(SLB)$/doctok.lib
-SHL1DEPS= \
-    $(SHL1LIBS)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= export.map
+APP1DEPS= \
+    $(APP1LIBS)
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:doctok
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
