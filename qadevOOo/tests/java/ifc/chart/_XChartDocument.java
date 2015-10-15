@@ -53,7 +53,6 @@ import com.sun.star.drawing.XShape;
 public class _XChartDocument extends MultiMethodTest {
 
     public XChartDocument    oObj = null;
-    boolean                result = true;
     XDiagram diagram = null;
     XChartData ChartData = null;
 
