@@ -714,6 +714,18 @@ bool ScExternalRefCache::isValidRangeName(sal_uInt16 nFileId, const OUString& rN
     return rMap.count(rName) > 0;
 }
 
+void ScExternalRefCache::setRangeName(sal_uInt16 nFileId, const OUString& rName)
+{
+    osl::MutexGuard aGuard(&maMtxDocs);
+
+    DocItem* pDoc = getDocItem(nFileId);
+    if (!pDoc)
+        return;
+
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
+}
+
 void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow,
                                      TokenRef pToken, sal_uLong nFmtIndex)
 {
@@ -1999,7 +2011,12 @@ bool ScExternalRefManager::isValidRangeName(sal_uInt16 nFileId, const OUString& 
     if (pSrcDoc)
     {
         // Only check the presence of the name.
-        return hasRangeName(*pSrcDoc, rName);
+        if (hasRangeName(*pSrcDoc, rName))
+        {
+            maRefCache.setRangeName(nFileId, rName);
+            return true;
+        }
+        return false;
     }
 
     if (maRefCache.isValidRangeName(nFileId, rName))
@@ -2011,7 +2028,13 @@ bool ScExternalRefManager::isValidRangeName(sal_uInt16 nFileId, const OUString& 
         // failed to load document from disk.
         return false;
 
-    return hasRangeName(*pSrcDoc, rName);
+    if (hasRangeName(*pSrcDoc, rName))
+    {
+        maRefCache.setRangeName(nFileId, rName);
+        return true;
+    }
+
+    return false;
 }
 
 void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)

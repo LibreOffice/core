@@ -234,6 +234,7 @@ public:
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const OUString& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray);
     bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName) const;
+    void setRangeName(sal_uInt16 nFileId, const OUString& rName);
 
     void setCellData(sal_uInt16 nFileId, const OUString& rTabName,
                      SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex);
