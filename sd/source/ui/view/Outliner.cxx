@@ -498,7 +498,12 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             bEndOfSearch = SearchAndReplaceOnce ();
             // restore start position if nothing was found
             if(!mbStringFound)
+            {
                 RestoreStartPosition ();
+                // Nothing was changed, no need to restart the spellchecker.
+                if (nCommand == SvxSearchCmd::FIND)
+                    bEndOfSearch = false;
+            }
             mnStartPageIndex = (sal_uInt16)-1;
         }
 
@@ -956,7 +961,17 @@ void Outliner::RestoreStartPosition()
                 std::dynamic_pointer_cast<DrawViewShell>(pViewShell));
             SetViewMode (meStartViewMode);
             if (pDrawViewShell.get() != NULL)
+            {
                 SetPage (meStartEditMode, mnStartPageIndex);
+                mpObj = mpStartEditedObject;
+                if (mpObj)
+                {
+                    PutTextIntoOutliner();
+                    EnterEditMode(false);
+                    if (OutlinerView* pOutlinerView = mpImpl->GetOutlinerView())
+                        pOutlinerView->SetSelection(maStartSelection);
+                }
+            }
         }
         else if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         {
