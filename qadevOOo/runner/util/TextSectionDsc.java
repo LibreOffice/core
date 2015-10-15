@@ -29,8 +29,6 @@ public class TextSectionDsc extends InstDescr {
 
     private static final String service = "com.sun.star.text.TextSection";
     private static final String ifcName = "com.sun.star.text.XTextContent";
-    private String name = null;
-
 
     public TextSectionDsc() {
         initTextSection();
@@ -38,7 +36,7 @@ public class TextSectionDsc extends InstDescr {
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
 
     @Override
