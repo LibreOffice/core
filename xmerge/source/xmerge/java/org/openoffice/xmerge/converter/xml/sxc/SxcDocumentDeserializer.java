@@ -494,7 +494,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             int newCol = decoder.getColNumber();
 
             // Check to see if some columns were skipped
-            if (newCol != col) {
+            if (newCol != col && rowElement != null) {
 
                 // How many columns have we skipped?
                 int numColsSkipped = newCol - col;
