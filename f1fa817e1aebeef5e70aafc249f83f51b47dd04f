@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_cf78b892",
+        "filename": "jurt/com/sun/star/lib/uno/bridges/java_remote/java_remote_bridge.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-15T08:47:17Z",
+      "side": 1,
+      "message": "this method no longer needs to be synchronized",
+      "revId": "f1fa817e1aebeef5e70aafc249f83f51b47dd04f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
