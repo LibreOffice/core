@@ -39,17 +39,13 @@ public class _XExtendedCalendar extends MultiMethodTest {
      * Load a calendar
      */
     @Override
-    public void before() {
+    public void before() throws Exception {
         Locale[] installed_locales = null;
-        XLocaleData locData = null;
-        try {
-            locData = UnoRuntime.queryInterface(
-                XLocaleData.class,
-                    tParam.getMSF().createInstance(
-                    "com.sun.star.i18n.LocaleData"));
-        } catch (com.sun.star.uno.Exception e) {
+        XLocaleData locData = UnoRuntime.queryInterface(
+                        XLocaleData.class,
+                            tParam.getMSF().createInstance(
+                            "com.sun.star.i18n.LocaleData"));
 
-        }
         installed_locales = locData.getAllInstalledLocaleNames();
         // use first Locale as fallback, if US-English is not found
         Locale lo = installed_locales[0];
