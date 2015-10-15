@@ -271,7 +271,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 String sCommand = (String) oCommand.getPropertySet().getPropertyValue(PropertyNames.COMMAND);
                 if (bHasEscapeProcessing)
                 {
-                    bQueryCreated = (!sCommand.equals(PropertyNames.EMPTY_STRING));
                     if (m_reportDocument instanceof ReportTextImplementation)
                     {
                         sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
