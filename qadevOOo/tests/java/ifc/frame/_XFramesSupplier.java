@@ -149,7 +149,6 @@ public class _XFramesSupplier extends MultiMethodTest {
     * </ul>
     */
     public void _setActiveFrame() {
-        boolean result = true ;
         XFrame sFrame = null ;
 
         requiredMethod("getActiveFrame()") ;
@@ -184,9 +183,16 @@ public class _XFramesSupplier extends MultiMethodTest {
 
         oObj.setActiveFrame(sFrame) ;
         XFrame gFrame = oObj.getActiveFrame() ;
-        if (!(gFrame == null && sFrame == null
-              || sFrame.equals(gFrame))) {
 
+        boolean result;
+        if (gFrame == null && sFrame == null)
+            result = true;
+        else if (gFrame != null && sFrame != null)
+            result = sFrame.equals(gFrame);
+        else
+            result = false;
+
+        if (!result) {
             log.println("Active frame set is not equal frame get: FAILED");
             result = false ;
         }
