@@ -95,7 +95,12 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         try {
             states = oObj.getPropertyStates(names);
             result = (states != null) && (states.length == names.length);
-            log.println("Number of states: " + states.length);
+            if (states != null) {
+                log.println("Number of states: " + states.length);
+            }
+            else {
+                log.println("Number of states: <null>");
+            }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("some properties seem to be unknown: " + e.toString());
         }
