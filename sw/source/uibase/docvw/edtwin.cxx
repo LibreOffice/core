@@ -1831,7 +1831,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_DELETE:
-                    if ( !rSh.HasReadonlySel() )
+                    if ( !rSh.HasReadonlySel() || rSh.CrsrInsideInputField())
                     {
                         if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(false))
                             eKeyState = KS_NumOrNoNum;
@@ -1918,7 +1918,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
                 case KEY_BACKSPACE:
                 case KEY_BACKSPACE | KEY_SHIFT:
-                    if ( !rSh.HasReadonlySel() )
+                    if ( !rSh.HasReadonlySel() || rSh.CrsrInsideInputField())
                     {
                         bool bDone = false;
                         // try to add comment for code snip:
