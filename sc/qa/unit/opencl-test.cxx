@@ -777,6 +777,9 @@ void ScOpenCLTest::testSystematic()
     CPPUNIT_ASSERT(nBHorEnd > 10);
     CPPUNIT_ASSERT(nAHorEnd == nBHorEnd);
 
+    (void) nBVertEnd;
+    (void) nBHorEnd;
+
     for (SCROW i = nAVertBegin; i < nAVertEnd; ++i)
     {
         for (int j = 1; j < nAHorEnd; ++j)
