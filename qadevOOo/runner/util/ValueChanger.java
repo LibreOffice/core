@@ -641,13 +641,6 @@ public class ValueChanger {
                 newValue = ST6;
             if (oldValue.equals(ST6))
                 newValue = ST1;
-        } else if (oldValue instanceof com.sun.star.table.BorderLine) {
-            com.sun.star.table.BorderLine _newValue = (com.sun.star.table.BorderLine) oldValue;
-            _newValue.Color += 1000;
-            _newValue.InnerLineWidth += 2;
-            _newValue.LineDistance += 3;
-            _newValue.OuterLineWidth += 3;
-            newValue = _newValue;
         } else if (oldValue instanceof com.sun.star.sheet.DataPilotFieldOrientation) {
             com.sun.star.sheet.DataPilotFieldOrientation FO1 = com.sun.star.sheet.DataPilotFieldOrientation.PAGE;
             com.sun.star.sheet.DataPilotFieldOrientation FO2 = com.sun.star.sheet.DataPilotFieldOrientation.COLUMN;
