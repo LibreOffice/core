@@ -78,17 +78,13 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      */
     protected SpreadsheetEncoder encoder = null;
 
-    /** {@code SxcDocument} object that this converter processes. */
-    protected SxcDocument sxcDoc = null;
-
     /**
      * Constructor.
      *
      * @param  document  Input {@code SxcDocument} {@code Document}.
      */
-    public SxcDocumentSerializer(Document document) {
+    public SxcDocumentSerializer() {
         fmt = new Format();
-        sxcDoc = (SxcDocument) document;
     }
 
     /**
