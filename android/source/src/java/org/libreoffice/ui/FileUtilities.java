@@ -59,7 +59,7 @@ public class FileUtilities {
         mExtnMap.put(".fodt", DOC);
         mExtnMap.put(".fodg", DRAWING);
         mExtnMap.put(".fodp",  IMPRESS);
-        // mExtnMap.put(".fods",  CALC);
+        mExtnMap.put(".fods",  CALC);
 
         // ODF templates
         mExtnMap.put(".ott", DOC);
