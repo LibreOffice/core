@@ -355,7 +355,7 @@ public:
     virtual ~SdDesignNameDlg();
     virtual void dispose() override;
     OUString GetDesignName();
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 };
 
 // SdPublishingDlg Methods
@@ -1628,11 +1628,9 @@ OUString SdDesignNameDlg::GetDesignName()
     return m_pEdit->GetText();
 }
 
-IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SdDesignNameDlg, ModifyHdl, Edit&, void)
 {
     m_pBtnOK->Enable(!m_pEdit->GetText().isEmpty());
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

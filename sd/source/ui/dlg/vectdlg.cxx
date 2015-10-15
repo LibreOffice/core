@@ -294,13 +294,12 @@ IMPL_LINK_TYPED( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
         m_pMtFillHoles->Disable();
     }
 
-    ModifyHdl( NULL );
+    m_pBtnPreview->Enable();
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ModifyHdl, Edit&, void)
 {
     m_pBtnPreview->Enable();
-    return 0L;
 }
 
 void SdVectorizeDlg::LoadSettings()

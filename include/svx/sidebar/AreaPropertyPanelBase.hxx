@@ -162,7 +162,7 @@ protected:
     DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
     DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
-    DECL_LINK(ModifyTransparentHdl_Impl, void*);
+    DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);
 
     // for transparency gradient

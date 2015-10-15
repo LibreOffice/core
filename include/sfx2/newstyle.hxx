@@ -41,7 +41,7 @@ private:
 
     DECL_DLLPRIVATE_LINK_TYPED( OKHdl, ComboBox&, void );
     DECL_DLLPRIVATE_LINK_TYPED( OKClickHdl, Button *, void );
-    DECL_DLLPRIVATE_LINK( ModifyHdl, ComboBox * );
+    DECL_DLLPRIVATE_LINK_TYPED( ModifyHdl, Edit&, void );
 
 public:
     SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );

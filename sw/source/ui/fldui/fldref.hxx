@@ -63,7 +63,7 @@ class SwFieldRefPage : public SwFieldPage
     DECL_LINK_TYPED(TypeHdl, ListBox&, void);
     DECL_LINK_TYPED(SubTypeListBoxHdl, ListBox&, void);
     DECL_LINK_TYPED(SubTypeTreeListBoxHdl, SvTreeListBox*, void);
-    DECL_LINK(ModifyHdl, void * = 0);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     void SubTypeHdl();
 
     void                UpdateSubType();

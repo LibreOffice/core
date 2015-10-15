@@ -97,10 +97,10 @@ private:
     ::sfx2::sidebar::EnumContext                maContext;
     SfxBindings*                                mpBindings;
 
-    DECL_LINK( MFLeftIndentMdyHdl, void * );
+    DECL_LINK_TYPED( MFLeftIndentMdyHdl, Edit&, void );
     DECL_LINK_TYPED( CBOXMergnCellClkHdl, Button*, void );
     DECL_LINK_TYPED( CBOXWrapTextClkHdl, Button*, void );
-    DECL_LINK( AngleModifiedHdl, void * );
+    DECL_LINK_TYPED( AngleModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( ClickStackHdl, Button*, void );
     DECL_LINK_TYPED( ReferenceEdgeHdl, Button*, void );
 

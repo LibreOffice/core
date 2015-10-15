@@ -97,7 +97,7 @@ private:
     // Handler:
     DECL_LINK_TYPED( LbSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( BtnClickHdl, Button*, void );
-    DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
+    DECL_LINK_TYPED( EdEntriesModHdl, Edit&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPUSRLST_HXX

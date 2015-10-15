@@ -101,7 +101,7 @@ void ScSamplingDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
-    Link<> aLink2 = LINK( this, ScSamplingDialog, RefInputModifyHandler);
+    Link<Edit&,void> aLink2 = LINK( this, ScSamplingDialog, RefInputModifyHandler);
     mpInputRangeEdit->SetModifyHdl( aLink2);
     mpOutputRangeEdit->SetModifyHdl( aLink2);
 
@@ -173,7 +173,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             sal_Int64 aSelectedSampleSize = rReferenceRange.aEnd.Row() - rReferenceRange.aStart.Row() + 1;
             if (aSelectedSampleSize > 1)
                 mpSampleSize->SetValue(aSelectedSampleSize);
-            SamplingSizeValueModified(NULL);
+            SamplingSizeValueModified(*mpSampleSize);
         }
     }
 
@@ -312,12 +312,11 @@ IMPL_LINK_NOARG_TYPED(ScSamplingDialog, LoseFocusHandler, Control&, void)
     mDialogLostFocus = !IsActive();
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified)
+IMPL_LINK_NOARG_TYPED(ScSamplingDialog, SamplingSizeValueModified, Edit&, void)
 {
     sal_Int64 aPopulationSize = mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1;
     if (mpSampleSize->GetValue() > aPopulationSize)
         mpSampleSize->SetValue(aPopulationSize);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScSamplingDialog, ToggleSamplingMethod, RadioButton&, void)
@@ -339,7 +338,7 @@ void ScSamplingDialog::ToggleSamplingMethod()
     }
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler)
+IMPL_LINK_NOARG_TYPED(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
 {
     if ( mpActiveEdit )
     {
@@ -380,7 +379,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler)
                 sal_Int64 aSelectedSampleSize = pRange->aEnd.Row() - pRange->aStart.Row() + 1;
                 if (aSelectedSampleSize > 1)
                     mpSampleSize->SetValue(aSelectedSampleSize);
-                SamplingSizeValueModified(NULL);
+                SamplingSizeValueModified(*mpSampleSize);
 
                 // Highlight the resulting range.
                 mpOutputRangeEdit->StartUpdateData();
@@ -397,8 +396,6 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler)
         mpButtonOk->Enable();
     else
         mpButtonOk->Disable();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

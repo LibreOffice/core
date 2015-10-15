@@ -220,7 +220,7 @@ public:
     VclPtr<Edit> mpDriverVersion;
 
     DECL_LINK_TYPED(OSSelectHdl, ListBox&, void);
-    DECL_LINK(EditModifiedHdl, Edit*);
+    DECL_LINK_TYPED(EditModifiedHdl, Edit&, void);
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
     virtual ~ListEntryDialog() { disposeOnce(); }
@@ -285,18 +285,16 @@ IMPL_LINK_TYPED(ListEntryDialog, OSSelectHdl, ListBox&, rListBox, void)
     }
 }
 
-IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)
+IMPL_LINK_TYPED(ListEntryDialog, EditModifiedHdl, Edit&, rEdit, void)
 {
-    if (pEdit == mpOSVersion)
-        maEntry.maOSVersion = pEdit->GetText();
-    else if (pEdit == mpPlatformVendor)
-        maEntry.maPlatformVendor = pEdit->GetText();
-    else if (pEdit == mpDevice)
-        maEntry.maDevice = pEdit->GetText();
-    else if (pEdit == mpDriverVersion)
-        maEntry.maDriverVersion = pEdit->GetText();
-
-    return 0;
+    if (&rEdit == mpOSVersion)
+        maEntry.maOSVersion = rEdit.GetText();
+    else if (&rEdit == mpPlatformVendor)
+        maEntry.maPlatformVendor = rEdit.GetText();
+    else if (&rEdit == mpDevice)
+        maEntry.maDevice = rEdit.GetText();
+    else if (&rEdit == mpDriverVersion)
+        maEntry.maDriverVersion = rEdit.GetText();
 }
 
 void openListDialog(SvxOpenCLTabPage* pTabPage, OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)

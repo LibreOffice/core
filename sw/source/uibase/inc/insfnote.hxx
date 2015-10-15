@@ -55,7 +55,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     VclPtr<PushButton>     m_pNextBT;
 
     DECL_LINK_TYPED(NumberCharHdl, Button *, void);
-    DECL_LINK(NumberEditHdl, void *);
+    DECL_LINK_TYPED(NumberEditHdl, Edit&, void);
     DECL_LINK_TYPED(NumberAutoBtnHdl, Button *, void);
     DECL_LINK_TYPED(NumberExtCharHdl, Button *, void);
     DECL_LINK_TYPED(NextPrevHdl, Button *, void);

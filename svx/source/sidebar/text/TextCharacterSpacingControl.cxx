@@ -400,10 +400,10 @@ IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningSelectHdl, ListBox&, v
         Invalidate();
         maVSSpacing->StartSelection();
     }
-    KerningModifyHdl( NULL );
+    KerningModifyHdl( *maEditKerning );
 }
 
-IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
+IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void)
 {
     if ( maVSSpacing->GetSelectItemId() > 0 )
     {
@@ -450,7 +450,6 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
     }
     SvxKerningItem aKernItem(nKern, SID_ATTR_CHAR_KERNING);
     mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SfxCallMode::RECORD, &aKernItem, 0L);
-    return 0;
 }
 
 }} // end of namespace sidebar

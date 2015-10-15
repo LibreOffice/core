@@ -97,7 +97,7 @@ IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*,
 
     // preview
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
-    ModifyTransparentHdl_Impl (NULL);
+    ModifyTransparentHdl_Impl (*m_pMtrTransparent);
 }
 
 IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, void)
@@ -143,7 +143,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
     m_pMtrTransparent->Enable(bActivate);
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
     XFillTransparenceItem aItem(nPos);
@@ -151,15 +151,17 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl)
 
     // preview
     InvalidatePreview();
-
-    return 0L;
 }
 
 IMPL_LINK_TYPED(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, ListBox&, rListBox, void)
 {
     ModifiedTrgrHdl_Impl(&rListBox);
 }
-IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
+IMPL_LINK_TYPED(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, Edit&, rBox, void)
+{
+    ModifiedTrgrHdl_Impl(&rBox);
+}
+void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void* pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
     {
@@ -184,8 +186,6 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
     rXFSet.Put ( aItem );
 
     InvalidatePreview();
-
-    return 0L;
 }
 
 void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
@@ -291,7 +291,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     // gradient transparency
     m_pMtrTrgrEndValue->SetValue( 100 );
     m_pMtrTrgrStartValue->SetValue( 0 );
-    Link<> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrHdl_Impl);
+    Link<Edit&,void> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl);
     m_pLbTrgrGradientType->SetSelectHdl( LINK( this, SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl) );
     m_pMtrTrgrCenterX->SetModifyHdl( aLink );
     m_pMtrTrgrCenterY->SetModifyHdl( aLink );
@@ -439,7 +439,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     // linear transparence
     sal_uInt16 nTransp = static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue();
     m_pMtrTransparent->SetValue(bLinearActive ? nTransp : 50);
-    ModifyTransparentHdl_Impl(NULL);
+    ModifyTransparentHdl_Impl(*m_pMtrTransparent);
 
     // select the correct radio button
     if(bGradActive)
@@ -745,9 +745,9 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pLbBitmap->SetSelectHdl(   LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
 
     m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountClickHdl_Impl ) );
-    m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
+    m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountEditHdl_Impl ) );
 
-    Link<> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
+    Link<Edit&,void> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
     Link<Button*,void> aClickLink( LINK( this, SvxAreaTabPage, ModifyTileClickHdl_Impl ) );
     m_pTsbTile->SetClickHdl( aClickLink );
     m_pTsbStretch->SetClickHdl( aClickLink );
@@ -1740,7 +1740,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     m_pTsbOriginal->SetState( eOriginal );
 
     // #93372# Setting proper state after changing button
-    ModifyTileHdl_Impl( NULL );
+    ModifyTileHdl_Impl( *m_pMtrFldXSize );
 
     //aRbtRow
     //aRbtColumn
@@ -2135,7 +2135,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     m_pBxBitmap->Show();
 
     ModifyBitmapHdl_Impl( *m_pLbBitmap );
-    ModifyTileHdl_Impl( m_pTsbOriginal );
+    ModifyTileHdl_Impl( *m_pMtrFldXSize );
 }
 
 
@@ -2175,7 +2175,11 @@ IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountClickHdl_Impl, Button*, p, void 
 {
     ModifyStepCountHdl_Impl(p);
 }
-IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountEditHdl_Impl, Edit&, r, void )
+{
+    ModifyStepCountHdl_Impl(&r);
+}
+void SvxAreaTabPage::ModifyStepCountHdl_Impl( void* p )
 {
     if( p == m_pTsbStepCount )
     {
@@ -2200,8 +2204,6 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     m_rXFSet.Put( XGradientStepCountItem( nValue ) );
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
@@ -2246,9 +2248,9 @@ IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyTileClickHdl_Impl, Button*, void)
 {
-    ModifyTileHdl_Impl(NULL);
+    ModifyTileHdl_Impl(*m_pMtrFldXSize);
 }
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyTileHdl_Impl, Edit&, void)
 {
     TriState eState = m_pTsbTile->GetState();
     if( eState == TRISTATE_TRUE )
@@ -2395,8 +2397,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
-
-    return 0L;
 }
 
 
@@ -2432,17 +2432,17 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ClickScaleHdl_Impl, Button*, void)
         m_pMtrFldYSize->SetLast( 100000 );
     }
 
-    ModifyTileHdl_Impl( NULL );
+    ModifyTileHdl_Impl( *m_pMtrFldXSize );
 }
 
 
 
-void SvxAreaTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
+void SvxAreaTabPage::PointChanged( vcl::Window* , RECT_POINT eRcPt )
 {
     m_eRP = eRcPt;
 
     // alignment of the bitmap fill
-    ModifyTileHdl_Impl( pWindow );
+    ModifyTileHdl_Impl( *m_pMtrFldXSize );
 }
 
 void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)

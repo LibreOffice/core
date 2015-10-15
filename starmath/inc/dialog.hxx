@@ -103,7 +103,7 @@ class SmFontDialog : public ModalDialog
     vcl::Font maFont;
 
     DECL_LINK_TYPED(FontSelectHdl, ComboBox&, void);
-    DECL_LINK(FontModifyHdl, ComboBox *);
+    DECL_LINK_TYPED(FontModifyHdl, Edit&, void);
     DECL_LINK_TYPED(AttrChangeHdl, Button *, void);
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -436,7 +436,7 @@ class SmSymDefineDialog : public ModalDialog
 
     DECL_LINK_TYPED(OldSymbolChangeHdl, ComboBox&, void);
     DECL_LINK_TYPED(OldSymbolSetChangeHdl, ComboBox&, void);
-    DECL_LINK(ModifyHdl, ComboBox *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(FontChangeHdl, ListBox&, void);
     DECL_LINK_TYPED(SubsetChangeHdl, ListBox&, void);
     DECL_LINK_TYPED(StyleChangeHdl, ComboBox&, void);

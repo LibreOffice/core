@@ -87,7 +87,7 @@ class SwLabFormatPage : public SfxTabPage
 
     SwLabItem    aItem;
 
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( PreviewHdl, Idle *, void );
     DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( SaveHdl, Button*, void );
@@ -124,7 +124,7 @@ class SwSaveLabelDlg : public ModalDialog
     SwLabRec&       rLabRec;
 
     DECL_LINK_TYPED(OkHdl, Button*, void);
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec);

@@ -105,7 +105,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
 
     mpLbTree->SetSelectHdl(LINK(this, ScXMLSourceDlg, TreeItemSelectHdl));
 
-    Link<> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
+    Link<Edit&,void> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
     mpRefEdit->SetModifyHdl(aLink);
 
     mpBtnOk->Disable();
@@ -682,10 +682,9 @@ IMPL_LINK_NOARG_TYPED(ScXMLSourceDlg, TreeItemSelectHdl, SvTreeListBox*, void)
     TreeItemSelected();
 }
 
-IMPL_LINK_NOARG(ScXMLSourceDlg, RefModifiedHdl)
+IMPL_LINK_NOARG_TYPED(ScXMLSourceDlg, RefModifiedHdl, Edit&, void)
 {
     RefEditModified();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

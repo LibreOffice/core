@@ -66,7 +66,7 @@ friend class InputEdit;
     void CleanupUglyHackWithUndo();
 
     void DelBoxContent();
-    DECL_LINK( ModifyHdl, void* );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
 
     using Window::IsActive;
 

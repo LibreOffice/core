@@ -290,7 +290,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pLbAmbientlight->SetSelectHdl( aLink2 );
     m_pLbShademode->SetSelectHdl( aLink2 );
 
-    Link<> aLink3 = LINK( this, Svx3DWin, ModifyHdl );
+    Link<Edit&,void> aLink3 = LINK( this, Svx3DWin, ModifyHdl );
     m_pMtrMatSpecularIntensity->SetModifyHdl( aLink3 );
     m_pNumHorizontal->SetModifyHdl( aLink3 );
     m_pNumVertical->SetModifyHdl( aLink3 );
@@ -2567,34 +2567,30 @@ IMPL_LINK_TYPED( Svx3DWin, SelectHdl, ListBox&, rListBox, void )
 }
 
 
-IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
+IMPL_LINK_TYPED( Svx3DWin, ModifyHdl, Edit&, rField, void )
 {
-    if( pField )
+    bool bUpdatePreview = false;
+
+    // Material
+    if( &rField == m_pMtrMatSpecularIntensity )
     {
-        bool bUpdatePreview = false;
-
-        // Material
-        if( pField == m_pMtrMatSpecularIntensity )
-        {
-            bUpdatePreview = true;
-        }
-        else if (pField == m_pNumHorizontal)
-        {
-            bUpdatePreview = true;
-        }
-        else if (pField == m_pNumVertical)
-        {
-            bUpdatePreview = true;
-        }
-        else if (pField == m_pMtrSlant)
-        {
-            bUpdatePreview = true;
-        }
-
-        if( bUpdatePreview )
-            UpdatePreview();
+        bUpdatePreview = true;
     }
-    return 0L;
+    else if (&rField == m_pNumHorizontal)
+    {
+        bUpdatePreview = true;
+    }
+    else if (&rField == m_pNumVertical)
+    {
+        bUpdatePreview = true;
+    }
+    else if (&rField == m_pMtrSlant)
+    {
+        bUpdatePreview = true;
+    }
+
+    if( bUpdatePreview )
+        UpdatePreview();
 }
 
 

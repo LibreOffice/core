@@ -1318,10 +1318,9 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameGetFocusHdl_Impl, Control&, void )
 
 
 
-IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameModifiedHdl_Impl, Edit&, void )
 {
     FileNameGetFocusHdl_Impl( *_pImp->_pEdFileName );
-    return 0;
 }
 
 
@@ -2913,7 +2912,7 @@ IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, OKHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
+IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, NameHdl, Edit&, void)
 {
     // trim the strings
     OUString aName = comphelper::string::strip(m_pNameEdit->GetText(), ' ');
@@ -2927,8 +2926,6 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
         if ( m_pOKBtn->IsEnabled() )
             m_pOKBtn->Enable( false );
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

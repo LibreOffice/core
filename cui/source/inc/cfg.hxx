@@ -483,7 +483,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
     void UpdateButtonStates();
 
     DECL_LINK_TYPED( MoveHdl, Button *, void );
-    DECL_LINK( ModifyHdl, Edit * );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
 
 public:

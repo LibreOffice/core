@@ -92,7 +92,7 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetAccessibleName(OUString( "Category"));
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    Link<> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
+    Link<Edit&,void> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
     mpEdDecimals->SetModifyHdl( aLink );
     mpEdLeadZeroes->SetModifyHdl( aLink );
@@ -118,9 +118,9 @@ IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, 
 
 IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )
 {
-    NumFormatValueHdl(nullptr);
+    NumFormatValueHdl(*mpEdDecimals);
 }
-IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl )
+IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void )
 {
     OUString      aFormat;
     OUString      sBreak = ",";
@@ -151,7 +151,6 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl )
 
     SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
     GetBindings()->GetDispatcher()->Execute(SID_NUMBER_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
-    return 0L;
 }
 
 VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (

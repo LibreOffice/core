@@ -44,8 +44,8 @@ private:
     DECL_LINK_TYPED (ClickFileopenHdl_Impl, Button*, void );
     DECL_LINK_TYPED (ClickTargetHdl_Impl  , Button*, void );
 
-    DECL_LINK (ModifiedPathHdl_Impl  , void * ); ///< Contens of combobox "Path" modified
-    DECL_LINK (ModifiedTargetHdl_Impl, void * ); ///< Contens of editfield "Target" modified
+    DECL_LINK_TYPED (ModifiedPathHdl_Impl  , Edit&, void ); ///< Contents of combobox "Path" modified
+    DECL_LINK_TYPED (ModifiedTargetHdl_Impl, Edit&, void ); ///< Contents of editfield "Target" modified
 
     DECL_LINK_TYPED( LostFocusPathHdl_Impl, Control&, void ); ///< Combobox "path" lost its focus
 

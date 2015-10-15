@@ -251,11 +251,10 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     m_pSlider->SetThumbPos(nCurrentRow-nStartRow-1);
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
+IMPL_LINK_TYPED( ScDataFormDlg, Impl_DataModifyHdl, Edit&, rEdit, void)
 {
-    if ( pEdit->IsModified() )
+    if ( rEdit.IsModified() )
         m_pBtnRestore->Enable( true );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NewHdl, Button*, void)

@@ -116,7 +116,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     m_pLbHatchings->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxHatchTabPage, ModifiedHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxHatchTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
     m_pMtrDistance->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
@@ -371,7 +371,11 @@ IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, v
 {
     ModifiedHdl_Impl(&rListBox);
 }
-IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
+{
+    ModifiedHdl_Impl(&rEdit);
+}
+void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
 {
     if( p == m_pMtrAngle )
     {
@@ -398,8 +402,6 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_pCtlPreview->Invalidate();
-
-    return 0L;
 }
 
 

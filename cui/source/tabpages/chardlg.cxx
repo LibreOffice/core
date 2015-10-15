@@ -423,7 +423,7 @@ void SvxCharNamePage::Initialize()
     // to handle the changes of the other pages
     SetExchangeSupport();
 
-    Link<> aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxCharNamePage, FontModifyEditHdl_Impl );
     m_pWestFontNameLB->SetModifyHdl( aLink );
     m_pWestFontStyleLB->SetModifyHdl( aLink );
     m_pWestFontSizeLB->SetModifyHdl( aLink );
@@ -1191,7 +1191,11 @@ IMPL_LINK_TYPED( SvxCharNamePage, FontModifyListBoxHdl_Impl, ListBox&, rBox, voi
 {
     FontModifyHdl_Impl(&rBox);
 }
-IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
+IMPL_LINK_TYPED( SvxCharNamePage, FontModifyEditHdl_Impl, Edit&, rBox, void )
+{
+    FontModifyHdl_Impl(&rBox);
+}
+void SvxCharNamePage::FontModifyHdl_Impl(void* pNameBox)
 {
     m_pImpl->m_aUpdateIdle.Start();
 
@@ -1200,7 +1204,6 @@ IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
         FillStyleBox_Impl( static_cast<FontNameBox*>(pNameBox) );
         FillSizeBox_Impl( static_cast<FontNameBox*>(pNameBox) );
     }
-    return 0;
 }
 
 
@@ -2724,7 +2727,7 @@ void SvxCharPositionPage::Initialize()
     m_p90degRB->SetClickHdl( aLink2 );
     m_p270degRB->SetClickHdl( aLink2 );
 
-    Link<> aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
     m_pHighLowMF->SetModifyHdl( aLink );
     m_pFontSizeMF->SetModifyHdl( aLink );
 
@@ -2820,13 +2823,12 @@ IMPL_LINK_TYPED( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
 
 
 
-IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
 {
     sal_uInt8 nEscProp = (sal_uInt8)m_pFontSizeMF->GetValue();
     short nEsc  = (short)m_pHighLowMF->GetValue();
     nEsc *= m_pLowPosBtn->IsChecked() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
-    return 0;
 }
 
 
@@ -2889,12 +2891,12 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningSelectHdl_Impl, ListBox&, void
         m_pKerningMF->Disable();
     }
 
-    KerningModifyHdl_Impl( NULL );
+    KerningModifyHdl_Impl( *m_pKerningMF );
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 {
     long nVal = static_cast<long>(m_pKerningMF->GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
@@ -2912,7 +2914,6 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
     rCJKFont.SetFixKerning( (short)nKern );
     rCTLFont.SetFixKerning( (short)nKern );
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
 
@@ -2942,11 +2943,9 @@ IMPL_LINK_TYPED( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, voi
 
 
 
-IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void)
 {
     m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
-
-    return 0;
 }
 
 void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )

@@ -485,10 +485,9 @@ IMPL_LINK_NOARG_TYPED(SwFieldDBPage, AddDBHdl, Button*, void)
 }
 
 // Modify
-IMPL_LINK_NOARG(SwFieldDBPage, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldDBPage, ModifyHdl, Edit&, void)
 {
     CheckInsert();
-    return 0;
 }
 
 void    SwFieldDBPage::FillUserData()

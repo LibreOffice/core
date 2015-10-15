@@ -167,7 +167,7 @@ namespace dbp
     private:
         void implCheckFinish();
 
-        DECL_LINK(OnSelectionModified, void*);
+        DECL_LINK_TYPED(OnSelectionModified, Edit&, void);
         DECL_LINK_TYPED(OnSelectionModifiedCombBox, ComboBox&, void);
     };
 

@@ -204,10 +204,9 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified)
+    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnTextModified, Edit&, void)
     {
         validate( );
-        return 0L;
     }
 
 

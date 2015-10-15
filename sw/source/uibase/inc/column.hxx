@@ -139,15 +139,16 @@ class SwColumnPage : public SfxTabPage
     bool            bLockUpdate;
 
     // Handler
-    DECL_LINK( ColModify, NumericField * );
-    DECL_LINK( GapModify, MetricField * );
-    DECL_LINK( EdModify, MetricField * );
+    DECL_LINK_TYPED( ColModify, Edit&, void );
+    void ColModify(NumericField*);
+    DECL_LINK_TYPED( GapModify, Edit&, void );
+    DECL_LINK_TYPED( EdModify, Edit&, void );
     DECL_LINK_TYPED( AutoWidthHdl, Button *, void );
     DECL_LINK_TYPED( SetDefaultsHdl, ValueSet *, void );
 
-    DECL_LINK_TYPED(Up, Button *, void);
-    DECL_LINK_TYPED(Down, Button *, void);
-    DECL_LINK( UpdateColMgr, void* );
+    DECL_LINK_TYPED( Up, Button *, void );
+    DECL_LINK_TYPED( Down, Button *, void );
+    DECL_LINK_TYPED( UpdateColMgr, Edit&, void );
     DECL_LINK_TYPED( UpdateColMgrListBox, ListBox&, void );
     void Timeout();
 

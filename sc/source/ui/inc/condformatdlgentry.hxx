@@ -102,7 +102,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     void Init(ScCondFormatDlg* pDialogParent);
     DECL_LINK_TYPED( StyleSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( ConditionTypeSelectHdl, ListBox&, void );
-    DECL_LINK( OnEdChanged, Edit* );
+    DECL_LINK_TYPED( OnEdChanged, Edit&, void );
 
     // Searches the lookup table for the entry position, given condition mode
     static sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode );

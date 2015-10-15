@@ -297,7 +297,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     Link<Button*,void> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
     m_pBtnAdd->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
-    m_pEdtName->SetModifyHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl2 ) );
+    m_pEdtName->SetModifyHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonEditHdl ) );
     m_pLbPages->SetSelectHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl4 ) ); // because of status
     m_pLbCustomPages->SetSelectHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl3 ) ); // because of status
 
@@ -394,8 +394,12 @@ IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl4, ListBox&, rListBox, voi
 {
     ClickButtonHdl2(&rListBox);
 }
+IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonEditHdl, Edit&, rEdit, void )
+{
+    ClickButtonHdl2(&rEdit);
+}
 // ButtonHdl()
-IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl2, void *, p )
+void SdDefineCustomShowDlg::ClickButtonHdl2(void* p)
 {
     if( p == m_pBtnAdd )
     {
@@ -441,8 +445,6 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl2, void *, p )
     }
 
     CheckState();
-
-    return 0L;
 }
 
 /**

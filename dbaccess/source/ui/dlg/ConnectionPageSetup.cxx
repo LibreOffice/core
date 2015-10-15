@@ -172,11 +172,10 @@ namespace dbaui
         return !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
     }
 
-    IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, /*_pEdit*/)
+    IMPL_LINK_NOARG_TYPED(OConnectionTabPageSetup, OnEditModified, Edit&, void)
     {
         SetRoadmapStateValue(checkTestConnection());
         callModifiedHdl();
-        return 0L;
     }
 }   // namespace dbaui
 

@@ -125,7 +125,7 @@ void ScStatisticsInputOutputDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
-    Link<> aLink2 = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
+    Link<Edit&,void> aLink2 = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
     mpInputRangeEdit->SetModifyHdl( aLink2);
     mpOutputRangeEdit->SetModifyHdl( aLink2);
 
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, GroupByChanged, RadioButto
         mGroupedBy = BY_ROW;
 }
 
-IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler )
+IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, void )
 {
     if ( mpActiveEdit )
     {
@@ -276,8 +276,6 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler )
         mpButtonOk->Enable();
     else
         mpButtonOk->Disable();
-
-    return 0;
 }
 
 void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()

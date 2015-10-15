@@ -411,10 +411,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->SaveValue();
 }
 
-IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
+IMPL_LINK_NOARG_TYPED( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
 {
-    (void)pEd;
-
     OUString aOutput( m_aStrDateInfo );
     OUString aStr( m_pYearValueField->GetText() );
     OUString sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
@@ -430,7 +428,6 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
         aOutput += OUString::number( nNum );
     }
     m_pToYearFT->SetText( aOutput );
-    return 0;
 }
 
 IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
@@ -443,7 +440,7 @@ IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigHdl, SpinField&, rEd, void )
     OUString aOutput(OUString::number(nNum));
     m_pYearValueField->SetText(aOutput);
     m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
-    TwoFigureHdl( static_cast<NumericField*>(&rEd) );
+    TwoFigureHdl( static_cast<Edit&>(rEd) );
 }
 
 class CanvasSettings
@@ -1699,9 +1696,9 @@ IMPL_LINK_TYPED( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void
     m_pDatePatternsED->SetText( aDatePatternsString);
 }
 
-IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
+IMPL_LINK_TYPED( OfaLanguagesTabPage, DatePatternsHdl, Edit&, rEd, void )
 {
-    const OUString aPatterns( pEd->GetText());
+    const OUString aPatterns( rEd.GetText());
     OUStringBuffer aBuf( aPatterns);
     sal_Int32 nChar = 0;
     bool bValid = true;
@@ -1787,26 +1784,25 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
         // Do not use SetText(...,GetSelection()) because internally the
         // reference's pointer of the selection is obtained resulting in the
         // entire text being selected at the end.
-        Selection aSelection( pEd->GetSelection());
-        pEd->SetText( aBuf.makeStringAndClear(), aSelection);
+        Selection aSelection( rEd.GetSelection());
+        rEd.SetText( aBuf.makeStringAndClear(), aSelection);
     }
     if (bValid)
     {
-        pEd->SetControlForeground();
-        pEd->SetControlBackground();
+        rEd.SetControlForeground();
+        rEd.SetControlBackground();
     }
     else
     {
 #if 0
         //! Gives white on white!?! instead of white on reddish.
-        pEd->SetControlBackground( ::Color( RGB_COLORDATA( 0xff, 0x65, 0x63)));
-        pEd->SetControlForeground( ::Color( COL_WHITE));
+        rEd.SetControlBackground( ::Color( RGB_COLORDATA( 0xff, 0x65, 0x63)));
+        rEd.SetControlForeground( ::Color( COL_WHITE));
 #else
-        pEd->SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+        rEd.SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
 #endif
     }
     m_bDatePatternsValid = bValid;
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,7 +53,7 @@ private:
     bool IsValidSeparatorSet() const;
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
-    DECL_LINK( SepModifyHdl, Edit* );
+    DECL_LINK_TYPED( SepModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SepEditOnFocusHdl, Control&, void );
 
 private:

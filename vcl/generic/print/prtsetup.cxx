@@ -441,13 +441,12 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-IMPL_LINK(RTSDevicePage, ModifyHdl, Edit*,  pEdit)
+IMPL_LINK_TYPED(RTSDevicePage, ModifyHdl, Edit&, rEdit, void)
 {
     if (m_pCustomValue)
     {
-        m_pCustomValue->m_aCustomOption = pEdit->GetText();
+        m_pCustomValue->m_aCustomOption = rEdit.GetText();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( RTSDevicePage, SelectHdl, ListBox&, rBox, void )

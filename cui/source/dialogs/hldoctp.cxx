@@ -104,7 +104,7 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
         aStrMark = rStrURL.copy( nPos+1 );
      m_pEdTarget->SetText ( aStrMark );
 
-    ModifiedPathHdl_Impl ( NULL );
+    ModifiedPathHdl_Impl ( *m_pCbbPath );
 }
 
 /*************************************************************************
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
         m_pCbbPath->SetText( aPath );
 
         if ( aOldURL != GetCurrentURL() )
-            ModifiedPathHdl_Impl (NULL);
+            ModifiedPathHdl_Impl(*m_pCbbPath);
     }
 }
 
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ModifiedPathHdl_Impl, Edit&, void)
 {
     maStrURL = GetCurrentURL();
 
@@ -264,8 +264,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
     maTimer.Start();
 
     m_pFtFullURL->SetText( maStrURL );
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -297,7 +295,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, Edit&, void)
 {
     maStrURL = GetCurrentURL();
 
@@ -305,8 +303,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
         mpMarkWnd->SelectEntry ( m_pEdTarget->GetText() );
 
     m_pFtFullURL->SetText( maStrURL );
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -332,7 +328,7 @@ void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 {
     m_pEdTarget->SetText ( aStrMark );
 
-    ModifiedTargetHdl_Impl ( NULL );
+    ModifiedTargetHdl_Impl ( *m_pEdTarget );
 }
 
 /*************************************************************************

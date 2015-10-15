@@ -176,7 +176,7 @@ bool ScNameDlg::IsRefInputMode() const
 void ScNameDlg::RefInputDone( bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(m_pEdAssign);
+    EdModifyHdl(*m_pEdAssign);
 }
 
 void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
@@ -508,15 +508,14 @@ IMPL_LINK_NOARG_TYPED(ScNameDlg, EdModifyCheckBoxHdl, CheckBox&, void)
     NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, EdModifyHdl, Edit&, void)
 {
     NameModified();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScNameDlg, AssignGetFocusHdl, Control&, void)
 {
-    EdModifyHdl(m_pEdAssign);
+    EdModifyHdl(*m_pEdAssign);
 }
 
 IMPL_LINK_NOARG_TYPED(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)

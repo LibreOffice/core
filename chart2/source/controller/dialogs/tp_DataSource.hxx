@@ -79,8 +79,8 @@ protected:
     DECL_LINK_TYPED( CategoriesRangeButtonClickedHdl, Button*, void );
     DECL_LINK_TYPED( AddButtonClickedHdl, Button*, void );
     DECL_LINK_TYPED( RemoveButtonClickedHdl, Button*, void );
-    DECL_LINK( RangeModifiedHdl, Edit* );
-    DECL_LINK( RangeUpdateDataHdl, Edit* );
+    DECL_LINK_TYPED( RangeModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( RangeUpdateDataHdl, Edit&, void );
     DECL_LINK_TYPED( UpButtonClickedHdl, Button*, void );
     DECL_LINK_TYPED( DownButtonClickedHdl, Button*, void );
 

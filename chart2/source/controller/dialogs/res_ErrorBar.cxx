@@ -406,10 +406,10 @@ IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
 IMPL_LINK_NOARG_TYPED(ErrorBarResources, SynchronizePosAndNeg, CheckBox&, void)
 {
     UpdateControlStates();
-    PosValueChanged( 0 );
+    PosValueChanged( *m_pMfPositive );
 }
 
-IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged)
+IMPL_LINK_NOARG_TYPED(ErrorBarResources, PosValueChanged, Edit&, void)
 {
     if( m_pCbSyncPosNeg->IsChecked())
     {
@@ -421,8 +421,6 @@ IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged)
         else
             m_pMfNegative->SetValue( m_pMfPositive->GetValue());
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ErrorBarResources, IndicatorChanged, Button*, void)
@@ -472,21 +470,19 @@ IMPL_LINK_TYPED( ErrorBarResources, ChooseRange, Button*, pButton, void )
         m_pCurrentRangeChoosingField = 0;
 }
 
-IMPL_LINK( ErrorBarResources, RangeChanged, Edit *, pEdit )
+IMPL_LINK_TYPED( ErrorBarResources, RangeChanged, Edit&, rEdit, void )
 {
-    if( pEdit == m_pEdRangePositive )
+    if( &rEdit == m_pEdRangePositive )
     {
         m_bRangePosUnique = true;
-        PosValueChanged( 0 );
+        PosValueChanged( *m_pMfPositive );
     }
     else
     {
         m_bRangeNegUnique = true;
     }
 
-    isRangeFieldContentValid( *pEdit );
-
-    return 0;
+    isRangeFieldContentValid( rEdit );
 }
 
 void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
@@ -705,7 +701,7 @@ void ErrorBarResources::listeningFinished(
     {
         m_pCurrentRangeChoosingField->SetText( aRange );
         m_pCurrentRangeChoosingField->GrabFocus();
-        PosValueChanged( 0 );
+        PosValueChanged( *m_pMfPositive );
     }
 
     m_pCurrentRangeChoosingField = 0;

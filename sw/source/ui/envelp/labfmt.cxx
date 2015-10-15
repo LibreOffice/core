@@ -326,7 +326,7 @@ SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pPHeightField, aMetric);
 
     // Install handlers
-    Link<> aLk = LINK(this, SwLabFormatPage, ModifyHdl);
+    Link<Edit&,void> aLk = LINK(this, SwLabFormatPage, ModifyHdl);
     m_pHDistField->SetModifyHdl( aLk );
     m_pVDistField->SetModifyHdl( aLk );
     m_pWidthField->SetModifyHdl( aLk );
@@ -382,11 +382,10 @@ void SwLabFormatPage::dispose()
 
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwLabFormatPage, ModifyHdl, Edit&, void)
 {
     bModified = true;
     aPreviewIdle.Start();
-    return 0;
 }
 
 // Invalidate preview
@@ -607,7 +606,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
     get(m_pOKPB, "ok");
 
     m_pOKPB->SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
-    Link<> aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
+    Link<Edit&,void> aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
     m_pMakeCB->SetModifyHdl(aLk);
     m_pTypeED->SetModifyHdl(aLk);
 
@@ -664,10 +663,9 @@ IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, OkHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, ModifyHdl, Edit&, void)
 {
     m_pOKPB->Enable(!m_pMakeCB->GetText().isEmpty() && !m_pTypeED->GetText().isEmpty());
-    return 0;
 }
 
 bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)

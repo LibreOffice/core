@@ -211,10 +211,9 @@ namespace abp
     }
 
 
-    IMPL_LINK( FinalPage, OnNameModified, Edit*, /**/ )
+    IMPL_LINK_NOARG_TYPED( FinalPage, OnNameModified, Edit&, void )
     {
         implCheckName();
-        return 0L;
     }
 
 

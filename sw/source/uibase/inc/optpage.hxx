@@ -173,9 +173,9 @@ class SwStdFontTabPage : public SfxTabPage
     OUString sScriptAsian;
     OUString sScriptComplex;
 
-    DECL_LINK_TYPED(StandardHdl, Button*, void);
-    DECL_LINK(ModifyHdl, ComboBox * );
-    DECL_LINK(ModifyHeightHdl, FontSizeBox * );
+    DECL_LINK_TYPED(StandardHdl, Button*, void );
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void );
+    DECL_LINK_TYPED(ModifyHeightHdl, Edit&, void );
     DECL_LINK_TYPED(LoseFocusHdl, Control&, void );
 
     SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);

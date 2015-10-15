@@ -64,11 +64,11 @@ private:
     std::set< sal_uInt16 >      m_aIgnoreErrorsAt;
     sal_uInt16          m_nErrorStart;
     sal_uInt16          m_nErrorEnd;
-    bool            m_bIsUndoEditMode;
+    bool                m_bIsUndoEditMode;
 
-    Link<>          m_aModifyLink;
+    Link<Edit&,void>    m_aModifyLink;
 
-    void            CallModifyLink() {m_aModifyLink.Call(this);}
+    void            CallModifyLink() {m_aModifyLink.Call(*this);}
 
     inline SpellDialog* GetSpellDialog() const;
 protected:
@@ -77,7 +77,7 @@ protected:
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
 
-    void            SetModifyHdl(const Link<>& rLink) override { m_aModifyLink = rLink;}
+    void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const OUString& rStr ) override;
@@ -179,7 +179,7 @@ private:
     DECL_LINK_TYPED( CheckGrammarHdl, Button*, void );
     DECL_LINK_TYPED( ExtClickHdl, Button*, void );
     DECL_LINK_TYPED(CancelHdl, Button*, void);
-    DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(UndoHdl, Button*, void);
     DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
     DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );

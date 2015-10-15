@@ -188,7 +188,7 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
     get(m_pOK, "ok");
     get(m_pFieldNameED, "entry");
     m_pFieldNameED->SetModifyHdl(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
-    ModifyHdl_Impl(m_pFieldNameED);
+    ModifyHdl_Impl(*m_pFieldNameED);
 }
 
 SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
@@ -203,9 +203,9 @@ void SwAddRenameEntryDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
+IMPL_LINK_TYPED(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit&, rEdit, void)
 {
-    OUString sEntry = pEdit->GetText();
+    OUString sEntry = rEdit.GetText();
     bool bFound = sEntry.isEmpty();
 
     if(!bFound)
@@ -221,7 +221,6 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
             }
     }
     m_pOK->Enable(!bFound);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

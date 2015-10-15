@@ -594,7 +594,7 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     pLabelBox   ->SetLoseFocusHdl( aFocusLink );
     pIdxBox     ->SetLoseFocusHdl( aFocusLink );
 
-    Link<> aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
+    Link<Edit&,void> aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
     pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
     pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
     pListHeightLB->    SetModifyHdl( aModifyHeightLink );
@@ -1006,11 +1006,11 @@ IMPL_LINK_NOARG_TYPED(SwStdFontTabPage, StandardHdl, Button*, void)
             SFX_MAPUNIT_TWIP, 10 ));
 }
 
-IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
+IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
 {
-    if(pBox == pStandardBox)
+    if(&rBox == pStandardBox)
     {
-        const OUString sEntry = pBox->GetText();
+        const OUString sEntry = rBox.GetText();
         if(bSetListDefault && bListDefault)
             pListBox->SetText(sEntry);
         if(bSetLabelDefault && bLabelDefault)
@@ -1018,26 +1018,25 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
         if(bSetIdxDefault && bIdxDefault)
             pIdxBox->SetText(sEntry);
     }
-    else if(pBox == pListBox)
+    else if(&rBox == pListBox)
     {
         bSetListDefault = false;
     }
-    else if(pBox == pLabelBox)
+    else if(&rBox == pLabelBox)
     {
         bSetLabelDefault = false;
     }
-    else if(pBox == pIdxBox)
+    else if(&rBox == pIdxBox)
     {
         bSetIdxDefault = false;
     }
-    return 0;
 }
 
-IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
+IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
 {
-    if(pBox == pStandardHeightLB)
+    if(&rBox == pStandardHeightLB)
     {
-        sal_Int64 nValue = pBox->GetValue(FUNIT_TWIP);
+        sal_Int64 nValue = static_cast<FontSizeBox&>(rBox).GetValue(FUNIT_TWIP);
         if(bSetListHeightDefault && bListHeightDefault)
             pListHeightLB->SetValue(nValue, FUNIT_TWIP);
         if(bSetLabelHeightDefault && bLabelHeightDefault)
@@ -1045,19 +1044,18 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
         if(bSetIndexHeightDefault && bIndexHeightDefault)
             pIndexHeightLB->SetValue(nValue, FUNIT_TWIP);
     }
-    else if(pBox == pListHeightLB)
+    else if(&rBox == pListHeightLB)
     {
         bSetListHeightDefault = false;
     }
-    else if(pBox == pLabelHeightLB)
+    else if(&rBox == pLabelHeightLB)
     {
         bSetLabelHeightDefault = false;
     }
-    else if(pBox == pIndexHeightLB)
+    else if(&rBox == pIndexHeightLB)
     {
         bSetIndexHeightDefault = false;
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )

@@ -40,13 +40,13 @@ public:
 
     DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
     DECL_LINK_TYPED( DeviceSelHdl, SvTreeListBox*, void );
-    DECL_LINK( EditModifiedHdl, Edit * );
+    DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
     DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
-    DECL_LINK( SpinOpenCLMinSizeHdl, NumericField*);
+    DECL_LINK_TYPED( SpinOpenCLMinSizeHdl, Edit&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 

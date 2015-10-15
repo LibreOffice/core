@@ -1165,7 +1165,7 @@ void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
         else
         {
             EnableControl_Impl(m_pLayoutBtn);
-            ModifyHdl_Impl(m_pSearchLB);
+            ModifyHdl_Impl(*m_pSearchLB);
         }
     }
     else
@@ -1209,14 +1209,14 @@ void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
 
             // Search-string in place? then enable Buttons
             bSet = true;
-            ModifyHdl_Impl(m_pSearchLB);
+            ModifyHdl_Impl(*m_pSearchLB);
         }
     }
 
     if (pCtrl == m_pAllSheetsCB)
     {
         bSet = true;
-        ModifyHdl_Impl(m_pSearchLB);
+        ModifyHdl_Impl(*m_pSearchLB);
     }
 
     if (pCtrl == m_pJapOptionsCB)
@@ -1396,17 +1396,17 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 
 
 
-IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
+IMPL_LINK_TYPED( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
 {
     if ( !bSet )
-        SetModifyFlag_Impl( pEd );
+        SetModifyFlag_Impl( &rEd );
     else
         bSet = false;
 
     // Calc allows searching for empty cells.
     bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SvxSearchApp::CALC);
 
-    if ( pEd == m_pSearchLB || pEd == m_pReplaceLB )
+    if ( &rEd == m_pSearchLB || &rEd == m_pReplaceLB )
     {
         sal_Int32 nSrchTxtLen = m_pSearchLB->GetText().getLength();
         sal_Int32 nReplTxtLen = 0;
@@ -1433,7 +1433,6 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
             m_pReplaceAllBtn->Disable();
         }
     }
-    return 0;
 }
 
 
@@ -1846,7 +1845,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, FocusHdl_Impl, Control&, rControl, void )
 
     static_cast<ComboBox*>(pCtrl)->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
-    ModifyHdl_Impl( static_cast<ComboBox*>(pCtrl) );
+    ModifyHdl_Impl( static_cast<Edit&>(*pCtrl) );
 
     if (bFormat && nTxtLen)
         m_pLayoutBtn->SetText(aLayoutStr);

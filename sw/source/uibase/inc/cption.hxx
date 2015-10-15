@@ -96,7 +96,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
     DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(OptionHdl, Button *, void);
     DECL_LINK_TYPED(CaptionHdl, Button *, void);
 

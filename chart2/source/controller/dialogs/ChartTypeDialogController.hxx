@@ -278,7 +278,7 @@ public:
     virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException) override;
 
 private:
-    DECL_LINK( ChangeLineCountHdl, void* );
+    DECL_LINK_TYPED( ChangeLineCountHdl, Edit&, void );
 
 private:
     VclPtr<FixedText>    m_pFT_NumberOfLines;

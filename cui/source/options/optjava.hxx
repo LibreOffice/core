@@ -127,7 +127,7 @@ private:
     VclPtr<ListBox>                m_pAssignedList;
     VclPtr<PushButton>             m_pRemoveBtn;
 
-    DECL_LINK(ModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(DblClickHdl_Impl, ListBox&, void);

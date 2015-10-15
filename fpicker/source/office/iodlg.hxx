@@ -92,7 +92,7 @@ private:
     DECL_LINK_TYPED(            OpenClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED(            CancelHdl_Impl, Button*, void );
     DECL_LINK_TYPED(            FileNameGetFocusHdl_Impl, Control&, void );
-    DECL_LINK( FileNameModifiedHdl_Impl, void* );
+    DECL_LINK_TYPED(            FileNameModifiedHdl_Impl, Edit&, void );
 
     DECL_LINK_TYPED(            URLBoxModifiedHdl_Impl, SvtURLBox*, void );
     DECL_LINK_TYPED(            ConnectToServerPressed_Hdl, Button*, void );

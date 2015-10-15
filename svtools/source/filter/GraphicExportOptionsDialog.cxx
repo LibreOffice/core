@@ -62,35 +62,29 @@ void GraphicExportOptionsDialog::initialize()
     mSize100mm = mRenderer.getDocumentSizeIn100mm(mCurrentPage);
 }
 
-IMPL_LINK_NOARG( GraphicExportOptionsDialog, widthModifiedHandle )
+IMPL_LINK_NOARG_TYPED( GraphicExportOptionsDialog, widthModifiedHandle, Edit&, void )
 {
     mResolution =  mpWidth->GetValue() / getViewWidthInch();
 
     updateHeight();
     updateResolution();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG( GraphicExportOptionsDialog, heightModifiedHandle )
+IMPL_LINK_NOARG_TYPED( GraphicExportOptionsDialog, heightModifiedHandle, Edit&, void )
 {
     mResolution =  mpHeight->GetValue() / getViewHeightInch();
 
     updateWidth();
     updateResolution();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG( GraphicExportOptionsDialog, resolutionModifiedHandle )
+IMPL_LINK_NOARG_TYPED( GraphicExportOptionsDialog, resolutionModifiedHandle, Edit&, void )
 {
     mResolution = mpResolution->GetText().toInt32();
 
     updateWidth();
     updateHeight();
     Update();
-
-    return 0L;
 }
 
 double GraphicExportOptionsDialog::getViewWidthInch()

@@ -45,7 +45,7 @@ protected:
     void            CheckButtons();
     DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
     DECL_LINK_TYPED( ComboBoxHighlightHdl, ComboBox&, void );
-    DECL_LINK( EditModifyHdl, Edit * );
+    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
     void            UpdateFields( BreakPoint* pBrk );
     BreakPoint*     GetSelectedBreakPoint();

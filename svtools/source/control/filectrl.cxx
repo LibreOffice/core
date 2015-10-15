@@ -196,7 +196,7 @@ void FileControl::GetFocus()
     maEdit->GrabFocus();
 }
 
-void FileControl::SetEditModifyHdl( const Link<>& rLink )
+void FileControl::SetEditModifyHdl( const Link<Edit&,void>& rLink )
 {
     if (!maEdit || maEdit->IsDisposed())
         return;
@@ -244,7 +244,7 @@ void FileControl::ImplBrowseFile( )
                 if ( aObj.GetProtocol() == INetProtocol::File )
                     aNewText = aObj.PathToFileName();
                 SetText( aNewText );
-                maEdit->GetModifyHdl().Call( maEdit.get() );
+                maEdit->GetModifyHdl().Call( *maEdit.get() );
             }
         }
     }

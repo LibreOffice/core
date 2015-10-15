@@ -119,7 +119,7 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
 
 class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
-    DECL_LINK( ModifyHdl, Edit*);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
 public:
     SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName);
 
@@ -132,7 +132,7 @@ public:
 class SwSendQueryBox_Impl : public SwMessageAndEditDialog
 {
     bool            bIsEmptyAllowed;
-    DECL_LINK( ModifyHdl, Edit*);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
 public:
     SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
@@ -140,7 +140,7 @@ public:
     void SetValue(const OUString& rSet)
     {
         m_pEdit->SetText(rSet);
-        ModifyHdl(m_pEdit);
+        ModifyHdl(*m_pEdit);
     }
 
     OUString GetValue() const
@@ -151,7 +151,7 @@ public:
     void SetIsEmptyTextAllowed(bool bSet)
     {
         bIsEmptyAllowed = bSet;
-        ModifyHdl(m_pEdit);
+        ModifyHdl(*m_pEdit);
     }
 };
 
@@ -166,13 +166,12 @@ SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(vcl::Window* pParent, const OUStrin
     m_pPrimaryMessage->SetText(m_pPrimaryMessage->GetText().replaceAll("%1", aTmp.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)));
 
-    ModifyHdl(m_pEdit);
+    ModifyHdl(*m_pEdit);
 }
 
-IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
+IMPL_LINK_TYPED( SwSaveWarningBox_Impl, ModifyHdl, Edit&, rEdit, void)
 {
-    m_pOKPB->Enable(!pEdit->GetText().isEmpty());
-    return 0;
+    m_pOKPB->Enable(!rEdit.GetText().isEmpty());
 }
 
 SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
@@ -182,13 +181,12 @@ SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& r
 {
     m_pImageIM->SetImage(QueryBox::GetStandardImage());
     m_pEdit->SetModifyHdl(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
-    ModifyHdl(m_pEdit);
+    ModifyHdl(*m_pEdit);
 }
 
-IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
+IMPL_LINK_TYPED( SwSendQueryBox_Impl, ModifyHdl, Edit&, rEdit, void)
 {
-    m_pOKPB->Enable(bIsEmptyAllowed  || !pEdit->GetText().isEmpty());
-    return 0;
+    m_pOKPB->Enable(bIsEmptyAllowed  || !rEdit.GetText().isEmpty());
 }
 
 class SwCopyToDialog : public SfxModalDialog

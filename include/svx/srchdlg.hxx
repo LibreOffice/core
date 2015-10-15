@@ -230,7 +230,7 @@ private:
 
     mutable sal_Int32           nTransliterationFlags;
 
-    DECL_LINK( ModifyHdl_Impl, ComboBox* );
+    DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( FlagHdl_Impl, Button*, void );
     DECL_LINK_TYPED( CommandHdl_Impl, Button*, void );
     DECL_LINK_TYPED(TemplateHdl_Impl, Button*, void);

@@ -433,13 +433,15 @@ public:
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
 
 private:
+    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
     VclPtr<DropdownMenuBox> mpControl;
     PopupMenu* mpMenu;
     VclPtr<MetricField> mpMetric;
+    Link<> maModifyHdl;
 };
 
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl )
-: PropertySubControl( nControlType )
+: PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
@@ -449,7 +451,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
-    mpControl->SetModifyHdl( rModifyHdl );
+    mpControl->SetModifyHdl( LINK( this, CharHeightPropertyBox, EditModifyHdl ) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
 
     OUString aPresetId;
@@ -459,6 +461,11 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
 CharHeightPropertyBox::~CharHeightPropertyBox()
 {
     mpControl.disposeAndClear();
+}
+
+IMPL_LINK_TYPED( CharHeightPropertyBox, EditModifyHdl, Edit&, rEdit, void )
+{
+    maModifyHdl.Call(&rEdit);
 }
 
 IMPL_LINK_TYPED( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
@@ -507,7 +514,7 @@ public:
     virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK(implModifyHdl, void *);
+    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -539,7 +546,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
-    Link<> aLink( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
+    Link<Edit&,void> aLink( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
@@ -558,12 +565,10 @@ void TransparencyPropertyBox::updateMenu()
         mpMenu->CheckItem( i, nValue == i );
 }
 
-IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
+IMPL_LINK_NOARG_TYPED(TransparencyPropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric.get());
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
@@ -609,7 +614,7 @@ public:
     virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK(implModifyHdl, void *);
+    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -635,7 +640,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
-    Link<> aLink( LINK( this, RotationPropertyBox, implModifyHdl ) );
+    Link<Edit&,void> aLink( LINK( this, RotationPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
@@ -662,12 +667,10 @@ void RotationPropertyBox::updateMenu()
     mpMenu->CheckItem( CM_COUNTERCLOCKWISE, !bDirection );
 }
 
-IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
+IMPL_LINK_NOARG_TYPED(RotationPropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric.get());
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
@@ -732,7 +735,7 @@ public:
     virtual Control* getControl() override;
 
     DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK(implModifyHdl, void *);
+    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -758,7 +761,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
-    Link<> aLink( LINK( this, ScalePropertyBox, implModifyHdl ) );
+    Link<Edit&,void> aLink( LINK( this, ScalePropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
@@ -784,12 +787,10 @@ void ScalePropertyBox::updateMenu()
     mpMenu->CheckItem( CM_BOTH, mnDirection == 3 );
 }
 
-IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScalePropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric.get());
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )

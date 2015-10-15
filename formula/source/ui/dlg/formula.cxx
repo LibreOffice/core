@@ -125,7 +125,7 @@ public:
     DECL_LINK_TYPED( FxHdl, ParaWin&, void );
 
     DECL_LINK_TYPED( MatrixHdl, Button*, void );
-    DECL_LINK(FormulaHdl, void *);
+    DECL_LINK_TYPED( FormulaHdl, Edit&, void);
     DECL_LINK_TYPED( FormulaCursorHdl, EditBox&, void );
     DECL_LINK_TYPED( BtnHdl, Button*, void );
     DECL_LINK_TYPED( DblClkHdl, FuncPage&, void );
@@ -1092,7 +1092,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
     aSel.Max()=aSel.Max()-1;
     pMEdit->SetSelection(aSel);
 
-    FormulaHdl(pMEdit);
+    FormulaHdl(*pMEdit);
 
     aSel.Min()=aSel.Max();
     pMEdit->SetSelection(aSel);
@@ -1285,11 +1285,11 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
     }
 }
 
-IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaHdl, Edit&, void)
 {
 
     FormEditData* pData = m_pHelper->getFormEditData();
-    if (!pData) return 0;
+    if (!pData) return;
 
     bEditFlag=true;
     OUString    aInputFormula=m_pHelper->getCurrentFormula();
@@ -1347,7 +1347,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
 
     m_pHelper->setSelection(aSel.Min(), aSel.Max());
     bEditFlag=false;
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
@@ -1669,7 +1668,7 @@ void FormulaDlg_Impl::SetEdSelection()
         Selection theSel = m_pEdRef->GetSelection();
         //  Edit may have the focus -> call ModifyHdl in addition
         //  to what's happening in GetFocus
-        pEd->GetModifyHdl().Call(pEd);
+        pEd->GetModifyHdl().Call(*pEd);
         pEd->GrabFocus();
         pEd->SetSelection(theSel);
     } // if( pEd )

@@ -373,15 +373,13 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
+    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnValueModified, Edit&, void)
     {
         // mark the currently selected entry as dirty
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = true;
-
-        return 0L;
     }
 
 }   // namespace dbaui

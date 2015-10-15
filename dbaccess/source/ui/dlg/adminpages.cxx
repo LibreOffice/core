@@ -115,6 +115,10 @@ namespace dbaui
     {
         callModifiedHdl(&rCtrl);
     }
+    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
+    {
+        callModifiedHdl(&rCtrl);
+    }
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
     {
         // collect all ODBC data source names

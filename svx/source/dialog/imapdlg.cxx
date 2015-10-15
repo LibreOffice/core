@@ -685,9 +685,9 @@ IMPL_LINK_TYPED( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 
 IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyComboBoxHdl, ComboBox&, void)
 {
-    URLModifyHdl(nullptr);
+    URLModifyHdl(*m_pURLBox);
 }
-IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
+IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyHdl, Edit&, void)
 {
     NotifyInfo  aNewInfo;
 
@@ -696,8 +696,6 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
     aNewInfo.aMarkTarget = m_pCbbTarget->GetText();
 
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLLoseFocusHdl, Control&, void)

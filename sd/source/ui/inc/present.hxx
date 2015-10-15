@@ -71,7 +71,7 @@ private:
 
                         DECL_LINK_TYPED( ChangeRangeHdl, Button*, void );
                         DECL_LINK_TYPED( ClickWindowPresentationHdl, Button*, void );
-                        DECL_LINK( ChangePauseHdl, void * );
+                        DECL_LINK_TYPED( ChangePauseHdl, Edit&, void );
 
     void                InitMonitorSettings();
     enum DisplayType {

@@ -129,7 +129,7 @@ void GenericEditImplementation< EDIT >::ClearModified()
 
 
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<>& _rLink )
+void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<Edit&,void>& _rLink )
 {
     m_rEdit.SetModifyHdl( _rLink );
 }

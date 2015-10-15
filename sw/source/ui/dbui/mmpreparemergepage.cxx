@@ -55,7 +55,7 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     m_pPrevPB->SetClickHdl( aMoveLink );
     m_pNextPB->SetClickHdl( aMoveLink );
     m_pLastPB->SetClickHdl( aMoveLink );
-    m_pRecordED->SetModifyHdl( LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl) );
+    m_pRecordED->SetModifyHdl( LINK( this, SwMailMergePrepareMergePage, MoveEditHdl_Impl) );
     m_pExcludeCB->SetClickHdl(LINK(this, SwMailMergePrepareMergePage, ExcludeHdl_Impl));
     MoveHdl_Impl(m_pRecordED);
 }
@@ -88,7 +88,11 @@ IMPL_LINK_TYPED( SwMailMergePrepareMergePage, MoveClickHdl_Impl, Button*, pCtrl,
 {
     MoveHdl_Impl(pCtrl);
 }
-IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
+IMPL_LINK_TYPED( SwMailMergePrepareMergePage, MoveEditHdl_Impl, Edit&, rEdit, void)
+{
+    MoveHdl_Impl(&rEdit);
+}
+void SwMailMergePrepareMergePage:: MoveHdl_Impl(Control* pCtrl)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     sal_Int32 nPos = rConfigItem.GetResultSetPosition();
@@ -135,7 +139,6 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
     rSh.GetDBManager()->MergeNew(aMergeDesc);
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwMailMergePrepareMergePage, ExcludeHdl_Impl, Button*, pBox, void)

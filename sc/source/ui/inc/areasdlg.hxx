@@ -74,7 +74,7 @@ private:
 
     // Handler:
     DECL_LINK_TYPED( Impl_SelectHdl, ListBox&, void );
-    DECL_LINK( Impl_ModifyHdl,       formula::RefEdit*  );
+    DECL_LINK_TYPED( Impl_ModifyHdl, Edit&, void  );
     DECL_LINK_TYPED( Impl_BtnHdl,    Button*, void );
     DECL_LINK_TYPED( Impl_GetFocusHdl, Control&, void );
 };

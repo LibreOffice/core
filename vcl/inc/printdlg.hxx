@@ -244,12 +244,12 @@ namespace vcl
         DECL_LINK_TYPED( ClickHdl, Button*, void );
         DECL_LINK_TYPED( ToggleHdl, CheckBox&, void );
         DECL_LINK_TYPED( ToggleRadioHdl, RadioButton&, void );
-        DECL_LINK( ModifyHdl, Edit* );
+        DECL_LINK_TYPED( ModifyHdl, Edit&, void );
 
         DECL_LINK_TYPED( UIOption_CheckHdl, CheckBox&, void );
         DECL_LINK_TYPED( UIOption_RadioHdl, RadioButton&, void );
         DECL_LINK_TYPED( UIOption_SelectHdl, ListBox&, void );
-        DECL_LINK( UIOption_ModifyHdl, Edit* );
+        DECL_LINK_TYPED( UIOption_ModifyHdl, Edit&, void );
 
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );

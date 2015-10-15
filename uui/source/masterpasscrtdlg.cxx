@@ -27,10 +27,9 @@
 
 
 
-IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
+IMPL_LINK_NOARG_TYPED(MasterPasswordCreateDialog, EditHdl_Impl, Edit&, void)
 {
     m_pOKBtn->Enable( m_pEDMasterPasswordCrt->GetText().getLength() >= nMinLen );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(MasterPasswordCreateDialog, OKHdl_Impl, Button*, void)

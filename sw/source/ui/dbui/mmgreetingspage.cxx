@@ -139,10 +139,9 @@ IMPL_LINK_TYPED(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void
     }
 }
 
-IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, Edit&, void)
 {
     UpdatePreview();
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED(SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl, ListBox&, void)
 {
@@ -267,7 +266,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, AssignHdl_Impl));
-    Link<> aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
+    Link<Edit&,void> aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
     Link<ListBox&,void> aLBoxLink2 = LINK(this, SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl);
     m_pFemaleLB->SetSelectHdl(aLBoxLink2);
     m_pMaleLB->SetSelectHdl(aLBoxLink2);

@@ -33,14 +33,15 @@
 
 const OUString BookmarkCombo::aForbiddenChars("/\\@*?\";,#");
 
-IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
+IMPL_LINK_TYPED( SwInsertBookmarkDlg, ModifyHdl, Edit&, rEdit, void )
 {
-    bool bSelEntries = pBox->GetSelectEntryCount() != 0;
+    BookmarkCombo& rBox = static_cast<BookmarkCombo&>(rEdit);
+    bool bSelEntries = rBox.GetSelectEntryCount() != 0;
     // if a string has been pasted from the clipboard then
     // there may be illegal characters in the box
     if(!bSelEntries)
     {
-        OUString sTmp = pBox->GetText();
+        OUString sTmp = rBox.GetText();
         const sal_Int32 nLen = sTmp.getLength();
         OUString sMsg;
         for(sal_Int32 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
@@ -52,7 +53,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
         }
         if(sTmp.getLength() != nLen)
         {
-            pBox->SetText(sTmp);
+            rBox.SetText(sTmp);
             ScopedVclPtr<InfoBox>::Create(this, sRemoveWarning+sMsg)->Execute();
         }
 
@@ -60,8 +61,6 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 
     m_pOkBtn->Enable(!bSelEntries);    // new text mark
     m_pDeleteBtn->Enable(bSelEntries); // deletable?
-
-    return 0;
 }
 
 // callback to delete a text mark

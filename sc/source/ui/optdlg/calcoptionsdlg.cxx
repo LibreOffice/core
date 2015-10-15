@@ -238,10 +238,9 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
     maConfig.mbOpenCLSubsetOnly = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, NumericField*, pSpin)
+IMPL_LINK_TYPED(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, Edit&, rEdit, void)
 {
-    maConfig.mnOpenCLMinimumFormulaGroupSize = pSpin->GetValue();
-    return 0;
+    maConfig.mnOpenCLMinimumFormulaGroupSize = static_cast<NumericField&>(rEdit).GetValue();
 }
 
 IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, BtnAutomaticSelectHdl, RadioButton&, void)
@@ -254,10 +253,9 @@ IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, DeviceSelHdl, SvTreeListBox*, void)
     SelectedDeviceChanged();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Edit*, pCtrl)
+IMPL_LINK_TYPED(ScCalcOptionsDialog, EditModifiedHdl, Edit&, rCtrl, void)
 {
-    maConfig.mpOpenCLSubsetOpCodes = ScStringToOpCodeSet(pCtrl->GetText());
-    return 0;
+    maConfig.mpOpenCLSubsetOpCodes = ScStringToOpCodeSet(rCtrl.GetText());
 }
 
 namespace {

@@ -87,7 +87,7 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     SetFieldUnit( *m_pTopMF , eMetric );
     SetFieldUnit( *m_pBottomMF, eMetric );
 
-    Link<> aLk = LINK(this, SvxGrfCropPage, SizeHdl);
+    Link<Edit&,void> aLk = LINK(this, SvxGrfCropPage, SizeHdl);
     m_pWidthMF->SetModifyHdl( aLk );
     m_pHeightMF->SetModifyHdl( aLk );
 
@@ -414,19 +414,19 @@ SfxTabPage::sfxpg SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
     description: scale changed, adjust size
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SvxGrfCropPage, ZoomHdl, MetricField *, pField )
+IMPL_LINK_TYPED( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    if( pField == m_pWidthZoomMF )
+    if( &rField == m_pWidthZoomMF )
     {
         long nLRBorders = lcl_GetValue(*m_pLeftMF, eUnit)
                          +lcl_GetValue(*m_pRightMF, eUnit);
         m_pWidthMF->SetValue( m_pWidthMF->Normalize(
-            ((aOrigSize.Width() - nLRBorders) * pField->GetValue())/100L),
+            ((aOrigSize.Width() - nLRBorders) * static_cast<MetricField&>(rField).GetValue())/100L),
             eUnit);
     }
     else
@@ -434,18 +434,16 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, MetricField *, pField )
         long nULBorders = lcl_GetValue(*m_pTopMF, eUnit)
                          +lcl_GetValue(*m_pBottomMF, eUnit);
         m_pHeightMF->SetValue( m_pHeightMF->Normalize(
-            ((aOrigSize.Height() - nULBorders ) * pField->GetValue())/100L) ,
+            ((aOrigSize.Height() - nULBorders ) * static_cast<MetricField&>(rField).GetValue())/100L) ,
             eUnit );
     }
-
-    return 0;
 }
 
 /*--------------------------------------------------------------------
     description: change size, adjust scale
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
+IMPL_LINK_TYPED( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -455,7 +453,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
     Size aSize( lcl_GetValue(*m_pWidthMF, eUnit),
                 lcl_GetValue(*m_pHeightMF, eUnit) );
 
-    if(pField == m_pWidthMF)
+    if(&rField == m_pWidthMF)
     {
         long nWidth = aOrigSize.Width() -
                 ( lcl_GetValue(*m_pLeftMF, eUnit) +
@@ -475,8 +473,6 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
         sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100L/ nHeight);
         m_pHeightZoomMF->SetValue(nZoom);
     }
-
-    return 0;
 }
 
 /*--------------------------------------------------------------------
@@ -525,7 +521,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
         if(bZoom)
         {
             // scale stays, recompute width
-            ZoomHdl(m_pWidthZoomMF);
+            ZoomHdl(*m_pWidthZoomMF);
         }
     }
     else
@@ -554,7 +550,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
         if(bZoom)
         {
             // scale stays, recompute height
-            ZoomHdl(m_pHeightZoomMF);
+            ZoomHdl(*m_pHeightZoomMF);
         }
     }
     m_pExampleWN->Invalidate();
@@ -747,11 +743,10 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
 }
 
 
-IMPL_LINK( SvxGrfCropPage, CropModifyHdl, MetricField *, pField )
+IMPL_LINK_TYPED( SvxGrfCropPage, CropModifyHdl, Edit&, rField, void )
 {
     aTimer.Start();
-    pLastCropField = pField;
-    return 0;
+    pLastCropField = static_cast<MetricField*>(&rField);
 }
 
 Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const

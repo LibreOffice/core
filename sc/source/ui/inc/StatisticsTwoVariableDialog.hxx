@@ -86,7 +86,7 @@ private:
     DECL_LINK_TYPED( OkClicked, Button*, void );
     DECL_LINK_TYPED( GetFocusHandler, Control&, void );
     DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
-    DECL_LINK( RefInputModifyHandler, void* );
+    DECL_LINK_TYPED( RefInputModifyHandler, Edit&, void );
 };
 
 #endif

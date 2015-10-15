@@ -66,7 +66,7 @@ private:
 
     DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
-    DECL_LINK( NameModifyHdl, void* );
+    DECL_LINK_TYPED( NameModifyHdl, Edit&, void );
     DECL_LINK_TYPED( AssignGetFocusHdl, Control&, void );
 
 protected:

@@ -1847,7 +1847,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer *, 
     m_pPreviewWIN->Invalidate();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
 {
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1857,14 +1857,13 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
-                aNumFmt.SetIncludeUpperLevels((sal_uInt8) std::min(pBox->GetValue(), sal_Int64(e + 1)) );
+                aNumFmt.SetIncludeUpperLevels((sal_uInt8) std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1)) );
                 pActNum->SetLevel(e, aNumFmt);
             }
             nMask <<= 1;
         }
     }
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void )
@@ -1956,7 +1955,7 @@ void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
                         SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
     m_pStartED->SetMin(bNoZeroAllowed ? 1 : 0);
     if(bIsNull && bNoZeroAllowed)
-        m_pStartED->GetModifyHdl().Call(m_pStartED);
+        m_pStartED->GetModifyHdl().Call(*m_pStartED);
 }
 
 IMPL_LINK_TYPED( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox&, rBox, void )
@@ -2021,9 +2020,9 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, BulColorHdl_Impl, ListBox&, rListBox, voi
     SetModified();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, Edit&, rField, void)
 {
-    sal_uInt16 nRelSize = (sal_uInt16)pField->GetValue();
+    sal_uInt16 nRelSize = (sal_uInt16)static_cast<MetricField&>(rField).GetValue();
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2037,7 +2036,6 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
@@ -2232,9 +2230,9 @@ IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
 {
-    bool bWidth = pField == m_pWidthMF;
+    bool bWidth = &rField == m_pWidthMF;
     bLastWidthModified = bWidth;
     bool bRatio = m_pRatioCB->IsChecked();
     long nWidthVal = static_cast<long>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_100TH_MM)));
@@ -2297,7 +2295,6 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
         nMask <<= 1;
     }
     SetModified(bRepaint);
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxNumOptionsTabPage, RatioHdl_Impl, Button*, pBox, void )
@@ -2305,9 +2302,9 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, RatioHdl_Impl, Button*, pBox, void )
     if (static_cast<CheckBox*>(pBox)->IsChecked())
     {
         if (bLastWidthModified)
-            SizeHdl_Impl(m_pWidthMF);
+            SizeHdl_Impl(*m_pWidthMF);
         else
-            SizeHdl_Impl(m_pHeightMF);
+            SizeHdl_Impl(*m_pHeightMF);
     }
 }
 
@@ -2340,7 +2337,11 @@ IMPL_LINK_NOARG_TYPED( SvxNumOptionsTabPage, EditListBoxHdl_Impl, ListBox&, void
 {
     EditModifyHdl_Impl(nullptr);
 }
-IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
+{
+    EditModifyHdl_Impl(&rEdit);
+}
+void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
 {
     bool bPrefix = pEdit == m_pPrefixED;
     bool bSuffix = pEdit == m_pSuffixED;
@@ -2372,8 +2373,6 @@ IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
         nMask <<= 1;
     }
     SetModified();
-
-    return 0;
 }
 
 static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, sal_uInt16 nXStart,

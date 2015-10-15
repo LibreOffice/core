@@ -954,9 +954,9 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 }
 
 
-IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
+IMPL_LINK_TYPED(SpellDialog, ModifyHdl, Edit&, rEd, void)
 {
-    if (m_pSentenceED == pEd)
+    if (m_pSentenceED == &rEd)
     {
         bModified = true;
         m_pSuggestionLB->SetNoSelection();
@@ -976,7 +976,6 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
         }
         m_pSentenceED->AddUndoAction(pSpellAction);
     }
-    return 0;
 };
 
 

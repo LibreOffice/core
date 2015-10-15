@@ -102,7 +102,7 @@ namespace dbp
 
         DECL_LINK_TYPED( OnMoveEntry, Button*, void );
         DECL_LINK_TYPED( OnEntrySelected, ListBox&, void );
-        DECL_LINK( OnNameModified, Edit* );
+        DECL_LINK_TYPED( OnNameModified, Edit&, void );
 
         void implCheckMoveButtons();
     };

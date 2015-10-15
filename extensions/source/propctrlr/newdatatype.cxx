@@ -64,7 +64,7 @@ namespace pcr
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 
         m_pName->SetText( sInitialName );
-        OnNameModified( NULL );
+        OnNameModified( *m_pName );
     }
 
     NewDataTypeDialog::~NewDataTypeDialog()
@@ -79,15 +79,13 @@ namespace pcr
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG( NewDataTypeDialog, OnNameModified )
+    IMPL_LINK_NOARG_TYPED( NewDataTypeDialog, OnNameModified, Edit&, void )
     {
         OUString sCurrentName = GetName();
         bool bNameIsOK = ( !sCurrentName.isEmpty() )
                       && ( m_aProhibitedNames.find( sCurrentName ) == m_aProhibitedNames.end() );
 
         m_pOK->Enable( bNameIsOK );
-
-        return 0L;
     }
 
 

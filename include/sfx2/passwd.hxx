@@ -76,8 +76,9 @@ private:
     SfxShowExtras  mnExtras;
 
     bool            mbAsciiOnly;
-    DECL_DLLPRIVATE_LINK(EditModifyHdl, Edit*);
+    DECL_DLLPRIVATE_LINK_TYPED(EditModifyHdl, Edit&, void);
     DECL_DLLPRIVATE_LINK_TYPED(OKHdl, Button *, void);
+    void            ModifyHdl(Edit*);
 
     void            SetPasswdText();
 

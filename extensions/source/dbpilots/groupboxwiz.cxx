@@ -291,10 +291,9 @@ namespace dbp
     }
 
 
-    IMPL_LINK( ORadioSelectionPage, OnNameModified, Edit*, /*_pList*/ )
+    IMPL_LINK_NOARG_TYPED( ORadioSelectionPage, OnNameModified, Edit&, void )
     {
         implCheckMoveButtons();
-        return 0L;
     }
 
 

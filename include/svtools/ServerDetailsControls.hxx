@@ -61,7 +61,7 @@ class DetailsContainer
 
     protected:
         void notifyChange( );
-        DECL_LINK ( ValueChangeHdl, void * );
+        DECL_LINK_TYPED ( ValueChangeHdl, Edit&, void );
 };
 
 class HostDetailsContainer : public DetailsContainer

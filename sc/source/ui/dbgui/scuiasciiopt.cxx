@@ -370,7 +370,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
     pCbTextSep->SetText( sTextSeparators );
 
-    Link<> aSeparatorHdl = LINK( this, ScImportAsciiDlg, SeparatorHdl );
+    Link<Edit&,void> aSeparatorHdl = LINK( this, ScImportAsciiDlg, SeparatorEditHdl );
     Link<Button*,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     pCbTextSep->SetSelectHdl( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
     pCbTextSep->SetModifyHdl( aSeparatorHdl );
@@ -684,7 +684,11 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorComboBoxHdl, ComboBox&, rCtrl, void 
 {
     SeparatorHdl(&rCtrl);
 }
-IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorEditHdl, Edit&, rEdit, void )
+{
+    SeparatorHdl(&rEdit);
+}
+void ScImportAsciiDlg::SeparatorHdl( Control* pCtrl )
 {
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     OSL_ENSURE( !pRbFixed->IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
@@ -706,7 +710,6 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
         UpdateVertical();
 
     mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
@@ -726,11 +729,10 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
     }
 }
 
-IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
+IMPL_LINK_TYPED( ScImportAsciiDlg, FirstRowHdl, Edit&, rEdit, void )
 {
-    OSL_ENSURE( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
-    mpTableBox->Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
-    return 0;
+    NumericField& rNumField = static_cast<NumericField&>(rEdit);
+    mpTableBox->Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( rNumField.GetValue() - 1 ) );
 }
 
 IMPL_LINK_TYPED( ScImportAsciiDlg, LbColTypeHdl, ListBox&, rListBox, void )

@@ -224,15 +224,15 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
                 maEdVal1->Show();
                 maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
                 maEdVal2->Hide();
-                OnEdChanged(maEdVal1);
+                OnEdChanged(*maEdVal1);
                 break;
             case 2:
                 maEdVal1->Show();
                 maEdVal1->SetText(pFormatEntry->GetExpression(maPos, 0));
-                OnEdChanged(maEdVal1);
+                OnEdChanged(*maEdVal1);
                 maEdVal2->Show();
                 maEdVal2->SetText(pFormatEntry->GetExpression(maPos, 1));
-                OnEdChanged(maEdVal2);
+                OnEdChanged(*maEdVal2);
                 break;
         }
     }
@@ -296,14 +296,14 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     return pEntry;
 }
 
-IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
+IMPL_LINK_TYPED(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
 {
-    OUString aFormula = pEdit->GetText();
+    OUString aFormula = rEdit.GetText();
 
     if( aFormula.isEmpty() )
     {
         maFtVal->SetText(ScGlobal::GetRscString(STR_ENTER_VALUE));
-        return 0;
+        return;
     }
 
     ScCompiler aComp( mpDoc, maPos );
@@ -313,9 +313,9 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     // Error, warn the user
     if( ta->GetCodeError() || ( ta->GetLen() == 0 ) )
     {
-        pEdit->SetControlBackground(COL_LIGHTRED);
+        rEdit.SetControlBackground(COL_LIGHTRED);
         maFtVal->SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
-        return 0;
+        return;
     }
 
     // Recognized col/row name or string token, warn the user
@@ -326,14 +326,13 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
         ( ( op == ocBad ) && ( t == formula::svString ) )
       )
     {
-        pEdit->SetControlBackground(COL_YELLOW);
+        rEdit.SetControlBackground(COL_YELLOW);
         maFtVal->SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
-        return 0;
+        return;
     }
 
-    pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+    rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     maFtVal->SetText("");
-    return 0;
 }
 
 void ScConditionFrmtEntry::Select()

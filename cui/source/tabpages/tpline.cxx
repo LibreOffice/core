@@ -1424,7 +1424,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         sal_uInt16 nTransp = static_cast<const XLineTransparenceItem&>( rAttrs->Get( XATTR_LINETRANSPARENCE ) ).GetValue();
         m_pMtrTransparent->SetValue( nTransp );
-        ChangeTransparentHdl_Impl( NULL );
+        ChangeTransparentHdl_Impl( *m_pMtrTransparent );
     }
     else
         m_pMtrTransparent->SetText( "" );
@@ -1526,10 +1526,9 @@ IMPL_LINK_TYPED( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ListBox&, rListBo
 {
     ChangePreviewHdl_Impl(&rListBox);
 }
-IMPL_LINK( SvxLineTabPage, ChangePreviewModifyHdl_Impl, void *, pCntrl )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangePreviewModifyHdl_Impl, Edit&, rEdit, void )
 {
-    ChangePreviewHdl_Impl(pCntrl);
-    return 0;
+    ChangePreviewHdl_Impl(&rEdit);
 }
 void SvxLineTabPage::ChangePreviewHdl_Impl(void * pCntrl )
 {
@@ -1600,10 +1599,9 @@ IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartListBoxHdl_Impl, ListBox&, rListBox,
 {
     ChangeStartHdl_Impl(&rListBox);
 }
-IMPL_LINK( SvxLineTabPage, ChangeStartModifyHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartModifyHdl_Impl, Edit&, rEdit, void )
 {
-    ChangeStartHdl_Impl(p);
-    return 0;
+    ChangeStartHdl_Impl(&rEdit);
 }
 void SvxLineTabPage::ChangeStartHdl_Impl( void * p )
 {
@@ -1678,10 +1676,9 @@ IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndListBoxHdl_Impl, ListBox&, rListBox, v
 {
     ChangeEndHdl_Impl(&rListBox);
 }
-IMPL_LINK( SvxLineTabPage, ChangeEndModifyHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndModifyHdl_Impl, Edit&, rEdit, void )
 {
-    ChangeEndHdl_Impl(p);
-    return 0;
+    ChangeEndHdl_Impl(&rEdit);
 }
 void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 {
@@ -1700,7 +1697,7 @@ void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 
 
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );
@@ -1710,8 +1707,6 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
     FillXLSet_Impl();
 
     m_pCtlPreview->Invalidate();
-
-    return 0L;
 }
 
 
@@ -1747,10 +1742,10 @@ IMPL_LINK_TYPED( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
     SymbolSelected(pButton);
 }
 
-IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
+IMPL_LINK_TYPED( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
 {
     m_bNewSize = true;
-    bool bWidth = pField == m_pSymbolWidthMF;
+    bool bWidth = &rField == m_pSymbolWidthMF;
     m_bLastWidthModified = bWidth;
     bool bRatio = m_pSymbolRatioCB->IsChecked();
     long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FUNIT_100TH_MM)));
@@ -1792,16 +1787,15 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
     }
     m_pCtlPreview->ResizeSymbol(m_aSymbolSize);
     m_aSymbolLastSize=m_aSymbolSize;
-    return 0;
 }
 IMPL_LINK_TYPED( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
 {
     if (static_cast<CheckBox*>(pBox)->IsChecked())
     {
         if (m_bLastWidthModified)
-            SizeHdl_Impl(m_pSymbolWidthMF);
+            SizeHdl_Impl(*m_pSymbolWidthMF);
         else
-            SizeHdl_Impl(m_pSymbolHeightMF);
+            SizeHdl_Impl(*m_pSymbolHeightMF);
     }
 }
 

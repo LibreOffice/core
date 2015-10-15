@@ -80,7 +80,7 @@ private:
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
 
-    DECL_LINK(SearchUpdateHdl, void*);
+    DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
 
     void OnTemplateImport ();
     void OnTemplateSearch ();

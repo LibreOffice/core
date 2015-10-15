@@ -155,7 +155,7 @@ private:
 
     DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
     DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
-    DECL_LINK(ModifyHdl, void * = 0);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED( OrderHdl, ListBox&, void );
     DECL_LINK_TYPED(ShowEntryHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(SaveEntryHdl, SvTreeListBox*, void);

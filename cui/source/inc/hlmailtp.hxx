@@ -37,7 +37,7 @@ private:
 
     DECL_STATIC_LINK_TYPED(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void);
         ///< Button : Address book
-    DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
+    DECL_LINK_TYPED (ModifiedReceiverHdl_Impl, Edit&, void ); ///< Combobox "receiver" modified
 
     void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const OUString& aProperScheme);

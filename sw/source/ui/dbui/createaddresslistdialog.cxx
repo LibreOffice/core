@@ -61,7 +61,7 @@ class SwAddressControl_Impl : public Control
 
     DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
     DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
-    DECL_LINK(EditModifyHdl_Impl, Edit*);
+    DECL_LINK_TYPED(EditModifyHdl_Impl, Edit&, void);
 
     void                MakeVisible(const Rectangle& aRect);
 
@@ -174,7 +174,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     long nFTYPos = nEDYPos + nEDHeight - nFTHeight;
 
     Link<Control&,void> aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
-    Link<> aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
+    Link<Edit&,void> aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
     Edit* pLastEdit = 0;
     sal_Int32 nVisibleLines = 0;
     sal_uIntPtr nLines = 0;
@@ -299,17 +299,16 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 }
 
 // copy data changes into database
-IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit*, pEdit)
+IMPL_LINK_TYPED(SwAddressControl_Impl, EditModifyHdl_Impl, Edit&, rEdit, void)
 {
     //get the data element number of the current set
-    sal_Int32 nIndex = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEdit->GetData());
+    sal_Int32 nIndex = (sal_Int32)reinterpret_cast<sal_IntPtr>(rEdit.GetData());
     //get the index of the set
     OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)
     {
-        m_pData->aDBData[m_nCurrentDataSet][nIndex] = pEdit->GetText();
+        m_pData->aDBData[m_nCurrentDataSet][nIndex] = rEdit.GetText();
     }
-    return 0;
 }
 
 void SwAddressControl_Impl::SetCursorTo(sal_uInt32 nElement)
@@ -681,15 +680,14 @@ IMPL_LINK_TYPED(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, v
     if(nValue != m_pSetNoNF->GetValue())
     {
         m_pSetNoNF->SetValue(nValue);
-        DBNumCursorHdl_Impl(m_pSetNoNF);
+        DBNumCursorHdl_Impl(*m_pSetNoNF);
     }
 }
 
-IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, DBNumCursorHdl_Impl, Edit&, void)
 {
     m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_pSetNoNF->GetValue() - 1) );
     UpdateButtons();
-    return 0;
 }
 
 void SwCreateAddressListDialog::UpdateButtons()
@@ -788,10 +786,9 @@ IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindHdl_Impl, Button*, void)
         m_pParent->Find(m_pFindED->GetText(), nColumn);
 }
 
-IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindEnableHdl_Impl, Edit&, void)
 {
     m_pFindPB->Enable(!m_pFindED->GetText().isEmpty());
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, CloseHdl_Impl, Button*, void)

@@ -64,7 +64,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     mpBtnCustomCalcCustom->SetClickHdl(aLink2);
     mpBtnCustomCalcDetails->SetClickHdl(aLink2);
 
-    Link<> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
+    Link<Edit&,void> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
     mpEdSepFuncArg->SetModifyHdl(aLink);
     mpEdSepArrayCol->SetModifyHdl(aLink);
     mpEdSepArrayRow->SetModifyHdl(aLink);
@@ -207,26 +207,22 @@ IMPL_LINK_TYPED( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
         LaunchCustomCalcSettings();
 }
 
-IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( ScTpFormulaOptions, SepModifyHdl, Edit&, rEdit, void )
 {
-    if (!pEdit)
-        return 0;
-
-    OUString aStr = pEdit->GetText();
+    OUString aStr = rEdit.GetText();
     if (aStr.getLength() > 1)
     {
         // In case the string is more than one character long, only grab the
         // first character.
         aStr = aStr.copy(0, 1);
-        pEdit->SetText(aStr);
+        rEdit.SetText(aStr);
     }
 
     if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && !maOldSepValue.isEmpty())
         // Invalid separator.  Restore the old value.
-        pEdit->SetText(maOldSepValue);
+        rEdit.SetText(maOldSepValue);
 
-    OnFocusSeparatorInput(pEdit);
-    return 0;
+    OnFocusSeparatorInput(&rEdit);
 }
 
 IMPL_LINK_TYPED( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )

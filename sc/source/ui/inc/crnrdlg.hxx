@@ -82,10 +82,10 @@ private:
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
     DECL_LINK_TYPED( Range1SelectHdl, ListBox&, void );
-    DECL_LINK( Range1DataModifyHdl, void * );
+    DECL_LINK_TYPED( Range1DataModifyHdl, Edit&, void );
     DECL_LINK_TYPED( ColClickHdl, Button*, void );
     DECL_LINK_TYPED( RowClickHdl, Button*, void );
-    DECL_LINK( Range2DataModifyHdl, void * );
+    DECL_LINK_TYPED( Range2DataModifyHdl, Edit&, void );
     DECL_LINK_TYPED( GetFocusHdl, Control&, void );
     DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
 };

@@ -49,7 +49,7 @@ namespace pcr
         OUString GetName() const { return m_pName->GetText(); }
 
     private:
-        DECL_LINK( OnNameModified, void* );
+        DECL_LINK_TYPED( OnNameModified, Edit&, void );
     };
 
 

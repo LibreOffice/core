@@ -1143,7 +1143,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass = new CharClass( aLanguageTag );
-        ModifyHdl(m_pShortED);
+        ModifyHdl(*m_pShortED);
     }
 }
 
@@ -1256,7 +1256,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
         {
             DeleteEntry(SvTabListBox::GetEntryText(pEntry, 0), SvTabListBox::GetEntryText(pEntry, 1));
             m_pReplaceTLB->GetModel()->Remove(pEntry);
-            ModifyHdl(m_pShortED);
+            ModifyHdl(*m_pShortED);
             return false;
         }
     }
@@ -1313,15 +1313,15 @@ bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
         // which means EndDialog() - has to be evaluated in KeyInput
         return false;
     }
-    ModifyHdl(m_pShortED);
+    ModifyHdl(*m_pShortED);
     return true;
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
+IMPL_LINK_TYPED(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
 {
     SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
-    bool bShort = pEdt == m_pShortED;
-    const OUString rEntry = pEdt->GetText();
+    bool bShort = &rEdt == m_pShortED;
+    const OUString rEntry = rEdt.GetText();
     const OUString rRepString = m_pReplaceED->GetText();
     OUString aWordStr( pCharClass->lowercase( rEntry ));
 
@@ -1402,8 +1402,6 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
         }
     }
     m_pNewReplacePB->Enable( bEnableNew );
-
-    return 0;
 }
 
 static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
@@ -1613,8 +1611,8 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
-        ModifyHdl(m_pAbbrevED);
-        ModifyHdl(m_pDoubleCapsED);
+        ModifyHdl(*m_pAbbrevED);
+        ModifyHdl(*m_pDoubleCapsED);
     }
 }
 
@@ -1706,23 +1704,23 @@ bool OfaAutocorrExceptPage::NewDelHdl(void* pBtn)
         && !m_pAbbrevED->GetText().isEmpty())
     {
         m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
-        ModifyHdl(m_pAbbrevED);
+        ModifyHdl(*m_pAbbrevED);
     }
     else if(pBtn == m_pDelAbbrevPB)
     {
         m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
-        ModifyHdl(m_pAbbrevED);
+        ModifyHdl(*m_pAbbrevED);
     }
     else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED.get() )
             && !m_pDoubleCapsED->GetText().isEmpty())
     {
         m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());
-        ModifyHdl(m_pDoubleCapsED);
+        ModifyHdl(*m_pDoubleCapsED);
     }
     else if(pBtn == m_pDelDoublePB)
     {
         m_pDoubleCapsLB->RemoveEntry(m_pDoubleCapsED->GetText());
-        ModifyHdl(m_pDoubleCapsED);
+        ModifyHdl(*m_pDoubleCapsED);
     }
     return false;
 }
@@ -1743,16 +1741,16 @@ IMPL_LINK_TYPED(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
+IMPL_LINK_TYPED(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
 {
 //  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
-    const OUString& sEntry = pEdt->GetText();
+    const OUString& sEntry = rEdt.GetText();
     bool bEntryLen = !sEntry.isEmpty();
-    if(pEdt == m_pAbbrevED)
+    if(&rEdt == m_pAbbrevED)
     {
         bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
         if(bSame && sEntry != m_pAbbrevLB->GetSelectEntry())
-            pEdt->SetText(m_pAbbrevLB->GetSelectEntry());
+            rEdt.SetText(m_pAbbrevLB->GetSelectEntry());
         m_pNewAbbrevPB->Enable(!bSame && bEntryLen);
         m_pDelAbbrevPB->Enable(bSame && bEntryLen);
     }
@@ -1760,11 +1758,10 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     {
         bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
         if(bSame && sEntry != m_pDoubleCapsLB->GetSelectEntry())
-            pEdt->SetText(m_pDoubleCapsLB->GetSelectEntry());
+            rEdt.SetText(m_pDoubleCapsLB->GetSelectEntry());
         m_pNewDoublePB->Enable(!bSame && bEntryLen);
         m_pDelDoublePB->Enable(bSame && bEntryLen);
     }
-    return 0;
 }
 
 VCL_BUILDER_FACTORY(AutoCorrEdit)

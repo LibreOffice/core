@@ -296,7 +296,7 @@ void ChartErrorBarPanel::Initialize()
 
     mpLBType->SetSelectHdl(LINK(this, ChartErrorBarPanel, ListBoxHdl));
 
-    Link<> aLink2 = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
+    Link<Edit&,void> aLink2 = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
     mpMFPos->SetModifyHdl(aLink2);
     mpMFNeg->SetModifyHdl(aLink2);
 }
@@ -420,16 +420,14 @@ IMPL_LINK_NOARG_TYPED(ChartErrorBarPanel, ListBoxHdl, ListBox&, void)
     setTypePos(mxModel, aCID, nPos);
 }
 
-IMPL_LINK(ChartErrorBarPanel, NumericFieldHdl, NumericField*, pMetricField)
+IMPL_LINK_TYPED(ChartErrorBarPanel, NumericFieldHdl, Edit&, rMetricField, void)
 {
     OUString aCID = getCID(mxModel);
-    double nVal = pMetricField->GetValue();
-    if (pMetricField == mpMFPos.get())
+    double nVal = static_cast<NumericField&>(rMetricField).GetValue();
+    if (&rMetricField == mpMFPos.get())
         setValue(mxModel, aCID, nVal, true);
-    else if (pMetricField == mpMFNeg.get())
+    else if (&rMetricField == mpMFNeg.get())
         setValue(mxModel, aCID, nVal, false);
-
-    return 0;
 }
 
 }} // end of namespace ::chart::sidebar

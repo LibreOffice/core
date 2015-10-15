@@ -225,7 +225,7 @@ void ScConsolidateDlg::Init()
     }
 
     FillAreaLists();
-    ModifyHdl( pEdDestArea );
+    ModifyHdl( *pEdDestArea );
     pLbDataArea->SelectEntryPos( 0 );
     pEdDataArea->SetText(OUString());
     pEdDataArea->GrabFocus();
@@ -280,7 +280,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = rRef.aStart.Format(nFmt, pDocP, eConv);
 
         pRefInputEdit->SetRefString( aStr );
-        ModifyHdl( pRefInputEdit );
+        ModifyHdl( *pRefInputEdit );
     }
 }
 
@@ -298,7 +298,7 @@ void ScConsolidateDlg::SetActive()
         if ( pRefInputEdit )
         {
             pRefInputEdit->GrabFocus();
-            ModifyHdl( pRefInputEdit );
+            ModifyHdl( *pRefInputEdit );
         }
     }
     else
@@ -524,11 +524,11 @@ IMPL_LINK_TYPED( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
+IMPL_LINK_TYPED( ScConsolidateDlg, ModifyHdl, Edit&, rEd, void )
 {
-    if ( pEd == pEdDataArea )
+    if ( &rEd == pEdDataArea )
     {
-        OUString aAreaStr( pEd->GetText() );
+        OUString aAreaStr( rEd.GetText() );
         if ( !aAreaStr.isEmpty() )
         {
             pBtnAdd->Enable();
@@ -536,11 +536,10 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
         else
             pBtnAdd->Disable();
     }
-    else if ( pEd == pEdDestArea )
+    else if ( &rEd == pEdDestArea )
     {
         pLbDestArea->SelectEntryPos(0);
     }
-    return 0;
 }
 
 // TODO: generalize!

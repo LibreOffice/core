@@ -1646,28 +1646,27 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( PrintDialog, ModifyHdl, Edit&, rEdit, void )
 {
     checkControlDependencies();
-    if( pEdit == maNUpPage.mpNupRowsEdt || pEdit == maNUpPage.mpNupColEdt ||
-        pEdit == maNUpPage.mpSheetMarginEdt || pEdit == maNUpPage.mpPageMarginEdt
+    if( &rEdit == maNUpPage.mpNupRowsEdt || &rEdit == maNUpPage.mpNupColEdt ||
+        &rEdit == maNUpPage.mpSheetMarginEdt || &rEdit == maNUpPage.mpPageMarginEdt
        )
     {
         updateNupFromPages();
     }
-    else if( pEdit == mpPageEdit )
+    else if( &rEdit == mpPageEdit )
     {
         mnCurPage = sal_Int32( mpPageEdit->GetValue() - 1 );
         preparePreview( true, true );
     }
-    else if( pEdit == maJobPage.mpCopyCountField )
+    else if( &rEdit == maJobPage.mpCopyCountField )
     {
         maPController->setValue( OUString( "CopyCount"  ),
                                makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
         maPController->setValue( OUString( "Collate"  ),
                                makeAny( isCollate() ) );
     }
-    return 0;
 }
 
 PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
@@ -1819,15 +1818,15 @@ IMPL_LINK_TYPED( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
     }
 }
 
-IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
+IMPL_LINK_TYPED( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
 {
-    PropertyValue* pVal = getValueForWindow( i_pBox );
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
     {
-        makeEnabled( i_pBox );
+        makeEnabled( &i_rBox );
 
-        NumericField* pNum = dynamic_cast<NumericField*>(i_pBox);
-        MetricField* pMetric = dynamic_cast<MetricField*>(i_pBox);
+        NumericField* pNum = dynamic_cast<NumericField*>(&i_rBox);
+        MetricField* pMetric = dynamic_cast<MetricField*>(&i_rBox);
         if( pNum )
         {
             sal_Int64 nVal = pNum->GetValue();
@@ -1840,7 +1839,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
         }
         else
         {
-            OUString aVal( i_pBox->GetText() );
+            OUString aVal( i_rBox.GetText() );
             pVal->Value <<= aVal;
         }
 
@@ -1849,7 +1848,6 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
         // update preview and page settings
         preparePreview();
     }
-    return 0;
 }
 
 void PrintDialog::Command( const CommandEvent& rEvt )

@@ -990,6 +990,7 @@ public:
     void update_color(sal_uInt16 n = UPDATE_ALL);
 
     DECL_LINK(ColorModifyHdl, void*);
+    DECL_LINK_TYPED(ColorModifyEditHdl, Edit&, void);
     DECL_LINK_TYPED(ModeModifyHdl, RadioButton&, void);
 
     sal_Int32 GetColor() const;
@@ -1074,20 +1075,21 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     mpColorField->SetModifyHdl( aLink );
     mpColorSlider->SetModifyHdl( aLink );
 
-    mpMFRed->SetModifyHdl( aLink );
-    mpMFGreen->SetModifyHdl( aLink );
-    mpMFBlue->SetModifyHdl( aLink );
+    Link<Edit&,void> aLink3( LINK( this, ColorPickerDialog, ColorModifyEditHdl ) );
+    mpMFRed->SetModifyHdl( aLink3 );
+    mpMFGreen->SetModifyHdl( aLink3 );
+    mpMFBlue->SetModifyHdl( aLink3 );
 
-    mpMFCyan->SetModifyHdl( aLink );
-    mpMFMagenta->SetModifyHdl( aLink );
-    mpMFYellow->SetModifyHdl( aLink );
-    mpMFKey->SetModifyHdl( aLink );
+    mpMFCyan->SetModifyHdl( aLink3 );
+    mpMFMagenta->SetModifyHdl( aLink3 );
+    mpMFYellow->SetModifyHdl( aLink3 );
+    mpMFKey->SetModifyHdl( aLink3 );
 
-    mpMFHue->SetModifyHdl( aLink );
-    mpMFSaturation->SetModifyHdl( aLink );
-    mpMFBrightness->SetModifyHdl( aLink );
+    mpMFHue->SetModifyHdl( aLink3 );
+    mpMFSaturation->SetModifyHdl( aLink3 );
+    mpMFBrightness->SetModifyHdl( aLink3 );
 
-    mpEDHex->SetModifyHdl( aLink );
+    mpEDHex->SetModifyHdl( aLink3 );
 
     Link<RadioButton&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
     mpRBRed->SetToggleHdl( aLink2 );
@@ -1278,6 +1280,10 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
     mpColorPreview->SetColor(aColor);
 }
 
+IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
+{
+    ColorModifyHdl(&rEdit);
+}
 IMPL_LINK(ColorPickerDialog, ColorModifyHdl, void *, p)
 {
     sal_uInt16 n = 0;

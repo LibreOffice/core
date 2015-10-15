@@ -59,7 +59,7 @@ namespace svx
         void    getLink(        OUString& _rName,         OUString& _rURL ) const;
 
     protected:
-        DECL_LINK(OnTextModified, void *);
+        DECL_LINK_TYPED( OnTextModified, Edit&, void );
         DECL_LINK_TYPED( OnBrowseFile, Button*, void );
         DECL_LINK_TYPED( OnOk, Button*, void );
 

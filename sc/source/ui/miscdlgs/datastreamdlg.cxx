@@ -97,10 +97,9 @@ IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateComboBoxHdl, ComboBox&, void)
 {
     UpdateEnable();
 }
-IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateHdl, Edit&, void)
 {
     UpdateEnable();
-    return 0;
 }
 
 void DataStreamDlg::UpdateEnable()

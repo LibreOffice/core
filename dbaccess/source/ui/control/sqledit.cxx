@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_TYPED(OSqlEdit, OnInvalidateTimer, Timer *, void)
         m_timerInvalidate.Start();
 }
 
-IMPL_LINK_NOARG(OSqlEdit, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(OSqlEdit, ModifyHdl, Edit&, void)
 {
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
@@ -191,8 +191,6 @@ IMPL_LINK_NOARG(OSqlEdit, ModifyHdl)
     rController.InvalidateFeature(SID_SBA_QRY_EXECUTE);
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
-
-    return 0;
 }
 
 void OSqlEdit::SetText(const OUString& rNewText)

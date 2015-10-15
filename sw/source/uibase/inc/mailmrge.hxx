@@ -105,10 +105,10 @@ class SwMailMergeDlg : public SvxStandardDialog
     OUString m_sSaveFilter;
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
-    DECL_LINK_TYPED( InsertPathHdl, Button*, void);
+    DECL_LINK_TYPED( InsertPathHdl, Button*, void );
     DECL_LINK_TYPED( OutputTypeHdl, Button*, void );
     DECL_LINK_TYPED( FilenameHdl, Button*, void );
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SaveTypeHdl, Button*, void );
 
     virtual void    Apply() override;

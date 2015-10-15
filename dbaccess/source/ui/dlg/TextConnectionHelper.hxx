@@ -84,7 +84,8 @@ namespace dbaui
         Link<> getControlModifiedLink() { return LINK(this, OTextConnectionHelper, OnControlModified); }
         DECL_LINK_TYPED(OnSetExtensionHdl,RadioButton&,void);
         DECL_LINK(OnControlModified,Control*);
-        DECL_LINK(OnEditModified,Edit*);
+        DECL_LINK_TYPED(OnControlEditModified, Edit&, void);
+        DECL_LINK_TYPED(OnEditModified, Edit&, void);
         DECL_LINK_TYPED(CharsetSelectHdl,ListBox&,void);
         DECL_LINK_TYPED(ComboBoxSelectHdl,ComboBox&,void);
 

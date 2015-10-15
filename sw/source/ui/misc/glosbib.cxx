@@ -322,9 +322,9 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, ModifyListBoxHdl, ListBox&, void)
 {
-    ModifyHdl(0);
+    ModifyHdl(*m_pNameED);
 }
-IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, ModifyHdl, Edit&, void)
 {
     OUString sEntry(m_pNameED->GetText());
     bool bEnableNew = true;
@@ -373,7 +373,6 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     m_pDelPB->Enable(bEnableDel);
     m_pNewPB->Enable(bEnableNew);
     m_pRenamePB->Enable(bEnableNew && pEntry);
-    return 0;
 }
 
 bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)

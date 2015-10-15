@@ -70,7 +70,7 @@ private:
     DECL_LINK_TYPED( MacroSelectHdl, SvTreeListBox *, void );
     DECL_LINK_TYPED( MacroDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( BasicSelectHdl, SvTreeListBox *, void );
-    DECL_LINK( EditModifyHdl, Edit * );
+    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
 
     void                CheckButtons();

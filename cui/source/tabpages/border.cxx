@@ -870,7 +870,7 @@ IMPL_LINK_TYPED( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
@@ -880,8 +880,6 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl)
 
     m_pFrameSel->SetStyleToSelection( nVal,
         SvxBorderStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
-
-    return 0;
 }
 
 
@@ -1179,21 +1177,20 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
 
 
 
-IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
+IMPL_LINK_TYPED( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)
 {
     if ( mbSync )
     {
-        sal_Int64 nVal = pField->GetValue();
-        if(pField != m_pLeftMF)
+        sal_Int64 nVal = static_cast<MetricField&>(rField).GetValue();
+        if(&rField != m_pLeftMF)
             m_pLeftMF->SetValue(nVal);
-        if(pField != m_pRightMF)
+        if(&rField != m_pRightMF)
             m_pRightMF->SetValue(nVal);
-        if(pField != m_pTopMF)
+        if(&rField != m_pTopMF)
             m_pTopMF->SetValue(nVal);
-        if(pField != m_pBottomMF)
+        if(&rField != m_pBottomMF)
             m_pBottomMF->SetValue(nVal);
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxBorderTabPage, SyncHdl_Impl, Button*, pBox, void)

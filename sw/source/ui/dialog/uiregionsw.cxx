@@ -1131,22 +1131,22 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
 }
 
 // Applying of the filename or the linked region
-IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SwEditRegionDlg, FileNameHdl, Edit&, rEdit, void )
 {
-    Selection aSelect = pEdit->GetSelection();
+    Selection aSelect = rEdit.GetSelection();
     if(!CheckPasswd())
-        return 0;
-    pEdit->SetSelection(aSelect);
+        return;
+    rEdit.SetSelection(aSelect);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-    if (pEdit == m_pFileNameED)
+    if (&rEdit == m_pFileNameED)
     {
         m_bSubRegionsFilled = false;
         m_pSubRegionED->Clear();
         if (m_pDDECB->IsChecked())
         {
-            OUString sLink( SwSectionData::CollapseWhiteSpaces(pEdit->GetText()) );
+            OUString sLink( SwSectionData::CollapseWhiteSpaces(rEdit.GetText()) );
             sal_Int32 nPos = 0;
             sLink = sLink.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
             if (nPos>=0)
@@ -1159,7 +1159,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
         }
         else
         {
-            OUString sTmp(pEdit->GetText());
+            OUString sTmp(rEdit.GetText());
             if(!sTmp.isEmpty())
             {
                 SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
@@ -1175,9 +1175,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     }
     else
     {
-        pSectRepr->SetSubRegion( pEdit->GetText() );
+        pSectRepr->SetSubRegion( rEdit.GetText() );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwEditRegionDlg, DDEHdl, Button*, pButton, void )
@@ -1283,10 +1282,10 @@ IMPL_LINK_TYPED( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
 
 // the current region name is being added to the TreeListBox immediately during
 // editing, with empty string no Ok()
-IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
+IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, NameEditHdl, Edit&, void)
 {
     if(!CheckPasswd(0))
-        return 0;
+        return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     if (pEntry)
@@ -1298,24 +1297,22 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
 
         m_pOK->Enable(!aName.isEmpty());
     }
-    return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SwEditRegionDlg, ConditionEditHdl, Edit&, rEdit, void )
 {
-    Selection aSelect = pEdit->GetSelection();
+    Selection aSelect = rEdit.GetSelection();
     if(!CheckPasswd(0))
-        return 0;
-    pEdit->SetSelection(aSelect);
+        return;
+    rEdit.SetSelection(aSelect);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        pRepr->GetSectionData().SetCondition(pEdit->GetText());
+        pRepr->GetSectionData().SetCondition(rEdit.GetText());
         pEntry = m_pTree->NextSelected(pEntry);
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, void )
@@ -1719,12 +1716,11 @@ IMPL_LINK_TYPED( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, voi
         m_aNewPasswd.realloc(0);
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl)
+IMPL_LINK_NOARG_TYPED(SwInsertSectionTabPage, NameEditHdl, Edit&, void)
 {
     const OUString aName = m_pCurName->GetText();
     GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() &&
             m_pCurName->GetEntryPos( aName ) == LISTBOX_ENTRY_NOTFOUND);
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
@@ -2136,7 +2132,7 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxIt
     get(m_pBeforeMF, "before");
     get(m_pAfterMF, "after");
     get(m_pPreviewWin, "preview");
-    Link<> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
+    Link<Edit&,void> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
     m_pBeforeMF->SetModifyHdl(aLk);
     m_pAfterMF->SetModifyHdl(aLk);
 }
@@ -2190,7 +2186,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     }
     m_pBeforeMF->SaveValue();
     m_pAfterMF->SaveValue();
-    IndentModifyHdl(0);
+    IndentModifyHdl(*m_pBeforeMF);
 }
 
 VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
@@ -2208,12 +2204,11 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
     m_pPreviewWin->SetSize(aPageSize);
 }
 
-IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwSectionIndentTabPage, IndentModifyHdl, Edit&, void)
 {
     m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) );
     m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))) );
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

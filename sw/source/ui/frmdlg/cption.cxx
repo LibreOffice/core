@@ -130,7 +130,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         xNameAccess = xObjs->getEmbeddedObjects();
     }
 
-    Link<> aLk = LINK( this, SwCaptionDialog, ModifyHdl );
+    Link<Edit&,void> aLk = LINK( this, SwCaptionDialog, ModifyHdl );
     m_pCategoryBox->SetModifyHdl( aLk );
     m_pTextEdit->SetModifyHdl( aLk );
     m_pNumberingSeparatorED->SetModifyHdl ( aLk );
@@ -246,7 +246,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     }
     m_pPosBox->SelectEntryPos(1);
 
-    m_pCategoryBox->GetModifyHdl().Call(m_pCategoryBox);
+    m_pCategoryBox->GetModifyHdl().Call(*m_pCategoryBox);
 
     m_pSepEdit->SetText(our_aSepTextSave);
     m_pTextEdit->GrabFocus();
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectHdl, ComboBox&, void)
     DrawSample();
 }
 
-IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionDialog, ModifyHdl, Edit&, void)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     OUString sFieldTypeName = m_pCategoryBox->GetText();
@@ -330,7 +330,6 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
     m_pSepText->Enable( !bNone );
     m_pSepEdit->Enable( !bNone );
     DrawSample();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwCaptionDialog, CaptionHdl, Button*, void)

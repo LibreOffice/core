@@ -95,6 +95,11 @@ namespace pcr
     }
 
 
+    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, EditModifiedHdl, Edit&, void )
+    {
+        setModified();
+    }
+
     IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl )
     {
         setModified();

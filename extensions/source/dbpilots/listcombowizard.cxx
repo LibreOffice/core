@@ -488,10 +488,9 @@ namespace dbp
     }
 
 
-    IMPL_LINK_NOARG(OLinkFieldsPage, OnSelectionModified)
+    IMPL_LINK_NOARG_TYPED(OLinkFieldsPage, OnSelectionModified, Edit&, void)
     {
         implCheckFinish();
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED(OLinkFieldsPage, OnSelectionModifiedCombBox, ComboBox&, void)

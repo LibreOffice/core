@@ -94,7 +94,7 @@ PageMarginControl::PageMarginControl(
     SelectValueSetItem();
 
     SetFieldUnit( *maLeftMarginEdit.get(), eFUnit );
-    Link<> aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
+    Link<Edit&,void> aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
     maLeftMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *maLeftMarginEdit.get(), mnPageLeftMargin, meUnit );
 
@@ -102,7 +102,7 @@ PageMarginControl::PageMarginControl(
     maRightMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *maRightMarginEdit.get(), mnPageRightMargin, meUnit );
 
-    Link<> aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
+    Link<Edit&,void> aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
     SetFieldUnit( *maTopMarginEdit.get(), eFUnit );
     maTopMarginEdit->SetModifyHdl( aLinkUL );
     SetMetricValue( *maTopMarginEdit.get(), mnPageTopMargin, meUnit );
@@ -399,7 +399,7 @@ IMPL_LINK_TYPED(PageMarginControl, ImplMarginHdl, ValueSet*, pControl, void)
     }
 }
 
-IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )
+IMPL_LINK_NOARG_TYPED( PageMarginControl, ModifyLRMarginHdl, Edit&, void )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);
@@ -411,10 +411,9 @@ IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )
     mnPageRightMargin = GetCoreValue( *maRightMarginEdit.get(), meUnit );
     mrPagePropPanel.ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
     mbCustomValuesUsed = true;
-    return 0;
 }
 
-IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, )
+IMPL_LINK_NOARG_TYPED( PageMarginControl, ModifyULMarginHdl, Edit&, void )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);
@@ -426,7 +425,6 @@ IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, )
     mnPageBottomMargin = GetCoreValue( *maBottomMarginEdit.get(), meUnit );
     mrPagePropPanel.ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
     mbCustomValuesUsed = true;
-    return 0;
 }
 
 bool PageMarginControl::GetUserCustomValues()

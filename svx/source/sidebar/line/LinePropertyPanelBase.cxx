@@ -260,8 +260,7 @@ void LinePropertyPanelBase::Initialize()
     mpLBEnd->SetAccessibleName(OUString("Ending Style"));  //wj acc
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
-    Link<> aLink = LINK(this, LinePropertyPanelBase, ChangeTransparentHdl);
-    mpMFTransparent->SetModifyHdl(aLink);
+    mpMFTransparent->SetModifyHdl(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
     mpMFTransparent->SetAccessibleName(OUString("Transparency"));  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
@@ -696,13 +695,12 @@ IMPL_LINK_TYPED(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox,
     }
 }
 
-IMPL_LINK_NOARG( LinePropertyPanelBase, ChangeTransparentHdl )
+IMPL_LINK_NOARG_TYPED( LinePropertyPanelBase, ChangeTransparentHdl, Edit&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );
 
     setLineTransparency(aItem);
-    return 0L;
 }
 
 VclPtr<PopupControl> LinePropertyPanelBase::CreateLineWidthPopupControl (PopupContainer* pParent)

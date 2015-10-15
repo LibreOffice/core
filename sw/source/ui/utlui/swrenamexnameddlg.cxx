@@ -99,16 +99,15 @@ IMPL_LINK_NOARG_TYPED(SwRenameXNamedDlg, OkHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, Edit*, pEdit)
+IMPL_LINK_TYPED(SwRenameXNamedDlg, ModifyHdl, Edit&, rEdit, void)
 {
-    OUString sTmp(pEdit->GetText());
+    OUString sTmp(rEdit.GetText());
 
     m_pOk->Enable(!sTmp.isEmpty()
                   && !xNameAccess->hasByName(sTmp)
                   && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
                   && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
                  );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

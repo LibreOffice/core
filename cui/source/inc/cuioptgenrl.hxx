@@ -50,7 +50,7 @@ private:
     unsigned nNameRow;
     unsigned nShortNameField;
 
-    DECL_LINK( ModifyHdl_Impl, Edit * );
+    DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
 
     bool                GetAddress_Impl();
     void                SetAddress_Impl();

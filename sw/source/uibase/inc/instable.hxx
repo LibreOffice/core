@@ -55,13 +55,13 @@ class SwInsTableDlg : public SfxModalDialog
     SwTableAutoFormat* pTAutoFormat;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
-    DECL_LINK( ModifyName, Edit* );
-    DECL_LINK( ModifyRowCol, NumericField* );
+    DECL_LINK_TYPED( ModifyName, Edit&, void );
+    DECL_LINK_TYPED( ModifyRowCol, Edit&, void );
     DECL_LINK_TYPED( AutoFormatHdl, Button*, void );
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(CheckBoxHdl, Button* = 0, void);
+    DECL_LINK_TYPED( OKHdl, Button*, void);
+    DECL_LINK_TYPED( CheckBoxHdl, Button* = 0, void);
     DECL_LINK_TYPED( ReapeatHeaderCheckBoxHdl, Button* = 0, void);
-    DECL_LINK( ModifyRepeatHeaderNF_Hdl, void* );
+    DECL_LINK_TYPED( ModifyRepeatHeaderNF_Hdl, Edit&, void );
 
 public:
     SwInsTableDlg( SwView& rView );

@@ -95,8 +95,8 @@ private:
     DECL_LINK_TYPED( OkBtnHdl, Button*, void );
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
-    DECL_LINK( NameModifyHdl, void * );
-    DECL_LINK( AssModifyHdl, void * );
+    DECL_LINK_TYPED( NameModifyHdl, Edit&, void );
+    DECL_LINK_TYPED( AssModifyHdl, Edit&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX

@@ -61,7 +61,7 @@ namespace dbaui
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
         virtual void GetFocus() override;
 
-        DECL_LINK(ModifyHdl, void*);
+        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
     public:
         OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);

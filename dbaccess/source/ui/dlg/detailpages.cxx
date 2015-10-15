@@ -79,7 +79,7 @@ namespace dbaui
             m_pOptionsLabel->Show();
             m_pOptions = get<Edit>("options");
             m_pOptions->Show();
-            m_pOptions->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+            m_pOptions->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
@@ -433,8 +433,8 @@ namespace dbaui
         }
         if ( m_sDefaultJdbcDriverName.getLength() )
         {
-            m_pEDDriverClass->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
-            m_pEDDriverClass->SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
+            m_pEDDriverClass->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
+            m_pEDDriverClass->SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnControlEditModifyHdl));
             m_pTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
         }
         else
@@ -448,9 +448,9 @@ namespace dbaui
         m_pFTSocket->Show(bShowSocket && !m_bUseClass);
         m_pEDSocket->Show(bShowSocket && !m_bUseClass);
 
-        m_pEDHostname->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
-        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
-        m_pEDSocket->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pEDHostname->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
+        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
+        m_pEDSocket->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
     }
 
     OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
@@ -545,14 +545,13 @@ namespace dbaui
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg->Execute();
     }
-    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
+    void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(void* pControl)
     {
-        if ( m_bUseClass && _pEdit == m_pEDDriverClass )
+        if ( m_bUseClass && pControl == m_pEDDriverClass )
             m_pTestJavaDriver->Enable( !m_pEDDriverClass->GetText().trim().isEmpty() );
 
         // tell the listener we were modified
-        callModifiedHdl();
-        return 0L;
+        OGenericAdministrationPage::callModifiedHdl();
     }
 
     // MySQLNativePage
@@ -566,7 +565,7 @@ namespace dbaui
         get(m_pUserName, "username");
         get(m_pPasswordRequired, "passwordrequired");
 
-        m_pUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
 
         m_aMySQLSettings->Show();
     }
@@ -666,10 +665,10 @@ namespace dbaui
         m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pNFRowCount, "LDAPRowCountspinbutton");
 
-        m_pETBaseDN->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pETBaseDN->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
         m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
-        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
-        m_pNFRowCount->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pNFPortNumber->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
+        m_pNFRowCount->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
 
         m_pNFRowCount->SetUseThousandSep(false);
         m_iNormalPort = 389;

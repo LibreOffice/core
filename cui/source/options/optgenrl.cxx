@@ -290,7 +290,7 @@ void SvxGeneralTabPage::InitControls ()
 void SvxGeneralTabPage::SetLinks ()
 {
     // link for updating the initials
-    Link<> aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
     Row& rNameRow = *vRows[nNameRow];
     for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
         vFields[i]->pEdit->SetModifyHdl(aLink);
@@ -347,7 +347,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 // ModifyHdl_Impl()
 // This handler updates the initials (short name)
 // when one of the name fields was updated.
-IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
+IMPL_LINK_TYPED( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
 {
     // short name field and row
     Field& rShortName = *vFields[nShortNameField];
@@ -358,7 +358,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
     unsigned nField = nInits;
     for (unsigned i = 0; i != nInits; ++i)
     {
-        if (vFields[rNameRow.nFirstField + i]->pEdit == pEdit)
+        if (vFields[rNameRow.nFirstField + i]->pEdit == &rEdit)
             nField = i;
     }
     // updating the initial
@@ -372,12 +372,11 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
         }
         while ((unsigned)sShortName.getLength() < nInits)
             sShortName += " ";
-        OUString sName = pEdit->GetText();
+        OUString sName = rEdit.GetText();
         OUString sLetter = sName.isEmpty()
             ? OUString(sal_Unicode(' ')) : sName.copy(0, 1);
         rShortName.pEdit->SetText(sShortName.replaceAt(nField, 1, sLetter).trim());
     }
-    return 0;
 }
 
 

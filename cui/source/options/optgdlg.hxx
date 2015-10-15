@@ -58,7 +58,7 @@ private:
 
     VclPtr<CheckBox>     m_pCollectUsageInfo;
 
-    DECL_LINK( TwoFigureHdl, NumericField* );
+    DECL_LINK_TYPED( TwoFigureHdl, Edit&, void );
     DECL_LINK_TYPED( TwoFigureConfigHdl, SpinField&, void );
     DECL_LINK_TYPED( TwoFigureConfigFocusHdl, Control&, void );
 #ifdef WNT
@@ -161,7 +161,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     DECL_LINK_TYPED(  SupportHdl, Button*, void ) ;
     DECL_LINK_TYPED(  LocaleSettingHdl, ListBox&, void ) ;
-    DECL_LINK(  DatePatternsHdl, Edit* ) ;
+    DECL_LINK_TYPED(  DatePatternsHdl, Edit&, void ) ;
 
 public:
     OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

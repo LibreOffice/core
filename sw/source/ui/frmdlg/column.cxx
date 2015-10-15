@@ -481,9 +481,9 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     m_pDefaultVS->SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
-    Link<> aCLNrLk = LINK(this, SwColumnPage, ColModify);
+    Link<Edit&,void> aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_pCLNrEdt->SetModifyHdl(aCLNrLk);
-    Link<> aLk = LINK(this, SwColumnPage, GapModify);
+    Link<Edit&,void> aLk = LINK(this, SwColumnPage, GapModify);
     aDistEd1.SetModifyHdl(aLk);
     aDistEd2.SetModifyHdl(aLk);
 
@@ -701,9 +701,9 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 // update ColumnManager
 IMPL_LINK_NOARG_TYPED( SwColumnPage, UpdateColMgrListBox, ListBox&, void )
 {
-    UpdateColMgr(0);
+    UpdateColMgr(*m_pLineWidthEdit);
 }
-IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr )
+IMPL_LINK_NOARG_TYPED( SwColumnPage, UpdateColMgr, Edit&, void )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
     if(nCols > 1)
@@ -803,8 +803,6 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr )
         else
             m_pPgeExampleWN->Invalidate();
     }
-
-    return 0;
 }
 
 void SwColumnPage::Init()
@@ -973,7 +971,12 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
  * the column number overwrites potential user's width settings; all columns
  * are equally wide.
  */
-IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
+IMPL_LINK_TYPED( SwColumnPage, ColModify, Edit&, rEdit, void )
+{
+    ColModify(static_cast<NumericField*>(&rEdit));
+}
+
+void SwColumnPage::ColModify(NumericField* pNF)
 {
     nCols = (sal_uInt16)m_pCLNrEdt->GetValue();
     //#107890# the handler is also called from LoseFocus()
@@ -995,8 +998,6 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
         ResetColWidth();
         Update(NULL);
     }
-
-    return 0;
 }
 
 /*
@@ -1005,10 +1006,11 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
  * width the automatic calculation of the column width is overruled; only an
  * alteration of the column number leads back to that default.
  */
-IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricField )
+IMPL_LINK_TYPED( SwColumnPage, GapModify, Edit&, rEdit, void )
 {
     if (nCols < 2)
-        return 0;
+        return;
+    MetricField* pMetricField = static_cast<MetricField*>(&rEdit);
     PercentField *pField = m_aPercentFieldsMap[pMetricField];
     assert(pField);
     long nActValue = static_cast< long >(pField->DenormalizePercent(pField->GetValue(FUNIT_TWIP)));
@@ -1069,16 +1071,15 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricField )
 
     }
     Update(pMetricField);
-    return 0;
 }
 
-IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricField )
+IMPL_LINK_TYPED( SwColumnPage, EdModify, Edit&, rEdit, void )
 {
+    MetricField * pMetricField = static_cast<MetricField*>(&rEdit);
     PercentField *pField = m_aPercentFieldsMap[pMetricField];
     assert(pField);
     pModifiedField = pField;
     Timeout();
-    return 0;
 }
 
 // Handler behind the Checkbox for automatic width. When the box is checked
@@ -1219,7 +1220,7 @@ void SwColumnPage::Update(MetricField *pInteractiveField)
         aDistEd1.SetText(OUString());
         aDistEd2.SetText(OUString());
     }
-    UpdateColMgr(0);
+    UpdateColMgr(*m_pLineWidthEdit);
 }
 
 // Update Bsp
@@ -1265,7 +1266,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             {
                 pColMgr->SetActualWidth(nActWidth);
                 ColModify( 0 );
-                UpdateColMgr( 0 );
+                UpdateColMgr( *m_pLineWidthEdit );
             }
         }
         m_pFrmExampleWN->Hide();

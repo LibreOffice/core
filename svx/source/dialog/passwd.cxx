@@ -51,7 +51,7 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
+IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, EditModifyHdl, Edit&, void)
 {
     if ( !bEmpty )
     {
@@ -63,7 +63,6 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
     }
     else if ( !m_pOKBtn->IsEnabled() )
         m_pOKBtn->Enable();
-    return 0;
 }
 
 
@@ -83,7 +82,7 @@ SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPassw
 
     m_pOKBtn->SetClickHdl( LINK( this, SvxPasswordDialog, ButtonHdl ) );
     m_pRepeatPasswdED->SetModifyHdl( LINK( this, SvxPasswordDialog, EditModifyHdl ) );
-    EditModifyHdl( 0 );
+    EditModifyHdl( *m_pRepeatPasswdED );
 
     if ( bDisableOldPassword )
     {

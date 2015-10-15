@@ -107,7 +107,7 @@ void AlignmentPropertyPanel::Initialize()
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
     mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    //wj acc
-    Link<> aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
+    Link<Edit&,void> aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
     mpCBXMergeCell->SetClickHdl ( LINK(this, AlignmentPropertyPanel, CBOXMergnCellClkHdl) );
@@ -152,21 +152,21 @@ IMPL_LINK_TYPED( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, vo
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LOCKPOS, SfxCallMode::RECORD, &aItem, 0l);
 }
 
-IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
+IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
-        return 0;
+        return;
     sal_Unicode nChar = sTmp[0];
     if( nChar == '-' )
     {
         if (sTmp.getLength() < 2)
-            return 0;
+            return;
         nChar = sTmp[1];
     }
 
     if( (nChar < '0') || (nChar > '9') )
-        return 0;
+        return;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
@@ -179,7 +179,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
     rtl_math_ConversionStatus eStatus;
     double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
     if (eStatus != rtl_math_ConversionStatus_Ok)
-        return 0;
+        return;
 
     FormatDegrees(fTmp);
 
@@ -188,7 +188,6 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 {
@@ -197,14 +196,13 @@ IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
 }
-IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
+IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
     mpCBXWrapText->EnableTriState(false);
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
     SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  SFX_MAPUNIT_TWIP ) );
 
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SfxCallMode::RECORD, &aItem, 0L);
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)

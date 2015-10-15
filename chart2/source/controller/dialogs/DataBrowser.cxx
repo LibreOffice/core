@@ -186,8 +186,8 @@ private:
     Link<SeriesHeaderEdit*,void> m_aChangeLink;
 
     void notifyChanges();
-    DECL_LINK( SeriesNameChanged, void * );
-    DECL_LINK( SeriesNameEdited, void * );
+    DECL_LINK_TYPED( SeriesNameChanged, Edit&, void );
+    DECL_LINK_TYPED( SeriesNameEdited, Edit&, void );
 
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
@@ -326,16 +326,14 @@ void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink
     m_aChangeLink = rLink;
 }
 
-IMPL_LINK_NOARG(SeriesHeader, SeriesNameChanged)
+IMPL_LINK_NOARG_TYPED(SeriesHeader, SeriesNameChanged, Edit&, void)
 {
     notifyChanges();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited)
+IMPL_LINK_NOARG_TYPED(SeriesHeader, SeriesNameEdited, Edit&, void)
 {
     m_bSeriesNameChangePending = true;
-    return 0;
 }
 
 void SeriesHeader::SetGetFocusHdl( const Link<Control&,void>& rLink )

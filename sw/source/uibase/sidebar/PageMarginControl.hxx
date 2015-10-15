@@ -102,8 +102,8 @@ private:
     PagePropertyPanel& mrPagePropPanel;
 
     DECL_LINK_TYPED( ImplMarginHdl, ValueSet*, void );
-    DECL_LINK( ModifyLRMarginHdl, MetricField* );
-    DECL_LINK( ModifyULMarginHdl, MetricField* );
+    DECL_LINK_TYPED( ModifyLRMarginHdl, Edit&, void );
+    DECL_LINK_TYPED( ModifyULMarginHdl, Edit&, void );
 
     void SetMetricFieldMaxValues(const Size& rPageSize);
 

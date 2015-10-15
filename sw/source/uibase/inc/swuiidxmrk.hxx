@@ -108,18 +108,19 @@ class SwIndexMarkPane
     void            UpdateMark();
 
     DECL_LINK_TYPED( InsertHdl, Button *, void );
-    DECL_LINK_TYPED(CloseHdl, Button*, void);
-    DECL_LINK_TYPED(DelHdl, Button*, void);
-    DECL_LINK_TYPED(NextHdl, Button*, void);
-    DECL_LINK_TYPED(NextSameHdl, Button*, void);
-    DECL_LINK_TYPED(PrevHdl, Button*, void);
-    DECL_LINK_TYPED(PrevSameHdl, Button*, void);
+    DECL_LINK_TYPED( CloseHdl, Button*, void );
+    DECL_LINK_TYPED( DelHdl, Button*, void );
+    DECL_LINK_TYPED( NextHdl, Button*, void );
+    DECL_LINK_TYPED( NextSameHdl, Button*, void );
+    DECL_LINK_TYPED( PrevHdl, Button*, void );
+    DECL_LINK_TYPED( PrevSameHdl, Button*, void );
     DECL_LINK_TYPED( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, void* );
-    DECL_LINK( KeyDCBModifyHdl, ComboBox * );
-    DECL_LINK_TYPED(NewUserIdxHdl, Button*, void);
-    DECL_LINK_TYPED( SearchTypeHdl, Button*, void);
-    DECL_LINK( PhoneticEDModifyHdl, Edit * );
+    DECL_LINK_TYPED( ModifyEditHdl, Edit&, void );
+    void ModifyHdl(Control*);
+    DECL_LINK_TYPED( KeyDCBModifyHdl, Edit&, void );
+    DECL_LINK_TYPED( NewUserIdxHdl, Button*, void );
+    DECL_LINK_TYPED( SearchTypeHdl, Button*, void );
+    DECL_LINK_TYPED( PhoneticEDModifyHdl, Edit&, void );
 
     //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
     //it needs to be called ones if this dialog is opened to create a new entry (in InitControls),
@@ -212,7 +213,7 @@ class SwAuthorMarkPane
     DECL_LINK_TYPED(CompEntryHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeSourceHdl, Button*, void);
     DECL_LINK_TYPED(IsEntryAllowedHdl, Edit*, bool);
-    DECL_LINK(EditModifyHdl, Edit*);
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 
     void InitControls();
     void Activate();

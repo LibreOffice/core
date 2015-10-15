@@ -564,7 +564,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pVertByMF->SetLoseFocusHdl( aLk3 );
     m_pFollowCB->SetClickHdl( LINK(this, SvxSwPosSizeTabPage, RangeModifyClickHdl) );
 
-    Link<> aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
+    Link<Edit&,void> aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
     m_pWidthMF->SetModifyHdl( aLk );
     m_pHeightMF->SetModifyHdl( aLk );
     m_pHoriByMF->SetModifyHdl( aLk );
@@ -1378,18 +1378,18 @@ IMPL_LINK_TYPED( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     }
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
 {
     sal_Int64 nWidth = m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP));
     sal_Int64 nHeight = m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP));
     if ( m_pKeepRatioCB->IsChecked() )
     {
-        if ( pEdit == m_pWidthMF )
+        if ( &rEdit == m_pWidthMF )
         {
             nHeight = sal_Int64((double)nWidth / m_fWidthHeightRatio);
             m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
         }
-        else if(pEdit == m_pHeightMF)
+        else if(&rEdit == m_pHeightMF)
         {
             nWidth = sal_Int64((double)nHeight * m_fWidthHeightRatio);
             m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
@@ -1397,7 +1397,6 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
     }
     m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
     UpdateExample();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)

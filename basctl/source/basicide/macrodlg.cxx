@@ -550,10 +550,8 @@ IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 
 
 
-IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
 {
-    (void)pEdit;
-
     // select the module in which the macro is put at Neu (new),
     // if BasicManager or Lib is selecting
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
@@ -606,7 +604,6 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
     }
 
     CheckButtons();
-    return 0;
 }
 
 

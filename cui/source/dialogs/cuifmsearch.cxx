@@ -264,7 +264,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     OUString sRealSetText = m_pcmbSearchText->GetText();
     if (!sRealSetText.equals(sInitialText))
         m_pcmbSearchText->SetText(OUString());
-    LINK(this, FmSearchDialog, OnSearchTextModified).Call(m_pcmbSearchText);
+    LINK(this, FmSearchDialog, OnSearchTextModified).Call(*m_pcmbSearchText);
 
     // initial
     m_aDelayedPaint.SetTimeoutHdl(LINK(this, FmSearchDialog, OnDelayedPaint));
@@ -393,7 +393,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
     }
 }
 
-IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
+IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnSearchTextModified, Edit&, void)
 {
     if ((!m_pcmbSearchText->GetText().isEmpty()) || !m_prbSearchForText->IsChecked())
         m_pbSearchAgain->Enable();
@@ -401,7 +401,6 @@ IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
         m_pbSearchAgain->Disable();
 
     m_pSearchEngine->InvalidatePreviousLoc();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnFocusGrabbed, Control&, void)

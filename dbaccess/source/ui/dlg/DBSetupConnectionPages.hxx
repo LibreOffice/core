@@ -189,7 +189,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK(OnEditModified,Edit*);
+        DECL_LINK_TYPED(OnEditModified, Edit&, void);
         VclPtr<FixedText>          m_pFTDriverClass;
         VclPtr<Edit>               m_pETDriverClass;
         VclPtr<PushButton>         m_pPBTestJavaDriver;

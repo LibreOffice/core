@@ -50,7 +50,7 @@ public:
     MetricField* get() { return m_pField; }
     void SetUpHdl(const Link<SpinField&,void>& rLink) { m_pField->SetUpHdl(rLink); }
     void SetDownHdl(const Link<SpinField&,void>& rLink) { m_pField->SetDownHdl(rLink); }
-    void SetModifyHdl(const Link<>& rLink) { m_pField->SetModifyHdl(rLink); }
+    void SetModifyHdl(const Link<Edit&,void>& rLink) { m_pField->SetModifyHdl(rLink); }
     void SetLoseFocusHdl(const Link<Control&,void>& rLink) { m_pField->SetLoseFocusHdl(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true, bool bChild = true) { m_pField->Enable(bEnable, bChild); }

@@ -122,16 +122,14 @@ void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
     maOldPrefixValue = pEdit->GetText();
 }
 
-IMPL_LINK_NOARG(ScTpDefaultsOptions, NumModifiedHdl)
+IMPL_LINK_NOARG_TYPED(ScTpDefaultsOptions, NumModifiedHdl, Edit&, void)
 {
     CheckNumSheets();
-    return 0;
 }
 
-IMPL_LINK( ScTpDefaultsOptions, PrefixModifiedHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( ScTpDefaultsOptions, PrefixModifiedHdl, Edit&, rEdit, void )
 {
-    CheckPrefix(pEdit);
-    return 0;
+    CheckPrefix(&rEdit);
 }
 
 IMPL_LINK_TYPED( ScTpDefaultsOptions, PrefixEditOnFocusHdl, Control&, rControl, void )

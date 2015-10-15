@@ -49,9 +49,9 @@ private:
     bool                        mbModified;
 
     DECL_LINK_TYPED(UserHdl, Button*, void);
-    DECL_LINK(SpinHdl, void*);
+    DECL_LINK_TYPED(SpinHdl, Edit&, void);
     DECL_LINK_TYPED(ViewLayoutUserHdl, Button*, void);
-    DECL_LINK(ViewLayoutSpinHdl, NumericField*);
+    DECL_LINK_TYPED(ViewLayoutSpinHdl, Edit&, void);
     DECL_LINK_TYPED(ViewLayoutCheckHdl, Button*, void);
     DECL_LINK_TYPED(OKHdl, Button*, void);
 

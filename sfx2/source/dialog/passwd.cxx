@@ -29,7 +29,12 @@
 
 
 
-IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )
+{
+    ModifyHdl(&rEdit);
+}
+
+void SfxPasswordDialog::ModifyHdl(Edit* pEdit)
 {
     if (mbAsciiOnly && (pEdit == mpPassword1ED || pEdit == mpPassword2ED))
     {
@@ -57,7 +62,6 @@ IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
     if( mpPassword2ED->IsVisible() )
         bEnable = (bEnable && (mpPassword2ED->GetText().getLength() >= mnMinLen));
     mpOKBtn->Enable( bEnable );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxPasswordDialog, OKHdl, Button*, void)
@@ -108,7 +112,7 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
 
     mpPassword1ED->SetAccessibleName(SFX2_RESSTR(STR_PASSWD));
 
-    Link<> aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
+    Link<Edit&,void> aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     mpPassword1ED->SetModifyHdl( aLink );
     mpPassword2ED->SetModifyHdl( aLink );
     mpOKBtn->SetClickHdl( LINK( this, SfxPasswordDialog, OKHdl ) );
@@ -168,7 +172,7 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     SetPasswdText();
-    EditModifyHdl( NULL );
+    ModifyHdl( NULL );
 }
 
 void SfxPasswordDialog::ShowMinLengthText(bool bShow)

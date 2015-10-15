@@ -193,7 +193,7 @@ private:
     DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
 
     DECL_LINK_TYPED( FileNameGetFocusHdl, Control&, void );
-    DECL_LINK( FileNameModifyHdl, void * );
+    DECL_LINK_TYPED( FileNameModifyHdl, Edit&, void );
 
     DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 

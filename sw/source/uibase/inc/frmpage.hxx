@@ -149,7 +149,7 @@ class SwFrmPage: public SfxTabPage
 
     // update example
     void            UpdateExample();
-    DECL_LINK( ModifyHdl, Edit * );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
 
     void            Init(const SfxItemSet& rSet, bool bReset = false);
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
@@ -304,7 +304,7 @@ class SwFrmAddPage : public SfxTabPage
     bool      bFormat;
     bool      bNew;
 
-    DECL_LINK(EditModifyHdl, void *);
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
     DECL_LINK_TYPED(ChainModifyHdl, ListBox&, void);
 
     static const sal_uInt16 aAddPgRg[];

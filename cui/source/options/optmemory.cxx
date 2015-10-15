@@ -229,7 +229,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
     tools::Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
     m_pTfGraphicObjectTime->SetTime( aTime );
 
-    GraphicCacheConfigHdl(m_pNfGraphicCache);
+    GraphicCacheConfigHdl(*m_pNfGraphicCache);
 
     // OLECache
     m_pNfOLECache->SetValue(
@@ -252,7 +252,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
 
 
 
-IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
+IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheConfigHdl, Edit&, void)
 {
     sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );
@@ -260,8 +260,6 @@ IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
 
     if( GetNfGraphicObjectCacheVal() > n )
         SetNfGraphicObjectCacheVal( n );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

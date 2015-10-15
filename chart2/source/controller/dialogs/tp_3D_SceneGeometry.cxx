@@ -100,8 +100,8 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     m_pMFZRotation->SetValue(m_nZRotation);
 
     const sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
-    Link<> aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
-    Link<> aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
+    Link<Edit&,void> aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
+    Link<Edit&,void> aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
 
     m_pMFXRotation->EnableUpdateData( nTimeout );
     m_pMFXRotation->SetUpdateDataHdl( aAngleChangedLink );
@@ -197,19 +197,17 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     m_bAngleChangePending = false;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleEdited)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, AngleEdited, Edit&, void)
 {
     m_nXRotation = m_pMFXRotation->GetValue();
     m_nYRotation = m_pMFYRotation->GetValue();
 
     m_bAngleChangePending = true;
-    return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleChanged)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, AngleChanged, Edit&, void)
 {
     applyAnglesToModel();
-    return 0;
 }
 
 void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
@@ -233,16 +231,14 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
     m_bPerspectiveChangePending = false;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveEdited)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveEdited, Edit&, void)
 {
     m_bPerspectiveChangePending = true;
-    return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveChanged)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveChanged, Edit&, void)
 {
     applyPerspectiveToModel();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, CheckBox&, void)

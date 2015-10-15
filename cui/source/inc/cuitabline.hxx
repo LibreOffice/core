@@ -173,22 +173,22 @@ private:
     // handler for gallery popup menu button + size
     DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
     DECL_LINK_TYPED( MenuCreateHdl_Impl, MenuButton *, void );
-    DECL_LINK( SizeHdl_Impl, MetricField * );
+    DECL_LINK_TYPED( SizeHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
 
     DECL_LINK_TYPED( ClickInvisibleHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ChangeStartClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeStartListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeStartModifyHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeStartModifyHdl_Impl, Edit&, void );
     void ChangeStartHdl_Impl(void*);
     DECL_LINK_TYPED( ChangeEndListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeEndModifyHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeEndModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ChangeEndClickHdl_Impl, Button*, void );
     void ChangeEndHdl_Impl(void*);
     DECL_LINK_TYPED( ChangePreviewListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangePreviewModifyHdl_Impl, void* );
+    DECL_LINK_TYPED( ChangePreviewModifyHdl_Impl, Edit&, void );
     void ChangePreviewHdl_Impl(void*);
-    DECL_LINK( ChangeTransparentHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeTransparentHdl_Impl, Edit&, void );
 
     DECL_LINK_TYPED( ChangeEdgeStyleHdl_Impl, ListBox&, void );
 
@@ -293,9 +293,9 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( SelectLinestyleListBoxHdl_Impl, ListBox&, void );
     void SelectLinestyleHdl_Impl(ListBox*);
-    DECL_LINK( ChangePreviewHdl_Impl, void * );
-    DECL_LINK( ChangeNumber1Hdl_Impl, void * );
-    DECL_LINK( ChangeNumber2Hdl_Impl, void * );
+    DECL_LINK_TYPED( ChangePreviewHdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( ChangeNumber1Hdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( ChangeNumber2Hdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeMetricHdl_Impl, Button*, void );

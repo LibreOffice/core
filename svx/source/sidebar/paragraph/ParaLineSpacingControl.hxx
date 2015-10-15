@@ -70,7 +70,7 @@ private:
     void SelectEntryPos(sal_Int32 nPos);
 
     DECL_LINK_TYPED(LineSPDistHdl_Impl, ListBox&, void);
-    DECL_LINK(LineSPDistAtHdl_Impl, void*);
+    DECL_LINK_TYPED(LineSPDistAtHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(PredefinedValuesHandler, Button*, void);
 };
 

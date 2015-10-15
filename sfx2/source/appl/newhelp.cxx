@@ -970,7 +970,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
         }
     }
 
-    ModifyHdl(m_pSearchED);
+    ModifyHdl(*m_pSearchED);
 }
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
@@ -1088,11 +1088,10 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, OpenHdl, Button*, void)
     m_pResultsLB->GetDoubleClickHdl().Call(*m_pResultsLB);
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ModifyHdl, Edit&, void)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
     m_pSearchBtn->Enable(!aSearchText.isEmpty());
-    return 0;
 }
 
 void SearchTabPage_Impl::ActivatePage()

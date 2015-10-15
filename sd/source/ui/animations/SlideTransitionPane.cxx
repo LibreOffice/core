@@ -1009,10 +1009,9 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceSlideRadioButtonToggled, Radio
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
 {
     applyToSelectedPages();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, SpeedListBoxSelected, ListBox&, void)

@@ -322,11 +322,10 @@ IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
     }
 }
 
-IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED(OSaveAsDlg, EditModifyHdl, Edit&, rEdit, void )
 {
-    if (pEdit == m_pImpl->m_pTitle)
+    if (&rEdit == m_pImpl->m_pTitle)
         m_pImpl->m_pPB_OK->Enable(!m_pImpl->m_pTitle->GetText().isEmpty());
-    return 0;
 }
 
 void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)

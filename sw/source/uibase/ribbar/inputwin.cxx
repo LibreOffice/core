@@ -474,7 +474,7 @@ void SwInputWindow::SetFormula( const OUString& rFormula, bool bDelFlag )
     bDelSel = bDelFlag;
 }
 
-IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwInputWindow, ModifyHdl, Edit&, void)
 {
     if (bIsTable && m_bResetUndo)
     {
@@ -488,7 +488,6 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
         pWrtShell->EndAllAction();
         sOldFormula = sNew;
     }
-    return 0;
 }
 
 void SwInputWindow::DelBoxContent()

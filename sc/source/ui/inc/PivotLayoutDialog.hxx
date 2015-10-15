@@ -95,7 +95,7 @@ private:
     DECL_LINK_TYPED(ToggleSource,        RadioButton&, void);
     DECL_LINK_TYPED(ToggleDestination,   RadioButton&, void);
     DECL_LINK_TYPED(SourceListSelected,  ListBox&, void);
-    DECL_LINK(SourceEditModified,  void*);
+    DECL_LINK_TYPED(SourceEditModified,  Edit&, void);
     void ToggleSource();
     void ToggleDestination();
     virtual bool Close() override;

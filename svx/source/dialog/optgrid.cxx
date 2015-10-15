@@ -312,17 +312,16 @@ SfxTabPage::sfxpg SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
+IMPL_LINK_TYPED( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )
 {
     bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
     {
-        if(pField == pMtrFldDrawX)
+        if(&rField == pMtrFldDrawX)
             pMtrFldDrawY->SetValue( pMtrFldDrawX->GetValue() );
         else
             pMtrFldDrawX->SetValue( pMtrFldDrawY->GetValue() );
     }
-    return 0;
 }
 
 
@@ -336,17 +335,16 @@ IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
+IMPL_LINK_TYPED( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )
 {
     bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
     {
-        if(pNumFldDivisionX == pField)
+        if(pNumFldDivisionX == &rField)
             pNumFldDivisionY->SetValue( pNumFldDivisionX->GetValue() );
         else
             pNumFldDivisionX->SetValue( pNumFldDivisionY->GetValue() );
     }
-    return 0;
 }
 
 

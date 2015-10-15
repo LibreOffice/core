@@ -24,6 +24,7 @@ class FixedText;
 class ListBox;
 class NumericField;
 class MetricField;
+class Edit;
 
 namespace chart {
 
@@ -90,7 +91,7 @@ private:
 
     DECL_LINK_TYPED(RadioBtnHdl, RadioButton&, void);
     DECL_LINK_TYPED(ListBoxHdl, ListBox&, void);
-    DECL_LINK(NumericFieldHdl, NumericField*);
+    DECL_LINK_TYPED(NumericFieldHdl, Edit&, void);
 };
 
 } } // end of namespace ::chart::sidebar

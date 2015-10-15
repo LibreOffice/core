@@ -71,7 +71,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
       maRotRight( SVX_RES(IMG_ROT_RIGHT)),
       mrAreaPropertyPanel(rPanel)
 {
-    Link<> aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
+    Link<Edit&,void> aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
     maMtrTrgrCenterX->SetModifyHdl( aLink );
     maMtrTrgrCenterY->SetModifyHdl( aLink );
     maMtrTrgrAngle->SetModifyHdl( aLink );
@@ -291,12 +291,11 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     mrAreaPropertyPanel.setFillFloatTransparence(aGradientItem);
 }
 
-IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
+IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, Edit&, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
     ExecuteValueModify( nStartCol, nEndCol );
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBox *, void)

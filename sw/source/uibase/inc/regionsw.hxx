@@ -108,20 +108,20 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK_TYPED( GetFirstEntryHdl, SvTreeListBox *, void );
     DECL_LINK_TYPED( DeselectHdl, SvTreeListBox *, void );
 
-    DECL_LINK_TYPED(OkHdl, Button*, void);
-    DECL_LINK(NameEditHdl, void *);
-    DECL_LINK( ConditionEditHdl, Edit * );
+    DECL_LINK_TYPED( OkHdl, Button*, void );
+    DECL_LINK_TYPED( NameEditHdl, Edit&, void );
+    DECL_LINK_TYPED( ConditionEditHdl, Edit&, void );
 
     DECL_LINK_TYPED( ChangePasswdHdl, Button *, void );
     DECL_LINK_TYPED( ChangeProtectHdl, Button *, void );
     DECL_LINK_TYPED( ChangeHideHdl, Button *, void );
     // #114856# edit in readonly sections
     DECL_LINK_TYPED( ChangeEditInReadonlyHdl, Button *, void );
-    DECL_LINK_TYPED(ChangeDismissHdl, Button*, void);
+    DECL_LINK_TYPED( ChangeDismissHdl, Button*, void);
     DECL_LINK_TYPED( UseFileHdl, Button*, void );
-    DECL_LINK_TYPED(FileSearchHdl, Button*, void);
-    DECL_LINK_TYPED(OptionsHdl, Button*, void);
-    DECL_LINK( FileNameHdl, Edit* );
+    DECL_LINK_TYPED( FileSearchHdl, Button*, void );
+    DECL_LINK_TYPED( OptionsHdl, Button*, void );
+    DECL_LINK_TYPED( FileNameHdl, Edit&, void );
     DECL_LINK_TYPED( DDEHdl, Button*, void );
     DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK_TYPED( SubRegionEventHdl, VclWindowEvent&, void );
@@ -174,9 +174,9 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK_TYPED( ChangeHideHdl, Button *, void );
     DECL_LINK_TYPED( ChangeProtectHdl, Button *, void );
     DECL_LINK_TYPED( ChangePasswdHdl, Button *, void );
-    DECL_LINK(NameEditHdl, void *);
+    DECL_LINK_TYPED( NameEditHdl, Edit&, void );
     DECL_LINK_TYPED( UseFileHdl, Button*, void );
-    DECL_LINK_TYPED(FileSearchHdl, Button*, void );
+    DECL_LINK_TYPED( FileSearchHdl, Button*, void );
     DECL_LINK_TYPED( DDEHdl, Button*, void );
     DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
 
@@ -243,7 +243,7 @@ class SwSectionIndentTabPage : public SfxTabPage
     VclPtr<MetricField>       m_pAfterMF;
     VclPtr<SvxParaPrevWindow> m_pPreviewWin;
 
-    DECL_LINK(IndentModifyHdl, void *);
+    DECL_LINK_TYPED(IndentModifyHdl, Edit&, void);
 public:
     SwSectionIndentTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();

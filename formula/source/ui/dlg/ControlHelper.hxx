@@ -100,7 +100,7 @@ private:
     DECL_LINK_TYPED( FxBtnClickHdl, Button*, void );
     DECL_LINK_TYPED( FxBtnFocusHdl, Control&, void );
     DECL_LINK_TYPED( EdFocusHdl, Control&, void );
-    DECL_LINK(  EdModifyHdl,ArgEdit* );
+    DECL_LINK_TYPED( EdModifyHdl, Edit&, void );
 
 protected:
 

@@ -79,7 +79,7 @@ private:
 
     void UpdateControlStates();
     DECL_LINK_TYPED( SelectTrendLine, Button *, void );
-    DECL_LINK( ChangeValue, void *);
+    DECL_LINK_TYPED( ChangeValue, Edit&, void);
 };
 
 } //  namespace chart

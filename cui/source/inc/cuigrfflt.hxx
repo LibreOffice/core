@@ -95,6 +95,7 @@ class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
     VclPtr<NumericField>   mpMtrRadius;
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 
 public:
 
@@ -113,6 +114,7 @@ private:
     VclPtr<MetricField>    mpMtrHeight;
     VclPtr<CheckBox>       mpCbxEdges;
     DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 public:
 
     GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
@@ -132,6 +134,7 @@ private:
     VclPtr<MetricField>    mpMtrThreshold;
     VclPtr<CheckBox>       mpCbxInvert;
     DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 
 public:
 
@@ -149,6 +152,7 @@ class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
     VclPtr<MetricField>    mpMtrSepia;
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 public:
     GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
@@ -165,6 +169,7 @@ class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
     VclPtr<NumericField>   mpNumPoster;
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 public:
     GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );

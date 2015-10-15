@@ -53,7 +53,7 @@ namespace dbaui
 
         // called when the test connection button was clicked
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK(OnEditModified, Edit*);
+        DECL_LINK_TYPED(OnEditModified, Edit&, void);
 
     public:
         virtual ~OConnectionTabPage();

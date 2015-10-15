@@ -319,15 +319,13 @@ IMPL_LINK_TYPED( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )
+IMPL_LINK_TYPED( ScMoveTableDlg, CheckNameHdl, Edit&, rEdt, void )
 {
-    if ( pEdt == pEdTabName )
+    if ( &rEdt == pEdTabName )
     {
         mbEverEdited = true;
         CheckNewTabName();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

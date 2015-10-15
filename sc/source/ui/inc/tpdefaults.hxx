@@ -35,8 +35,8 @@ private:
     void CheckPrefix(Edit* pEdit);
     void OnFocusPrefixInput(Edit* pEdit);
 
-    DECL_LINK(NumModifiedHdl, void *);
-    DECL_LINK( PrefixModifiedHdl, Edit* );
+    DECL_LINK_TYPED( NumModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( PrefixModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( PrefixEditOnFocusHdl, Control&, void );
 
 private:

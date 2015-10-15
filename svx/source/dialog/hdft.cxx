@@ -566,23 +566,19 @@ IMPL_LINK_TYPED( SvxHFPage, TurnOnHdl, Button *, pButton, void )
     UpdateExample();
 }
 
-IMPL_LINK_NOARG(SvxHFPage, DistModify)
+IMPL_LINK_NOARG_TYPED(SvxHFPage, DistModify, Edit&, void)
 {
     UpdateExample();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxHFPage, HeightModify)
+IMPL_LINK_NOARG_TYPED(SvxHFPage, HeightModify, Edit&, void)
 {
     UpdateExample();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxHFPage, BorderModify)
+IMPL_LINK_NOARG_TYPED(SvxHFPage, BorderModify, Edit&, void)
 {
     UpdateExample();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)

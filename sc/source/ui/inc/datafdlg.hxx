@@ -72,7 +72,7 @@ private:
     DECL_LINK_TYPED(Impl_CloseHdl, Button*, void);
 
     DECL_LINK_TYPED(Impl_ScrollHdl, ScrollBar*, void);
-    DECL_LINK( Impl_DataModifyHdl,  Edit*    );
+    DECL_LINK_TYPED(Impl_DataModifyHdl, Edit&, void);
 };
 #endif // INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 

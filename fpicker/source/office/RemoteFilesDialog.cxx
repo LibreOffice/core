@@ -987,13 +987,11 @@ IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, FileNameGetFocusHdl, Control&, void )
     m_pFileView->SetNoSelection();
 }
 
-IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, FileNameModifyHdl, Edit&, void )
 {
     m_pFileView->SetNoSelection();
     if( !m_pOk_btn->IsEnabled() )
         EnableControls();
-
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SplitHdl, Splitter*, void )

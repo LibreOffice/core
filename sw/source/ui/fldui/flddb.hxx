@@ -57,8 +57,8 @@ class SwFieldDBPage : public SwFieldPage
     DECL_LINK_TYPED( TypeListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( NumSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( TreeSelectHdl, SvTreeListBox*, void );
-    DECL_LINK(ModifyHdl, void *);
-    DECL_LINK_TYPED(AddDBHdl, Button*, void);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
+    DECL_LINK_TYPED( AddDBHdl, Button*, void );
     void TypeHdl(ListBox*);
 
     void                CheckInsert();

@@ -179,7 +179,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
     {
         // If something is selected in the document, prepopulate with this
         SetText( aString );
-        GetModifyHdl().Call(this); // FIXME why SetText doesn't trigger this?
+        GetModifyHdl().Call(*this); // FIXME why SetText doesn't trigger this?
     }
     else if (GetEntryCount() > 0)
     {
@@ -489,7 +489,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
     }
 }
 
-IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
+IMPL_LINK_NOARG_TYPED(FindTextToolbarController, EditModifyHdl, Edit&, void)
 {
     // enable or disable item DownSearch/UpSearch of findbar
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
@@ -511,8 +511,6 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
                 pToolBox->EnableItem(m_nUpSearchId, false);
         }
     }
-
-    return 0;
 }
 
 UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )

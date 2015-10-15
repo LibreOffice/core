@@ -297,12 +297,10 @@ IMPL_LINK_TYPED( ArgInput, EdFocusHdl, Control&, rControl, void )
         EdFocus();
 }
 
-IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
+IMPL_LINK_TYPED( ArgInput, EdModifyHdl, Edit&, rEdit, void )
 {
-    if(pEd == pEdArg)
+    if(&rEdit == pEdArg)
         EdModify();
-
-    return 0;
 }
 
 // class EditBox

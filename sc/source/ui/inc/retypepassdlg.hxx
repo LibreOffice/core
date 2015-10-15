@@ -134,7 +134,7 @@ private:
     DECL_LINK_TYPED( OKHdl, Button*, void );
     DECL_LINK_TYPED( RadioBtnHdl, Button*, void );
     DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
-    DECL_LINK( PasswordModifyHdl, void* );
+    DECL_LINK_TYPED( PasswordModifyHdl, Edit&, void );
 
     ScPassHashProtectable* mpProtected;
 };
