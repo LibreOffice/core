@@ -159,7 +159,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
+void SfxPickList::AddDocumentToPickList(SfxObjectShell* pDocSh, bool bAvoidThumbnail)
 {
     SfxMedium *pMed = pDocSh->GetMedium();
     if( !pMed )
@@ -197,7 +197,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     boost::optional<OUString> aThumbnail;
     // don't generate thumbnail when in headless mode, or on non-desktop (?)
 #if HAVE_FEATURE_DESKTOP
-    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
+    if (!bAvoidThumbnail && !pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
         SFX_ITEMSET_ARG( pMed->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
@@ -412,7 +412,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             case SFX_EVENT_OPENDOC:
             {
-                AddDocumentToPickList(pDocSh);
+                AddDocumentToPickList(pDocSh, /* bAvoidThumbnail = */ true);
             }
             break;
 
