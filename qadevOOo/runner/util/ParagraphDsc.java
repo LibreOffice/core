@@ -30,8 +30,6 @@ public class ParagraphDsc extends InstDescr {
 
     private static final String service = "com.sun.star.text.Paragraph";
     private static final String ifcName = "com.sun.star.text.XTextContent";
-    private String name = null;
-
 
     public ParagraphDsc() {
         initParagraph();
@@ -39,7 +37,7 @@ public class ParagraphDsc extends InstDescr {
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
 
     @Override
