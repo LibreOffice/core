@@ -40,7 +40,6 @@ namespace dbaui
     class DbaMouseDownListBoxController : public ListBoxCellController
     {
     protected:
-        Link<>  m_aOriginalModifyHdl;
         Link<>  m_aAdditionalModifyHdl;
 
     public:
@@ -53,38 +52,18 @@ namespace dbaui
 
     protected:
         virtual bool WantMouseEvent() const override { return true; }
-        virtual void SetModifyHdl(const Link<>& _rHdl) override;
-
-    private:
-        void implCheckLinks();
-        DECL_LINK( OnMultiplexModify, void* );
+        virtual void callModifyHdl() override;
     };
 
     void DbaMouseDownListBoxController::SetAdditionalModifyHdl(const Link<>& _rHdl)
     {
         m_aAdditionalModifyHdl = _rHdl;
-        implCheckLinks();
     }
 
-    void DbaMouseDownListBoxController::SetModifyHdl(const Link<>& _rHdl)
+    void DbaMouseDownListBoxController::callModifyHdl()
     {
-        m_aOriginalModifyHdl = _rHdl;
-        implCheckLinks();
-    }
-
-    IMPL_LINK( DbaMouseDownListBoxController, OnMultiplexModify, void*, _pArg )
-    {
-        m_aAdditionalModifyHdl.Call(_pArg);
-        m_aOriginalModifyHdl.Call(_pArg);
-        return 0L;
-    }
-
-    void DbaMouseDownListBoxController::implCheckLinks()
-    {
-        if (m_aAdditionalModifyHdl.IsSet() || m_aOriginalModifyHdl.IsSet())
-            ListBoxCellController::SetModifyHdl(LINK(this, DbaMouseDownListBoxController, OnMultiplexModify));
-        else
-            ListBoxCellController::SetModifyHdl(Link<>());
+        m_aAdditionalModifyHdl.Call(nullptr);
+        ListBoxCellController::callModifyHdl();
     }
 
     // IndexFieldsControl

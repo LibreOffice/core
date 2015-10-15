@@ -77,6 +77,7 @@ namespace svt
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
     {
+        GetComboBox().SetModifyHdl( LINK(this, ComboBoxCellController, ModifyHdl) );
     }
 
 
@@ -129,9 +130,10 @@ namespace svt
         GetComboBox().SaveValue();
     }
 
-    void ComboBoxCellController::SetModifyHdl(const Link<>& rLink)
+    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl)
     {
-        GetComboBox().SetModifyHdl(rLink);
+        callModifyHdl();
+        return 0;
     }
 
     //= ListBoxControl
@@ -215,14 +217,9 @@ namespace svt
     }
 
 
-    void ListBoxCellController::SetModifyHdl(const Link<>& rLink)
+    IMPL_LINK_NOARG_TYPED(ListBoxCellController, ListBoxSelectHdl, ListBox&, void)
     {
-        maModifyHdl = rLink;
-    }
-
-    IMPL_LINK_TYPED(ListBoxCellController, ListBoxSelectHdl, ListBox&, rListBox, void)
-    {
-        maModifyHdl.Call(&rListBox);
+        callModifyHdl();
     }
 
 
@@ -333,6 +330,11 @@ namespace svt
     //= CheckBoxCellController
 
 
+    CheckBoxCellController::CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin)
+    {
+        static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl( LINK(this, CheckBoxCellController, ModifyHdl) );
+    }
+
     bool CheckBoxCellController::WantMouseEvent() const
     {
         return true;
@@ -357,9 +359,10 @@ namespace svt
     }
 
 
-    void CheckBoxCellController::SetModifyHdl(const Link<>& rLink)
+    IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl)
     {
-        static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl(rLink);
+        callModifyHdl();
+        return 0;
     }
 
 
@@ -386,6 +389,7 @@ namespace svt
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
         ,m_bOwnImplementation( true )
     {
+        m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
     }
 
 
@@ -394,6 +398,7 @@ namespace svt
         ,m_pEditImplementation( _pImplementation )
         ,m_bOwnImplementation( false )
     {
+        m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
     }
 
 
@@ -446,9 +451,10 @@ namespace svt
     }
 
 
-    void EditCellController::SetModifyHdl(const Link<>& rLink)
+    IMPL_LINK_NOARG(EditCellController, ModifyHdl)
     {
-        m_pEditImplementation->SetModifyHdl(rLink);
+        callModifyHdl();
+        return 0;
     }
 
 
@@ -458,6 +464,7 @@ namespace svt
     SpinCellController::SpinCellController(SpinField* pWin)
                          :CellController(pWin)
     {
+        GetSpinWindow().SetModifyHdl( LINK(this, SpinCellController, ModifyHdl) );
     }
 
 
@@ -503,9 +510,10 @@ namespace svt
     }
 
 
-    void SpinCellController::SetModifyHdl(const Link<>& rLink)
+    IMPL_LINK_NOARG(SpinCellController, ModifyHdl)
     {
-        GetSpinWindow().SetModifyHdl(rLink);
+        callModifyHdl();
+        return 0;
     }
 
 

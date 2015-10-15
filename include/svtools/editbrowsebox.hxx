@@ -83,10 +83,11 @@ namespace svt
     class SVT_DLLPUBLIC CellController : public SvRefBase
     {
         friend class EditBrowseBox;
+        Link<LinkParamNone*, void> maModifyHdl;
 
     protected:
-        VclPtr<Control>  pWindow;
-        bool        bSuspended;     // <true> if the window is hidden and disabled
+        VclPtr<Control>            pWindow;
+        bool                       bSuspended;     // <true> if the window is hidden and disabled
 
     public:
         TYPEINFO();
@@ -111,8 +112,9 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const;
-        virtual void SetModifyHdl(const Link<>& rLink) = 0;
+        void SetModifyHdl(const Link<LinkParamNone*,void>& rLink) { maModifyHdl = rLink; }
         virtual bool WantMouseEvent() const;
+        virtual void callModifyHdl() { maModifyHdl.Call(nullptr); }
     };
 
     typedef tools::SvRef<CellController> CellControllerRef;
@@ -249,7 +251,8 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        virtual void SetModifyHdl(const Link<>& rLink) override;
+    private:
+        DECL_LINK(ModifyHdl, void*);
     };
 
 
@@ -269,7 +272,8 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        virtual void SetModifyHdl(const Link<>& rLink) override;
+    private:
+        DECL_LINK(ModifyHdl, void*);
     };
 
 
@@ -313,15 +317,16 @@ namespace svt
     public:
         TYPEINFO_OVERRIDE();
 
-        CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin){}
+        CheckBoxCellController(CheckBoxControl* pWin);
         CheckBox& GetCheckBox() const;
 
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
 
     protected:
-        virtual void SetModifyHdl(const Link<>& rLink) override;
         virtual bool WantMouseEvent() const override;
+    private:
+        DECL_LINK(ModifyHdl, void*);
     };
 
 
@@ -354,7 +359,8 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        virtual void SetModifyHdl(const Link<>& rLink) override;
+    private:
+        DECL_LINK(ModifyHdl, void*);
     };
 
 
@@ -388,9 +394,7 @@ namespace svt
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        virtual void SetModifyHdl(const Link<>& rLink) override;
     private:
-        Link<> maModifyHdl;
         DECL_LINK_TYPED(ListBoxSelectHdl, ListBox&, void);
     };
 
@@ -669,7 +673,7 @@ namespace svt
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
         SVT_DLLPRIVATE void impl_construct();
 
-        DECL_DLLPRIVATE_LINK(ModifyHdl, void* );
+        DECL_DLLPRIVATE_LINK_TYPED(ModifyHdl, LinkParamNone*, void );
         DECL_DLLPRIVATE_LINK_TYPED(StartEditHdl, void*, void );
         DECL_DLLPRIVATE_LINK_TYPED(EndEditHdl, void*, void );
         DECL_DLLPRIVATE_LINK_TYPED(CellModifiedHdl, void*, void );

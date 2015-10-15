@@ -1044,7 +1044,7 @@ namespace svt
             aController.Clear();
 
             // reset the modify handler
-            aOldController->SetModifyHdl(Link<>());
+            aOldController->SetModifyHdl(Link<LinkParamNone*,void>());
 
             if (bHasFocus)
                 GrabFocus(); // ensure that we have (and keep) the focus
@@ -1088,12 +1088,11 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditBrowseBox, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(EditBrowseBox, ModifyHdl, LinkParamNone*, void)
     {
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
         nCellModifiedEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,CellModifiedHdl), NULL, true);
-        return 0;
     }
 
 
