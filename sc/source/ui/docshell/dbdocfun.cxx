@@ -511,8 +511,12 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
+    SCROW nStartRow = aLocalParam.nRow1;
+    if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
+        ++nStartRow;
+
     if ( aLocalParam.bIncludePattern && rDoc.HasAttrib(
-                                        aLocalParam.nCol1, aLocalParam.nRow1, nTab,
+                                        aLocalParam.nCol1, nStartRow        , nTab,
                                         aLocalParam.nCol2, aLocalParam.nRow2, nTab,
                                         HASATTR_MERGED | HASATTR_OVERLAPPED ) )
     {
@@ -532,10 +536,6 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     bool bShrunk = false;
     rDoc.ShrinkToUsedDataArea( bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
             aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow, !aLocalParam.bByRow);
-
-    SCROW nStartRow = aLocalParam.nRow1;
-    if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
-        ++nStartRow;
 
     // Calculate the script types for all cells in the sort range beforehand.
     // This will speed up the row height adjustment that takes place after the
