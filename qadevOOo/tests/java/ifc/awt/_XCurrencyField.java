@@ -154,9 +154,10 @@ public class _XCurrencyField extends MultiMethodTest {
         requiredMethod("getFirst()");
 
         boolean result = true;
-        oObj.setFirst(first + 1.1);
+        double value = first + 1.1;
+        oObj.setFirst(value);
         double ret = oObj.getFirst();
-        result = ret == first + 1.1;
+        result = ret == value;
 
         tRes.tested("setFirst()", result);
     }
