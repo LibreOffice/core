@@ -65,34 +65,23 @@ public final class Driver {
      * @param  args  The argument passed on the command line.
      */
     public static void main(String args[]) {
-
-        // Register jarfiles
-        String propFile       = "ConverterInfoList.properties";
-        ConverterInfoList cil = null;
         try {
-            cil = new ConverterInfoList(propFile);
-        } catch (Exception e) {
-            System.out.println("\nCannot not load " + propFile +
-                " property file");
-        }
+            // Register jarfiles
+            String propFile = "ConverterInfoList.properties";
+            ConverterInfoList cil = new ConverterInfoList(propFile);
 
-        Iterator<ConverterInfo> jarInfoEnumeration;
-        ConverterInfoReader cir;
-
-        Iterator<String> jarFileEnum = cil.getJarFileEnum();
-        while (jarFileEnum.hasNext()) {
-            String jarName = jarFileEnum.next();
-            try {
-                cir = new ConverterInfoReader(jarName, false);
-                jarInfoEnumeration = cir.getConverterInfoEnumeration();
-                ConverterInfoMgr.addPlugIn(jarInfoEnumeration);
-            } catch (Exception e) {
-                System.out.println("\nCannot not load <" + jarName +
-                    "> from the <" + propFile + "> property file");
+            Iterator<String> jarFileEnum = cil.getJarFileEnum();
+            while (jarFileEnum.hasNext()) {
+                String jarName = jarFileEnum.next();
+                try {
+                    ConverterInfoReader cir = new ConverterInfoReader(jarName, false);
+                    Iterator<ConverterInfo> jarInfoEnumeration = cir.getConverterInfoEnumeration();
+                    ConverterInfoMgr.addPlugIn(jarInfoEnumeration);
+                } catch (Exception e) {
+                    System.out.println("\nCannot not load <" + jarName +
+                        "> from the <" + propFile + "> property file");
+                }
             }
-        }
-
-        try {
 
             Driver app = new Driver();
             app.parseCommandLine(args);
