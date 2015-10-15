@@ -169,7 +169,6 @@ public class SQLQueryComposer
 
     private void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
     {
-        String sOrder = "";
         m_queryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
@@ -177,7 +176,7 @@ public class SQLQueryComposer
             int iAggregate = CurDBMetaData.getAggregateIndex(sSortValue);
             if (iAggregate > -1)
             {
-                sOrder = m_xQueryAnalyzer.getOrder();
+                String sOrder = m_xQueryAnalyzer.getOrder();
                 if (sOrder.length() > 0)
                 {
                     sOrder += ", ";
@@ -190,10 +189,7 @@ public class SQLQueryComposer
             {
                 appendSortingCriterion(i, _baddAliasFieldNames);
             }
-            sOrder = m_xQueryAnalyzer.getOrder();
         }
-        // just for debug!
-        sOrder = m_queryComposer.getOrder();
     }
 
     private void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
