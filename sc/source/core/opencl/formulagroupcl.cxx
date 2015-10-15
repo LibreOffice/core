@@ -1776,13 +1776,6 @@ public:
                 ss << ";\n";
                 ss << "    }\n";
                 ss << "}\n";
-                if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                        formula::svSingleVectorRef && ZeroReturnZero())
-                {
-                    ss << "else{\n";
-                    ss << "        return 0;\n";
-                    ss << "    }\n";
-                }
             }
             else
             {
