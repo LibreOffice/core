@@ -193,17 +193,14 @@ public class XMergeBridge {
 
         XParser xParser = UnoRuntime.queryInterface(
                         XParser.class , xSaxParserObj );
-        if (xParser==null){
-            System.out.println("\nParser creation Failed");
-        }
         xOutStream.closeOutput();
         InputSource aInput = new InputSource();
         if (sFileName==null){
             sFileName="";
-            }
+        }
         aInput.sSystemId = sFileName;
         aInput.aInputStream =xInStream;
-                xParser.setDocumentHandler ( xDocHandler );
+        xParser.setDocumentHandler ( xDocHandler );
 
         xParser.parseStream ( aInput );
         xOutStream.closeOutput();
