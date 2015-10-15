@@ -298,6 +298,14 @@ void DesktopLOKTest::testPaintTile()
     // 256.
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
+    // This crashed in OutputDevice::DrawDeviceAlphaBitmap().
+    nCanvasWidth = 200;
+    nCanvasHeight = 200;
+    nTileWidth = 4000;
+    nTileHeight = 4000;
+    aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
+    pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
     closeDoc();
 }
 
