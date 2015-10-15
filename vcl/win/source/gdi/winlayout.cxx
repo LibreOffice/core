@@ -1986,7 +1986,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         for(; (i < rVisualItem.mnEndCharPos) && (i < mnEndCharPos); ++i )
         {
             int j = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
-            int nCurrIdx = i * 2;
+            int nCurrIdx = (i - mnMinCharPos) * 2;
             if( !rVisualItem.IsRTL() )
             {
                 // normal positions for LTR case
