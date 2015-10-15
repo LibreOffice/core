@@ -23,6 +23,7 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/srchitem.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -51,6 +52,7 @@ public:
     void testSetGraphicSelection();
     void testResetSelection();
     void testSearch();
+    void testSearchAll();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -63,6 +65,7 @@ public:
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
+    CPPUNIT_TEST(testSearchAll);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -371,12 +374,13 @@ void SdTiledRenderingTest::testResetSelection()
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
 }
 
-static void lcl_search(const OUString& rKey)
+static void lcl_search(const OUString& rKey, bool bFindAll = false)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(rKey)},
-        {"SearchItem.Backward", uno::makeAny(false)}
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
@@ -412,6 +416,17 @@ void SdTiledRenderingTest::testSearch()
     // This should trigger the not-found callback.
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+}
+
+void SdTiledRenderingTest::testSearchAll()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+
+    lcl_search("match", /*bFindAll=*/true);
+
+    OString aUsedFormat;
+    // This was empty: find-all did not highlight the first match.
+    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 }
 
 #endif
