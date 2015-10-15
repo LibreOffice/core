@@ -127,9 +127,6 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
     public void skipBytes(int n) throws
             com.sun.star.io.IOException
     {
-        int tmpLongVal = n;
-        int  tmpIntVal;
-
         try {
             iIn.available();
         } catch (IOException e) {
@@ -137,20 +134,12 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
         }
 
         do {
-            if (tmpLongVal >= Integer.MAX_VALUE) {
-               tmpIntVal = Integer.MAX_VALUE;
-            } else {
-               // Casting is safe here.
-               tmpIntVal = tmpLongVal;
-            }
-            tmpLongVal -= tmpIntVal;
-
             try {
-                iIn.skip(tmpIntVal);
+                n -= iIn.skip(n);
             } catch (IOException e) {
                 throw new com.sun.star.io.IOException(e);
             }
-        } while (tmpLongVal > 0);
+        } while (n > 0);
     }
 }
 
