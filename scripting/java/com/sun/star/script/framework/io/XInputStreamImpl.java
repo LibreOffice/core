@@ -75,7 +75,9 @@ public class XInputStreamImpl implements XInputStream {
         com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
 
         try {
-            is.skip(nBytesToSkip);
+            do {
+                nBytesToSkip -= is.skip(nBytesToSkip);
+            } while (nBytesToSkip > 0);
         } catch (IOException e) {
             throw new com.sun.star.io.IOException(e);
         }
