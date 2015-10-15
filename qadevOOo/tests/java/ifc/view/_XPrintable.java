@@ -117,29 +117,23 @@ public class _XPrintable extends MultiMethodTest {
      * <code>com.sun.star.ucb.SimpleFileAccess</code> cann't be
      * created.
      */
-    public void _print(){
+    public void _print() throws Exception {
         boolean result = true ;
 
         final String file = "XPrintable.prt" ;
         final String fileName = utils.getOfficeTempDirSys(tParam.getMSF())+file ;
         final String fileURL = utils.getOfficeTemp(tParam.getMSF()) + file ;
 
-        XSimpleFileAccess fAcc = null ;
-        try {
-            Object oFAcc =
-                tParam.getMSF().createInstance
-                ("com.sun.star.ucb.SimpleFileAccess") ;
-            fAcc = UnoRuntime.queryInterface
-                (XSimpleFileAccess.class, oFAcc) ;
-            if (fAcc == null) throw new StatusException
-                (Status.failed("Can't create SimpleFileAccess service")) ;
-            if (fAcc.exists(fileURL)) {
-                log.println("Old file exists and will be deleted");
-                fAcc.kill(fileURL);
-            }
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Error accessing file '" + fileURL + "'");
-            e.printStackTrace(log);
+        Object oFAcc =
+            tParam.getMSF().createInstance
+            ("com.sun.star.ucb.SimpleFileAccess") ;
+        XSimpleFileAccess fAcc = UnoRuntime.queryInterface
+            (XSimpleFileAccess.class, oFAcc) ;
+        if (fAcc == null) throw new StatusException
+            (Status.failed("Can't create SimpleFileAccess service")) ;
+        if (fAcc.exists(fileURL)) {
+            log.println("Old file exists and will be deleted");
+            fAcc.kill(fileURL);
         }
 
         try {
