@@ -107,10 +107,14 @@ public class ValueChanger {
             else
                 newValue = OR1;
         } else if (oldValue instanceof com.sun.star.lang.Locale) {
-            Object Loc1 = new com.sun.star.lang.Locale("en", "US", "");
-            Object Loc2 = new com.sun.star.lang.Locale("de", "DE", "");
-
-            if (oldValue.equals(Loc1))
+            com.sun.star.lang.Locale Loc1 = new com.sun.star.lang.Locale(
+                "en", "US", "");
+            com.sun.star.lang.Locale Loc2 = new com.sun.star.lang.Locale(
+                "de", "DE", "");
+            com.sun.star.lang.Locale old = (com.sun.star.lang.Locale) oldValue;
+            if (old.Language.equals(Loc1.Language)
+                && old.Country.equals(Loc1.Country)
+                && old.Variant.equals(Loc1.Variant))
                 newValue = Loc2;
             else
                 newValue = Loc1;
