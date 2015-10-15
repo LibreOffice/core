@@ -48,16 +48,13 @@ public class _XControlShape extends MultiMethodTest {
 
     public XControlShape oObj = null;
 
-    XControlModel model = null;
-
     /**
     * Test calls the method. <p>
     * Has <b> OK </b> status if the method successfully returns
     * and no exceptions were thrown. <p>
     */
     public void _getControl() {
-        model = oObj.getControl() ;
-
+        oObj.getControl();
         tRes.tested("getControl()", true) ;
     }
 
