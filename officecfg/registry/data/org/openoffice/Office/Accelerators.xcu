@@ -751,13 +751,19 @@
         <node oor:name="F4" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ViewDataSourceBrowser</value>
+            <value xml:lang="en-US">.uno:ToggleRelative</value>
           </prop>
         </node>
         <node oor:name="F4_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:ToggleRelative</value>
+          </prop>
+        </node>
+        <node oor:name="F4_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:ViewDataSourceBrowser</value>
           </prop>
         </node>
         <node oor:name="F5" oor:op="replace">
