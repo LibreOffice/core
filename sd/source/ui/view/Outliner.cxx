@@ -667,6 +667,14 @@ bool Outliner::SearchAndReplaceAll()
     }
 
     RestoreStartPosition ();
+
+    if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && !bRet)
+    {
+        // Find-all, tiled rendering and we have at least one match.
+        OString aPayload = OString::number(mnStartPageIndex);
+        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+    }
+
     mnStartPageIndex = (sal_uInt16)-1;
 
     return bRet;
