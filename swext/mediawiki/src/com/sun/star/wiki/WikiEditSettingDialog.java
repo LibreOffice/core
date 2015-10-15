@@ -308,7 +308,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                       null,
                                       false );
                 }
-            } while ( sRedirectURL.length() > 0 );
+            } while (sRedirectURL != null && sRedirectURL.length() > 0);
         }
         catch ( WikiCancelException ce )
         {
