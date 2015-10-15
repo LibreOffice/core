@@ -63,7 +63,7 @@ protected:
         return false;
     }
 
-    virtual void postLoad(const char* pFilename) SAL_OVERRIDE
+    virtual void postLoad(const char* pFilename) override
     {
         if (OString(pFilename) == "tdf94386.odt")
         {
