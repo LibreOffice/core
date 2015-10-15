@@ -44,7 +44,6 @@ $(eval $(call gb_Jar_add_sourcefiles,ridl,\
     ridljar/com/sun/star/uno/IQueryInterface \
     ridljar/com/sun/star/uno/ITypeDescription \
     ridljar/com/sun/star/uno/Type \
-    ridljar/com/sun/star/uno/Union \
     ridljar/com/sun/star/uno/UnoRuntime \
 ))
 
