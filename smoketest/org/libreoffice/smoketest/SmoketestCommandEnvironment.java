@@ -75,7 +75,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
     public void handle( com.sun.star.task.XInteractionRequest xRequest )
     {
         boolean approve = true;
-        boolean abort = false;
 
         com.sun.star.task.XInteractionContinuation[] conts = xRequest.getContinuations();
         for (int i = 0; i < conts.length; i++)
@@ -88,15 +87,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
                     xApprove.select();
                 //don't query again for ongoing extensions
                 approve = false;
-            }
-            else if (abort)
-            {
-                com.sun.star.task.XInteractionAbort xAbort =
-                    UnoRuntime.queryInterface(com.sun.star.task.XInteractionAbort.class, conts[i]);
-                if (xAbort != null)
-                    xAbort.select();
-                //don't query again for ongoing extensions
-                abort = false;
             }
         }
     }
