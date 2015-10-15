@@ -145,8 +145,13 @@ public class ProviderBrowseNode extends PropertySet implements
             result = false;
         }
 
-        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " + "name=" + name +
+        if (container == null) {
+            LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " + "name=" + name +
+                       ", path=<none>, result=" + result);
+        } else {
+            LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " + "name=" + name +
                        ", path=" + container.getParcelContainerDir() + ", result=" + result);
+        }
 
         return result;
     }
