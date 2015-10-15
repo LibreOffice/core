@@ -30,7 +30,6 @@ $(eval $(call gb_Jar_use_jars,OOoRunner,\
 
 $(eval $(call gb_Jar_set_packageroot,OOoRunner,\
 	base \
-	complex \
 	complexlib \
 	convwatch \
 	graphical \
@@ -139,7 +138,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/util/XLayerImpl \
     qadevOOo/runner/util/XMLTools \
     qadevOOo/runner/util/XSchemaHandlerImpl \
-    qadevOOo/tests/java/complex/unoapi/CheckModuleAPI \
     qadevOOo/tests/java/ifc/accessibility/_XAccessible \
     qadevOOo/tests/java/ifc/accessibility/_XAccessibleAction \
     qadevOOo/tests/java/ifc/accessibility/_XAccessibleComponent \
