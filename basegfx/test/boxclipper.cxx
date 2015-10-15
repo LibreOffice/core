@@ -35,8 +35,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/random.hxx>
 
-#include <boost/bind.hpp>
-
 #include <boxclipper.hxx>
 
 using namespace ::basegfx;
@@ -168,14 +166,10 @@ public:
             OUString::createFromAscii(randomSvg), false, 0);
         std::for_each(randomPoly.begin(),
                       randomPoly.end(),
-                      boost::bind(
-             &B2DPolyRange::appendElement,
-                          boost::ref(aRandomIntersections),
-                          boost::bind(
-                 &B2DPolygon::getB2DRange,
-                              _1),
-                          B2VectorOrientation::Negative,
-                          1));
+                      [this](const B2DPolygon& poly)
+                      {this->aRandomIntersections.appendElement(poly.getB2DRange(),
+                                                            B2VectorOrientation::Negative,
+                                                            1);});
 #endif
     }
 
@@ -223,14 +217,8 @@ public:
         // now, sort all polygons with increasing 0th point
         std::sort(aRes.begin(),
                   aRes.end(),
-                  boost::bind(
-                      &compare,
-                      boost::bind(
-                          &B2DPolygon::getB2DPoint,
-                          _1,0),
-                      boost::bind(
-                          &B2DPolygon::getB2DPoint,
-                          _2,0)));
+                  [](const B2DPolygon& left, const B2DPolygon& right)
+                  {return compare(left.getB2DPoint(0), right.getB2DPoint(0));});
 
         return aRes;
     }
