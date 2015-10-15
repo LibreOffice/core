@@ -789,7 +789,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     {
         for (int nCol = 0; nCol < nCanvasWidth; ++nCol)
         {
-            const int nOffset = (nCanvasHeight * nRow) + nCol;
+            const int nOffset = (nCanvasWidth * nRow) + nCol;
             // VCL's transparent is 0, RGBA's transparent is 0xff.
             pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
         }

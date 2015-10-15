@@ -61,6 +61,7 @@ public:
     void testGetFilterTypes();
     void testGetPartPageRectangles();
     void testSearchCalc();
+    void testPaintTile();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
+    CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -278,6 +280,25 @@ void DesktopLOKTest::testSearchCalc()
 
     closeDoc();
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testPaintTile()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    int nCanvasWidth = 100;
+    int nCanvasHeight = 300;
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+    int nTilePosX = 0;
+    int nTilePosY = 0;
+    int nTileWidth = 1000;
+    int nTileHeight = 3000;
+
+    // This used to crash: painTile() implementation did not handle
+    // nCanvasWidth != nCanvasHeight correctly, as usually both are just always
+    // 256.
+    pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    closeDoc();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
