@@ -6431,4 +6431,79 @@ void Test::testFuncSUMSQ()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaErrorPropagation()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScAddress aPos, aPos2;
+    const OUString aTRUE("TRUE");
+    const OUString aFALSE("FALSE");
+
+    aPos.Set(0,0,0);// A1
+    m_pDoc->SetValue( aPos, 1.0);
+    aPos.IncCol();  // B1
+    m_pDoc->SetValue( aPos, 2.0);
+    aPos.IncCol();
+
+    aPos.IncRow();  // C2
+    m_pDoc->SetString( aPos, "=ISERROR(A1:B1+3)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+
+    aPos.IncRow();  // C3
+    m_pDoc->SetString( aPos, "=ISERROR(A1:B1+{3})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    aPos.IncRow();  // C4
+    aPos2 = aPos;
+    aPos2.IncCol(); // D4
+    m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(A1:B1+{3})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+
+    aPos.IncRow();  // C5
+    m_pDoc->SetString( aPos, "=ISERROR({1;\"x\"}+{3;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    aPos.IncRow();  // C6
+    aPos2 = aPos;
+    aPos2.IncCol(); // D6
+    m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR({1;\"x\"}+{3;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
+
+    aPos.IncRow();  // C7
+    m_pDoc->SetString( aPos, "=ISERROR({\"x\";2}+{3;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    aPos.IncRow();  // C8
+    aPos2 = aPos;
+    aPos2.IncCol(); // D8
+    m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR({\"x\";2}+{3;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+
+    aPos.IncRow();  // C9
+    m_pDoc->SetString( aPos, "=ISERROR(({1;\"x\"}+{3;4})-{5;6})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    aPos.IncRow();  // C10
+    aPos2 = aPos;
+    aPos2.IncCol(); // D10
+    m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({1;\"x\"}+{3;4})-{5;6})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos2));
+
+    aPos.IncRow();  // C11
+    m_pDoc->SetString( aPos, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    aPos.IncRow();  // C12
+    aPos2 = aPos;
+    aPos2.IncCol(); // D12
+    m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
