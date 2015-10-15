@@ -66,7 +66,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/helper/ConfigHelper \
     qadevOOo/runner/helper/ConfigurationRead \
     qadevOOo/runner/helper/ContextMenuInterceptor \
-    qadevOOo/runner/helper/CwsDataExchangeImpl \
     qadevOOo/runner/helper/FileTools \
     qadevOOo/runner/helper/LoggingThread \
     qadevOOo/runner/helper/OfficeProvider \

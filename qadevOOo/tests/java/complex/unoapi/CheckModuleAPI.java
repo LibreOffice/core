@@ -28,7 +28,6 @@ import helper.ProcessHandler;
 import com.sun.star.lang.XMultiServiceFactory;
 import helper.BuildEnvTools;
 import helper.ComplexDescGetter;
-import helper.CwsDataExchangeImpl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,11 +185,8 @@ public class CheckModuleAPI extends ComplexTestCase
 
     private String[] getAllModuleCommand()
     {
-        String[] checkModules;
-
         final String[] names = getModulesFromSourceRoot();
-        checkModules = getCheckModuleCommand(names);
-
+        String[] checkModules = getCheckModuleCommand(names);
         return checkModules;
     }
 
@@ -252,47 +248,6 @@ public class CheckModuleAPI extends ComplexTestCase
                     };
         }
         return cmdLines;
-    }
-
-    private String[] getCwsModuleCommand()
-    {
-        String[] checkModules;
-        final String version = (String) param.get(PropertyName.VERSION);
-        String[] names = null;
-        if (version.startsWith("cws_"))
-        {
-            try
-            {
-                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
-                final ArrayList<String> addedModules = cde.getModules();
-
-                final ArrayList<String> moduleNames = new ArrayList<String>();
-                Iterator<String> iterator = addedModules.iterator();
-                while (iterator.hasNext())
-                {
-                    String sModuleName = iterator.next();
-                    if (doesQaUnoApiFolderExist(mSRC_ROOT, sModuleName))
-                    {
-                        moduleNames.add(sModuleName);
-                    }
-                }
-                names = moduleNames.toArray(new String[moduleNames.size()]);
-            }
-            catch (ParameterNotFoundException ex)
-            {
-                this.failed(ex.toString(), false);
-            }
-
-
-        }
-        else
-        {
-            // major version: all modules must be tested
-            names = getModulesFromSourceRoot();
-        }
-        checkModules = getCheckModuleCommand(names);
-
-        return checkModules;
     }
 
     private String[] getDefinedModuleCommand(String module)
@@ -464,13 +419,9 @@ public class CheckModuleAPI extends ComplexTestCase
         all: check all modules which contains a qa/unoapi folder
         auto: check all modules which contains a qa/unoapi folder except the module is not added
          */
-        if (module.equals("all"))
+        if (module.equals("all") || module.equals("auto"))
         {
             checkModules = getAllModuleCommand();
-        }
-        else if (module.equals("auto"))
-        {
-            checkModules = getCwsModuleCommand();
         }
         else
         {
@@ -497,27 +448,6 @@ public class CheckModuleAPI extends ComplexTestCase
         {
             log.println("No modules containing qa/unoapi folder found => OK");
             state = true;
-        }
-
-        setUnoApiCwsStatus(state);
-
-    }
-
-    private void setUnoApiCwsStatus(boolean status)
-    {
-        final String version = (String) param.get(PropertyName.VERSION);
-        if (version.startsWith("cws_"))
-        {
-            try
-            {
-
-                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
-                cde.setUnoApiCwsStatus(status);
-            }
-            catch (ParameterNotFoundException ex)
-            {
-                log.println("ERROR: could not wirte status to EIS database: " + ex.toString());
-            }
         }
     }
 
