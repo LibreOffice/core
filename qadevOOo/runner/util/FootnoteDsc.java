@@ -29,8 +29,6 @@ public class FootnoteDsc extends InstDescr {
 
     private static final String service = "com.sun.star.text.Footnote";
     private static final String ifcName = "com.sun.star.text.XTextContent";
-    private String name = null;
-
 
     public FootnoteDsc() {
         initFootnote();
@@ -38,7 +36,7 @@ public class FootnoteDsc extends InstDescr {
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
 
     @Override
