@@ -44,7 +44,6 @@ public class XMLTools {
         }
         private final HashMap<String, Attribute> attrByName = new HashMap<String, Attribute>() ;
         private final ArrayList<Attribute> attributes = new ArrayList<Attribute>() ;
-        private PrintWriter log = null ;
 
         /**
          * Creates a class instance.
@@ -83,47 +82,30 @@ public class XMLTools {
         ****************************************/
 
         public short getLength() {
-            if (log != null)
-                log.println("getLength() called -> " + attributes.size()) ;
             return (short) attributes.size() ;
         }
 
         public String getNameByIndex(short idx) {
             String name = attributes.get(idx).Name ;
-            if (log != null)
-                log.println("getNameByIndex(" + idx + ") called -> '" +
-                name + "'") ;
             return name ;
         }
 
         public String getTypeByIndex(short idx) {
             String type = attributes.get(idx).Type  ;
-            if (log != null)
-                log.println("getTypeByIndex(" + idx + ") called -> '" +
-                    type + "'") ;
             return type;
         }
 
         public String getTypeByName(String name) {
             String type = attrByName.get(name).Type ;
-            if (log != null)
-                log.println("getTypeByName('" + name + "') called -> '" +
-                    type + "'") ;
             return type;
         }
         public String getValueByIndex(short idx) {
             String value = attributes.get(idx).Value ;
-            if (log != null)
-                log.println("getValueByIndex(" + idx + ") called -> '" +
-                    value + "'") ;
-            return  value;
+            return value;
         }
 
         public String getValueByName(String name) {
             String value = attrByName.get(name).Value ;
-            if (log != null)
-                log.println("getValueByName('" + name + "') called -> '" +
-                    value + "'") ;
             return value;
         }
     }
