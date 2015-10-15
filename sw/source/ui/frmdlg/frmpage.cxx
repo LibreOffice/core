@@ -684,7 +684,7 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pAtVertPosED->SetLoseFocusHdl( aLk3 );
     m_pFollowTextFlowCB->SetClickHdl( LINK(this, SwFrmPage, RangeModifyClickHdl) );
 
-    Link<> aLk = LINK(this, SwFrmPage, ModifyHdl);
+    Link<Edit&,void> aLk = LINK(this, SwFrmPage, ModifyHdl);
     m_aWidthED.SetModifyHdl( aLk );
     m_aHeightED.SetModifyHdl( aLk );
     m_pAtHorzPosED->SetModifyHdl( aLk );
@@ -1788,9 +1788,9 @@ IMPL_LINK_TYPED( SwFrmPage, RelSizeClickHdl, Button *, p, void )
     RangeModifyHdl();  // correct the values again
 
     if (pBtn == m_pRelWidthCB)
-        ModifyHdl(m_aWidthED.get());
+        ModifyHdl(*m_aWidthED.get());
     else // pBtn == m_pRelHeightCB
-        ModifyHdl(m_aHeightED.get());
+        ModifyHdl(*m_aHeightED.get());
 }
 
 // range check
@@ -2099,18 +2099,18 @@ IMPL_LINK_NOARG_TYPED(SwFrmPage, AutoHeightClickHdl, Button*, void)
         HandleAutoCB( m_pAutoHeightCB->IsChecked(), *m_pHeightFT, *m_pHeightAutoFT, *m_aWidthED.get() );
 }
 
-IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SwFrmPage, ModifyHdl, Edit&, rEdit, void )
 {
     SwTwips nWidth  = static_cast< SwTwips >(m_aWidthED.DenormalizePercent(m_aWidthED.GetValue(FUNIT_TWIP)));
     SwTwips nHeight = static_cast< SwTwips >(m_aHeightED.DenormalizePercent(m_aHeightED.GetValue(FUNIT_TWIP)));
     if ( m_pFixedRatioCB->IsChecked() )
     {
-        if (pEdit == m_aWidthED.get())
+        if (&rEdit == m_aWidthED.get())
         {
             nHeight = SwTwips((double)nWidth / fWidthHeightRatio);
             m_aHeightED.SetPrcntValue(m_aHeightED.NormalizePercent(nHeight), FUNIT_TWIP);
         }
-        else if (pEdit == m_aHeightED.get())
+        else if (&rEdit == m_aHeightED.get())
         {
             nWidth = SwTwips((double)nHeight * fWidthHeightRatio);
             m_aWidthED.SetPrcntValue(m_aWidthED.NormalizePercent(nWidth), FUNIT_TWIP);
@@ -2118,7 +2118,6 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
     }
     fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
     UpdateExample();
-    return 0;
 }
 
 void SwFrmPage::UpdateExample()
@@ -3192,13 +3191,11 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
     return bRet;
 }
 
-IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwFrmAddPage, EditModifyHdl, Edit&, void)
 {
     bool bEnable = !pNameED->GetText().isEmpty();
     pAltNameED->Enable(bEnable);
     pAltNameFT->Enable(bEnable);
-
-    return 0;
 }
 
 void SwFrmAddPage::SetFormatUsed(bool bFormatUsed)

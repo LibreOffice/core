@@ -57,8 +57,9 @@ private:
 
     void                FillTypeLB();
 
-    DECL_LINK( ChangeAttrHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeAttrEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ChangeAttrListBoxHdl_Impl, ListBox&, void );
+    void ChangeAttrHdl_Impl(void*);
 
 public:
 

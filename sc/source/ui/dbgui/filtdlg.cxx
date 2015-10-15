@@ -451,7 +451,7 @@ void ScFilterDlg::SetActive()
     if ( bRefInputMode )
     {
         pEdCopyArea->GrabFocus();
-        ((Link<>&)pEdCopyArea->GetModifyHdl()).Call( pEdCopyArea );
+        pEdCopyArea->GetModifyHdl().Call( *pEdCopyArea );
     }
     else
         GrabFocus();
@@ -1051,91 +1051,87 @@ IMPL_LINK_TYPED( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
     }
 }
 
-IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
+IMPL_LINK_TYPED( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
 {
     size_t nOffset = GetSliderPos();
     size_t i = 0;
     size_t nQE = i + nOffset;
-    if ( pEd )
+    OUString aStrVal = rEd.GetText();
+    ListBox*  pLbCond   = pLbCond1;
+    ListBox*  pLbField  = pLbField1;
+    if ( &rEd == pEdVal2 )
     {
-        OUString aStrVal = pEd->GetText();
-        ListBox*  pLbCond   = pLbCond1;
-        ListBox*  pLbField  = pLbField1;
-        if ( pEd == pEdVal2 )
-        {
-            pLbCond  = pLbCond2;
-            pLbField = pLbField2;
-            i=1;
-            nQE=i+nOffset;
-        }
-        if ( pEd == pEdVal3 )
-        {
-            pLbCond = pLbCond3;
-            pLbField = pLbField3;
-            i=2;
-            nQE=i+nOffset;
-        }
-        if ( pEd == pEdVal4 )
-        {
-            pLbCond = pLbCond4;
-            pLbField = pLbField4;
-            i=3;
-            nQE=i+nOffset;
-        }
+        pLbCond  = pLbCond2;
+        pLbField = pLbField2;
+        i=1;
+        nQE=i+nOffset;
+    }
+    if ( &rEd == pEdVal3 )
+    {
+        pLbCond = pLbCond3;
+        pLbField = pLbField3;
+        i=2;
+        nQE=i+nOffset;
+    }
+    if ( &rEd == pEdVal4 )
+    {
+        pLbCond = pLbCond4;
+        pLbField = pLbField4;
+        i=3;
+        nQE=i+nOffset;
+    }
 
-        if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
+    if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
+    {
+        pLbCond->SelectEntry(OUString('='));
+        pLbCond->Disable();
+    }
+    else
+        pLbCond->Enable();
+
+    if (maHasDates.size() < nQE + 1)
+        maHasDates.resize(nQE + 1, false);
+    if (maRefreshExceptQuery.size() < nQE + 1)
+        maRefreshExceptQuery.resize(nQE + 1, false);
+
+    ScQueryEntry& rEntry = theQueryData.GetEntry( nQE );
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
+    rEntry.bDoQuery = bDoThis;
+
+    if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
+    {
+        bool bByEmptyOrNotByEmpty = false;
+        if ( aStrEmpty.equals(aStrVal) )
         {
-            pLbCond->SelectEntry(OUString('='));
-            pLbCond->Disable();
+            bByEmptyOrNotByEmpty = true;
+            rEntry.SetQueryByEmpty();
+        }
+        else if ( aStrNotEmpty.equals(aStrVal) )
+        {
+            bByEmptyOrNotByEmpty = true;
+            rEntry.SetQueryByNonEmpty();
         }
         else
-            pLbCond->Enable();
-
-        if (maHasDates.size() < nQE + 1)
-            maHasDates.resize(nQE + 1, false);
-        if (maRefreshExceptQuery.size() < nQE + 1)
-            maRefreshExceptQuery.resize(nQE + 1, false);
-
-        ScQueryEntry& rEntry = theQueryData.GetEntry( nQE );
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-        bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
-        rEntry.bDoQuery = bDoThis;
-
-        if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
-            bool bByEmptyOrNotByEmpty = false;
-            if ( aStrEmpty.equals(aStrVal) )
-            {
-                bByEmptyOrNotByEmpty = true;
-                rEntry.SetQueryByEmpty();
-            }
-            else if ( aStrNotEmpty.equals(aStrVal) )
-            {
-                bByEmptyOrNotByEmpty = true;
-                rEntry.SetQueryByNonEmpty();
-            }
-            else
-            {
-                rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
-                rItem.mfVal = 0.0;
+            rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
+            rItem.mfVal = 0.0;
 
-                sal_uInt32 nIndex = 0;
-                bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
-                    rItem.maString.getString(), nIndex, rItem.mfVal);
-                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-            }
-
-            const sal_Int32 nField = pLbField->GetSelectEntryPos();
-            rEntry.nField = nField ? (theQueryData.nCol1 +
-                static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
-
-            ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
-            rEntry.eOp     = eOp;
-            if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
-                rItem.meType = ScQueryEntry::ByDate;
+            sal_uInt32 nIndex = 0;
+            bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+                rItem.maString.getString(), nIndex, rItem.mfVal);
+            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
+
+        const sal_Int32 nField = pLbField->GetSelectEntryPos();
+        rEntry.nField = nField ? (theQueryData.nCol1 +
+            static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
+
+        ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
+        rEntry.eOp     = eOp;
+        if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
+            rItem.meType = ScQueryEntry::ByDate;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScFilterDlg, ScrollHdl, ScrollBar*, void)

@@ -76,9 +76,9 @@ private:
     DECL_LINK_TYPED( GetFocusHandler,  Control&, void );
     DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
 
-    DECL_LINK( InputRangeModified, void* );
-    DECL_LINK( Parameter1ValueModified, void* );
-    DECL_LINK( Parameter2ValueModified, void* );
+    DECL_LINK_TYPED( InputRangeModified, Edit&, void );
+    DECL_LINK_TYPED( Parameter1ValueModified, Edit&, void );
+    DECL_LINK_TYPED( Parameter2ValueModified, Edit&, void );
     DECL_LINK_TYPED( DistributionChanged, ListBox&, void );
     DECL_LINK_TYPED( CheckChanged, CheckBox&, void );
 

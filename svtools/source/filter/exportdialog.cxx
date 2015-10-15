@@ -1028,10 +1028,9 @@ void ExportDialog::dispose()
 |* stores values set in the ini-file
 |*
 \************************************************************************/
-IMPL_LINK_NOARG(ExportDialog, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ExportDialog, SelectHdl, Edit&, void)
 {
     updateControls();
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED(ExportDialog, SelectListBoxHdl, ListBox&, void)
 {
@@ -1042,7 +1041,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdl, Button*, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
+IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
 {
     double fRatio = static_cast< double >( maOriginalSize.Height ) / maOriginalSize.Width;
 
@@ -1073,10 +1072,9 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
             maSize.Height = aDest.Height();
     }
     updateControls();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
+IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
 {
     double fRatio = static_cast< double >( maOriginalSize.Width ) / maOriginalSize.Height;
 
@@ -1107,10 +1105,9 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
             maSize.Width = aDest.Width();
     }
     updateControls();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
+IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlNfResolution, Edit&, void)
 {
     sal_Int32 nResolution = mpNfResolution->GetValue();
     if ( mpLbResolution->GetSelectEntryPos() == 0 )      // pixels / cm
@@ -1121,7 +1118,6 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
     maResolution.Height= nResolution;
 
     updateControls();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ExportDialog, SbCompressionUpdateHdl, ScrollBar*, void)

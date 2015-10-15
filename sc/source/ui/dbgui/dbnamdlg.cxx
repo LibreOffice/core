@@ -266,7 +266,7 @@ void ScDbNameDlg::Init()
     m_pEdName->GrabFocus();
     bSaved = true;
     pSaveObj->Save();
-    NameModifyHdl( 0 );
+    NameModifyHdl( *m_pEdName );
 }
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
                 theCurArea = ScRange();
                 bSaved = true;
                 pSaveObj->Save();
-                NameModifyHdl( 0 );
+                NameModifyHdl( *m_pEdName );
             }
             else
             {
@@ -560,12 +560,12 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
             SetInfoStrings( NULL );     // leer
             bSaved=false;
             pSaveObj->Restore();
-            NameModifyHdl( 0 );
+            NameModifyHdl( *m_pEdName );
         }
     }
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, NameModifyHdl, Edit&, void)
 {
     OUString  theName     = m_pEdName->GetText();
     bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
@@ -626,10 +626,9 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
         //SFX_APPWINDOW->Enable();
         bRefInputMode = true;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AssModifyHdl, Edit&, void)
 {
     //  hier parsen fuer Save() etc.
 
@@ -660,8 +659,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
         m_pFTSource->Disable();
         m_pFTOperations->Disable();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

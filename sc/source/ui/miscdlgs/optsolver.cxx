@@ -410,7 +410,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 
     Link<ScCursorRefEdit&,void> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
     Link<ScCursorRefEdit&,void> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
-    Link<> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
+    Link<Edit&,void> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         mpLeftEdit[nRow]->SetCursorLinks( aCursorUp, aCursorDown );
@@ -699,21 +699,19 @@ IMPL_LINK_TYPED( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )
         }
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, TargetModifyHdl, Edit&, void)
 {
     // modify handler for the target edit:
     //  select "Value of" if something is input into the edit
     if ( !m_pEdTargetValue->GetText().isEmpty() )
         m_pRbValue->Check();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, CondModifyHdl, Edit&, void)
 {
     // modify handler for the condition edits, just to enable/disable "delete" buttons
     ReadConditions();
     EnableButtons();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, SelectHdl, ListBox&, void)

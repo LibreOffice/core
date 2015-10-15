@@ -108,14 +108,14 @@ private:
 
     // Handler
     DECL_LINK_TYPED( NewHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(DelHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(DelAllHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( DelHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( DelAllHdl_Impl, Button*, void );
 
     DECL_LINK_TYPED( FillTypeCheckHdl_Impl, Button*, void );
     DECL_LINK_TYPED( TabTypeCheckHdl_Impl, Button*, void );
 
     DECL_LINK_TYPED( SelectHdl_Impl, ComboBox&, void );
-    DECL_LINK(ModifyHdl_Impl, void *);
+    DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( GetFillCharHdl_Impl, Control&, void );
     DECL_LINK_TYPED( GetDezCharHdl_Impl, Control&, void );
 

@@ -72,7 +72,7 @@ private:
 
     void Initialize();
     DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
-    DECL_LINK(MFModifyHdl, void *);
+    DECL_LINK_TYPED(MFModifyHdl, Edit&, void);
 };
 
 } } // end of namespace svx::sidebar

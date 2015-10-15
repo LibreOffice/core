@@ -148,9 +148,9 @@ using namespace ::com::sun::star;
         get(m_pFTDefaultPortNumber, "portNumDefLabel");
         get(m_pCBUseSSL, "useSSLCheckbutton");
 
-        m_pETHostServer->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-        m_pETBaseDN->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pETHostServer->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pETBaseDN->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
         SetRoadmapStateValue(false);
     }
@@ -405,11 +405,11 @@ using namespace ::com::sun::star;
         //TODO this code snippet is redundant
         m_pHeaderText->SetText(ModuleRes(_nHeaderTextResId));
 
-        m_pETDatabasename->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-        m_pETHostname->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pETDatabasename->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pETHostname->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
 
-        m_pETDriverClass->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pETDriverClass->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pPBTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
 
         SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
@@ -679,14 +679,13 @@ using namespace ::com::sun::star;
         aMsg->Execute();
     }
 
-    IMPL_LINK(OJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
+    IMPL_LINK_TYPED(OJDBCConnectionPageSetup, OnEditModified, Edit&, _rEdit, void)
     {
-        if ( _pEdit == m_pETDriverClass )
+        if ( &_rEdit == m_pETDriverClass )
             m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().isEmpty() );
         SetRoadmapStateValue(checkTestConnection());
         // tell the listener we were modified
         callModifiedHdl();
-        return 0L;
     }
 
     VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
@@ -750,7 +749,7 @@ using namespace ::com::sun::star;
         get(m_pETUserName, "generalUserNameEntry");
         get(m_pCBPasswordRequired, "passRequiredCheckbutton");
         get(m_pPBTestConnection, "testConnectionButton");
-        m_pETUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlModified));
+        m_pETUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
         m_pCBPasswordRequired->SetClickHdl(LINK(this,OGenericAdministrationPage,OnControlModifiedClick));
         m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 

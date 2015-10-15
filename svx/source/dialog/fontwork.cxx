@@ -251,7 +251,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     m_pTbxShadow->SetSizePixel(aSize);
     m_pTbxShadow->SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
-    Link<> aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
+    Link<Edit&,void> aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     m_pMtrFldDistance->SetModifyHdl( aLink );
     m_pMtrFldTextStart->SetModifyHdl( aLink );
     m_pMtrFldShadowX->SetModifyHdl( aLink );
@@ -735,10 +735,9 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, ModifyInputHdl_Impl, Edit&, void)
 {
     aInputIdle.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)

@@ -142,9 +142,9 @@ private:
     bool                bAttrModified;
 
     DECL_LINK_TYPED( ClickRotateHdl_Impl, Button*, void );
-    DECL_LINK( ChangeDrawHdl_Impl, MetricField * );
+    DECL_LINK_TYPED( ChangeDrawHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ChangeGridsnapHdl_Impl, Button*, void );
-    DECL_LINK( ChangeDivisionHdl_Impl, NumericField * );
+    DECL_LINK_TYPED( ChangeDivisionHdl_Impl, Edit&, void );
 };
 
 #endif

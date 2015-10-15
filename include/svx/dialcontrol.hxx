@@ -159,7 +159,7 @@ private:
     void                ImplSetFieldLink( const Link<>& rLink );
 
 
-    DECL_LINK( LinkedFieldModifyHdl, NumericField* );
+    DECL_LINK_TYPED( LinkedFieldModifyHdl, Edit&, void );
     DECL_LINK_TYPED( LinkedFieldFocusHdl, Control&, void );
     void LinkedFieldModifyHdl();
     DECL_LINK_TYPED(SpinFieldHdl, SpinField&, void);

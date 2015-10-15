@@ -63,7 +63,7 @@ class SwNumNamesDlg : public ModalDialog
     VclPtr<ListBox>  m_pFormBox;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK( ModifyHdl, Edit * );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
 
@@ -119,10 +119,9 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 }
 
 // unlock OK-Button when text is in Edit
-IMPL_LINK( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
+IMPL_LINK_TYPED( SwNumNamesDlg, ModifyHdl, Edit&, rBox, void )
 {
-    m_pOKBtn->Enable(!pBox->GetText().isEmpty());
-    return 0;
+    m_pOKBtn->Enable(!rBox.GetText().isEmpty());
 }
 
 // DoubleClickHdl
@@ -583,7 +582,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, LevelHdl, ListBox&, rBox, void )
     Update();
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pField )
+IMPL_LINK_TYPED( SwOutlineSettingsTabPage, ToggleComplete, Edit&, rEdit, void )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -591,14 +590,13 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pField )
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetIncludeUpperLevels( std::min( (sal_uInt8)pField->GetValue(),
+            aNumFormat.SetIncludeUpperLevels( std::min( (sal_uInt8)static_cast<NumericField&>(rEdit).GetValue(),
                                                 (sal_uInt8)(i + 1)) );
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
@@ -667,7 +665,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
     SetModified();
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
+IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, DelimModify, Edit&, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -682,10 +680,9 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pField )
+IMPL_LINK_TYPED( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -693,13 +690,12 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pField )
         if(nActLevel & nMask)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
-            aNumFormat.SetStart( (sal_uInt16)pField->GetValue() );
+            aNumFormat.SetStart( (sal_uInt16)static_cast<NumericField&>(rEdit).GetValue() );
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
@@ -866,7 +862,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
                         SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
     m_pStartEdit->SetMin(bNoZeroAllowed ? 1 : 0);
     if(bIsNull && bNoZeroAllowed)
-        m_pStartEdit->GetModifyHdl().Call(m_pStartEdit);
+        m_pStartEdit->GetModifyHdl().Call(*m_pStartEdit);
 }
 
 static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat, long nXStart, long nYStart, const Size& rSize)

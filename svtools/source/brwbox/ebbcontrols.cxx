@@ -80,6 +80,11 @@ namespace svt
         GetComboBox().SetModifyHdl( LINK(this, ComboBoxCellController, ModifyHdl) );
     }
 
+    IMPL_LINK_NOARG_TYPED(ComboBoxCellController, ModifyHdl, Edit&, void)
+    {
+        callModifyHdl();
+    }
+
 
     bool ComboBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
@@ -128,12 +133,6 @@ namespace svt
     void ComboBoxCellController::ClearModified()
     {
         GetComboBox().SaveValue();
-    }
-
-    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl)
-    {
-        callModifyHdl();
-        return 0;
     }
 
     //= ListBoxControl
@@ -330,7 +329,8 @@ namespace svt
     //= CheckBoxCellController
 
 
-    CheckBoxCellController::CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin)
+    CheckBoxCellController::CheckBoxCellController(CheckBoxControl* pWin)
+        : CellController(pWin)
     {
         static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl( LINK(this, CheckBoxCellController, ModifyHdl) );
     }
@@ -364,7 +364,6 @@ namespace svt
         callModifyHdl();
         return 0;
     }
-
 
     //= MultiLineEditImplementation
 
@@ -451,12 +450,10 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditCellController, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(EditCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
-        return 0;
     }
-
 
     //= SpinCellController
 
@@ -509,13 +506,10 @@ namespace svt
         return GetSpinWindow().IsModified();
     }
 
-
-    IMPL_LINK_NOARG(SpinCellController, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(SpinCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
-        return 0;
     }
-
 
     //= FormattedFieldCellController
 

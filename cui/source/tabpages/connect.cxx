@@ -120,7 +120,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     // disable 3D border
     m_pCtlPreview->SetBorderStyle(WindowBorderStyle::MONO);
 
-    Link<> aLink( LINK( this, SvxConnectionPage, ChangeAttrHdl_Impl ) );
+    Link<Edit&,void> aLink( LINK( this, SvxConnectionPage, ChangeAttrEditHdl_Impl ) );
     m_pMtrFldHorz1->SetModifyHdl( aLink );
     m_pMtrFldVert1->SetModifyHdl( aLink );
     m_pMtrFldHorz2->SetModifyHdl( aLink );
@@ -400,7 +400,11 @@ IMPL_LINK_TYPED( SvxConnectionPage, ChangeAttrListBoxHdl_Impl, ListBox&, r, void
 {
     ChangeAttrHdl_Impl(&r);
 }
-IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxConnectionPage, ChangeAttrEditHdl_Impl, Edit&, r, void )
+{
+    ChangeAttrHdl_Impl(&r);
+}
+void SvxConnectionPage::ChangeAttrHdl_Impl(void* p)
 {
     if( p == m_pMtrFldHorz1 )
     {
@@ -483,8 +487,6 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
             m_pMtrFldLine1->SetEmptyFieldValue();
 
     }
-
-    return 0L;
 }
 
 void SvxConnectionPage::FillTypeLB()

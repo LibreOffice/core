@@ -143,9 +143,10 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK_TYPED(ClickTransOffHdl_Impl, Button*, void );
     DECL_LINK_TYPED(ClickTransLinearHdl_Impl, Button*, void );
     DECL_LINK_TYPED(ClickTransGradientHdl_Impl, Button*, void );
-    DECL_LINK(ModifyTransparentHdl_Impl, void*);
-    DECL_LINK(ModifiedTrgrHdl_Impl, void*);
+    DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
+    DECL_LINK_TYPED(ModifiedTrgrEditHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
+    void ModifiedTrgrHdl_Impl(void*);
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
@@ -271,13 +272,14 @@ private:
     DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
-    DECL_LINK( ModifyStepCountHdl_Impl, void* );
+    DECL_LINK_TYPED( ModifyStepCountEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifyStepCountClickHdl_Impl, Button*, void );
+    void ModifyStepCountHdl_Impl(void*);
 
     //UUUU
     DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
 
-    DECL_LINK( ModifyTileHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifyTileHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifyTileClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickScaleHdl_Impl, Button*, void );
     void ClickInvisibleHdl_Impl();
@@ -353,7 +355,7 @@ private:
     SfxMapUnit          m_ePoolUnit;
 
     DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
-    DECL_LINK( ModifyShadowHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifyShadowHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( SelectShadowHdl_Impl, ListBox&, void );
 
 public:
@@ -428,10 +430,11 @@ private:
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeGradientHdl_Impl, ListBox&, void );
-    DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
+    void ModifiedHdl_Impl(void*);
 
     long CheckChanges_Impl();
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
@@ -504,8 +507,9 @@ private:
     SfxMapUnit          m_ePoolUnit;
 
     DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
-    DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
@@ -729,7 +733,7 @@ private:
     DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( SelectColorModelHdl_Impl, ListBox&, void );
     void ChangeColor(const Color &rNewColor);
-    DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
 
     long CheckChanges_Impl();
 

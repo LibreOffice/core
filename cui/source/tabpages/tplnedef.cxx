@@ -144,7 +144,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     Link<ListBox&, void> aLink = LINK( this, SvxLineDefTabPage, SelectTypeListBoxHdl_Impl );
     m_pLbType1->SetSelectHdl( aLink );
     m_pLbType2->SetSelectHdl( aLink );
-    Link<> aLink2 = LINK( this, SvxLineDefTabPage, ChangePreviewHdl_Impl );
+    Link<Edit&,void> aLink2 = LINK( this, SvxLineDefTabPage, ChangePreviewHdl_Impl );
     m_pMtrLength1->SetModifyHdl( aLink2 );
     m_pMtrLength2->SetModifyHdl( aLink2 );
     m_pMtrDistance->SetModifyHdl( aLink2 );
@@ -393,15 +393,13 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox* p)
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ChangePreviewHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangePreviewHdl_Impl, Edit&, void)
 {
     FillDash_Impl();
     m_pCtlPreview->Invalidate();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
 {
     if( m_pNumFldNumber1->GetValue() == 0L )
     {
@@ -414,14 +412,12 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
         m_pNumFldNumber2->SetFirst( 0L );
     }
 
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( *m_pMtrLength1 );
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, Edit&, void)
 {
     if( m_pNumFldNumber2->GetValue() == 0L )
     {
@@ -434,9 +430,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
         m_pNumFldNumber1->SetFirst( 0L );
     }
 
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( *m_pMtrLength1 );
 }
 
 
@@ -544,7 +538,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
             m_pMtrLength2->Reformat();
         }
     }
-    ChangePreviewHdl_Impl( p );
+    ChangePreviewHdl_Impl( *m_pMtrLength1 );
 }
 
 
@@ -728,7 +722,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
             *pnDashListState |= ChangeType::MODIFIED;
 
-            ChangePreviewHdl_Impl( this );
+            ChangePreviewHdl_Impl( *m_pMtrLength1 );
         }
     }
 

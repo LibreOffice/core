@@ -60,7 +60,7 @@ class SwAddRenameEntryDialog : public SfxModalDialog
     VclPtr<OKButton> m_pOK;
     const std::vector< OUString >& m_rCSVHeader;
 
-    DECL_LINK(ModifyHdl_Impl, Edit*);
+    DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
 protected:
     SwAddRenameEntryDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);

@@ -172,17 +172,16 @@ IMPL_LINK_TYPED( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
 
 
 
-IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
 {
-    if (pEdit == m_pComboBox)
+    if (&rEdit == m_pComboBox)
         CheckButtons();
-    else if (pEdit == m_pNumericField)
+    else if (&rEdit == m_pNumericField)
     {
         BreakPoint* pBrk = GetSelectedBreakPoint();
         if ( pBrk )
-            pBrk->nStopAfter = pEdit->GetText().toInt32();
+            pBrk->nStopAfter = rEdit.GetText().toInt32();
     }
-    return 0;
 }
 
 

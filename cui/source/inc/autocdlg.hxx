@@ -255,7 +255,7 @@ private:
         DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
         DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
         DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
-        DECL_LINK(ModifyHdl, Edit*);
+        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
         bool NewDelHdl(void*);
 
         void RefillReplaceBox(  bool bFromReset,
@@ -318,7 +318,7 @@ private:
     DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
     DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     bool NewDelHdl(void*);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,

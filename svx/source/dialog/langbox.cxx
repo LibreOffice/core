@@ -679,7 +679,7 @@ sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
 }
 
 
-IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
+IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
 {
     EditedAndValid eOldState = meEditedAndValid;
     OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));
@@ -755,7 +755,6 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
             SetControlBackground();
         }
     }
-    return 0;
 }
 
 

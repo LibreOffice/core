@@ -2871,10 +2871,9 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ModifyHdl, Edit&, void)
     {
         m_aResultIdle.Start();
-        return 0;
     }
 
 

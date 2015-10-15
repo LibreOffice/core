@@ -76,12 +76,12 @@ class SwFieldVarPage : public SwFieldPage
     sal_uLong           nOldFormat;
     bool                bInit;
 
-    DECL_LINK_TYPED(TypeHdl, ListBox&, void);
+    DECL_LINK_TYPED( TypeHdl, ListBox&, void );
     DECL_LINK_TYPED( SubTypeListBoxHdl, ListBox&, void );
-    DECL_LINK(ModifyHdl, void * = 0);
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( TBClickHdl, ToolBox *, void );
-    DECL_LINK_TYPED(ChapterHdl, ListBox&, void);
-    DECL_LINK(SeparatorHdl, void * = 0);
+    DECL_LINK_TYPED( ChapterHdl, ListBox&, void );
+    DECL_LINK_TYPED( SeparatorHdl, Edit&, void );
     void SubTypeHdl(ListBox*);
 
     void                UpdateSubType();

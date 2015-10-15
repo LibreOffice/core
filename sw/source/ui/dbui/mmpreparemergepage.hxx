@@ -42,8 +42,9 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
 
     DECL_LINK_TYPED(EditDocumentHdl_Impl, Button*, void);
     DECL_LINK_TYPED(ExcludeHdl_Impl, Button*, void);
-    DECL_LINK(MoveHdl_Impl, void*);
+    DECL_LINK_TYPED(MoveEditHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(MoveClickHdl_Impl, Button*, void);
+    void MoveHdl_Impl(Control*);
 
     virtual void        ActivatePage() override;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;

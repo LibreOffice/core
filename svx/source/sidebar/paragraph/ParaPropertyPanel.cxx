@@ -168,7 +168,7 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
 
 void ParaPropertyPanel::InitToolBoxIndent()
 {
-    Link<> aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
     mpLeftIndent->SetModifyHdl( aLink );
     mpRightIndent->SetModifyHdl( aLink );
     mpFLineIndent->SetModifyHdl( aLink );
@@ -191,7 +191,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
 void ParaPropertyPanel::InitToolBoxSpacing()
 {
-    Link<> aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
     mpTopDist->SetModifyHdl(aLink);
     mpBottomDist->SetModifyHdl( aLink );
 
@@ -208,7 +208,7 @@ void ParaPropertyPanel::initial()
 }
 
 // for Paragraph Indent
-IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
+IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
@@ -217,7 +217,6 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
-    return 0;
 }
 
 IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
@@ -300,7 +299,7 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
 }
 
 // for Paragraph Spacing
-IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
+IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
     aMargin.SetUpper( (sal_uInt16)GetCoreValue( *mpTopDist, m_eULSpaceUnit ) );
@@ -308,7 +307,6 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
-    return 0L;
 }
 
 // for Paragraph State change

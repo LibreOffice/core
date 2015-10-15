@@ -63,9 +63,9 @@ private:
 
     void Initialize();
 
-    DECL_LINK( NewWidthModifiedHdl, void* );
-    DECL_LINK( NewHeightModifiedHdl, void* );
-    DECL_LINK( ResolutionModifiedHdl, void* );
+    DECL_LINK_TYPED( NewWidthModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( NewHeightModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( ResolutionModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( ToggleCompressionRB, RadioButton&, void );
     DECL_LINK_TYPED( ToggleReduceResolutionRB, CheckBox&, void );
 

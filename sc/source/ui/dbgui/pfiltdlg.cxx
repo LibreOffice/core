@@ -539,29 +539,24 @@ IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
     }
 }
 
-IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
+IMPL_LINK_TYPED( ScPivotFilterDlg, ValModifyHdl, Edit&, rEd, void )
 {
-    if ( pEd )
+    OUString aStrVal = rEd.GetText();
+    ListBox* pLb = m_pLbCond1;
+
+    if ( &rEd == m_pEdVal2 ) pLb = m_pLbCond2;
+    else if ( &rEd == m_pEdVal3 ) pLb = m_pLbCond3;
+
+    // if ond of the special values "empty"/"non-empty" was chosen only the
+    // =-operand makes sense:
+
+    if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
     {
-        OUString aStrVal = pEd->GetText();
-        ListBox* pLb = m_pLbCond1;
-
-        if ( pEd == m_pEdVal2 ) pLb = m_pLbCond2;
-        else if ( pEd == m_pEdVal3 ) pLb = m_pLbCond3;
-
-        // if ond of the special values "empty"/"non-empty" was chosen only the
-        // =-operand makes sense:
-
-        if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
-        {
-            pLb->SelectEntry(OUString('='));
-            pLb->Disable();
-        }
-        else
-            pLb->Enable();
+        pLb->SelectEntry(OUString('='));
+        pLb->Disable();
     }
-
-    return 0;
+    else
+        pLb->Enable();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

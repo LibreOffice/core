@@ -161,7 +161,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     // Line Numbering
     m_pNumberingOnCB->SetClickHdl(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
     m_pDivisorED->SetModifyHdl(LINK(this, SwLineNumberingDlg, ModifyHdl));
-    ModifyHdl();
+    ModifyHdl(*m_pDivisorED);
     LineOnOffHdl();
 
     get<PushButton>("ok")->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
@@ -255,15 +255,13 @@ IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, OKHdl, Button*, void)
 }
 
 // modify
-IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, ModifyHdl, Edit&, void)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked() && !m_pDivisorED->GetText().isEmpty();
 
     m_pDivIntervalFT->Enable(bEnable);
     m_pDivIntervalNF->Enable(bEnable);
     m_pDivRowsFT->Enable(bEnable);
-
-    return 0;
 }
 
 // On/Off
@@ -271,7 +269,7 @@ IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, LineOnOffHdl, Button*, void)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked();
     m_pBodyContent->Enable(bEnable);
-    ModifyHdl();
+    ModifyHdl(*m_pDivisorED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

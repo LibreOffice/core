@@ -286,37 +286,31 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     rFilter.ExportGraphic( aScaledGraphic, OUString( "none" ), aStream, nFilterFormat, &aFilterData );
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void )
 {
     m_dResolution =  m_pMFNewWidth->GetValue() / GetViewWidthInch();
 
     UpdateNewHeightMF();
     UpdateResolutionLB();
     Update();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewHeightModifiedHdl, Edit&, void )
 {
     m_dResolution =  m_pMFNewHeight->GetValue() / GetViewHeightInch();
 
     UpdateNewWidthMF();
     UpdateResolutionLB();
     Update();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ResolutionModifiedHdl, Edit&, void )
 {
     m_dResolution = (double) m_pResolutionLB->GetText().toInt32();
 
     UpdateNewWidthMF();
     UpdateNewHeightMF();
     Update();
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&, void )

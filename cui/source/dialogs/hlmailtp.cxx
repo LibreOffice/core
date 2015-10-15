@@ -229,13 +229,11 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
 {
     OUString aScheme = GetSchemeFromURL( m_pCbbReceiver->GetText() );
     if(!aScheme.isEmpty())
         SetScheme( aScheme );
-
-    return 0L;
 }
 
 /*************************************************************************

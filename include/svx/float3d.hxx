@@ -195,7 +195,7 @@ private:
     DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK_TYPED( ClickColorHdl, Button*, void );
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, void * );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     void ClickLight(PushButton &rBtn);
 
     DECL_LINK_TYPED( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );

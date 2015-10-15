@@ -733,14 +733,14 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
     }
 }
 
-IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
 {
     // note: isValid sets the color of the edit field
-    if( isRangeFieldContentValid( *pEdit ))
+    if( isRangeFieldContentValid( rEdit ))
     {
         setDirty();
-        updateModelFromControl( pEdit );
-        if( pEdit == m_pEDT_RANGE )
+        updateModelFromControl( &rEdit );
+        if( &rEdit == m_pEDT_RANGE )
         {
             if( ! lcl_UpdateCurrentSeriesName( *m_pLB_SERIES ))
                 fillSeriesListBox();
@@ -749,18 +749,16 @@ IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
 
     // enable/disable OK button
     isValid();
-
-    return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( DataSourceTabPage, RangeUpdateDataHdl, Edit&, rEdit, void )
 {
     // note: isValid sets the color of the edit field
-    if( isRangeFieldContentValid( *pEdit ))
+    if( isRangeFieldContentValid( rEdit ))
     {
         setDirty();
-        updateModelFromControl( pEdit );
-        if( pEdit == m_pEDT_RANGE )
+        updateModelFromControl( &rEdit );
+        if( &rEdit == m_pEDT_RANGE )
         {
             if( ! lcl_UpdateCurrentSeriesName( *m_pLB_SERIES ))
                 fillSeriesListBox();
@@ -768,8 +766,6 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     }
     // enable/disable OK button
     isValid();
-
-    return 0;
 }
 
 void DataSourceTabPage::listeningFinished(

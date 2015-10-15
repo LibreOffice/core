@@ -137,8 +137,8 @@ private:
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
-    DECL_LINK( ChangeWidthHdl, void * );
-    DECL_LINK( ChangeHeightHdl, void * );
+    DECL_LINK_TYPED( ChangeWidthHdl, Edit&, void );
+    DECL_LINK_TYPED( ChangeHeightHdl, Edit&, void );
     DECL_LINK_TYPED( ClickSizeProtectHdl, Button*, void );
     DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
 

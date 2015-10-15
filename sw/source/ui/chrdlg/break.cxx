@@ -79,10 +79,9 @@ IMPL_LINK_TYPED( SwBreakDlg, PageNumHdl, Button*, pBox, void )
 }
 
 // By changing the Page number the checkbox is checked.
-IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwBreakDlg, PageNumModifyHdl, Edit&, void)
 {
     m_pPageNumBox->Check();
-    return 0;
 }
 
 /*

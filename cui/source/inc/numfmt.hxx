@@ -158,10 +158,12 @@ private:
     DECL_LINK_TYPED( SelFormatClickHdl_Impl, Button*, void );
     void SelFormatHdl_Impl(void*);
     DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
-    DECL_LINK( EditHdl_Impl, Edit* );
-    DECL_LINK( OptHdl_Impl, void * );
+    DECL_LINK_TYPED( EditModifyHdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( OptEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( OptClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( TimeHdl_Impl, Timer *, void);
+    void EditHdl_Impl(Edit*);
+    void OptHdl_Impl(void*);
 };
 
 #endif

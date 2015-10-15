@@ -93,7 +93,7 @@ void ScTableProtectionDlg::Init()
 
     m_pBtnOk->SetClickHdl(LINK( this, ScTableProtectionDlg, OKHdl ));
 
-    Link<> aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
+    Link<Edit&,void> aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
     m_pPassword1Edit->SetModifyHdl(aLink);
     m_pPassword2Edit->SetModifyHdl(aLink);
 
@@ -135,12 +135,11 @@ IMPL_LINK_NOARG_TYPED(ScTableProtectionDlg, OKHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScTableProtectionDlg, PasswordModifyHdl, Edit&, void)
 {
     OUString aPass1 = m_pPassword1Edit->GetText();
     OUString aPass2 = m_pPassword2Edit->GetText();
     m_pBtnOk->Enable(aPass1 == aPass2);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

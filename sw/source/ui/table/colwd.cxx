@@ -31,13 +31,12 @@
 #include <cmdid.h>
 #include <table.hrc>
 
-IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
 {
     sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
     m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
     m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);
-    return 0;
 }
 
 SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
@@ -62,7 +61,7 @@ SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
         m_pWidthMF->SetMin(m_pWidthMF->Normalize(rFnc.GetColWidth(0)), FUNIT_TWIP);
     m_pColNF->SetMax(rFnc.GetColCount() +1 );
     m_pColNF->SetModifyHdl(LINK(this,SwTableWidthDlg, LoseFocusHdl));
-    LoseFocusHdl();
+    LoseFocusHdl(*m_pColNF);
 }
 
 SwTableWidthDlg::~SwTableWidthDlg()

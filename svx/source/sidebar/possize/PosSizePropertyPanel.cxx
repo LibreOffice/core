@@ -408,7 +408,7 @@ void PosSizePropertyPanel::HandleContextChange(
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -427,12 +427,11 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl )
         }
     }
     executeSize();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -451,23 +450,20 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl )
         }
     }
     executeSize();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 {
     executePosX();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 {
     executePosY();
-    return 0;
 }
 
 
@@ -487,21 +483,21 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
-        return 0;
+        return;
     sal_Unicode nChar = sTmp[0];
     if( nChar == '-' )
     {
         if (sTmp.getLength() < 2)
-            return 0;
+            return;
         nChar = sTmp[1];
     }
 
     if( (nChar < '0') || (nChar > '9') )
-        return 0;
+        return;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
@@ -514,7 +510,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl )
     rtl_math_ConversionStatus eStatus;
     double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
     if (eStatus != rtl_math_ConversionStatus_Ok)
-        return 0;
+        return;
 
     while (fTmp < 0)
         fTmp += 360;
@@ -529,8 +525,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl )
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
-
-    return 0;
 }
 
 

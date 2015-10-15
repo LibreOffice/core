@@ -41,7 +41,7 @@ SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const
     pFtDescription->SetText( rDesc );
     pEdtName->SetText( rName );
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(pEdtName.get());
+    ModifyHdl(*pEdtName.get());
     pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
 }
 
@@ -58,11 +58,10 @@ void SvxNameDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SvxNameDialog, ModifyHdl, Edit&, void)
 {
     if(aCheckNameHdl.IsSet())
         pBtnOK->Enable(aCheckNameHdl.Call(*this));
-    return 0;
 }
 
 
@@ -82,7 +81,7 @@ SvxObjectNameDialog::SvxObjectNameDialog(
 
     // activate name
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(pEdtName.get());
+    ModifyHdl(*pEdtName.get());
     pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
 
@@ -99,14 +98,12 @@ void SvxObjectNameDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SvxObjectNameDialog, ModifyHdl, Edit&, void)
 {
     if(aCheckNameHdl.IsSet())
     {
         pBtnOK->Enable(aCheckNameHdl.Call(*this));
     }
-
-    return 0;
 }
 
 

@@ -81,7 +81,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     DECL_LINK_TYPED(ContainsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(InsertDataHdl_Impl, Button*, void);
-    DECL_LINK(GreetingSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(GreetingSelectHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(GreetingSelectComboBoxHdl_Impl, ComboBox&, void);
     DECL_LINK_TYPED(GreetingSelectListBoxHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);

@@ -815,7 +815,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
     m_pAssignedList->SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
     m_pAssignedList->SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
-    ModifyHdl_Impl( m_pParameterEdit );
+    ModifyHdl_Impl( *m_pParameterEdit );
     EnableRemoveButton();
 }
 
@@ -834,12 +834,10 @@ void SvxJavaParameterDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, ModifyHdl_Impl, Edit&, void)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     m_pAssignBtn->Enable(!sParam.isEmpty());
-
-    return 0;
 }
 
 
@@ -854,7 +852,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
             nPos = m_pAssignedList->InsertEntry( sParam );
         m_pAssignedList->SelectEntryPos( nPos );
         m_pParameterEdit->SetText( OUString() );
-        ModifyHdl_Impl( m_pParameterEdit );
+        ModifyHdl_Impl( *m_pParameterEdit );
         EnableRemoveButton();
     }
 }

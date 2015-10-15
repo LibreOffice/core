@@ -248,7 +248,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     m_pScrollSB->SetScrollHdl(aScrLk);
     m_pScrollSB->SetEndScrollHdl(aScrLk);
 
-    Link<> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
+    Link<Edit&,void> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     Link<sal_Int32,bool> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
     Link<sal_Int32,void> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
     for (sal_uInt16 i = 0; i < 8; i++)
@@ -669,18 +669,17 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
     }
 }
 
-IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
+IMPL_LINK_TYPED(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
 {
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        if (pEdit == aEditArr[i])
+        if (&rEdit == aEditArr[i])
         {
             nCurrentEdit = i / 2;
             break;
         }
     }
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
@@ -923,7 +922,7 @@ Size RubyPreview::GetOptimalSize() const
 
 void RubyEdit::GetFocus()
 {
-    GetModifyHdl().Call(this);
+    GetModifyHdl().Call(*this);
     Edit::GetFocus();
 }
 

@@ -72,10 +72,10 @@ protected: //methods
     void setDirty();
 
     DECL_LINK_TYPED( ChooseRangeHdl, Button*, void );
-    DECL_LINK( ControlChangedHdl, void* );
+    DECL_LINK_TYPED( ControlChangedHdl, Edit&, void );
     DECL_LINK_TYPED( ControlChangedCheckBoxHdl, CheckBox&, void );
     DECL_LINK_TYPED( ControlChangedRadioHdl, RadioButton&, void );
-    DECL_LINK( ControlEditedHdl, void* );
+    DECL_LINK_TYPED( ControlEditedHdl, Edit&, void );
 
 protected: //member
 

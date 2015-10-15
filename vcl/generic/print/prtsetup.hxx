@@ -116,7 +116,7 @@ class RTSDevicePage : public TabPage
     void FillValueBox( const ::psp::PPDKey* );
 
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, Edit* );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
 public:
     explicit RTSDevicePage( RTSDialog* );
     virtual ~RTSDevicePage();

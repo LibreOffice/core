@@ -1215,7 +1215,7 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, TriStateHdl, Button*, void)
     mePrevToggleAllState = maChkToggleAll->GetState();
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 {
     OUString aSearchText = maEdSearch->GetText();
     aSearchText = aSearchText.toAsciiLowerCase();
@@ -1254,8 +1254,6 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
         maChkToggleAll->SetState( TRISTATE_FALSE );
     else
         maChkToggleAll->SetState( TRISTATE_INDET );
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )

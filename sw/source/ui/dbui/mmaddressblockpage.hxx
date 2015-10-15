@@ -222,10 +222,10 @@ private:
 
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(EditModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(EditModifyHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
-    DECL_LINK(FieldChangeHdl_Impl, void *);
+    DECL_LINK_TYPED(FieldChangeHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
 
     bool            HasItem_Impl(sal_Int32 nUserData);

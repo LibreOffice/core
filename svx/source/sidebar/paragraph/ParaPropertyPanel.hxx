@@ -113,9 +113,9 @@ private:
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK(ModifyIndentHdl_Impl, void*);
+    DECL_LINK_TYPED(ModifyIndentHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ClickIndent_IncDec_Hdl_Impl, ToolBox*, void);
-    DECL_LINK(ULSpaceHdl_Impl, void*);
+    DECL_LINK_TYPED(ULSpaceHdl_Impl, Edit&, void);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );

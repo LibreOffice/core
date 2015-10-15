@@ -775,15 +775,15 @@ IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
     }
 }
 
-IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( SaneDlg, ModifyHdl, Edit&, rEdit, void )
 {
     if( mrSane.IsOpen() )
     {
-        if( pEdit == mpStringEdit )
+        if( &rEdit == mpStringEdit )
         {
             mrSane.SetOptionValue( mnCurrentOption, mpStringEdit->GetText() );
         }
-        else if( pEdit == mpReslBox )
+        else if( &rEdit == mpReslBox )
         {
             double fRes = (double)mpReslBox->GetValue();
             int nOption = mrSane.GetOptionByName( "resolution" );
@@ -813,7 +813,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                 mpReslBox->SetValue( (sal_uLong)fRes );
             }
         }
-        else if( pEdit == mpNumericEdit )
+        else if( &rEdit == mpNumericEdit )
         {
             double fValue;
             OString aContents(OUStringToOString(mpNumericEdit->GetText(),
@@ -831,7 +831,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
             }
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
-        else if( pEdit == mpVectorBox )
+        else if( &rEdit == mpVectorBox )
         {
             mnCurrentElement = mpVectorBox->GetValue()-1;
             double fValue;
@@ -844,28 +844,27 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                 mpQuantumRangeBox->SelectEntry( aValue );
             }
         }
-        else if( pEdit == mpTopField )
+        else if( &rEdit == mpTopField )
         {
             mpPreview->ChangePreviewLogicTopLeftY(mpTopField->GetValue());
             mpPreview->Invalidate();
         }
-        else if( pEdit == mpLeftField )
+        else if( &rEdit == mpLeftField )
         {
             mpPreview->ChangePreviewLogicTopLeftX(mpLeftField->GetValue());
             mpPreview->Invalidate();
         }
-        else if( pEdit == mpBottomField )
+        else if( &rEdit == mpBottomField )
         {
             mpPreview->ChangePreviewLogicBottomRightY(mpBottomField->GetValue());
             mpPreview->Invalidate();
         }
-        else if( pEdit == mpRightField )
+        else if( &rEdit == mpRightField )
         {
             mpPreview->ChangePreviewLogicBottomRightX(mpRightField->GetValue());
             mpPreview->Invalidate();
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SaneDlg, ReloadSaneOptionsHdl, Sane&, void )

@@ -71,7 +71,7 @@ namespace dbaui
             startComponentListening(xConnComp);
 
         m_pSQL->SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
-        OnStatementModified(m_pSQL);
+        OnStatementModified(*m_pSQL);
     }
 
     DirectSQLDialog::~DirectSQLDialog()
@@ -291,7 +291,7 @@ namespace dbaui
             // set the text in the statement editor
             OUString sStatement = m_aStatementHistory[_nHistoryPos];
             m_pSQL->SetText(sStatement);
-            OnStatementModified(m_pSQL);
+            OnStatementModified(*m_pSQL);
 
             if (_bUpdateListBox)
             {
@@ -308,10 +308,9 @@ namespace dbaui
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnStatementModified )
+    IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnStatementModified, Edit&, void )
     {
         m_pExecute->Enable(!m_pSQL->GetText().isEmpty());
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnCloseClick, Button*, void )

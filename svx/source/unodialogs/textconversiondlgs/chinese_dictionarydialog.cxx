@@ -624,10 +624,9 @@ IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, EditFieldsListBoxHdl, ListBox&, v
 {
     updateButtons();
 }
-IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl)
+IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, EditFieldsHdl, Edit&, void)
 {
     updateButtons();
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
 {

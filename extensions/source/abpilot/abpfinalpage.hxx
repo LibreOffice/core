@@ -67,7 +67,7 @@ namespace abp
         virtual bool        canAdvance() const override;
 
     private:
-        DECL_LINK( OnNameModified, Edit* );
+        DECL_LINK_TYPED( OnNameModified, Edit&, void );
         DECL_LINK_TYPED(OnRegister, Button*, void);
         DECL_LINK_TYPED(OnEmbed, Button*, void);
 

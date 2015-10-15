@@ -170,8 +170,7 @@ void LineWidthControl::Initialize()
     maVSWidth->SetSelItem(0);
 
     maVSWidth->SetSelectHdl(LINK( this, LineWidthControl, VSSelectHdl ));
-    Link<> aLink = LINK(this, LineWidthControl, MFModifyHdl);
-    maMFWidth->SetModifyHdl(aLink);
+    maMFWidth->SetModifyHdl(LINK(this, LineWidthControl, MFModifyHdl));
 
     maVSWidth->StartSelection();
     maVSWidth->Show();
@@ -296,9 +295,9 @@ IMPL_LINK_TYPED(LineWidthControl, VSSelectHdl, ValueSet*, pControl, void)
     }
 }
 
-IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
+IMPL_LINK_TYPED(LineWidthControl, MFModifyHdl, Edit&, rControl, void)
 {
-    if (pControl == maMFWidth.get())
+    if (&rControl == maMFWidth.get())
     {
         if(maVSWidth->GetSelItem())
         {
@@ -317,7 +316,6 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         mbCloseByEdit = true;
         mnTmpCustomWidth = nTmp;
     }
-    return 0L;
 }
 
 } } // end of namespace svx::sidebar

@@ -115,7 +115,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pBtnDelete->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxGradientTabPage, ModifiedHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
     m_pLbGradientType->SetSelectHdl( aLink2 );
     m_pMtrCenterX->SetModifyHdl( aLink );
@@ -405,7 +405,11 @@ IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox
 {
     ModifiedHdl_Impl(&rListBox);
 }
-IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
+IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
+{
+    ModifiedHdl_Impl(&rBox);
+}
+void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 {
     css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos();
 
@@ -428,8 +432,6 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_pCtlPreview->Invalidate();
-
-    return 0L;
 }
 
 

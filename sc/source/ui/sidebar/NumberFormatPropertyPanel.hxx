@@ -26,6 +26,7 @@
 class FixedText;
 class ListBox;
 class NumericField;
+class Edit;
 
 namespace sc { namespace sidebar {
 
@@ -84,7 +85,7 @@ private:
     SfxBindings*                            mpBindings;
 
     DECL_LINK_TYPED(NumFormatSelectHdl, ListBox&, void);
-    DECL_LINK(NumFormatValueHdl, void*);
+    DECL_LINK_TYPED(NumFormatValueHdl, Edit&, void);
     DECL_LINK_TYPED(NumFormatValueClickHdl, Button*, void);
 
     void Initialize();

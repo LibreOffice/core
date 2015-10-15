@@ -682,10 +682,9 @@ IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, SourceListSelected, ListBox&, void)
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified)
+IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, SourceEditModified, Edit&, void)
 {
     UpdateSourceRange();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, ToggleSource, RadioButton&, void)

@@ -337,10 +337,9 @@ IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AddBtnHdl, Button*, void)
     AddPushed();
 };
 
-IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDefDlg, NameModifyHdl, Edit&, void)
 {
     IsNameValid();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AssignGetFocusHdl, Control&, void)

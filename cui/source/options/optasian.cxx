@@ -142,7 +142,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
     LanguageHdl(*m_pLanguageLB);
     m_pLanguageLB->SetSelectHdl(LINK(this, SvxAsianLayoutPage, LanguageHdl));
     m_pStandardCB->SetClickHdl(LINK(this, SvxAsianLayoutPage, ChangeStandardHdl));
-    Link<> aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
+    Link<Edit&,void> aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
     m_pStartED->SetModifyHdl(aLk);
     m_pEndED->SetModifyHdl(aLk);
 
@@ -384,16 +384,16 @@ IMPL_LINK_TYPED(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
     m_pStartFT->Enable(!bCheck);
     m_pEndFT->Enable(!bCheck);
 
-    ModifyHdl(m_pStartED);
+    ModifyHdl(*m_pStartED);
 }
 
-IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
+IMPL_LINK_TYPED(SvxAsianLayoutPage, ModifyHdl, Edit&, rEdit, void)
 {
     LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
     Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));
     OUString sStart = m_pStartED->GetText();
     OUString sEnd = m_pEndED->GetText();
-    bool bEnable = pEdit->IsEnabled();
+    bool bEnable = rEdit.IsEnabled();
     if(pImpl->xForbidden.is())
     {
         try
@@ -414,7 +414,6 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
         }
     }
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : 0, bEnable ? &sEnd : 0);
-    return 0;
 }
 
 const sal_uInt16* SvxAsianLayoutPage::GetRanges()

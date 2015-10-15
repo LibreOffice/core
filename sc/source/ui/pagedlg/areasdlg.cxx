@@ -209,7 +209,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
             lcl_GetRepeatRangeString(&rRef, pDoc, bRow, aStr);
             pRefInputEdit->SetRefString( aStr );
         }
-        Impl_ModifyHdl( pRefInputEdit );
+        Impl_ModifyHdl( *pRefInputEdit );
     }
 }
 
@@ -225,7 +225,7 @@ void ScPrintAreasDlg::AddRefEntry()
         sal_Int32 nLen = aVal.getLength();
         pEdPrintArea->SetSelection( Selection( nLen, nLen ) );
 
-        Impl_ModifyHdl( pEdPrintArea );
+        Impl_ModifyHdl( *pEdPrintArea );
     }
 }
 
@@ -243,7 +243,7 @@ void ScPrintAreasDlg::SetActive()
         if ( pRefInputEdit )
         {
             pRefInputEdit->GrabFocus();
-            Impl_ModifyHdl( pRefInputEdit );
+            Impl_ModifyHdl( *pRefInputEdit );
         }
     }
     else
@@ -305,9 +305,9 @@ void ScPrintAreasDlg::Impl_Reset()
     lcl_GetRepeatRangeString(pRepeatColRange, pDoc, false, aStrRange);
     pEdRepeatCol->SetText( aStrRange );
 
-    Impl_ModifyHdl( pEdPrintArea );
-    Impl_ModifyHdl( pEdRepeatRow );
-    Impl_ModifyHdl( pEdRepeatCol );
+    Impl_ModifyHdl( *pEdPrintArea );
+    Impl_ModifyHdl( *pEdRepeatRow );
+    Impl_ModifyHdl( *pEdRepeatCol );
     if( pDoc->IsPrintEntireSheet( nCurTab ) )
         pLbPrintArea->SelectEntryPos( SC_AREASDLG_PR_ENTIRE );
 
@@ -574,7 +574,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
         pEd->SetText( *static_cast< OUString* >( pLb->GetEntryData( nSelPos ) ) );
 }
 
-IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
+IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
 {
     ListBox* pLb = NULL;
 
@@ -582,22 +582,22 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     sal_Int32 nUserDefPos = SC_AREASDLG_RR_USER;
     sal_Int32 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
 
-    if( pEd == pEdPrintArea )
+    if( &rEd == pEdPrintArea )
     {
         pLb = pLbPrintArea;
         nUserDefPos = SC_AREASDLG_PR_USER;
         nFirstCustomPos = SC_AREASDLG_PR_SELECT;    // "Selection" and following
     }
-    else if( pEd == pEdRepeatCol )
+    else if( &rEd == pEdRepeatCol )
         pLb = pLbRepeatCol;
-    else if( pEd == pEdRepeatRow )
+    else if( &rEd == pEdRepeatRow )
         pLb = pLbRepeatRow;
     else
-        return 0;
+        return;
 
     // set list box selection according to edit field
     const sal_Int32 nEntryCount = pLb->GetEntryCount();
-    OUString aStrEd( pEd->GetText() );
+    OUString aStrEd( rEd.GetText() );
     OUString aEdUpper = aStrEd.toAsciiUpperCase();
 
     if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
@@ -615,8 +615,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     }
     else
         pLb->SelectEntryPos( !aStrEd.isEmpty() ? nUserDefPos : 0 );
-
-    return 0;
 }
 
 // globale Funktionen:

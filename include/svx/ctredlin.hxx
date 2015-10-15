@@ -197,9 +197,9 @@ private:
     DECL_LINK_TYPED( SelDateHdl, ListBox&, void );
     DECL_LINK_TYPED( RowEnableHdl, Button*, void );
     DECL_LINK_TYPED( TimeHdl, Button*, void );
-    DECL_LINK( ModifyHdl, void* );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK( ModifyDate, void* );
+    DECL_LINK_TYPED( ModifyDate, Edit&, void );
     DECL_LINK_TYPED( RefHandle, Button*, void );
 
 protected:

@@ -289,21 +289,18 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, ModifyHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, ModifyHdl, Edit&, void )
 {
     EditHdl(nullptr);
-    return 1;
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, EditLabelHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditLabelHdl, Edit&, void )
 {
     bLabelChanged = true;
     EditHdl(NULL);
-
-    return 1;
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditUsernameHdl, Edit&, void )
 {
     for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
@@ -313,8 +310,6 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
     }
 
     EditHdl(NULL);
-
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )

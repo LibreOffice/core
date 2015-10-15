@@ -301,15 +301,15 @@ IMPL_LINK_TYPED( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
     m_pShowFont->SetFont(maFont);
 }
 
-IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
 {
+    ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
     // if font is available in list then use it
-    sal_Int32 nPos = pComboBox->GetEntryPos( pComboBox->GetText() );
+    sal_Int32 nPos = rComboBox.GetEntryPos( rComboBox.GetText() );
     if (COMBOBOX_ENTRY_NOTFOUND != nPos)
     {
-        FontSelectHdl( *pComboBox );
+        FontSelectHdl( rComboBox );
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SmFontDialog, AttrChangeHdl, Button*, void )
@@ -1810,34 +1810,32 @@ IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox,
 }
 
 
-IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
+IMPL_LINK_TYPED( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
 {
+    ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
     // remember cursor position for later restoring of it
-    Selection  aSelection (pComboBox->GetSelection());
+    Selection  aSelection (rComboBox.GetSelection());
 
-    if (pComboBox == pSymbols)
+    if (&rComboBox == pSymbols)
         SelectSymbol(*pSymbols, pSymbols->GetText(), false);
-    else if (pComboBox == pSymbolSets)
+    else if (&rComboBox == pSymbolSets)
         SelectSymbolSet(*pSymbolSets, pSymbolSets->GetText(), false);
-    else if (pComboBox == pOldSymbols)
+    else if (&rComboBox == pOldSymbols)
         // allow only names from the list
         SelectSymbol(*pOldSymbols, pOldSymbols->GetText(), true);
-    else if (pComboBox == pOldSymbolSets)
+    else if (&rComboBox == pOldSymbolSets)
         // allow only names from the list
         SelectSymbolSet(*pOldSymbolSets, pOldSymbolSets->GetText(), true);
-    else if (pComboBox == pStyles)
+    else if (&rComboBox == pStyles)
         // allow only names from the list (that's the case here anyway)
         SelectStyle(pStyles->GetText(), true);
     else
         SAL_WARN("starmath", "wrong combobox argument");
 
-    pComboBox->SetSelection(aSelection);
+    rComboBox.SetSelection(aSelection);
 
     UpdateButtons();
-
-    return 0;
 }
-
 
 IMPL_LINK_TYPED( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 {

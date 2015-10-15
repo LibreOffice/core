@@ -119,7 +119,7 @@ private:
     OUString msBaseTitle;
     void updateTitle();
 
-    DECL_LINK( EdRangeModifyHdl, Edit* );
+    DECL_LINK_TYPED( EdRangeModifyHdl, Edit&, void );
 protected:
 
     virtual void RefInputDone( bool bForced = false ) override;

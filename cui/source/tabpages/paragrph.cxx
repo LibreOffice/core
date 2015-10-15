@@ -834,10 +834,9 @@ IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void 
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxStdParagraphTabPage, ModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxStdParagraphTabPage, ModifyHdl_Impl, Edit&, void)
 {
     UpdateExample_Impl();
-    return 0;
 }
 
 void SvxStdParagraphTabPage::Init_Impl()
@@ -850,7 +849,7 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_pLeftIndent->SetLoseFocusHdl( aLink2 );
     m_pRightIndent->SetLoseFocusHdl( aLink2 );
 
-    Link<> aLink = LINK( this, SvxStdParagraphTabPage, ModifyHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxStdParagraphTabPage, ModifyHdl_Impl );
     m_pFLineIndent->SetModifyHdl( aLink );
     m_pLeftIndent->SetModifyHdl( aLink );
     m_pRightIndent->SetModifyHdl( aLink );

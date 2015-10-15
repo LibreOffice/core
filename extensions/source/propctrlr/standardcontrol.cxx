@@ -1060,9 +1060,9 @@ namespace pcr
     void DropDownEditControl::setControlHelper( CommonBehaviourControlHelper& _rControlHelper )
     {
         m_pHelper = &_rControlHelper;
-        m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
+        m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, EditModifiedHdl ) );
         m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, GetFocusHdl ) );
-        m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
+        m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, EditModifiedHdl ) );
         m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, LoseFocusHdl ) );
     }
 

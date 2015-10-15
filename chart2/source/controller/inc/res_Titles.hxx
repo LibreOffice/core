@@ -35,7 +35,7 @@ public:
     void writeToResources( const TitleDialogData& rInput );
     void readFromResources( TitleDialogData& rOutput );
 
-    void SetUpdateDataHdl( const Link<>& rLink );
+    void SetUpdateDataHdl( const Link<Edit&,void>& rLink );
     bool IsModified();
     void ClearModifyFlag();
 

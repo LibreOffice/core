@@ -141,8 +141,8 @@ private:
     DECL_LINK_TYPED( ClickRemoveBitmapHdl, Button*, void );
     DECL_LINK_TYPED( ClickRbtHdl, Button*, void );
     DECL_LINK_TYPED( ClickCreateGroupHdl, Button*, void );
-    DECL_LINK( ModifyBitmapHdl, void * );
-    DECL_LINK( ModifyTimeHdl, void * );
+    DECL_LINK_TYPED( ModifyBitmapHdl, Edit&, void );
+    DECL_LINK_TYPED( ModifyTimeHdl, Edit&, void );
 
     void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();

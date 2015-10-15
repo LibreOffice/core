@@ -147,7 +147,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     ChangeRangeHdl( NULL );
 
     ClickWindowPresentationHdl( NULL );
-    ChangePauseHdl( NULL );
+    ChangePauseHdl( *aTmfPause );
 }
 
 SdStartPresentationDlg::~SdStartPresentationDlg()
@@ -356,10 +356,9 @@ IMPL_LINK_NOARG_TYPED(SdStartPresentationDlg, ClickWindowPresentationHdl, Button
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
+IMPL_LINK_NOARG_TYPED(SdStartPresentationDlg, ChangePauseHdl, Edit&, void)
 {
     aCbxAutoLogo->Enable( aRbtAuto->IsChecked() && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

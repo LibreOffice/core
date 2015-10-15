@@ -325,17 +325,18 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK_TYPED( PopupActivateHdl_Impl, Menu *, bool);
         DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
         DECL_LINK_TYPED( BulletHdl_Impl, Button*, void);
-        DECL_LINK( SizeHdl_Impl, MetricField * );
+        DECL_LINK_TYPED( SizeHdl_Impl, Edit&, void );
         DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
         DECL_LINK_TYPED( CharFmtHdl_Impl, ListBox&, void );
-        DECL_LINK( EditModifyHdl_Impl, Edit* );
+        DECL_LINK_TYPED( EditModifyHdl_Impl, Edit&, void );
         DECL_LINK_TYPED( EditListBoxHdl_Impl, ListBox&, void );
-        DECL_LINK( AllLevelHdl_Impl, NumericField * );
+        DECL_LINK_TYPED( AllLevelHdl_Impl, Edit&, void );
         DECL_LINK_TYPED( OrientHdl_Impl, ListBox&, void );
         DECL_LINK_TYPED( SameLevelHdl_Impl, Button*, void );
         DECL_LINK_TYPED( BulColorHdl_Impl, ListBox&, void );
-        DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
+        DECL_LINK_TYPED( BulRelSizeHdl_Impl, Edit&, void);
         DECL_LINK_TYPED( PreviewInvalidateHdl_Impl, Timer *, void);
+        void EditModifyHdl_Impl(Edit*);
 
 public:
         SvxNumOptionsTabPage(vcl::Window* pParent,

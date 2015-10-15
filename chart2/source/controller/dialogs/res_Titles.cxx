@@ -54,7 +54,7 @@ TitleResources::~TitleResources()
 {
 }
 
-void TitleResources::SetUpdateDataHdl( const Link<>& rLink )
+void TitleResources::SetUpdateDataHdl( const Link<Edit&,void>& rLink )
 {
     sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
 

@@ -129,7 +129,7 @@ namespace dbaui
         {
             get(m_pMaxRowScanLabel, "rowsft");
             get(m_pMaxRowScan, "rows");
-            m_pMaxRowScan->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+            m_pMaxRowScan->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
             m_pMaxRowScan->SetUseThousandSep(false);
             m_pMaxRowScanLabel->Show();
             m_pMaxRowScan->Show();
@@ -342,8 +342,8 @@ namespace dbaui
         get(m_pAutoRetrieving, "query");
 
         m_pAutoRetrievingEnabled->SetClickHdl( LINK(this, OGenericAdministrationPage, OnControlModifiedClick) );
-        m_pAutoIncrement->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlModified) );
-        m_pAutoRetrieving->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlModified) );
+        m_pAutoIncrement->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl) );
+        m_pAutoRetrieving->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl) );
 
         m_aControlDependencies.enableOnCheckMark( *m_pAutoRetrievingEnabled,
             *m_pAutoIncrementLabel, *m_pAutoIncrement, *m_pAutoRetrievingLabel, *m_pAutoRetrieving );

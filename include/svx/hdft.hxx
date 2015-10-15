@@ -94,10 +94,10 @@ protected:
     bool            mbEnableDrawingLayerFillStyles : 1;
 
     void            InitHandler();
-    DECL_LINK_TYPED( TurnOnHdl, Button*, void);
-    DECL_LINK(DistModify, void *);
-    DECL_LINK(HeightModify, void *);
-    DECL_LINK(BorderModify, void *);
+    DECL_LINK_TYPED(TurnOnHdl, Button*, void);
+    DECL_LINK_TYPED(DistModify, Edit&, void);
+    DECL_LINK_TYPED(HeightModify, Edit&, void);
+    DECL_LINK_TYPED(BorderModify, Edit&, void);
     DECL_LINK_TYPED(BackgroundHdl, Button*, void);
 
     void            UpdateExample();

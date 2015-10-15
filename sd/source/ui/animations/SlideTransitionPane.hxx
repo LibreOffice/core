@@ -91,7 +91,7 @@ private:
 
     DECL_LINK_TYPED( TransitionSelected, ListBox&, void );
     DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
-    DECL_LINK( AdvanceTimeModified, void * );
+    DECL_LINK_TYPED( AdvanceTimeModified, Edit&, void );
     DECL_LINK_TYPED( SpeedListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( SoundListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );

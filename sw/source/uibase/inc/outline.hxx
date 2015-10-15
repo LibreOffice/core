@@ -103,13 +103,13 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     sal_uInt16              nActLevel;
 
     DECL_LINK_TYPED( LevelHdl, ListBox&, void );
-    DECL_LINK( ToggleComplete, NumericField * );
+    DECL_LINK_TYPED( ToggleComplete, Edit&, void );
     DECL_LINK_TYPED( CollSelect, ListBox&, void );
-    DECL_LINK_TYPED(CollSelectGetFocus, Control&, void);
+    DECL_LINK_TYPED( CollSelectGetFocus, Control&, void );
     DECL_LINK_TYPED( NumberSelect, ListBox&, void );
-    DECL_LINK(DelimModify, void *);
-    DECL_LINK( StartModified, NumericField * );
-    DECL_LINK_TYPED(CharFormatHdl, ListBox&, void);
+    DECL_LINK_TYPED( DelimModify, Edit&, void );
+    DECL_LINK_TYPED( StartModified, Edit&, void );
+    DECL_LINK_TYPED( CharFormatHdl, ListBox&, void );
 
     void    Update();
 

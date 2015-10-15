@@ -57,11 +57,11 @@ private:
     VclPtr<MetricField>    m_pLineLengthEdit;
     VclPtr<MetricField>    m_pLineDistEdit;
 
-    DECL_LINK_TYPED(HeightPage, Button*, void);
-    DECL_LINK_TYPED(HeightMetric, Button*, void);
-    DECL_LINK_TYPED(HeightModify, Control&, void);
-    DECL_LINK( LineWidthChanged_Impl, void * );
-    DECL_LINK_TYPED( LineColorSelected_Impl, ListBox&, void);
+    DECL_LINK_TYPED( HeightPage, Button*, void );
+    DECL_LINK_TYPED( HeightMetric, Button*, void );
+    DECL_LINK_TYPED( HeightModify, Control&, void );
+    DECL_LINK_TYPED( LineWidthChanged_Impl, Edit&, void );
+    DECL_LINK_TYPED( LineColorSelected_Impl, ListBox&, void );
 
     long            lMaxHeight;
 

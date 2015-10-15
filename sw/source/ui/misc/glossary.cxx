@@ -124,7 +124,7 @@ class SwNewGlosNameDlg : public ModalDialog
     VclPtr<Edit>        m_pOldShort;
 
 protected:
-    DECL_LINK( Modify, Edit * );
+    DECL_LINK_TYPED( Modify, Edit&, void );
     DECL_LINK_TYPED(Rename, Button*, void);
 
 public:
@@ -305,7 +305,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
         ShowAutoText("", "");
     }
     // update controls
-    NameModify(m_pShortNameEdit);
+    NameModify(*m_pShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
@@ -370,18 +370,18 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
     return 0;
 }
 
-IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
+IMPL_LINK_TYPED( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
 {
     const OUString aName(m_pNameED->GetText());
-    bool bNameED = pEdit == m_pNameED;
+    bool bNameED = &rEdit == m_pNameED;
     if( aName.isEmpty() )
     {
         if(bNameED)
             m_pShortNameEdit->SetText(aName);
         m_pInsertBtn->Enable(false);
-        return 0;
+        return;
     }
-    const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : pEdit->GetText());
+    const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : rEdit.GetText());
     if(bNameED)
     {
             // did the text get in to the Listbbox in the Edit with a click?
@@ -407,7 +407,6 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
             m_pInsertBtn->Enable(bEnable);
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox, bool )
@@ -479,7 +478,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
             pChild->SetUserData(new OUString(aShortName));
             m_pNameED->SetText(aStr);
             m_pShortNameEdit->SetText(aShortName);
-            NameModify(m_pNameED);       // for toggling the buttons
+            NameModify(*m_pNameED);       // for toggling the buttons
 
             if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
             {
@@ -536,7 +535,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 
                 m_pCategoryBox->GetModel()->Remove(pChild);
                 m_pNameED->SetText(OUString());
-                NameModify(m_pNameED);
+                NameModify(*m_pNameED);
             }
         }
     }
@@ -794,18 +793,17 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, EditHdl, MenuButton *, void)
 }
 
 // KeyInput for ShortName - Edits without Spaces
-IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
+IMPL_LINK_TYPED( SwNewGlosNameDlg, Modify, Edit&, rBox, void )
 {
     OUString aName(m_pNewName->GetText());
     SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
-    if (pBox == m_pNewName)
+    if (&rBox == m_pNewName)
         m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
 
     bool bEnable = !aName.isEmpty() && !m_pNewShort->GetText().isEmpty() &&
         (!pDlg->DoesBlockExist(aName, m_pNewShort->GetText())
             || aName == m_pOldName->GetText());
     m_pOk->Enable(bEnable);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwNewGlosNameDlg, Rename, Button*, void)

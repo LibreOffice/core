@@ -175,9 +175,9 @@ namespace dbaui
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void callModifiedHdl(void* pControl) override;
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK(OnEditModified,Edit*);
 
         VclPtr<Edit>               m_pEDHostname;
         VclPtr<NumericField>       m_pNFPortNumber;
@@ -188,9 +188,9 @@ namespace dbaui
         VclPtr<Edit>               m_pEDDriverClass;
         VclPtr<PushButton>         m_pTestJavaDriver;
 
-        OUString              m_sDefaultJdbcDriverName;
-        sal_uInt16              m_nPortId;
-        bool                m_bUseClass;
+        OUString                   m_sDefaultJdbcDriverName;
+        sal_uInt16                 m_nPortId;
+        bool                       m_bUseClass;
     };
 
     // MySQLNativePage

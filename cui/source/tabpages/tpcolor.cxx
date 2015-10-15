@@ -382,7 +382,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pLbColorModel->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorModelHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
     m_pR->SetModifyHdl( aLink );
     m_pG->SetModifyHdl( aLink );
     m_pB->SetModifyHdl( aLink );
@@ -656,7 +656,7 @@ VclPtr<SfxTabPage> SvxColorTabPage::Create( vcl::Window* pWindow,
 }
 
 // is called when the content of the MtrFields is changed for color values
-IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, void)
 {
     if (eCM == CM_RGB)
     {
@@ -679,8 +679,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
     m_pCtlPreviewNew->Invalidate();
-
-    return 0;
 }
 
 

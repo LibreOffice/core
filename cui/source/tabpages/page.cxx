@@ -422,7 +422,7 @@ void SvxPageDescPage::Init_Impl()
     m_pLandscapeBtn->SetClickHdl(     LINK( this, SvxPageDescPage, SwapOrientation_Impl ) );
     m_pPortraitBtn->SetClickHdl(      LINK( this, SvxPageDescPage, SwapOrientation_Impl ) );
 
-    Link<> aLink = LINK( this, SvxPageDescPage, BorderModify_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxPageDescPage, BorderModify_Impl );
     m_pLeftMarginEdit->SetModifyHdl( aLink );
     m_pRightMarginEdit->SetModifyHdl( aLink );
     m_pTopMarginEdit->SetModifyHdl( aLink );
@@ -1057,7 +1057,7 @@ IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
@@ -1077,7 +1077,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
         }
     }
     UpdateExample_Impl( true );
-    return 0;
 }
 
 
@@ -1178,12 +1177,11 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, BorderModify_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, BorderModify_Impl, Edit&, void)
 {
     if ( !bBorderModified )
         bBorderModified = true;
     UpdateExample_Impl();
-    return 0;
 }
 
 void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )

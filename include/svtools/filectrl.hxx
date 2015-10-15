@@ -86,7 +86,7 @@ public:
     void            SetText( const OUString& rStr ) override;
     OUString        GetText() const override;
 
-    void            SetEditModifyHdl( const Link<>& rLink );
+    void            SetEditModifyHdl( const Link<Edit&,void>& rLink );
 };
 
 #endif

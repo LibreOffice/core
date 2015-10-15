@@ -828,44 +828,41 @@ void Slider::Resize()
 
 void Slider::SetLinkedField(VclPtr<NumericField> pField)
 {
-    ImplSetFieldLink(Link<>());
     if (mpLinkedField)
-        mpLinkedField->SetLoseFocusHdl(Link<Control&,void>());
-    mpLinkedField = pField;
-    ImplSetFieldLink(LINK(this, Slider, LinkedFieldModifyHdl));
-    if (mpLinkedField)
-        mpLinkedField->SetLoseFocusHdl(LINK(this, Slider, LinkedFieldLoseFocusHdl));
-}
-
-void Slider::ImplSetFieldLink(const Link<>& rLink)
-{
-    if (mpLinkedField != nullptr)
     {
-        mpLinkedField->SetModifyHdl(rLink);
+        mpLinkedField->SetModifyHdl(Link<Edit&,void>());
+        mpLinkedField->SetUpHdl(Link<SpinField&,void>());
+        mpLinkedField->SetDownHdl(Link<SpinField&,void>());
+        mpLinkedField->SetFirstHdl(Link<SpinField&,void>());
+        mpLinkedField->SetLastHdl(Link<SpinField&,void>());
+        mpLinkedField->SetLoseFocusHdl(Link<Control&,void>());
+    }
+    mpLinkedField = pField;
+    if (mpLinkedField)
+    {
+        mpLinkedField->SetModifyHdl(LINK(this, Slider, LinkedFieldModifyHdl));
         mpLinkedField->SetUpHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
         mpLinkedField->SetDownHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
         mpLinkedField->SetFirstHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
         mpLinkedField->SetLastHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
+        mpLinkedField->SetLoseFocusHdl(LINK(this, Slider, LinkedFieldLoseFocusHdl));
     }
 }
 
 IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldSpinnerHdl, SpinField&, void)
 {
     if (mpLinkedField)
-        mpLinkedField->GetModifyHdl().Call(&mpLinkedField);
+        SetThumbPos(mpLinkedField->GetValue());
 }
 IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldLoseFocusHdl, Control&, void)
 {
     if (mpLinkedField)
         SetThumbPos(mpLinkedField->GetValue());
 }
-
-IMPL_LINK(Slider, LinkedFieldModifyHdl, NumericField*, /*pField*/)
+IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldModifyHdl, Edit&, void)
 {
     if (mpLinkedField)
         SetThumbPos(mpLinkedField->GetValue());
-
-    return 0;
 }
 
 void Slider::RequestHelp( const HelpEvent& rHEvt )

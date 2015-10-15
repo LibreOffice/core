@@ -91,7 +91,7 @@ private:
     void                    UpdateExample_Impl();
 
     DECL_LINK_TYPED( LineDistHdl_Impl, ListBox&, void );
-    DECL_LINK(ModifyHdl_Impl, void *);
+    DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( AutoHdl_Impl, Button*, void );
 
 protected:

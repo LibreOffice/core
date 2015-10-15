@@ -577,13 +577,13 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     m_pCbAction->SetClickHdl(aLink);
     m_pCbComment->SetClickHdl(aLink);
 
-    Link<> a2Link=LINK( this, SvxTPFilter, ModifyDate);
+    Link<Edit&,void> a2Link=LINK( this, SvxTPFilter, ModifyDate);
     m_pDfDate->SetModifyHdl(a2Link);
     m_pTfDate->SetModifyHdl(a2Link);
     m_pDfDate2->SetModifyHdl(a2Link);
     m_pTfDate2->SetModifyHdl(a2Link);
 
-    Link<> a3Link=LINK( this, SvxTPFilter, ModifyHdl);
+    Link<Edit&,void> a3Link=LINK( this, SvxTPFilter, ModifyHdl);
     m_pEdRange->SetModifyHdl(a3Link);
     m_pEdComment->SetModifyHdl(a3Link);
     m_pLbAction->SetSelectHdl(LINK( this, SvxTPFilter, ModifyListBoxHdl));
@@ -907,10 +907,10 @@ void SvxTPFilter::ShowAction(bool bShow)
 }
 
 
-IMPL_LINK_TYPED( SvxTPFilter, SelDateHdl, ListBox&, rLb, void )
+IMPL_LINK_NOARG_TYPED( SvxTPFilter, SelDateHdl, ListBox&, void )
 {
     ShowDateFields(static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos()));
-    ModifyHdl(&rLb);
+    bModified=true;
 }
 
 IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
@@ -945,7 +945,8 @@ IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
         m_pEdComment->Invalidate();
     }
 
-    ModifyHdl(pCB);
+    if(pCB!=NULL)
+        bModified=true;
 }
 
 IMPL_LINK_TYPED( SvxTPFilter, TimeHdl, Button*, pButton, void )
@@ -963,22 +964,16 @@ IMPL_LINK_TYPED( SvxTPFilter, TimeHdl, Button*, pButton, void )
         m_pDfDate2->SetDate(aDate);
         m_pTfDate2->SetTime(aTime);
     }
-    ModifyHdl(m_pDfDate);
+    bModified=true;
 }
-
-IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
+IMPL_LINK_NOARG_TYPED( SvxTPFilter, ModifyHdl, Edit&, void)
 {
-    if(pCtr!=NULL)
-    {
-        bModified=true;
-    }
-    return 0;
+    bModified=true;
 }
 IMPL_LINK_NOARG_TYPED( SvxTPFilter, ModifyListBoxHdl, ListBox&, void)
 {
     bModified=true;
 }
-
 void SvxTPFilter::DeactivatePage()
 {
     if(bModified)
@@ -1026,12 +1021,11 @@ void SvxTPFilter::Disable( bool bChild)
     Enable( false, bChild );
 }
 
-IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
+IMPL_LINK_TYPED( SvxTPFilter, ModifyDate, Edit&, rTF, void)
 {
-
     Date aDate( Date::SYSTEM );
     tools::Time aTime(0);
-    if (m_pDfDate==pTF)
+    if (m_pDfDate==&rTF)
     {
         if(m_pDfDate->GetText().isEmpty())
            m_pDfDate->SetDate(aDate);
@@ -1039,7 +1033,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(pRedlinTable!=nullptr)
             pRedlinTable->SetFirstDate(m_pDfDate->GetDate());
     }
-    else if (m_pDfDate2==pTF)
+    else if (m_pDfDate2==&rTF)
     {
         if(m_pDfDate2->GetText().isEmpty())
            m_pDfDate2->SetDate(aDate);
@@ -1047,7 +1041,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(pRedlinTable!=nullptr)
             pRedlinTable->SetLastDate(m_pDfDate2->GetDate());
     }
-    else if (m_pTfDate==pTF)
+    else if (m_pTfDate==&rTF)
     {
         if(m_pTfDate->GetText().isEmpty())
            m_pTfDate->SetTime(aTime);
@@ -1055,7 +1049,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
         if(pRedlinTable!=nullptr)
             pRedlinTable->SetFirstTime(m_pTfDate->GetTime());
     }
-    else if (m_pTfDate2==pTF)
+    else if (m_pTfDate2==&rTF)
     {
         if(m_pTfDate2->GetText().isEmpty())
            m_pTfDate2->SetTime(aTime);
@@ -1064,8 +1058,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
             pRedlinTable->SetLastTime(m_pTfDate2->GetTime());
 
     }
-    ModifyHdl(m_pDfDate);
-    return 0;
+    ModifyHdl(*m_pDfDate);
 }
 
 IMPL_LINK_TYPED( SvxTPFilter, RefHandle, Button*, pRef, void )

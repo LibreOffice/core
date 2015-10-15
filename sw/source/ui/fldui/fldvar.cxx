@@ -561,7 +561,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
     m_pChapterFrame->Show(bShowChapterFrame);
     m_pInvisibleCB->Enable(bInvisible);
 
-    ModifyHdl();    // apply/insert/delete status update
+    ModifyHdl(*m_pNameED);    // apply/insert/delete status update
 
     m_pNumFormatLB->SetUpdateMode(true);
     m_pFormatLB->SetUpdateMode(true);
@@ -582,7 +582,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                         if (nSelData != SIZE_MAX && pBox && !bInit)
                         {
                             m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectEntry());
-                            ModifyHdl();
+                            ModifyHdl(*m_pNameED);
                         }
                     }
                 }
@@ -831,7 +831,7 @@ sal_Int32 SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 }
 
 // Modify
-IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ModifyHdl, Edit&, void)
 {
     OUString sValue(m_pValueED->GetText());
     bool bHasValue = !sValue.isEmpty();
@@ -952,8 +952,6 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl)
     m_pNewDelTBX->EnableItem(m_nApplyId, bApply);
     m_pNewDelTBX->EnableItem(m_nDeleteId, bDelete);
     EnableInsert(bInsert);
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
@@ -1106,16 +1104,14 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ChapterHdl, ListBox&, void)
 
     m_pSeparatorED->Enable(bEnable);
     m_pSeparatorFT->Enable(bEnable);
-    SeparatorHdl();
+    SeparatorHdl(*m_pSeparatorED);
 }
 
-IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldVarPage, SeparatorHdl, Edit&, void)
 {
     bool bEnable = !m_pSeparatorED->GetText().isEmpty() ||
                     m_pChapterLevelLB->GetSelectEntryPos() == 0;
     EnableInsert(bEnable);
-
-    return 0;
 }
 
 bool SwFieldVarPage::FillItemSet(SfxItemSet* )

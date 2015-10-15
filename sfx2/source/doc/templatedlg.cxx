@@ -389,7 +389,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ActivatePageHdl, TabControl*, void)
     mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
 
     if (mpSearchView->IsVisible())
-        SearchUpdateHdl(NULL);
+        SearchUpdateHdl(*mpSearchEdit);
 }
 
 void SfxTemplateManagerDlg::readSettings ()
@@ -708,7 +708,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
     }
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
 {
     OUString aKeyword = mpSearchEdit->GetText();
 
@@ -754,8 +754,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
         mpSearchView->Hide();
         mpCurView->Show();
     }
-
-    return 0;
 }
 
 void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
@@ -1589,7 +1587,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     // Deselect all items and update search results
     mpSearchView->deselectItems();
 
-    SearchUpdateHdl(mpSearchEdit);
+    SearchUpdateHdl(*mpSearchEdit);
 }
 
 void SfxTemplateManagerDlg::loadRepositories()

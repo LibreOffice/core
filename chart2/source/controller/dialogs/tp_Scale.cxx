@@ -157,12 +157,11 @@ void ScaleTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_STATIC_LINK(
-    ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
+IMPL_STATIC_LINK_TYPED(
+    ScaleTabPage, FmtFieldModifiedHdl, Edit&, rEdit, void )
 {
-    if( pFmtFied )
-        pFmtFied->SetDefaultValue( pFmtFied->GetValue() );
-    return 0;
+    FormattedField& rFmtField = static_cast<FormattedField&>(rEdit);
+    rFmtField.SetDefaultValue( rFmtField.GetValue() );
 }
 
 void ScaleTabPage::StateChanged( StateChangedType nType )

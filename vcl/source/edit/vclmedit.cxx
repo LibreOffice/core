@@ -1073,7 +1073,7 @@ void VclMultiLineEdit::ImplInitSettings(bool /*bFont*/, bool /*bForeground*/, bo
 
 void VclMultiLineEdit::Modify()
 {
-    aModifyHdlLink.Call( this );
+    aModifyHdlLink.Call( *this );
 
     CallEventListeners( VCLEVENT_EDIT_MODIFY );
 
@@ -1098,7 +1098,7 @@ IMPL_LINK_NOARG_TYPED(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
 
 void VclMultiLineEdit::UpdateData()
 {
-    aUpdateDataHdlLink.Call( this );
+    aUpdateDataHdlLink.Call( *this );
 }
 
 void VclMultiLineEdit::SetModifyFlag()

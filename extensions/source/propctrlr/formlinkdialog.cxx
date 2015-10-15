@@ -92,7 +92,7 @@ namespace pcr
         void    fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames );
 
     private:
-        DECL_LINK( OnFieldNameChanged, ComboBox* );
+        DECL_LINK_TYPED( OnFieldNameChanged, Edit&, void );
     };
 
 
@@ -147,9 +147,9 @@ namespace pcr
     }
 
 
-    IMPL_LINK( FieldLinkRow, OnFieldNameChanged, ComboBox*, /*_pBox*/ )
+    IMPL_LINK_NOARG_TYPED( FieldLinkRow, OnFieldNameChanged, Edit&, void )
     {
-        return m_aLinkChangeHandler.Call( this );
+        m_aLinkChangeHandler.Call( this );
     }
 
     VCL_BUILDER_FACTORY(FieldLinkRow)

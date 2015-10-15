@@ -668,7 +668,7 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, SelectHdl_Impl, ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, ModifyHdl_Impl, Edit&, void)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
@@ -681,11 +681,10 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 
         m_pNewBtn->Disable();
         m_pDelBtn->Enable();
-        return 0;
+        return;
     }
     m_pNewBtn->Enable();
     m_pDelBtn->Disable();
-    return 0;
 }
 
 void SvxTabulatorTabPage::PageCreated(const SfxAllItemSet& aSet)

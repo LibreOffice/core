@@ -161,7 +161,7 @@ private:
     DECL_LINK_TYPED(OnClickedSearchAgain, Button *, void);
     DECL_LINK_TYPED( OnClickedSpecialSettings, Button*, void );
 
-    DECL_LINK(OnSearchTextModified, void *);
+    DECL_LINK_TYPED(OnSearchTextModified, Edit&, void);
 
     DECL_LINK_TYPED( OnPositionSelected, ListBox&, void );
     DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );

@@ -217,7 +217,7 @@ private:
     DECL_LINK_TYPED(SearchHdl, LinkParamNone*, void);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK_TYPED(OpenHdl, Button*, void);
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );

@@ -1227,11 +1227,10 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     }
 }
 
-IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl)
+IMPL_LINK_NOARG_TYPED(CombiColumnLineChartDialogController, ChangeLineCountHdl, Edit&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {

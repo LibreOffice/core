@@ -94,7 +94,7 @@ private:
     DECL_LINK_TYPED( OkHdl,    Button*, void );
     DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK_TYPED( GetFocusHdl, Control&, void );
-    DECL_LINK( ModifyHdl,    formula::RefEdit* );
+    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 
     static ScSubTotalFunc  LbPosToFunc( sal_Int32 nPos );

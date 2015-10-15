@@ -1249,7 +1249,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, v
     setFillFloatTransparence(aGradientItem);
 }
 
-IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransparentHdl_Impl)
+IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, void)
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;
@@ -1262,8 +1262,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransparentHdl_Impl)
 
     const XFillTransparenceItem aLinearItem(nTrans);
     setFillTransparence(aLinearItem);
-
-    return 0L;
 }
 
 XGradient AreaPropertyPanelBase::GetGradient (const css::awt::GradientStyle eStyle) const

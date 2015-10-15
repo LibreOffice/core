@@ -156,22 +156,21 @@ void SwInsTableDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK( SwInsTableDlg, ModifyName, Edit *, pEdit )
+IMPL_LINK_TYPED( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
 {
-    OUString sTableName = pEdit->GetText();
+    OUString sTableName = rEdit.GetText();
     if (sTableName.indexOf(' ') != -1)
     {
         sTableName = sTableName.replaceAll(" ", "");
-        pEdit->SetText(sTableName);
+        rEdit.SetText(sTableName);
     }
 
     m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == 0);
-    return 0;
 }
 
-IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
+IMPL_LINK_TYPED( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
 {
-    if(pField == m_pColNF)
+    if(&rEdit == m_pColNF)
     {
         sal_Int64 nCol = m_pColNF->GetValue();
         if(!nCol)
@@ -196,9 +195,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
         else if( nActVal < nEnteredValRepeatHeaderNF )
             m_pRepeatHeaderNF->SetValue( ( nEnteredValRepeatHeaderNF < nMax )? nEnteredValRepeatHeaderNF : nMax );
     }
-    return 0;
 }
-
 IMPL_LINK_TYPED( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
@@ -221,10 +218,9 @@ IMPL_LINK_NOARG_TYPED(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
     m_pRepeatGroup->Enable(m_pHeaderCB->IsChecked() && m_pRepeatHeaderCB->IsChecked());
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl)
+IMPL_LINK_NOARG_TYPED(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, Edit&, void)
 {
     nEnteredValRepeatHeaderNF = m_pRepeatHeaderNF->GetValue();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

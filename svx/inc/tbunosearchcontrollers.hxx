@@ -113,7 +113,7 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-    DECL_LINK(EditModifyHdl, void*);
+    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 
 private:
 

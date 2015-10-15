@@ -657,7 +657,7 @@ namespace svx
         }
         m_pWordInput->SetText( sFirstSuggestion );
         m_pWordInput->SaveValue();
-        OnSuggestionModified( m_pWordInput );
+        OnSuggestionModified( *m_pWordInput );
     }
 
 
@@ -718,19 +718,17 @@ namespace svx
     IMPL_LINK_NOARG_TYPED( HangulHanjaConversionDialog, OnSuggestionSelected, SuggestionDisplay&, void )
     {
         m_pWordInput->SetText( m_pSuggestions->GetSelectEntry() );
-        OnSuggestionModified( NULL );
+        OnSuggestionModified( *m_pWordInput );
     }
 
 
-    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionModified )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaConversionDialog, OnSuggestionModified, Edit&, void )
     {
         m_pFind->Enable( m_pWordInput->IsValueChangedFromSaved() );
 
         bool bSameLen = m_pWordInput->GetText().getLength() == m_pOriginalWord->GetText().getLength();
         m_pReplace->Enable( m_bDocumentMode && bSameLen );
         m_pReplaceAll->Enable( m_bDocumentMode && bSameLen );
-
-        return 0L;
     }
 
 
@@ -1197,13 +1195,11 @@ namespace svx
         EndDialog( RET_OK );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaNewDictDialog, ModifyHdl, Edit&, void)
     {
         OUString aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
 
         m_pOkBtn->Enable( !aName.isEmpty() );
-
-        return 0;
     }
 
     HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(vcl::Window* pParent)
@@ -1502,39 +1498,33 @@ namespace svx
         UpdateScrollbar();
     }
 
-    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, OriginalModifyHdl )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, OriginalModifyHdl, Edit&, void )
     {
         m_bModifiedOriginal = true;
         m_aOriginal = comphelper::string::stripEnd( m_aOriginalLB->GetText(), ' ' );
 
         UpdateSuggestions();
         UpdateButtonStates();
-
-        return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl1, Edit*, pEdit )
+    IMPL_LINK_TYPED( HangulHanjaEditDictDialog, EditModifyHdl1, Edit&, rEdit, void )
     {
-        EditModify( pEdit, 0 );
-        return 0;
+        EditModify( &rEdit, 0 );
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl2, Edit*, pEdit )
+    IMPL_LINK_TYPED( HangulHanjaEditDictDialog, EditModifyHdl2, Edit&, rEdit, void )
     {
-        EditModify( pEdit, 1 );
-        return 0;
+        EditModify( &rEdit, 1 );
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl3, Edit*, pEdit )
+    IMPL_LINK_TYPED( HangulHanjaEditDictDialog, EditModifyHdl3, Edit&, rEdit, void )
     {
-        EditModify( pEdit, 2 );
-        return 0;
+        EditModify( &rEdit, 2 );
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl4, Edit*, pEdit )
+    IMPL_LINK_TYPED( HangulHanjaEditDictDialog, EditModifyHdl4, Edit&, rEdit, void )
     {
-        EditModify( pEdit, 3 );
-        return 0;
+        EditModify( &rEdit, 3 );
     }
 
     IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, BookLBSelectHdl, ListBox&, void )

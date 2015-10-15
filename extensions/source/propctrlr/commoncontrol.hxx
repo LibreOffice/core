@@ -27,10 +27,12 @@
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <type_traits>
 
 class NotifyEvent;
 class Control;
 class ListBox;
+class Edit;
 
 namespace pcr
 {
@@ -88,6 +90,7 @@ namespace pcr
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
         DECL_LINK( ModifiedHdl, void* );
+        DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
         DECL_LINK_TYPED( SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( GetFocusHdl, Control&, void );
         DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
@@ -148,27 +151,39 @@ namespace pcr
         inline void impl_checkDisposed_throw();
     private:
         VclPtr<TControlWindow>         m_pControlWindow;
+        void implSetModifyHandler(std::true_type);
+        void implSetModifyHandler(std::false_type);
     };
 
 
     //= CommonBehaviourControl - implementation
 
-
     template< class TControlInterface, class TControlWindow >
-    inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers )
+    inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers)
         :ComponentBaseClass( m_aMutex )
         ,CommonBehaviourControlHelper( _nControlType, *this )
         ,m_pControlWindow( new TControlWindow( _pParentWindow, _nWindowStyle ) )
     {
         if ( _bDoSetHandlers )
         {
-            m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
+            implSetModifyHandler(std::is_base_of<::Edit,TControlWindow>());
             m_pControlWindow->SetGetFocusHdl( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
             m_pControlWindow->SetLoseFocusHdl( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
         }
         autoSizeWindow();
     }
 
+    template< class TControlInterface, class TControlWindow >
+    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(std::true_type)
+    {
+        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
+    }
+
+    template< class TControlInterface, class TControlWindow >
+    inline void CommonBehaviourControl< TControlInterface, TControlWindow >::implSetModifyHandler(std::false_type)
+    {
+        m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
+    }
 
     template< class TControlInterface, class TControlWindow >
     inline void CommonBehaviourControl< TControlInterface, TControlWindow >::impl_checkDisposed_throw()

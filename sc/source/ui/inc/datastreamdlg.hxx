@@ -48,7 +48,7 @@ class DataStreamDlg : public ModalDialog
     VclPtr<VclFrame>       m_pVclFrameMove;
 
     DECL_LINK_TYPED(UpdateClickHdl, Button*, void);
-    DECL_LINK(UpdateHdl, void*);
+    DECL_LINK_TYPED(UpdateHdl, Edit&, void);
     DECL_LINK_TYPED(UpdateComboBoxHdl, ComboBox&, void);
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
 

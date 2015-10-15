@@ -224,7 +224,7 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, void)
 {
     OUString aScheme = GetSchemeFromURL( m_pCbbTarget->GetText() );
     if( !aScheme.isEmpty() )
@@ -233,8 +233,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
     // start timer
     maTimer.SetTimeout( 2500 );
     maTimer.Start();
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -254,7 +252,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, Edit&, void)
 {
     OUString aStrLogin ( m_pEdLogin->GetText() );
     if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
@@ -262,8 +260,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
         m_pCbAnonymous->Check();
         ClickAnonymousHdl_Impl(NULL);
     }
-
-    return 0L;
 }
 
 void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)

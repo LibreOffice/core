@@ -85,10 +85,11 @@ private:
     void            CheckCustomShow();
 
     DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
-    DECL_LINK( ClickButtonHdl2, void* );
+    DECL_LINK_TYPED( ClickButtonEditHdl, Edit&, void );
     DECL_LINK_TYPED( ClickButtonHdl3, SvTreeListBox*, void );
     DECL_LINK_TYPED( ClickButtonHdl4, ListBox&, void );
     DECL_LINK_TYPED( OKHdl, Button*, void );
+    void ClickButtonHdl2(void*);
 
 public:
 

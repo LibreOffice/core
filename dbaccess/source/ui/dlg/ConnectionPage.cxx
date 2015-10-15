@@ -101,9 +101,9 @@ namespace dbaui
         get(m_pTestConnection, "connectionButton");
 
         m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pJavaDriver->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pJavaDriver->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pJavaDriver->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_pUserName->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pUserName->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pPasswordRequired->SetClickHdl(LINK(this, OGenericAdministrationPage, OnControlModifiedClick));
 
         m_pTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
@@ -210,7 +210,6 @@ namespace dbaui
                 break;
         }
 
-        ;
         AuthenticationMode eAuthMode( DataSourceMetaData::getAuthentication( m_eType ) );
         bool bShowUserAuthenfication = ( eAuthMode != AuthNone );
         bool bShowUser = ( eAuthMode == AuthUserPwd );
@@ -321,15 +320,14 @@ namespace dbaui
         m_pTestConnection->Enable(bEnableTestConnection);
         return true;
     }
-    IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
+    IMPL_LINK_TYPED(OConnectionTabPage, OnEditModified, Edit&, _rEdit, void)
     {
-        if ( _pEdit == m_pJavaDriver )
+        if ( &_rEdit == m_pJavaDriver )
             m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );
 
         checkTestConnection();
         // tell the listener we were modified
         callModifiedHdl();
-        return 0L;
     }
 }   // namespace dbaui
 

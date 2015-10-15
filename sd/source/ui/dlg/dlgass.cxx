@@ -239,7 +239,7 @@ public:
     DECL_LINK_TYPED( SelectLayoutHdl, ListBox&, void );
     DECL_LINK_TYPED( PageSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( PresTypeHdl, Button*, void );
-    DECL_LINK( UpdateUserDataHdl, void * );
+    DECL_LINK_TYPED( UpdateUserDataHdl, Edit&, void );
     DECL_LINK_TYPED( SelectEffectHdl, ListBox&, void);
     DECL_LINK_TYPED( OpenButtonHdl, Button *, void );
 
@@ -1235,7 +1235,7 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PresTypeHdl, Button*, void)
     mpPage3LogoCB->Enable(bKiosk);
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdateUserDataHdl, Edit&, void)
 {
     mbUserDataDirty = true;
     OUString aTopic = mpPage4AskTopicEDT->GetText();
@@ -1244,8 +1244,6 @@ IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
 
     if (aTopic.isEmpty() && aName.isEmpty() && aInfo.isEmpty())
         maDocFile.clear();
-
-    return 0;
 }
 
 // ********************************************************************

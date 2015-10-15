@@ -60,7 +60,7 @@ private:
         css::linguistic2::XDictionary >    xNewDic;
 
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
-    DECL_LINK(ModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
 
 public:
     SvxNewDictionaryDialog( vcl::Window* pParent,
@@ -134,7 +134,7 @@ private:
     DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
     DECL_LINK_TYPED(NewDelActionHdl, SvxDictEdit&, bool);
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     bool NewDelHdl(void*);
 
 

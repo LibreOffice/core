@@ -89,7 +89,7 @@ namespace dbaui
         DECL_LINK_TYPED( OnClose, void*, void );
         DECL_LINK_TYPED( OnCloseClick, Button*, void );
         DECL_LINK_TYPED( OnListEntrySelected, ListBox&, void );
-        DECL_LINK( OnStatementModified, void* );
+        DECL_LINK_TYPED( OnStatementModified, Edit&, void );
 
     private:
         /// adds a statement to the statement history

@@ -343,14 +343,14 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pLbCurrency->SetSelectHdl( aLink2 );
     m_pCbSourceFormat->SetClickHdl( LINK( this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxNumberFormatTabPage, OptHdl_Impl );
+    Link<Edit&,void> aLink = LINK( this, SvxNumberFormatTabPage, OptEditHdl_Impl );
 
     m_pEdDecimals->SetModifyHdl( aLink );
     m_pEdLeadZeroes->SetModifyHdl( aLink );
     m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pBtnThousand->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pLbFormat->SetDoubleClickHdl( HDL( DoubleClickHdl_Impl ) );
-    m_pEdFormat->SetModifyHdl( HDL( EditHdl_Impl ) );
+    m_pEdFormat->SetModifyHdl( HDL( EditModifyHdl_Impl ) );
     m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbRemove->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
@@ -1498,7 +1498,11 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
+{
+    EditHdl_Impl(&rEdit);
+}
+void SvxNumberFormatTabPage::EditHdl_Impl( Edit* pEdFormat )
 {
     sal_uInt32 nCurKey = NUMKEY_UNDEFINED;
 
@@ -1551,8 +1555,6 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
         pNumFmtShell->SetCurNumFmtKey( nCurKey );
         UpdateOptions_Impl( true );
     }
-
-    return 0;
 }
 
 
@@ -1571,7 +1573,11 @@ IMPL_LINK_TYPED( SvxNumberFormatTabPage, OptClickHdl_Impl, Button*, pOptCtrl, vo
 {
     OptHdl_Impl(pOptCtrl);
 }
-IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, OptEditHdl_Impl, Edit&, rEdit, void )
+{
+    OptHdl_Impl(&rEdit);
+}
+void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
 {
     if (   (pOptCtrl == m_pEdLeadZeroes)
         || (pOptCtrl == m_pEdDecimals)
@@ -1617,7 +1623,6 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
             m_pLbFormat->SetNoSelection();
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)

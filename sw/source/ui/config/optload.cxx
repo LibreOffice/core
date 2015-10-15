@@ -526,7 +526,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     m_pEdDelim->SetText( sDelim );
 
-    Link<> aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
+    Link<Edit&,void> aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
     m_pCategoryBox->SetModifyHdl( aLk );
     m_pNumberingSeparatorED->SetModifyHdl( aLk );
     m_pTextEdit->SetModifyHdl( aLk );
@@ -647,7 +647,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     }
     m_pLbCaptionOrder->SelectEntryPos(
         SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
-    ModifyHdl();
+    ModifyHdl(*m_pCategoryBox);
 }
 
 void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
@@ -783,7 +783,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
         m_pApplyBorderCB->Check( pOpt->CopyAttributes() );
     }
 
-    ModifyHdl();
+    ModifyHdl(*m_pCategoryBox);
 }
 
 IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
@@ -822,7 +822,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
     }
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ModifyHdl, Edit&, void)
 {
     const OUString sFieldTypeName = m_pCategoryBox->GetText();
 
@@ -838,7 +838,6 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
     m_pTextEdit->Enable(bEnable);
 
     InvalidatePreview();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SelectHdl, ComboBox&, void)

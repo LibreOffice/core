@@ -124,10 +124,9 @@ namespace dbmm
         m_pStartMigration->Show(!m_pSaveAsLocation->GetText().isEmpty());
     }
 
-    IMPL_LINK( SaveDBDocPage, OnLocationModified, Edit*, /**/ )
+    IMPL_LINK_NOARG_TYPED( SaveDBDocPage, OnLocationModified, Edit&, void )
     {
         impl_updateLocationDependentItems();
-        return 0L;
     }
 
     void SaveDBDocPage::initializePage()

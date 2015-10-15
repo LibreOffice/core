@@ -196,8 +196,8 @@ private:
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
     DECL_LINK_TYPED( CursorUpHdl, ScCursorRefEdit&, void );
     DECL_LINK_TYPED( CursorDownHdl, ScCursorRefEdit&, void );
-    DECL_LINK( CondModifyHdl, void* );
-    DECL_LINK( TargetModifyHdl, void* );
+    DECL_LINK_TYPED( CondModifyHdl, Edit&, void );
+    DECL_LINK_TYPED( TargetModifyHdl, Edit&, void );
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 };
 

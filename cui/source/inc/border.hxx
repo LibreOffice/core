@@ -122,8 +122,8 @@ private:
     DECL_LINK_TYPED( SelPreHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( SelSdwHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( LinesChanged_Impl, LinkParamNone*, void );
-    DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
-    DECL_LINK( ModifyWidthHdl_Impl, void*);
+    DECL_LINK_TYPED( ModifyDistanceHdl_Impl, Edit&, void);
+    DECL_LINK_TYPED( ModifyWidthHdl_Impl, Edit&, void);
     DECL_LINK_TYPED( SyncHdl_Impl, Button*, void);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;

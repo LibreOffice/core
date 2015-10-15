@@ -133,9 +133,10 @@ private:
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
     DECL_LINK_TYPED( UpdateHdl_Impl, Idle *, void );
-    DECL_LINK(          FontModifyHdl_Impl, void* );
+    DECL_LINK_TYPED( FontModifyEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( FontModifyListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( FontModifyComboBoxHdl_Impl, ComboBox&, void );
+    void FontModifyHdl_Impl(void*);
 
 public:
     using SfxTabPage::ActivatePage;
@@ -297,13 +298,13 @@ private:
 
     DECL_LINK_TYPED(    PositionHdl_Impl, Button*, void );
     DECL_LINK_TYPED(    RotationHdl_Impl, Button*, void );
-    DECL_LINK(          FontModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(    FontModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED(    AutoPositionHdl_Impl, Button*, void );
     DECL_LINK_TYPED(    FitToLineHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(    KerningSelectHdl_Impl, ListBox&, void);
-    DECL_LINK(          KerningModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(    KerningSelectHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED(    KerningModifyHdl_Impl, Edit&, void );
     DECL_LINK_TYPED(    LoseFocusHdl_Impl, Control&, void );
-    DECL_LINK(          ScaleWidthModifyHdl_Impl, void *);
+    DECL_LINK_TYPED(    ScaleWidthModifyHdl_Impl, Edit&, void );
 
 public:
     virtual ~SvxCharPositionPage();

@@ -196,11 +196,11 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
 
     mpMtrWidth->SetValue( nTileWidth );
     mpMtrWidth->SetLast( GetGraphicSizePixel().Width() );
-    mpMtrWidth->SetModifyHdl( GetModifyHdl() );
+    mpMtrWidth->SetModifyHdl( LINK(this, GraphicFilterMosaic, EditModifyHdl) );
 
     mpMtrHeight->SetValue( nTileHeight );
     mpMtrHeight->SetLast( GetGraphicSizePixel().Height() );
-    mpMtrHeight->SetModifyHdl( GetModifyHdl() );
+    mpMtrHeight->SetModifyHdl( LINK(this, GraphicFilterMosaic, EditModifyHdl) );
 
     mpCbxEdges->Check( bEnhanceEdges );
     mpCbxEdges->SetToggleHdl( LINK(this, GraphicFilterMosaic, CheckBoxModifyHdl) );
@@ -211,6 +211,11 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
 IMPL_LINK_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
 {
     GetModifyHdl().Call(&rCheckBox);
+}
+
+IMPL_LINK_TYPED(GraphicFilterMosaic, EditModifyHdl, Edit&, rEdit, void)
+{
+    GetModifyHdl().Call(&rEdit);
 }
 
 GraphicFilterMosaic::~GraphicFilterMosaic()
@@ -273,8 +278,13 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
     get(mpMtrRadius, "radius");
 
     mpMtrRadius->SetValue( nRadius* 10  );
-    mpMtrRadius->SetModifyHdl( GetModifyHdl() );
+    mpMtrRadius->SetModifyHdl( LINK(this, GraphicFilterSmooth, EditModifyHdl) );
     mpMtrRadius->GrabFocus();
+}
+
+IMPL_LINK_TYPED(GraphicFilterSmooth, EditModifyHdl, Edit&, rEdit, void)
+{
+    GetModifyHdl().Call(&rEdit);
 }
 
 GraphicFilterSmooth::~GraphicFilterSmooth()
@@ -329,7 +339,7 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     get(mpCbxInvert, "invert");
 
     mpMtrThreshold->SetValue( FRound( cGreyThreshold / 2.55 ) );
-    mpMtrThreshold->SetModifyHdl( GetModifyHdl() );
+    mpMtrThreshold->SetModifyHdl( LINK(this, GraphicFilterSolarize, EditModifyHdl) );
 
     mpCbxInvert->Check( bInvert );
     mpCbxInvert->SetToggleHdl( LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl) );
@@ -338,6 +348,10 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
 IMPL_LINK_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
 {
     GetModifyHdl().Call(&rCheckBox);
+}
+IMPL_LINK_TYPED(GraphicFilterSolarize, EditModifyHdl, Edit&, rEdit, void)
+{
+    GetModifyHdl().Call(&rEdit);
 }
 
 GraphicFilterSolarize::~GraphicFilterSolarize()
@@ -399,7 +413,12 @@ GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGr
     get(mpMtrSepia, "value");
 
     mpMtrSepia->SetValue( nSepiaPercent );
-    mpMtrSepia->SetModifyHdl( GetModifyHdl() );
+    mpMtrSepia->SetModifyHdl( LINK(this, GraphicFilterSepia, EditModifyHdl) );
+}
+
+IMPL_LINK_TYPED(GraphicFilterSepia, EditModifyHdl, Edit&, rEdit, void)
+{
+    GetModifyHdl().Call(&rEdit);
 }
 
 GraphicFilterSepia::~GraphicFilterSepia()
@@ -452,7 +471,12 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
     mpNumPoster->SetFirst( 2 );
     mpNumPoster->SetLast( rGraphic.GetBitmapEx().GetBitCount() );
     mpNumPoster->SetValue( nPosterCount );
-    mpNumPoster->SetModifyHdl( GetModifyHdl() );
+    mpNumPoster->SetModifyHdl( LINK(this, GraphicFilterPoster, EditModifyHdl) );
+}
+
+IMPL_LINK_TYPED(GraphicFilterPoster, EditModifyHdl, Edit&, rEdit, void)
+{
+    GetModifyHdl().Call(&rEdit);
 }
 
 GraphicFilterPoster::~GraphicFilterPoster()

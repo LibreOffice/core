@@ -210,7 +210,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     void LanguageHdl(ListBox*);
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void );
     DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
-    DECL_LINK(ModifyHdl, void*);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(ModifyListBoxHdl, ListBox&, void);
 
     void  ApplyTOXDescription();
@@ -268,7 +268,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 
     VclPtr<SwTOXEntryTabPage>  m_pParent;
 
-    DECL_LINK(EditResize, Edit*);
+    DECL_LINK_TYPED( EditResize, Edit&, void );
     DECL_LINK_TYPED( NextItemHdl, SwTOXEdit&, void );
     DECL_LINK_TYPED( TbxFocusHdl, Control&, void );
     DECL_LINK_TYPED( NextItemBtnHdl, SwTOXButton&, void );
@@ -417,12 +417,12 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK_TYPED(LevelHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(AutoRightHdl, Button*, void);
     DECL_LINK_TYPED(TokenSelectedHdl, SwFormToken&, void);
-    DECL_LINK(TabPosHdl, MetricField*);
-    DECL_LINK(FillCharHdl, ComboBox*);
+    DECL_LINK_TYPED(TabPosHdl, Edit&, void);
+    DECL_LINK_TYPED(FillCharHdl, Edit&, void);
     DECL_LINK_TYPED(RemoveInsertAuthHdl, Button*, void);
     DECL_LINK_TYPED(SortKeyHdl, Button*, void);
     DECL_LINK_TYPED(ChapterInfoHdl, ListBox&, void);
-    DECL_LINK(ChapterInfoOutlineHdl, NumericField*);
+    DECL_LINK_TYPED(ChapterInfoOutlineHdl, Edit&, void);
     DECL_LINK_TYPED(NumberFormatHdl, ListBox&, void);
 
     DECL_LINK_TYPED(AllLevelsHdl, Button*, void);

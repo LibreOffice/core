@@ -144,10 +144,10 @@ private:
 
                         DECL_LINK_TYPED( UpdateHdl, Button*, void );
                         DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
-                        DECL_LINK( SelectHdl, void* );
-                        DECL_LINK( UpdateHdlMtfSizeX, void* );
-                        DECL_LINK( UpdateHdlMtfSizeY, void* );
-                        DECL_LINK( UpdateHdlNfResolution, void* );
+                        DECL_LINK_TYPED( SelectHdl, Edit&, void );
+                        DECL_LINK_TYPED( UpdateHdlMtfSizeX, Edit&, void );
+                        DECL_LINK_TYPED( UpdateHdlMtfSizeY, Edit&, void );
+                        DECL_LINK_TYPED( UpdateHdlNfResolution, Edit&, void );
                         DECL_LINK_TYPED( SbCompressionUpdateHdl, ScrollBar*, void );
 
                         DECL_LINK_TYPED( OK, Button*, void );

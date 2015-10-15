@@ -549,7 +549,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_pAddressElementsLB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
     m_pDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
     m_pDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
-    Link<> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
+    Link<Edit&,void> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
     m_pFieldCB->SetModifyHdl(aFieldsLink);
     m_pFieldCB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl));
     Link<Button*,void> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
@@ -598,11 +598,10 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, SvTreeList
     m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, Edit&, void)
 {
     m_pPreviewWIN->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
     UpdateImageButtons_Impl();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, void)
@@ -722,9 +721,9 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
 
 IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, ComboBox&, void)
 {
-    FieldChangeHdl_Impl(nullptr);
+    FieldChangeHdl_Impl(*m_pFieldCB);
 }
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&, void)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
@@ -743,7 +742,6 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
     UpdateImageButtons_Impl();
     m_pPreviewWIN->SetAddress(GetAddress());
     m_pDragED->Modify();
-    return 0;
 }
 
 void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()

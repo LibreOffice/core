@@ -36,7 +36,7 @@ private:
 
     Link<SvxNameDialog&,bool> aCheckNameHdl;
 
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
@@ -85,7 +85,7 @@ private:
     // callback link for name uniqueness
     Link<SvxObjectNameDialog&,bool> aCheckNameHdl;
 
-    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     // constructor

@@ -57,7 +57,7 @@ private:
     Link<Slider*,void>   maSlideHdl;
     Link<Slider*,void>   maEndSlideHdl;
 
-    DECL_LINK(LinkedFieldModifyHdl, NumericField*);
+    DECL_LINK_TYPED(LinkedFieldModifyHdl, Edit&, void);
     DECL_LINK_TYPED(LinkedFieldLoseFocusHdl, Control&, void);
     DECL_LINK_TYPED(LinkedFieldSpinnerHdl, SpinField&, void);
 
@@ -77,7 +77,6 @@ private:
     SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE long ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE long ImplDoSlideAction( ScrollType eScrollType );
-    SAL_DLLPRIVATE void ImplSetFieldLink(const Link<>& rLink);
     SAL_DLLPRIVATE void ImplUpdateLinkedField();
 
 public:

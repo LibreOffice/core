@@ -51,10 +51,9 @@ IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKHdl, ComboBox&, void )
         EndDialog( RET_OK );
 }
 
-IMPL_LINK( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
+IMPL_LINK_TYPED( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
 {
-    m_pOKBtn->Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
-    return 0;
+    m_pOKBtn->Enable( !comphelper::string::remove(rBox.GetText(), ' ').isEmpty() );
 }
 
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )

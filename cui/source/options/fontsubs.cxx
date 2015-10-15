@@ -88,7 +88,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     m_pCheckLB->setColSizes();
 
     aTextColor = m_pCheckLB->GetTextColor();
-    Link<> aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
+    Link<Edit&,void> aLink(LINK(this, SvxFontSubstTabPage, SelectEditHdl));
     Link<ComboBox&,void> aLink2(LINK(this, SvxFontSubstTabPage, SelectComboBoxHdl));
     Link<Button*,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
 
@@ -270,7 +270,11 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, SelectComboBoxHdl, ComboBox&, rBox, void)
 {
     SelectHdl(&rBox);
 }
-IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
+IMPL_LINK_TYPED(SvxFontSubstTabPage, SelectEditHdl, Edit&, rBox, void)
+{
+    SelectHdl(&rBox);
+}
+void SvxFontSubstTabPage::SelectHdl(vcl::Window* pWin)
 {
     if (pWin == m_pApply || pWin == m_pDelete)
     {
@@ -342,8 +346,6 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
     }
 
     CheckEnable();
-
-    return 0;
 }
 
 

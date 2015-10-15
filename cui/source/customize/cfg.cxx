@@ -2673,14 +2673,12 @@ void SvxMainMenuOrganizerDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
+IMPL_LINK_NOARG_TYPED(SvxMainMenuOrganizerDialog, ModifyHdl, Edit&, void)
 {
-    (void)pEdit;
-
     // if the Edit control is empty do not change the name
     if (m_pMenuNameEdit->GetText().isEmpty())
     {
-        return 0;
+        return;
     }
 
     SvxConfigEntry* pNewEntryData =
@@ -2689,8 +2687,6 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     pNewEntryData->SetName(m_pMenuNameEdit->GetText());
 
     m_pMenuListBox->SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )

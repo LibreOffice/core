@@ -183,7 +183,7 @@ namespace svx
 
     private:
         DECL_LINK_TYPED( OnOption, Button*, void );
-        DECL_LINK( OnSuggestionModified, void* );
+        DECL_LINK_TYPED( OnSuggestionModified, Edit&, void );
         DECL_LINK_TYPED( OnSuggestionSelected, SuggestionDisplay&, void );
         DECL_LINK_TYPED( OnConversionDirectionClicked, Button*, void );
         DECL_LINK_TYPED( ClickByCharacterHdl, Button*, void );
@@ -237,7 +237,7 @@ namespace svx
         bool m_bEntered;
 
         DECL_LINK_TYPED( OKHdl, Button*, void );
-        DECL_LINK( ModifyHdl, void* );
+        DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     public:
         HangulHanjaNewDictDialog( vcl::Window* _pParent );
         virtual ~HangulHanjaNewDictDialog();
@@ -291,12 +291,12 @@ namespace svx
         bool            m_bModifiedSuggestions;
         bool            m_bModifiedOriginal;
 
-        DECL_LINK( OriginalModifyHdl, void* );
+        DECL_LINK_TYPED( OriginalModifyHdl, Edit&, void );
         DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
-        DECL_LINK( EditModifyHdl1, Edit* );
-        DECL_LINK( EditModifyHdl2, Edit* );
-        DECL_LINK( EditModifyHdl3, Edit* );
-        DECL_LINK( EditModifyHdl4, Edit* );
+        DECL_LINK_TYPED( EditModifyHdl1, Edit&, void );
+        DECL_LINK_TYPED( EditModifyHdl2, Edit&, void );
+        DECL_LINK_TYPED( EditModifyHdl3, Edit&, void );
+        DECL_LINK_TYPED( EditModifyHdl4, Edit&, void );
 
         DECL_LINK_TYPED( BookLBSelectHdl, ListBox&, void );
         DECL_LINK_TYPED( NewPBPushHdl, Button*, void );

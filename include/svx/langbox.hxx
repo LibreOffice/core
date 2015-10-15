@@ -181,7 +181,7 @@ private:
     SVX_DLLPRIVATE virtual void         ImplSaveValue() override;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const override;
 
-    DECL_LINK( EditModifyHdl, SvxLanguageComboBox* );
+    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
 };
 
 #endif

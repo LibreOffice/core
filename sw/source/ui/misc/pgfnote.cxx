@@ -84,15 +84,13 @@ IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightModify, Control&, void)
             FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl)
+IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthEdit->GetValue( ),
                 m_pLineWidthEdit->GetDecimalDigits( ),
                 m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
     m_pLineTypeBox->SetWidth( nVal );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineColorSelected_Impl, ListBox&, void)

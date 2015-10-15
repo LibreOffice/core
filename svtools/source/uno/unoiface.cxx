@@ -545,7 +545,7 @@ VCLXFileControl::~VCLXFileControl()
 {
     VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
-        pControl->GetEdit().SetModifyHdl( Link<>() );
+        pControl->GetEdit().SetModifyHdl( Link<Edit&,void>() );
 }
 
 ::com::sun::star::uno::Any VCLXFileControl::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -595,7 +595,7 @@ void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
     VclPtr< FileControl > pPrevFileControl = GetAsDynamic< FileControl >();
     if ( pPrevFileControl )
-        pPrevFileControl->SetEditModifyHdl( Link<>() );
+        pPrevFileControl->SetEditModifyHdl( Link<Edit&,void>() );
 
     FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow.get() );
     if ( pNewFileControl )
@@ -625,7 +625,7 @@ void VCLXFileControl::setText( const OUString& aText ) throw(::com::sun::star::u
 
         // also in Java a textChanged is triggered, not in VCL.
         // ::com::sun::star::awt::Toolkit should be JAVA-compliant...
-        ModifyHdl( NULL );
+        ModifyHdl();
     }
 }
 
@@ -722,13 +722,16 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(::com::sun::star::uno::RuntimeE
 }
 
 
-IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(VCLXFileControl, ModifyHdl, Edit&, void)
+{
+    ModifyHdl();
+}
+
+void VCLXFileControl::ModifyHdl()
 {
     ::com::sun::star::awt::TextEvent aEvent;
     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
     maTextListeners.textChanged( aEvent );
-
-    return 1;
 }
 
 ::com::sun::star::awt::Size VCLXFileControl::getMinimumSize() throw(::com::sun::star::uno::RuntimeException, std::exception)

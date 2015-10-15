@@ -279,7 +279,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pSaveIndividualRB->SetClickHdl( aLk );
     aLk.Call( m_pSaveSingleDocRB );
 
-    Link<> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
+    Link<Edit&,void> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
     m_pFromNF->SetModifyHdl(aLk2);
     m_pToNF->SetModifyHdl(aLk2);
     m_pFromNF->SetMax(SAL_MAX_INT32);
@@ -481,10 +481,9 @@ IMPL_LINK_TYPED( SwMailMergeDlg, FilenameHdl, Button*, pBox, void )
     m_pFilterLB->Enable( bEnable );
 }
 
-IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeDlg, ModifyHdl, Edit&, void)
 {
     m_pFromRB->Check();
-    return 0;
 }
 
 bool SwMailMergeDlg::ExecQryShell()

@@ -708,10 +708,10 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
+IMPL_LINK_TYPED( ScTpUserLists, EdEntriesModHdl, Edit&, rEd, void )
 {
-    if ( pEd != mpEdEntries )
-        return 0;
+    if ( &rEd != mpEdEntries )
+        return;
 
     if ( mpBtnCopy->IsEnabled() )
     {
@@ -753,8 +753,6 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
             mpBtnModify->Disable();
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

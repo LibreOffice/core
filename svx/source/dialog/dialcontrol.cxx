@@ -393,16 +393,51 @@ void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces
     mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
 
     // remove modify handler from old linked field
-    ImplSetFieldLink( Link<>() );
     if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->SetLoseFocusHdl( Link<Control&,void>() );
+    {
+        NumericField& rField = *mpImpl->mpLinkField;
+        rField.SetModifyHdl( Link<Edit&,void>() );
+        rField.SetUpHdl( Link<SpinField&,void>() );
+        rField.SetDownHdl( Link<SpinField&,void>() );
+        rField.SetFirstHdl( Link<SpinField&,void>() );
+        rField.SetLastHdl( Link<SpinField&,void>() );
+        rField.SetLoseFocusHdl( Link<Control&,void>() );
+    }
     // remember the new linked field
     mpImpl->mpLinkField = pField;
     // set modify handler at new linked field
-    ImplSetFieldLink( LINK( this, DialControl, LinkedFieldModifyHdl ) );
     if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->SetLoseFocusHdl( LINK( this, DialControl, LinkedFieldFocusHdl ) );
+    {
+        NumericField& rField = *mpImpl->mpLinkField;
+        rField.SetModifyHdl( LINK( this, DialControl, LinkedFieldModifyHdl ) );
+        rField.SetUpHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetDownHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetFirstHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetLastHdl( LINK(this, DialControl, SpinFieldHdl) );
+        rField.SetLoseFocusHdl( LINK( this, DialControl, LinkedFieldFocusHdl ) );
+    }
 }
+IMPL_LINK_NOARG_TYPED( DialControl, LinkedFieldModifyHdl, Edit&, void )
+{
+    LinkedFieldModifyHdl();
+}
+IMPL_LINK_NOARG_TYPED( DialControl, LinkedFieldFocusHdl, Control&, void )
+{
+    LinkedFieldModifyHdl();
+}
+IMPL_LINK_NOARG_TYPED(DialControl, SpinFieldHdl, SpinField&, void)
+{
+    LinkedFieldModifyHdl();
+}
+
+void DialControl::LinkedFieldModifyHdl()
+{
+    if( mpImpl->mpLinkField )
+        SetRotation( static_cast< sal_Int32 >( mpImpl->mpLinkField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
+}
+
+
+
 
 void DialControl::SaveValue()
 {
@@ -466,28 +501,6 @@ void DialControl::SetRotation( sal_Int32 nAngle, bool bBroadcast )
     }
 }
 
-void DialControl::ImplSetFieldLink( const Link<>& rLink )
-{
-    if( mpImpl->mpLinkField )
-    {
-        NumericField& rField = *mpImpl->mpLinkField;
-        rField.SetModifyHdl( rLink );
-        rField.SetUpHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetDownHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetFirstHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetLastHdl( LINK(this, DialControl, SpinFieldHdl) );
-    }
-}
-
-IMPL_LINK_NOARG_TYPED(DialControl, SpinFieldHdl, SpinField&, void)
-{
-    if( mpImpl->mpLinkField )
-    {
-        NumericField& rField = *mpImpl->mpLinkField;
-        rField.GetModifyHdl().Call(&rField);
-    }
-}
-
 void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 {
     long nX = rPos.X() - mpImpl->mnCenterX;
@@ -517,22 +530,6 @@ void DialControl::HandleEscapeEvent()
             mpImpl->mpLinkField->GrabFocus();
     }
 }
-
-IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, /*pField*/ )
-{
-    LinkedFieldModifyHdl();
-    return 0;
-}
-IMPL_LINK_NOARG_TYPED( DialControl, LinkedFieldFocusHdl, Control&, void )
-{
-    LinkedFieldModifyHdl();
-}
-void DialControl::LinkedFieldModifyHdl()
-{
-    if( mpImpl->mpLinkField )
-        SetRotation( static_cast< sal_Int32 >( mpImpl->mpLinkField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
-}
-
 
 
 DialControlWrapper::DialControlWrapper( DialControl& rDial ) :

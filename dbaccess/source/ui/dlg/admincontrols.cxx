@@ -143,11 +143,11 @@ namespace dbaui
         get(m_pSocket, "socket");
         get(m_pNamedPipe, "namedpipe");
 
-        m_pDatabaseName->SetModifyHdl( _rControlModificationLink );
-        m_pHostName->SetModifyHdl( _rControlModificationLink );
-        m_pPort->SetModifyHdl( _rControlModificationLink );
-        m_pSocket->SetModifyHdl( _rControlModificationLink );
-        m_pNamedPipe->SetModifyHdl( _rControlModificationLink );
+        m_pDatabaseName->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
+        m_pHostName->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
+        m_pPort->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
+        m_pSocket->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
+        m_pNamedPipe->SetModifyHdl( LINK(this, MySQLNativeSettings, EditModifyHdl) );
         m_pSocketRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
         m_pNamedPipeRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
 
@@ -172,6 +172,11 @@ namespace dbaui
     IMPL_LINK_TYPED(MySQLNativeSettings, RadioToggleHdl, RadioButton&, rRadioButton, void)
     {
         m_aControlModificationLink.Call(&rRadioButton);
+    }
+
+    IMPL_LINK_TYPED(MySQLNativeSettings, EditModifyHdl, Edit&, rEdit, void)
+    {
+        m_aControlModificationLink.Call(&rEdit);
     }
 
     MySQLNativeSettings::~MySQLNativeSettings()

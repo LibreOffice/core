@@ -88,7 +88,7 @@ private:
     void initial();
     DECL_LINK_TYPED(VSSelHdl, ValueSet*, void);
     DECL_LINK_TYPED(KerningSelectHdl, ListBox&, void);
-    DECL_LINK(KerningModifyHdl,  MetricField*);
+    DECL_LINK_TYPED(KerningModifyHdl, Edit&, void);
 };
 }}
 

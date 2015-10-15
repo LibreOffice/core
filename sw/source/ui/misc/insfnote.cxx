@@ -88,12 +88,10 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberCharHdl, Button*, void)
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() || bExtCharAvailable );
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl)
+IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberEditHdl, Edit&, void)
 {
     m_pNumberCharBtn->Check();
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberAutoBtnHdl, Button*, void)

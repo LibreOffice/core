@@ -769,19 +769,18 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
 }
 
 
-IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
 {
-    OUString aRangeStr = pEdit->GetText();
+    OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         SCA_VALID, mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & SCA_VALID)
-        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+        rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
-        pEdit->SetControlBackground(COL_LIGHTRED);
+        rEdit.SetControlBackground(COL_LIGHTRED);
 
     updateTitle();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )

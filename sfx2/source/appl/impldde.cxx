@@ -62,7 +62,7 @@ class SvDDELinkEditDialog : public ModalDialog
     VclPtr<Edit>            m_pEdDdeItem;
     VclPtr<OKButton>        m_pOKButton;
 
-    DECL_LINK( EditHdl_Impl, Edit* );
+    DECL_LINK_TYPED( EditHdl_Impl, Edit&, void );
 public:
     SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
     virtual ~SvDDELinkEditDialog();
@@ -113,12 +113,11 @@ OUString SvDDELinkEditDialog::GetCmd() const
     return sRet;
 }
 
-IMPL_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, )
+IMPL_LINK_NOARG_TYPED( SvDDELinkEditDialog, EditHdl_Impl, Edit&, void)
 {
     m_pOKButton->Enable( !m_pEdDdeApp->GetText().isEmpty() &&
                          !m_pEdDdeTopic->GetText().isEmpty() &&
                          !m_pEdDdeItem->GetText().isEmpty() );
-    return 0;
 }
 
 SvDDEObject::SvDDEObject()

@@ -46,14 +46,14 @@ public:
     void commitPendingChanges();
 
     // is called by timer to apply changes to model
-    DECL_LINK( AngleChanged, void* );
+    DECL_LINK_TYPED( AngleChanged, Edit&, void );
     // is called immediately when a field changes
-    DECL_LINK( AngleEdited, void* );
+    DECL_LINK_TYPED( AngleEdited, Edit&, void );
 
     // is called by timer to apply changes to model
-    DECL_LINK( PerspectiveChanged, void* );
+    DECL_LINK_TYPED( PerspectiveChanged, Edit&, void );
     // is called immediately when a field changes
-    DECL_LINK( PerspectiveEdited, void* );
+    DECL_LINK_TYPED( PerspectiveEdited, Edit&, void );
     DECL_LINK_TYPED( PerspectiveToggled, CheckBox&, void );
     DECL_LINK_TYPED( RightAngledAxesToggled, CheckBox&, void );
 

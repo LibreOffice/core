@@ -50,7 +50,7 @@ private:
     VclPtr<CheckBox> m_pNumberingOnFooterHeader;
     DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK_TYPED(LineOnOffHdl, Button* = 0, void);
-    DECL_LINK(ModifyHdl, void * = 0);
+    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     SwLineNumberingDlg(SwView *pVw);

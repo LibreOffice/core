@@ -920,12 +920,12 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if ( m_pMtrWidth->HasFocus() )
     {
-        ChangeWidthHdl( this );
+        ChangeWidthHdl( *m_pMtrWidth );
     }
 
     if ( m_pMtrHeight->HasFocus() )
     {
-        ChangeHeightHdl( this );
+        ChangeHeightHdl( *m_pMtrHeight );
     }
 
     if( !mbPageDisabled )
@@ -1567,7 +1567,7 @@ void SvxPositionSizeTabPage::DisableProtect()
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
@@ -1586,13 +1586,11 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
             m_pMtrWidth->SetUserValue(nWidth, FUNIT_NONE);
         }
     }
-
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
@@ -1611,8 +1609,6 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
             m_pMtrHeight->SetUserValue(nHeight, FUNIT_NONE);
         }
     }
-
-    return 0L;
 }
 
 

@@ -80,10 +80,9 @@ void DetailsContainer::setActive( bool bActive )
     m_bIsActive = bActive;
 }
 
-IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl )
+IMPL_LINK_NOARG_TYPED( DetailsContainer, ValueChangeHdl, Edit&, void )
 {
     notifyChange( );
-    return 0;
 }
 
 HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme ) :

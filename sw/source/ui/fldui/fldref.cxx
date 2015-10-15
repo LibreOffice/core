@@ -408,7 +408,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldRefPage, TypeHdl, ListBox&, void)
         m_pFormat->Enable(bFormat);
 
         SubTypeHdl();
-        ModifyHdl(NULL);
+        ModifyHdl(*m_pNameED);
     }
 }
 
@@ -430,7 +430,7 @@ void SwFieldRefPage::SubTypeHdl()
             if (!IsFieldEdit() || m_pSelectionLB->GetSelectEntryCount())
             {
                 m_pNameED->SetText(m_pSelectionLB->GetSelectEntry());
-                ModifyHdl(m_pNameED);
+                ModifyHdl(*m_pNameED);
             }
             break;
 
@@ -758,7 +758,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 }
 
 // Modify
-IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldRefPage, ModifyHdl, Edit&, void)
 {
     OUString aName(m_pNameED->GetText());
     const bool bEmptyName = aName.isEmpty();
@@ -774,8 +774,6 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl)
     EnableInsert(bEnable);
 
     m_pSelectionLB->SelectEntry(aName);
-
-    return 0;
 }
 
 bool SwFieldRefPage::FillItemSet(SfxItemSet* )
@@ -954,7 +952,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         InsertField( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // enable/disable insert if applicable
+    ModifyHdl(*m_pNameED);    // enable/disable insert if applicable
 
     return false;
 }
