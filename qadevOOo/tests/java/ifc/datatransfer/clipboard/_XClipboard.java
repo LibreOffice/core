@@ -44,8 +44,6 @@ public class _XClipboard extends MultiMethodTest {
     MyTransferable myTransferable1;
     MyTransferable myTransferable2;
 
-    MyOwner myOwner;
-
     /**
      * <code>XClipboardOwner</code> interface implementation which
      * stores parameters passed to <code>lostOwnership</code> method.
@@ -84,8 +82,7 @@ public class _XClipboard extends MultiMethodTest {
      */
     @Override
     public void before() {
-        oObj.setContents(myTransferable1 = new MyTransferable(),
-                myOwner = new MyOwner());
+        oObj.setContents(myTransferable1 = new MyTransferable(), new MyOwner());
     }
 
     /**
