@@ -670,11 +670,14 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             if (mpAlphaVDev)
             {
                 Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
-                SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
-                if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
+                if (aAlphaBitmap.ImplGetImpBitmap())
                 {
-                    mpAlphaVDev->BlendBitmap(aTR, rAlpha);
-                    return;
+                    SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+                    if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
+                    {
+                        mpAlphaVDev->BlendBitmap(aTR, rAlpha);
+                        return;
+                    }
                 }
             }
             else
