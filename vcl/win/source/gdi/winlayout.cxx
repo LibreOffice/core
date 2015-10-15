@@ -1904,13 +1904,13 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         pGlyphPos[ i ] = nXPos;
 
         // convert glyph positions to character positions
-        i = rVisualItem.mnMinCharPos;
-        if( i < mnMinCharPos )
-            i = mnMinCharPos;
-        for(; (i < rVisualItem.mnEndCharPos) && (i < mnEndCharPos); ++i )
+        int nMinCharPos = rVisualItem.mnMinCharPos;
+        if( nMinCharPos < mnMinCharPos )
+            nMinCharPos = mnMinCharPos;
+        for( i = nMinCharPos; (i < rVisualItem.mnEndCharPos) && (i < mnEndCharPos); ++i )
         {
             int j = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
-            int nCurrIdx = i * 2;
+            int nCurrIdx = (i - nMinCharPos) * 2;
             if( !rVisualItem.IsRTL() )
             {
                 // normal positions for LTR case
