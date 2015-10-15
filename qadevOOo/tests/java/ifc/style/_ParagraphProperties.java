@@ -453,7 +453,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
         tRes.tested("ParaUserDefinedAttributes", res);
     }
 
-    private class OwnUserDefinedAttributes implements XNameContainer{
+    private static class OwnUserDefinedAttributes implements XNameContainer{
         HashMap<String, Object> members = null;
 
 

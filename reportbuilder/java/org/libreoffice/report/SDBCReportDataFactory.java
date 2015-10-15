@@ -130,7 +130,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         }
     }
 
-    private class ParameterDefinition
+    private static class ParameterDefinition
     {
         private int parameterCount = 0;
         private final ArrayList<Integer> parameterIndex = new ArrayList<Integer>();

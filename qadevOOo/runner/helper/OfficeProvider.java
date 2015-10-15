@@ -712,7 +712,7 @@ public class OfficeProvider implements AppProvider
 
     }
 
-    private class OfficeWatcherPing extends Thread
+    private static class OfficeWatcherPing extends Thread
     {
 
         private final OfficeWatcher ow;

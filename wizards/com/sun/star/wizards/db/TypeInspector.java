@@ -46,7 +46,7 @@ public class TypeInspector
     };
     static final int INVALID = 999999;
 
-    public class TypeInfo
+    public static class TypeInfo
     {
         public boolean bisAutoIncrementable;
 

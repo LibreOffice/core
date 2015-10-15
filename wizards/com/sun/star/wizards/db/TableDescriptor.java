@@ -83,9 +83,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         xWindow = _xWindow;
     }
 
-    private class ColumnDescriptor
+    private static class ColumnDescriptor
     {
-
         String Name;
         XPropertySet xColPropertySet;
 

@@ -44,7 +44,7 @@ public class _XLoadable extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestLoadListener implements com.sun.star.form.XLoadListener {
+    protected static class TestLoadListener implements com.sun.star.form.XLoadListener {
         public boolean disposingCalled = false ;
         public boolean loadedCalled = false ;
         public boolean reloadedCalled = false ;

@@ -81,7 +81,7 @@ public class _XBindableValue extends MultiMethodTest {
         return res;
     }
 
-    class MyValueBinding implements XValueBinding {
+    static class MyValueBinding implements XValueBinding {
         private final ArrayList<Type> types = new ArrayList<Type>();
 
         public com.sun.star.uno.Type[] getSupportedValueTypes() {

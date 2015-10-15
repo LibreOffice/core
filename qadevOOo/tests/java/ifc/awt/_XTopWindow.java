@@ -50,7 +50,7 @@ public class _XTopWindow extends MultiMethodTest {
     * Listener implementation which sets flags on different
     * method calls.
     */
-    protected class TestListener implements XTopWindowListener {
+    protected static class TestListener implements XTopWindowListener {
         private final PrintWriter log;
         public boolean activated = false ;
         public boolean deactivated = false ;

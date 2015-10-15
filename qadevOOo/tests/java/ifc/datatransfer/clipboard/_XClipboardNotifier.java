@@ -53,7 +53,7 @@ public class _XClipboardNotifier extends MultiMethodTest {
      * <code>XClipboardOwner</code> interface implementation which
      * stores parameters passed to <code>lostOwnership</code> method.
      */
-    class MyOwner implements XClipboardOwner {
+    static class MyOwner implements XClipboardOwner {
         XClipboard board;
         XTransferable contents;
 
@@ -67,7 +67,7 @@ public class _XClipboardNotifier extends MultiMethodTest {
      * Simpliest <code>XTransferable</code> interface implementation
      * which supports "text/html" data type.
      */
-    class MyTransferable implements XTransferable {
+    static class MyTransferable implements XTransferable {
         DataFlavor[] supportedFlavors;
 
         public MyTransferable() {

@@ -56,7 +56,7 @@ public class _XValidatable extends MultiMethodTest {
         tRes.tested("setValidator()", res);
     }
 
-    public class MyValidator implements XValidator {
+    public static class MyValidator implements XValidator {
         public void addValidityConstraintListener(com.sun.star.form.validation.XValidityConstraintListener xValidityConstraintListener)
             throws com.sun.star.lang.NullPointerException {
         }

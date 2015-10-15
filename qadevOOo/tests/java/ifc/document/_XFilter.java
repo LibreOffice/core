@@ -155,7 +155,7 @@ public class _XFilter extends MultiMethodTest {
     * Calls <code>filter()</code> method in a separate thread.
     * Necessary to check if the cancel method works
     */
-    protected class FilterThread extends Thread {
+    protected static class FilterThread extends Thread {
 
         public boolean filterRes = true;
         private final XFilter Filter;

@@ -532,7 +532,7 @@ public class ORowSet extends TestCase {
      * for the XCompletedExecution test
      * @see ifc.sdb._XCompletedExecution
      */
-    private class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
+    private static class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
         private boolean handlerWasUsed = false;
         private PrintWriter log = new PrintWriter(System.out);
 

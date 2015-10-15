@@ -60,7 +60,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         registerProperty(m_enhancedSolverStatus);
     }
 
-    private class Variable {
+    private static class Variable {
         private final CellMap CellMap;
         private final int OriginalVariable;
         private double MinValue;

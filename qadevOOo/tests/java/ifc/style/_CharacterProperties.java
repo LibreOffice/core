@@ -482,7 +482,7 @@ public class _CharacterProperties extends MultiPropertyTest {
         tRes.tested("TextUserDefinedAttributes", res);
     }
 
-    private class OwnUserDefinedAttributes implements XNameContainer{
+    private static class OwnUserDefinedAttributes implements XNameContainer{
         HashMap<String, Object> members = null;
 
 

@@ -411,7 +411,7 @@ class OfficeZip {
      *
      * <p>These are stored in {@code entryList}.</p>
      */
-    private class Entry {
+    private static class Entry {
 
         ZipEntry zipEntry = null;
         byte bytes[] = null;

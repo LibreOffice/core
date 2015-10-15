@@ -625,7 +625,7 @@ public class ProcessHandler
         bUseOutput = false;
     }
 
-    private class ProcessWatcher extends Thread
+    private static class ProcessWatcher extends Thread
     {
 
         private int m_nTimeoutInSec;

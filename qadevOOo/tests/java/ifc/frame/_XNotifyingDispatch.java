@@ -53,7 +53,7 @@ public class _XNotifyingDispatch extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestNotificationListener implements
+    protected static class TestNotificationListener implements
             com.sun.star.frame.XDispatchResultListener {
         public boolean disposingCalled = false ;
         public boolean finishedDispatch = false ;

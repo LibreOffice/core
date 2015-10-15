@@ -68,7 +68,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
      * exception to be thrown when obtaining a result data for a cell fails
      * (probably because the cell is not a result cell).
      */
-    private class ResultCellFailure extends com.sun.star.uno.Exception {}
+    private static class ResultCellFailure extends com.sun.star.uno.Exception {}
 
     @Override
     protected void before()

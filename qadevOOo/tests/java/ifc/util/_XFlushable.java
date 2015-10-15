@@ -43,7 +43,7 @@ public class _XFlushable extends MultiMethodTest {
      * Simple <code>XFlushListener</code> implementation which
      * just registers if any calls to its methods were made.
      */
-    private class MyFlushListener implements XFlushListener{
+    private static class MyFlushListener implements XFlushListener{
         boolean called = false ;
         public void flushed(com.sun.star.lang.EventObject e) {
             called = true ;

@@ -109,7 +109,7 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
      * for russian locale.
      * @see com.sun.star.i18n.XForbiddenCharacters
      */
-    protected class ForbiddenChrTest implements XForbiddenCharacters {
+    protected static class ForbiddenChrTest implements XForbiddenCharacters {
         protected Locale locale = new Locale("ru", "RU", "");
         protected ForbiddenCharacters chrs = new ForbiddenCharacters("q", "w");
 
