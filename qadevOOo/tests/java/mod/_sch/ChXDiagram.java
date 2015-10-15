@@ -348,15 +348,11 @@ public class ChXDiagram extends TestCase {
     * a double-value in the cell else it inserts a formula in the cell
     */
     public static void insertIntoCell(
-        int CellX, int CellY, String theValue, XSpreadsheet TT1, String flag) {
+        int CellX, int CellY, String theValue, XSpreadsheet TT1, String flag)
+            throws com.sun.star.lang.IndexOutOfBoundsException {
 
-        XCell oCell = null;
+        XCell oCell = TT1.getCellByPosition(CellX, CellY);
 
-        try {
-            oCell = TT1.getCellByPosition(CellX, CellY);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Could not get Cell");
-        }
         if (flag.equals("V")) {
             oCell.setValue(Float.parseFloat(theValue));
         }
