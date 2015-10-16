@@ -79,7 +79,7 @@ public:
 class SfxAbstractApplyTabDialog : virtual public SfxAbstractTabDialog
 {
 public:
-    virtual void                SetApplyHdl( const Link<>& rLink ) = 0;
+    virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) = 0;
 };
 
 class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog

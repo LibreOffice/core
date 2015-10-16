@@ -167,7 +167,7 @@ IMPL_LINK_NOARG_TYPED(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
         m_aHandler.Call(NULL);
 }
 
-void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<>& rLink )
+void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& rLink )
 {
     m_aHandler = rLink;
     pDlg->SetApplyHandler(LINK(this, AbstractApplyTabDialog_Impl, ApplyHdl));

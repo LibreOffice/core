@@ -133,8 +133,8 @@ public:
     }
     DECL_LINK_TYPED(ApplyHdl, Button*, void);
 private:
-    Link<> m_aHandler;
-    virtual void                SetApplyHdl( const Link<>& rLink ) override;
+    Link<LinkParamNone*,void> m_aHandler;
+    virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;
 };
 
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg

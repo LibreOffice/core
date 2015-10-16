@@ -515,7 +515,7 @@ public:
         , m_bModified(bModified)
     {
     }
-    DECL_LINK( ApplyHdl, void* );
+    DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     void apply()
     {
         ApplyHdl(NULL);
@@ -533,7 +533,7 @@ private:
     bool m_bModified;
 };
 
-IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
+IMPL_LINK_NOARG_TYPED(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 {
     SwWrtShell* pWrtShell = m_rDocSh.GetWrtShell();
     SwDoc* pDoc = m_rDocSh.GetDoc();
@@ -611,8 +611,6 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
     }
 
     pWrtShell->EndAllAction();
-
-    return m_nRet;
 }
 
 sal_uInt16 SwDocShell::Edit(
