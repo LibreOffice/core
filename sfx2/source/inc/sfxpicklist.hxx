@@ -58,7 +58,7 @@ class SfxPickList : public SfxListener
        certain requirements, e.g. being writable. Check implementation for requirement
        details.
      */
-    static void             AddDocumentToPickList(SfxObjectShell* pDocShell, bool bAvoidThumbnail = false);
+    static void             AddDocumentToPickList( SfxObjectShell* pDocShell );
 
     public:
         static SfxPickList& Get();
