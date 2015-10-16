@@ -33,8 +33,8 @@ public class FileTools {
      * Copies all files under srcDir to dstDir.
      * If dstDir does not exist, it will be created.
      * @param srcDir the source directory
-     * @param dstDir the destination direcotry
-     * @throws java.io.IOException throws java.io.IOException if something failes
+     * @param dstDir the destination directory
+     * @throws java.io.IOException throws java.io.IOException if something fails
      */
     public static void copyDirectory(File srcDir, File dstDir)
            throws java.io.IOException {
@@ -45,9 +45,9 @@ public class FileTools {
      * ignore list. This files will not be copied.
      * If dstDir does not exist, it will be created.
      * @param srcDir the source directory
-     * @param dstDir the destination direcotry
+     * @param dstDir the destination directory
      * @param ignore a list of files which should not be copied
-     * @throws java.io.IOException throws java.io.IOException if something failes
+     * @throws java.io.IOException throws java.io.IOException if something fails
      */
     public static void copyDirectory(File srcDir, File dstDir, String[] ignore)
            throws java.io.IOException {
@@ -60,7 +60,9 @@ public class FileTools {
 
         if (srcDir.isDirectory()) {
             if (!dstDir.exists()) {
-                dstDir.mkdir();
+                if (!dstDir.mkdir()) {
+                    throw new java.io.IOException("could not create folder " + dstDir);
+                }
             }
 
             String[] files = srcDir.list();
@@ -77,7 +79,7 @@ public class FileTools {
      * Copies src file to dst file. If the dst file does not exist, it is created
      * @param src the source file
      * @param dst the destination file
-     * @throws java.io.IOException throws java.io.IOException if something failes
+     * @throws java.io.IOException throws java.io.IOException if something fails
      */
     public static void copyFile(File src, File dst) throws java.io.IOException {
         InputStream in = null;
