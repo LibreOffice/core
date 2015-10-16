@@ -814,9 +814,8 @@ void SAL_CALL ChartController::dispose()
     if (getModel().is())
     {
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
-        if (xSidebar.is())
+        if (sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get()))
         {
-            sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
             sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
         }
     }
