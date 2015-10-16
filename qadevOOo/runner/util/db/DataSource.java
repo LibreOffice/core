@@ -42,7 +42,7 @@ public class DataSource
                 m_dataSource );
 
             Object[] descriptorProperties = new Object[] {
-                _descriptor.Name, _descriptor.URL, _descriptor.Info, _descriptor.User, _descriptor.Password,
+                null, _descriptor.URL, _descriptor.Info, _descriptor.User, _descriptor.Password,
                 _descriptor.IsPasswordRequired };
             String[] propertyNames = new String[] {
                 "Name", "URL", "Info", "User", "Password", "IsPasswordRequired" };

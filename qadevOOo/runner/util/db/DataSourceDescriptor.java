@@ -26,10 +26,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class DataSourceDescriptor
 {
     /**
-    * Representation of <code>'Name'</code> property.
-    */
-    public String Name = null ;
-    /**
     * Representation of <code>'URL'</code> property.
     */
     public String URL = null ;

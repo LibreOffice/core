@@ -251,7 +251,7 @@ public class ORowSet extends TestCase {
         if (isMySQLDB)
         {
             DBTools.DataSourceInfo legacyDescriptor = dbTools.newDataSourceInfo();
-            legacyDescriptor.Name = srcInf.Name;
+            legacyDescriptor.Name = null;
             legacyDescriptor.User = srcInf.User;
             legacyDescriptor.Password = srcInf.Password;
             legacyDescriptor.Info = srcInf.Info;
