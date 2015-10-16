@@ -434,7 +434,7 @@ void Application::Execute()
     {
         if (GetCommandLineParam(i) == "--eventtesting")
         {
-            pSVData->maAppData.mnEventTestLimit = 10;
+            pSVData->maAppData.mnEventTestLimit = 50;
             pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
             pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
             pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::MEDIUM);

@@ -2,11 +2,23 @@ Notes on experimental afl driven ui fuzzing
 
 only keyboard events for now
 
-vcl/workben/eventtesting is just serialized "hello" + ctrl+a + ctrl+b keystrokes to get things started
+vcl/workben/eventtesting.writer is just serialized "hello" + ctrl+a + ctrl+b
+keystrokes to get things started
 
-currently an arbitrary limit of 10 keystrokes before application quits in
+vcl/workben/eventtesting.impress is a bit more involved and inserts text,
+a new slide via the menu, bullets and undos for all of that
+
+currently an arbitrary limit of 50 keystrokes before application quits in
 order to initially explore that shallow space
 
+writer:
 Xnest :1
-cp vcl/workben/eventtesting .
+cp vcl/workben/eventtesting.writer eventtesting
 afl-fuzz -f eventtesting -t 10000 -i ~/fuzz/in.vcl -o ~/fuzz/out.vcl -d -T vcl -m 50000000 instdir/program/soffice.bin --nologo --writer --eventtesting --norestore --display :1
+
+impress:
+Xnest :1
+cp vcl/workben/eventtesting.impress eventtesting
+afl-fuzz -f eventtesting -t 10000 -i ~/fuzz/in.vcl -o ~/fuzz/out.vcl -d -T vcl -m 50000000 instdir/program/soffice.bin --nologo --impress --eventtesting --norestore --display :1
+
+This also works with --headless and no --display entry and thus no Xnest required
