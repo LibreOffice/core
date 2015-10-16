@@ -154,11 +154,10 @@ IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeEditHdl, Edit&, void)
 {
     ChangeHdl(NULL);
 }
-IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeHdl)
+IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeHdl, LinkParamNone*, void)
 {
     if( m_bCommitToModel )
         commitToModel();
-    return 0;
 }
 
 bool TitlesAndObjectsTabPage::canAdvance() const

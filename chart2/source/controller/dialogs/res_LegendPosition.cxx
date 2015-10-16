@@ -234,7 +234,7 @@ IMPL_LINK_TYPED( LegendPositionResources, PositionChangeHdl, RadioButton&, rRadi
         m_aChangeLink.Call(NULL);
 }
 
-void LegendPositionResources::SetChangeHdl( const Link<>& rLink )
+void LegendPositionResources::SetChangeHdl( const Link<LinkParamNone*,void>& rLink )
 {
     m_aChangeLink = rLink;
 }
