@@ -24,7 +24,10 @@ package complexlib;
  */
 public class Assurance
 {
-    public static final boolean CONTINUE = true;
+    /** Used to indicate that we should continue with test method, even if check fails */
+    public enum ContinueWithTest {
+        YES, NO
+    }
 
     /** State of the current test method **/
     protected boolean bSuccessful = true;
@@ -39,7 +42,7 @@ public class Assurance
      * @param s The condition that should be true.
      */
     protected void assure(boolean s) {
-        assure("Assure failed.", s, false);
+        assure("Assure failed.", s, ContinueWithTest.NO);
     }
 
     /**
@@ -49,7 +52,7 @@ public class Assurance
      * @param s The condition that should be true.
      */
     protected void assure(String msg, boolean s) {
-        assure(msg, s, false);
+        assure(msg, s, ContinueWithTest.NO);
     }
 
     /**
@@ -59,7 +62,7 @@ public class Assurance
      * @param actual specifies the actual int value
      */
     protected void assureEquals( String message, int expected, int actual ) {
-        assureEquals( message, Integer.valueOf( expected ), Integer.valueOf( actual ), false );
+        assureEquals( message, Integer.valueOf( expected ), Integer.valueOf( actual ), ContinueWithTest.NO );
     }
 
     /**
@@ -69,13 +72,13 @@ public class Assurance
      * @param actual specifies the actual string value
      */
     protected void assureEquals( String message, String expected, String actual ) {
-        assureEquals( message, expected, actual, false );
+        assureEquals( message, expected, actual, ContinueWithTest.NO );
     }
 
     /**
      * assures the two given sequences are of equal length, and have equal content
      */
-    public <T> void assureEquals( String i_message, T[] i_expected, T[] i_actual, boolean i_continue )
+    public <T> void assureEquals( String i_message, T[] i_expected, T[] i_actual, ContinueWithTest i_continue )
     {
         if ( i_expected.length != i_actual.length )
             failed( i_message + ": expected element count: " + i_expected.length + ", actual element count: " + i_actual.length );
@@ -91,7 +94,7 @@ public class Assurance
      * @param msg The message of the failure.
      */
     protected void failed(String msg) {
-        assure(msg, false, false);
+        assure(msg, false, ContinueWithTest.NO);
     }
 
     /**
@@ -103,19 +106,19 @@ public class Assurance
      * The current method will of course marked as failed.
      * @param msg The message that is evaluated.
      * @param s The condition that should be true.
-     * @param cont Continue with test method, even if s is false.
+     * @param cont if YES, continue with test method, even if s is false.
      */
-    protected void assure(String msg, boolean s, boolean cont) {
+    protected void assure(String msg, boolean s, ContinueWithTest cont) {
         bSuccessful &= s;
         if (!s) {
             message += msg + "\r\n";
-            if (!cont) {
+            if (cont == ContinueWithTest.NO) {
                 throw new AssureException(msg);
             }
         }
     }
 
-    private void assureEquals( String message, Object expected, Object actual, boolean cont ) {
+    private void assureEquals( String message, Object expected, Object actual, ContinueWithTest cont ) {
         assure( message + " (expected: " + expected.toString() + ", actual: " + actual.toString() + ")",
             expected.equals( actual ), cont );
     }
@@ -128,9 +131,9 @@ public class Assurance
      * method will continue.<br>
      * The current method will of course marked as failed.
      * @param msg The message that is evaluated.
-     * @param cont Continue with test method, even if s is false.
+     * @param cont if YES, continue with test method, even if s is false.
      */
-    protected void failed(String msg, boolean cont) {
+    protected void failed(String msg, ContinueWithTest cont) {
         assure(msg, false, cont);
     }
 

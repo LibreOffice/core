@@ -323,7 +323,7 @@ public class RecoveryTest extends ComplexTestCase {
             XDialog oDialog = null;
             oDialog = rt.getActiveDialogAfterStartup(xMSF);
 
-            assure("could not get Recovery Dialog at start of office", (oDialog != null), CONTINUE);
+            assure("could not get Recovery Dialog at start of office", (oDialog != null), ContinueWithTest.YES);
 
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
             log.println("got the following dialog: '" +oDialog.getTitle() + "'");
@@ -427,7 +427,7 @@ public class RecoveryTest extends ComplexTestCase {
                 XWindow oDialog = null;
                 oDialog = rt.getActiveWindow(xMSF);
 
-                assure("could not get 'Save Documents' Dialog: ", (oDialog != null), CONTINUE);
+                assure("could not get 'Save Documents' Dialog: ", (oDialog != null), ContinueWithTest.YES);
 
                 UITools oUITools = new UITools(oDialog);
 
@@ -438,7 +438,7 @@ public class RecoveryTest extends ComplexTestCase {
                 try{
                     documents = oUITools.getListBoxItems(listBoxName);
                 } catch (java.lang.Exception e){
-                    failed("could not get the document names from the 'Save Documents' dialog", CONTINUE);
+                    failed("could not get the document names from the 'Save Documents' dialog", ContinueWithTest.YES);
                 }
                 log.println("there are " + documents.length + " documents to save");
                 log.println("The following documents will be saved:");
@@ -451,12 +451,12 @@ public class RecoveryTest extends ComplexTestCase {
                 try{
                     oUITools.setTextEditFiledText("Save to", tempURL);
                 } catch (java.lang.Exception e){
-                    failed("could not set target directory for saving documents at 'Save Documents' dialog", CONTINUE);
+                    failed("could not set target directory for saving documents at 'Save Documents' dialog", ContinueWithTest.YES);
                 }
                 try{
                     oUITools.clickButton("OK");
                 } catch (java.lang.Exception e){
-                    failed("could not click 'OK' at 'Save Documents' dialog", CONTINUE);
+                    failed("could not click 'OK' at 'Save Documents' dialog", ContinueWithTest.YES);
                 }
             }
         } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){

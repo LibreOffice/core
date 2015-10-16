@@ -270,7 +270,7 @@ public class TypeDetection extends ComplexTestCase {
             }
 
         } catch (ClassCastException e){
-            failed(e.toString(), true);
+            failed(e.toString(), ContinueWithTest.YES);
         }
     }
 
@@ -296,7 +296,7 @@ public class TypeDetection extends ComplexTestCase {
             boolean fileTypeOK = helper.checkFileType(type, fileType);
 
             assure("\nURL-test         : " + fileAlias + ":\n\treturned type: '" + type +
-                   "'\n\texpected type: '" + fileType + "'",fileTypeOK ,true);
+                   "'\n\texpected type: '" + fileType + "'",fileTypeOK ,ContinueWithTest.YES);
     }
 
     /** Filles a MediaDescriptor with a <code>XInputStream</code> of the test
@@ -317,7 +317,7 @@ public class TypeDetection extends ComplexTestCase {
         try{
             xStream = helper.getFileStream( fileURL );
         } catch (NotConnectedException e) {
-            failed("Could not get XInputStream from file :'" + fileURL + "'",true);
+            failed("Could not get XInputStream from file :'" + fileURL + "'",ContinueWithTest.YES);
             return;
         }
 
@@ -332,7 +332,7 @@ public class TypeDetection extends ComplexTestCase {
             boolean fileTypeOK = helper.checkFileType(type, fileType);
 
             assure("\nXInputStream-test: " + fileAlias + ":\n\treturned type: '" + type +
-                   "'\n\texpected type: '" + fileType + "'", fileTypeOK, true);
+                   "'\n\texpected type: '" + fileType + "'", fileTypeOK, ContinueWithTest.YES);
 
     }
 
@@ -375,16 +375,16 @@ public class TypeDetection extends ComplexTestCase {
 
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\n\texpected type: '" + expectedFileType + "'",
-                                    fileTypeOK, true);
+                                    fileTypeOK, ContinueWithTest.YES);
 
                     } catch (FileAliasNotFoundException e){
-                        failed(e.toString(),true);
+                        failed(e.toString(),ContinueWithTest.YES);
                     }
 
             }
 
         } catch (ClassCastException e){
-            failed(e.toString(), true);
+            failed(e.toString(), ContinueWithTest.YES);
         }
     }
 
@@ -429,16 +429,16 @@ public class TypeDetection extends ComplexTestCase {
 
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\n\texpected type: '" + expectedType + "'",
-                                    fileTypeOK,true);
+                                    fileTypeOK,ContinueWithTest.YES);
 
                 } catch (FileAliasNotFoundException e){
-                    failed(e.toString(),true);
+                    failed(e.toString(),ContinueWithTest.YES);
                 }
 
             }
 
         } catch (ClassCastException e){
-            failed(e.toString(), true);
+            failed(e.toString(), ContinueWithTest.YES);
         }
     }
 
@@ -474,16 +474,16 @@ public class TypeDetection extends ComplexTestCase {
 
                     assure("\n" + fileAlias + ":\n\treturned type: '" + type +
                                     "'\t\nexpected type: '" + fileType + "'",
-                                    fileTypeOK, true);
+                                    fileTypeOK, ContinueWithTest.YES);
 
                 } catch (FileAliasNotFoundException e){
-                    failed(e.toString(),true);
+                    failed(e.toString(),ContinueWithTest.YES);
                 }
 
             }
 
         } catch (ClassCastException e){
-            failed(e.toString(), true);
+            failed(e.toString(), ContinueWithTest.YES);
         }
      }
 
@@ -531,15 +531,15 @@ public class TypeDetection extends ComplexTestCase {
                 }
 
                 if (file.canWrite() && bReadOnly)
-                    assure("\nStreamLoader: file '"+ fileURL +"' is writable but out-Parameter does contain 'ReadOnly' property",false ,true);
+                    assure("\nStreamLoader: file '"+ fileURL +"' is writable but out-Parameter does contain 'ReadOnly' property", false, ContinueWithTest.YES);
                 else if ((!file.canWrite()) && (!bReadOnly))
-                    assure("\nStreamLoader: file '"+ fileURL +"'is readonly but out-Parameter does not contain 'ReadOnly' property",false ,true);
-                else assure("all ok",true,true);
+                    assure("\nStreamLoader: file '"+ fileURL +"'is readonly but out-Parameter does not contain 'ReadOnly' property", false, ContinueWithTest.YES);
+                else assure("all ok", true, ContinueWithTest.YES);
 
             }
 
          } catch (ClassCastException e){
-            failed(e.toString(), true);
+            failed(e.toString(), ContinueWithTest.YES);
         }
 
      }

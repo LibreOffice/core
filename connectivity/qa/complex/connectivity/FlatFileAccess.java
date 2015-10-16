@@ -228,11 +228,11 @@ public class FlatFileAccess extends ComplexTestCase
             {
                 values.add( (T)i_getter.getValue( rowSet ) );
             }
-            assureEquals( i_context + ": " + i_failureDesc, i_expectedValues, values.toArray(), true );
+            assureEquals( i_context + ": " + i_failureDesc, i_expectedValues, values.toArray(), ContinueWithTest.YES );
         }
         catch( final SQLException e )
         {
-            failed( i_context + ": caught an exception: " + e.toString(), false );
+            failed( i_context + ": caught an exception: " + e.toString(), ContinueWithTest.NO );
         }
         finally
         {
