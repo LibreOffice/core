@@ -347,9 +347,6 @@ namespace
 {
     bool InjectKeyEvent(SvStream& rStream)
     {
-        if (Application::AnyInput())
-            return false;
-
         VclPtr<vcl::Window> xWin(Application::GetFirstTopLevelWindow());
         while (xWin)
         {
@@ -359,6 +356,17 @@ namespace
         }
         if (!xWin)
             return false;
+
+        // skip the first available cycle and insert on the next one when we
+        // are trying the initial event, flagged by a triggered but undeleted
+        // mpEventTestingIdle
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->maAppData.mpEventTestingIdle)
+        {
+            delete pSVData->maAppData.mpEventTestingIdle;
+            pSVData->maAppData.mpEventTestingIdle = nullptr;
+            return false;
+        }
 
         SalKeyEvent aKeyEvent;
         aKeyEvent.mnTime = 0;
@@ -375,7 +383,6 @@ namespace
 
     void CloseDialogsAndQuit()
     {
-        Scheduler::ProcessTaskScheduling(false);
         Application::EndAllDialogs();
         Application::Quit();
     }
@@ -383,26 +390,36 @@ namespace
 
 IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
 {
-    SAL_INFO("vcl.eventtesting", "EventTestLimit is " << mnEventTestLimit);
-    if (mnEventTestLimit == 0)
+    if (Application::AnyInput())
     {
-        delete mpEventTestInput;
-        delete mpEventTestingIdle;
-        SAL_INFO("vcl.eventtesting", "Event Limit reached, exiting" << mnEventTestLimit);
+        mpEventTestingIdle->Start();
+    }
+    else
+    {
+        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplVclEventTestingHdl ) );
+    }
+}
+
+IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplVclEventTestingHdl, void*, void )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    SAL_INFO("vcl.eventtesting", "EventTestLimit is " << pSVData->maAppData.mnEventTestLimit);
+    if (pSVData->maAppData.mnEventTestLimit == 0)
+    {
+        delete pSVData->maAppData.mpEventTestInput;
+        SAL_INFO("vcl.eventtesting", "Event Limit reached, exiting" << pSVData->maAppData.mnEventTestLimit);
         CloseDialogsAndQuit();
     }
     else
     {
-        Scheduler::ProcessTaskScheduling(false);
-        if (InjectKeyEvent(*mpEventTestInput))
-            --mnEventTestLimit;
-        if (!mpEventTestInput->good())
+        if (InjectKeyEvent(*pSVData->maAppData.mpEventTestInput))
+            --pSVData->maAppData.mnEventTestLimit;
+        if (!pSVData->maAppData.mpEventTestInput->good())
         {
             SAL_INFO("vcl.eventtesting", "Event Input exhausted, exit next cycle");
-            mnEventTestLimit = 0;
+            pSVData->maAppData.mnEventTestLimit = 0;
         }
-        Scheduler::ProcessTaskScheduling(false);
-        mpEventTestingIdle->Start();
+        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplVclEventTestingHdl ) );
     }
 }
 
@@ -420,7 +437,7 @@ void Application::Execute()
             pSVData->maAppData.mnEventTestLimit = 10;
             pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
             pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
-            pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::LOWEST);
+            pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::MEDIUM);
             pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
             pSVData->maAppData.mpEventTestingIdle->Start();
             break;
