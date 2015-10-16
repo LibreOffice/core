@@ -43,7 +43,7 @@ class ScCondFrmtEntry : public Control
 private:
     bool mbActive;
 
-    Link<> maClickHdl;
+    Link<ScCondFrmtEntry&,void> maClickHdl;
 
     //general ui elements
     VclPtr<FixedText> maFtCondNr;

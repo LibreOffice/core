@@ -89,7 +89,7 @@ public:
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
-    DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
+    DECL_LINK_TYPED( EntrySelectHdl, ScCondFrmtEntry&, void );
 
     DECL_LINK_TYPED( TypeListHdl, ListBox&, void );
     DECL_LINK_TYPED( AfterTypeListHdl, void*, void );

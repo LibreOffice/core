@@ -112,7 +112,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
             }
         }
         if(nCount)
-            EntrySelectHdl(maEntries[0].get());
+            EntrySelectHdl(*maEntries[0].get());
     }
     else
     {
@@ -388,10 +388,10 @@ IMPL_LINK_NOARG_TYPED( ScCondFormatList, RemoveBtnHdl, Button*, void )
     RecalcAll();
 }
 
-IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
+IMPL_LINK_TYPED( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
 {
-    if(pEntry->IsSelected())
-        return 0;
+    if(rEntry.IsSelected())
+        return;
 
     //A child has focus, but we will hide that, so regrab to whatever new thing gets
     //shown instead of leaving it stuck in the inaccessible hidden element
@@ -401,11 +401,10 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
         (*itr)->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
-    pEntry->SetActive();
+    rEntry.SetActive();
     RecalcAll();
     if (bReGrabFocus)
         GrabFocus();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( ScCondFormatList, ScrollHdl, ScrollBar*, void )

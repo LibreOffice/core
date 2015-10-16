@@ -78,7 +78,7 @@ bool ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
-        ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, [this] () { maClickHdl.Call(this); } );
+        ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, [this] () { maClickHdl.Call(*this); } );
     }
     return Control::Notify(rNEvt);
 }
