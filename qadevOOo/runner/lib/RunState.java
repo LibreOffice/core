@@ -18,22 +18,26 @@
 
 package lib;
 
-/**
- * The class implements Status behaviour for exception runstate Status objects.
- */
-class ExceptionStatus extends Status {
+public enum RunState {
 
     /**
-     * Creates an instance of Status object with EXCEPTION runstate.
-     *
-     * @param t the exception an activity terminated with.
+     * The constant represents PASSED runtime state.
      */
-    ExceptionStatus( Throwable t ) {
-        super(RunState.EXCEPTION, FAILED);
-        String message = t.getMessage();
-        if (message != null)
-            runStateString = message;
-        else
-            runStateString = t.toString();
-    }
+    PASSED,
+
+    /**
+     * The constant represents EXCEPTION runtime state.
+     */
+    EXCEPTION,
+
+    /**
+     * The constant represents SKIPPED runtime state.
+     */
+    SKIPPED,
+
+    /**
+     * This is a private indicator for a user defined runtime state
+     */
+    USER_DEFINED
+
 }

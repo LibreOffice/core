@@ -83,6 +83,7 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/lib/ExceptionStatus \
     qadevOOo/runner/lib/MultiMethodTest \
     qadevOOo/runner/lib/MultiPropertyTest \
+    qadevOOo/runner/lib/RunState \
     qadevOOo/runner/lib/SimpleStatus \
     qadevOOo/runner/lib/Status \
     qadevOOo/runner/lib/StatusException \

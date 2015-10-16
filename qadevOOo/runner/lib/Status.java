@@ -41,7 +41,7 @@ public class Status extends SimpleStatus {
      * @param runState either PASSED, SKIPPED, etc.
      * @param state OK or FAILED.
      */
-    public Status(int runState, boolean state ) {
+    public Status(RunState runState, boolean state ) {
         super(runState, state);
     }
 
@@ -62,7 +62,7 @@ public class Status extends SimpleStatus {
      * otherwise).
      */
     public static Status passed( boolean state ) {
-        return new Status(PASSED, state );
+        return new Status(RunState.PASSED, state );
     }
 
     /**
@@ -83,7 +83,7 @@ public class Status extends SimpleStatus {
      * otherwise).
      */
     public static Status skipped( boolean state ) {
-        return new Status( SKIPPED, state );
+        return new Status( RunState.SKIPPED, state );
     }
 
 
@@ -115,7 +115,7 @@ public class Status extends SimpleStatus {
      * Checks whether the status runstate is passed.
      */
     public boolean isPassed() {
-        return getRunState() == PASSED;
+        return getRunState() == RunState.PASSED;
     }
 
     /**

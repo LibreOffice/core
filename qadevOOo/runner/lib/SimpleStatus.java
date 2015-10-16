@@ -24,27 +24,6 @@ package lib;
  * the SimpleSTatus instance.
  */
 class SimpleStatus {
-    /* Run states. */
-
-    /**
-     * The constatnt represents PASSED runtime state.
-     */
-    public static final int PASSED = 0;
-
-    /**
-     * The constant represents EXCEPTION runtime state.
-     */
-    public static final int EXCEPTION = 3;
-
-    /**
-     * The constant represents SKIPPED runtime state.
-     */
-    public static final int SKIPPED = 1;
-
-    /**
-     * This is a private indicator for a user defined runtime state
-     */
-    private static final int USER_DEFINED = 4;
 
     /* Test states */
 
@@ -63,7 +42,7 @@ class SimpleStatus {
     /**
      * The field is holding reason of the status.
      */
-    private final int runState;
+    private final RunState runState;
 
     /**
      * This is the run state: either SKIPPED, PASSED, etc.
@@ -74,14 +53,14 @@ class SimpleStatus {
     /**
      * The constructor initialize state and reason field.
      */
-    protected SimpleStatus( int runState, boolean state ) {
+    protected SimpleStatus( RunState runState, boolean state ) {
         this.state = state;
         this.runState = runState;
-        if ( runState == PASSED ) {
+        if ( runState == RunState.PASSED ) {
             runStateString = "PASSED";
-        } else if ( runState == SKIPPED ) {
+        } else if ( runState == RunState.SKIPPED ) {
             runStateString = "SKIPPED";
-        } else if ( runState == EXCEPTION ) {
+        } else if ( runState == RunState.EXCEPTION ) {
             runStateString = "EXCEPTION";
         } else {
             runStateString = "UNKNOWN";
@@ -93,7 +72,7 @@ class SimpleStatus {
      */
     protected SimpleStatus(String runStateString, boolean state) {
         this.state = state;
-        this.runState = USER_DEFINED;
+        this.runState = RunState.USER_DEFINED;
         this.runStateString = runStateString;
     }
 
@@ -107,7 +86,7 @@ class SimpleStatus {
     /**
      * getRunState() implementation. Just returns th runState field value.
      */
-    public int getRunState() {
+    public RunState getRunState() {
         return runState;
     }
 
