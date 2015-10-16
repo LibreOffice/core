@@ -284,7 +284,7 @@ namespace svt
         VclPtr<CheckBox>             pBox;
         Rectangle                    aFocusRect;
         Link<VclPtr<CheckBox>,void>  m_aClickLink;
-        Link<>                       m_aModifyLink;
+        Link<LinkParamNone*,void>    m_aModifyLink;
 
     public:
         CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
@@ -301,7 +301,7 @@ namespace svt
 
         void SetClickHdl(const Link<VclPtr<CheckBox>,void>& rHdl) {m_aClickLink = rHdl;}
 
-        void SetModifyHdl(const Link<>& rHdl) {m_aModifyLink = rHdl;}
+        void SetModifyHdl(const Link<LinkParamNone*,void>& rHdl) {m_aModifyLink = rHdl;}
 
         CheckBox&   GetBox() {return *pBox;};
 
@@ -326,7 +326,7 @@ namespace svt
     protected:
         virtual bool WantMouseEvent() const override;
     private:
-        DECL_LINK(ModifyHdl, void*);
+        DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
     };
 
 

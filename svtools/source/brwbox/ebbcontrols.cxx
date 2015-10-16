@@ -263,7 +263,7 @@ namespace svt
     IMPL_LINK_NOARG_TYPED(CheckBoxControl, OnClick, Button*, void)
     {
         m_aClickLink.Call(pBox);
-        m_aModifyLink.Call(pBox);
+        m_aModifyLink.Call(nullptr);
     }
 
 
@@ -359,10 +359,9 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl)
+    IMPL_LINK_NOARG_TYPED(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
     {
         callModifyHdl();
-        return 0;
     }
 
     //= MultiLineEditImplementation
