@@ -64,13 +64,10 @@ public class DataSource
     /**
      * retrieves the css.sdb.OfficeDatabaseDocument associated with the data source
      */
-    public DatabaseDocument getDatabaseDocument()
+    public synchronized DatabaseDocument getDatabaseDocument()
     {
-        synchronized ( this )
-        {
-            if ( m_document == null )
-                m_document = new DatabaseDocument( this );
-        }
+        if ( m_document == null )
+            m_document = new DatabaseDocument( this );
         return m_document;
     }
 
