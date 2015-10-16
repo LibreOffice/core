@@ -1912,10 +1912,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
                     SetAktItemSet(pOldAktItemSet);
                 }
 
-                const SvxLRSpaceItem *pLR =
-                    HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
-                OSL_ENSURE(pLR, "Impossible");
-                if (pLR)
+                if (const SvxLRSpaceItem *pLR = aListIndent.GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
                 {
                     m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
                     m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);

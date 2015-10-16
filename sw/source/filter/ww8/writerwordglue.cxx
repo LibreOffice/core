@@ -392,7 +392,7 @@ namespace sw
 
         HdFtDistanceGlue::HdFtDistanceGlue(const SfxItemSet &rPage)
         {
-            if (const SvxBoxItem *pBox = HasItem<SvxBoxItem>(rPage, RES_BOX))
+            if (const SvxBoxItem *pBox = rPage.GetItem<SvxBoxItem>(RES_BOX))
             {
                 dyaHdrTop = pBox->CalcLineSpace(SvxBoxItemLine::TOP);
                 dyaHdrBottom = pBox->CalcLineSpace(SvxBoxItemLine::BOTTOM);
@@ -410,7 +410,7 @@ namespace sw
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;
 
-            const SwFormatHeader *pHd = HasItem<SwFormatHeader>(rPage, RES_HEADER);
+            const SwFormatHeader *pHd = rPage.GetItem<SwFormatHeader>(RES_HEADER);
             if (pHd && pHd->IsActive() && pHd->GetHeaderFormat())
             {
                 mbHasHeader = true;
@@ -419,7 +419,7 @@ namespace sw
             else
                 mbHasHeader = false;
 
-            const SwFormatFooter *pFt = HasItem<SwFormatFooter>(rPage, RES_FOOTER);
+            const SwFormatFooter *pFt = rPage.GetItem<SwFormatFooter>(RES_FOOTER);
             if (pFt && pFt->IsActive() && pFt->GetFooterFormat())
             {
                 mbHasFooter = true;

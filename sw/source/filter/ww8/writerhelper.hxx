@@ -428,41 +428,6 @@ namespace sw
             return DefaultItemGet<T>(rDoc.GetAttrPool(), eType);
         }
 
-        /** Return a pointer to a SfxPoolItem derived class if it exists in an
-            SfxItemSet
-
-            Writer's attributes are retrieved by passing a numeric identifier
-            and receiving a SfxPoolItem reference which must then typically be
-            cast back to its original type which is both tedious and verbose.
-
-            HasItem returns a pointer to the requested SfxPoolItem for a given
-            property id if it exists in the SfxItemSet or its chain of parents,
-            e.g. fontsize
-
-            HasItem uses item_cast () on the retrieved pointer to test that the
-            retrieved property is of the type that the developer thinks it is.
-
-            @param rSet
-            The SfxItemSet whose property we want
-
-            @param eType
-            The numeric identifier of the default property to be retrieved
-
-            @tplparam T
-            A SfxPoolItem derived class of the retrieved property
-
-            @return The T requested or 0 if no T found with id eType
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        template<class T> const T* HasItem(const SfxItemSet &rSet,
-            sal_uInt16 eType)
-        {
-            return item_cast<T>(rSet.GetItem(eType));
-        }
-
-
         /** Get the Paragraph Styles of a SwDoc
 
             Writer's styles are in one of those dreaded macro based pre-STL
