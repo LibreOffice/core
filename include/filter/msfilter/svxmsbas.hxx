@@ -20,14 +20,16 @@
 #ifndef INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
 #define INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
 
-#include <tools/solar.h>
-#include <filter/msfilter/msfilterdllapi.h>
-
 #include <map>
 #include <unordered_map>
 
+#include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sot/storage.hxx>
+#include <tools/solar.h>
+#include <tools/ref.hxx>
+
 class SfxObjectShell;
-class SotStorage;
 
 /* Construct with the root storage of the MS document, with bImportCode
  * set the visual basic code will be imported into the stardocument when Import

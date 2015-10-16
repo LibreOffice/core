@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 #define INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 
+#include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/gen.hxx>

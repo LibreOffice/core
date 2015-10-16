@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_EXPORT_UTILS_HXX
 #define INCLUDED_OOX_EXPORT_UTILS_HXX
 
+#include <rtl/ustring.hxx>
+
 #define I32S(x) OString::number( (sal_Int32) x ).getStr()
 #define I64S(x) OString::number( (sal_Int64) x ).getStr()
 #define IS(x) OString::number( x ).getStr()

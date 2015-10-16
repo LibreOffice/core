@@ -11,6 +11,7 @@
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
 
 #include "LibreOfficeKit.h"
+#include "LibreOfficeKitInit.h"
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:

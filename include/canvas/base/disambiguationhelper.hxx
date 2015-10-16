@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
 #define INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
 
+#include <com/sun/star/lang/EventObject.hpp>
 #include <osl/mutex.hxx>
 
 

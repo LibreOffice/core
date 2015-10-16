@@ -20,14 +20,15 @@
 #ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 #define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 
-#include <com/sun/star/rendering/XCustomSprite.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/canvastoolsdllapi.h>
+#include <com/sun/star/rendering/XCustomSprite.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 namespace canvas
 {

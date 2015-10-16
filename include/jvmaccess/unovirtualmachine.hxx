@@ -21,13 +21,12 @@
 #define INCLUDED_JVMACCESS_UNOVIRTUALMACHINE_HXX
 
 #include <jvmaccess/jvmaccessdllapi.h>
+#include <jvmaccess/virtualmachine.hxx>
 #include <sal/config.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 
 namespace jvmaccess {
-
-class VirtualMachine;
 
 /** An encapsulating wrapper around a Java virtual machine and an appropriate
     UNO class loader.

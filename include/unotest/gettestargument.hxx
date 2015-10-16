@@ -20,8 +20,7 @@
 #ifndef INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
 #define INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
 
-#include <sal/config.h>
-
+#include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
 

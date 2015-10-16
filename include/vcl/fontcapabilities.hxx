@@ -13,6 +13,8 @@
 #include <boost/dynamic_bitset.hpp>
 #include <vector>
 
+#include <sal/types.h>
+
 //See OS/2 table, i.e. http://www.microsoft.com/typography/otspec/os2.htm#ur
 namespace vcl
 {

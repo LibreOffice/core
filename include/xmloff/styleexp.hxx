@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 

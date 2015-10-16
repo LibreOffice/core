@@ -19,18 +19,17 @@
 #ifndef INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 #define INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 
-#include <sal/config.h>
-
 #include <map>
 #include <vector>
-#include <sal/types.h>
+
+#include <rtl/ustring.hxx>
 
 
 namespace connectivity
 {
     typedef ::std::vector< OUString>         TStringVector;
-    typedef ::std::vector< sal_Int32>               TIntVector;
-    typedef ::std::map<sal_Int32,sal_Int32>         TInt2IntMap;
+    typedef ::std::vector< sal_Int32>        TIntVector;
+    typedef ::std::map<sal_Int32,sal_Int32>  TInt2IntMap;
     typedef ::std::map< OUString,sal_Int32>  TString2IntMap;
     typedef ::std::map< sal_Int32,OUString>  TInt2StringMap;
 }
