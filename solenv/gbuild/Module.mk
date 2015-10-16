@@ -296,7 +296,9 @@ $(call gb_Module__read_targetfile,$(1),$(2),subsequentcheck target)
 
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $$(gb_Module_CURRENTTARGET) :| \
-	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+	$(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
+    $(call gb_Package_get_target,instsetoo_native_setup) \
+    $(call gb_Package_get_target,instsetoo_native_setup_ure)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
@@ -307,7 +309,9 @@ $(call gb_Module__read_targetfile,$(1),$(2),stagingcheck target)
 
 $(call gb_Module_get_stagingcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $$(gb_Module_CURRENTTARGET) :| \
-	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+	$(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
+    $(call gb_Package_get_target,instsetoo_native_setup) \
+    $(call gb_Package_get_target,instsetoo_native_setup_ure)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
