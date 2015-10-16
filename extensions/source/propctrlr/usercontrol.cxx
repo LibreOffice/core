@@ -56,7 +56,7 @@ namespace pcr
             {
                 SetText( "" );
                 if ( m_pHelper )
-                    m_pHelper->ModifiedHdl( this );
+                    m_pHelper->setModified();
                 return true;
             }
         }

@@ -100,10 +100,9 @@ namespace pcr
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl )
+    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, ModifiedHdl, ListBox&, void )
     {
         setModified();
-        return 0;
     }
 
     IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )

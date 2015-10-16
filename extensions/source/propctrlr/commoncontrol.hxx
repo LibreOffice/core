@@ -89,9 +89,8 @@ namespace pcr
         virtual vcl::Window* getVclWindow() = 0;
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
-        DECL_LINK( ModifiedHdl, void* );
+        DECL_LINK_TYPED( ModifiedHdl, ListBox&, void );
         DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
-        DECL_LINK_TYPED( SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( GetFocusHdl, Control&, void );
         DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     };

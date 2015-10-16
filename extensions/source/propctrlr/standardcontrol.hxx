@@ -61,10 +61,10 @@ namespace pcr
             TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
         }
 
-        void SetModifyHdl( const Link<>& _rLink ) { aModifyHdl = _rLink;; }
+        void SetModifyHdl( const Link<ListBox&,void>& _rLink ) { aModifyHdl = _rLink;; }
     private:
         DECL_LINK_TYPED(OnSelect, ListBox&, void);
-        Link<> aModifyHdl;
+        Link<ListBox&,void> aModifyHdl;
     };
 
     template< class LISTBOX_WINDOW >
@@ -74,7 +74,7 @@ namespace pcr
     template< class LISTBOX_WINDOW >
     void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::OnSelect(ListBox& rListBox)
     {
-        aModifyHdl.Call(&rListBox);
+        aModifyHdl.Call(rListBox);
     }
 
     //= OTimeControl
