@@ -22,7 +22,6 @@ import lib.MultiMethodTest;
 import util.XInstCreator;
 
 import com.sun.star.text.XFootnote;
-import com.sun.star.uno.XInterface;
 
 
 /**
@@ -38,9 +37,7 @@ import com.sun.star.uno.XInterface;
 public class _XFootnote extends MultiMethodTest {
 
     public XFootnote oObj = null;        // oObj filled by MultiMethodTest
-
     XInstCreator info = null;               // instance creator
-    XInterface oInt = null;
 
     /**
      * Test calls the method. <p>
