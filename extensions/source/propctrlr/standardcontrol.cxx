@@ -1034,7 +1034,8 @@ namespace pcr
         ,m_pFloatingEdit( NULL )
         ,m_pDropdownButton( NULL )
         ,m_nOperationMode( eStringList )
-        ,m_bDropdown( false )
+        ,m_bDropdown(false)
+        ,m_pHelper(nullptr)
     {
         SetCompoundControl( true );
 
