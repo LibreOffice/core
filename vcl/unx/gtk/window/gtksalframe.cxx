@@ -4689,9 +4689,12 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
         if (nDeletePos < nPosition)
         {
             if (nDeleteEnd <= nPosition)
-                xText->setCaretPosition( nPosition-(nDeleteEnd-nDeletePos) );
+                nPosition = nPosition - (nDeleteEnd - nDeletePos);
             else
-                xText->setCaretPosition( nDeletePos );
+                nPosition = nDeletePos;
+
+            if (xText->getCharacterCount() >= nPosition)
+                xText->setCaretPosition( nPosition );
         }
         return true;
     }
