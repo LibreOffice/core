@@ -47,11 +47,11 @@ public class Summarizer
         {
             if (entry.SubEntries[i].State == null)
             {
-                entry.SubEntries[i].State = "PASSED.FAILED";
+                entry.SubEntries[i].State = "COMPLETED.FAILED";
             }
             if (entry.SubEntries[i].State.equals("known issue"))
             {
-                entry.SubEntries[i].State = "PASSED.OK";
+                entry.SubEntries[i].State = "COMPLETED.OK";
                 knownIssues++;
             }
             if (!entry.SubEntries[i].State.endsWith("OK"))
@@ -64,12 +64,12 @@ public class Summarizer
         if (failures.size() > 0)
         {
             String errMsg = "";
-            String state = "PASSED.FAILED";
+            String state = "COMPLETED.FAILED";
             for (int j = 0; j < failures.size(); j++)
             {
                 if (states.get(j).equals("not part of the job"))
                 {
-                    state = "PASSED(some interfaces/services not tested).OK";
+                    state = "COMPLETED(some interfaces/services not tested).OK";
                 }
                 else
                 {
@@ -83,11 +83,11 @@ public class Summarizer
         }
         else if (entry.EntryType.equals("component") && knownIssues > 0)
         {
-            entry.State = "PASSED(with known issues).OK";
+            entry.State = "COMPLETED(with known issues).OK";
         }
         else
         {
-            entry.State = "PASSED.OK";
+            entry.State = "COMPLETED.OK";
         }
     }
 

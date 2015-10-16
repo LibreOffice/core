@@ -23,7 +23,7 @@ package lib;
  * described in two ways: state and runtime state. The state describes if the
  * activity was successful (OK state) or not (FAILED state). The runtime state
  * describes what happened during the activity: the test can be:
- *   - PASSED - the activity completed normally (although it can complete with
+ *   - COMPLETED - the activity completed normally (although it can complete with
  *     FAILED state)
  *   - SKIPPED - the activity was not performed because of a reason (it also can
  *     has OK or FAILED state)
@@ -38,7 +38,7 @@ public class Status extends SimpleStatus {
 
     /**
      * Construct a status: use runState and state
-     * @param runState either PASSED, SKIPPED, etc.
+     * @param runState either COMPLETED, SKIPPED, etc.
      * @param bSuccessful OK or FAILED.
      */
     public Status(RunState runState, boolean bSuccessful ) {
@@ -102,7 +102,7 @@ public class Status extends SimpleStatus {
      * The method returns a human-readable description of the status.
      * The Status implementation of the method returns the status state
      * description and appends to it the reason, for example:
-     * "FAILED.The getLabel works wrong", "PASSED.OK".
+     * "FAILED.The getLabel works wrong", "COMPLETED.OK".
      */
     @Override
     public String toString() {

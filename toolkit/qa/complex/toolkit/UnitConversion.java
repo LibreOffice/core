@@ -90,7 +90,7 @@ public class UnitConversion
      * 4. try to resize and move the window to an other position, so we get a well knowing position and size.
      * 5. run some more tests
      *
-     * If no test fails, the test is well done and returns with 'PASSED, OK'
+     * If no test fails, the test is well done and returns with 'COMPLETED.OK'
      *
      */
     @Test

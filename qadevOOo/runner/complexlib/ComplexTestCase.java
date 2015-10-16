@@ -200,7 +200,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 subEntry.ErrorMsg = (msg == null ? "" : msg);
                 continue;
             }
-            subEntry.State = (bSuccessful ? "PASSED.OK" : message);
+            subEntry.State = (bSuccessful ? "COMPLETED.OK" : message);
             subEntry.hasErrorMsg = !bSuccessful;
             subEntry.ErrorMsg = message;
         }

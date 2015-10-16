@@ -36,7 +36,7 @@ class SimpleStatus {
     private final RunState runState;
 
     /**
-     * This is the run state: either SKIPPED, PASSED, etc.
+     * This is the run state: either SKIPPED, COMPLETED, etc.
      * or user defined. Deriving classes can overwrite it for own run states.
      */
     protected String runStateString;
