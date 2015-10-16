@@ -69,14 +69,14 @@ namespace pcr
         VclPtr<ComboBox>   m_pDetailColumn;
         VclPtr<ComboBox>   m_pMasterColumn;
 
-        Link<>      m_aLinkChangeHandler;
+        Link<FieldLinkRow&,void> m_aLinkChangeHandler;
 
     public:
         explicit FieldLinkRow( vcl::Window* _pParent );
         virtual ~FieldLinkRow();
         virtual void dispose() override;
 
-        inline void         SetLinkChangeHandler( const Link<>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
+        inline void         SetLinkChangeHandler( const Link<FieldLinkRow&,void>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
         enum LinkParticipant
         {
@@ -149,7 +149,7 @@ namespace pcr
 
     IMPL_LINK_NOARG_TYPED( FieldLinkRow, OnFieldNameChanged, Edit&, void )
     {
-        m_aLinkChangeHandler.Call( this );
+        m_aLinkChangeHandler.Call( *this );
     }
 
     VCL_BUILDER_FACTORY(FieldLinkRow)
@@ -663,10 +663,9 @@ namespace pcr
     }
 
 
-    IMPL_LINK( FormLinkDialog, OnFieldChanged, FieldLinkRow*, /*_pRow*/ )
+    IMPL_LINK_NOARG_TYPED( FormLinkDialog, OnFieldChanged, FieldLinkRow&, void )
     {
         updateOkButton();
-        return 0L;
     }
 
 

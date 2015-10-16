@@ -87,7 +87,7 @@ namespace pcr
 
     private:
         DECL_LINK_TYPED( OnSuggest,    Button*, void );
-        DECL_LINK( OnFieldChanged,     FieldLinkRow* );
+        DECL_LINK_TYPED( OnFieldChanged, FieldLinkRow&, void );
         DECL_LINK_TYPED( OnInitialize, void*, void);
 
         void        updateOkButton();
