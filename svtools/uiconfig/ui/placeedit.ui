@@ -354,7 +354,7 @@
                     <property name="max_length">4</property>
                     <property name="invisible_char">●</property>
                     <property name="max_width_chars">4</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="numeric">True</property>
                   </object>
