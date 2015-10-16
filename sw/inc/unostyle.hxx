@@ -107,9 +107,9 @@ class SwXStyleFamily : public cppu::WeakImplHelper
 >,
     public SfxListener
 {
-    SfxStyleFamily              eFamily;
-    SfxStyleSheetBasePool*      pBasePool;
-    SwDocShell*                 pDocShell;
+    SfxStyleFamily              m_eFamily;
+    SfxStyleSheetBasePool*      m_pBasePool;
+    SwDocShell*                 m_pDocShell;
 
     SwXStyle*               _FindStyle(const OUString& rStyleName) const;
 public:
