@@ -84,8 +84,14 @@ public:
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
-    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
+    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSearchInParent = true,
                                          TypeId aItemType = 0 ) const;
+
+    /// Templatized version of the GetItem().
+    template<class T> const T*  GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
+    {
+        return dynamic_cast<const T*>(GetItem(nWhich, bSearchInParent));
+    }
 
     // Get Which-value of the item at position nPos
     sal_uInt16                  GetWhichByPos(sal_uInt16 nPos) const;

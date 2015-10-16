@@ -88,7 +88,10 @@ public:
     */
     template<class T> const T* GetArg(sal_uInt16 nSlotId) const
     {
-        return dynamic_cast<const T*>(GetItem(pArgs, nSlotId));
+        if (pArgs)
+            return pArgs->GetItem<T>(nSlotId, false);
+
+        return nullptr;
     }
 
     void                ReleaseArgs();
