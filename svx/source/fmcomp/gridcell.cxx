@@ -571,6 +571,8 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
         implDoPropertyListening( FM_PROP_TEXT, false );
         implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, false );
         implDoPropertyListening( FM_PROP_SELECT_SEQ, false );
+        implDoPropertyListening( FM_PROP_DATE, false );
+        implDoPropertyListening( FM_PROP_TIME, false );
 
         // be listener at the bound field as well
         try
@@ -676,6 +678,8 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
         ||  _rEvent.PropertyName == FM_PROP_TEXT
         ||  _rEvent.PropertyName == FM_PROP_EFFECTIVE_VALUE
         ||  _rEvent.PropertyName == FM_PROP_SELECT_SEQ
+        ||  _rEvent.PropertyName == FM_PROP_DATE
+        ||  _rEvent.PropertyName == FM_PROP_TIME
         )
     {   // it was one of the known "value" properties
         if ( !isValuePropertyLocked() )
