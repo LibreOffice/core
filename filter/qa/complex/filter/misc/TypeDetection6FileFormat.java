@@ -88,7 +88,7 @@ public class TypeDetection6FileFormat
     /**
      * Creates an instance for the given <CODE>serviceName</CODE>
      * @param serviceName the name of the service which should be created
-     * @throws Exception was thrown if creataion failes
+     * @throws Exception was thrown if creation fails
      * @return <CODE>XInterface</CODE> of service
      */
     public XInterface getTestObject(String serviceName) throws Exception
