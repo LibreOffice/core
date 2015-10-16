@@ -284,7 +284,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
     }
 }
 
-void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew )
+void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreateNew)
 {
     long nRet = pDialog->GetResult();
 
@@ -329,12 +329,12 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
 
 IMPL_LINK_TYPED( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
-    ImplEndGalleryThemeProperties( dynamic_cast<VclAbstractDialog2*>(&rDialog), true );
+    ImplEndGalleryThemeProperties(&rDialog, true);
 }
 
 IMPL_LINK_TYPED( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
-    ImplEndGalleryThemeProperties( dynamic_cast<VclAbstractDialog2*>(&rDialog), false );
+    ImplEndGalleryThemeProperties(&rDialog, false);
 }
 
 IMPL_LINK_TYPED( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
