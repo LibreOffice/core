@@ -27,7 +27,6 @@ import lib.Status;
  */
 public class _XScenario extends MultiMethodTest {
     public XScenario oObj = null;
-    CellRangeAddress address = null;
     String comment = null;
     boolean skipTest = false;
 
@@ -43,7 +42,7 @@ public class _XScenario extends MultiMethodTest {
             tRes.tested("addRanges()",Status.skipped(true));
             return;
         }
-        oObj.addRanges(new CellRangeAddress[] {address});
+        oObj.addRanges(new CellRangeAddress[] {null});
         tRes.tested("addRanges()", true);
     }
 
