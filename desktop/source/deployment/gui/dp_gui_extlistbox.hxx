@@ -126,7 +126,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     Image m_aWarningImage;
     Image m_aDefaultImage;
 
-    Link<> m_aClickHdl;
+    Link<FixedHyperlink&,void> m_aClickHdl;
 
     VclPtr<ScrollBar>      m_pScrollBar;
 
@@ -190,7 +190,7 @@ public:
     long            PointToPos( const Point& rPos );
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink );
     void            DoScroll( long nDelta );
-    void            SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
+    void            SetHyperlinkHdl( const Link<FixedHyperlink&,void>& rLink ){ m_aClickHdl = rLink; }
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 

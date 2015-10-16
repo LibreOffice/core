@@ -2016,13 +2016,13 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     pSpellDialog->m_pChangePB->Enable();
 }
 
-IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
+IMPL_LINK_TYPED( SpellDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
-    OUString sURL=pHyperlink->GetURL();
+    OUString sURL=rHyperlink.GetURL();
     OUString sTitle=GetText();
 
     if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
-        return 1;
+        return;
     try
     {
         uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
@@ -2038,8 +2038,6 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         aErrorBox->SetText(sTitle);
         aErrorBox->Execute();
     }
-
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     private:
         long                m_nTextLen;
         Pointer             m_aOldPointer;
-        Link<>              m_aClickHdl;
+        Link<FixedHyperlink&,void> m_aClickHdl;
         OUString            m_sURL;
 
         /** initializes the font (link color and underline).
@@ -91,22 +91,22 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
 
             m_aClickHdl is called if the text is clicked.
         */
-        inline void         SetClickHdl( const Link<>& rLink ) { m_aClickHdl = rLink; }
+        inline void         SetClickHdl( const Link<FixedHyperlink&,void>& rLink ) { m_aClickHdl = rLink; }
 
         // ::FixedHyperbaseLink
 
         /** sets the URL of the hyperlink and uses it as tooltip. */
-        void        SetURL(const OUString& rNewURL);
+        void                SetURL(const OUString& rNewURL);
 
         /** returns the URL of the hyperlink.
 
             @return
                 m_sURL
         */
-        const OUString&    GetURL() const { return m_sURL;}
+        const OUString&     GetURL() const { return m_sURL;}
 
         /** sets new text and recalculates the text length. */
-        virtual void SetText(const OUString& rNewDescription) override;
+        virtual void        SetText(const OUString& rNewDescription) override;
     };
 
 #endif

@@ -273,12 +273,10 @@ bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
     return true;
 }
 
-IMPL_LINK ( Breadcrumb, ClickLinkHdl, FixedHyperlink*, pLink )
+IMPL_LINK_TYPED( Breadcrumb, ClickLinkHdl, FixedHyperlink&, rLink, void )
 {
-    m_sClickedURL = pLink->GetURL();
+    m_sClickedURL = rLink.GetURL();
     m_aClickHdl.Call( this );
-
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

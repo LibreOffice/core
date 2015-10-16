@@ -77,7 +77,7 @@ void FixedHyperlink::MouseButtonUp( const MouseEvent& )
 {
     // calls the link if the control is enabled and the mouse is over the text.
     if ( IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
-        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, [this] () { m_aClickHdl.Call(this); } );
+        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, [this] () { m_aClickHdl.Call(*this); } );
 }
 
 void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
@@ -106,7 +106,7 @@ void FixedHyperlink::KeyInput( const KeyEvent& rKEvt )
     {
         case KEY_SPACE:
         case KEY_RETURN:
-            m_aClickHdl.Call( this );
+            m_aClickHdl.Call( *this );
             break;
 
         default:

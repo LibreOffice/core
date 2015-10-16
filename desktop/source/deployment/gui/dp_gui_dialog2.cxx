@@ -1072,11 +1072,9 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 }
 
 
-IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
+IMPL_LINK_TYPED( ExtMgrDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
-    openWebBrowser( pHyperlink->GetURL(), GetText() );
-
-    return 1;
+    openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 
@@ -1404,11 +1402,9 @@ IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
 }
 
 
-IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
+IMPL_LINK_TYPED( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
-    openWebBrowser( pHyperlink->GetURL(), GetText() );
-
-    return 1;
+    openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 

@@ -1540,11 +1540,10 @@ IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 
 
 
-IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
 {
     OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );
-    return 0;
 }
 
 
@@ -2312,11 +2311,10 @@ IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, OpenURLHdl_Impl, FixedHyperlink&, void)
 {
     OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

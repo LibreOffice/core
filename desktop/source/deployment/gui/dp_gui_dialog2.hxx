@@ -136,7 +136,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleExtTypeCbx, Button*, void );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
 
@@ -202,7 +202,7 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
 
     static bool     isEnabled( const css::uno::Reference< css::deployment::XPackage > &xPackage );
     static bool     checkDependencies( const css::uno::Reference< css::deployment::XPackage > &xPackage );

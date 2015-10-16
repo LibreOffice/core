@@ -185,7 +185,7 @@ private:
     DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );
     DECL_LINK_TYPED( LanguageSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DialogUndoHdl, SpellUndoAction_Impl&, void );
-    DECL_LINK( HandleHyperlink, FixedHyperlink * );
+    DECL_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
 
     DECL_LINK_TYPED( InitHdl, void*, void );
 

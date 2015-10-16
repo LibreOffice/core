@@ -74,14 +74,14 @@ class SvxEditModulesDlg : public ModalDialog
 
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
-    DECL_LINK_TYPED(SelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(UpDownHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ClickHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(BackHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( UpDownHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( BackHdl_Impl, Button*, void );
     DECL_LINK_TYPED( LangSelectListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
     DECL_LINK_TYPED( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK(OpenURLHdl_Impl, void *);
+    DECL_LINK_TYPED( OpenURLHdl_Impl, FixedHyperlink&, void );
     void LangSelectHdl_Impl(ListBox*);
 
 public:
@@ -143,7 +143,7 @@ private:
     DECL_LINK_TYPED( BoxDoubleClickHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( PostDblClickHdl_Impl, void *, void);
-    DECL_LINK( OpenURLHdl_Impl, void *);
+    DECL_LINK_TYPED( OpenURLHdl_Impl, FixedHyperlink&, void );
 
     void                UpdateModulesBox_Impl();
     void                UpdateDicBox_Impl();

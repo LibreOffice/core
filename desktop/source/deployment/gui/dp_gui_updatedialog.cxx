@@ -922,7 +922,7 @@ void UpdateDialog::initDescription()
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
 
-    Link<> aLink = LINK( this, UpdateDialog, hyperlink_clicked );
+    Link<FixedHyperlink&,void> aLink = LINK( this, UpdateDialog, hyperlink_clicked );
     m_pPublisherLink->SetClickHdl( aLink );
     m_pReleaseNotesLink->SetClickHdl( aLink );
 }
@@ -1319,13 +1319,11 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, closeHandler, Button*, void)
     EndDialog();
 }
 
-IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
+IMPL_LINK_TYPED( UpdateDialog, hyperlink_clicked, FixedHyperlink&, rHyperlink, void )
 {
-    OUString sURL;
-    if ( pHyperlink )
-        sURL = OUString( pHyperlink->GetURL() );
+    OUString sURL = rHyperlink.GetURL();
     if ( sURL.isEmpty() )
-        return 0;
+        return;
 
     try
     {
@@ -1337,8 +1335,6 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
     catch ( const uno::Exception& )
     {
     }
-
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
