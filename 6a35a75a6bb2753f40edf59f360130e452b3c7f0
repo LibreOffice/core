@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_6fd1acfb",
+        "filename": "sc/source/ui/docshell/dbdocfun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T11:13:52Z",
+      "side": 0,
+      "message": "Note that rDoc.ShrinkToUsedDataArea() may modify aLocalParam.nRow2\n\nSimply moving these lines to a place further above will not work for all cases as then nStartRow may be greater than the resulting aLocalParam.nRow2 if someone selected the last data row plus additional empty rows.",
+      "revId": "6a35a75a6bb2753f40edf59f360130e452b3c7f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
