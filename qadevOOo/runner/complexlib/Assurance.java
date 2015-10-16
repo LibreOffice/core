@@ -27,7 +27,7 @@ public class Assurance
     public static final boolean CONTINUE = true;
 
     /** State of the current test method **/
-    protected boolean state = true;
+    protected boolean bSuccessful = true;
 
     /** The message if the test did fail **/
     protected String message = null;
@@ -106,7 +106,7 @@ public class Assurance
      * @param cont Continue with test method, even if s is false.
      */
     protected void assure(String msg, boolean s, boolean cont) {
-        state &= s;
+        bSuccessful &= s;
         if (!s) {
             message += msg + "\r\n";
             if (!cont) {

@@ -65,14 +65,14 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
         catch (java.lang.reflect.InvocationTargetException e)
         {
             Throwable t = e.getTargetException();
-            if (!(t instanceof RuntimeException) || state)
+            if (!(t instanceof RuntimeException) || bSuccessful)
             {
                 log.println(t.toString());
                 if (message == null)
                 {
                     message = "Exception in before() method.\n\r" + t.getMessage();
                 }
-                state = false;
+                bSuccessful = false;
                 t.printStackTrace((PrintWriter) log);
             }
         }
@@ -99,7 +99,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
             DescEntry subEntry = _entry.SubEntries[i];
             if (m_bBeforeCalled)
             {
-                state = true;
+                bSuccessful = true;
                 message = "";
             }
             else
@@ -200,8 +200,8 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 subEntry.ErrorMsg = (msg == null ? "" : msg);
                 continue;
             }
-            subEntry.State = (state ? "PASSED.OK" : message);
-            subEntry.hasErrorMsg = !state;
+            subEntry.State = (bSuccessful ? "PASSED.OK" : message);
+            subEntry.hasErrorMsg = !bSuccessful;
             subEntry.ErrorMsg = message;
         }
     }
