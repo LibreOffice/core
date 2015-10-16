@@ -379,6 +379,7 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
     :mpData(pData)
     ,mnLength(length)
     ,mrEncryptedData(rEncryptedData)
+    ,mnUnencryptedByte1(0)
     ,mnEncryptedByte1(0)
     ,mnEncryptedByte2(0)
     ,mnVersion(2)
