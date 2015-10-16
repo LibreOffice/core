@@ -68,7 +68,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
     DECL_LINK_TYPED(AddressBlockHdl_Impl, Button*, void);
     DECL_LINK_TYPED(InsertDataHdl_Impl, Button*, void);
-    DECL_LINK(AddressBlockSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(AddressBlockSelectHdl_Impl, LinkParamNone*, void);
     DECL_LINK_TYPED(HideParagraphsHdl_Impl, Button*, void);
 
     void                EnableAddressBlock(bool bAll, bool bSelective);

@@ -248,7 +248,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox
     m_pWizard->UpdateRoadmap();
 }
 
-IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
 {
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
@@ -258,7 +258,6 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, Button*, pBox, void)

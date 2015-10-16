@@ -379,7 +379,7 @@ void SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 pImpl->nSelectedAddress != (sal_uInt16)nSelect)
         {
             pImpl->nSelectedAddress = (sal_uInt16)nSelect;
-            m_aSelectHdl.Call(this);
+            m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
     }
@@ -422,7 +422,7 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 pImpl->nSelectedAddress != (sal_uInt16)nSelect)
         {
             pImpl->nSelectedAddress = (sal_uInt16)nSelect;
-            m_aSelectHdl.Call(this);
+            m_aSelectHdl.Call(nullptr);
             Invalidate();
         }
     }

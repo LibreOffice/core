@@ -61,7 +61,7 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 {
     VclPtr<ScrollBar> aVScrollBar;
     SwAddressPreview_Impl* pImpl;
-    Link<> m_aSelectHdl;
+    Link<LinkParamNone*,void> m_aSelectHdl;
 
     void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);
@@ -109,7 +109,7 @@ public:
     static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem& rConfigItem,
                              const css::uno::Sequence<OUString>* pAssignments = 0);
 
-    void SetSelectHdl (const Link<>& rLink) { m_aSelectHdl = rLink; }
+    void SetSelectHdl (const Link<LinkParamNone*,void>& rLink) { m_aSelectHdl = rLink; }
 };
 
 // iterate over an address block or a greeting line the iterator returns the
