@@ -92,7 +92,6 @@ do_configure()
       JDK_HOME="/usr/lib/jvm/java-6-sun"
     fi
     OPTIONS_PLATFORM=(
-      --disable-dbus
       --disable-"${disable_kde}"
       --disable-gconf
       --disable-gnome-vfs
