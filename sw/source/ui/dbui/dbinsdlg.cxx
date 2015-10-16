@@ -734,11 +734,12 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
                     ::GetHtmlMode( pView->GetDocShell() )));
     }
 
-    if( m_pLbTableCol->GetEntryCount() != pRep->GetAllColCount() )
+    sal_Int32 nCols = m_pLbTableCol->GetEntryCount();
+    if (nCols != pRep->GetAllColCount() && nCols > 0)
     {
         // Number of columns has changed: then the TabCols have to be adjusted
         long nWidth = pRep->GetWidth();
-        const sal_Int32 nCols = m_pLbTableCol->GetEntryCount() - 1;
+        --nCols;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );
         aTabCols.SetRightMax( nWidth );
