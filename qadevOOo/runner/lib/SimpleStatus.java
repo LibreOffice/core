@@ -47,8 +47,8 @@ class SimpleStatus {
     protected SimpleStatus( RunState runState, boolean bSuccessful ) {
         this.bSuccessful = bSuccessful;
         this.runState = runState;
-        if ( runState == RunState.PASSED ) {
-            runStateString = "PASSED";
+        if ( runState == RunState.COMPLETED ) {
+            runStateString = "COMPLETED";
         } else if ( runState == RunState.SKIPPED ) {
             runStateString = "SKIPPED";
         } else if ( runState == RunState.EXCEPTION ) {

@@ -62,7 +62,7 @@ public class Status extends SimpleStatus {
      * otherwise).
      */
     public static Status passed( boolean bSuccessful ) {
-        return new Status(RunState.PASSED, bSuccessful );
+        return new Status(RunState.COMPLETED, bSuccessful );
     }
 
     /**
@@ -112,10 +112,10 @@ public class Status extends SimpleStatus {
     }
 
     /**
-     * Checks whether the status runstate is passed.
+     * Checks whether the status runstate is completed.
      */
-    public boolean isPassed() {
-        return getRunState() == RunState.PASSED;
+    public boolean isCompleted() {
+        return getRunState() == RunState.COMPLETED;
     }
 
     /**

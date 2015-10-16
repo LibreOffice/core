@@ -21,9 +21,9 @@ package lib;
 public enum RunState {
 
     /**
-     * The constant represents PASSED runtime state.
+     * The constant represents COMPLETED runtime state.
      */
-    PASSED,
+    COMPLETED,
 
     /**
      * The constant represents EXCEPTION runtime state.

@@ -339,7 +339,7 @@ public class MultiMethodTest
         executeMethod(method);
         Status mtStatus = tRes.getStatusFor(method);
 
-        if (mtStatus != null && (!mtStatus.isPassed() || mtStatus.isFailed()))
+        if (mtStatus != null && (!mtStatus.isCompleted() || mtStatus.isFailed()))
         {
             log.println("! Required method " + method + " failed");
             throw new StatusException(mtStatus);
