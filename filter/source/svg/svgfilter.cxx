@@ -20,6 +20,7 @@
 
 #include <cstdio>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <uno/environment.h>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -107,14 +108,23 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     {
         // #i124608# detect selection
         bool bSelectionOnly = false;
-        bool bGotSelection(false);
+        bool bGotSelection = false;
 
-        // #i124608# extract Single selection wanted from dialog return values
-        for ( sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++ )
+        // when using LibreOfficeKit, default to exporting everything (-1)
+        bool bPageProvided = comphelper::LibreOfficeKit::isActive();
+        sal_Int32 nPageToExport = -1;
+
+        for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
         {
-            if ( rDescriptor[nInd].Name == "SelectionOnly" )
+            if (rDescriptor[nInd].Name == "SelectionOnly")
             {
+                // #i124608# extract single selection wanted from dialog return values
                 rDescriptor[nInd].Value >>= bSelectionOnly;
+            }
+            else if (rDescriptor[nInd].Name == "PagePos")
+            {
+                rDescriptor[nInd].Value >>= nPageToExport;
+                bPageProvided = true;
             }
         }
 
@@ -122,7 +132,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
         uno::Reference<frame::XController > xController(xFrame->getController(), uno::UNO_QUERY_THROW);
 
-        if( !mSelectedPages.hasElements() )
+        if (!bPageProvided)
         {
             uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY_THROW);
@@ -186,18 +196,6 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
          */
         if( !mSelectedPages.hasElements() )
         {
-            sal_Int32            nLength = rDescriptor.getLength();
-            const PropertyValue* pValue = rDescriptor.getConstArray();
-            sal_Int32            nPageToExport = -1;
-
-            for ( sal_Int32 i = 0 ; i < nLength; ++i)
-            {
-                if ( pValue[ i ].Name == "PagePos" )
-                {
-                    pValue[ i ].Value >>= nPageToExport;
-                }
-            }
-
             uno::Reference< drawing::XMasterPagesSupplier > xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
             uno::Reference< drawing::XDrawPagesSupplier >   xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
 

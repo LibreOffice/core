@@ -29,6 +29,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
+#include <comphelper/lok.hxx>
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
 #include <svx/unopage.hxx>
@@ -700,7 +701,7 @@ bool SVGFilter::implExportDocument()
     SvtMiscOptions aMiscOptions;
     const bool bExperimentalMode = aMiscOptions.IsExperimentalMode();
 
-    mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
+    mbSinglePage = ((nLastPage == 0) || !bExperimentalMode) && !comphelper::LibreOfficeKit::isActive();
     mnVisiblePage = -1;
 
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
