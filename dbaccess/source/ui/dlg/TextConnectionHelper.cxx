@@ -94,17 +94,6 @@ namespace dbaui
             m_pTextSeparator->InsertEntry( m_aTextSeparatorList.getToken( i, '\t' ) );
         m_pTextSeparator->InsertEntry(m_aTextNone);
 
-        // set the modify handlers
-        m_pFieldSeparator->SetUpdateDataHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
-        m_pFieldSeparator->SetSelectHdl(LINK(this, OTextConnectionHelper, ComboBoxSelectHdl));
-        m_pTextSeparator->SetUpdateDataHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
-        m_pTextSeparator->SetSelectHdl(LINK(this, OTextConnectionHelper, ComboBoxSelectHdl));
-        m_pCharSet->SetSelectHdl(LINK(this, OTextConnectionHelper, CharsetSelectHdl));
-
-        m_pFieldSeparator->SetModifyHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
-        m_pTextSeparator->SetModifyHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
-        m_pDecimalSeparator->SetModifyHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
-        m_pThousandsSeparator->SetModifyHdl(LINK(this, OTextConnectionHelper, OnControlEditModified));
         m_pOwnExtension->SetModifyHdl(LINK(this, OTextConnectionHelper, OnEditModified));
         m_pAccessTextFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_pAccessCSVFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
@@ -151,21 +140,6 @@ namespace dbaui
         Show();
     }
 
-    IMPL_LINK_TYPED(OTextConnectionHelper, CharsetSelectHdl, ListBox&, rListBox, void)
-    {
-        getControlModifiedLink().Call(&rListBox);
-    }
-
-    IMPL_LINK_TYPED(OTextConnectionHelper, ComboBoxSelectHdl, ComboBox&, rBox, void)
-    {
-        getControlModifiedLink().Call(&rBox);
-    }
-
-    IMPL_LINK_TYPED(OTextConnectionHelper, OnControlEditModified, Edit&, rEdit, void)
-    {
-        getControlModifiedLink().Call(&rEdit);
-    }
-
     OTextConnectionHelper::~OTextConnectionHelper()
     {
         disposeOnce();
@@ -193,12 +167,6 @@ namespace dbaui
         m_pCharSetLabel.clear();
         m_pCharSet.clear();
         TabPage::dispose();
-    }
-
-    IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*,)
-    {
-        callModifiedHdl();
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED(OTextConnectionHelper, OnEditModified, Edit&, void)
