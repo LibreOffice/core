@@ -76,18 +76,6 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
-     *
-     * @return The UNO XWindowPeer object associated with the OfficeWindow.
-     */
-    public XWindowPeer getUNOWindowPeer()
-    {
-        if (mWindow == null)
-            createUNOWindowPeer();
-        return mWindow;
-    }
-
-    /**
      * Receives a notification about the connection has been closed.
      * This method has to set the connection to <code>null</code>.
      *
@@ -171,11 +159,16 @@ public class LocalOfficeWindow
             releaseSystemWindow();
     }
 
-       /** Factory method for a UNO AWT toolkit window as a child of this Java window.
-    *
-    */
-       private synchronized XWindowPeer createUNOWindowPeer()
-       {
+    /**
+     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
+     *
+     * @return The UNO XWindowPeer object associated with the OfficeWindow.
+     */
+    public synchronized XWindowPeer getUNOWindowPeer()
+    {
+        if (mWindow != null)
+            return mWindow;
+
         try
         {
             // get this windows native window type
@@ -217,6 +210,7 @@ public class LocalOfficeWindow
 
         return mWindow;
     }
+
     /** We make sure that the office window is notified that the parent
      *  will be removed.
      */
