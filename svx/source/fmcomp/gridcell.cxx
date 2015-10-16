@@ -565,7 +565,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
         implDoPropertyListening( FM_PROP_READONLY, false );
         implDoPropertyListening( FM_PROP_ENABLED, false );
 
-        // add as listener for all know "value" properties
+        // add as listener for all known "value" properties
         implDoPropertyListening( FM_PROP_VALUE, false );
         implDoPropertyListening( FM_PROP_STATE, false );
         implDoPropertyListening( FM_PROP_TEXT, false );
