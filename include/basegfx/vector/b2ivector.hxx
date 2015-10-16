@@ -139,14 +139,14 @@ namespace basegfx
     */
     BASEGFX_DLLPUBLIC B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
 
-} // end of namespace basegfx
+    template< typename charT, typename traits >
+    inline std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, const basegfx::B2IVector& vector )
+    {
+        return stream << "(" << vector.getX() << "," << vector.getY() << ")";
+    }
 
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const basegfx::B2IVector& vector )
-{
-    return stream << "(" << vector.getX() << "," << vector.getY() << ")";
-}
+} // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_VECTOR_B2IVECTOR_HXX
 
