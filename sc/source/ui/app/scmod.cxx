@@ -1071,13 +1071,15 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bCompileErrorCells = true;
         }
 
-        SetFormulaOptions( rOpt );
-
         if ( pDocSh )
         {
             pDocSh->SetFormulaOptions( rOpt );
             pDocSh->SetDocumentModified();
         }
+
+        // ScDocShell::SetFormulaOptions() may check for changed settings, so
+        // set the new options here after that has been called.
+        SetFormulaOptions( rOpt );
     }
 
     //============================================
