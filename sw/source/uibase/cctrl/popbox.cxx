@@ -28,18 +28,6 @@ SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
 {
 }
 
-void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
-{
-    // If doubleclick is detected use doubleclick handler
-    if(rEvt.GetButtons() == MOUSE_RIGHT &&
-        0 == GetItemId(rEvt.GetPosPixel()))
-    {
-        aRightClickLink.Call(const_cast<MouseEvent *>(&rEvt));
-    }
-    else
-        ToolBox::MouseButtonDown(rEvt);
-}
-
 SwHelpToolBox::~SwHelpToolBox() {}
 
 sal_Int8 SwHelpToolBox::AcceptDrop( const AcceptDropEvent& rEvt )
