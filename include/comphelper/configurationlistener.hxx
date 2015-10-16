@@ -100,6 +100,7 @@ public:
 };
 
 template< typename uno_type > ConfigurationListenerProperty< uno_type >::ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener, const OUString &rProp )
+    : maValue()
 {
     maName = rProp;
     mxListener = xListener;
