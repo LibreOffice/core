@@ -834,6 +834,15 @@ static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     return 0;
 }
 
+static inline sal_Unicode lcl_toupper( const sal_Unicode c )
+{
+    // Do not use libc toupper() because that is localized and *might* yield
+    // unexpected results (apparently not encountered yet?), for example
+    // Turkish lower case ASCII 'i' might result in upper case 'İ', which is
+    // U+0130 but 0xDD in ISO-8859-9 and 0xA9 in ISO-8859-3 encodings.
+    return ('a' <= c && c <= 'z') ? c - ('a'-'A') : c;
+}
+
 static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
                                                  ScAddress* pAddr,
                                                  sal_uInt16* nFlags )
@@ -846,9 +855,9 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     if( !rtl::isAsciiAlpha( *p ) )
         return NULL;
 
-    nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
+    nCol = sal::static_int_cast<SCCOL>( lcl_toupper( *p++ ) - 'A' );
     while (nCol <= MAXCOL && rtl::isAsciiAlpha(*p))
-        nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
+        nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + lcl_toupper( *p++ ) - 'A' );
     if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
         return NULL;
 
@@ -1145,9 +1154,9 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
 
         if (rtl::isAsciiAlpha( *p ))
         {
-            nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
+            nCol = sal::static_int_cast<SCCOL>( lcl_toupper( *p++ ) - 'A' );
             while (nCol < MAXCOL && rtl::isAsciiAlpha(*p))
-                nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
+                nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + lcl_toupper( *p++ ) - 'A' );
         }
         else
             nBits = 0;
