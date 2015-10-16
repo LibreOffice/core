@@ -403,7 +403,7 @@ IMPL_LINK_NOARG_TYPED(SwSortDlg, DelimCharHdl, Button*, void)
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if( RET_OK == pMap->Execute() )
         {
-            SFX_ITEMSET_ARG(pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR);
+            const SfxInt32Item* pItem = SfxItemSet::GetItem<SfxInt32Item>(pMap->GetOutputItemSet(), SID_ATTR_CHAR, false);
             if ( pItem )
                 m_pDelimEdt->SetText( OUString(sal_Unicode(pItem->GetValue())) );
         }

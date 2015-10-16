@@ -253,7 +253,7 @@ void SdPrintOptions::PageCreated (const SfxAllItemSet&
                                   )
 {
 #ifdef MACOSX
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_SDMODE_FLAG, false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

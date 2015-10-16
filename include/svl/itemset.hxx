@@ -87,10 +87,19 @@ public:
     const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSearchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
-    /// Templatized version of the GetItem().
-    template<class T> const T*  GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
+    /// Templatized version to directly return the correct type.
+    template<class T> const T* GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
     {
         return dynamic_cast<const T*>(GetItem(nWhich, bSearchInParent));
+    }
+
+    /// Templatized static version to directly return the correct type if the SfxItemSet is available.
+    template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent = true)
+    {
+        if (pItemSet)
+            return pItemSet->GetItem<T>(nWhich, bSearchInParent);
+
+        return nullptr;
     }
 
     // Get Which-value of the item at position nPos

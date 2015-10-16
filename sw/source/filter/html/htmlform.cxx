@@ -659,7 +659,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
             if ( pDocSh->GetMedium() )
             {
                 // if there is no hidden property in the MediaDescriptor it should be removed after loading
-                SFX_ITEMSET_ARG(pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN);
+                const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pDocSh->GetMedium()->GetItemSet(), SID_HIDDEN, false);
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
 

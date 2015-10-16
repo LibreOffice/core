@@ -327,7 +327,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             SfxMedium* pMed = pSh->GetMedium();
 
-            SFX_ITEMSET_ARG(pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY);
+            const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
             if ( pItem && pItem->GetValue() )
             {
                 SfxApplication* pApp = SfxGetpApp();
@@ -335,17 +335,17 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
                 aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
-                SFX_ITEMSET_ARG(pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER);
+                const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
                 if ( pReferer )
                     aSet.Put( *pReferer );
-                SFX_ITEMSET_ARG(pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION);
+                const SfxInt16Item* pVersionItem = SfxItemSet::GetItem<SfxInt16Item>(pSh->GetMedium()->GetItemSet(), SID_VERSION, false);
                 if ( pVersionItem )
                     aSet.Put( *pVersionItem );
 
                 if( pMed->GetFilter() )
                 {
                     aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                    SFX_ITEMSET_ARG(pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS);
+                    const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
                     if ( pOptions )
                         aSet.Put( *pOptions );
                 }
@@ -427,7 +427,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             OUString aTemp;
             osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), aTemp );
             INetURLObject aPhysObj( aTemp );
-            SFX_ITEMSET_ARG(pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION);
+            const SfxInt16Item* pVersionItem = SfxItemSet::GetItem<SfxInt16Item>(pSh->GetMedium()->GetItemSet(), SID_VERSION, false);
 
             INetURLObject aMedObj( pMed->GetName() );
 
@@ -510,7 +510,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                            SFX_ITEMSET_ARG(pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER);
+                            const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
                             if ( pReferer )
                                 aSet.Put( *pReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
@@ -520,7 +520,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             if( pMed->GetFilter() )
                             {
                                 aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                                SFX_ITEMSET_ARG(pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS);
+                                const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
                                 if ( pOptions )
                                     aSet.Put( *pOptions );
                             }
@@ -664,7 +664,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // If a salvaged file is present, do not enclose the OrigURL
                 // again, since the Template is invalid after reload.
-                SFX_ITEMSET_ARG(pNewSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE);
+                const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pNewSet, SID_DOC_SALVAGE, false);
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
@@ -689,9 +689,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pSilentItem && pSilentItem->GetValue() )
                     pNewSet->Put( SfxBoolItem( SID_SILENT, true ) );
 
-                SFX_ITEMSET_ARG(pNewSet, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER);
-                SFX_ITEMSET_ARG(pNewSet, pMacroExecItem  , SfxUInt16Item, SID_MACROEXECMODE     );
-                SFX_ITEMSET_ARG(pNewSet, pDocTemplateItem, SfxUInt16Item, SID_UPDATEDOCMODE     );
+                const SfxUnoAnyItem* pInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pNewSet, SID_INTERACTIONHANDLER, false);
+                const SfxUInt16Item* pMacroExecItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet, SID_MACROEXECMODE, false);
+                const SfxUInt16Item* pDocTemplateItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet, SID_UPDATEDOCMODE, false);
 
                 if (!pInteractionItem)
                 {
@@ -709,8 +709,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Do not chache the old Document! Is invalid when loading
                 // another document.
 
-                SFX_ITEMSET_ARG(pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS);
-                SFX_ITEMSET_ARG(pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER);
+                const SfxStringItem* pSavedOptions = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
+                const SfxStringItem* pSavedReferer = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_REFERER, false);
 
                 bool bHasStorage = pMedium->HasStorage_Impl();
                 if( bHandsOff )
@@ -874,7 +874,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {
-                    SFX_ITEMSET_ARG(pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC);
+                    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_EDITDOC, false);
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( SID_EDITDOC );
                     else

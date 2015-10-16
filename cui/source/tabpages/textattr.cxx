@@ -701,7 +701,7 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight() const
 
 void SvxTextAttrPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW);
+    const OfaPtrItem* pViewItem = aSet.GetItem<OfaPtrItem>(SID_SVXTEXTATTRPAGE_VIEW, false);
 
     if (pViewItem)
         SetView( static_cast<SdrView *>(pViewItem->GetValue()));

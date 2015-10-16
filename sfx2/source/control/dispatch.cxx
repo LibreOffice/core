@@ -1300,7 +1300,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             {
                 bool bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
                 SfxObjectShell* pSh = xImp->pFrame->GetObjectShell();
-                SFX_ITEMSET_ARG(pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY);
+                const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
                 bool bIsViewer = pItem && pItem->GetValue();
                 if ( bIsViewer != bViewerTbx )
                     continue;

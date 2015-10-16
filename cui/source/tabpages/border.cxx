@@ -1208,8 +1208,8 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBorderTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE);
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
+    const SfxUInt16Item* pSWModeItem = aSet.GetItem<SfxUInt16Item>(SID_SWMODE_TYPE, false);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
     if (pSWModeItem)
     {
         nSWMode = static_cast<SwBorderModes>(pSWModeItem->GetValue());

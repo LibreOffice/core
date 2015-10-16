@@ -72,11 +72,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
 
     if ( _pSet )
     {
-        SFX_ITEMSET_ARG(_pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG);
+        const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_AUTO_CORRECT_DLG, false);
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = true;
 
-        SFX_ITEMSET_ARG(_pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS);
+        const SfxBoolItem* pItem2 = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_OPEN_SMARTTAGOPTIONS, false);
         if ( pItem2 && pItem2->GetValue() )
             bOpenSmartTagOptions = true;
     }
@@ -1857,7 +1857,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     bool bShowSWOptions = false;
 
-    SFX_ITEMSET_ARG(&rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG);
+    const SfxBoolItem* pItem = rSet.GetItem<SfxBoolItem>(SID_AUTO_CORRECT_DLG, false);
     if ( pItem && pItem->GetValue() )
         bShowSWOptions = true;
 

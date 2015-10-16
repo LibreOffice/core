@@ -943,9 +943,9 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                         0x0008 --->EnableNegativeMode()
                         0x0010 --->EnableContextualMode()
             */
-    SFX_ITEMSET_ARG(&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH);
-    SFX_ITEMSET_ARG(&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET);
-    SFX_ITEMSET_ARG(&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST);
+    const SfxUInt16Item* pPageWidthItem = aSet.GetItem<SfxUInt16Item>(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH, false);
+    const SfxUInt32Item* pFlagSetItem = aSet.GetItem<SfxUInt32Item>(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET, false);
+    const SfxUInt32Item* pLineDistItem = aSet.GetItem<SfxUInt32Item>(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, false);
 
     if (pPageWidthItem)
         SetPageWidth(pPageWidthItem->GetValue());
@@ -1353,7 +1353,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
 
 void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT);
+    const SfxBoolItem* pBoolItem = aSet.GetItem<SfxBoolItem>(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT, false);
     if (pBoolItem)
         if(pBoolItem->GetValue())
             EnableJustifyExt();
@@ -2166,7 +2166,7 @@ IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListB
 
 void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK);
+    const SfxBoolItem* pDisablePageBreakItem = aSet.GetItem<SfxBoolItem>(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK, false);
 
     if (pDisablePageBreakItem)
         if ( pDisablePageBreakItem->GetValue())

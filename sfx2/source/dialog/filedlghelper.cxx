@@ -1374,15 +1374,15 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            SFX_ITEMSET_ARG(rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION);
+            const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet, SID_PASSWORDINTERACTION, false);
             mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG(rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO);
+            const SfxUnoAnyItem* pPassToModifyItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rpSet, SID_MODIFYPASSWORDINFO, false);
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        SFX_ITEMSET_ARG(rpSet, pSelectItem, SfxBoolItem, SID_SELECTION);
+        const SfxBoolItem* pSelectItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet, SID_SELECTION, false);
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else

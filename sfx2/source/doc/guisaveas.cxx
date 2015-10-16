@@ -1043,7 +1043,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
-    SFX_ITEMSET_ARG(pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY);
+    const SfxBoolItem* pRecommendReadOnly = SfxItemSet::GetItem<SfxBoolItem>(pDialogParams, SID_RECOMMENDREADONLY, false);
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 

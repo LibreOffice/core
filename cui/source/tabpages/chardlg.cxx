@@ -1346,9 +1346,9 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 
 void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST);
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
-    SFX_ITEMSET_ARG(&aSet,pDisalbeItem,SfxUInt16Item,SID_DISABLE_CTL);
+    const SvxFontListItem* pFontListItem = aSet.GetItem<SvxFontListItem>(SID_ATTR_CHAR_FONTLIST, false);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
+    const SfxUInt16Item* pDisalbeItem = aSet.GetItem<SfxUInt16Item>(SID_DISABLE_CTL, false);
     if (pFontListItem)
         SetFontList(*pFontListItem);
 
@@ -2620,8 +2620,8 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 
 void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL);
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
+    const SfxUInt16Item* pDisableCtlItem = aSet.GetItem<SfxUInt16Item>(SID_DISABLE_CTL, false);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
     if (pDisableCtlItem)
         DisableControls(pDisableCtlItem->GetValue());
 
@@ -3390,7 +3390,7 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
 
 void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
@@ -3628,7 +3628,7 @@ void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
 
 void SvxCharTwoLinesPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

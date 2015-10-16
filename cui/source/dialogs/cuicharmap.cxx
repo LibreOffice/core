@@ -68,22 +68,22 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     m_pCharCodeText->set_width_request(m_pCharCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
 
-    SFX_ITEMSET_ARG(pSet, pItem, SfxBoolItem, FN_PARAM_1);
+    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_1, false);
     if ( pItem )
         bOne = pItem->GetValue();
 
     init();
 
-    SFX_ITEMSET_ARG(pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR);
+    const SfxInt32Item* pCharItem = SfxItemSet::GetItem<SfxInt32Item>(pSet, SID_ATTR_CHAR, false);
     if ( pCharItem )
         SetChar( pCharItem->GetValue() );
 
-    SFX_ITEMSET_ARG(pSet, pDisableItem, SfxBoolItem, FN_PARAM_2);
+    const SfxBoolItem* pDisableItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_2, false);
     if ( pDisableItem && pDisableItem->GetValue() )
         DisableFontSelection();
 
-    SFX_ITEMSET_ARG(pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
-    SFX_ITEMSET_ARG(pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME);
+    const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pSet, SID_ATTR_CHAR_FONT, false);
+    const SfxStringItem* pFontNameItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FONT_NAME, false);
     if ( pFontItem )
     {
         vcl::Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );

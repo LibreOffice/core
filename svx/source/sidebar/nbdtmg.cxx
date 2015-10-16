@@ -143,7 +143,7 @@ void NBOTypeMgrBase::StoreBulCharFmtName_impl() {
         if ( pSet )
         {
             SfxAllItemSet aSet(*pSet);
-            SFX_ITEMSET_ARG(&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT);
+            const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
 
             if ( pBulletCharFmt )
             {

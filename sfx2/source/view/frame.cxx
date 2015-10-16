@@ -415,7 +415,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     const SfxMedium *pMed = pDoc->GetMedium();
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
-    SFX_ITEMSET_ARG(pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC);
+    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pMed->GetItemSet(), SID_EDITDOC, false);
     bool bEditable = ( !pItem || pItem->GetValue() );
 
     GetDescriptor()->SetEditable( bEditable );
@@ -428,9 +428,9 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    SFX_ITEMSET_ARG(pItemSet, pRefererItem, SfxStringItem, SID_REFERER);
-    SFX_ITEMSET_ARG(pItemSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS);
-    SFX_ITEMSET_ARG(pItemSet, pTitle1Item, SfxStringItem, SID_DOCINFO_TITLE);
+    const SfxStringItem* pRefererItem = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_REFERER, false);
+    const SfxStringItem* pOptionsItem = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_FILE_FILTEROPTIONS, false);
+    const SfxStringItem* pTitle1Item = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_DOCINFO_TITLE, false);
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 

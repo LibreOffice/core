@@ -202,8 +202,8 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP);
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT);
+            const SfxStringItem* pCItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
+            const SvxFontItem* pFItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pFItem )
             {
                 aFont.SetName( pFItem->GetFamilyName() );

@@ -74,7 +74,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    SFX_ITEMSET_ARG(pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS);
+    const SvxGalleryItem* pGalleryItem = SfxItemSet::GetItem<SvxGalleryItem>(pArgs, SID_GALLERY_FORMATS, false);
     if ( !pGalleryItem )
         return;
 

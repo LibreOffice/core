@@ -353,8 +353,8 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
         std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( &rFrame.GetWindow(), aSet, rFrame.GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if ( pDlg->Execute() == RET_OK )
         {
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP);
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
+            const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
+            const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pItem )
                 rString  = pItem->GetValue();
             if ( pFontItem )

@@ -1601,7 +1601,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                            SFX_ITEMSET_ARG(pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA);
+                            const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
                             if ( pItem )
                             {
                                 pImp->m_pController->restoreViewData( pItem->GetValue() );

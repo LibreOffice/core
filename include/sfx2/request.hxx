@@ -78,10 +78,6 @@ public:
     void                AppendItem(const SfxPoolItem &);
     void                RemoveItem( sal_uInt16 nSlotId );
 
-    static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
-                                       bool bDeep = false,
-                                       std::function<bool ( const SfxPoolItem* )> isItemType = nullptr );
-
     /** Templatized access to the individual parameters of the SfxRequest.
 
         Use like: const SfxInt32Item *pPosItem = rReq.GetArg<SfxInt32Item>(SID_POS);
@@ -120,15 +116,6 @@ public:
 private:
     const SfxRequest&   operator=(const SfxRequest &) = delete;
 };
-
-template<class T> bool checkSfxPoolItem(const SfxPoolItem* pItem)
-{
-    return dynamic_cast<const T*>(pItem) != nullptr;
-}
-
-#define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId) \
-    const ItemType *pItem = static_cast<const ItemType*>( \
-        SfxRequest::GetItem( pArgs, nSlotId, false, checkSfxPoolItem<ItemType> ) )
 
 #endif
 

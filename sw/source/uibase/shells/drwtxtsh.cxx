@@ -748,8 +748,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP);
-            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
+            const SfxStringItem* pCItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
+            const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );

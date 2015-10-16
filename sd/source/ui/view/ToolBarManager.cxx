@@ -912,7 +912,7 @@ bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) co
         if (pMedium == NULL)
             break;
 
-        SFX_ITEMSET_ARG(pMedium->GetItemSet(),pViewOnlyItem,SfxBoolItem,SID_VIEWONLY);
+        const SfxBoolItem* pViewOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_VIEWONLY, false);
         if (pViewOnlyItem == NULL)
             break;
 

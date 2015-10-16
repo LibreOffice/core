@@ -359,7 +359,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 Reference< XFrame > xFrame;
                 const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                SFX_ITEMSET_ARG(pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME);
+                const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
@@ -1138,7 +1138,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            SFX_ITEMSET_ARG(pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME);
+            const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
             if ( pFrameItem )
                 xFrame = pFrameItem->GetFrame();
 
