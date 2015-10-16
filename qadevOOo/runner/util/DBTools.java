@@ -114,10 +114,6 @@ public class DBTools {
         */
         public Boolean IsPasswordRequired = null ;
         /**
-        * Representation of <code>'SuppressVersionColumns'</code> property.
-        */
-        private Boolean SuppressVersionColumns;
-        /**
         * Representation of <code>'IsReadOnly'</code> property.
         */
         private Boolean IsReadOnly = null ;
@@ -152,7 +148,6 @@ public class DBTools {
             if (User != null) props.setPropertyValue("User", User) ;
             if (Password != null) props.setPropertyValue("Password", Password) ;
             if (IsPasswordRequired != null) props.setPropertyValue("IsPasswordRequired", IsPasswordRequired) ;
-            if (SuppressVersionColumns != null) props.setPropertyValue("SuppressVersionColumns", SuppressVersionColumns) ;
             if (IsReadOnly != null) props.setPropertyValue("IsReadOnly", IsReadOnly) ;
             if (TableFilter != null) props.setPropertyValue("TableFilter", TableFilter) ;
 
