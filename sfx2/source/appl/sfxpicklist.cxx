@@ -224,8 +224,6 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             }
         }
     }
-#else
-    (void)bAvoidThumbnail;
 #endif
     // add to svtool history options
     SvtHistoryOptions().AppendItem( ePICKLIST,
