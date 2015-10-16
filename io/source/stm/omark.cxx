@@ -174,19 +174,8 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
         else {
             MutexGuard guard( m_mutex );
             // new data must be buffered
-            try
-            {
-                m_pBuffer->writeAt( m_nCurrentPos , aData );
-                m_nCurrentPos += aData.getLength();
-            }
-            catch( IRingBuffer_OutOfBoundsException & )
-            {
-                throw BufferSizeExceededException();
-            }
-            catch( IRingBuffer_OutOfMemoryException & )
-            {
-                throw BufferSizeExceededException();
-            }
+            m_pBuffer->writeAt( m_nCurrentPos , aData );
+            m_nCurrentPos += aData.getLength();
             checkMarksAndFlush();
         }
     }
@@ -605,16 +594,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
 
                 OSL_ASSERT( aData.getLength() == nRead );
 
-                try
-                {
-                    m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
-                }
-                catch( IRingBuffer_OutOfMemoryException & ) {
-                    throw BufferSizeExceededException();
-                }
-                catch( IRingBuffer_OutOfBoundsException & ) {
-                    throw BufferSizeExceededException();
-                }
+                m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
 
                 if( nRead < nToRead ) {
                     nBytesToRead = nBytesToRead - (nToRead-nRead);
@@ -668,18 +648,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
 
             if( nRead ) {
                 aData.realloc( nRead );
-                try
-                {
-                    m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
-                }
-                catch( IRingBuffer_OutOfMemoryException & )
-                {
-                    throw BufferSizeExceededException();
-                }
-                catch( IRingBuffer_OutOfBoundsException &  )
-                {
-                    throw BufferSizeExceededException();
-                }
+                m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
             }
 
             nBytesRead = Min( nMaxBytesToRead , nInBuffer + nRead );

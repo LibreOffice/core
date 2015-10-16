@@ -20,6 +20,8 @@
 #ifndef INCLUDED_IO_SOURCE_STM_STREAMHELPER_HXX
 #define INCLUDED_IO_SOURCE_STM_STREAMHELPER_HXX
 
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+
 // Save NDEBUG state
 #ifdef NDEBUG
 #define STREAMHELPER_HXX_HAD_NDEBUG
@@ -37,14 +39,6 @@
 namespace io_stm
 {
 
-class IRingBuffer_OutOfBoundsException :
-    public Exception
-{};
-
-class IRingBuffer_OutOfMemoryException :
-    public Exception
-{};
-
 class MemRingBuffer
 {
 public:
@@ -56,18 +50,17 @@ public:
     * data is written beyond end.
     ***/
     void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
-    throw(  IRingBuffer_OutOfMemoryException,
-            IRingBuffer_OutOfBoundsException );
+        throw(css::io::BufferSizeExceededException);
     void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
-    throw( IRingBuffer_OutOfBoundsException );
+        throw(css::io::BufferSizeExceededException);
     sal_Int32   getSize() const throw();
-    void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
+    void    forgetFromStart(sal_Int32 nBytesToForget) throw(css::io::BufferSizeExceededException);
 
     virtual void shrink() throw();
 
 private:
 
-    void resizeBuffer( sal_Int32 nMinSize ) throw( IRingBuffer_OutOfMemoryException );
+    void resizeBuffer(sal_Int32 nMinSize) throw(css::io::BufferSizeExceededException);
     inline void checkInvariants() {
         assert( m_nBufferLen >= 0 );
         assert( m_nOccupiedBuffer >= 0 );
@@ -84,24 +77,16 @@ private:
 };
 
 
-class I_FIFO_OutOfBoundsException :
-    public Exception
-{};
-
-class I_FIFO_OutOfMemoryException :
-    public Exception
-{};
-
 class MemFIFO :
     private MemRingBuffer
 {
 public:
     void          write( const Sequence<sal_Int8> &)
-                  throw( I_FIFO_OutOfMemoryException, I_FIFO_OutOfBoundsException );
+                  throw( css::io::BufferSizeExceededException );
     void          read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
-                  throw( I_FIFO_OutOfBoundsException );
+                  throw( css::io::BufferSizeExceededException );
     void          skip( sal_Int32 nBytesToSkip )
-                  throw( I_FIFO_OutOfBoundsException );
+                  throw( css::io::BufferSizeExceededException );
     sal_Int32     getSize() const throw()
                   { return MemRingBuffer::getSize(); }
     virtual void  shrink() throw() override

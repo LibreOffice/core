@@ -303,33 +303,17 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     }
 
     // adjust buffersize if necessary
-
-    try
+    if( m_nBytesToSkip )
     {
-        if( m_nBytesToSkip )
-        {
-            Sequence< sal_Int8 > seqCopy( nLen - m_nBytesToSkip );
-            memcpy( seqCopy.getArray() , &( aData.getConstArray()[m_nBytesToSkip] ) , nLen-m_nBytesToSkip );
-            m_pFIFO->write( seqCopy );
-        }
-        else
-        {
-            m_pFIFO->write( aData );
-        }
-        m_nBytesToSkip = 0;
+        Sequence< sal_Int8 > seqCopy( nLen - m_nBytesToSkip );
+        memcpy( seqCopy.getArray() , &( aData.getConstArray()[m_nBytesToSkip] ) , nLen-m_nBytesToSkip );
+        m_pFIFO->write( seqCopy );
     }
-    catch ( I_FIFO_OutOfBoundsException & )
+    else
     {
-        throw BufferSizeExceededException(
-            "Pipe::writeBytes BufferSizeExceededException",
-            *this );
+        m_pFIFO->write( aData );
     }
-    catch ( I_FIFO_OutOfMemoryException & )
-    {
-        throw BufferSizeExceededException(
-            "Pipe::writeBytes BufferSizeExceededException",
-            *this );
-    }
+    m_nBytesToSkip = 0;
 
     // readBytes may check again if enough bytes are available
     m_conditionBytesAvail.set();
