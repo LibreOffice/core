@@ -39,7 +39,8 @@ namespace pcr
     {
     public:
         NumberFormatSampleField( vcl::Window* _pParent, WinBits _nStyle )
-            :FormattedField( _pParent, _nStyle )
+            : FormattedField(_pParent, _nStyle)
+            , m_pHelper(nullptr)
         {
         }
 
