@@ -346,7 +346,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             if ( pFact )
             {
-                SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, SID_CONFIG);
+                const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
 
                 SfxItemSet aSet(
                     GetPool(), SID_CONFIG, SID_CONFIG );
@@ -481,7 +481,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPTIPS:
         {
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS);
+            const SfxBoolItem* pOnItem = rReq.GetArg<SfxBoolItem>(SID_HELPTIPS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsQuickHelpEnabled();
@@ -508,7 +508,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPBALLOONS:
         {
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS);
+            const SfxBoolItem* pOnItem = rReq.GetArg<SfxBoolItem>(SID_HELPBALLOONS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsBalloonHelpEnabled();
@@ -569,9 +569,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SHOW_IME_STATUS_WINDOW:
             if (sfx2::appl::ImeStatusWindow::canToggle())
             {
-                SfxBoolItem const * pItem = static_cast< SfxBoolItem const * >(
-                    rReq.GetArg(SID_SHOW_IME_STATUS_WINDOW, false,
-                                checkSfxPoolItem<SfxBoolItem>));
+                const SfxBoolItem * pItem = rReq.GetArg<SfxBoolItem>(SID_SHOW_IME_STATUS_WINDOW);
                 bool bShow = pItem == 0
                     ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
                     : pItem->GetValue();
@@ -634,8 +632,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_AVAILABLE_TOOLBARS:
         {
-            SfxStringItem const * pToolbarName = static_cast< SfxStringItem const *>(
-                    rReq.GetArg(SID_AVAILABLE_TOOLBARS, false, checkSfxPoolItem< SfxStringItem >));
+            const SfxStringItem* pToolbarName = rReq.GetArg<SfxStringItem>(SID_AVAILABLE_TOOLBARS);
 
             if ( pToolbarName )
             {
@@ -962,7 +959,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_OPTIONS_TREEDIALOG:
         {
             OUString sPageURL;
-            SFX_REQUEST_ARG(rReq, pURLItem, SfxStringItem, SID_OPTIONS_PAGEURL);
+            const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_OPTIONS_PAGEURL);
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
             const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
@@ -1220,7 +1217,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_OFFICE_CHECK_PLZ:
         {
             bool bRet = false;
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, rReq.GetSlot());
+            const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(rReq.GetSlot());
 
             if ( pStringItem )
             {

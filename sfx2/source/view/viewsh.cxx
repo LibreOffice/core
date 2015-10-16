@@ -472,7 +472,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
     {
         case SID_STYLE_FAMILY :
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId);
+            const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nId);
             if (pItem)
             {
                 pImp->m_nFamily = pItem->GetValue();
@@ -555,11 +555,11 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel  aModel;
             OUString aDocType;
 
-            SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT);
+            const SfxStringItem* pMailSubject = rReq.GetArg<SfxStringItem>(SID_MAIL_SUBJECT);
             if ( pMailSubject )
                 aModel.SetSubject( pMailSubject->GetValue() );
 
-            SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT);
+            const SfxStringItem* pMailRecipient = rReq.GetArg<SfxStringItem>(SID_MAIL_RECIPIENT);
             if ( pMailRecipient )
             {
                 OUString aRecipient( pMailRecipient->GetValue() );
@@ -569,7 +569,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
             }
-            SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME);
+            const SfxStringItem* pMailDocType = rReq.GetArg<SfxStringItem>(SID_TYPE_NAME);
             if ( pMailDocType )
                 aDocType = pMailDocType->GetValue();
 
@@ -750,7 +750,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_PLUGINS_ACTIVE:
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId);
+            const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(nId);
             bool const bActive = (pShowItem)
                 ? pShowItem->GetValue()
                 : !pImp->m_bPlugInsActive;

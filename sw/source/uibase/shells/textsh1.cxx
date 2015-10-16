@@ -189,7 +189,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
     else if (pDlg && pReq)
     {
-        SFX_REQUEST_ARG((*pReq), pItem, SfxStringItem, FN_PARAM_1);
+        const SfxStringItem* pItem = (*pReq).GetArg<SfxStringItem>(FN_PARAM_1);
         if (pItem)
             pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
     }
@@ -323,7 +323,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // get the language
             OUString aNewLangText;
-            SFX_REQUEST_ARG(rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS);
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_LANGUAGE_STATUS);
             if (pItem2)
                 aNewLangText = pItem2->GetValue();
 
@@ -435,7 +435,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // replace word/selection with text from selected sub menu entry
             OUString aReplaceText;
-            SFX_REQUEST_ARG(rReq, pItem2, SfxStringItem, SID_THES);
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -457,8 +457,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_ENDNOTE:
         {
             OUString aStr;
-            SFX_REQUEST_ARG(rReq, pFont, SfxStringItem, FN_PARAM_1);
-            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, nSlot);
+            const SfxStringItem* pFont = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
             bool bFont = pFont && !pFont->GetValue().isEmpty();
@@ -556,9 +556,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
-                SFX_REQUEST_ARG(rReq, pTemplate, SfxStringItem, FN_PARAM_1);
-                SFX_REQUEST_ARG(rReq, pNumber, SfxUInt16Item, FN_PARAM_2);
-                SFX_REQUEST_ARG(rReq, pIsNumberFilled, SfxBoolItem, FN_PARAM_3);
+                const SfxStringItem* pTemplate = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+                const SfxUInt16Item* pNumber = rReq.GetArg<SfxUInt16Item>(FN_PARAM_2);
+                const SfxBoolItem* pIsNumberFilled = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
                 if ( pTemplate )
                     aTemplateName = pTemplate->GetValue();
                 if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )

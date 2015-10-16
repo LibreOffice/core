@@ -426,20 +426,6 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
     }
 }
 
-
-
-const SfxPoolItem* SfxRequest::GetArg
-(
-    sal_uInt16  nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool    bDeep,    // sal_False: do not search in the Parent-ItemSets
-    std::function<bool ( const SfxPoolItem* )> isItemType     // != 0:  check for required pool item class
-)   const
-{
-    return GetItem( pArgs, nSlotId, bDeep, isItemType );
-}
-
-
-
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
@@ -464,14 +450,9 @@ const SfxPoolItem* SfxRequest::GetItem
             case SID_MY:
             {
                 ...
-                // An Example on not using the macros
-                const SfxInt32Item *pPosItem = (const SfxUInt32Item*)
-                    rReq.GetArg( SID_POS, sal_False, TYPE(SfxInt32Item) );
+                // An example
+                const SfxInt32Item *pPosItem = rReq.GetArg<SfxUInt32Item>(SID_POS);
                 sal_uInt16 nPos = pPosItem ? pPosItem->GetValue() : 0;
-
-                // An Example on using the macros
-                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, sal_False);
-                sal_uInt16 nSize = pSizeItem ? pPosItem->GetValue() : 0;
 
                 ...
             }

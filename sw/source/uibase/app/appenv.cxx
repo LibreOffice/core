@@ -211,7 +211,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     std::unique_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
-    SFX_REQUEST_ARG(rReq, pItem, SwEnvItem, FN_ENVELOP);
+    const SwEnvItem* pItem = rReq.GetArg<SwEnvItem>(FN_ENVELOP);
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -223,7 +223,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
     else
     {
-        SFX_REQUEST_ARG(rReq, pBoolItem, SfxBoolItem, FN_PARAM_1);
+        const SfxBoolItem* pBoolItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
         if ( pBoolItem && pBoolItem->GetValue() )
             nMode = ENV_NEWDOC;
     }

@@ -101,10 +101,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         {
             case SID_DRAW_ELLIPSE :
             {
-                SFX_REQUEST_ARG(rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X);
-                SFX_REQUEST_ARG(rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y);
-                SFX_REQUEST_ARG(rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X);
-                SFX_REQUEST_ARG(rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y);
+                const SfxUInt32Item* pCenterX = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_X);
+                const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
+                const SfxUInt32Item* pAxisX = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_X);
+                const SfxUInt32Item* pAxisY = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_Y);
 
                 Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
@@ -119,10 +119,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 
             case SID_DRAW_RECT :
             {
-                SFX_REQUEST_ARG(rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X);
-                SFX_REQUEST_ARG(rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y);
-                SFX_REQUEST_ARG(rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X);
-                SFX_REQUEST_ARG(rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y);
+                const SfxUInt32Item* pMouseStartX = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_X);
+                const SfxUInt32Item* pMouseStartY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSESTART_Y);
+                const SfxUInt32Item* pMouseEndX = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_X);
+                const SfxUInt32Item* pMouseEndY = rReq.GetArg<SfxUInt32Item>(ID_VAL_MOUSEEND_Y);
 
                 Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),

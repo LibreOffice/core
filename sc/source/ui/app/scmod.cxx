@@ -455,7 +455,7 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
                 bool bNew = !aNewOpts.GetDetectiveAuto();
-                SFX_REQUEST_ARG(rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO);
+                const SfxBoolItem* pAuto = rReq.GetArg<SfxBoolItem>(SID_DETECTIVE_AUTO);
                 if ( pAuto )
                     bNew = pAuto->GetValue();
 

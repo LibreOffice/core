@@ -221,7 +221,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
-                    SFX_REQUEST_ARG(rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL);
+                    const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
                     if ( pStatusIndicatorItem )
                         OSL_VERIFY( pStatusIndicatorItem->GetValue() >>= xStatusIndicator );
                     else
@@ -558,7 +558,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             std::unique_ptr< ScriptDocument > pDocument;
 
-            SFX_REQUEST_ARG(rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT);
+            const SfxStringItem* pDocumentItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_DOCUMENT);
             if ( pDocumentItem )
             {
                 OUString sDocumentCaption = pDocumentItem->GetValue();
@@ -566,7 +566,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
 
-            SFX_REQUEST_ARG(rReq, pDocModelItem, SfxUsrAnyItem, SID_BASICIDE_ARG_DOCUMENT_MODEL);
+            const SfxUsrAnyItem* pDocModelItem = rReq.GetArg<SfxUsrAnyItem>(SID_BASICIDE_ARG_DOCUMENT_MODEL);
             if ( !pDocument.get() && pDocModelItem )
             {
                 uno::Reference< frame::XModel > xModel( pDocModelItem->GetValue(), UNO_QUERY );
@@ -577,21 +577,21 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( !pDocument.get() )
                 break;
 
-            SFX_REQUEST_ARG(rReq, pLibNameItem, SfxStringItem, SID_BASICIDE_ARG_LIBNAME);
+            const SfxStringItem* pLibNameItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_LIBNAME);
             if ( !pLibNameItem )
                 break;
 
             OUString aLibName( pLibNameItem->GetValue() );
             pDocument->loadLibraryIfExists( E_SCRIPTS, aLibName );
             SetCurLib( *pDocument, aLibName );
-            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME);
+            const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_NAME);
             if ( pNameItem )
             {
                 OUString aName( pNameItem->GetValue() );
                 OUString aModType( "Module" );
                 OUString aDlgType( "Dialog" );
                 OUString aType( aModType );
-                SFX_REQUEST_ARG(rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE);
+                const SfxStringItem* pTypeItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_TYPE);
                 if ( pTypeItem )
                     aType = pTypeItem->GetValue();
 
@@ -609,7 +609,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
                     if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
                     {
-                        SFX_REQUEST_ARG(rReq, pLineItem, SfxUInt32Item, SID_BASICIDE_ARG_LINE);
+                        const SfxUInt32Item* pLineItem = rReq.GetArg<SfxUInt32Item>(SID_BASICIDE_ARG_LINE);
                         if ( pLineItem )
                         {
                             pModWin->AssertValidEditEngine();
@@ -642,7 +642,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                         pModWin->GetEditVScrollBar().SetThumbPos( pTextView->GetStartDocPos().Y() );
                                     }
                                     sal_uInt16 nCol1 = 0, nCol2 = 0;
-                                    SFX_REQUEST_ARG(rReq, pCol1Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN1);
+                                    const SfxUInt16Item* pCol1Item = rReq.GetArg<SfxUInt16Item>(SID_BASICIDE_ARG_COLUMN1);
                                     if ( pCol1Item )
                                     {
                                         nCol1 = pCol1Item->GetValue();
@@ -650,7 +650,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                             --nCol1;
                                         nCol2 = nCol1;
                                     }
-                                    SFX_REQUEST_ARG(rReq, pCol2Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN2);
+                                    const SfxUInt16Item* pCol2Item = rReq.GetArg<SfxUInt16Item>(SID_BASICIDE_ARG_COLUMN2);
                                     if ( pCol2Item )
                                     {
                                         nCol2 = pCol2Item->GetValue();

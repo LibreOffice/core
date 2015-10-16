@@ -81,7 +81,15 @@ public:
     static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
                                        bool bDeep = false,
                                        std::function<bool ( const SfxPoolItem* )> isItemType = nullptr );
-    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, std::function<bool ( const SfxPoolItem* )> isItemType = nullptr ) const;
+
+    /** Templatized access to the individual parameters of the SfxRequest.
+
+        Use like: const SfxInt32Item *pPosItem = rReq.GetArg<SfxInt32Item>(SID_POS);
+    */
+    template<class T> const T* GetArg(sal_uInt16 nSlotId) const
+    {
+        return dynamic_cast<const T*>(GetItem(pArgs, nSlotId));
+    }
 
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
@@ -115,9 +123,6 @@ template<class T> bool checkSfxPoolItem(const SfxPoolItem* pItem)
     return dynamic_cast<const T*>(pItem) != nullptr;
 }
 
-#define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId) \
-        const ItemType *pItem = static_cast<const ItemType*>( \
-                rReq.GetArg( nSlotId, false, checkSfxPoolItem<ItemType> ) )
 #define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId) \
     const ItemType *pItem = static_cast<const ItemType*>( \
         SfxRequest::GetItem( pArgs, nSlotId, false, checkSfxPoolItem<ItemType> ) )

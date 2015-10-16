@@ -309,8 +309,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             else
             {
                 // convert internal StyleName to DisplayName (slot implementation uses the latter)
-                SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE);
-                SFX_REQUEST_ARG(rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME);
+                const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_APPLY_STYLE);
+                const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
                 if ( pFamilyItem && pNameItem )
                 {
                     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetModel(), uno::UNO_QUERY);

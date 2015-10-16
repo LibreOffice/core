@@ -135,7 +135,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_THES:
         {
             OUString aReplaceText;
-            SFX_REQUEST_ARG(rReq, pItem2, SfxStringItem, SID_THES);
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -318,7 +318,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, FN_PARAM_1);
+            const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
 
             if( !pArgs || pItem )
             {

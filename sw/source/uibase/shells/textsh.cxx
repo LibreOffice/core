@@ -282,7 +282,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
     {
-        SFX_REQUEST_ARG(rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT);
+        const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
         SvGlobalName *pName = NULL;
         SvGlobalName aName;
         if ( pNameItem )
@@ -291,8 +291,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG(rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2);
-        SFX_REQUEST_ARG(rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3);
+        const SfxStringItem* pClassLocationItem = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        const SfxStringItem* pCommandsItem = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
         if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
@@ -353,11 +353,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_FLOATINGFRAME:
     {
         svt::EmbeddedObjectRef xObj;
-        SFX_REQUEST_ARG(rReq, pNameItem,   SfxStringItem, FN_PARAM_1);
-        SFX_REQUEST_ARG(rReq, pURLItem,    SfxStringItem, FN_PARAM_2);
-        SFX_REQUEST_ARG(rReq, pMarginItem, SvxSizeItem, FN_PARAM_3);
-        SFX_REQUEST_ARG(rReq, pScrollingItem, SfxByteItem, FN_PARAM_4);
-        SFX_REQUEST_ARG(rReq, pBorderItem, SfxBoolItem, FN_PARAM_5);
+        const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        const SvxSizeItem* pMarginItem = rReq.GetArg<SvxSizeItem>(FN_PARAM_3);
+        const SfxByteItem* pScrollingItem = rReq.GetArg<SfxByteItem>(FN_PARAM_4);
+        const SfxBoolItem* pBorderItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_5);
 
         if(pURLItem) // URL is a _must_
         {

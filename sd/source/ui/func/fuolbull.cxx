@@ -143,7 +143,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nSId);
+    const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSId);
     if ( !pItem )
     {
         rReq.Done();

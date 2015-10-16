@@ -214,7 +214,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG(rReq, pFillStyle, SfxUInt32Item, ID_VAL_STYLE);
+                    const SfxUInt32Item* pFillStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
                     if (CHECK_RANGE (drawing::FillStyle_NONE, (sal_Int32)pFillStyle->GetValue (), drawing::FillStyle_BITMAP))
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -236,7 +236,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG(rReq, pLineStyle, SfxUInt32Item, ID_VAL_STYLE);
+                    const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
                     if (CHECK_RANGE (drawing::LineStyle_NONE, (sal_Int32)pLineStyle->GetValue (), drawing::LineStyle_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
@@ -258,7 +258,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG(rReq, pLineWidth, SfxUInt32Item, ID_VAL_WIDTH);
+                    const SfxUInt32Item* pLineWidth = rReq.GetArg<SfxUInt32Item>(ID_VAL_WIDTH);
                     pAttr->ClearItem (XATTR_LINEWIDTH);
                     pAttr->Put (XLineWidthItem (pLineWidth->GetValue ()), XATTR_LINEWIDTH);
                     rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
@@ -273,9 +273,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG(rReq, pRed, SfxUInt32Item, ID_VAL_RED);
-                    SFX_REQUEST_ARG(rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN);
-                    SFX_REQUEST_ARG(rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE);
+                    const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                    const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                    const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                     pAttr->ClearItem (XATTR_FILLCOLOR);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -297,9 +297,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG(rReq, pRed, SfxUInt32Item, ID_VAL_RED);
-                    SFX_REQUEST_ARG(rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN);
-                    SFX_REQUEST_ARG(rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE);
+                    const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                    const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                    const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                     pAttr->ClearItem (XATTR_LINECOLOR);
                     pAttr->Put (XLineColorItem (-1, Color ((sal_uInt8) pRed->GetValue (),
@@ -319,10 +319,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
-                    SFX_REQUEST_ARG(rReq, pRed, SfxUInt32Item, ID_VAL_RED);
-                    SFX_REQUEST_ARG(rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN);
-                    SFX_REQUEST_ARG(rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                    const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                    const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                    const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                     XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
@@ -380,10 +380,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
-                    SFX_REQUEST_ARG(rReq, pRed, SfxUInt32Item, ID_VAL_RED);
-                    SFX_REQUEST_ARG(rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN);
-                    SFX_REQUEST_ARG(rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                    const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                    const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                    const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                     XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
@@ -435,13 +435,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 7)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
-                    SFX_REQUEST_ARG(rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE);
-                    SFX_REQUEST_ARG(rReq, pDots, SfxUInt32Item, ID_VAL_DOTS);
-                    SFX_REQUEST_ARG(rReq, pDotLen, SfxUInt32Item, ID_VAL_DOTLEN);
-                    SFX_REQUEST_ARG(rReq, pDashes, SfxUInt32Item, ID_VAL_DASHES);
-                    SFX_REQUEST_ARG(rReq, pDashLen, SfxUInt32Item, ID_VAL_DASHLEN);
-                    SFX_REQUEST_ARG(rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                    const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                    const SfxUInt32Item* pDots = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTS);
+                    const SfxUInt32Item* pDotLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTLEN);
+                    const SfxUInt32Item* pDashes = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHES);
+                    const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
+                    const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
 
                     if (CHECK_RANGE (css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue (), css::drawing::DashStyle_ROUNDRELATIVE))
                     {
@@ -485,14 +485,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 8)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
-                    SFX_REQUEST_ARG(rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE);
-                    SFX_REQUEST_ARG(rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE);
-                    SFX_REQUEST_ARG(rReq, pBorder, SfxUInt32Item, ID_VAL_BORDER);
-                    SFX_REQUEST_ARG(rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X);
-                    SFX_REQUEST_ARG(rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y);
-                    SFX_REQUEST_ARG(rReq, pStart, SfxUInt32Item, ID_VAL_STARTINTENS);
-                    SFX_REQUEST_ARG(rReq, pEnd, SfxUInt32Item, ID_VAL_ENDINTENS);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                    const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                    const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
+                    const SfxUInt32Item* pBorder = rReq.GetArg<SfxUInt32Item>(ID_VAL_BORDER);
+                    const SfxUInt32Item* pCenterX = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_X);
+                    const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
+                    const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
+                    const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
 
                     if (CHECK_RANGE (css::awt::GradientStyle_LINEAR, (sal_Int32)pStyle->GetValue (), css::awt::GradientStyle_RECT) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
@@ -562,10 +562,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
-                    SFX_REQUEST_ARG(rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE);
-                    SFX_REQUEST_ARG(rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE);
-                    SFX_REQUEST_ARG(rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                    const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                    const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
+                    const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
 
                     if (CHECK_RANGE (css::drawing::HatchStyle_SINGLE, (sal_Int32)pStyle->GetValue (), css::drawing::HatchStyle_TRIPLE) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
@@ -623,7 +623,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
 
                     XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     long           nCounts        = pGradientList->Count ();
@@ -658,7 +658,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, ID_VAL_INDEX);
+                    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
 
                     XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();

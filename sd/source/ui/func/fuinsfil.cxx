@@ -248,8 +248,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SFX_REQUEST_ARG(rReq, pFileName, SfxStringItem, ID_VAL_DUMMY0);
-        SFX_REQUEST_ARG(rReq, pFilterName, SfxStringItem, ID_VAL_DUMMY1);
+        const SfxStringItem* pFileName = rReq.GetArg<SfxStringItem>(ID_VAL_DUMMY0);
+        const SfxStringItem* pFilterName = rReq.GetArg<SfxStringItem>(ID_VAL_DUMMY1);
 
         aFile = pFileName->GetValue ();
 

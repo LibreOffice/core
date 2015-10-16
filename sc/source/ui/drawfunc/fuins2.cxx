@@ -214,7 +214,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
     uno::Reference< io::XInputStream > xIconMetaFile;
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    SFX_REQUEST_ARG(rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT);
+    const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         SvGlobalName aClassName = pNameItem->GetValue();

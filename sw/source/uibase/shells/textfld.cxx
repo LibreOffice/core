@@ -347,7 +347,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_DELETE_NOTE_AUTHOR:
             {
-                SFX_REQUEST_ARG(rReq, pNoteItem, SfxStringItem, nSlot);
+                const SfxStringItem* pNoteItem = rReq.GetArg<SfxStringItem>(nSlot);
                 if ( pNoteItem && GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Delete( pNoteItem->GetValue() );
             }
@@ -365,7 +365,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_HIDE_NOTE_AUTHOR:
             {
-                SFX_REQUEST_ARG(rReq, pNoteItem, SfxStringItem, nSlot);
+                const SfxStringItem* pNoteItem = rReq.GetArg<SfxStringItem>(nSlot);
                 if ( pNoteItem && GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Hide( pNoteItem->GetValue() );
             }
@@ -376,7 +376,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
-                    SFX_REQUEST_ARG(rReq, pAuthorItem, SvxPostItAuthorItem, SID_ATTR_POSTIT_AUTHOR);
+                    const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
                     OUString sAuthor;
                     if ( pAuthorItem )
                         sAuthor = pAuthorItem->GetValue();
@@ -388,7 +388,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                 sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
                     }
 
-                    SFX_REQUEST_ARG(rReq, pTextItem, SvxPostItTextItem, SID_ATTR_POSTIT_TEXT);
+                    const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
                     OUString sText;
                     if ( pTextItem )
                         sText = pTextItem->GetValue();
@@ -543,8 +543,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if ( pItem )
                 {
                     aText = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    SFX_REQUEST_ARG(rReq, pType, SfxStringItem, FN_PARAM_2);
-                    SFX_REQUEST_ARG(rReq, pIsUrl, SfxBoolItem, FN_PARAM_1);
+                    const SfxStringItem* pType = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+                    const SfxBoolItem* pIsUrl = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
                     if ( pType )
                         aType = pType->GetValue();
                     if ( pIsUrl )

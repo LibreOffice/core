@@ -50,7 +50,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_NUMBERING_ON:
     {
         GetShell().StartAllAction();
-        SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, FN_PARAM_1);
+        const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
         bool bMode = !GetShell().SelectionHasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -79,7 +79,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_BULLET_ON:
     {
         GetShell().StartAllAction();
-        SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, FN_PARAM_1);
+        const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
         bool bMode = !GetShell().SelectionHasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -186,7 +186,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
-        SFX_REQUEST_ARG(rReq, pPageItem, SfxStringItem, FN_PARAM_1);
+        const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if ( pPageItem )
             pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
         const short nRet = pDlg->Execute();
@@ -247,7 +247,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
     case FN_SVX_SET_NUMBER:
     case FN_SVX_SET_BULLET:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nSlot);
+            const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSlot);
             if ( pItem != NULL )
             {
                 const sal_uInt16 nChoosenItemIdx = pItem->GetValue();

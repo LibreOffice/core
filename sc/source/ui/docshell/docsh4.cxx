@@ -566,7 +566,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 ScDocument& rDoc = GetDocument();
                 // get argument (recorded macro)
-                SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, FID_CHG_RECORD);
+                const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FID_CHG_RECORD);
                 bool bDo = true;
 
                 // xmlsec05/06:
