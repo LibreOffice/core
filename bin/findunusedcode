@@ -17,7 +17,6 @@ echo "--without-doxygen
 --enable-extension-integration
 --enable-graphite
 --enable-evolution2
---enable-lockdown
 --enable-online-update
 --enable-dbgutil
 --enable-werror

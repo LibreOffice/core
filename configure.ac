@@ -1000,11 +1000,6 @@ AC_ARG_ENABLE(fetch-external,
         [Disables fetching external tarballs from web sources.])
 )
 
-AC_ARG_ENABLE(lockdown,
-    AS_HELP_STRING([--disable-lockdown],
-        [Disables the gconf integration work in LibreOffice.]),
-)
-
 AC_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
         [Enables precompiled header support for C++. Forced default on Windows/VC build])
@@ -1197,11 +1192,6 @@ AC_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--disable-sdremote-bluetooth],
         [Determines whether to build sdremote with bluetooth support.
          Requires dbus on Linux.]))
-
-AC_ARG_ENABLE(gconf,
-    AS_HELP_STRING([--disable-gconf],
-        [Determines whether to use the GConf support.]),
-,enable_gconf=yes)
 
 AC_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
@@ -10004,24 +9994,6 @@ fi
 AC_MSG_NOTICE([VCLplugs to be built: $build_vcl_plugins])
 
 dnl ===================================================================
-dnl GCONF check
-dnl ===================================================================
-
-ENABLE_GCONF=
-AC_MSG_CHECKING([whether to enable GConf support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "iOS" -a "$enable_gconf" = "yes"; then
-    ENABLE_GCONF="TRUE"
-    AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( GCONF, gconf-2.0 gobject-2.0 )
-    GCONF_CFLAGS=$(printf '%s' "$GCONF_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(GCONF_LIBS)
-AC_SUBST(GCONF_CFLAGS)
-AC_SUBST(ENABLE_GCONF)
-
-dnl ===================================================================
 dnl check for dbus support
 dnl ===================================================================
 ENABLE_DBUS=""
@@ -11227,19 +11199,6 @@ AC_SUBST(MOC4)
 AC_SUBST(KDE_GLIB_CFLAGS)
 AC_SUBST(KDE_GLIB_LIBS)
 AC_SUBST(KDE_HAVE_GLIB)
-
-dnl ===================================================================
-dnl Test for the enabling the lockdown pieces
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable the lockdown pieces])
-ENABLE_LOCKDOWN=
-if test -n "$enable_lockdown" -a "$enable_lockdown" != "no"; then
-    ENABLE_LOCKDOWN=TRUE
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_LOCKDOWN)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support

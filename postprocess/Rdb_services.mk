@@ -192,9 +192,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_OPENGL_CANVAS), \
         canvas/source/opengl/oglcanvas \
 	) \
-	$(if $(ENABLE_GCONF), \
-		shell/source/backends/gconfbe/gconfbe1 \
-	) \
 	$(if $(ENABLE_GIO), \
 		shell/source/sessioninstall/losessioninstall \
 		ucb/source/ucp/gio/ucpgio \

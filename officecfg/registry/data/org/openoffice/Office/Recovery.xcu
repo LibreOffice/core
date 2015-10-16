@@ -17,15 +17,4 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" oor:package="org.openoffice.Office" oor:name="Recovery">
-  <node oor:name="AutoSave" install:module="gconflockdown">
-    <prop oor:name="Enabled">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveEnabled"/>
-    </prop>
-    <prop oor:name="UserAutoSaveEnabled">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend UserAutoSaveEnabled"/>
-    </prop>
-    <prop oor:name="TimeIntervall">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveTimeIntervall"/>
-    </prop>
-  </node>
 </oor:component-data>

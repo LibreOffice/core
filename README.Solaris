@@ -32,7 +32,7 @@ pkg install pkg:/developer/documentation-tool/doxygen@1.5.7.1-0.175.0.0.0.2.537
 Compiling
 ---------
 
-CC="gcc" CXX="g++" ./autogen.sh --with-num-cpus=2 --with-max-jobs=4 --without-junit --disable-mozilla --with-system-curl --without-help --disable-cups --without-java --with-system-cairo --with-lang= --disable-gconf --enable-gio --disable-gnome-vfs --disable-gstreamer --without-fonts --with-system-dicts --disable-mozilla --without-system-mozilla --disable-xmlsec --with-system-openssl
+CC="gcc" CXX="g++" ./autogen.sh --with-num-cpus=2 --with-max-jobs=4 --without-junit --disable-mozilla --with-system-curl --without-help --disable-cups --without-java --with-system-cairo --with-lang= --enable-gio --disable-gnome-vfs --disable-gstreamer --without-fonts --with-system-dicts --disable-mozilla --without-system-mozilla --disable-xmlsec --with-system-openssl
 
 gmake
 

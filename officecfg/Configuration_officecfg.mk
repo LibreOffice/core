@@ -69,7 +69,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Setup-reportbuilder.xcu \
 	org/openoffice/Setup-start.xcu \
 	org/openoffice/UserProfile-unixdesktop.xcu \
-	org/openoffice/VCL-gconflockdown.xcu \
 	org/openoffice/VCL-unixdesktop.xcu \
 	org/openoffice/Office/Accelerators-macosx.xcu \
 	org/openoffice/Office/Accelerators-reportbuilder.xcu \
@@ -83,7 +82,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-math.xcu \
 	org/openoffice/Office/Common-unx.xcu \
 	org/openoffice/Office/Common-unixdesktop.xcu \
-	org/openoffice/Office/Common-gconflockdown.xcu \
 	org/openoffice/Office/Common-macosx.xcu \
 	org/openoffice/Office/Common-wnt.xcu \
 	org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
@@ -111,7 +109,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-base.xcu \
 	org/openoffice/Office/Embedding-reportbuilder.xcu \
 	org/openoffice/Office/Embedding-writer.xcu \
-	org/openoffice/Office/Recovery-gconflockdown.xcu \
 	org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
 	org/openoffice/Office/UI/Controller-reportbuilder.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \

@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 			InstallModule_winexplorerext \
 		) \
 	) \
-	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GCONF) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
+	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		InstallModule_gnome \
 	) \
 	$(if $(filter TRUE,$(ENABLE_KDE4)),\

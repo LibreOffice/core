@@ -3066,33 +3066,6 @@ endef
 endif # ENABLE_TDE
 
 
-ifeq ($(ENABLE_GCONF),TRUE)
-
-define gb_LinkTarget__use_gconf
-$(call gb_LinkTarget_set_include,$(1),\
-	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(GCONF_CFLAGS)))) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(GCONF_CFLAGS))) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(GCONF_LIBS) \
-)
-
-endef
-
-else # !ENABLE_GCONF
-
-define gb_LinkTarget__use_gconf
-
-endef
-
-endif # ENABLE_GCONF
-
-
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python
 ifneq ($(SYSTEM_PYTHON),)

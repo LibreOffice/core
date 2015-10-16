@@ -17,7 +17,7 @@
  */
 #include "macros.inc"
 
-#if (defined ENABLE_GCONF && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
+#if defined ENABLE_GIO
 File gid_File_Share_Registry_Gnome_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

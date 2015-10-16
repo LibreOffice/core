@@ -431,22 +431,11 @@ postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivit
 postprocess_DRIVERS += postgresql
 endif
 
-ifeq ($(USING_X11), TRUE)
-ifneq (,$(or $(filter TRUETRUE,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
+ifneq (,$(and $(USING_X11), $(ENABLE_GIO)))
 postprocess_XCDS += gnome.xcd
 postprocess_DEPS_gnome := main
-ifeq ($(ENABLE_GCONF)$(ENABLE_LOCKDOWN),TRUETRUE)
-postprocess_FILES_gnome += \
-	$(postprocess_MOD)/org/openoffice/Office/Common-gconflockdown.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/Recovery-gconflockdown.xcu \
-	$(postprocess_MOD)/org/openoffice/VCL-gconflockdown.xcu
+postprocess_FILES_gnome += $(postprocess_MOD)/org/openoffice/ucb/Configuration-gio.xcu
 endif
-ifeq ($(ENABLE_GIO),TRUE)
-postprocess_FILES_gnome += \
-	$(postprocess_MOD)/org/openoffice/ucb/Configuration-gio.xcu
-endif
-endif
-endif # $(USING_X11) == TRUE
 
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 postprocess_XCDS += onlineupdate.xcd
