@@ -24,7 +24,6 @@
 -o fwk.DispatchRecorder
 -o fwk.DispatchRecorderSupplier
 -o fwk.FooterMenuController
--o fwk.ObjectMenuController
 -o fwk.StatusBarControllerFactory
 -o fwk.ToolBarsMenuController
 -o fwk.UICategoryDescription

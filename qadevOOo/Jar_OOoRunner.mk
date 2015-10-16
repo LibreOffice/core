@@ -959,7 +959,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_fwk/ModuleManager \
     qadevOOo/tests/java/mod/_fwk/ModuleUIConfigurationManager \
     qadevOOo/tests/java/mod/_fwk/ModuleUIConfigurationManagerSupplier \
-    qadevOOo/tests/java/mod/_fwk/ObjectMenuController \
     qadevOOo/tests/java/mod/_fwk/PopupMenuControllerFactory \
     qadevOOo/tests/java/mod/_fwk/ServiceHandler \
     qadevOOo/tests/java/mod/_fwk/SoundHandler \
