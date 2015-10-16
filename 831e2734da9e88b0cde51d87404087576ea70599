@@ -1,0 +1,406 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_6f024c40",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "Rather \u0027replace\u0027 or \u0027adapt\u0027 or better \u0027update\u0027 AutoCorrect if ...",
+      "range": {
+        "startLine": 119,
+        "startChar": 11,
+        "endLine": 119,
+        "endChar": 20
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_affc643f",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027remains\u0027",
+      "range": {
+        "startLine": 128,
+        "startChar": 31,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8ff9a050",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027newly created\u0027",
+      "range": {
+        "startLine": 128,
+        "startChar": 82,
+        "endLine": 128,
+        "endChar": 89
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_4fff8834",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027at\u0027",
+      "range": {
+        "startLine": 129,
+        "startChar": 56,
+        "endLine": 129,
+        "endChar": 58
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_ef949ce9",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027adjust to entire cells\u0027 (as opposed to partial cells)",
+      "range": {
+        "startLine": 422,
+        "startChar": 7,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_0fa47055",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027so\u0027",
+      "range": {
+        "startLine": 981,
+        "startChar": 3,
+        "endLine": 981,
+        "endChar": 6
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_6f89acca",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027on start-up\u0027",
+      "range": {
+        "startLine": 1041,
+        "startChar": 70,
+        "endLine": 1041,
+        "endChar": 83
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_4f8668ba",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027Enter\u0027 (key, not input)",
+      "range": {
+        "startLine": 1249,
+        "startChar": 74,
+        "endLine": 1249,
+        "endChar": 79
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_af93c4f9",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027would be\u0027",
+      "range": {
+        "startLine": 1255,
+        "startChar": 57,
+        "endLine": 1255,
+        "endChar": 60
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8f9080ee",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027reference\u0027",
+      "range": {
+        "startLine": 1326,
+        "startChar": 65,
+        "endLine": 1326,
+        "endChar": 73
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_efbbfc73",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "Confusing translation, make that\n\n...\"since during reference input on another document this ViewShell is not the one that is used for input.\"",
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_cfc0b8e3",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027Alt-Cursor keys\u0027",
+      "range": {
+        "startLine": 1336,
+        "startChar": 17,
+        "endLine": 1336,
+        "endChar": 24
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_2fb6948a",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "um.. change to\n\n\"\n Each task now has its own InputWindow,\n therefore either should each task get its own InputHandler,\n or the InputWindow should create its own InputHandler\n (then always search via InputWindow and only if not found\n use the InputHandler of the App).\n As an intermediate solution each View gets its own InputHandler,\n which only yields problems if two Views are in one task window.\n\"",
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_0fbbd073",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027at\u0027",
+      "range": {
+        "startLine": 1506,
+        "startChar": 88,
+        "endLine": 1506,
+        "endChar": 90
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_4fadc830",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027must not be created\u0027",
+      "range": {
+        "startLine": 1512,
+        "startChar": 24,
+        "endLine": 1512,
+        "endChar": 45
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_afaaa417",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027if\u0027",
+      "range": {
+        "startLine": 1513,
+        "startChar": 15,
+        "endLine": 1513,
+        "endChar": 19
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8fa7e04e",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027in case the TabView-dtor tries to access them\u0027",
+      "range": {
+        "startLine": 1737,
+        "startChar": 20,
+        "endLine": 1737,
+        "endChar": 64
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_ef62dc15",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T17:33:26Z",
+      "side": 1,
+      "message": "\u0027known by\u0027",
+      "range": {
+        "startLine": 1798,
+        "startChar": 19,
+        "endLine": 1798,
+        "endChar": 27
+      },
+      "revId": "831e2734da9e88b0cde51d87404087576ea70599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
