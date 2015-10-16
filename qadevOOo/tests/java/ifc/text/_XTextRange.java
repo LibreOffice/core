@@ -46,8 +46,6 @@ public class _XTextRange extends MultiMethodTest {
                                             // in MultiMethodTest
     XTextRange oStartRange = null;          // startrange of textrang
     XTextRange oEndRange = null;            // endrange of textrang
-    String startStr = null;                 // string in startrange
-    String endStr = null;                   // string in endrange
 
     /**
     * Retrieves the start range and sets its context to
