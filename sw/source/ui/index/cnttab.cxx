@@ -2017,9 +2017,13 @@ void SwTOXEntryTabPage::dispose()
 // pVoid is used as signal to change all levels of the example
 IMPL_LINK_TYPED(SwTOXEntryTabPage, ModifyClickHdl, Button*, pVoid, void)
 {
-    ModifyHdl(pVoid);
+    OnModify(pVoid);
 }
-IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
+IMPL_LINK_NOARG_TYPED(SwTOXEntryTabPage, ModifyHdl, LinkParamNone*, void)
+{
+    OnModify(nullptr);
+}
+void SwTOXEntryTabPage::OnModify(void* pVoid)
 {
     UpdateDescriptor();
 
@@ -2032,7 +2036,6 @@ IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
         pTOXDlg->CreateOrUpdateExample(
             pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_ENTRY, nCurLevel);
     }
-    return 0;
 }
 
 bool SwTOXEntryTabPage::FillItemSet( SfxItemSet* )
@@ -2362,7 +2365,7 @@ IMPL_LINK_NOARG_TYPED(SwTOXEntryTabPage, AllLevelsHdl, Button*, void)
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
             m_pCurrentForm->SetPattern(i, sNewToken);
 
-        ModifyHdl(this);
+        OnModify(this);
     }
 }
 

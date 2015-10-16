@@ -258,9 +258,9 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        aButtonTexts[TOKEN_END]; // Text of the buttons
     OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     OUString        sCharStyle;
-    Link<SwFormToken&,void> aButtonSelectedHdl;
-    VclPtr<Control>         pActiveCtrl;
-    Link<>          aModifyHdl;
+    Link<SwFormToken&,void>   aButtonSelectedHdl;
+    VclPtr<Control>           pActiveCtrl;
+    Link<LinkParamNone*,void> aModifyHdl;
     OUString        accessibleName;
     OUString        sAdditionalAccnameString1;
     OUString        sAdditionalAccnameString2;
@@ -301,10 +301,9 @@ public:
     void        SetButtonSelectedHdl(const Link<SwFormToken&,void>& rLink)
                 { aButtonSelectedHdl = rLink;}
 
-    void        SetModifyHdl(const Link<>& rLink){aModifyHdl = rLink;}
+    void        SetModifyHdl(const Link<LinkParamNone*,void>& rLink){aModifyHdl = rLink;}
 
-    Control*    GetActiveControl()
-                    { return pActiveCtrl;}
+    Control*    GetActiveControl() { return pActiveCtrl; }
 
     void        InsertAtSelection(const OUString& rText, const SwFormToken& aToken);
     void        RemoveControl(SwTOXButton* pDel, bool bInternalCall = false);
@@ -429,7 +428,8 @@ class SwTOXEntryTabPage : public SfxTabPage
 
     void            WriteBackLevel();
     void            UpdateDescriptor();
-    DECL_LINK(ModifyHdl, void*);
+    DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
+    void OnModify(void*);
     DECL_LINK_TYPED(ModifyClickHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;
