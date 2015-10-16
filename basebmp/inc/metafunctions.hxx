@@ -25,6 +25,8 @@
 #include <vigra/numerictraits.hxx>
 
 #include <functional>
+#include <limits>
+#include <type_traits>
 
 namespace basebmp
 {
@@ -207,7 +209,15 @@ template< typename T > inline T shiftLeft( T v, int shift )
 /// Shift right for positive shift value, and left otherwise
 template< typename T > inline T shiftRight( T v, int shift )
 {
-    return shift > 0 ? v >> shift : v << (-shift);
+    // Avoid undefined behavior and only shift by less than the length in bits
+    // of the promoted left operand:
+    static_assert(
+        std::is_unsigned<T>::value,
+        "must be unsigned for promotedBits and the below ': 0' to be correct");
+    auto const promotedBits = std::numeric_limits<decltype(+T())>::digits;
+    return shift >= 0
+        ? shift < promotedBits ? v >> shift : 0
+        : -shift < promotedBits ? v << (-shift) : 0;
 }
 
 } // namespace basebmp
