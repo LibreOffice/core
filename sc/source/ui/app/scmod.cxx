@@ -1039,7 +1039,19 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
         // ScDocShell::SetFormulaOptions() may check for changed settings, so
         // set the new options here after that has been called.
-        SetFormulaOptions( rOpt );
+        if (!bCalcAll || rOpt.GetWriteCalcConfig())
+        {
+            // CalcConfig is new, didn't change or is global, simply set all.
+            SetFormulaOptions( rOpt );
+        }
+        else
+        {
+            // If "only for current document" was checked, reset those affected
+            // by that setting to previous values.
+            ScFormulaOptions aNewOpt( rOpt);
+            aNewOpt.GetCalcConfig().MergeDocumentSpecific( pFormulaCfg->GetCalcConfig());
+            SetFormulaOptions( aNewOpt);
+        }
     }
 
     // ViewOptions
