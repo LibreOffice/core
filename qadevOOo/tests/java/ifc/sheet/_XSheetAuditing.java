@@ -42,7 +42,6 @@ public class _XSheetAuditing extends MultiMethodTest {
     CellAddress dependentAddress = null;
     XCell xAddress = null;
     XCell xPrecedentAddress = null;
-    XCell xDependentAddress = null;
     XDrawPage xDrawPage = null;
     int elementCount = 0;
 
@@ -76,7 +75,7 @@ public class _XSheetAuditing extends MultiMethodTest {
             throw new StatusException(Status.failed("'XSheetAuditing.Spreadsheet' object relation not found."));
         try {
             xAddress = xSheet.getCellByPosition(address.Column, address.Row);
-            xDependentAddress = xSheet.getCellByPosition(dependentAddress.Column, dependentAddress.Row);
+            xSheet.getCellByPosition(dependentAddress.Column, dependentAddress.Row);
             xPrecedentAddress = xSheet.getCellByPosition(precedentAddress.Column, precedentAddress.Row);
         }
         catch(com.sun.star.lang.IndexOutOfBoundsException e) {
