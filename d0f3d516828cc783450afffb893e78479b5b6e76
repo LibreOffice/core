@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_ef493c90",
+        "filename": "sc/source/ui/view/tabvwsh9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T18:16:48Z",
+      "side": 1,
+      "message": "Rather \u0027We don\u0027t disable this anymore\u0027",
+      "revId": "d0f3d516828cc783450afffb893e78479b5b6e76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
