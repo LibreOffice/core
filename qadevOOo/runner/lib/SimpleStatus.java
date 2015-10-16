@@ -25,19 +25,10 @@ package lib;
  */
 class SimpleStatus {
 
-    /* Test states */
-
-    /**
-     * The constant represents FAILED state.
-     */
-    public static final boolean FAILED = false;
-
-
-
     /**
      * The field is holding state of the status.
      */
-    private final boolean state;
+    private final boolean bSuccessful;
 
     /**
      * The field is holding reason of the status.
@@ -53,8 +44,8 @@ class SimpleStatus {
     /**
      * The constructor initialize state and reason field.
      */
-    protected SimpleStatus( RunState runState, boolean state ) {
-        this.state = state;
+    protected SimpleStatus( RunState runState, boolean bSuccessful ) {
+        this.bSuccessful = bSuccessful;
         this.runState = runState;
         if ( runState == RunState.PASSED ) {
             runStateString = "PASSED";
@@ -70,17 +61,14 @@ class SimpleStatus {
     /**
      * The constructor initialize state and reason field.
      */
-    protected SimpleStatus(String runStateString, boolean state) {
-        this.state = state;
+    protected SimpleStatus(String runStateString, boolean bSuccessful) {
+        this.bSuccessful = bSuccessful;
         this.runState = RunState.USER_DEFINED;
         this.runStateString = runStateString;
     }
 
-    /**
-     * getState implementation. Just returns the state field value.
-     */
-    public boolean getState() {
-        return state;
+    public boolean isSuccessful() {
+        return bSuccessful;
     }
 
     /**
@@ -101,7 +89,7 @@ class SimpleStatus {
      * Get the result: passed or failed.
      */
     public String getStateString() {
-        if (state)
+        if (bSuccessful)
             return "OK";
         return "FAILED";
 

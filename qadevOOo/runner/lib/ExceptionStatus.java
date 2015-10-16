@@ -29,7 +29,7 @@ class ExceptionStatus extends Status {
      * @param t the exception an activity terminated with.
      */
     ExceptionStatus( Throwable t ) {
-        super(RunState.EXCEPTION, FAILED);
+        super(RunState.EXCEPTION, false/*bSuccessful*/);
         String message = t.getMessage();
         if (message != null)
             runStateString = message;

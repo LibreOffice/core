@@ -39,16 +39,16 @@ public class Status extends SimpleStatus {
     /**
      * Construct a status: use runState and state
      * @param runState either PASSED, SKIPPED, etc.
-     * @param state OK or FAILED.
+     * @param bSuccessful OK or FAILED.
      */
-    public Status(RunState runState, boolean state ) {
-        super(runState, state);
+    public Status(RunState runState, boolean bSuccessful ) {
+        super(runState, bSuccessful);
     }
 
     /**
      * Construct a status: use own message and state.
      * @param message An own message for the status.
-     * @param state OK or FAILED.
+     * @param bSuccessful OK or FAILED.
      */
     public Status(String message, boolean state) {
         super( message, state );
@@ -58,11 +58,11 @@ public class Status extends SimpleStatus {
      * This is a factory method for creating a Status representing normal
      * activity termination.
      *
-     * @param state describes a test state (OK if state == true, FAILED
+     * @param bSuccessful describes a test state (OK if state == true, FAILED
      * otherwise).
      */
-    public static Status passed( boolean state ) {
-        return new Status(RunState.PASSED, state );
+    public static Status passed( boolean bSuccessful ) {
+        return new Status(RunState.PASSED, bSuccessful );
     }
 
     /**
@@ -82,8 +82,8 @@ public class Status extends SimpleStatus {
      * @param state describes a test state (OK if state == true, FAILED
      * otherwise).
      */
-    public static Status skipped( boolean state ) {
-        return new Status( RunState.SKIPPED, state );
+    public static Status skipped( boolean bSuccessful ) {
+        return new Status( RunState.SKIPPED, bSuccessful );
     }
 
 
@@ -95,7 +95,7 @@ public class Status extends SimpleStatus {
      * @param reason describes why the activity failed
      */
     public static Status failed(final String reason) {
-        return new Status(reason, FAILED);
+        return new Status(reason, false/*bSuccessful*/);
     }
 
     /**
@@ -122,7 +122,7 @@ public class Status extends SimpleStatus {
      * Checks whether the status state is failed.
      */
     public boolean isFailed() {
-        return !getState();
+        return !isSuccessful();
     }
 
 }
