@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_0f49108c",
+        "filename": "sc/source/ui/view/tabvwsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-16T18:50:58Z",
+      "side": 1,
+      "message": "It\u0027s not about number, but the subtotal function Count2 (or CountA in statusbar UI) instead that counts also text, not only numbers, so literally\n\u0027Text contained: Count2 \u003e\u003d 1\u0027\nbut actually this code determines the number of content cells, regardless of type, so better\n\u0027Content contained: Count2 \u003e\u003d 1\u0027",
+      "revId": "a79f258b1971e1f743ea4abf106ad3084fe98490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
