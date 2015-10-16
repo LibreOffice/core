@@ -4692,6 +4692,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
         return true;
 
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
+SAL_WARN("DEBUG","xText.is()["<<xText.is()<<"] - why is this false sometimes?");
     if (xText.is())
     {
         sal_Int32 nPosition = xText->getCaretPosition();
