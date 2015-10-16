@@ -118,9 +118,9 @@ private:
 
     DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
-    DECL_LINK(implPropertyHdl, void *);
-    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
-    DECL_LINK_TYPED(lateInitCallback, Timer *, void);
+    DECL_LINK_TYPED( implPropertyHdl, LinkParamNone*, void );
+    DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK_TYPED( lateInitCallback, Timer *, void );
     void implControlHdl(Control*);
 
 private:

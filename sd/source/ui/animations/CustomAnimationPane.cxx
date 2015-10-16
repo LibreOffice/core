@@ -2010,10 +2010,9 @@ void CustomAnimationPane::onChangeSpeed()
 }
 
 /// this link is called when the property box is modified by the user
-IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
+IMPL_LINK_NOARG_TYPED(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
     onChangeProperty();
-    return 0;
 }
 
 IMPL_LINK_TYPED( CustomAnimationPane, implClickHdl, Button*, pBtn, void )

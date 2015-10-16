@@ -110,7 +110,7 @@ public:
                                 vcl::Window* pParent,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const OUString& rPresetId,
-                                const Link<>& rModifyHdl );
+                                const Link<LinkParamNone*,void>& rModifyHdl );
 
     sal_Int32 getControlType() const { return mnType; }
 
