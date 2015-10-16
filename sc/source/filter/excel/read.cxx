@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "calcconfig.hxx"
 #include "document.hxx"
 #include "scerrors.hxx"
 #include "fprogressbar.hxx"
@@ -752,6 +753,10 @@ FltError ImportExcel::Read( void )
 
         pD->CalcAfterLoad();
 
+        ScCalcConfig aConfig = pD->GetCalcConfig();
+        aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_A1_XL_A1 );
+        pD->SetCalcConfig( aConfig );
+
         const XclImpAddressConverter& rAddrConv = GetAddressConverter();
         if( rAddrConv.IsTabTruncated() )
             eLastErr = SCWARN_IMPORT_SHEET_OVERFLOW;
@@ -1296,6 +1301,10 @@ FltError ImportExcel8::Read( void )
         PostDocLoad();
 
         pD->CalcAfterLoad();
+
+        ScCalcConfig aConfig = pD->GetCalcConfig();
+        aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_A1_XL_A1 );
+        pD->SetCalcConfig( aConfig );
 
         // import change tracking data
         XclImpChangeTrack aImpChTr( GetRoot(), maStrm );
