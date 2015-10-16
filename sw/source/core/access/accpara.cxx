@@ -389,7 +389,7 @@ void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
     ClearPortionData();
 
     const OUString& rText = GetString();
-
+SAL_WARN("DEBUG","What triggers this _InvalidateContent? bVisibleDataFired["<<bVisibleDataFired<<"] oldText["<<sOldText<<"] curr["<<rText<<"]");
     if( rText != sOldText )
     {
         // The text is changed
@@ -2937,7 +2937,9 @@ sal_Bool SwAccessibleParagraph::replaceText(
             const uno::Reference<text::XTextRange> xRange(
                 SwXTextRange::CreateXTextRange(
                     *pNode->GetDoc(), aStartPos, &aEndPos));
+SAL_WARN("DEBUG","text["<<GetString()<<"] before replacing a portion["<<aStartPos<<"]["<<aEndPos<<"]=["<<xRange->getString()<<"] of it with ["<<sReplacement<<"]");
             xRange->setString(sReplacement);
+SAL_WARN("DEBUG","text["<<GetString()<<"] range["<<xRange->getString()<<"] after replacing. text OUGHT to match modification - not be null");
 
             // delete portion data
             ClearPortionData();
