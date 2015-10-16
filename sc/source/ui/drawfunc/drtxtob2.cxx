@@ -104,7 +104,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, false);
+                SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION);
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );

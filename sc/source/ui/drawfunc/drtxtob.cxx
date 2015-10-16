@@ -344,7 +344,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_THES:
             {
                 OUString aReplaceText;
-                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
+                SFX_REQUEST_ARG(rReq, pItem2, SfxStringItem, SID_THES);
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (!aReplaceText.isEmpty())

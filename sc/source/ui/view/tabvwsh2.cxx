@@ -307,7 +307,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, aNewReq ));
             if ( nNewId != SID_DRAW_CS_ID )
             {
-                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId, false );
+                SFX_REQUEST_ARG(rReq, pEnumCommand, SfxStringItem, nNewId);
                 if ( pEnumCommand )
                 {
                     SfxBindings& rBind = GetViewFrame()->GetBindings();

@@ -2576,11 +2576,11 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
             if( pArgs && pArgs->Count() >= 2 )
             {
-                SFX_REQUEST_ARG( _rRequest, pName, SfxStringItem, FN_INSERT_TABLE, false );
-                SFX_REQUEST_ARG( _rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, false );
-                SFX_REQUEST_ARG( _rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, false );
-                SFX_REQUEST_ARG( _rRequest, pFlags, SfxInt32Item, FN_PARAM_1, false );
-                SFX_REQUEST_ARG( _rRequest, pAuto, SfxStringItem, FN_PARAM_2, false );
+                SFX_REQUEST_ARG(_rRequest, pName, SfxStringItem, FN_INSERT_TABLE);
+                SFX_REQUEST_ARG(_rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN);
+                SFX_REQUEST_ARG(_rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW);
+                SFX_REQUEST_ARG(_rRequest, pFlags, SfxInt32Item, FN_PARAM_1);
+                SFX_REQUEST_ARG(_rRequest, pAuto, SfxStringItem, FN_PARAM_2);
 
                 if ( pName )
                     aTableName = pName->GetValue();
@@ -2772,8 +2772,8 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
             if ( nSel & nsSelectionType::SEL_DRW_TXT )
                 break;
 
-            SFX_REQUEST_ARG( rReq, pPos, SfxUInt16Item, SID_GALLERY_BG_POS, false );
-            SFX_REQUEST_ARG( rReq, pBrush, SvxBrushItem, SID_GALLERY_BG_BRUSH, false );
+            SFX_REQUEST_ARG(rReq, pPos, SfxUInt16Item, SID_GALLERY_BG_POS);
+            SFX_REQUEST_ARG(rReq, pBrush, SvxBrushItem, SID_GALLERY_BG_BRUSH);
             if ( !pPos || !pBrush )
                 break;
 

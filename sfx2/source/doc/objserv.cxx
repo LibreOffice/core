@@ -450,7 +450,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCINFO:
         {
-            SFX_REQUEST_ARG(rReq, pDocInfItem, SfxDocumentInfoItem, SID_DOCINFO, false);
+            SFX_REQUEST_ARG(rReq, pDocInfItem, SfxDocumentInfoItem, SID_DOCINFO);
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
@@ -461,7 +461,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 // no argument containing DocInfo; check optional arguments
                 bool bReadOnly = IsReadOnly();
-                SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY, false);
+                SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY);
                 if ( pROItem )
                     // override readonly attribute of document
                     // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
@@ -573,7 +573,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // TODO/LATER: do the following GUI related actions in standalown method
 
                 // Introduce a status indicator for GUI operation
-                SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, false );
+                SFX_REQUEST_ARG(rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL);
                 if ( !pStatusIndicatorItem )
                 {
                     // get statusindicator
@@ -610,7 +610,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 // Introduce an interaction handler for GUI operation
-                SFX_REQUEST_ARG( rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, false );
+                SFX_REQUEST_ARG(rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER);
                 if ( !pInteractionHandlerItem )
                 {
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -707,7 +707,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( lErr && nErrorCode == ERRCODE_NONE )
             {
-                SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, false );
+                SFX_REQUEST_ARG(rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING);
                 if ( pWarnItem && pWarnItem->GetValue() )
                     nErrorCode = lErr;
             }
@@ -806,8 +806,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE, false);
-            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME, false);
+            SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE);
+            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME);
             if ( pSaveItem )
             {
                 if ( pSaveItem->GetValue() )

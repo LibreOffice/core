@@ -128,10 +128,10 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else if (pArgs->Count() == 4)
         {
-            SFX_REQUEST_ARG (rRequest, pNewName, SfxStringItem, ID_VAL_PAGENAME, false);
-            SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, false);
-            SFX_REQUEST_ARG (rRequest, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK, false);
-            SFX_REQUEST_ARG (rRequest, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ, false);
+            SFX_REQUEST_ARG(rRequest, pNewName, SfxStringItem, ID_VAL_PAGENAME);
+            SFX_REQUEST_ARG(rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT);
+            SFX_REQUEST_ARG(rRequest, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK);
+            SFX_REQUEST_ARG(rRequest, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ);
             AutoLayout aLayout ((AutoLayout)pNewAutoLayout->GetValue ());
             if (aLayout >= AUTOLAYOUT__START
                 && aLayout < AUTOLAYOUT__END)

@@ -112,9 +112,9 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         sal_Int32 nRows = 0;
         OUString sTableStyle;
 
-        SFX_REQUEST_ARG( rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, false );
-        SFX_REQUEST_ARG( rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, false );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, SID_TABLE_STYLE, false );
+        SFX_REQUEST_ARG(rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN);
+        SFX_REQUEST_ARG(rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW);
+        SFX_REQUEST_ARG(rReq, pStyle, SfxStringItem, SID_TABLE_STYLE);
 
         if( pCols )
             nColumns = pCols->GetValue();

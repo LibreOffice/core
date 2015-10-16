@@ -399,8 +399,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
             case SID_STYLE_APPLY:
             {
-                SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, false );
-                SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, false );
+                SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE);
+                SFX_REQUEST_ARG(rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME);
                 if ( pFamilyItem && pNameItem )
                 {
                     com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), com::sun::star::uno::UNO_QUERY);

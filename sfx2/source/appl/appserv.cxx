@@ -346,8 +346,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             if ( pFact )
             {
-                SFX_REQUEST_ARG(rReq, pStringItem,
-                    SfxStringItem, SID_CONFIG, false);
+                SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, SID_CONFIG);
 
                 SfxItemSet aSet(
                     GetPool(), SID_CONFIG, SID_CONFIG );
@@ -482,7 +481,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPTIPS:
         {
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, false);
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsQuickHelpEnabled();
@@ -509,7 +508,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPBALLOONS:
         {
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, false);
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS);
             bool bOn = pOnItem
                             ? pOnItem->GetValue()
                             : !Help::IsBalloonHelpEnabled();
@@ -963,7 +962,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_OPTIONS_TREEDIALOG:
         {
             OUString sPageURL;
-            SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_OPTIONS_PAGEURL, false );
+            SFX_REQUEST_ARG(rReq, pURLItem, SfxStringItem, SID_OPTIONS_PAGEURL);
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
             const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
@@ -1221,7 +1220,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_OFFICE_CHECK_PLZ:
         {
             bool bRet = false;
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, rReq.GetSlot(), false);
+            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, rReq.GetSlot());
 
             if ( pStringItem )
             {

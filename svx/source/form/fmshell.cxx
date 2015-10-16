@@ -492,7 +492,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, false );
+            SFX_REQUEST_ARG(rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS);
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -602,7 +602,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
-            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, false );
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES);
             bool bShow = true;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
@@ -614,7 +614,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_PROPERTIES:
         {
             // PropertyBrowser anzeigen
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot);
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             InterfaceBag aOnlyTheForm;
@@ -628,7 +628,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_CTL_PROPERTIES:
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot);
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
@@ -665,7 +665,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_DESIGN_MODE:
         {
-            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, false);
+            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot);
             bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
             SetDesignMode( bDesignMode );
             if ( m_bDesignMode == bDesignMode )

@@ -538,11 +538,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             const SfxItemSet* pRequestArguments = rRequest.GetArgs();
             if (pRequestArguments)
             {
-                SFX_REQUEST_ARG (rRequest,
-                    pIsActive,
-                    SfxBoolItem,
-                    (sal_uInt16)nSlotId,
-                    false);
+                SFX_REQUEST_ARG(rRequest, pIsActive, SfxBoolItem, (sal_uInt16)nSlotId);
                 bIsActive = pIsActive->GetValue ();
             }
         }

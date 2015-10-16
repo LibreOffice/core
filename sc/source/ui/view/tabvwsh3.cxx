@@ -794,7 +794,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             SCTAB nTab;
 
             ::std::vector < sal_Int32 > aIndexList;
-            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, false );
+            SFX_REQUEST_ARG(rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES);
             if ( pItem )
                 pItem->GetList( aIndexList );
             else

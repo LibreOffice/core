@@ -1359,11 +1359,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                         }
 
-                        SFX_REQUEST_ARG( rReq, pFuncItem, SfxUInt16Item, FN_PARAM_1, false );
-                        SFX_REQUEST_ARG( rReq, pSkipItem, SfxBoolItem, FN_PARAM_2, false );
-                        SFX_REQUEST_ARG( rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3, false );
-                        SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4, false );
-                        SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5, false );
+                        SFX_REQUEST_ARG(rReq, pFuncItem, SfxUInt16Item, FN_PARAM_1);
+                        SFX_REQUEST_ARG(rReq, pSkipItem, SfxBoolItem, FN_PARAM_2);
+                        SFX_REQUEST_ARG(rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3);
+                        SFX_REQUEST_ARG(rReq, pLinkItem, SfxBoolItem, FN_PARAM_4);
+                        SFX_REQUEST_ARG(rReq, pMoveItem, SfxInt16Item, FN_PARAM_5);
                         if ( pFuncItem )
                             nFunction = static_cast<ScPasteFunc>(pFuncItem->GetValue());
                         if ( pSkipItem )
@@ -2475,19 +2475,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OUString aSource;
                 sal_uLong nRefresh=0;
 
-                SFX_REQUEST_ARG( rReq, pFile, SfxStringItem, SID_FILE_NAME, false );
-                SFX_REQUEST_ARG( rReq, pSource, SfxStringItem, FN_PARAM_1, false );
+                SFX_REQUEST_ARG(rReq, pFile, SfxStringItem, SID_FILE_NAME);
+                SFX_REQUEST_ARG(rReq, pSource, SfxStringItem, FN_PARAM_1);
                 if ( pFile && pSource )
                 {
                     aFile = pFile->GetValue();
                     aSource = pSource->GetValue();
-                    SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, SID_FILTER_NAME, false );
+                    SFX_REQUEST_ARG(rReq, pFilter, SfxStringItem, SID_FILTER_NAME);
                     if ( pFilter )
                         aFilter = pFilter->GetValue();
-                    SFX_REQUEST_ARG( rReq, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, false );
+                    SFX_REQUEST_ARG(rReq, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS);
                     if ( pOptions )
                         aOptions = pOptions->GetValue();
-                    SFX_REQUEST_ARG( rReq, pRefresh, SfxUInt32Item, FN_PARAM_2, false );
+                    SFX_REQUEST_ARG(rReq, pRefresh, SfxUInt32Item, FN_PARAM_2);
                     if ( pRefresh )
                         nRefresh = pRefresh->GetValue();
                 }

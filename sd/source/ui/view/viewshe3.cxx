@@ -235,7 +235,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     else if (pArgs->Count() == 1)
     {
         pDocument->StopWorkStartupDelay();
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, false);
+        SFX_REQUEST_ARG(rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT);
         if( pLayout )
         {
             if (ePageKind == PK_NOTES)
@@ -253,10 +253,10 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
 
-        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, false);
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, false);
-        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, false);
-        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, false);
+        SFX_REQUEST_ARG(rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME);
+        SFX_REQUEST_ARG(rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT);
+        SFX_REQUEST_ARG(rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK);
+        SFX_REQUEST_ARG(rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ);
 
         if (CHECK_RANGE (AUTOLAYOUT__START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT__END))
         {

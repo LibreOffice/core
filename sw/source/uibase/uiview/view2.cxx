@@ -360,7 +360,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         OSL_FAIL("control access failed");
     }
 
-    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , false );
+    SFX_REQUEST_ARG(rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
@@ -369,7 +369,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         if ( pName )
         {
             aFileName = pName->GetValue();
-            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , false );
+            SFX_REQUEST_ARG(rReq, pFilter, SfxStringItem, FN_PARAM_FILTER);
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
         }
@@ -405,8 +405,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
 
-        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , false );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , false );
+        SFX_REQUEST_ARG(rReq, pAsLink, SfxBoolItem, FN_PARAM_1);
+        SFX_REQUEST_ARG(rReq, pStyle, SfxStringItem, FN_PARAM_2);
 
         bool bAsLink = false;
         if( nHtmlMode & HTMLMODE_ON )

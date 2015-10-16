@@ -482,11 +482,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( pArgs )
                 {
-                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME, false );
+                    SFX_REQUEST_ARG(rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME);
                     if ( pTemplateItem )
                     {
                         aFileName = pTemplateItem->GetValue();
-                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, false );
+                        SFX_REQUEST_ARG(rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD);
                         if ( pFlagsItem )
                             nFlags = static_cast<SfxTemplateFlags>((sal_uInt16) pFlagsItem->GetValue());
                     }

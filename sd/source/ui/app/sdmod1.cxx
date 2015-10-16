@@ -235,7 +235,7 @@ void SdModule::Execute(SfxRequest& rReq)
             {
                 ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SD_RESSTR(STR_CANT_PERFORM_IN_LIVEMODE))->Execute();
 
-                SFX_REQUEST_ARG( rReq, pLinkItem, SfxLinkItem, SID_DONELINK, false );
+                SFX_REQUEST_ARG(rReq, pLinkItem, SfxLinkItem, SID_DONELINK);
                 if( pLinkItem )
                     pLinkItem->GetValue().Call( 0 );
             }
@@ -274,7 +274,7 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
                 pDoc->StopWorkStartupDelay();
             }
 
-            SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, false);
+            SFX_REQUEST_ARG(rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME);
             SfxViewFrame::LoadDocumentIntoFrame( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
 
             ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
@@ -522,7 +522,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
     if ( SvtModuleOptions().IsImpress() )
     {
         Reference< XFrame > xTargetFrame;
-        SFX_REQUEST_ARG( rReq, pFrmItem, SfxUnoFrameItem, SID_FILLFRAME, false);
+        SFX_REQUEST_ARG(rReq, pFrmItem, SfxUnoFrameItem, SID_FILLFRAME);
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 

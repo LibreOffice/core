@@ -275,7 +275,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             if( rReq.GetArgs() )
             {
-                SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , false );
+                SFX_REQUEST_ARG(rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE);
                 if (pItem)
                 {
                     aNewAttr.Put(*pItem);
@@ -470,7 +470,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, FN_PARAM_1, false);
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, FN_PARAM_1);
 
             if( !pArgs || pItem )
             {
@@ -1113,7 +1113,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_DELETE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, false);
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSlot);
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
             break;
@@ -1125,7 +1125,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_HIDE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, false);
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSlot);
             if ( pItem )
                 pPostItMgr->Hide( pItem->GetValue() );
         }
@@ -1222,7 +1222,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         case SID_THES:
         {
             OUString aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
+            SFX_REQUEST_ARG(rReq, pItem2, SfxStringItem, SID_THES);
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())

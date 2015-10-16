@@ -375,7 +375,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_FM_CREATE_FIELDCONTROL:
             {
-                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
+                SFX_REQUEST_ARG(rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR);
                 OSL_ENSURE( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
 
                 if(pDescriptorItem)

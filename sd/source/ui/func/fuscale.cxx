@@ -179,7 +179,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     }
     else if(mpViewShell && (pArgs->Count () == 1))
     {
-        SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, false);
+        SFX_REQUEST_ARG(rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM);
         mpViewShell->SetZoom (pScale->GetValue ());
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );

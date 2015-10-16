@@ -115,9 +115,9 @@ template<class T> bool checkSfxPoolItem(const SfxPoolItem* pItem)
     return dynamic_cast<const T*>(pItem) != nullptr;
 }
 
-#define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId, bDeep) \
+#define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId) \
         const ItemType *pItem = static_cast<const ItemType*>( \
-                rReq.GetArg( nSlotId, bDeep, checkSfxPoolItem<ItemType> ) )
+                rReq.GetArg( nSlotId, false, checkSfxPoolItem<ItemType> ) )
 #define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId) \
     const ItemType *pItem = static_cast<const ItemType*>( \
         SfxRequest::GetItem( pArgs, nSlotId, false, checkSfxPoolItem<ItemType> ) )

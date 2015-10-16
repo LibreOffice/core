@@ -1010,7 +1010,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         break;
         case SID_SHOWLINES:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
+            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot());
             bSourceLinesEnabled = pItem && pItem->GetValue();
             aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
         }

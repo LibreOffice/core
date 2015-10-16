@@ -273,7 +273,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         case SID_LANGUAGE_STATUS:
         {
             OUString aNewLangTxt;
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , false );
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS);
             if (pItem)
                 aNewLangTxt = pItem->GetValue();
             if (aNewLangTxt == "*" )

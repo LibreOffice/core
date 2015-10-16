@@ -34,8 +34,8 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin,
     , nInventor(0)
     , nIdentifier(0)
 {
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, false );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, false );
+    SFX_REQUEST_ARG(rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR);
+    SFX_REQUEST_ARG(rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER);
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )

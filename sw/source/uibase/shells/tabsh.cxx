@@ -943,9 +943,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             long nCount=0;
             bool bHorizontal=true;
             bool bProportional = false;
-            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, false );
-            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, false );
-            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2, false );
+            SFX_REQUEST_ARG(rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS);
+            SFX_REQUEST_ARG(rReq, pHor, SfxBoolItem, FN_PARAM_1);
+            SFX_REQUEST_ARG(rReq, pProp, SfxBoolItem, FN_PARAM_2);
             if ( pSplit )
             {
                 nCount = pSplit->GetValue();
@@ -985,7 +985,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, false );
+            SFX_REQUEST_ARG(rReq, pType, SfxUInt16Item, FN_PARAM_1);
             if( pType )
             {
                 switch( pType->GetValue() )

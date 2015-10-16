@@ -152,7 +152,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
     {
         case SID_ATTR_UNDO_COUNT:
         {
-            SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, false);
+            SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID);
             std::shared_ptr< comphelper::ConfigurationChanges > batch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Undo::Steps::set(

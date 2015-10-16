@@ -432,7 +432,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         OUString aIconMediaType;
         uno::Reference< io::XInputStream > xIconMetaFile;
 
-        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
+        SFX_REQUEST_ARG(rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT);
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
             SvGlobalName aClassName = pNameItem->GetValue();
