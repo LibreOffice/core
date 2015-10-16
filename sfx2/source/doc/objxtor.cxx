@@ -1105,8 +1105,8 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, false);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME);
     OUString aURL;
     OUString aTarget("_blank");
     if ( pFileNameItem )

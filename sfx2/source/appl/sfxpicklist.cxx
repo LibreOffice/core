@@ -179,7 +179,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         return;
 
     // add no document that forbids this (for example Message-Body)
-    SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );
+    SFX_ITEMSET_ARG(pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST);
     if ( pPicklistItem && !pPicklistItem->GetValue() )
         return;
 
@@ -200,7 +200,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
-        SFX_ITEMSET_ARG( pMed->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+        SFX_ITEMSET_ARG(pMed->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
         if ( pEncryptionDataItem )
         {
             // encrypted document, will show a generic document icon instead

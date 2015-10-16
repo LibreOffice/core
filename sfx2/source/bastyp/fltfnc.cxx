@@ -574,7 +574,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
             pOldFilter = 0;
         else
         {
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
+            SFX_ITEMSET_ARG(rMedium.GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE);
             if ( ( pOldFilter->GetFilterFlags() & SfxFilterFlags::PACKED ) && pSalvageItem )
                 // Salvage is always done without packing
                 pOldFilter = 0;
@@ -584,7 +584,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     const SfxFilter* pFilter = pOldFilter;
 
     bool bPreview = rMedium.IsPreview_Impl();
-    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, false);
+    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER);
     if ( bPreview && rMedium.IsRemote() && ( !pReferer || !pReferer->GetValue().match("private:searchfolder:") ) )
         return ERRCODE_ABORT;
 
@@ -621,7 +621,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     }
 
     bool bHidden = bPreview;
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, false);
+    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS);
     if ( !bHidden && pFlags )
     {
         OUString aFlags( pFlags->GetValue() );

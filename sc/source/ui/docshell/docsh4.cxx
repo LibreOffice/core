@@ -2365,7 +2365,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
 
         if ( GetMedium() )
         {
-            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
+            SFX_ITEMSET_ARG(GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             {
                 aArgs.realloc( 2 );

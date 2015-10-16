@@ -708,7 +708,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_GALLERY_FORMATS:
         {
-            SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, false );
+            SFX_ITEMSET_ARG(pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS);
             if ( !pGalleryItem )
                 break;
 

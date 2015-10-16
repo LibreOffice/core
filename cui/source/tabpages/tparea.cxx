@@ -482,7 +482,7 @@ void SvxTransparenceTabPage::ChangesApplied()
 
 void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,false);
+    SFX_ITEMSET_ARG(&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
 
@@ -577,8 +577,8 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
 
 void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
+    SFX_ITEMSET_ARG(&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE);
 
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
@@ -851,8 +851,8 @@ void SvxAreaTabPage::Construct()
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_Int32 nCount(0);
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
-    SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
+    SFX_ITEMSET_ARG(&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG(&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     if (pPosItem)
@@ -2447,16 +2447,16 @@ void SvxAreaTabPage::PointChanged( vcl::Window* , RECT_POINT eRcPt )
 
 void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
-    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
+    SFX_ITEMSET_ARG(&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE);
+    SFX_ITEMSET_ARG(&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST);
+    SFX_ITEMSET_ARG(&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST);
+    SFX_ITEMSET_ARG(&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST);
+    SFX_ITEMSET_ARG(&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS);
 
     //UUUU
-    SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT, false);
+    SFX_ITEMSET_ARG(&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());

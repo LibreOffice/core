@@ -568,7 +568,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     {
         if (GetMedium())
         {
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+            SFX_ITEMSET_ARG(rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
             nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
         }
 
@@ -860,7 +860,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             aValues[0].Name = "FilterName";
                                             aValues[0].Value <<= OUString( GetMedium()->GetFilter()->GetFilterName() );
 
-                                            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
+                                            SFX_ITEMSET_ARG(GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
                                             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
                                             {
                                                 aValues.realloc( 2 );
@@ -983,7 +983,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 
     if (GetMedium())
     {
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+        SFX_ITEMSET_ARG(rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
         nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
     }
 
@@ -1052,7 +1052,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     //  So make sure that we transfer the whole file with CreateFileStream
     rMedium.GetPhysicalName();  //! Call CreateFileStream directly, if available
 
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
     nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
 
     const SfxFilter* pFilter = rMedium.GetFilter();

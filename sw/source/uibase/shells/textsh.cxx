@@ -1042,8 +1042,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if( RET_OK == pDlg->Execute() )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
+            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP);
+            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
             if ( pFontItem )
             {
                 aNewFont.SetName( pFontItem->GetFamilyName() );

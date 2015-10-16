@@ -1213,7 +1213,7 @@ bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 {
     if ( pObjShell && pObjShell->GetMedium() )
     {
-        SFX_ITEMSET_ARG( pObjShell->GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, false );
+        SFX_ITEMSET_ARG(pObjShell->GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY);
         if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
             return true;
     }

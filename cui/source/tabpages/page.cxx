@@ -1758,13 +1758,13 @@ bool SvxPageDescPage::IsMarginOutOfRange()
 
 void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,false);
-    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,false);
-    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END,false);
-    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST,false);
+    SFX_ITEMSET_ARG(&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE);
+    SFX_ITEMSET_ARG(&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START);
+    SFX_ITEMSET_ARG(&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END);
+    SFX_ITEMSET_ARG(&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST);
 
     //UUUU
-    SFX_ITEMSET_ARG (&aSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES, false);
+    SFX_ITEMSET_ARG(&aSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES);
 
     if (pModeItem)
     {

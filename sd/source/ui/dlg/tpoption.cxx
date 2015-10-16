@@ -662,7 +662,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
 
 void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,false);
+    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

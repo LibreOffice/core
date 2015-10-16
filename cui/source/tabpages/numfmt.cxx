@@ -1808,8 +1808,8 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, b
 
 void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO,false);
-    SFX_ITEMSET_ARG (&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE,false);
+    SFX_ITEMSET_ARG(&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO);
+    SFX_ITEMSET_ARG(&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE);
     if (pNumberInfoItem)
         SetNumberFormatList(*pNumberInfoItem);
     if (pLinkItem)

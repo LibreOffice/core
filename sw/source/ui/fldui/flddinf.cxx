@@ -82,7 +82,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCo
     //enable 'active' language selection
     m_pFormatLB->SetShowLanguageControl(true);
 
-    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, false );
+    SFX_ITEMSET_ARG(&rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO);
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;
 }

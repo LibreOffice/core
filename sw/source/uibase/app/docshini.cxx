@@ -502,7 +502,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
         if(GetCreateMode() != SfxObjectCreateMode::ORGANIZER)
         {
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+            SFX_ITEMSET_ARG(rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
             m_nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
         }
 

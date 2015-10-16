@@ -1709,8 +1709,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
+            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP);
+            SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );

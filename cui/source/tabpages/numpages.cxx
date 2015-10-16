@@ -532,7 +532,7 @@ IMPL_LINK_NOARG_TYPED(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
 
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
+    SFX_ITEMSET_ARG(&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT);
 
     if (pBulletCharFmt)
         SetCharFormatName( pBulletCharFmt->GetValue());
@@ -786,8 +786,8 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 
 void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,false);
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
+    SFX_ITEMSET_ARG(&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT);
+    SFX_ITEMSET_ARG(&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT);
 
 
     if (pNumCharFmt &&pBulletCharFmt)
@@ -3671,10 +3671,10 @@ void SvxNumOptionsTabPage::SetModified(bool bRepaint)
 
 void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,false);
-    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,false);
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
-    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,false);
+    SFX_ITEMSET_ARG(&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX);
+    SFX_ITEMSET_ARG(&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT);
+    SFX_ITEMSET_ARG(&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT);
+    SFX_ITEMSET_ARG(&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM);
 
     if (pNumCharFmt &&pBulletCharFmt)
         SetCharFmts( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
@@ -3693,7 +3693,7 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 void SvxNumPositionTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,false);
+    SFX_ITEMSET_ARG(&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM);
 
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));

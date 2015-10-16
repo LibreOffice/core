@@ -512,7 +512,7 @@ void SvxConnectionPage::FillTypeLB()
 }
 void SvxConnectionPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,false);
+    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST);
     if (pOfaPtrItem)
         SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()) );
 

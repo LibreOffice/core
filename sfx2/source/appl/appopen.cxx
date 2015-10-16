@@ -232,12 +232,12 @@ sal_uInt32 CheckPasswd_Impl
                         {
                             // use the comphelper password helper to request a password
                             OUString aPassword;
-                            SFX_ITEMSET_ARG( pSet, pPasswordItem, SfxStringItem, SID_PASSWORD, false);
+                            SFX_ITEMSET_ARG(pSet, pPasswordItem, SfxStringItem, SID_PASSWORD);
                             if ( pPasswordItem )
                                 aPassword = pPasswordItem->GetValue();
 
                             uno::Sequence< beans::NamedValue > aEncryptionData;
-                            SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
+                            SFX_ITEMSET_ARG(pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
                             if ( pEncryptionDataItem )
                                 pEncryptionDataItem->GetValue() >>= aEncryptionData;
 

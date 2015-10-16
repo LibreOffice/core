@@ -343,13 +343,13 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUS
 uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+    SFX_ITEMSET_ARG(GetMedium().GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
     else
     {
         // try to get the encryption data from the password
-        SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
+        SFX_ITEMSET_ARG(GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
         if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             aEncryptionData = GenerateEncryptionData( pPasswordItem->GetValue() );
     }

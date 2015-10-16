@@ -1165,7 +1165,7 @@ void SvxHFPage::EnableDynamicSpacing()
 void SvxHFPage::PageCreated(const SfxAllItemSet &rSet)
 {
     //UUUU
-    SFX_ITEMSET_ARG (&rSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES, false);
+    SFX_ITEMSET_ARG(&rSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES);
 
     if(pSupportDrawingLayerFillStyleItem)
     {

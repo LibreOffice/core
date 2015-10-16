@@ -277,14 +277,14 @@ bool SfxObjectShell::APISaveAs_Impl
     if ( GetMedium() )
     {
         OUString aFilterName;
-        SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
+        SFX_ITEMSET_ARG(aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME);
         if( pFilterNameItem )
         {
             aFilterName = pFilterNameItem->GetValue();
         }
         else
         {
-            SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, false );
+            SFX_ITEMSET_ARG(aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE);
             if ( pContentTypeItem )
             {
                 const SfxFilter* pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
@@ -310,7 +310,7 @@ bool SfxObjectShell::APISaveAs_Impl
             SfxObjectShellRef xLock( this ); // ???
 
             // use the title that is provided in the media descriptor
-            SFX_ITEMSET_ARG( aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE, false );
+            SFX_ITEMSET_ARG(aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE);
             if ( pDocTitleItem )
                 getDocProperties()->setTitle( pDocTitleItem->GetValue() );
 
@@ -503,7 +503,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, false);
+                    SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO);
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
@@ -565,7 +565,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE )
                 {
                     // in case of plugin mode the SaveAs operation means SaveTo
-                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, false );
+                    SFX_ITEMSET_ARG(GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY);
                     if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
                         rReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
                 }
@@ -636,8 +636,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
 
                 bool bPreselectPassword = false;
-                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
-                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, false );
+                SFX_ITEMSET_ARG(GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
+                SFX_ITEMSET_ARG(GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD);
                 if ( pOldEncryptionDataItem || pOldPasswordItem )
                     bPreselectPassword = true;
 

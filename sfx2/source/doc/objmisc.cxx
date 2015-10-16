@@ -835,7 +835,7 @@ OUString SfxObjectShell::GetTitle
 
         if ( pMed )
         {
-            SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE, false );
+            SFX_ITEMSET_ARG(pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE);
             if ( pNameItem )
                 aTitle = pNameItem->GetValue();
         }
@@ -862,7 +862,7 @@ OUString SfxObjectShell::GetTitle
         // If a specific title was given at open:
         // important for URLs: use INetProtocol::File for which the set title is not
         // considered. (See below, analysis of aTitleMap_Impl)
-        SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE, false );
+        SFX_ITEMSET_ARG(pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE);
         if ( pNameItem )
             return X( pNameItem->GetValue() );
     }
@@ -1024,7 +1024,7 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
     SfxApplication* pSfxApp = SfxGetpApp();
     if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame().IsClosing_Impl() )
     {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN);
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
             sal_uInt16 nId = pImp->nEventId;
@@ -1162,7 +1162,7 @@ void SfxObjectShell::InitOwnModel_Impl()
 {
     if ( !pImp->bModelInitialized )
     {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE);
         if ( pSalvageItem )
         {
             pImp->aTempName = pMedium->GetPhysicalName();
@@ -1197,7 +1197,7 @@ void SfxObjectShell::InitOwnModel_Impl()
 void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 {
     bool bSetModifiedTRUE = false;
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
+    SFX_ITEMSET_ARG(pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE);
     if( ( nFlags & SfxLoadedFlags::MAINDOCUMENT ) && !(pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT )
         && !(pImp->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ))
     {
@@ -1258,7 +1258,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 
         if ( (pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) && (pImp->nLoadedFlags & SfxLoadedFlags::IMAGES ) )
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
+            SFX_ITEMSET_ARG(pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE);
             bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
 
             // closing the streams on loading should be under control of SFX!
@@ -1296,7 +1296,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
     if ( pTmpMedium )
     {
         OUString aName( pTmpMedium->GetName() );
-        SFX_ITEMSET_ARG( pTmpMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME, false);
+        SFX_ITEMSET_ARG(pTmpMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME);
         OUString aTemplateName;
         if ( pTemplNamItem )
             aTemplateName = pTemplNamItem->GetValue();
@@ -1342,7 +1342,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             assert(pMedium != 0);
             if( ok )
             {
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
+                SFX_ITEMSET_ARG(pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE);
                 bool bSalvage = pSalvageItem != nullptr;
 
                 if ( !bSalvage )
@@ -1685,7 +1685,7 @@ bool SfxObjectShell::IsPreview() const
         return false;
 
     bool bPreview = false;
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, false);
+    SFX_ITEMSET_ARG(pMedium->GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS);
     if ( pFlags )
     {
         // Distributed values among individual items
@@ -1697,7 +1697,7 @@ bool SfxObjectShell::IsPreview() const
 
     if ( !bPreview )
     {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pItem, SfxBoolItem, SID_PREVIEW, false);
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(), pItem, SfxBoolItem, SID_PREVIEW);
         if ( pItem )
             bPreview = pItem->GetValue();
     }
@@ -1750,7 +1750,7 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
     vcl::Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, false );
+    SFX_ITEMSET_ARG(pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME);
     if ( pUnoItem )
     {
         uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
@@ -1760,7 +1760,7 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     if ( !pWindow )
     {
         SfxFrame* pFrame = 0;
-        SFX_ITEMSET_ARG( pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME, false );
+        SFX_ITEMSET_ARG(pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME);
         if( pFrameItem && pFrameItem->GetFrame() )
             // get target frame from ItemSet
             pFrame = pFrameItem->GetFrame();
@@ -1783,7 +1783,7 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     if ( pWindow )
     {
         // this frame may be invisible, show it if it is allowed
-        SFX_ITEMSET_ARG( pSet, pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
+        SFX_ITEMSET_ARG(pSet, pHiddenItem, SfxBoolItem, SID_HIDDEN);
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
             pWindow->Show();
@@ -1861,7 +1861,7 @@ sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
     OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, false);
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE);
         if ( pMacroModeItem )
             nImposedExecMode = pMacroModeItem->GetValue();
     }

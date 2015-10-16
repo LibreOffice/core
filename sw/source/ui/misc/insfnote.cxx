@@ -116,8 +116,8 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
     if (RET_OK == pDlg->Execute())
     {
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, false );
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
+        SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP);
+        SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
         if ( pItem )
         {
             m_pNumberCharEdit->SetText( pItem->GetValue() );

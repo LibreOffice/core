@@ -1509,7 +1509,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
 void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
+    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE);
 
     if (pFlagItem)
     {

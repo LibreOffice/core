@@ -2349,8 +2349,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, false );
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
+                    SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP);
+                    SFX_ITEMSET_ARG(pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT);
 
                     if ( pItem && pFontItem )
                     {

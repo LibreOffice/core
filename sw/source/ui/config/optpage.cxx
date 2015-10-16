@@ -515,8 +515,8 @@ IMPL_LINK_NOARG_TYPED(SwAddPrinterTabPage, SelectHdl, ListBox&, void)
 
 void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,false);
+    SFX_ITEMSET_ARG(&aSet,pListItem,SfxBoolItem,SID_FAX_LIST);
+    SFX_ITEMSET_ARG(&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE);
     if (pPreviewItem)
     {
         SetPreview(pPreviewItem->GetValue());
@@ -1089,7 +1089,7 @@ IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
 
 void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE, false);
+    SFX_ITEMSET_ARG(&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE);
     if (pFlagItem)
         SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
 }
@@ -1306,7 +1306,7 @@ IMPL_LINK_NOARG_TYPED(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
 
 void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
+    SFX_ITEMSET_ARG(&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
@@ -1411,7 +1411,7 @@ VclPtr<SfxTabPage> SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const
 
 void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
+    SFX_ITEMSET_ARG(&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }

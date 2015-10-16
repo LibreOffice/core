@@ -1542,7 +1542,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
         if(pMedium && pMedium->IsStorage())
         {
           SfxItemSet * pSet = pMedium->GetItemSet();
-          SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
+          SFX_ITEMSET_ARG(pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
           uno::Sequence < beans::NamedValue > aEncryptionData;
           if (pEncryptionDataItem)
               pEncryptionDataItem->GetValue() >>= aEncryptionData;

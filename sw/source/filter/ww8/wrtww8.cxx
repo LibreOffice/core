@@ -2987,7 +2987,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
     if ( mpMedium )
     {
-        SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+        SFX_ITEMSET_ARG(mpMedium->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
         if ( pEncryptionDataItem && ( pEncryptionDataItem->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
         {
             OSL_ENSURE( false, "Unexpected EncryptionData!" );
@@ -2997,7 +2997,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
         if ( !aEncryptionData.getLength() )
         {
             // try to generate the encryption data based on password
-            SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
+            SFX_ITEMSET_ARG(mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() && pPasswordItem->GetValue().getLength() <= 15 )
             {
                 // Generate random number with a seed of time as salt.

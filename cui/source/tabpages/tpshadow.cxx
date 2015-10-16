@@ -201,7 +201,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_Int32 nPos;
     sal_Int32 nCount;
 
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
+    SFX_ITEMSET_ARG(&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
 
@@ -564,9 +564,9 @@ void SvxShadowTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
 
 void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
+    SFX_ITEMSET_ARG(&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE);
+    SFX_ITEMSET_ARG(&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());

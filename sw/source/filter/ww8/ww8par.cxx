@@ -5526,7 +5526,7 @@ namespace
     uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib* pWwFib )
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+        SFX_ITEMSET_ARG(rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 
@@ -5585,7 +5585,7 @@ namespace
     uno::Sequence< beans::NamedValue > InitStd97Codec( ::msfilter::MSCodec_Std97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium )
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+        SFX_ITEMSET_ARG(rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 

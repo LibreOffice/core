@@ -557,7 +557,7 @@ void SvxLineTabPage::FillListboxes()
 
 void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,false);
+    SFX_ITEMSET_ARG(&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     if( m_nDlgType == 0 && m_pDashList.is() )
@@ -1812,14 +1812,14 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
-    SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
-    SFX_ITEMSET_ARG (&aSet,pSdrObjListItem,OfaPtrItem,SID_OBJECT_LIST,false);
-    SFX_ITEMSET_ARG (&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET,false);
-    SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,false);
+    SFX_ITEMSET_ARG(&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE);
+    SFX_ITEMSET_ARG(&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST);
+    SFX_ITEMSET_ARG(&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST);
+    SFX_ITEMSET_ARG(&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE);
+    SFX_ITEMSET_ARG(&aSet,pSdrObjListItem,OfaPtrItem,SID_OBJECT_LIST);
+    SFX_ITEMSET_ARG(&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET);
+    SFX_ITEMSET_ARG(&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());

@@ -1277,7 +1277,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
-        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, false );
+        SFX_ITEMSET_ARG(&rSet, pItem, SfxPoolItem, nWhich);
         if ( pItem ) //???
         {
             sal_uInt16 nSubCount = pType->nAttribs;
@@ -1329,7 +1329,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
-        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, false );
+        SFX_ITEMSET_ARG(&rSet, pItem, SfxPoolItem, nWhich);
         if ( pItem ) //???
         {
             sal_uInt16 nSubCount = rArg.pType->nAttribs;

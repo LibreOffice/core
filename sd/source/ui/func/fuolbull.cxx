@@ -68,7 +68,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     }
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-    SFX_ITEMSET_ARG( pArgs, pPageItem, SfxStringItem, FN_PARAM_1, false );
+    SFX_ITEMSET_ARG(pArgs, pPageItem, SfxStringItem, FN_PARAM_1);
 
     if ( !pArgs || pPageItem )
     {

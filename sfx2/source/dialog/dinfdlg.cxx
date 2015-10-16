@@ -712,7 +712,7 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     m_pKeywordsEd->SetText( m_pInfoItem->getKeywords() );
     m_pCommentEd->SetText( m_pInfoItem->getDescription() );
 
-    SFX_ITEMSET_ARG( rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, false );
+    SFX_ITEMSET_ARG(rSet, pROItem, SfxBoolItem, SID_DOC_READONLY);
     if ( pROItem && pROItem->GetValue() )
     {
         m_pTitleEd->SetReadOnly();
@@ -919,7 +919,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
         SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
         if (!pMedSet)
             break;
-        SFX_ITEMSET_ARG( pMedSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
+        SFX_ITEMSET_ARG(pMedSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA);
         uno::Sequence< beans::NamedValue > aEncryptionData;
         if (pEncryptionDataItem)
             pEncryptionDataItem->GetValue() >>= aEncryptionData;
@@ -1154,7 +1154,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
         static_cast<const SfxDocumentInfoItem &>(rItemSet.Get( SID_DOCINFO ));
 
 #ifdef DBG_UTIL
-    SFX_ITEMSET_ARG( &rItemSet, pURLItem, SfxStringItem, SID_BASEURL, false );
+    SFX_ITEMSET_ARG(&rItemSet, pURLItem, SfxStringItem, SID_BASEURL);
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
 #endif
 

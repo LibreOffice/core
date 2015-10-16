@@ -2596,7 +2596,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
     // actually it runs always in window mode in case of ActiveX control
     if ( !maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium() )
     {
-        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, false );
+        SFX_ITEMSET_ARG(mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY);
         if ( pItem && pItem->GetValue() )
         {
             // this is a plugin/activex mode, no toolbars should be visible during slide show

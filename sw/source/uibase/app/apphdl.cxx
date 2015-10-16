@@ -701,9 +701,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // update fixed fields
                 if (pDocSh->GetMedium())
                 {
-                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
-                        pTemplateItem, SfxBoolItem,
-                        SID_TEMPLATE, false);
+                    SFX_ITEMSET_ARG(pDocSh->GetMedium()->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
                         pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(false, 0);
@@ -714,7 +712,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // Update all FIX-Date/Time fields
                 if( pWrtSh )
                 {
-                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+                    SFX_ITEMSET_ARG(pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
                     bool bUpdateFields = true;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = false;
