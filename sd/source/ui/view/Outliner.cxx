@@ -611,6 +611,7 @@ bool Outliner::SearchAndReplaceAll()
         return true;
     }
 
+    std::vector<SearchSelection> aSelections;
     if (pViewShell->ISA(OutlineViewShell))
     {
         // Put the cursor to the beginning/end of the outliner.
@@ -633,7 +634,6 @@ bool Outliner::SearchAndReplaceAll()
 
         // Search/replace until the end of the document is reached.
         bool bFoundMatch;
-        std::vector<SearchSelection> aSelections;
         do
         {
             bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
@@ -679,6 +679,19 @@ bool Outliner::SearchAndReplaceAll()
         // Find-all, tiled rendering and we have at least one match.
         OString aPayload = OString::number(mnStartPageIndex);
         pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+
+        // Emit a selection callback here:
+        // 1) The original one is no longer valid, as we there was a SET_PART in between
+        // 2) The underlying editeng will only talk about the first match till
+        // it doesn't support multi-selection.
+        std::vector<OString> aRectangles;
+        for (const SearchSelection& rSelection : aSelections)
+        {
+            if (rSelection.m_nPage == mnStartPageIndex)
+                aRectangles.push_back(rSelection.m_aRectangles);
+        }
+        OString sRectangles = comphelper::string::join("; ", aRectangles);
+        pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
     }
 
     mnStartPageIndex = (sal_uInt16)-1;
