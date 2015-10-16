@@ -20,9 +20,10 @@
 #ifndef INCLUDED_XMLOFF_XMLCNIMP_HXX
 #define INCLUDED_XMLOFF_XMLCNIMP_HXX
 
-#include <xmloff/dllapi.h>
-#include <sal/types.h>
 #include <memory>
+
+#include <rtl/ustring.hxx>
+#include <xmloff/dllapi.h>
 
 class SvXMLAttrCollection;
 

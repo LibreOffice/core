@@ -20,6 +20,7 @@
 #define INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
 
 #include <formula/formuladllapi.h>
+#include <rtl/ustring.hxx>
 
 namespace formula
 {

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX
 #define INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX
 
+#include <com/sun/star/rendering/Viewstate.hpp>
 #include <sal/types.h>
 
 #include <memory>

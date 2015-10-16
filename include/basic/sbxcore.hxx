@@ -20,11 +20,11 @@
 #ifndef INCLUDED_BASIC_SBXCORE_HXX
 #define INCLUDED_BASIC_SBXCORE_HXX
 
-#include <tools/rtti.hxx>
-#include <tools/ref.hxx>
-
-#include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
+#include <basic/sbxdef.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/ref.hxx>
+#include <tools/rtti.hxx>
 
 class SvStream;
 

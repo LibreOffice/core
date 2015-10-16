@@ -22,6 +22,7 @@
 
 #include <basegfx/raster/bpixelraster.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <osl/diagnose.h>
 
 namespace basegfx
 {

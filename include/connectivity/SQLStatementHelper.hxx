@@ -22,6 +22,7 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ustrbuf.hxx>
 
 namespace dbtools
 {

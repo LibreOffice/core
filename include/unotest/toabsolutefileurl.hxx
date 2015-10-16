@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTEST_TOABSOLUTEFILEURL_HXX
 #define INCLUDED_UNOTEST_TOABSOLUTEFILEURL_HXX
 
-#include <sal/config.h>
+#include <rtl/ustring.hxx>
 
 #include <unotest/detail/unotestdllapi.hxx>
 

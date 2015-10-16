@@ -25,6 +25,8 @@
 // later.
 #include <vector>
 
+#include <sal/types.h>
+
 namespace EEngineData
 {
     // spell checking wrong vector containing the redlining data

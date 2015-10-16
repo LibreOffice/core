@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SALGTYPE_HXX
 #define INCLUDED_VCL_SALGTYPE_HXX
 
+#include <sal/types.h>
+
 typedef sal_uInt32 SalColor;
 #define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
 #define SALCOLOR_RED( n )           ((sal_uInt8)((n)>>16))

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_APPENDUNIXSHELLWORD_HXX
 #define INCLUDED_TOOLS_APPENDUNIXSHELLWORD_HXX
 
-#include <sal/config.h>
+#include <rtl/strbuf.hxx>
 
 #if defined UNX
 #include <tools/toolsdllapi.h>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_GETPROCESSWORKINGDIR_HXX
 #define INCLUDED_TOOLS_GETPROCESSWORKINGDIR_HXX
 
-#include <sal/config.h>
+#include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
 
 

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_GLOBL3D_HXX
 #define INCLUDED_SVX_GLOBL3D_HXX
 
+#include <sal/types.h>
+
 const sal_uInt32 E3dInventor = sal_uInt32('E')*0x00000001+
                            sal_uInt32('3')*0x00000100+
                            sal_uInt32('D')*0x00010000+
