@@ -484,7 +484,9 @@ public:
     void testSetFormula();
 
     void testTdf97369();
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION == 1050 ) )
     void testTdf97587();
+#endif
 
     void testEmptyCalcDocDefaults();
 
@@ -550,7 +552,9 @@ public:
     CPPUNIT_TEST(testFuncIF);
     CPPUNIT_TEST(testFuncCHOOSE);
     CPPUNIT_TEST(testFuncIFERROR);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
+#endif
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
     CPPUNIT_TEST(testRefR1C1WholeCol);
     CPPUNIT_TEST(testRefR1C1WholeRow);
@@ -600,20 +604,30 @@ public:
     CPPUNIT_TEST(testPivotTable);
     CPPUNIT_TEST(testPivotTableLabels);
     CPPUNIT_TEST(testPivotTableDateLabels);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testPivotTableFilters);
+#endif
     CPPUNIT_TEST(testPivotTableNamedSource);
     CPPUNIT_TEST(testPivotTableCache);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testPivotTableDuplicateDataFields);
+#endif
     CPPUNIT_TEST(testPivotTableNormalGrouping);
     CPPUNIT_TEST(testPivotTableNumberGrouping);
     CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testPivotTableEmptyRows);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testPivotTableTextNumber);
+#endif
     CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
     CPPUNIT_TEST(testPivotTableNumStability);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testPivotTableFieldReference);
+#endif
     CPPUNIT_TEST(testPivotTableDocFunc);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testPivotTableRepeatItemLabels);
+#endif
     CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
@@ -733,8 +747,11 @@ public:
     CPPUNIT_TEST(testFormulaErrorPropagation);
     CPPUNIT_TEST(testSetFormula);
     CPPUNIT_TEST(testTdf97369);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION == 1050 ) )
     CPPUNIT_TEST(testTdf97587);
+#endif
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:

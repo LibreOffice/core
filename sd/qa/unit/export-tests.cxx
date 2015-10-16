@@ -82,7 +82,9 @@ class SdExportTest : public SdModelTestBaseXML
 {
 public:
     void testN821567();
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1070 ) )
     void testMediaEmbedding();
+#endif
     void testFdo84043();
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
@@ -96,7 +98,9 @@ public:
     CPPUNIT_TEST_SUITE(SdExportTest);
 
     CPPUNIT_TEST(testN821567);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1070 ) )
     CPPUNIT_TEST(testMediaEmbedding);
+#endif
     CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
@@ -198,6 +202,8 @@ void SdExportTest::testTransparentBackground()
     xDocShRef->DoClose();
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1070 ) )
+
 void SdExportTest::testMediaEmbedding()
 {
     if (!OpenGLWrapper::isVCLOpenGLEnabled())
@@ -232,6 +238,8 @@ void SdExportTest::testMediaEmbedding()
 
     xDocShRef->DoClose();
 }
+
+#endif
 
 void SdExportTest::testFdo84043()
 {

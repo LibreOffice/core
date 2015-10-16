@@ -150,9 +150,11 @@ public:
 #endif
     void testSheetProtectionODS();
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
     void testPivotTableMedianODS();
+#endif
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
@@ -242,9 +244,11 @@ public:
     CPPUNIT_TEST(testRelativePathsODS);
 #endif
     CPPUNIT_TEST(testSheetProtectionODS);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
     CPPUNIT_TEST(testPivotTableMedianODS);
+#endif
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSupBookVirtualPathXLS);
 #endif
@@ -2759,6 +2763,8 @@ void ScExportTest::testSheetProtectionODS()
     xDocSh2->DoClose();
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+
 void ScExportTest::testPivotTableXLSX()
 {
     struct
@@ -3053,6 +3059,8 @@ void ScExportTest::testPivotTableMedianODS()
 
     xDocSh2->DoClose();
 }
+
+#endif // ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
 
 void ScExportTest::testFunctionsExcel2010ODS()
 {

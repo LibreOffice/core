@@ -118,6 +118,8 @@ DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 
 #if !defined(_WIN32)
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
 {
     CPPUNIT_ASSERT(!mxComponent.is());
@@ -452,6 +454,8 @@ DECLARE_OOXMLIMPORT_TEST(testInk, "ink.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
 }
 
+#endif
+
 DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
 {
     /*
@@ -575,6 +579,8 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getSize().Height);
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation.docx")
 {
     // The problem was that (due to incorrect handling of rotation inside
@@ -596,6 +602,8 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShapeDescriptor->getShapeType());
 }
 
+#endif
+
 DECLARE_OOXMLIMPORT_TEST(testTableWidth, "table_width.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -608,6 +616,8 @@ DECLARE_OOXMLIMPORT_TEST(testTableWidth, "table_width.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrames->getByIndex(0), "FrameWidthPercent"));
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_OOXMLIMPORT_TEST(testN820788, "n820788.docx")
 {
     // The problem was that AutoSize was not enabled for the text frame.
@@ -617,6 +627,8 @@ DECLARE_OOXMLIMPORT_TEST(testN820788, "n820788.docx")
     // This was text::SizeType::FIX.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
 }
+
+#endif
 
 DECLARE_OOXMLIMPORT_TEST(testN820504, "n820504.docx")
 {

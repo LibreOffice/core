@@ -384,6 +384,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
     }
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-color.ott", "one-empty-address.ods", "one-empty-address")
 {
     executeMailMerge();
@@ -410,6 +412,8 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]", "family"));
     CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties", "stroke-color"));
 }
+
+#endif
 
 DECLARE_FILE_MAILMERGE_TEST(testSimpleMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses")
 {

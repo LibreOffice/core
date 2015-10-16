@@ -58,7 +58,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport2 \
     CppunitTest_sw_ooxmlexport3 \
     CppunitTest_sw_ooxmlexport4 \
-    CppunitTest_sw_ooxmlexport5 \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_sw_ooxmlexport5) \
     CppunitTest_sw_ooxmlexport6 \
     CppunitTest_sw_ooxmlexport7 \
     CppunitTest_sw_ooxmlexport8 \
@@ -66,9 +66,9 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlfieldexport \
     CppunitTest_sw_ooxmlw14export \
     CppunitTest_sw_ooxmlimport \
-    CppunitTest_sw_ww8export \
-    CppunitTest_sw_ww8export2 \
-    CppunitTest_sw_ww8import \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_sw_ww8export) \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_sw_ww8export2) \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_sw_ww8import) \
     CppunitTest_sw_rtfexport \
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \

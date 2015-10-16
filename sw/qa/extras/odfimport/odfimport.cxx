@@ -43,6 +43,8 @@ DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
     // .odt import did crash on the empty font list (which I think is valid according SVG spec)
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
 {
     // This document has a section that is conditionally hidden, but has no empty paragraph after it.
@@ -54,6 +56,8 @@ DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
     // This used to crash
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
 }
+
+#endif
 
 DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 {
@@ -446,10 +450,14 @@ DECLARE_ODFIMPORT_TEST(testCalcFootnoteContent, "ooo32780-1.odt")
     //this was a CalcFootnoteContent crash
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_ODFIMPORT_TEST(testMoveSubTree, "ooo77837-1.odt")
 {
     //this was a MoveSubTree crash
 }
+
+#endif
 
 DECLARE_ODFIMPORT_TEST(testFdo75872_ooo33, "fdo75872_ooo33.odt")
 {

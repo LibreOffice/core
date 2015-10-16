@@ -553,6 +553,8 @@ DECLARE_OOXMLEXPORT_TEST(testTableStart2Sdt, "table-start-2-sdt.docx")
     }
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport())
@@ -561,6 +563,8 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
         assertXPath(pXmlDoc, "//w:sdt", 1);
     }
 }
+
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
 {
@@ -613,6 +617,8 @@ DECLARE_OOXMLEXPORT_TEST(testSdtBeforeField, "sdt-before-field.docx")
     }
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
@@ -621,6 +627,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
     // make sure AlternateContent should not present in sdt
     assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
+
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testfdo82492, "fdo82492.docx")
 {

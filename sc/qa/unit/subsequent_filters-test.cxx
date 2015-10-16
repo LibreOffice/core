@@ -117,10 +117,14 @@ public:
     void testRangeNameXLSX();
     void testHyperlinksXLSX();
     void testHardRecalcODS();
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     void testFunctionsODS();
+#endif
     void testFunctionsExcel2010();
     void testCeilingFloorXLSX();
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     void testCachedFormulaResultsODS();
+#endif
     void testCachedMatrixFormulaResultsODS();
     void testFormulaDepAcrossSheetsODS();
     void testFormulaDepDeleteContentsODS();
@@ -192,11 +196,13 @@ public:
     void testPivotTableBasicODS();
     void testPivotTableNamedRangeSourceODS();
     void testPivotTableSharedCacheGroupODS();
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     void testGetPivotDataXLS();
     void testPivotTableSharedGroupXLSX();
     void testPivotTableSharedDateGroupXLSX();
     void testPivotTableSharedNestedDateGroupXLSX();
     void testPivotTableSharedNumGroupXLSX();
+#endif
 
     void testFormulaDependency();
 
@@ -243,10 +249,14 @@ public:
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testHyperlinksXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     CPPUNIT_TEST(testFunctionsODS);
+#endif
     CPPUNIT_TEST(testFunctionsExcel2010);
     CPPUNIT_TEST(testCeilingFloorXLSX);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     CPPUNIT_TEST(testCachedFormulaResultsODS);
+#endif
     CPPUNIT_TEST(testFormulaDepAcrossSheetsODS);
     CPPUNIT_TEST(testFormulaDepDeleteContentsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
@@ -303,11 +313,13 @@ public:
     CPPUNIT_TEST(testPivotTableBasicODS);
     CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
     CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testPivotTableSharedGroupXLSX);
     CPPUNIT_TEST(testPivotTableSharedDateGroupXLSX);
     CPPUNIT_TEST(testPivotTableSharedNestedDateGroupXLSX);
     CPPUNIT_TEST(testPivotTableSharedNumGroupXLSX);
+#endif
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -528,6 +540,8 @@ void ScFiltersTest::testHardRecalcODS()
     xDocSh->DoClose();
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+
 void ScFiltersTest::testFunctionsODS()
 {
     ScDocShellRef xDocSh = loadDoc("functions.", FORMAT_ODS);
@@ -588,6 +602,8 @@ void ScFiltersTest::testFunctionsODS()
     // testFile(aCSVFileName, rDocUserDef, 0);
 }
 
+#endif
+
 void ScFiltersTest::testFunctionsExcel2010()
 {
     ScDocShellRef xDocSh = loadDoc("functions-excel-2010.", FORMAT_XLSX);
@@ -611,6 +627,8 @@ void ScFiltersTest::testCeilingFloorXLSX()
 
     xDocSh->DoClose();
 }
+
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
 
 void ScFiltersTest::testCachedFormulaResultsODS()
 {
@@ -684,6 +702,8 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         xDocSh->DoClose();
     }
 }
+
+#endif
 
 void ScFiltersTest::testCachedMatrixFormulaResultsODS()
 {
@@ -2041,6 +2061,8 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
     xDocSh->DoClose();
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+
 void ScFiltersTest::testGetPivotDataXLS()
 {
     ScDocShellRef xDocSh = loadDoc("pivot-getpivotdata.", FORMAT_XLS);
@@ -2217,6 +2239,8 @@ void ScFiltersTest::testPivotTableSharedNumGroupXLSX()
 
     xDocSh->DoClose();
 }
+
+#endif
 
 void ScFiltersTest::testRowHeightODS()
 {

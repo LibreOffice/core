@@ -2861,6 +2861,7 @@ void SwUiWriterTest::testTdf75137()
 
 void SwUiWriterTest::testTdf83798()
 {
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     SwDoc* pDoc = createDoc("tdf83798.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
@@ -2894,6 +2895,7 @@ void SwUiWriterTest::testTdf83798()
     pCursor->Move(fnMoveForward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("2.A"), pCursor->GetText());
     pCursor->DeleteMark();
+#endif
 }
 
 void SwUiWriterTest::testTdf89714()

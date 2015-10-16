@@ -645,6 +645,8 @@ DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1060 ) )
+
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
 {
     // check XML
@@ -664,6 +666,8 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2014), sal_Int32(aDate.Year));
 }
 
+#endif
+
 DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -681,6 +685,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76312, "FDO76312.docx")
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
 }
+
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1060 ) )
 
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
 {
@@ -702,6 +708,8 @@ DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
 }
+
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testCheckBoxControl, "checkbox-control.docx")
 {
@@ -889,6 +897,8 @@ DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
 }
 
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1060 ) )
+
 DECLARE_OOXMLEXPORT_TEST(testFDO78292, "FDO78292.docx")
 {
    //text node is a leaf node, it should not have any children
@@ -897,6 +907,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78292, "FDO78292.docx")
       return;
    assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
 }
+
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
 {

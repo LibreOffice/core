@@ -556,6 +556,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
     }
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -581,6 +583,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "LeftMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
+
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
 {

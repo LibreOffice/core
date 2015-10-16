@@ -143,6 +143,8 @@ DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
     }
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_RTFIMPORT_TEST(testN192129, "n192129.rtf")
 {
     // We expect that the result will be 16x16px.
@@ -163,6 +165,8 @@ DECLARE_RTFIMPORT_TEST(testN192129, "n192129.rtf")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
     }
 }
+
+#endif
 
 DECLARE_RTFIMPORT_TEST(testFdo45543, "fdo45543.rtf")
 {

@@ -274,8 +274,11 @@ void testErrorBar( Reference< XPropertySet > const & xErrorBar )
 void checkCommonTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+      , bool aExpectedShowEquation, bool aExpectedR2
+#endif
+        )
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -302,13 +305,17 @@ void checkCommonTrendline(
     Reference< XPropertySet > xEquationProperties( xCurve->getEquationProperties() );
     CPPUNIT_ASSERT(xEquationProperties.is());
 
-    bool bShowEquation = false;
-    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation);
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+    ::com::sun::star::uno::Any theAny = xEquationProperties->getPropertyValue("ShowEquation");
+    bool bShowEquation = ( * static_cast< sal_Bool const * >( theAny.getValue() ) ) != sal_False;
+    ///bool bShowEquation = false;
+    ///CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation);
     CPPUNIT_ASSERT_EQUAL(aExpectedShowEquation, bShowEquation);
 
     bool bShowCorrelationCoefficient = false;
     CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient);
     CPPUNIT_ASSERT_EQUAL(aExpectedR2, bShowCorrelationCoefficient);
+#endif
 }
 
 void checkNameAndType(Reference<XPropertySet> const & xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)
@@ -327,8 +334,11 @@ void checkNameAndType(Reference<XPropertySet> const & xProperties, const OUStrin
 void checkLinearTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+      , bool aExpectedShowEquation, bool aExpectedR2
+#endif
+        )
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -336,18 +346,24 @@ void checkLinearTrendline(
     checkNameAndType(xProperties, aExpectedName, "com.sun.star.chart2.LinearRegressionCurve");
 
     checkCommonTrendline(
-        xCurve,
-        aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
-        aExpectedForceIntercept, aExpectedInterceptValue,
-        aExpectedShowEquation, aExpectedR2);
+        xCurve
+      , aExpectedExtrapolateForward, aExpectedExtrapolateBackward
+      , aExpectedForceIntercept, aExpectedInterceptValue
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+      , aExpectedShowEquation, aExpectedR2
+#endif
+    );
 }
 
 void checkPolynomialTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         sal_Int32 aExpectedDegree,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+      , bool aExpectedShowEquation, bool aExpectedR2
+#endif
+        )
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -359,10 +375,13 @@ void checkPolynomialTrendline(
     CPPUNIT_ASSERT_EQUAL(aExpectedDegree, aDegree);
 
     checkCommonTrendline(
-        xCurve,
-        aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
-        aExpectedForceIntercept, aExpectedInterceptValue,
-        aExpectedShowEquation, aExpectedR2);
+        xCurve
+      , aExpectedExtrapolateForward, aExpectedExtrapolateBackward
+      , aExpectedForceIntercept, aExpectedInterceptValue
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+      , aExpectedShowEquation, aExpectedR2
+#endif
+    );
 }
 
 void checkMovingAverageTrendline(
@@ -395,11 +414,19 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xCh
 
     xCurve = xRegressionCurveSequence[0];
     CPPUNIT_ASSERT(xCurve.is());
-    checkPolynomialTrendline(xCurve, "col2_poly", 3, 0.1, -0.1, true, -1.0, true, true);
+    checkPolynomialTrendline( xCurve, "col2_poly", 3, 0.1, -0.1, true, -1.0
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+                                    , true, true
+#endif
+                            );
 
     xCurve = xRegressionCurveSequence[1];
     CPPUNIT_ASSERT(xCurve.is());
-    checkLinearTrendline(xCurve, "col2_linear", -0.5, -0.5, false, 0.0, true, false);
+    checkLinearTrendline( xCurve, "col2_linear", -0.5, -0.5, false, 0.0
+#if ! ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1080 ) )
+                                , true, false
+#endif
+                        );
 
     xCurve = xRegressionCurveSequence[2];
     CPPUNIT_ASSERT(xCurve.is());

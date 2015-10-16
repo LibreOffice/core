@@ -46,12 +46,14 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_nolib_save \
 	CppunitTest_dbaccess_macros_test \
 	$(if $(ENABLE_JAVA), \
-		CppunitTest_dbaccess_RowSetClones) \
+		$(if $(filter-out 1050,$(MACOSX_SDK_VERSION)), \
+			CppunitTest_dbaccess_RowSetClones)) \
 ))
 
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
-    CppunitTest_dbaccess_hsqldb_test \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)), \
+        CppunitTest_dbaccess_hsqldb_test) \
 ))
 endif
 

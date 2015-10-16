@@ -784,11 +784,15 @@ DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("hello"), getParagraphOfText(1, xText)->getString());
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
 {
     // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineStyle);
 }
+
+#endif
 
 DECLARE_RTFEXPORT_TEST(testCjklist12, "cjklist12.rtf")
 {
@@ -984,6 +988,8 @@ DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
+
 DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
 {
     // The problem that a user defined property named "Company" was lost on export.
@@ -999,6 +1005,8 @@ DECLARE_RTFEXPORT_TEST(testRedline, "redline.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Rebecca Lopez"), getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineAuthor"));
     CPPUNIT_ASSERT_EQUAL(OUString("Dorothy Jones"), getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineAuthor"));
 }
+
+#endif
 
 DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
 {

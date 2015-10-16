@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,writerfilter,\
-    CppunitTest_writerfilter_rtftok \
+    $(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_writerfilter_rtftok) \
     CppunitTest_writerfilter_misc \
 ))
 

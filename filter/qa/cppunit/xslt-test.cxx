@@ -46,8 +46,10 @@ public:
     void testXsltCopyNew();
 
     CPPUNIT_TEST_SUITE(XsltFilterTest);
+#if !( defined(MACOSX) && (MACOSX_SDK_VERSION < 1060) )
     CPPUNIT_TEST(testXsltCopyOld);
     CPPUNIT_TEST(testXsltCopyNew);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 

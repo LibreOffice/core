@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,postprocess,\
-	CppunitTest_services \
+	$(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),CppunitTest_services) \
 ))
 
 # vim: set noet sw=4 ts=4:
