@@ -320,7 +320,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     try {
         if( argc < 4) {
-            printf( "usage : %s <locaLe> <XML inputfile> <destination file>\n", argv[0] );
+            printf( "usage : %s <locale> <XML inputfile> <destination file>\n", argv[0] );
             exit( 1 );
         }
 
