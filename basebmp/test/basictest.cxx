@@ -186,7 +186,7 @@ public:
         const basegfx::B2IPoint aPt5(100000,100000);
         pDevice->setPixel( aPt5, aCol3, DrawMode::Paint );
 
-        sal_Int32 nPixel(countPixel(pDevice, aCol2));
+        auto nPixel(countPixel(pDevice, aCol2));
         const basegfx::B2IPoint aPt6(aSize.getX(),aSize.getY());
         pDevice->setPixel( aPt6, aCol2, DrawMode::Paint );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("setPixel clipping",
