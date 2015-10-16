@@ -3882,7 +3882,10 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         else
             pTarget->SetClipRegion();
 
-        pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
+        // In case of tiled rendering pass a region to DrawSelection(), so that
+        // selection callbacks are not emitted during every repaint.
+        vcl::Region aRegion;
+        pView->DrawSelection(pView->GetEditSelection(), pView->isTiledRendering() ? &aRegion : 0, pTarget);
     }
 }
 
