@@ -263,25 +263,27 @@ namespace dbaui
         }
         else if (m_pTravelNext == pButton)
         {
-            sal_Int32 nCurrent = m_pAllParams->GetSelectEntryPos();
-            sal_Int32 nCount = m_pAllParams->GetEntryCount();
-            OSL_ENSURE(static_cast<size_t>(nCount) == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            if (sal_Int32 nCount = m_pAllParams->GetEntryCount())
+            {
+                sal_Int32 nCurrent = m_pAllParams->GetSelectEntryPos();
+                OSL_ENSURE(static_cast<size_t>(nCount) == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
-            // search the next entry in list we haven't visited yet
-            sal_Int32 nNext = (nCurrent + 1) % nCount;
-            while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & EF_VISITED ))
-                nNext = (nNext + 1) % nCount;
+                // search the next entry in list we haven't visited yet
+                sal_Int32 nNext = (nCurrent + 1) % nCount;
+                while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & EF_VISITED ))
+                    nNext = (nNext + 1) % nCount;
 
-            if ( m_aVisitedParams[nNext] & EF_VISITED )
-                // there is no such "not visited yet" entry -> simply take the next one
-                nNext = (nCurrent + 1) % nCount;
+                if ( m_aVisitedParams[nNext] & EF_VISITED )
+                    // there is no such "not visited yet" entry -> simply take the next one
+                    nNext = (nCurrent + 1) % nCount;
 
-            m_pAllParams->SelectEntryPos(nNext);
-            OnEntrySelected();
-            m_bNeedErrorOnCurrent = true;
-                // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
-                // so the next time it is called we need an error message, again ....
-                // (TODO : there surely are better solutions for this ...)
+                m_pAllParams->SelectEntryPos(nNext);
+                OnEntrySelected();
+                m_bNeedErrorOnCurrent = true;
+                    // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
+                    // so the next time it is called we need an error message, again ....
+                    // (TODO : there surely are better solutions for this ...)
+            }
         }
     }
 
