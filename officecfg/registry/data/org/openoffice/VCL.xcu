@@ -28,7 +28,6 @@
     <node oor:name="DesktopManagement" oor:op="replace">
       <prop oor:name="DisablePrinting" oor:type="xs:string" oor:op="replace">
         <value>false</value>
-        <value install:module="gconflockdown" oor:external="com.sun.star.configuration.backend.GconfBackend DisablePrinting"/>
       </prop>
     </node>
     <node oor:name="Transfer" oor:op="replace">

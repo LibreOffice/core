@@ -62,7 +62,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     avmedia \
     helplinker \
     sax \
-    gconfbe1 \
     fsstorage \
     desktopbe1 \
     localebe1 \

@@ -96,22 +96,6 @@
         <value xml:lang="zh-TW">13</value>
       </prop>
     </node>
-    <node oor:name="FontAntiAliasing" install:module="gconflockdown">
-      <prop oor:name="Enabled">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingEnabled"/>
-      </prop>
-      <prop oor:name="MinPixelHeight">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingMinPixelHeight"/>
-      </prop>
-    </node>
-    <node oor:name="Menu" install:module="gconflockdown">
-      <prop oor:name="DontHideDisabledEntry">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend DontHideDisabledEntry"/>
-      </prop>
-      <prop oor:name="ShowIconsInMenues">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend ShowIconsInMenues"/>
-      </prop>
-    </node>
   </node>
   <node oor:name="Help">
     <node oor:name="StartCenter">
@@ -548,13 +532,9 @@
   </node>
   <node oor:name="Misc">
     <prop oor:name="UseSystemFileDialog">
-      <value install:module="gconflockdown" oor:external="com.sun.star.configuration.backend.GconfBackend UseSystemFileDialog"/>
     </prop>
     <prop oor:name="UseSystemPrintDialog" install:module="macosx">
       <value>true</value>
-    </prop>
-    <prop oor:name="SymbolSet" install:module="gconflockdown">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend SymbolSet"/>
     </prop>
     <prop oor:name="TemplateRepositoryUrls">
       <value/>
@@ -615,12 +595,6 @@
       <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
         <value>false</value>
       </prop>
-      <prop oor:name="CreateBackup" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend CreateBackup"/>
-      </prop>
-      <prop oor:name="WarnAlienFormat" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnAlienFormat"/>
-      </prop>
     </node>
     <node oor:name="ODF">
       <prop oor:name="DefaultVersion" oor:type="xs:short">
@@ -632,27 +606,6 @@
     <node oor:name="Scripting">
       <prop oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean">
         <value>true</value>
-      </prop>
-      <prop oor:name="MacroSecurityLevel" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend MacroSecurityLevel"/>
-      </prop>
-      <prop oor:name="RecommendPasswordProtection" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend RecommendPasswordProtection"/>
-      </prop>
-      <prop oor:name="RemovePersonalInfoOnSaving" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend RemovePersonalInfoOnSaving"/>
-      </prop>
-      <prop oor:name="WarnCreatePDF" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnCreatePDF"/>
-      </prop>
-      <prop oor:name="WarnPrintDoc" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnPrintDoc"/>
-      </prop>
-      <prop oor:name="WarnSaveOrSendDoc" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSaveOrSendDoc"/>
-      </prop>
-      <prop oor:name="WarnSignDoc" install:module="gconflockdown">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSignDoc"/>
       </prop>
     </node>
   </node>
@@ -679,28 +632,5 @@
         <value oor:external="com.sun.star.configuration.backend.DesktopBackend SourceViewFontHeight"/>
       </prop>
     </node>
-    <node oor:name="View" install:module="gconflockdown">
-      <prop oor:name="History">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend FontViewHistory"/>
-      </prop>
-      <prop oor:name="ShowFontBoxWYSIWYG">
-        <value oor:external="com.sun.star.configuration.backend.GconfBackend ShowFontBoxWYSIWYG"/>
-      </prop>
-    </node>
-  </node>
-  <node oor:name="Accessibility" install:module="gconflockdown">
-    <prop oor:name="IsSystemFont">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend AccessibilityIsSystemFont"/>
-    </prop>
-  </node>
-  <node oor:name="Print" install:module="gconflockdown">
-    <prop oor:name="PrintingModifiesDocument">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend PrintingModifiesDocument"/>
-    </prop>
-  </node>
-  <node oor:name="Undo" install:module="gconflockdown">
-    <prop oor:name="Steps">
-      <value oor:external="com.sun.star.configuration.backend.GconfBackend UndoSteps"/>
-    </prop>
   </node>
 </oor:component-data>

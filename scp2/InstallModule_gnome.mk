@@ -13,7 +13,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/gnome,gnome))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/gnome,\
 	ENABLE_GIO \
-	ENABLE_LOCKDOWN \
     ENABLE_GTK \
 ))
 
