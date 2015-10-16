@@ -53,6 +53,7 @@ public:
     void testResetSelection();
     void testSearch();
     void testSearchAll();
+    void testSearchAllSelections();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
+    CPPUNIT_TEST(testSearchAllSelections);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -434,6 +436,18 @@ void SdTiledRenderingTest::testSearchAll()
     lcl_search("second", /*bFindAll=*/true);
     // This was 0: no SET_PART was emitted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+}
+
+void SdTiledRenderingTest::testSearchAllSelections()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    lcl_search("third", /*bFindAll=*/true);
+    // Make sure this is found on the 3rd slide.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
+    // This was 1: only the first match was highlighted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
 }
 
 #endif
