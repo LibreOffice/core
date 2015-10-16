@@ -59,9 +59,9 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
     // global ScriptEditorForBeanShell returned for getEditor() calls
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
 
-    // global list of ScriptEditors, key is URL of file being edited
-    private static Map<URL, ScriptEditorForBeanShell> BEING_EDITED =
-        new HashMap<URL, ScriptEditorForBeanShell>();
+    // global list of ScriptEditors, key is [external form of URL] of file being edited
+    private static Map<String, ScriptEditorForBeanShell> BEING_EDITED =
+        new HashMap<String, ScriptEditorForBeanShell>();
 
     // template for new BeanShell scripts
     private static String BSHTEMPLATE;
@@ -112,7 +112,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
      */
     public static ScriptEditorForBeanShell getEditor(URL url) {
         synchronized (BEING_EDITED) {
-            return BEING_EDITED.get(url);
+            return BEING_EDITED.get(url.toExternalForm());
         }
     }
 
@@ -194,12 +194,12 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
                         ScriptEditorForBeanShell editor;
 
                         synchronized (BEING_EDITED) {
-                            editor = BEING_EDITED.get(url);
+                            editor = BEING_EDITED.get(url.toExternalForm());
 
                             if (editor == null) {
                                 editor = new ScriptEditorForBeanShell(
                                     context, theCl, url);
-                                BEING_EDITED.put(url, editor);
+                                BEING_EDITED.put(url.toExternalForm(), editor);
                             }
                         }
 
@@ -353,7 +353,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
     private void shutdown() {
         synchronized (BEING_EDITED) {
-            BEING_EDITED.remove(scriptURL);
+            BEING_EDITED.remove(scriptURL.toExternalForm());
         }
     }
 
