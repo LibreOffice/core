@@ -425,7 +425,11 @@ dialog_remove_buttons(GtkWidget *pActionArea)
         gtk_container_get_children( GTK_CONTAINER( pActionArea ) );
 
     for( GList *p = pChildren; p; p = p->next )
-        gtk_widget_destroy( GTK_WIDGET( p->data ) );
+    {
+        GtkWidget *pWidget = GTK_WIDGET( p->data );
+        if ( GTK_IS_BUTTON( pWidget ) )
+            gtk_widget_destroy( pWidget );
+    }
 
     g_list_free( pChildren );
 }
