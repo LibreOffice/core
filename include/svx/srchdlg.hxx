@@ -171,6 +171,7 @@ private:
     VclPtr<PushButton>     m_pSearchComponent2PB;
 
     VclPtr<CheckBox>       m_pMatchCaseCB;
+    VclPtr<CheckBox>       m_pSearchFormattedCB;
     VclPtr<CheckBox>       m_pWordBtn;
 
     VclPtr<PushButton>     m_pCloseBtn;

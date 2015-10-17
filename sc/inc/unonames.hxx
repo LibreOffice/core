@@ -376,6 +376,7 @@
 #define SC_UNO_SRCHTYPE             "SearchType"
 #define SC_UNO_SRCHWORDS            "SearchWords"
 #define SC_UNO_SRCHFILTERED         "SearchFiltered"
+#define SC_UNO_SRCHFORMATTED        "SearchFormatted"
 
 //  old (5.2) property names for page styles - for compatibility only!
 #define OLD_UNO_PAGE_BACKCOLOR      "BackgroundColor"
