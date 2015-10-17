@@ -155,6 +155,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     else if (aString == SC_UNO_SRCHSIMREM) pSearchItem->SetLEVShorter( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
     else if (aString == SC_UNO_SRCHTYPE)   pSearchItem->SetCellType( static_cast<SvxSearchCellType>(ScUnoHelpFunctions::GetInt16FromAny( aValue )) );
     else if (aString == SC_UNO_SRCHFILTERED) pSearchItem->SetSearchFiltered( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
+    else if (aString == SC_UNO_SRCHFORMATTED) pSearchItem->SetSearchFormatted( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
 }
 
 uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
@@ -178,6 +179,7 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyNa
     else if (aString == SC_UNO_SRCHSIMREM) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
     else if (aString == SC_UNO_SRCHTYPE)   aRet <<= (sal_Int16) pSearchItem->GetCellType();
     else if (aString == SC_UNO_SRCHFILTERED) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFiltered() );
+    else if (aString == SC_UNO_SRCHFORMATTED) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFormatted() );
 
     return aRet;
 }

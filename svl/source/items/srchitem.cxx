@@ -44,7 +44,7 @@ using namespace com::sun::star::util;
 
 #define CFG_ROOT_NODE       "Office.Common/SearchOptions"
 
-#define SRCH_PARAMS         12
+#define SRCH_PARAMS         13
 #define SRCH_PARA_OPTIONS   "Options"
 #define SRCH_PARA_FAMILY    "Family"
 #define SRCH_PARA_COMMAND   "Command"
@@ -53,6 +53,7 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_ROWDIR    "RowDirection"
 #define SRCH_PARA_ALLTABLES "AllTables"
 #define SRCH_PARA_SEARCHFILTERED "SearchFiltered"
+#define SRCH_PARA_SEARCHFORMATTED  "SearchFormatted"
 #define SRCH_PARA_BACKWARD  "Backward"
 #define SRCH_PARA_PATTERN   "Pattern"
 #define SRCH_PARA_CONTENT   "Content"
@@ -121,6 +122,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     m_bRowDirection   ( true ),
     m_bAllTables      ( false ),
     m_bSearchFiltered ( false ),
+    m_bSearchFormatted( false ),
     m_bNotes          ( false),
     m_bBackward       ( false ),
     m_bPattern        ( false ),
@@ -209,6 +211,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     m_bRowDirection   ( rItem.m_bRowDirection ),
     m_bAllTables      ( rItem.m_bAllTables ),
     m_bSearchFiltered   ( rItem.m_bSearchFiltered ),
+    m_bSearchFormatted  ( rItem.m_bSearchFormatted ),
     m_bNotes          ( rItem.m_bNotes),
     m_bBackward       ( rItem.m_bBackward ),
     m_bPattern        ( rItem.m_bPattern ),
@@ -261,6 +264,7 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( m_bRowDirection  == rSItem.m_bRowDirection )   &&
            ( m_bAllTables     == rSItem.m_bAllTables )      &&
            ( m_bSearchFiltered  == rSItem.m_bSearchFiltered )   &&
+           ( m_bSearchFormatted == rSItem.m_bSearchFormatted )  &&
            ( m_nCellType      == rSItem.m_nCellType )       &&
            ( m_nAppFlag       == rSItem.m_nAppFlag )        &&
            ( m_bAsianOptions  == rSItem.m_bAsianOptions )   &&
@@ -391,14 +395,16 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             aSeq[6].Value <<= m_bAllTables;
             aSeq[7].Name = SRCH_PARA_SEARCHFILTERED;
             aSeq[7].Value <<= m_bSearchFiltered;
-            aSeq[8].Name = SRCH_PARA_BACKWARD;
-            aSeq[8].Value <<= m_bBackward;
-            aSeq[9].Name = SRCH_PARA_PATTERN;
-            aSeq[9].Value <<= m_bPattern;
-            aSeq[10].Name = SRCH_PARA_CONTENT;
-            aSeq[10].Value <<= m_bContent;
-            aSeq[11].Name = SRCH_PARA_ASIANOPT;
-            aSeq[11].Value <<= m_bAsianOptions;
+            aSeq[8].Name = SRCH_PARA_SEARCHFORMATTED;
+            aSeq[8].Value <<= m_bSearchFormatted;
+            aSeq[9].Name = SRCH_PARA_BACKWARD;
+            aSeq[9].Value <<= m_bBackward;
+            aSeq[10].Name = SRCH_PARA_PATTERN;
+            aSeq[10].Value <<= m_bPattern;
+            aSeq[11].Name = SRCH_PARA_CONTENT;
+            aSeq[11].Value <<= m_bContent;
+            aSeq[12].Name = SRCH_PARA_ASIANOPT;
+            aSeq[12].Value <<= m_bAsianOptions;
             rVal <<= aSeq;
         }
         break;
@@ -414,6 +420,8 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             rVal <<= m_bAllTables; break;
         case MID_SEARCH_SEARCHFILTERED:
             rVal <<= m_bSearchFiltered; break;
+        case MID_SEARCH_SEARCHFORMATTED:
+            rVal <<= m_bSearchFormatted; break;
         case MID_SEARCH_BACKWARD:
             rVal <<= m_bBackward; break;
         case MID_SEARCH_PATTERN:
@@ -530,6 +538,11 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                         if ( aSeq[i].Value >>= m_bSearchFiltered )
                             ++nConvertedCount;
                     }
+                    else if ( aSeq[i].Name == SRCH_PARA_SEARCHFORMATTED )
+                    {
+                        if ( aSeq[i].Value >>= m_bSearchFormatted )
+                            ++nConvertedCount;
+                    }
                     else if ( aSeq[i].Name == SRCH_PARA_BACKWARD )
                     {
                         if ( aSeq[i].Value >>= m_bBackward )
@@ -568,6 +581,8 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             bRet = (rVal >>= m_bAllTables); break;
         case MID_SEARCH_SEARCHFILTERED:
             bRet = (rVal >>= m_bSearchFiltered); break;
+        case MID_SEARCH_SEARCHFORMATTED:
+            bRet = (rVal >>= m_bSearchFormatted); break;
         case MID_SEARCH_BACKWARD:
             bRet = (rVal >>= m_bBackward); break;
         case MID_SEARCH_PATTERN:

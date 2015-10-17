@@ -33,7 +33,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    27
+#define MAX_FLAGS_OFFSET    28
 
 class SvtSearchOptions_Impl : public ConfigItem
 {
@@ -148,7 +148,8 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         "Japanese/IsIgnoreMiddleDot",           // 24
         "IsNotes",                              // 25
         "IsIgnoreDiacritics_CTL",               // 26
-        "IsIgnoreKashida_CTL"                   // 27
+        "IsIgnoreKashida_CTL",                  // 27
+        "IsSearchFormatted"                     // 28
     };
 
     const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -575,6 +576,16 @@ bool SvtSearchOptions::IsIgnoreKashida_CTL() const
 void SvtSearchOptions::SetIgnoreKashida_CTL( bool bVal )
 {
     pImpl->SetFlag( 27, bVal );
+}
+
+bool SvtSearchOptions::IsSearchFormatted() const
+{
+    return pImpl->GetFlag( 28 );
+}
+
+void SvtSearchOptions::SetSearchFormatted( bool bVal )
+{
+    pImpl->SetFlag( 28, bVal );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
