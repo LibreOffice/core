@@ -19,9 +19,9 @@
 
 #include "stordata.hxx"
 
-#include "sal/types.h"
-#include "sal/log.hxx"
-#include "osl/diagnose.h"
+#include <sal/types.h>
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include "store/types.h"
 #include "storbase.hxx"
