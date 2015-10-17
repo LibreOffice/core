@@ -632,8 +632,7 @@ sub replace_setup_variables
 
     my $productname = $hashref->{'PRODUCTNAME'};
     my $productversion = $hashref->{'PRODUCTVERSION'};
-    my $userdirproductversion = "";
-    if ( $hashref->{'USERDIRPRODUCTVERSION'} ) { $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'}; }
+    my $productmajorversion = $hashref->{'LIBO_VERSION_MAJOR'};
     my $productkey = $productname . " " . $productversion;
 
     # string $buildid, which is used to replace the setup variable <buildid>
@@ -653,7 +652,7 @@ sub replace_setup_variables
 
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
-    my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
+    my $updateid = $productname . "_" . $productmajorversion . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
