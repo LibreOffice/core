@@ -768,9 +768,9 @@ bool SwAccessibleParagraph::GetWordBoundary(
         rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
             rText, nPos, aLocale, nWordType, sal_True );
 
-        // It's a word if the first character is an alpha-numeric character.
-        bRet = GetAppCharClass().isLetterNumeric(
-            OUString(rText[rBound.startPos]) );
+        // If we have a break-iterator let's trust that it
+        // does the right thing.
+        bRet = true;
     }
     else
     {
