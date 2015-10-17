@@ -1664,15 +1664,11 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 
 inline bool CmpBrdLn( const SvxBorderLine* pBrd1, const SvxBorderLine* pBrd2 )
 {
-    bool bRet;
-    if( 0 != pBrd1 ?  0 == pBrd2 : 0 != pBrd2 )
-        bRet = false;
-    else
-        if( !pBrd1 )
-            bRet = true;
-        else
-            bRet = (*pBrd1 == *pBrd2);
-    return bRet;
+    if( pBrd1 == pBrd2 )
+        return true;
+    if( pBrd1 == nullptr )
+        return false;
+    return *pBrd1 == *pBrd2;
 }
 
 

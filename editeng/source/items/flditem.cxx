@@ -358,14 +358,12 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
 
     const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
-    if ( !pField && !pOtherFld )
+    if( pField == pOtherFld )
         return true;
-
-    if ( ( !pField && pOtherFld ) || ( pField && !pOtherFld ) )
+    if( pOtherFld == nullptr )
         return false;
-
-    return ( ( pField->Type() == pOtherFld->Type() )
-                && ( *pField == *pOtherFld ) );
+    return ( pField->Type() == pOtherFld->Type() )
+            && ( *pField == *pOtherFld );
 }
 
 
