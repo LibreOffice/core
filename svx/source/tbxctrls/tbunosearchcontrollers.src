@@ -29,4 +29,9 @@ String RID_SVXSTR_FINDBAR_MATCHCASE
     Text [ en-US ] = "Match Case" ;
 };
 
+String RID_SVXSTR_FINDBAR_SEARCHFORMATTED
+{
+    Text [ en-US ] = "Search Formatted Display String" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

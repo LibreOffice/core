@@ -222,6 +222,39 @@ private:
     VclPtr<CheckBox> m_pMatchCaseControl;
 };
 
+class SearchFormattedToolboxController : public svt::ToolboxController,
+                                      public css::lang::XServiceInfo
+{
+public:
+    SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    virtual ~SearchFormattedToolboxController();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire() throw () override;
+    virtual void SAL_CALL release() throw () override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+
+    // XToolbarController
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+private:
+    VclPtr<CheckBox> m_pSearchFormattedControl;
+};
+
 class FindAllToolboxController   : public svt::ToolboxController,
                                       public css::lang::XServiceInfo
 {
