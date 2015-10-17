@@ -5999,7 +5999,7 @@
       </node>
       <node oor:name=".uno:TemplateMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Templates</value>
+          <value xml:lang="en-US">Te~mplates</value>
         </prop>
       </node>
       <node oor:name=".uno:ExternalEdit" oor:op="replace">
