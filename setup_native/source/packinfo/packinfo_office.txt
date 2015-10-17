@@ -101,7 +101,6 @@ End
 
 Start
 module = "gid_Module_Prg_Wrt_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-writer"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-writer"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
@@ -117,7 +116,6 @@ End
 
 Start
 module = "gid_Module_Prg_Calc_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-calc"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-calc"
@@ -133,7 +131,6 @@ End
 
 Start
 module = "gid_Module_Prg_Draw_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-draw"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-draw"
@@ -149,7 +146,6 @@ End
 
 Start
 module = "gid_Module_Prg_Impress_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-impress"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-impress"
@@ -165,7 +161,6 @@ End
 
 Start
 module = "gid_Module_Prg_Base_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-base"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
@@ -181,7 +176,6 @@ End
 
 Start
 module = "gid_Module_Prg_Math_Bin"
-script = "shellscripts_module.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-math"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWlibC"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-math"
