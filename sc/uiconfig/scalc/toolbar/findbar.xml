@@ -23,6 +23,7 @@
   <toolbar:toolbaritem xlink:href=".uno:UpSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:DownSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:FindAll"/>
+  <toolbar:toolbaritem xlink:href=".uno:SearchFormattedDisplayString"/>
   <toolbar:toolbaritem xlink:href=".uno:MatchCase"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>

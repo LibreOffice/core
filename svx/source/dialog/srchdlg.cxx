@@ -300,6 +300,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     get(m_pSearchComponent2PB, "component2");
 
     get(m_pMatchCaseCB, "matchcase");
+    get(m_pSearchFormattedCB, "searchformatted");
     get(m_pWordBtn, "wholewords");
     aCalcStr = get<FixedText>("entirecells")->GetText();
 
@@ -383,6 +384,7 @@ void SvxSearchDialog::dispose()
     m_pSearchComponent1PB.clear();
     m_pSearchComponent2PB.clear();
     m_pMatchCaseCB.clear();
+    m_pSearchFormattedCB.clear();
     m_pWordBtn.clear();
     m_pCloseBtn.clear();
     m_pIgnoreDiacritics.clear();
@@ -740,6 +742,7 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
         m_pRowsBtn->Show();
         m_pColumnsBtn->Show();
         m_pAllSheetsCB->Show();
+        m_pSearchFormattedCB->Show();
     }
 }
 
@@ -813,6 +816,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_pRowsBtn->SetClickHdl( aLink );
         m_pColumnsBtn->SetClickHdl( aLink );
         m_pAllSheetsCB->SetClickHdl( aLink );
+        m_pSearchFormattedCB->SetClickHdl( aLink );
 
         sal_uIntPtr nModifyFlagCheck;
         switch ( pSearchItem->GetCellType() )
@@ -854,6 +858,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     }
     else
     {
+        m_pSearchFormattedCB->Hide();
         m_pWordBtn->SetText( aCalcStr.getToken( 1, '#' ) );
 
         if ( pSearchItem->GetAppFlag() == SvxSearchApp::DRAW )
@@ -1293,6 +1298,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 
             pSearchItem->SetRowDirection( m_pRowsBtn->IsChecked() );
             pSearchItem->SetAllTables( m_pAllSheetsCB->IsChecked() );
+            pSearchItem->SetSearchFormatted( m_pSearchFormattedCB->IsChecked() );
         }
 
         if (pBtn == m_pSearchBtn)
@@ -2230,6 +2236,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 
         pSearchItem->SetRowDirection( m_pRowsBtn->IsChecked() );
         pSearchItem->SetAllTables( m_pAllSheetsCB->IsChecked() );
+        pSearchItem->SetSearchFormatted( m_pSearchFormattedCB->IsChecked() );
     }
 
     pSearchItem->SetCommand( SvxSearchCmd::FIND );

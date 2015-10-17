@@ -47,6 +47,7 @@ public:
     bool    IsSimilaritySearch() const;
     bool    IsUseAsianOptions() const;
     bool    IsMatchCase() const;            // also Japanese search option
+    bool    IsSearchFormatted() const;
     bool    IsNotes() const;
 
     void    SetWholeWordsOnly( bool bVal );
@@ -56,6 +57,7 @@ public:
     void    SetSimilaritySearch( bool bVal );
     void    SetUseAsianOptions( bool bVal );
     void    SetMatchCase( bool bVal );      // also Japanese search option
+    void    SetSearchFormatted( bool bVal );
     void    SetNotes( bool bVal);
 
     // Japanese search options

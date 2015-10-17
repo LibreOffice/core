@@ -942,6 +942,7 @@
 
 #define RID_SVXSTR_TEXTCOLOR                                (RID_SVX_START + 1178)
 
+#define RID_SVXSTR_FINDBAR_SEARCHFORMATTED                  (RID_SVX_START + 1188)
 #define RID_SVXSTR_FINDBAR_MATCHCASE                        (RID_SVX_START + 1189)
 #define RID_SVXSTR_FINDBAR_FIND                             (RID_SVX_START + 1190)
 
