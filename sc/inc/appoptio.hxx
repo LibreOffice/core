@@ -49,8 +49,8 @@ public:
     sal_uInt16*     GetLRUFuncList() const          { return pLRUList;      }
     void        SetLRUFuncList( const sal_uInt16* pList,
                                 const sal_uInt16  nCount );
-    void        SetStatusFunc( sal_uInt16 nNew )    { nStatusFunc = nNew;   }
-    sal_uInt16      GetStatusFunc() const           { return nStatusFunc;   }
+    void        SetStatusFunc( sal_uInt32 nNew )    { nStatusFunc = nNew;   }
+    sal_uInt32      GetStatusFunc() const           { return nStatusFunc;   }
     void        SetAutoComplete( bool bNew )    { bAutoComplete = bNew; }
     bool        GetAutoComplete() const         { return bAutoComplete; }
     void        SetDetectiveAuto( bool bNew )   { bDetectiveAuto = bNew; }
@@ -87,7 +87,7 @@ private:
     SvxZoomType     eZoomType;
     sal_uInt16      nZoom;
     bool            bSynchronizeZoom;
-    sal_uInt16      nStatusFunc;
+    sal_uInt32      nStatusFunc;
     bool            bAutoComplete;
     bool            bDetectiveAuto;
     sal_uInt32  nTrackContentColor;

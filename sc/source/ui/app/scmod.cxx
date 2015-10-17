@@ -468,8 +468,8 @@ void ScModule::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 auto const & p = pReqArgs->Get(SID_PSZ_FUNCTION);
-                OSL_ENSURE(dynamic_cast<const SfxUInt16Item*>(&p) !=  nullptr,"wrong Parameter");
-                const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(p);
+                OSL_ENSURE(dynamic_cast<const SfxUInt32Item*>(&p) !=  nullptr,"wrong Parameter");
+                const SfxUInt32Item& rItem = static_cast<const SfxUInt32Item&>(p);
 
                 ScAppOptions aNewOpts( GetAppOptions() );
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
@@ -585,7 +585,7 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxBoolItem( nWhich, GetAppOptions().GetDetectiveAuto() ) );
                 break;
             case SID_PSZ_FUNCTION:
-                rSet.Put( SfxUInt16Item( nWhich, GetAppOptions().GetStatusFunc() ) );
+                rSet.Put( SfxUInt32Item( nWhich, GetAppOptions().GetStatusFunc() ) );
                 break;
             case SID_ATTR_METRIC:
                 rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );

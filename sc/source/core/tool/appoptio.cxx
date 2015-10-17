@@ -62,7 +62,7 @@ void ScAppOptions::SetDefaults()
     nZoom           = 100;
     eZoomType       = SvxZoomType::PERCENT;
     bSynchronizeZoom = true;
-    nStatusFunc     = SUBTOTAL_FUNC_SUM;
+    nStatusFunc     = ( 1 << SUBTOTAL_FUNC_SUM );
     bAutoComplete   = true;
     bDetectiveAuto  = true;
 
@@ -215,7 +215,8 @@ static void lcl_GetSortList( Any& rDest )
 #define SCLAYOUTOPT_ZOOMVAL         2
 #define SCLAYOUTOPT_ZOOMTYPE        3
 #define SCLAYOUTOPT_SYNCZOOM        4
-#define SCLAYOUTOPT_COUNT           5
+#define SCLAYOUTOPT_STATUSBARMULTI  5
+#define SCLAYOUTOPT_COUNT           6
 
 #define CFGPATH_INPUT       "Office.Calc/Input"
 
@@ -254,6 +255,16 @@ static void lcl_GetSortList( Any& rDest )
 #define SCCOMPATOPT_KEY_BINDING     0
 #define SCCOMPATOPT_COUNT           1
 
+static sal_uInt32 lcl_ConvertStatusBarFuncSetToSingle( sal_uInt32 nFuncSet )
+{
+    if ( !nFuncSet )
+        return 0;
+    for ( sal_uInt32 nFunc = 1; nFunc < 32; ++nFunc )
+        if ( nFuncSet & ( 1 << nFunc ) )
+            return nFunc;
+    return 0;
+}
+
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
@@ -262,7 +273,8 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
         "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
         "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
         "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
-        "Zoom/Synchronize"              // SCLAYOUTOPT_SYNCZOOM
+        "Zoom/Synchronize",             // SCLAYOUTOPT_SYNCZOOM
+        "Other/StatusbarMultiFunction"  // SCLAYOUTOPT_STATUSBARMULTI
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -389,6 +401,8 @@ ScAppCfg::ScAppCfg() :
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
+        bool bStatusBarFuncSingleFound = false;
+        bool bStatusBarFuncMultiFound = false;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
@@ -400,7 +414,10 @@ ScAppCfg::ScAppCfg() :
                         if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
                         break;
                     case SCLAYOUTOPT_STATUSBAR:
-                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (sal_uInt16) nIntVal );
+                        bStatusBarFuncSingleFound = true;
+                        break;
+                    case SCLAYOUTOPT_STATUSBARMULTI:
+                        bStatusBarFuncMultiFound = true;
                         break;
                     case SCLAYOUTOPT_ZOOMVAL:
                         if (pValues[nProp] >>= nIntVal) SetZoom( (sal_uInt16) nIntVal );
@@ -412,6 +429,23 @@ ScAppCfg::ScAppCfg() :
                         SetSynchronizeZoom( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                 }
+            }
+        }
+
+        sal_uInt32 nUIntVal = 0;
+        if ( bStatusBarFuncMultiFound )
+        {
+            if ( pValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntVal )
+                SetStatusFunc( nUIntVal );
+        }
+        else if ( bStatusBarFuncSingleFound )
+        {
+            if ( pValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntVal )
+            {
+                if ( nUIntVal )
+                    SetStatusFunc( 1 << nUIntVal );
+                else
+                    SetStatusFunc( 0 );
             }
         }
     }
@@ -589,7 +623,7 @@ ScAppCfg::ScAppCfg() :
                 pValues[nProp] <<= (sal_Int32) GetAppMetric();
                 break;
             case SCLAYOUTOPT_STATUSBAR:
-                pValues[nProp] <<= (sal_Int32) GetStatusFunc();
+                pValues[nProp] <<= lcl_ConvertStatusBarFuncSetToSingle( GetStatusFunc() );
                 break;
             case SCLAYOUTOPT_ZOOMVAL:
                 pValues[nProp] <<= (sal_Int32) GetZoom();
@@ -599,6 +633,9 @@ ScAppCfg::ScAppCfg() :
                 break;
             case SCLAYOUTOPT_SYNCZOOM:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetSynchronizeZoom() );
+                break;
+            case SCLAYOUTOPT_STATUSBARMULTI:
+                pValues[nProp] <<= GetStatusFunc();
                 break;
         }
     }

@@ -5205,7 +5205,7 @@ SfxVoidItem StandardTextAttributes SID_TEXT_STANDARD
 ]
 
 
-SfxUInt16Item StatusBarFunc SID_PSZ_FUNCTION
+SfxUInt32Item StatusBarFunc SID_PSZ_FUNCTION
 
 [
     AutoUpdate = FALSE,

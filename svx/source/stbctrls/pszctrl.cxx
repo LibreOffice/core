@@ -92,29 +92,39 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 class FunctionPopup_Impl : public PopupMenu
 {
 public:
-    explicit FunctionPopup_Impl( sal_uInt16 nCheck );
+    explicit FunctionPopup_Impl( sal_uInt32 nCheckEncoded );
 
-    sal_uInt16          GetSelected() const { return nSelected; }
+    sal_uInt32          GetSelected() const { return nSelected; }
 
 private:
-    sal_uInt16          nSelected;
+    sal_uInt32          nSelected;
 
     virtual void    Select() override;
 };
 
 
-FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
+FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt32 nCheckEncoded ) :
     PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
-    nSelected( 0 )
+    nSelected( nCheckEncoded )
 {
-    if (nCheck)
-        CheckItem( nCheck );
+    for ( sal_uInt16 nCheck = 1; nCheck < 32; ++nCheck )
+        if ( nCheckEncoded & (1 << nCheck) )
+            CheckItem( nCheck );
 }
 
 
 void FunctionPopup_Impl::Select()
 {
-    nSelected = GetCurItemId();
+    sal_uInt16 nCurItemId = GetCurItemId();
+    if ( nCurItemId == PSZ_FUNC_NONE )
+        nSelected = ( 1 << PSZ_FUNC_NONE );
+    else
+    {
+        nSelected &= (~( 1 << PSZ_FUNC_NONE )); // Clear the "None" bit
+        nSelected ^= ( 1 << nCurItemId ); // Toggle the bit corresponding to nCurItemId
+        if ( !nSelected )
+            nSelected = ( 1 << PSZ_FUNC_NONE );
+    }
 }
 
 struct SvxPosSizeStatusBarControl_Impl
@@ -137,7 +147,7 @@ struct SvxPosSizeStatusBarControl_Impl
     bool      bSize;      // set size ?
     bool      bTable;     // set table index ?
     bool      bHasMenu;   // set StarCalc popup menu ?
-    sal_uInt16  nFunction;  // the selected StarCalc function
+    sal_uInt32  nFunctionSet;  // the selected StarCalc functions encoded in 32 bits
     Image     aPosImage;  // Image to show the position
     Image     aSizeImage; // Image to show the size
 };
@@ -163,7 +173,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImp->bSize = false;
     pImp->bTable = false;
     pImp->bHasMenu = false;
-    pImp->nFunction = 0;
+    pImp->nFunctionSet = 0;
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
@@ -232,8 +242,8 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         if ( eState == SfxItemState::DEFAULT )
         {
             pImp->bHasMenu = true;
-            if ( pState && dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr )
-                pImp->nFunction = static_cast<const SfxUInt16Item*>(pState)->GetValue();
+            if ( pState && dynamic_cast< const SfxUInt32Item* >(pState) !=  nullptr )
+                pImp->nFunctionSet = static_cast<const SfxUInt32Item*>(pState)->GetValue();
         }
         else
             pImp->bHasMenu = false;
@@ -305,20 +315,20 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && pImp->bHasMenu )
     {
-        sal_uInt16 nSelect = pImp->nFunction;
+        sal_uInt32 nSelect = pImp->nFunctionSet;
         if (!nSelect)
-            nSelect = PSZ_FUNC_NONE;
+            nSelect = ( 1 << PSZ_FUNC_NONE );
         FunctionPopup_Impl aMenu( nSelect );
         if ( aMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
             nSelect = aMenu.GetSelected();
             if (nSelect)
             {
-                if (nSelect == PSZ_FUNC_NONE)
+                if (nSelect == (1 << PSZ_FUNC_NONE))
                     nSelect = 0;
 
                 css::uno::Any a;
-                SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
+                SfxUInt32Item aItem( SID_PSZ_FUNCTION, nSelect );
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name  = "StatusBarFunc";
@@ -407,6 +417,5 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor( aOldLineColor );
     pDev->SetFillColor( aOldFillColor );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

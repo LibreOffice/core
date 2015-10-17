@@ -395,6 +395,12 @@
         <info>
           <desc>Contains other layout settings.</desc>
         </info>
+        <prop oor:name="StatusbarMultiFunction" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Selects a set of functions that are calculated for the selected cells, and which show the results in the status bar.</desc>
+            <label>Statusbar Functions</label>
+          </info>
+        </prop>
         <prop oor:name="StatusbarFunction" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Calc/Layout -->
           <!-- OldLocation: Soffice.cfg -->
