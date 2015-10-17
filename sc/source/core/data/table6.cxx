@@ -60,6 +60,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     bool    bFound = false;
     bool    bDoSearch = true;
     bool    bDoBack = rSearchItem.GetBackward();
+    bool    bSearchFormatted = rSearchItem.IsSearchFormatted();
 
     OUString  aString;
     ScRefCellValue aCell;
@@ -85,7 +86,10 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
             else
             {
-                aCol[nCol].GetInputString( nRow, aString );
+                if( !bSearchFormatted )
+                    aCol[nCol].GetInputString( nRow, aString );
+                else
+                    aCol[nCol].GetString( nRow, aString );
             }
         }
         break;
@@ -94,7 +98,10 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
             else
             {
-                aCol[nCol].GetInputString( nRow, aString );
+                if( !bSearchFormatted )
+                    aCol[nCol].GetInputString( nRow, aString );
+                else
+                    aCol[nCol].GetString( nRow, aString );
             }
             break;
         case SvxSearchCellType::NOTE:

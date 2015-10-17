@@ -6020,6 +6020,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="IsSearchFormatted" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Edit / Find & Replace  -->
+        <info>
+          <desc>Specifies if formatted display strings are searched instead of cell content (Calc).</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <group oor:name="Japanese">
         <info>
           <desc>Contains search options for the Japanese language.</desc>

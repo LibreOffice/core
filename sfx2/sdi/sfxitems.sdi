@@ -92,6 +92,7 @@
         INT16       Command         MID_SEARCH_COMMAND;
         INT32       SearchStartPointX MID_SEARCH_STARTPOINTX;
         INT32       SearchStartPointY MID_SEARCH_STARTPOINTY;
+        BOOL        SearchFormatted MID_SEARCH_SEARCHFORMATTED;
     };
     item SvxSearch SvxSearchItem;
 

@@ -75,6 +75,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
     bool            m_bRowDirection;      // search direction: row-wise/column-wise
     bool            m_bAllTables;         // search in all sheets
     bool            m_bSearchFiltered;      // search filtered cells.
+    bool            m_bSearchFormatted;     // search formatted display strings
 
     // Writer-specific
     bool            m_bNotes;
@@ -148,6 +149,9 @@ public:
 
             bool            IsSearchFiltered() const { return m_bSearchFiltered; }
             void            SetSearchFiltered(bool b) { m_bSearchFiltered = b; }
+
+            bool            IsSearchFormatted() const { return m_bSearchFormatted; }
+            void            SetSearchFormatted(bool b) { m_bSearchFormatted = b; }
 
             SvxSearchCellType GetCellType() const { return m_nCellType; }
             void            SetCellType(SvxSearchCellType nNewCellType) { m_nCellType = nNewCellType; }
