@@ -62,7 +62,7 @@ void ScAppOptions::SetDefaults()
     nZoom           = 100;
     eZoomType       = SvxZoomType::PERCENT;
     bSynchronizeZoom = true;
-    nStatusFunc     = SUBTOTAL_FUNC_SUM;
+    nStatusFunc     = ( 1 << SUBTOTAL_FUNC_SUM );
     bAutoComplete   = true;
     bDetectiveAuto  = true;
 
