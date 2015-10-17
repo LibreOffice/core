@@ -254,9 +254,9 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                 mpMTRAngle->Show();
                 mpToolBoxColor->Hide();
 
-                if(pSh && pSh->GetItem(SID_COLOR_TABLE))
+                const SvxColorListItem* pColorListItem = static_cast<const SvxColorListItem*>(pSh ? pSh->GetItem(SID_COLOR_TABLE) : nullptr);
+                if (pColorListItem)
                 {
-                    const SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
                     mpLbFillAttr->Enable();
                     mpLbFillGradTo->Enable();
                     mpLbFillGradFrom->Enable();
@@ -265,8 +265,8 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                     mpLbFillAttr->Clear();
                     mpLbFillGradTo->Clear();
                     mpLbFillGradFrom->Clear();
-                    mpLbFillGradTo->Fill(aColorListItem.GetColorList());
-                    mpLbFillGradFrom->Fill(aColorListItem.GetColorList());
+                    mpLbFillGradTo->Fill(pColorListItem->GetColorList());
+                    mpLbFillGradFrom->Fill(pColorListItem->GetColorList());
 
                     mpLbFillGradFrom->AdaptDropDownLineCountToMaximum();
                     mpLbFillGradTo->AdaptDropDownLineCountToMaximum();

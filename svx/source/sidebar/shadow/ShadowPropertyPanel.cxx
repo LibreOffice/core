@@ -1,3 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #include <ShadowPropertyPanel.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
@@ -118,21 +126,24 @@ void ShadowPropertyPanel::dispose()
 
 void ShadowPropertyPanel::Initialize()
 {
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = pDocSh->GetItem(SID_COLOR_TABLE);
-    pColorList = static_cast<const SvxColorListItem*>(pItem) ->GetColorList();
-    mpLBShadowColor->Fill(pColorList);
-    mpShowShadow->SetState( TRISTATE_FALSE );
-    mpShowShadow->SetClickHdl( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
-    mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
-    mpLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
-    mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
-    mpShadowDistance->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
-    mpShadowTransSlider->SetRange(Range(0,100));
-    mpShadowTransSlider->SetUpdateMode(true);
-    mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
-    InsertDistanceValues();
-    InsertAngleValues();
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+
+    const SvxColorListItem* pColorListItem = static_cast<const SvxColorListItem*>(pSh ? pSh->GetItem(SID_COLOR_TABLE) : nullptr);
+    if (pColorListItem)
+    {
+        mpLBShadowColor->Fill(pColorListItem->GetColorList());
+        mpShowShadow->SetState( TRISTATE_FALSE );
+        mpShowShadow->SetClickHdl( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
+        mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
+        mpLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
+        mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
+        mpShadowDistance->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
+        mpShadowTransSlider->SetRange(Range(0,100));
+        mpShadowTransSlider->SetUpdateMode(true);
+        mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
+        InsertDistanceValues();
+        InsertAngleValues();
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
@@ -362,3 +373,5 @@ VclPtr<vcl::Window> ShadowPropertyPanel::Create (
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
