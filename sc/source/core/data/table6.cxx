@@ -58,10 +58,12 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         return false;
 
     bool    bFound = false;
+    bool    bFoundFormatted = false;
     bool    bDoSearch = true;
     bool    bDoBack = rSearchItem.GetBackward();
 
     OUString  aString;
+    OUString  aFormattedString;
     ScRefCellValue aCell;
     if (rSearchItem.GetSelection())
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
@@ -86,6 +88,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             else
             {
                 aCol[nCol].GetInputString( nRow, aString );
+                aCol[nCol].GetString( nRow, aFormattedString );
             }
         }
         break;
@@ -95,6 +98,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             else
             {
                 aCol[nCol].GetInputString( nRow, aString );
+                aCol[nCol].GetString( nRow, aFormattedString );
             }
             break;
         case SvxSearchCellType::NOTE:
@@ -102,27 +106,40 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         default:
             break;
     }
-    sal_Int32 nStart = 0;
-    sal_Int32 nEnd = aString.getLength();
+    sal_Int32 nStart = 0, nStartFormatted = 0;
+    sal_Int32 nEnd = aString.getLength(), nEndFormatted = aFormattedString.getLength();
     ::com::sun::star::util::SearchResult aSearchResult;
     if (pSearchText)
     {
         if ( bDoBack )
         {
            sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-            bFound = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
-            // change results to definition before 614:
-            --nEnd;
+           bFound = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
+           // change results to definition before 614:
+           --nEnd;
+           if( !bFound )
+           {
+               sal_Int32 nTempFormatted=nStartFormatted; nStartFormatted=nEndFormatted; nEndFormatted=nTempFormatted;
+               bFoundFormatted = pSearchText->SearchBackward(aFormattedString, &nStartFormatted, &nEndFormatted, &aSearchResult);
+               --nEndFormatted;
+           }
         }
         else
         {
             bFound = pSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;
+            if( !bFound )
+            {
+                bFoundFormatted = pSearchText->SearchForward(aFormattedString, &nStartFormatted, &nEndFormatted, &aSearchResult);
+                --nEndFormatted;
+            }
         }
 
         if (bFound && rSearchItem.GetWordOnly())
             bFound = (nStart == 0 && nEnd == aString.getLength() - 1);
+        if (bFoundFormatted && rSearchItem.GetWordOnly())
+            bFoundFormatted = (nStartFormatted == 0 && nEndFormatted == aFormattedString.getLength() - 1);
     }
     else
     {
@@ -236,6 +253,9 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
         // pCell is invalid now (deleted)
     }
+    else
+        return bFound || bFoundFormatted;
+
     return bFound;
 }
 
