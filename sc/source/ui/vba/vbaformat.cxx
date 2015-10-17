@@ -50,7 +50,17 @@ using namespace ::com::sun::star;
 #define LOCALE "Locale"
 
 template< typename... Ifc >
-ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, const uno::Reference< frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( script::BasicErrorException ) : ScVbaFormat_BASE( xParent, xContext ), m_aDefaultLocale( OUString("en"), OUString( "US"), OUString() ), mxPropertySet( _xPropertySet ), mxModel( xModel ), mbCheckAmbiguoity( bCheckAmbiguoity ), mbAddIndent( false )
+ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent,
+                                    const uno::Reference< uno::XComponentContext > & xContext,
+                                    const uno::Reference< beans::XPropertySet >& _xPropertySet,
+                                    const uno::Reference< frame::XModel >& xModel,
+                                    bool bCheckAmbiguoity ) throw ( script::BasicErrorException )
+    : ScVbaFormat_BASE( xParent, xContext ),
+      m_aDefaultLocale( OUString("en"), OUString( "US"), OUString() ),
+      mxPropertySet( _xPropertySet ),
+      mxModel( xModel ),
+      mbCheckAmbiguoity( bCheckAmbiguoity ),
+      mbAddIndent( false )
 {
     try
     {

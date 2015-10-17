@@ -57,7 +57,11 @@ void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorE
 
 }
 
-ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const OUString& sStyleName, const uno::Reference< frame::XModel >& _xModel ) throw ( script::BasicErrorException, uno::RuntimeException ) :  ScVbaStyle_BASE( xParent, xContext, lcl_getStyleProps( sStyleName, _xModel ), _xModel, false ), mxModel( _xModel )
+ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
+                        const uno::Reference< uno::XComponentContext > & xContext,
+                        const OUString& sStyleName, const uno::Reference< frame::XModel >& _xModel )
+                    throw ( script::BasicErrorException, uno::RuntimeException )
+    :  ScVbaStyle_BASE( xParent, xContext, lcl_getStyleProps( sStyleName, _xModel ), _xModel, false )
 {
     try
     {
@@ -69,7 +73,12 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent, c
     }
 }
 
-ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, const uno::Reference< frame::XModel >& _xModel ) throw ( script::BasicErrorException, uno::RuntimeException ) : ScVbaStyle_BASE( xParent, xContext, _xPropertySet, _xModel, false ),  mxModel( _xModel )
+ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
+                        const uno::Reference< uno::XComponentContext > & xContext,
+                        const uno::Reference< beans::XPropertySet >& _xPropertySet,
+                        const uno::Reference< frame::XModel >& _xModel )
+                    throw ( script::BasicErrorException, uno::RuntimeException )
+    : ScVbaStyle_BASE( xParent, xContext, _xPropertySet, _xModel, false )
 {
     try
     {

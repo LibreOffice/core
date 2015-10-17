@@ -3395,7 +3395,6 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_bTabInTOC(false)
     , m_bHideTabLeaderAndPageNumbers(false)
     , m_bExportModeRTF(false)
-    , m_bOutOutlineOnly(false)
     , m_bFontSizeWritten(false)
     , m_pDoc(pDocument)
     , m_nCurStart(pCurrentPam->GetPoint()->nNode.GetIndex())
