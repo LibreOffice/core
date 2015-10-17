@@ -526,8 +526,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 
-        SfxViewFrame* pViewFrame = NULL;
-
         SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
         bool bStartWithTemplate = pOpt->IsStartWithTemplate();
 
@@ -636,7 +634,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     SfxObjectShell* pShell = xShell;
                     if( pShell )
                     {
-                        pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
+                        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
                         DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
                         pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
 
