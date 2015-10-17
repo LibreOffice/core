@@ -113,7 +113,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_width_chars">1</property>
-                            <property name="text" translatable="yes">0.00</property>
+                            <property name="text" translatable="no">0.00</property>
                             <property name="climb_rate">1</property>
                             <property name="digits">2</property>
                           </object>
@@ -126,7 +126,7 @@
                           <object class="GtkSpinButton" id="spinbutton_neg">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">0.00</property>
+                            <property name="text" translatable="no">0.00</property>
                             <property name="input_purpose">alpha</property>
                             <property name="climb_rate">1</property>
                             <property name="digits">2</property>
