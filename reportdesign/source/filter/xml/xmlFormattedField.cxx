@@ -43,7 +43,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                 ,bool _bPageCount) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
 {
-    OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
+    OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetControlElemTokenMap();
 
