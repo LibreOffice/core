@@ -38,7 +38,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
             < "Security" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "Personalization" ; RID_SVXPAGE_PERSONALIZATION ; > ;
-            < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
+            < "Application Colors" ; RID_SVXPAGE_COLORCONFIG ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Advanced" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Basic IDE Options" ; RID_SVXPAGE_BASICIDE_OPTIONS ; > ;
