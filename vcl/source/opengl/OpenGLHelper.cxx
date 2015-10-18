@@ -262,7 +262,7 @@ namespace
             // to the already saved binary, since they have the same hash value
             if( eStatus == osl::FileBase::E_EXIST )
             {
-                SAL_WARN( "vcl.opengl",
+                SAL_INFO( "vcl.opengl",
                         "No binary program saved. A file with the same hash already exists: '" << rBinaryFileName << "'" );
                 return true;
             }
@@ -289,7 +289,7 @@ namespace
             sal_uInt64 nBytesRead = 0;
             aFile.read( rBinary.data(), nSize, nBytesRead );
             assert( nSize == nBytesRead );
-            SAL_WARN("vcl.opengl", "Loading file: '" << rBinaryFileName << "': success" );
+            SAL_INFO("vcl.opengl", "Loading file: '" << rBinaryFileName << "': success" );
             return true;
         }
         else
@@ -363,7 +363,7 @@ namespace
         if( !writeProgramBinary( rBinaryFileName, aBinary ) )
             SAL_WARN("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': FAIL");
         else
-            SAL_WARN("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': success");
+            SAL_INFO("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': success");
     }
 }
 
