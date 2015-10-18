@@ -188,6 +188,27 @@ void setSuffixCell(
 
 }
 
+OUString (*getCaseAdjustmentFn(const OUString& aStr))(const OUString&)
+{
+    sal_Int32 nStrType = ScGlobal::pCharClass->getStringType(aStr,0,aStr.getLength());
+
+    OUString (*fAdjustCase)(const OUString&);
+    if ((nStrType & 0x00000004) && !(nStrType & 0x00000002))
+    {
+        fAdjustCase = [](const OUString& rStr)
+            { return ScGlobal::pCharClass->lowercase(rStr, 0 , rStr.getLength()); };
+    } else if ((nStrType & 0x00000002) && !(nStrType & 0x00000004))
+    {
+        fAdjustCase = [](const OUString& rStr)
+            { return ScGlobal::pCharClass->uppercase(rStr, 0 , rStr.getLength()); };
+    } else
+    {
+        fAdjustCase = [](const OUString& rStr)
+            { return rStr; };
+    }
+    return fAdjustCase;
+}
+
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             FillCmd& rCmd, FillDateCmd& rDateCmd,
                             double& rInc, sal_uInt16& rMinDigits,
@@ -716,6 +737,10 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
             }
 
+            OUString aStr;
+            GetString(nCol1,nRow1,aStr);
+            OUString (*fAdjustCase)(const OUString&) = getCaseAdjustmentFn(aStr);
+
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
             {
@@ -731,7 +756,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (nListIndex == 0) nListIndex = nListCount;
                         --nListIndex;
                     }
-                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
+                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), fAdjustCase(pListData->GetSubStr(nListIndex)));
                 }
 
                 if (rInner == nIEnd) break;
@@ -822,6 +847,10 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
 
         if ( pListData )                            // user defined list
         {
+            OUString aStr;
+            GetString(nCol1,nRow1,aStr);
+            OUString (*fAdjustCase)(const OUString&) = getCaseAdjustmentFn(aStr);
+
             sal_uInt16 nListCount = pListData->GetSubCount();
             if ( nListCount )
             {
@@ -829,7 +858,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 while ( nIndex < sal::static_int_cast<long>(nSub) )
                     nIndex += nListCount;
                 sal_uLong nPos = ( nListIndex + nIndex - nSub ) % nListCount;
-                aValue = pListData->GetSubStr(sal::static_int_cast<sal_uInt16>(nPos));
+                aValue = fAdjustCase(pListData->GetSubStr(sal::static_int_cast<sal_uInt16>(nPos)));
             }
         }
         else if ( eFillCmd == FILL_SIMPLE )         // fill with pattern/sample
