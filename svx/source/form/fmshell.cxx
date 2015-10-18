@@ -265,7 +265,7 @@ bool FmFormShell::PrepareClose(bool bUI)
                 const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
                 if ( rController->commitCurrentControl() )
                 {
-                    bool bModified = rController->isModifiedRow();
+                    const bool bModified = rController->isModifiedRow();
 
                     if ( bModified && bUI )
                     {
@@ -274,19 +274,16 @@ bool FmFormShell::PrepareClose(bool bUI)
                             "svx/ui/savemodifieddialog.ui");
                         switch (aQry->Execute())
                         {
-                            case RET_NO:
-                                bModified = false;
-                                // fallthrough to next case
                             case RET_YES:
+                                bResult = rController->commitCurrentRecord( );
+                                // fallthrough to next case
+                            case RET_NO:
                                 GetImpl()->didPrepareClose( true );
                                 break;
 
                             case RET_CANCEL:
                                 return false;
                         }
-
-                        if ( bModified )
-                            bResult = rController->commitCurrentRecord( );
                     }
                 }
             }
