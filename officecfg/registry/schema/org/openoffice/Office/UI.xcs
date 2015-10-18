@@ -36,7 +36,7 @@
       </prop>
     </group>
     <group oor:name="ColorScheme">
-      <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+      <!-- UIHints: Tools / Options / Star|OpenOffice / Application Colors -->
       <info>
         <desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
       </info>
@@ -610,7 +610,7 @@
         </info>
       </prop>
       <set oor:name="ColorSchemes" oor:node-type="ColorScheme">
-        <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+        <!-- UIHints: Tools / Options / Star|OpenOffice / Application Colors -->
         <info>
           <desc>Lists entries with color settings.</desc>
         </info>
