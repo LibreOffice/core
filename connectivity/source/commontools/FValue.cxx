@@ -794,7 +794,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
                             break;
                 }
                 break;
-            }
+        }
         return false;
     }
 

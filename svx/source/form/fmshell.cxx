@@ -285,8 +285,8 @@ bool FmFormShell::PrepareClose(bool bUI)
                                 return false;
                         }
 
-                            if ( bModified )
-                                bResult = rController->commitCurrentRecord( );
+                        if ( bModified )
+                            bResult = rController->commitCurrentRecord( );
                     }
                 }
             }
