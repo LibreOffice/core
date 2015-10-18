@@ -103,6 +103,74 @@ namespace {
         }
         return bIsCompatible;
     }
+
+    static bool isStorageComparable(sal_Int32 _eType1, sal_Int32 _eType2)
+    {
+        bool bIsComparable = true;
+
+        if (_eType1 != _eType2)
+        {
+            SAL_INFO( "connectivity.commontools", "ORowSetValue::isStorageCompatible _eType1 != _eType2" );
+            switch (_eType1)
+            {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                case DataType::LONGVARCHAR:
+                    bIsComparable = (DataType::CHAR         == _eType2)
+                                ||  (DataType::VARCHAR      == _eType2)
+                                ||  (DataType::LONGVARCHAR  == _eType2);
+                    break;
+
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    bIsComparable = (DataType::DECIMAL      == _eType2)
+                                ||  (DataType::NUMERIC      == _eType2);
+                    break;
+
+            case DataType::DOUBLE:
+                case DataType::REAL:
+                    bIsComparable = (DataType::DOUBLE   == _eType2)
+                                ||  (DataType::REAL     == _eType2);
+                    break;
+
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                case DataType::LONGVARBINARY:
+                    bIsComparable = (DataType::BINARY           == _eType2)
+                                ||  (DataType::VARBINARY        == _eType2)
+                                ||  (DataType::LONGVARBINARY    == _eType2);
+                    break;
+
+                case DataType::INTEGER:
+                    bIsComparable = (DataType::SMALLINT == _eType2)
+                                ||  (DataType::TINYINT  == _eType2)
+                                ||  (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
+                    break;
+                case DataType::SMALLINT:
+                    bIsComparable = (DataType::TINYINT  == _eType2)
+                                ||  (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
+                    break;
+                case DataType::TINYINT:
+                    bIsComparable = (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
+                    break;
+
+                case DataType::BLOB:
+                case DataType::CLOB:
+                case DataType::OBJECT:
+                    bIsComparable = (DataType::BLOB     == _eType2)
+                                ||  (DataType::CLOB     == _eType2)
+                                ||  (DataType::OBJECT   == _eType2);
+                    break;
+
+                default:
+                    bIsComparable = false;
+            }
+        }
+        return bIsComparable;
+    }
 }
 
 
@@ -775,7 +843,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
     if(m_bNull && _rRH.isNull())
         return true;
 
-    if ( m_eTypeKind != _rRH.m_eTypeKind )
+    if ( !isStorageComparable(m_eTypeKind, _rRH.m_eTypeKind ))
     {
         switch(m_eTypeKind)
         {
