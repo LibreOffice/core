@@ -708,6 +708,10 @@
   <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
   <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
   <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":^fi:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":_fi:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":^Fi:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":FI:" block-list:name="ﬁ"/>
   <block-list:block block-list:abbreviated-name=":fi:" block-list:name="φ"/>
   <block-list:block block-list:abbreviated-name=":Fi:" block-list:name="Φ"/>
   <block-list:block block-list:abbreviated-name=":filmska kamera:" block-list:name="🎥"/>
@@ -972,16 +976,18 @@
   <block-list:block block-list:abbreviated-name=":motka:" block-list:name="⚚"/>
   <block-list:block block-list:abbreviated-name=":mrav:" block-list:name="🐜"/>
   <block-list:block block-list:abbreviated-name=":munja:" block-list:name="☇"/>
-  <block-list:block block-list:abbreviated-name=":muškarac:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":muškarac:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":muški:" block-list:name="♂"/>
   <block-list:block block-list:abbreviated-name=":nadskup:" block-list:name="⊃"/>
   <block-list:block block-list:abbreviated-name=":namrgođeno:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":naočale:" block-list:name="👓"/>
-  <block-list:block block-list:abbreviated-name=":ne:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":ne:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":ne dijeli:" block-list:name="∤"/>
   <block-list:block block-list:abbreviated-name=":ne postoji:" block-list:name="∄"/>
   <block-list:block block-list:abbreviated-name=":Neptun:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":ni:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ni:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":nije:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":nije izvan:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":nije jednako:" block-list:name="≠"/>
   <block-list:block block-list:abbreviated-name=":nije nadskup:" block-list:name="⊅"/>
@@ -1217,8 +1223,9 @@
   <block-list:block block-list:abbreviated-name=":spajalica:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":sparkler:" block-list:name="🎇"/>
   <block-list:block block-list:abbreviated-name=":šprica:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":srca:" block-list:name="♥"/>
   <block-list:block block-list:abbreviated-name=":srce2:" block-list:name="♡"/>
-  <block-list:block block-list:abbreviated-name=":srce:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":srce:" block-list:name="❤"/>
   <block-list:block block-list:abbreviated-name=":srednja zvijezda:" block-list:name="⭐"/>
   <block-list:block block-list:abbreviated-name=":srednji kvadrat2:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":srednji kvadrat:" block-list:name="◻"/>
@@ -1249,6 +1256,7 @@
   <block-list:block block-list:abbreviated-name=":tanabata stablo:" block-list:name="🎋"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":telefon0:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":tenis:" block-list:name="🎾"/>
@@ -1353,7 +1361,8 @@
   <block-list:block block-list:abbreviated-name=":zečije uši:" block-list:name="👯"/>
   <block-list:block block-list:abbreviated-name=":zelena jabuka:" block-list:name="🍏"/>
   <block-list:block block-list:abbreviated-name=":Zemlja:" block-list:name="♁"/>
-  <block-list:block block-list:abbreviated-name=":žena:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":žena:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":ženski:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name=":Živa:" block-list:name="☿"/>

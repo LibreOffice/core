@@ -957,6 +957,7 @@
   <block-list:block block-list:abbreviated-name=":Jupiter:" block-list:name="♃"/>
   <block-list:block block-list:abbreviated-name=":JV2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":JV:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":JZ2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":JZ:" block-list:name="↙"/>
   <block-list:block block-list:abbreviated-name=":kabelka:" block-list:name="👜"/>
   <block-list:block block-list:abbreviated-name=":kaduceus:" block-list:name="☤"/>
@@ -1102,6 +1103,7 @@
   <block-list:block block-list:abbreviated-name=":malé obsahuje:" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":maltézský kříž:" block-list:name="✠"/>
   <block-list:block block-list:abbreviated-name=":mandarinka:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":manželství:" block-list:name="⚭"/>
   <block-list:block block-list:abbreviated-name=":masáž:" block-list:name="💆"/>
   <block-list:block block-list:abbreviated-name=":maso:" block-list:name="🍖"/>
   <block-list:block block-list:abbreviated-name=":mávání:" block-list:name="👋"/>
@@ -1306,6 +1308,7 @@
   <block-list:block block-list:abbreviated-name=":poslední čtvrť:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":pošta2:" block-list:name="🏣"/>
   <block-list:block block-list:abbreviated-name=":pošta:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":poštovní schránka:" block-list:name="📮"/>
   <block-list:block block-list:abbreviated-name=":poštovní trubka:" block-list:name="📯"/>
   <block-list:block block-list:abbreviated-name=":pot:" block-list:name="💦"/>
   <block-list:block block-list:abbreviated-name=":potlesk:" block-list:name="👏"/>
@@ -1499,7 +1502,7 @@
   <block-list:block block-list:abbreviated-name=":suši:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":SV2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":sval:" block-list:name="💪"/>
-  <block-list:block block-list:abbreviated-name=":svatba:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":svatba:" block-list:name="💒"/>
   <block-list:block block-list:abbreviated-name=":SV:" block-list:name="↗"/>
   <block-list:block block-list:abbreviated-name=":světlé vlasy:" block-list:name="👱"/>
   <block-list:block block-list:abbreviated-name=":svitek:" block-list:name="📜"/>
@@ -1518,6 +1521,7 @@
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
   <block-list:block block-list:abbreviated-name=":tečka uprostřed:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":televize:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":tenis:" block-list:name="🎾"/>
@@ -1582,7 +1586,8 @@
   <block-list:block block-list:abbreviated-name=":úsměv2:" block-list:name="😄"/>
   <block-list:block block-list:abbreviated-name=":usměvavá kočka2:" block-list:name="😺"/>
   <block-list:block block-list:abbreviated-name=":usměvavá kočka:" block-list:name="😸"/>
-  <block-list:block block-list:abbreviated-name=":usměvavý2:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":usměvavý2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":usměvavý:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":úsměv:" block-list:name="😃"/>
   <block-list:block block-list:abbreviated-name=":ústa:" block-list:name="👄"/>
   <block-list:block block-list:abbreviated-name=":ustaraný:" block-list:name="😟"/>
@@ -1682,6 +1687,7 @@
   <block-list:block block-list:abbreviated-name=":zámek:" block-list:name="🔒"/>
   <block-list:block block-list:abbreviated-name=":zamračená osoba:" block-list:name="🙍"/>
   <block-list:block block-list:abbreviated-name=":zamračený:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":zamyšlený:" block-list:name="😔"/>
   <block-list:block block-list:abbreviated-name=":západ slunce:" block-list:name="🌆"/>
   <block-list:block block-list:abbreviated-name=":zápisník2:" block-list:name="📔"/>
   <block-list:block block-list:abbreviated-name=":zápisník:" block-list:name="📓"/>
@@ -1709,7 +1715,7 @@
   <block-list:block block-list:abbreviated-name=":žena:" block-list:name="👩"/>
   <block-list:block block-list:abbreviated-name=":ženy:" block-list:name="🚺"/>
   <block-list:block block-list:abbreviated-name=":zklamané oddechnutí:" block-list:name="😥"/>
-  <block-list:block block-list:abbreviated-name=":zklamaný:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":zklamaný:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":zlomené srdce:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":zmatený:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":zmrzlina2:" block-list:name="🍧"/>
