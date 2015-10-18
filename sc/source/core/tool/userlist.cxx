@@ -111,7 +111,7 @@ size_t ScUserListData::GetSubCount() const
     return maSubStrings.size();
 }
 
-bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const
+bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const
 {
     // First, case sensitive search.
     SubStringsType::const_iterator itr = ::std::find_if(
@@ -119,6 +119,7 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) co
     if (itr != maSubStrings.end())
     {
         rIndex = ::std::distance(maSubStrings.begin(), itr);
+        bMatchCase = true;
         return true;
     }
 
@@ -130,8 +131,10 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) co
     if (itr != maSubStrings.end())
     {
         rIndex = ::std::distance(maSubStrings.begin(), itr);
+        bMatchCase = false;
         return true;
     }
+    bMatchCase = false;
     return false;
 }
 
@@ -146,8 +149,9 @@ OUString ScUserListData::GetSubStr(sal_uInt16 nIndex) const
 sal_Int32 ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
     sal_uInt16 nIndex1, nIndex2;
-    bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    bool bMatchCase;
+    bool bFound1 = GetSubIndex(rSubStr1, nIndex1, bMatchCase);
+    bool bFound2 = GetSubIndex(rSubStr2, nIndex2, bMatchCase);
     if (bFound1)
     {
         if (bFound2)
@@ -171,8 +175,9 @@ sal_Int32 ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSub
 sal_Int32 ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
     sal_uInt16 nIndex1, nIndex2;
-    bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    bool bMatchCase;
+    bool bFound1 = GetSubIndex(rSubStr1, nIndex1, bMatchCase);
+    bool bFound2 = GetSubIndex(rSubStr2, nIndex2, bMatchCase);
     if (bFound1)
     {
         if (bFound2)
@@ -269,14 +274,26 @@ ScUserList::ScUserList(const ScUserList& r) :
 
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 {
+    std::vector<DataType::const_iterator> matchData;
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    sal_uInt16 nIndex;
+    bool bMatchCase = false;
+
     for (; itr != itrEnd; ++itr)
     {
-        sal_uInt16 nIndex;
-        if (itr->GetSubIndex(rSubStr, nIndex))
-            return &(*itr);
+        if (itr->GetSubIndex(rSubStr, nIndex, bMatchCase))
+        {
+            if (bMatchCase)
+                return &(*itr);
+            matchData.push_back(itr);
+        }
     }
-    return NULL;
+    if (matchData.empty())
+    {
+        return NULL;
+    }
+
+    return &(**matchData.begin());
 }
 
 const ScUserListData& ScUserList::operator[](size_t nIndex) const

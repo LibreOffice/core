@@ -51,7 +51,7 @@ public:
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
     size_t GetSubCount() const;
-    bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const;
+    bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const;
     OUString GetSubStr(sal_uInt16 nIndex) const;
     sal_Int32 Compare(const OUString& rSubStr1, const OUString& rSubStr2) const;
     sal_Int32 ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const;
