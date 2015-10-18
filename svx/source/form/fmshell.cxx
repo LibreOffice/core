@@ -276,6 +276,8 @@ bool FmFormShell::PrepareClose(bool bUI)
                         {
                             case RET_NO:
                                 bModified = false;
+                                // fallthrough to next case
+                            case RET_YES:
                                 GetImpl()->didPrepareClose( true );
                                 break;
 
