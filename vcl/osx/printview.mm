@@ -24,7 +24,9 @@
 #include "osx/salprn.h"
 
 @implementation AquaPrintView
--(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
+
+-(id)initWithController: (vcl::PrinterController*)pController
+        withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
     NSRect aRect = { NSZeroPoint, [pInfoPrinter->getPrintInfo() paperSize] };
     if( (self = [super initWithFrame: aRect]) != nil )
@@ -49,7 +51,9 @@
     // #i101108# sanity check
     if( nWidth < 1 )
         nWidth = 1;
-    NSRect aRect = { { static_cast<CGFloat>(page % nWidth), static_cast<CGFloat>(page / nWidth) }, aPaperSize };
+    NSRect aRect = { { static_cast<CGFloat>(page % nWidth),
+                       static_cast<CGFloat>(page / nWidth) },
+                     aPaperSize };
     return aRect;
 }
 
@@ -61,7 +65,8 @@
 
 -(void)drawRect: (NSRect)rect
 {
-    mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y) );
+    mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x),
+                                       static_cast<int>(rect.origin.y) );
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     
@@ -69,6 +74,7 @@
     if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )
         mpController->printFilteredPage( nPage-1 );
 }
+
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
