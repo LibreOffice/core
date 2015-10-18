@@ -499,8 +499,9 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 bSuccess = true;
                 mbJob = true;
                 pInst->startedPrintJob();
-                [pPrintOperation runOperation];
+                BOOL wasSuccessful = [pPrintOperation runOperation];
                 pInst->endedPrintJob();
+                bSuccess = wasSuccessful ? true : false;
                 bWasAborted = [[[pPrintOperation printInfo] jobDisposition] compare: NSPrintCancelJob] == NSOrderedSame;
                 mbJob = false;
                 if( pReleaseAfterUse )

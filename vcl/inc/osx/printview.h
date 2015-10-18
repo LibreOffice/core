@@ -42,7 +42,8 @@ struct PrintAccessoryViewState
     vcl::PrinterController*     mpController;
     AquaSalInfoPrinter*         mpInfoPrinter;
 }
--(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
+-(id)initWithController: (vcl::PrinterController*)pController
+        withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
 -(BOOL)knowsPageRange: (NSRangePointer)range;
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;
@@ -52,7 +53,9 @@ struct PrintAccessoryViewState
 @interface AquaPrintAccessoryView : NSObject
 {
 }
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp
+               withController: (vcl::PrinterController*)pController
+                    withState: (PrintAccessoryViewState*)pState;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_PRINTVIEW_H
