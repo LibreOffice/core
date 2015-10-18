@@ -45,11 +45,15 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-/* Note: the accessory view as implemented here is already deprecated in Leopard. Unfortunately
-   as long as our baseline is Tiger we cannot gain the advantages over multiple accessory views
-   as well havs having accessory views AND a preview (as long as you are linked vs. 10.4 libraries
-   the preview insists on not being present. This is unfortunate.
-*/
+#if MACOSX_SDK_VERSION <= 1040
+// as long as you are linking with 10.4 libraries there's no preview
+# define VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+#  undef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+#else
+// since 10.5 you can use multiple accessory views and have accessory views and a preview
+# define MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+#  undef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+#endif
 
 class ControllerProperties;
 
@@ -60,93 +64,207 @@ class ControllerProperties;
 -(id)initWithControllerMap: (ControllerProperties*)pController;
 -(void)triggered:(id)pSender;
 -(void)triggeredNumeric:(id)pSender;
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
 -(void)triggeredPreview:(id)pSender;
+#endif
 -(void)dealloc;
 @end
 
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+
+@interface AquaPrintPanelAccessoryController : NSViewController< NSPrintPanelAccessorizing >
+{
+    NSPrintOperation *mpPrintOperation;
+    vcl::PrinterController *mpPrinterController;
+    PrintAccessoryViewState *mpViewState;
+}
+
+-(void)forPrintOperation:(NSPrintOperation*)pPrintOp;
+-(void)withPrinterController:(vcl::PrinterController*)pController;
+-(void)withViewState:(PrintAccessoryViewState*)pState;
+
+-(NSPrintOperation*)printOperation;
+-(vcl::PrinterController*)printerController;
+-(PrintAccessoryViewState*)viewState;
+
+-(NSSet*)keyPathsForValuesAffectingPreview;
+-(NSArray*)localizedSummaryItems;
+
+-(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount;
+
+@end
+
+@implementation AquaPrintPanelAccessoryController
+
+-(void)forPrintOperation:(NSPrintOperation*)pPrintOp
+    { mpPrintOperation = pPrintOp; }
+
+-(void)withPrinterController:(vcl::PrinterController*)pController
+    { mpPrinterController = pController; }
+
+-(void)withViewState:(PrintAccessoryViewState*)pState
+    { mpViewState = pState; }
+
+-(NSPrintOperation*)printOperation
+    { return mpPrintOperation; }
+
+-(vcl::PrinterController*)printerController
+    { return mpPrinterController; }
+
+-(PrintAccessoryViewState*)viewState
+    { return mpViewState; }
+
+-(NSSet*)keyPathsForValuesAffectingPreview
+{
+    return [ NSSet setWithObject:@"updatePrintOperation" ];
+}
+
+-(NSArray*)localizedSummaryItems
+{
+    return [ NSArray arrayWithObject:
+               [ NSDictionary dictionary ] ];
+}
+
+-(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount
+{
+    // page range may be changed by option choice
+    sal_Int32 nPages = mpPrinterController->getFilteredPageCount();
+
+    mpViewState->bNeedRestart = false;
+    if( nPages != pLastPageCount )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        SAL_INFO( "vcl.osx.print", "number of pages changed" <<
+                  " from " << pLastPageCount << " to " << nPages );
+        #endif
+        mpViewState->bNeedRestart = true;
+    }
+
+    NSTabView* pTabView = [[[self view] subviews] objectAtIndex:0];
+    NSTabViewItem* pItem = [pTabView selectedTabViewItem];
+    if( pItem )
+        mpViewState->nLastPage = [pTabView indexOfTabViewItem: pItem];
+    else
+        mpViewState->nLastPage = 0;
+
+    if( mpViewState->bNeedRestart )
+    {
+        // AppKit does not give a chance of changing the page count
+        // and don't let cancel the dialog either
+        // hack: send a cancel message to the modal window displaying views
+        NSWindow* pNSWindow = [NSApp modalWindow];
+        if( pNSWindow )
+            [pNSWindow cancelOperation: nil];
+        [[mpPrintOperation printInfo] setJobDisposition: NSPrintCancelJob];
+    }
+
+    return nPages;
+}
+
+@end
+
+#endif
 
 class ControllerProperties
 {
-    vcl::PrinterController*             mpController;
     std::map< int, rtl::OUString >      maTagToPropertyName;
     std::map< int, sal_Int32 >          maTagToValueInt;
     std::map< NSView*, NSView* >        maViewPairMap;
     std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
     sal_Int32                           mnLastPageCount;
-    PrintAccessoryViewState*            mpState;
+    ResStringArray                      maLocalizedStrings;
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+    vcl::PrinterController*             mpController;
     NSPrintOperation*                   mpOp;
+    PrintAccessoryViewState*            mpState;
+    NSBox*                              mpPreviewBox;
+    NSImageView*                        mpPreview;  // print preview is not provided "by default"
     NSView*                             mpAccessoryView;
     NSTabView*                          mpTabView;
-    NSBox*                              mpPreviewBox;
-    NSImageView*                        mpPreview;
     NSTextField*                        mpPageEdit;
     NSStepper*                          mpStepper;
-    NSTextView*                         mpPagesLabel;
-    ResStringArray                      maLocalizedStrings;        
+#else
+    AquaPrintPanelAccessoryController*  mpAccessoryController;
+#endif
 
-    public:
-    ControllerProperties( vcl::PrinterController* i_pController,
-                          NSPrintOperation* i_pOp,
-                          NSView* i_pAccessoryView,
-                          NSTabView* i_pTabView,
-                          PrintAccessoryViewState* i_pState )
-    : mpController( i_pController ),
-      mnNextTag( 0 ),
-      mnLastPageCount( i_pController->getFilteredPageCount() ),
-      mpState( i_pState ),
-      mpOp( i_pOp ),
-      mpAccessoryView( i_pAccessoryView ),
-      mpTabView( i_pTabView ),
-      mpPreviewBox( nil ),
-      mpPreview( nil ),
-      mpPageEdit( nil ),
-      mpStepper( nil ),
-      mpPagesLabel( nil ),
-      maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
+public:
+    ControllerProperties(
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+                          vcl::PrinterController* i_pController
+                        , NSPrintOperation* i_pOp
+                        , PrintAccessoryViewState* i_pState
+                        , NSView* i_pAccessoryView
+                        , NSTabView* i_pTabView
+#else
+                          AquaPrintPanelAccessoryController* i_pAccessoryController
+#endif
+                         )
+    : mnNextTag( 0 )
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+    , mnLastPageCount( i_pController->getFilteredPageCount() )
+    , mpController( i_pController )
+    , mpOp( i_pOp )
+    , mpState( i_pState )
+    , mpPreviewBox( nil )
+    , mpPreview( nil )
+    , mpAccessoryView( i_pAccessoryView )
+    , mpTabView( i_pTabView )
+    , mpPageEdit( nil )
+    , mpStepper( nil )
+#else
+    , mnLastPageCount( [i_pAccessoryController printerController]->getFilteredPageCount() )
+#endif
+    , maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+    , mpAccessoryController( i_pAccessoryController )
+#endif
     {
-        mpState->bNeedRestart = false;
-        DBG_ASSERT( maLocalizedStrings.Count() >= 5, "resources not found !" );
+        assert( maLocalizedStrings.Count() >= 5 && "resources not found" );
     }
-    
+
     rtl::OUString getMoreString()
     {
         return maLocalizedStrings.Count() >= 4
                ? OUString( maLocalizedStrings.GetString( 3 ) )
                : OUString( "More" );
     }
-    
+
     rtl::OUString getPrintSelectionString()
     {
         return maLocalizedStrings.Count() >= 5
                ? OUString( maLocalizedStrings.GetString( 4 ) )
                : OUString( "Print selection only" );
     }
-    
+
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
     void updatePrintJob()
     {
-        // TODO: refresh page count etc from mpController 
-
-        // page range may have changed depending on options
+        // page range may be changed by option choice
         sal_Int32 nPages = mpController->getFilteredPageCount();
-        #if OSL_DEBUG_LEVEL > 1
+
+        mpState->bNeedRestart = false;
         if( nPages != mnLastPageCount )
-            fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
-        #endif
-        mpState->bNeedRestart = (nPages != mnLastPageCount);
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            SAL_INFO( "vcl.osx.print", "number of pages changed" <<
+                      " from " << mnLastPageCount << " to " << nPages );
+            #endif
+            mpState->bNeedRestart = true;
+        }
+        mnLastPageCount = nPages;
+
         NSTabViewItem* pItem = [mpTabView selectedTabViewItem];
         if( pItem )
             mpState->nLastPage = [mpTabView indexOfTabViewItem: pItem];
         else
             mpState->nLastPage = 0;
-        mnLastPageCount = nPages;
+
         if( mpState->bNeedRestart )
         {
-            // Warning: bad hack ahead
-            // Apple does not give us a chance of changing the page count,
-            // and they don't let us cancel the dialog either
-            // hack: send a cancel message to the window displaying our views.
-            // this is ugly.
+            // AppKit does not give a chance of changing the page count
+            // and don't let cancel the dialog either
+            // hack: send a cancel message to the modal window displaying views
             NSWindow* pNSWindow = [NSApp modalWindow];
             if( pNSWindow )
                 [pNSWindow cancelOperation: nil];
@@ -158,7 +276,8 @@ class ControllerProperties
             updatePreviewImage( nPage-1 );
         }
     }
-    
+#endif
+
     int addNameTag( const rtl::OUString& i_rPropertyName )
     {
         int nNewTag = mnNextTag++;
@@ -173,18 +292,18 @@ class ControllerProperties
         maTagToValueInt[ nNewTag ] = i_nValue;
         return nNewTag;
     }
-    
+
     void addObservedControl( NSObject* i_pView )
     {
         maViews.push_back( i_pView );
     }
-    
+
     void addViewPair( NSView* i_pLeft, NSView* i_pRight )
     {
         maViewPairMap[ i_pLeft ] = i_pRight;
         maViewPairMap[ i_pRight ] = i_pLeft;
     }
-    
+
     NSView* getPair( NSView* i_pLeft ) const
     {
         NSView* pRight = nil;
@@ -193,18 +312,25 @@ class ControllerProperties
             pRight = it->second;
         return pRight;
     }
-    
+
     void changePropertyWithIntValue( int i_nTag )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         std::map< int, sal_Int32 >::const_iterator value_it = maTagToValueInt.find( i_nTag );
         if( name_it != maTagToPropertyName.end() && value_it != maTagToValueInt.end() )
         {
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+#endif
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= value_it->second;
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
                 updatePrintJob();
+#else
+                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
+#endif
             }
         }
     }
@@ -214,20 +340,30 @@ class ControllerProperties
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+#endif
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_nValue;
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
                 updatePrintJob();
+#else
+                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
+#endif
             }
         }
     }
-    
+
     void changePropertyWithBoolValue( int i_nTag, bool i_bValue )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+#endif
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
@@ -236,25 +372,36 @@ class ControllerProperties
                    pVal->Value <<= i_bValue ? sal_Int32(2) : sal_Int32(0);
                else
                    pVal->Value <<= i_bValue;
-                updatePrintJob(); 
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+                updatePrintJob();
+#else
+                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
+#endif
             }
         }
     }
-    
+
     void changePropertyWithStringValue( int i_nTag, const rtl::OUString& i_rValue )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+#endif
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_rValue;
-                updatePrintJob(); 
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+                updatePrintJob();
+#else
+                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
+#endif
             }
         }
     }
-    
+
     void updateEnableState()
     {
         for( std::vector< NSObject* >::iterator it = maViews.begin(); it != maViews.end(); ++it )
@@ -266,14 +413,17 @@ class ControllerProperties
                 pCtrl = (NSControl*)pObj;
             else if( [pObj isKindOfClass: [NSCell class]] )
                 pCell = (NSCell*)pObj;
-            
+
             int nTag = pCtrl ? [pCtrl tag] :
                        pCell ? [pCell tag] :
                        -1;
-            
+
             std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
             if( name_it != maTagToPropertyName.end() && ! name_it->second.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrintContent")) )
             {
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+                vcl::PrinterController * mpController = [mpAccessoryController printerController];
+#endif
                 BOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
@@ -284,11 +434,12 @@ class ControllerProperties
                 }
                 else if( pCell )
                     [pCell setEnabled: bEnabled];
-                
             }
         }
     }
-    
+
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+
     void updatePreviewImage( sal_Int32 i_nPage )
     {
         sal_Int32 nPages = mpController->getFilteredPageCount();
@@ -339,7 +490,7 @@ class ControllerProperties
     {
         if( maLocalizedStrings.Count() < 3 )
             return;
-        
+
         // get the preview control
         NSRect aPreviewFrame = [mpAccessoryView frame];
         aPreviewFrame.origin.x = 0;
@@ -363,24 +514,24 @@ class ControllerProperties
         [mpPreview setImageAlignment: NSImageAlignCenter];
         [mpPreview setImageFrameStyle: NSImageFrameNone];
         [mpPreviewBox addSubview: [mpPreview autorelease]];
-    
+
         // add a label
         sal_Int32 nPages = mpController->getFilteredPageCount();
         rtl::OUStringBuffer aBuf( 16 );
         aBuf.append( "/ " );
         aBuf.append( rtl::OUString::number( nPages ) );
-    
+
         NSString* pText = CreateNSString( aBuf.makeStringAndClear() );
         NSRect aTextRect = { { 100, 5 }, { 100, 22 } };
-        mpPagesLabel = [[NSTextView alloc] initWithFrame: aTextRect];
-        [mpPagesLabel setFont: [NSFont controlContentFontOfSize: 0]];
-        [mpPagesLabel setEditable: NO];
-        [mpPagesLabel setSelectable: NO];
-        [mpPagesLabel setDrawsBackground: NO];
-        [mpPagesLabel setString: [pText autorelease]];
-        [mpPagesLabel setToolTip: [CreateNSString( maLocalizedStrings.GetString( 2 ) ) autorelease]];
-        [mpPreviewBox addSubview: [mpPagesLabel autorelease]];
-    
+        NSTextView* aPagesLabel = [[NSTextView alloc] initWithFrame: aTextRect];
+        [aPagesLabel setFont: [NSFont controlContentFontOfSize: 0]];
+        [aPagesLabel setEditable: NO];
+        [aPagesLabel setSelectable: NO];
+        [aPagesLabel setDrawsBackground: NO];
+        [aPagesLabel setString: [pText autorelease]];
+        [aPagesLabel setToolTip: [CreateNSString( maLocalizedStrings.GetString( 2 ) ) autorelease]];
+        [mpPreviewBox addSubview: [aPagesLabel autorelease]];
+
         NSRect aFieldRect = { { 45, 5 }, { 35, 25 } };
         mpPageEdit = [[NSTextField alloc] initWithFrame: aFieldRect];
         [mpPageEdit setEditable: YES];
@@ -388,14 +539,14 @@ class ControllerProperties
         [mpPageEdit setDrawsBackground: YES];
         [mpPageEdit setToolTip: [CreateNSString( maLocalizedStrings.GetString( 1 ) ) autorelease]];
         [mpPreviewBox addSubview: [mpPageEdit autorelease]];
-    
+
         // add a stepper control
         NSRect aStepFrame = { { 85, 5 }, { 15, 25 } };
         mpStepper = [[NSStepper alloc] initWithFrame: aStepFrame];
         [mpStepper setIncrement: 1];
         [mpStepper setValueWraps: NO];
         [mpPreviewBox addSubview: [mpStepper autorelease]];
-                        
+
         // constrain the text field to decimal numbers
         NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
         [pFormatter setFormatterBehavior: NSNumberFormatterBehavior10_4];
@@ -407,20 +558,20 @@ class ControllerProperties
         [mpPageEdit setFormatter: pFormatter];
         [mpStepper setMinValue: 1];
         [mpStepper setMaxValue: nPages];
-    
+
         [mpPageEdit setIntValue: 1];
         [mpStepper setIntValue: 1];
-    
+
         // connect target and action
         [mpStepper setTarget: i_pCtrlTarget];
         [mpStepper setAction: @selector(triggeredPreview:)];
         [mpPageEdit setTarget: i_pCtrlTarget];
         [mpPageEdit setAction: @selector(triggeredPreview:)];
-        
+
         // set first preview image
         updatePreviewImage( 0 );
     }
-    
+
     void changePreview( NSObject* i_pSender )
     {
         if( [i_pSender isMemberOfClass: [NSTextField class]] )
@@ -444,6 +595,9 @@ class ControllerProperties
             }
         }
     }
+
+#endif
+
 };
 
 static OUString filterAccelerator( rtl::OUString const & rText )
@@ -455,14 +609,16 @@ static OUString filterAccelerator( rtl::OUString const & rText )
 }
 
 @implementation ControlTarget
+
 -(id)initWithControllerMap: (ControllerProperties*)pController
 {
     if( (self = [super init]) )
     {
-        mpController = pController; 
+        mpController = pController;
     }
     return self;
 }
+
 -(void)triggered:(id)pSender
 {
     if( [pSender isMemberOfClass: [NSPopUpButton class]] )
@@ -500,10 +656,12 @@ static OUString filterAccelerator( rtl::OUString const & rText )
     }
     else
     {
-        SAL_INFO( "vcl.osx.print", "Unsupported class" << ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil"));
+        SAL_INFO( "vcl.osx.print", "Unsupported class" <<
+                  ( [pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil" ) );
     }
     mpController->updateEnableState();
 }
+
 -(void)triggeredNumeric:(id)pSender
 {
     if( [pSender isMemberOfClass: [NSTextField class]] )
@@ -532,19 +690,25 @@ static OUString filterAccelerator( rtl::OUString const & rText )
     }
     else
     {
-        SAL_INFO( "vcl.osx.print", "Unsupported class" << ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil"));
+        SAL_INFO( "vcl.osx.print", "Unsupported class" <<
+                  ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil") );
     }
     mpController->updateEnableState();
 }
+
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
 -(void)triggeredPreview:(id)pSender
 {
     mpController->changePreview( pSender );
 }
+#endif
+
 -(void)dealloc
 {
     delete mpController;
     [super dealloc];
 }
+
 @end
 
 struct ColumnItem
@@ -584,7 +748,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
                                   )
 {
     // balance columns
-    
+
     // first get overall column widths
     long nLeftWidth = 0;
     long nRightWidth = 0;
@@ -600,7 +764,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
         if( nW > nRightWidth )
             nRightWidth = nW;
     }
-    
+
     // right align left column
     for( size_t i = 0; i < rLeftColumn.size(); i++ )
     {
@@ -637,7 +801,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
             [rRightColumn[i].pControl setFrame: aCtrlRect];
         }
     }
-    
+
     NSArray* pSubViews = [pNSView subviews];
     unsigned int nViews = [pSubViews count];
     NSRect aUnion = NSZeroRect;
@@ -647,7 +811,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
     {
         aUnion = NSUnionRect( aUnion, [[pSubViews objectAtIndex: n] frame] );
     }
-    
+
     // move everything so it will fit
     for( unsigned int n = 0; n < nViews; n++ )
     {
@@ -657,12 +821,12 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
         aFrame.origin.y -= aUnion.origin.y - 5;
         [pCurSubView setFrame: aFrame];
     }
-    
+
     // resize the view itself
     aUnion.size.height += 10;
     aUnion.size.width += 20;
     [pNSView setFrameSize: aUnion.size];
-    
+
     if( aUnion.size.width > rMaxSize.width )
         rMaxSize.width = aUnion.size.width;
     if( aUnion.size.height > rMaxSize.height )
@@ -728,10 +892,11 @@ static sal_Int32 findBreak( const rtl::OUString& i_rText, sal_Int32 i_nPos )
     Reference< i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
     if( xBI.is() )
     {
-        i18n::Boundary aBoundary = xBI->getWordBoundary( i_rText, i_nPos,
-                                                         Application::GetSettings().GetLanguageTag().getLocale(),
-                                                         i18n::WordType::ANYWORD_IGNOREWHITESPACES,
-                                                         sal_True );
+        i18n::Boundary aBoundary =
+                xBI->getWordBoundary( i_rText, i_nPos,
+                                      Application::GetSettings().GetLanguageTag().getLocale(),
+                                      i18n::WordType::ANYWORD_IGNOREWHITESPACES,
+                                      true );
         nRet = aBoundary.endPos;
     }
     return nRet;
@@ -855,7 +1020,9 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     // setup radio matrix
     NSButtonCell* pProto = [[NSButtonCell alloc] init];
     
-    NSRect aRadioRect = { { static_cast<CGFloat>(rCurX + nOff), 0 }, { static_cast<CGFloat>(280 - rCurX), static_cast<CGFloat>(5*rChoices.getLength()) } };
+    NSRect aRadioRect = { { static_cast<CGFloat>(rCurX + nOff), 0 },
+                          { static_cast<CGFloat>(280 - rCurX),
+                            static_cast<CGFloat>(5*rChoices.getLength()) } };
     [pProto setTitle: @"RadioButtonGroup"];
     [pProto setButtonType: NSRadioButton];
     NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
@@ -1079,43 +1246,56 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     rCurY = aFieldRect.origin.y - 5;
 }
 
-// In 10.5 and later:
-// 'setAccessoryView:' is deprecated
-
-// Make deprecation warnings just warnings in a -Werror compilation.
-
-#ifdef __GNUC__
-// #pragma GCC diagnostic push
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
-
 @implementation AquaPrintAccessoryView
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState
+
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp
+               withController: (vcl::PrinterController*)pController
+                    withState: (PrintAccessoryViewState*)pState
 {
     const Sequence< PropertyValue >& rOptions( pController->getUIOptions() );
     if( rOptions.getLength() == 0 )
         return nil;
 
-    NSView* pCurParent = 0;
-    long nCurY = 0;
-    long nCurX = 0;
-    NSRect aViewFrame = { NSZeroPoint, {600, 400 } };
-    NSRect aTabViewFrame = { { 190, 0 }, {410, 400 } };
-    NSSize aMaxTabSize = NSZeroSize;
+    NSRect aViewFrame = { NSZeroPoint, { 600, 400 } };
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+    NSRect aTabViewFrame = { { 190, 0 }, { 410, 400 } };
+#else
+    NSRect aTabViewFrame = aViewFrame;
+#endif
+
     NSView* pAccessoryView = [[NSView alloc] initWithFrame: aViewFrame];
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aTabViewFrame];
     [pAccessoryView addSubview: [pTabView autorelease]];
-    
-    bool bIgnoreSubgroup = false;
-    
-    ControllerProperties* pControllerProperties = new ControllerProperties( pController, pOp, pAccessoryView, pTabView, pState );
+
+#ifdef MODERN_IMPLEMENTATION_OF_PRINT_DIALOG
+    // create the accessory controller
+    AquaPrintPanelAccessoryController* pAccessoryController =
+            [[AquaPrintPanelAccessoryController alloc] initWithNibName: nil bundle: nil];
+    [pAccessoryController setView: [pAccessoryView autorelease]];
+    [pAccessoryController forPrintOperation: pOp];
+    [pAccessoryController withPrinterController: pController];
+    [pAccessoryController withViewState: pState];
+#endif
+
+    NSView* pCurParent = 0;
+    long nCurY = 0;
+    long nCurX = 0;
+    NSSize aMaxTabSize = NSZeroSize;
+
+    ControllerProperties* pControllerProperties =
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+            new ControllerProperties( pController, pOp, pState, pAccessoryView, pTabView );
+#else
+            new ControllerProperties( pAccessoryController );
+#endif
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithControllerMap: pControllerProperties];
-    
+
     std::vector< ColumnItem > aLeftColumn, aRightColumn;
-    
+
     // ugly:
     // prepend a "selection" checkbox if the properties have such a selection in PrintContent
     bool bAddSelectionCheckBox = false, bSelectionBoxEnabled = false, bSelectionBoxChecked = false;
+
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
         Sequence< beans::PropertyValue > aOptProp;
@@ -1167,15 +1347,15 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         rOptions[i].Value >>= aOptProp;
 
         // extract ui element
-        bool bEnabled = true;
         rtl::OUString aCtrlType;
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         rtl::OUString aGroupHint;
         Sequence< rtl::OUString > aChoices;
+        bool bEnabled = true;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         long nAttachOffset = 0;
-        sal_Bool bIgnore = sal_False;
+        bool bIgnore = false;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -1203,7 +1383,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
-                bEnabled = bValue;
+                bEnabled = bValue ? true : false;
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinValue")) )
             {
@@ -1219,7 +1399,9 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InternalUIOnly")) )
             {
-                rEntry.Value >>= bIgnore;
+                sal_Bool bValue = sal_False;
+                rEntry.Value >>= bValue;
+                bIgnore = bValue ? true : false;
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GroupingHint")) )
             {
@@ -1235,8 +1417,10 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))  ||
             aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bool")) )
         {
-            // since our build target is MacOSX 10.4 we can have only one accessory view
-            // so we have a single accessory view that is tabbed for grouping
+            bool bIgnoreSubgroup = false;
+
+            // with `setAccessoryView' method only one accessory view can be set
+            // so create this single accessory view as tabbed for grouping
             if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Group"))
                 || ! pCurParent
                 || ( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Subgroup")) && nCurY < -250 && ! bIgnore ) 
@@ -1245,10 +1429,11 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 rtl::OUString aGroupTitle( aText );
                 if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Subgroup")) )
                     aGroupTitle = pControllerProperties->getMoreString();
+
                 // set size of current parent
                 if( pCurParent )
                     adjustViewAndChildren( pCurParent, aMaxTabSize, aLeftColumn, aRightColumn );
-                
+
                 // new tab item
                 if( ! aText.getLength() )
                     aText = "OOo";
@@ -1259,11 +1444,9 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 pCurParent = [[NSView alloc] initWithFrame: aTabViewFrame];
                 [pItem setView: pCurParent];
                 [pLabel release];
-                
-                // reset indent
-                nCurX = 20;
-                // reset Y
-                nCurY = 0;
+
+                nCurX = 20; // reset indent
+                nCurY = 0;  // reset Y
                 // clear columns
                 aLeftColumn.clear();
                 aRightColumn.clear();
@@ -1277,7 +1460,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                     bAddSelectionCheckBox = false;
                 }
             }
-            
+
             if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Subgroup")) && pCurParent )
             {
                 bIgnoreSubgroup = bIgnore;
@@ -1292,12 +1475,12 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             }
             else if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bool")) && pCurParent )
             {
-                sal_Bool bVal = sal_False;                
+                sal_Bool bVal = sal_False;
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
                 addBool( pCurParent, nCurX, nCurY, nAttachOffset,
-                         aText, true, aPropertyName, bVal,
+                         aText, true, aPropertyName, bVal?true:false,
                          aRightColumn, pControllerProperties, pCtrlTarget );
             }
             else if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Radio")) && pCurParent )
@@ -1325,7 +1508,8 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                          aLeftColumn, aRightColumn,
                          pControllerProperties, pCtrlTarget );
             }
-            else if( (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Edit")) || aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))) && pCurParent )
+            else if( (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Edit"))
+                || aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))) && pCurParent )
             {
                 // current value
                 PropertyValue* pVal = pController->getValue( aPropertyName );
@@ -1341,17 +1525,19 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             SAL_INFO( "vcl.osx.print", "Unsupported UI option \"" << aCtrlType << "\"");
         }
     }
-        
+
     pControllerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize, aLeftColumn, aRightColumn );
-    
-    // leave some space for the preview
+
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+    // leave some space for preview
     if( aMaxTabSize.height < 200 )
         aMaxTabSize.height = 200;
-    
+#endif
+
     // now reposition everything again so it is upper bound
     adjustTabViews( pTabView, aMaxTabSize );
-    
+
     // find the minimum needed tab size
     NSSize aTabCtrlSize = [pTabView minimumSize];
     aTabCtrlSize.height += aMaxTabSize.height + 10;
@@ -1361,20 +1547,28 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     aViewFrame.size.width = aTabCtrlSize.width + aTabViewFrame.origin.x;
     aViewFrame.size.height = aTabCtrlSize.height + aTabViewFrame.origin.y;
     [pAccessoryView setFrameSize: aViewFrame.size];
-    
-    pControllerProperties->setupPreview( pCtrlTarget );
 
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
+    pControllerProperties->setupPreview( pCtrlTarget );
+#endif
+
+#ifdef VINTAGE_IMPLEMENTATION_OF_PRINT_DIALOG
     // set the accessory view
     [pOp setAccessoryView: [pAccessoryView autorelease]];
+#else // -(void)setAccessoryView:(NSView *)aView of NSPrintOperation is deprecated since 10.5
+    // get the print panel
+    NSPrintPanel* pPrintPanel = [pOp printPanel];
+    [pPrintPanel setOptions: [pPrintPanel options] | NSPrintPanelShowsPreview];
+    // add the accessory controller to the panel
+    [pPrintPanel addAccessoryController: [pAccessoryController autorelease]];
+#endif
 
     // set the current selecte tab item
     if( pState->nLastPage >= 0 && pState->nLastPage < [pTabView numberOfTabViewItems] )
         [pTabView selectTabViewItemAtIndex: pState->nLastPage];
-        
+
     return pCtrlTarget;
 }
-
-// #pragma GCC diagnostic pop
 
 @end
 
