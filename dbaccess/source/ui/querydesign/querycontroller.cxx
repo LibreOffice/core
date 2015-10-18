@@ -66,6 +66,7 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
@@ -1316,33 +1317,17 @@ void OQueryController::executeQuery()
             }
             if (xDisp.is())
             {
-                Sequence< PropertyValue> aProps(9);
-                aProps[0].Name = PROPERTY_DATASOURCENAME;
-                aProps[0].Value <<= sDataSourceName;
-
-                aProps[1].Name = PROPERTY_COMMAND_TYPE;
-                aProps[1].Value <<= CommandType::COMMAND;
-
-                aProps[2].Name = PROPERTY_COMMAND;
-                aProps[2].Value <<= sTranslatedStmt;
-
-                aProps[3].Name = PROPERTY_ENABLE_BROWSER;
-                aProps[3].Value <<= false;
-
-                aProps[4].Name = PROPERTY_ACTIVE_CONNECTION;
-                aProps[4].Value <<= getConnection();
-
-                aProps[5].Name = PROPERTY_UPDATE_CATALOGNAME;
-                aProps[5].Value <<= m_sUpdateCatalogName;
-
-                aProps[6].Name = PROPERTY_UPDATE_SCHEMANAME;
-                aProps[6].Value <<= m_sUpdateSchemaName;
-
-                aProps[7].Name = PROPERTY_UPDATE_TABLENAME;
-                aProps[7].Value <<= m_sUpdateTableName;
-
-                aProps[8].Name = PROPERTY_ESCAPE_PROCESSING;
-                aProps[8].Value <<= m_bEscapeProcessing;
+	      auto aProps(::comphelper::InitPropertySequence({
+		{ PROPERTY_DATASOURCENAME, makeAny(sDataSourceName) },
+                { PROPERTY_COMMAND_TYPE, makeAny(CommandType::COMMAND) },
+		{ PROPERTY_COMMAND, makeAny(sTranslatedStmt) },
+		{ PROPERTY_ENABLE_BROWSER, makeAny(false) },
+		{ PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
+		{ PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
+		{ PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
+		{ PROPERTY_UPDATE_TABLENAME, makeAny(m_sUpdateTableName) },
+		{ PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
+	      }));
 
                 xDisp->dispatch(aWantToDispatch, aProps);
                 // check the state of the beamer
