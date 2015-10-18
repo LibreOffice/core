@@ -72,7 +72,7 @@ namespace pcr
             @param _rSlaveHandlers
                 the set of slave handlers to invoke. Must not be <NULL/>
         */
-        PropertyComposer( const ::std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >& _rSlaveHandlers );
+        explicit PropertyComposer( const ::std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >& _rSlaveHandlers );
 
     public:
         // XPropertyHandler overridables
@@ -131,7 +131,7 @@ namespace pcr
         class MethodGuard : public ::osl::MutexGuard
         {
         public:
-            MethodGuard( PropertyComposer& _rInstance )
+            explicit MethodGuard( PropertyComposer& _rInstance )
                 : ::osl::MutexGuard( _rInstance.m_aMutex )
             {
                 if ( _rInstance.m_aSlaveHandlers.empty() )

@@ -86,7 +86,7 @@ namespace pcr
         static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     protected:
-        GenericPropertyHandler(
+        explicit GenericPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 

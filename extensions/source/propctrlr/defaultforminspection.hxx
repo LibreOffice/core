@@ -62,7 +62,7 @@ namespace pcr
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     public:
-        DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );
+        explicit DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );
 
     protected:
         // Service constructors

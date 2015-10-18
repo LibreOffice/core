@@ -40,7 +40,7 @@ namespace
     class ResourceIndexAccessBase : public cppu::WeakImplHelper< css::container::XIndexAccess>
     {
         public:
-            ResourceIndexAccessBase( std::shared_ptr<ResMgr> pResMgr)
+            explicit ResourceIndexAccessBase( std::shared_ptr<ResMgr> pResMgr)
                 : m_pResMgr(pResMgr)
             {
                 OSL_ENSURE(m_pResMgr, "no resource manager given");
@@ -61,7 +61,7 @@ namespace
     class ResourceStringIndexAccess : public ResourceIndexAccessBase
     {
         public:
-            ResourceStringIndexAccess( std::shared_ptr<ResMgr> pResMgr)
+            explicit ResourceStringIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
             virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
@@ -73,7 +73,7 @@ namespace
     class ResourceStringListIndexAccess : public ResourceIndexAccessBase
     {
         public:
-            ResourceStringListIndexAccess( std::shared_ptr<ResMgr> pResMgr)
+            explicit ResourceStringListIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
             virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;

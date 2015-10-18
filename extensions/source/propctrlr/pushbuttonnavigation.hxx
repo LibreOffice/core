@@ -43,7 +43,7 @@ namespace pcr
             @param _rxControlModel
                 the control model which is or will be bound
         */
-        PushButtonNavigation(
+        explicit PushButtonNavigation(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel
         );
 

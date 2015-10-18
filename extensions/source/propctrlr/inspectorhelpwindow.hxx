@@ -40,7 +40,7 @@ namespace pcr
         sal_Int32       m_nMaxLines;
 
     public:
-        InspectorHelpWindow( vcl::Window* _pParent );
+        explicit InspectorHelpWindow( vcl::Window* _pParent );
         virtual ~InspectorHelpWindow();
         virtual void dispose() override;
 

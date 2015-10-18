@@ -2995,7 +2995,7 @@ namespace pcr
         class SQLCommandPropertyUI : public ISQLCommandPropertyUI
         {
         protected:
-            SQLCommandPropertyUI( const Reference< XPropertySet >& _rxObject )
+            explicit SQLCommandPropertyUI( const Reference< XPropertySet >& _rxObject )
                 : m_xObject(_rxObject)
             {
                 if ( !m_xObject.is() )
@@ -3012,7 +3012,7 @@ namespace pcr
         class FormSQLCommandUI : public SQLCommandPropertyUI
         {
         public:
-            FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
+            explicit FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
 
             // ISQLCommandAdapter
             virtual OUString        getSQLCommand() const override;
@@ -3079,7 +3079,7 @@ namespace pcr
         class ValueListCommandUI : public SQLCommandPropertyUI
         {
         public:
-            ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
+            explicit ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
 
             // ISQLCommandAdapter
             virtual OUString        getSQLCommand() const override;

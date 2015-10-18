@@ -990,7 +990,7 @@ namespace pcr
             {
                 DBG_ASSERT( aHandler->get(), "OPropertyBrowserController::doInspection: invalid handler!" );
 
-                StlSyntaxSequence< Property > aThisHandlersProperties = (*aHandler)->getSupportedProperties();
+                StlSyntaxSequence< Property > aThisHandlersProperties(  (*aHandler)->getSupportedProperties() );
 
                 if ( aThisHandlersProperties.empty() )
                 {
@@ -1032,7 +1032,7 @@ namespace pcr
                 }
 
                 // determine the superseded properties
-                StlSyntaxSequence< OUString > aSupersededByThisHandler = (*aHandler)->getSupersededProperties();
+                StlSyntaxSequence< OUString > aSupersededByThisHandler( (*aHandler)->getSupersededProperties() );
                 for (   StlSyntaxSequence< OUString >::const_iterator superseded = aSupersededByThisHandler.begin();
                         superseded != aSupersededByThisHandler.end();
                         ++superseded
@@ -1065,7 +1065,7 @@ namespace pcr
                 }
 
                 // see if the handler expresses interest in any actuating properties
-                StlSyntaxSequence< OUString > aInterestingActuations = (*aHandler)->getActuatingProperties();
+                StlSyntaxSequence< OUString > aInterestingActuations( (*aHandler)->getActuatingProperties() );
                 for (   StlSyntaxSequence< OUString >::const_iterator aLoop = aInterestingActuations.begin();
                         aLoop != aInterestingActuations.end();
                         ++aLoop
@@ -1180,7 +1180,7 @@ namespace pcr
 
         StlSyntaxSequence< PropertyCategoryDescriptor > aCategories;
         if ( m_xModel.is() )
-            aCategories = m_xModel->describeCategories();
+            aCategories = StlSyntaxSequence< PropertyCategoryDescriptor >(m_xModel->describeCategories());
 
         for (   StlSyntaxSequence< PropertyCategoryDescriptor >::const_iterator category = aCategories.begin();
                 category != aCategories.end();

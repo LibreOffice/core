@@ -48,7 +48,7 @@ namespace pcr
         Sequence< Reference< XControlModel > > m_aModels;
 
     public:
-        OSimpleTabModel( const Sequence< Reference< XControlModel > >& _rModels )
+        explicit OSimpleTabModel( const Sequence< Reference< XControlModel > >& _rModels )
             :m_aModels( _rModels )
         {
         }

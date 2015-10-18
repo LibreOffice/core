@@ -193,7 +193,7 @@ namespace pcr
     private:
         ComposedPropertyUIUpdate&   m_rUIUpdate;
     public:
-        ComposedUIAutoFireGuard( ComposedPropertyUIUpdate& _rUIUpdate )
+        explicit ComposedUIAutoFireGuard( ComposedPropertyUIUpdate& _rUIUpdate )
             :m_rUIUpdate( _rUIUpdate )
         {
             m_rUIUpdate.suspendAutoFire();

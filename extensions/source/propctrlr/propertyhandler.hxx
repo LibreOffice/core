@@ -97,7 +97,7 @@ namespace pcr
         ::std::unique_ptr< OPropertyInfoService >             m_pInfoService;
 
     protected:
-        PropertyHandler(
+        explicit PropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
         virtual ~PropertyHandler();
@@ -356,7 +356,7 @@ namespace pcr
                                     ,public PropertyHandlerComponent_Base
     {
     protected:
-        PropertyHandlerComponent(
+        explicit PropertyHandlerComponent(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
@@ -398,7 +398,7 @@ namespace pcr
     class HandlerComponentBase : public PropertyHandlerComponent
     {
     protected:
-        HandlerComponentBase( const css::uno::Reference< css::uno::XComponentContext >& _rxContext )
+        explicit HandlerComponentBase( const css::uno::Reference< css::uno::XComponentContext >& _rxContext )
             :PropertyHandlerComponent( _rxContext )
         {
         }

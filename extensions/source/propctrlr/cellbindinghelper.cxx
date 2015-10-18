@@ -66,7 +66,7 @@ namespace pcr
             OUString m_sReference;
 
         public:
-            StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
+            explicit StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
 
             inline bool operator()( const OUString& _rCompare )
             {

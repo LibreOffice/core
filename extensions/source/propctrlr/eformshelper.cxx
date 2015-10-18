@@ -576,7 +576,7 @@ namespace pcr
             PropertyBag& m_rProperties;
 
         public:
-            PropertyBagInserter( PropertyBag& rProperties ) : m_rProperties( rProperties ) { }
+            explicit PropertyBagInserter( PropertyBag& rProperties ) : m_rProperties( rProperties ) { }
 
             void operator()( const Property& _rProp )
             {

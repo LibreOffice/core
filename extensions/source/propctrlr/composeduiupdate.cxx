@@ -171,7 +171,7 @@ namespace pcr
         class MethodGuard : public ::osl::MutexGuard
         {
         public:
-            MethodGuard( CachedInspectorUI& rInstance )
+            explicit MethodGuard( CachedInspectorUI& rInstance )
                 : ::osl::MutexGuard( rInstance.m_aMutex )
             {
                 rInstance.checkDisposed();
@@ -444,7 +444,7 @@ namespace pcr
             CachedInspectorUI::FGetStringBag  m_pGetter;
 
         public:
-            StringBagClearer( CachedInspectorUI::FGetStringBag _pGetter ) :m_pGetter( _pGetter ) { }
+            explicit StringBagClearer( CachedInspectorUI::FGetStringBag _pGetter ) :m_pGetter( _pGetter ) { }
 
             void operator()( const ImplMapHandlerToUI::value_type& _rUI )
             {
@@ -597,7 +597,7 @@ namespace pcr
             StringBag&  m_rMinuend;
 
         public:
-            StringBagComplement( StringBag& _rMinuend ) :m_rMinuend( _rMinuend ) { }
+            explicit StringBagComplement( StringBag& _rMinuend ) :m_rMinuend( _rMinuend ) { }
 
             void operator()( const OUString& _rPropertyToSubtract )
             {

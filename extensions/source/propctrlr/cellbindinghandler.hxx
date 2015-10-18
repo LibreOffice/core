@@ -44,7 +44,7 @@ namespace pcr
         ::rtl::Reference< IPropertyEnumRepresentation > m_pCellExchangeConverter;
 
     public:
-        CellBindingPropertyHandler(
+        explicit CellBindingPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 

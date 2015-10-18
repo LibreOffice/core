@@ -102,7 +102,7 @@ namespace pcr
         static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     protected:
-        EventHandler(
+        explicit EventHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
        );
 
