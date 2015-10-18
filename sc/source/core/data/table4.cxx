@@ -362,13 +362,14 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
         {
-            (void)rListData->GetSubIndex(aStr, rListIndex);
+            bool bMatchCase = false;
+            (void)rListData->GetSubIndex(aStr, rListIndex, bMatchCase);
             nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
             for (sal_uInt16 i=1; i<nCount && rListData; i++)
             {
                 (void)GetString(nCol, nRow, aStr);
-                if (!rListData->GetSubIndex(aStr, rListIndex))
+                if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
                     rListData = NULL;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
