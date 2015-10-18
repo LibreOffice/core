@@ -50,7 +50,7 @@ namespace pcr
                             m_xFacetInfo;
 
     public:
-        XSDDataType(
+        explicit XSDDataType(
             const css::uno::Reference< css::xsd::XDataType >& _rxDataType
         );
 

@@ -182,7 +182,7 @@ namespace pcr
         virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     public:
-        OPropertyBrowserController(
+        explicit OPropertyBrowserController(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     protected:

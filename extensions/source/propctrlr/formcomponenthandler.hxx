@@ -95,7 +95,7 @@ namespace pcr
         sal_Int16                       m_nClassId;
 
     public:
-        FormComponentPropertyHandler(
+        explicit FormComponentPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
@@ -453,7 +453,7 @@ namespace pcr
         ::std::unique_ptr< WaitObject >       m_aWaitObject;
 
     public:
-        WaitCursor( vcl::Window* _pWindow )
+        explicit WaitCursor( vcl::Window* _pWindow )
         {
             if ( _pWindow )
                 m_aWaitObject.reset( new WaitObject( _pWindow ) );

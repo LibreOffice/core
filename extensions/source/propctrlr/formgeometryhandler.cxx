@@ -105,7 +105,7 @@ namespace pcr
     class BroadcastHelperBase
     {
     protected:
-        BroadcastHelperBase( ::osl::Mutex& _rMutex )
+        explicit BroadcastHelperBase( ::osl::Mutex& _rMutex )
             :maBHelper( _rMutex )
         {
         }
@@ -211,7 +211,7 @@ namespace pcr
     class FormGeometryHandler : public FormGeometryHandler_Base
     {
     public:
-        FormGeometryHandler(
+        explicit FormGeometryHandler(
             const Reference< XComponentContext >& _rxContext
         );
 

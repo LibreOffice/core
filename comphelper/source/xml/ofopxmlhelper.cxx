@@ -68,7 +68,7 @@ class OFOPXMLHelper_Impl
 public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetParsingResult();
 
-    OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
+    explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
     virtual ~OFOPXMLHelper_Impl();
 
     // XDocumentHandler

@@ -50,7 +50,7 @@ namespace pcr
         SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
 
     public:
-        OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        explicit OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~OControlFontDialog();
 
         // XTypeProvider

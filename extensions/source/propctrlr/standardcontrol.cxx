@@ -962,7 +962,7 @@ namespace pcr
         virtual void    Resize() override;
 
     public:
-                        OMultilineFloatingEdit(vcl::Window* _pParen);
+        explicit        OMultilineFloatingEdit(vcl::Window* _pParen);
         virtual         ~OMultilineFloatingEdit();
         virtual void    dispose() override;
         MultiLineEdit&  getEdit() { return *m_aImplEdit.get(); }
@@ -1385,7 +1385,7 @@ namespace pcr
             Sequence< OUString > aStringLines;
             if ( !( _rValue >>= aStringLines ) && _rValue.hasValue() )
                 throw IllegalTypeException();
-            getTypedControlWindow()->SetStringListValue( aStringLines );
+            getTypedControlWindow()->SetStringListValue( StlSyntaxSequence<OUString>(aStringLines) );
         }
         break;
         }

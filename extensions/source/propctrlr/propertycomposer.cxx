@@ -395,7 +395,7 @@ namespace pcr
             )
         {
             // TODO: make this cheaper (cache it?)
-            const StlSyntaxSequence< OUString > aThisHandlersActuatingProps = (*loop)->getActuatingProperties();
+            const StlSyntaxSequence< OUString > aThisHandlersActuatingProps( (*loop)->getActuatingProperties() );
             for (   StlSyntaxSequence< OUString >::const_iterator loopProps = aThisHandlersActuatingProps.begin();
                     loopProps != aThisHandlersActuatingProps.end();
                     ++loopProps

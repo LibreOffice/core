@@ -67,7 +67,7 @@ namespace pcr
                                 m_pPropertyInfo;
 
     public:
-        InspectorModelProperties( ::osl::Mutex& _rMutex );
+        explicit InspectorModelProperties( ::osl::Mutex& _rMutex );
 
         using ::comphelper::OPropertyContainerHelper::convertFastPropertyValue;
         using ::comphelper::OPropertyContainerHelper::setFastPropertyValue;

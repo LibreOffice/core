@@ -109,7 +109,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bSupportedPropertiesAreKnown )
         {
-            m_aSupportedProperties = doDescribeSupportedProperties();
+            m_aSupportedProperties = StlSyntaxSequence<css::beans::Property>(doDescribeSupportedProperties());
             m_bSupportedPropertiesAreKnown = true;
         }
         return m_aSupportedProperties;

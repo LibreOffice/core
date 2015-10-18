@@ -37,7 +37,7 @@ namespace pcr
     class EditPropertyHandler : public EditPropertyHandler_Base
     {
     public:
-        EditPropertyHandler(
+        explicit EditPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 

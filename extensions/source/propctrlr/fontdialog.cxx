@@ -77,7 +77,7 @@ namespace pcr
                     m_xPropStateAccess;
 
     public:
-        OFontPropertyExtractor( const css::uno::Reference< css::beans::XPropertySet >&
+        explicit OFontPropertyExtractor( const css::uno::Reference< css::beans::XPropertySet >&
             _rxProps );
 
     public:

@@ -211,7 +211,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 class EventAttacherImpl : public WeakImplHelper < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
-    EventAttacherImpl( const Reference< XComponentContext >& );
+    explicit EventAttacherImpl( const Reference< XComponentContext >& );
     virtual ~EventAttacherImpl();
 
     // XServiceInfo

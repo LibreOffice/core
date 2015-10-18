@@ -41,7 +41,7 @@ namespace pcr
         ::std::unique_ptr< XSDValidationHelper >  m_pHelper;
 
     public:
-        XSDValidationPropertyHandler(
+        explicit XSDValidationPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 

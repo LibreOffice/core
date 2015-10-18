@@ -41,7 +41,7 @@ namespace pcr
     class PropertyControlExtender : public PropertyControlExtender_Base
     {
     public:
-        PropertyControlExtender(
+        explicit PropertyControlExtender(
             const css::uno::Reference< css::inspection::XPropertyControl >& _rxObservedControl
         );
 

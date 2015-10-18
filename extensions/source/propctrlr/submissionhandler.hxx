@@ -74,7 +74,7 @@ namespace pcr
         ::comphelper::OPropertyChangeMultiplexer*   m_pPropChangeMultiplexer;
 
     public:
-        SubmissionPropertyHandler(
+        explicit SubmissionPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 

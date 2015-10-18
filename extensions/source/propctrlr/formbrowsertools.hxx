@@ -42,7 +42,7 @@ namespace pcr
         sal_Int32 m_nId;
 
     public:
-        FindPropertyByHandle( sal_Int32 _nId ) : m_nId ( _nId ) { }
+        explicit FindPropertyByHandle( sal_Int32 _nId ) : m_nId ( _nId ) { }
         bool operator()( const css::beans::Property& _rProp ) const
         {
             return m_nId == _rProp.Handle;
@@ -56,7 +56,7 @@ namespace pcr
         OUString m_sName;
 
     public:
-        FindPropertyByName( const OUString& _rName ) : m_sName( _rName ) { }
+        explicit FindPropertyByName( const OUString& _rName ) : m_sName( _rName ) { }
         bool operator()( const css::beans::Property& _rProp ) const
         {
             return m_sName == _rProp.Name;

@@ -139,7 +139,7 @@ namespace pcr
             @param _rContextImpl
                 the instance to delegate events to
         */
-        PropertyControlContext_Impl( OBrowserListBox& _rContextImpl );
+        explicit PropertyControlContext_Impl( OBrowserListBox& _rContextImpl );
 
         /** disposes the context.
 

@@ -34,7 +34,7 @@ namespace pcr
                                     ,public PcrClient
     {
     public:
-        MasterDetailLinkDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        explicit MasterDetailLinkDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         // XServiceInfo - static methods
         static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );

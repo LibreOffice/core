@@ -37,7 +37,7 @@ namespace pcr
             m_xSlaveHandler;
 
     public:
-        ButtonNavigationHandler(
+        explicit ButtonNavigationHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
         static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);

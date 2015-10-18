@@ -47,7 +47,7 @@ namespace pcr
         bool                            m_bSimulatingModelChange;
 
     public:
-        EFormsPropertyHandler(
+        explicit EFormsPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
