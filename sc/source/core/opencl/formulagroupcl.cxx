@@ -2657,6 +2657,13 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                                         new DynamicKernelMixedSlidingArgument(mCalcConfig,
                                             ts, ft->Children[i], mpCodeGen, j)));
                             }
+                            else if (!AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) &&
+                                     !pCodeGen->takeString())
+                            {
+                                // Can't handle
+                                SAL_INFO("sc.opencl", "Strings but can't do that.");
+                                throw UnhandledToken(pChild, ("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
+                            }
                             else
                             {
                                 // Not sure I can figure out what case this exactly is;)
