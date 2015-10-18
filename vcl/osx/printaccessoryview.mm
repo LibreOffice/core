@@ -45,10 +45,10 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-/* Note: the accessory view as implemented here is already deprecated in Leopard. Unfortunately
-   as long as our baseline is Tiger we cannot gain the advantages over multiple accessory views
-   as well havs having accessory views AND a preview (as long as you are linked vs. 10.4 libraries
-   the preview insists on not being present. This is unfortunate.
+/* Note: the accessory view as implemented here is deprecated in OS X 10.5.
+   Since Leopard you can use multiple accessory views and have accessory views
+   _and_ a preview
+   (as long as you are linked with 10.4 libraries the preview is not here)
 */
 
 class ControllerProperties;
@@ -106,7 +106,7 @@ class ControllerProperties
       maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
     {
         mpState->bNeedRestart = false;
-        DBG_ASSERT( maLocalizedStrings.Count() >= 5, "resources not found !" );
+        assert( maLocalizedStrings.Count() >= 5 && "resources not found" );
     }
     
     rtl::OUString getMoreString()
@@ -131,7 +131,8 @@ class ControllerProperties
         sal_Int32 nPages = mpController->getFilteredPageCount();
         #if OSL_DEBUG_LEVEL > 1
         if( nPages != mnLastPageCount )
-            fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
+            SAL_INFO( "vcl.osx.print", "trouble: number of pages suddenly changed" <<
+                      " from " << mnLastPageCount << " to " << nPages );
         #endif
         mpState->bNeedRestart = (nPages != mnLastPageCount);
         NSTabViewItem* pItem = [mpTabView selectedTabViewItem];
@@ -532,7 +533,8 @@ static OUString filterAccelerator( rtl::OUString const & rText )
     }
     else
     {
-        SAL_INFO( "vcl.osx.print", "Unsupported class" << ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil"));
+        SAL_INFO( "vcl.osx.print", "Unsupported class" <<
+                  ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil") );
     }
     mpController->updateEnableState();
 }
@@ -1079,15 +1081,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     rCurY = aFieldRect.origin.y - 5;
 }
 
-// In 10.5 and later:
-// 'setAccessoryView:' is deprecated
-
-// Make deprecation warnings just warnings in a -Werror compilation.
-
-#ifdef __GNUC__
-// #pragma GCC diagnostic push
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
+// Note that '-(void)setAccessoryView:(NSView *)aView' of NSPrintOperation is deprecated since 10.5
 
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState
@@ -1235,8 +1229,8 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))  ||
             aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bool")) )
         {
-            // since our build target is MacOSX 10.4 we can have only one accessory view
-            // so we have a single accessory view that is tabbed for grouping
+            // with `setAccessoryView' method only one accessory view can be set
+            // so create this single accessory view as tabbed for grouping
             if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Group"))
                 || ! pCurParent
                 || ( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Subgroup")) && nCurY < -250 && ! bIgnore ) 
@@ -1325,7 +1319,8 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                          aLeftColumn, aRightColumn,
                          pControllerProperties, pCtrlTarget );
             }
-            else if( (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Edit")) || aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))) && pCurParent )
+            else if( (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Edit"))
+                || aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range"))) && pCurParent )
             {
                 // current value
                 PropertyValue* pVal = pController->getValue( aPropertyName );
@@ -1373,8 +1368,6 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         
     return pCtrlTarget;
 }
-
-// #pragma GCC diagnostic pop
 
 @end
 
