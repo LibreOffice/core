@@ -2877,9 +2877,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 SwChapterField aCopy(*static_cast<const SwChapterField*>(pField));
                 aCopy.ChangeExpansion(*pTextNd, false);
                 const OUString sStr = FieldString(ww::eSTYLEREF)
-                    + " \"Heading "
+                    + " "
                     + OUString::number(aCopy.GetLevel() + 1)
-                    + "\"  \\* MERGEFORMAT ";
+                    + " \\* MERGEFORMAT ";
                 GetExport().OutputField(pField, ww::eSTYLEREF, sStr);
                 bWriteExpand = false;
             }
