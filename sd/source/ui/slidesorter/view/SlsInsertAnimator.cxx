@@ -115,7 +115,7 @@ Point Blend (const Point& rPointA, const Point& rPointB, const double nT)
 class InsertAnimator::Implementation : public AnimatorAccess
 {
 public:
-    Implementation (SlideSorter& rSlideSorter);
+    explicit Implementation (SlideSorter& rSlideSorter);
     virtual ~Implementation();
 
     void SetInsertPosition (

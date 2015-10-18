@@ -29,7 +29,7 @@ namespace sd { namespace slidesorter { namespace view {
 class LocalResource : public Resource
 {
 public:
-    LocalResource (const sal_uInt16 nResourceId) : Resource(SdResId(nResourceId)){}
+    explicit LocalResource (const sal_uInt16 nResourceId) : Resource(SdResId(nResourceId)){}
     ~LocalResource() { FreeResource(); }
 };
 

@@ -68,7 +68,7 @@ public:
 class IsShell : public ::std::unary_function<ShellDescriptor,bool>
 {
 public:
-    IsShell (const SfxShell* pShell) : mpShell(pShell) {}
+    explicit IsShell (const SfxShell* pShell) : mpShell(pShell) {}
     bool operator() (const ShellDescriptor& rDescriptor)
     { return rDescriptor.mpShell == mpShell; }
 private:
@@ -81,7 +81,7 @@ private:
 class IsId : public ::std::unary_function<ShellDescriptor,bool>
 {
 public:
-    IsId (ShellId nId) : mnId(nId) {}
+    explicit IsId (ShellId nId) : mnId(nId) {}
     bool operator() (const ShellDescriptor& rDescriptor)
     { return rDescriptor.mnId == mnId; }
 private:
@@ -128,7 +128,7 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (Implementation& rImpl) : mrImpl(rImpl) {mrImpl.LockUpdate();}
+        explicit UpdateLock (Implementation& rImpl) : mrImpl(rImpl) {mrImpl.LockUpdate();}
         ~UpdateLock() {mrImpl.UnlockUpdate();};
     private:
         Implementation& mrImpl;

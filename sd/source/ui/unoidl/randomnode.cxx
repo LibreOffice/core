@@ -72,7 +72,7 @@ class RandomAnimationNode : public RandomAnimationNodeBase
 {
 public:
     RandomAnimationNode( const RandomAnimationNode& rNode );
-    RandomAnimationNode( sal_Int16 nPresetClass );
+    explicit RandomAnimationNode( sal_Int16 nPresetClass );
     RandomAnimationNode();
 
     void init( sal_Int16 nPresetClass );

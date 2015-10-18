@@ -115,7 +115,7 @@ class SdLayerManager : public ::cppu::WeakImplHelper< ::com::sun::star::drawing:
     friend class SdLayer;
 
 public:
-    SdLayerManager( SdXImpressDocument& rMyModel ) throw();
+    explicit SdLayerManager( SdXImpressDocument& rMyModel ) throw();
     virtual ~SdLayerManager() throw();
 
     // uno helper

@@ -111,7 +111,7 @@ private:
     SdCustomShow * getSdCustomShow( const OUString& Name ) const throw();
 
 public:
-    SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();
+    explicit SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();
     virtual ~SdXCustomPresentationAccess() throw();
 
     // XServiceInfo

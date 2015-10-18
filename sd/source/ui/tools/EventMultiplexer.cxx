@@ -64,7 +64,7 @@ class EventMultiplexer::Implementation
       public SfxListener
 {
 public:
-    Implementation (ViewShellBase& rBase);
+    explicit Implementation (ViewShellBase& rBase);
     virtual ~Implementation();
 
     void AddEventListener (

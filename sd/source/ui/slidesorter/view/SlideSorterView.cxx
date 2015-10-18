@@ -89,7 +89,7 @@ namespace {
     class Painter : public ILayerPainter
     {
     public:
-        Painter (SlideSorterView& rView) : mrView(rView) {}
+        explicit Painter (SlideSorterView& rView) : mrView(rView) {}
         virtual ~Painter() {}
 
         virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
@@ -109,7 +109,7 @@ class BackgroundPainter
       public ::boost::noncopyable
 {
 public:
-    BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
+    explicit BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
     virtual ~BackgroundPainter() {}
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override

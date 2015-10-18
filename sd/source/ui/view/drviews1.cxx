@@ -139,7 +139,7 @@ namespace
         void Lock(bool bLock);
         SfxViewFrame *mpFrame;
     public:
-        LockUI(SfxViewFrame *pFrame) : mpFrame(pFrame) { Lock(true); }
+        explicit LockUI(SfxViewFrame *pFrame) : mpFrame(pFrame) { Lock(true); }
         ~LockUI() { Lock(false); }
 
     };

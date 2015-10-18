@@ -53,9 +53,9 @@ class SdUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider
     css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
-                            SdUnoModule( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory )
-                                : m_xFactory( xFactory )
-                            {}
+    explicit SdUnoModule( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory )
+        : m_xFactory( xFactory )
+    {}
 
     // XnotifyingDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener )

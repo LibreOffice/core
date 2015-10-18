@@ -1130,7 +1130,7 @@ class DocumentRenderer::Implementation
       public vcl::PrinterOptionsHelper
 {
 public:
-    Implementation (ViewShellBase& rBase)
+    explicit Implementation (ViewShellBase& rBase)
         : mxObjectShell(rBase.GetDocShell())
         , mrBase(rBase)
         , mbIsDisposed(false)

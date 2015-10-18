@@ -42,10 +42,10 @@ LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
     return eRet;
 }
 
-class SdUnoDrawPool :   public SvxUnoDrawPool
+class SdUnoDrawPool : public SvxUnoDrawPool
 {
 public:
-    SdUnoDrawPool( SdDrawDocument* pModel ) throw();
+    explicit SdUnoDrawPool(SdDrawDocument* pModel) throw();
     virtual ~SdUnoDrawPool() throw();
 
 protected:

@@ -39,7 +39,7 @@ namespace sd { namespace slidesorter { namespace view {
 class ViewCacheContext : public cache::CacheContext
 {
 public:
-    ViewCacheContext (SlideSorter& rSlideSorter);
+    explicit ViewCacheContext (SlideSorter& rSlideSorter);
     virtual ~ViewCacheContext();
     virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview) override;
     virtual bool IsIdle() override;

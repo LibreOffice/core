@@ -118,7 +118,7 @@ class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
 {
 public:
-    SdUnoForbiddenCharsTable( SdrModel* pModel );
+    explicit SdUnoForbiddenCharsTable(SdrModel* pModel);
     virtual ~SdUnoForbiddenCharsTable();
 
     // SfxListener

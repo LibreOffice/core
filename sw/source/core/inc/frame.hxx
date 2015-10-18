@@ -1161,7 +1161,7 @@ public:
     //Flag pFrm for SwFrmDeleteGuard lifetime that we shouldn't delete
     //it in e.g. SwSectionFrm::MergeNext etc because we will need it
     //again after the SwFrmDeleteGuard dtor
-    SwFrmDeleteGuard(SwFrm* pFrm)
+    explicit SwFrmDeleteGuard(SwFrm* pFrm)
         : m_pFrm(pFrm)
     {
         m_bOldDeleteAllowed = m_pFrm && !m_pFrm->IsDeleteForbidden();

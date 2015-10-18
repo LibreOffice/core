@@ -27,7 +27,7 @@ namespace sd { namespace slidesorter { namespace view {
 class FramePainter
 {
 public:
-    FramePainter (const BitmapEx& rBitmap);
+    explicit FramePainter (const BitmapEx& rBitmap);
     ~FramePainter();
 
     /** Paint a border around the given box by using a set of bitmaps for

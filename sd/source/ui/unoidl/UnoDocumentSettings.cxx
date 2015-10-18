@@ -71,7 +71,7 @@ namespace sd
                              public DocumentSettingsSerializer
     {
     public:
-        DocumentSettings( SdXImpressDocument* pModel );
+        explicit DocumentSettings( SdXImpressDocument* pModel );
         virtual ~DocumentSettings() throw();
 
         // XInterface

@@ -2613,7 +2613,7 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
 class SdNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
-    SdNavigationOrderAccess( SdrPage* pPage );
+    explicit SdNavigationOrderAccess(SdrPage* pPage);
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception) override;
