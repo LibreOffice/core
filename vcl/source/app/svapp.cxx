@@ -368,16 +368,15 @@ namespace
             return false;
         }
 
-        SalKeyEvent aKeyEvent;
-        aKeyEvent.mnTime = 0;
-        rStream.ReadUInt16(aKeyEvent.mnCode);
-        rStream.ReadUInt16(aKeyEvent.mnCharCode);
-        aKeyEvent.mnRepeat = 0;
+        sal_uInt16 nCode, nCharCode;
+        rStream.ReadUInt16(nCode);
+        rStream.ReadUInt16(nCharCode);
         if (!rStream.good())
             return false;
 
-        ImplWindowFrameProc(xWin.get(), NULL, SALEVENT_KEYINPUT, &aKeyEvent);
-        ImplWindowFrameProc(xWin.get(), NULL, SALEVENT_KEYUP, &aKeyEvent);
+        KeyEvent aVCLKeyEvt(nCharCode, nCode);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, xWin.get(), &aVCLKeyEvt);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, xWin.get(), &aVCLKeyEvt);
         return true;
     }
 
