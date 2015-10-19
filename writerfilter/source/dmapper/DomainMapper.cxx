@@ -1266,9 +1266,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             default:;
             }
             if( eBorderId )
-                rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) , true);
+                rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) );
             if(eBorderDistId)
-                rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
+                rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()));
             if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
             {
                 table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
