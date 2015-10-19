@@ -36,6 +36,37 @@ struct _LOKDocView
 struct _LOKDocViewClass
 {
     GtkDrawingAreaClass parent_class;
+
+    void (*load_changed)            (LOKDocView*       self,
+                                     gdouble           fValue);
+
+    void (*edit_changed)            (LOKDocView*       self,
+                                     gboolean          bWasEdit);
+
+    void (*command_changed)         (LOKDocView*       self,
+                                     gchar*            pPayload);
+
+    void (*search_not_found)        (LOKDocView*       self,
+                                     gchar*            pPayload);
+
+    void (*part_changed)            (LOKDocView*       self,
+                                     gint              nPart);
+
+    void (*size_changed)            (LOKDocView*       self,
+                                     gint              nPart);
+
+    void (*hyperlink_clicked)       (LOKDocView*       self,
+                                     gchar*            pPayload);
+
+    void (*cursor_changed)          (LOKDocView*       self,
+                                     gint              nX,
+                                     gint              nY,
+                                     gint              nWidth,
+                                     gint              nHeight);
+
+    /// Additional padding for future changes without changing the ABI
+    gpointer padding[8];
+
 };
 
 GType                          lok_doc_view_get_type               (void) G_GNUC_CONST;
