@@ -410,7 +410,12 @@ void VBAEncryption::writeVersionEnc()
 
 sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
 {
-    sal_uInt8 nProjKey = 0;
+    sal_uInt32 nProjKey = 0;
+        // use sal_uInt32 instead of sal_uInt8 to avoid miscompilation at least
+        // under "Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101
+        // for x64" with --enable-64-bit and --enable-dbgutil, causing
+        // CppunitTest_oox_vba_encryption's TestVbaEncryption::testProjKey1 to
+        // fail with actual 53 vs. expected 223
     sal_Int32 n = rProjectKey.getLength();
     const sal_Unicode* pString = rProjectKey.getStr();
     for (sal_Int32 i = 0; i < n; ++i)
