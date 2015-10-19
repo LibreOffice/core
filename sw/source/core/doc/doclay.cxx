@@ -610,10 +610,10 @@ static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uIn
         rNewSet.Put( *pOldItem );
     else
     {
-        pOldItem = rOldSet.GetItem( nWhich, true);
+        pOldItem = rOldSet.GetItem( nWhich );
         if (pOldItem != NULL)
         {
-            const SfxPoolItem *pNewItem = rNewSet.GetItem( nWhich, true);
+            const SfxPoolItem *pNewItem = rNewSet.GetItem( nWhich );
             if (pNewItem != NULL)
             {
                 if (*pOldItem != *pNewItem)
