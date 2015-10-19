@@ -166,8 +166,8 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 #define CHECKBOXWIDTH                                           \
     {                                                           \
         SwTwips nSize = GetFrameFormat()->GetFrmSize().GetWidth();   \
-        for (size_t nTmp = 0; nTmp < aLines.size(); ++nTmp)   \
-            ::_CheckBoxWidth( *aLines[ nTmp ], nSize );         \
+        for (size_t nTmp = 0; nTmp < m_aLines.size(); ++nTmp)   \
+            ::_CheckBoxWidth( *m_aLines[ nTmp ], nSize );         \
     }
 
 #define CHECKTABLELAYOUT                                            \
@@ -3438,7 +3438,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     {
     case nsTableChgWidthHeightType::WH_COL_RIGHT:
     case nsTableChgWidthHeightType::WH_COL_LEFT:
-        if( TBLVAR_CHGABS == eTableChgMode )
+        if( TBLVAR_CHGABS == m_eTableChgMode )
         {
             if( bInsDel )
                 bBigger = !bBigger;
@@ -3469,22 +3469,22 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( !bRet )
                 {
                     // Then call itself recursively; only with another mode (proportional)
-                    TableChgMode eOld = eTableChgMode;
-                    eTableChgMode = TBLFIX_CHGPROP;
+                    TableChgMode eOld = m_eTableChgMode;
+                    m_eTableChgMode = TBLFIX_CHGPROP;
 
                     bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                         ppUndo );
-                    eTableChgMode = eOld;
+                    m_eTableChgMode = eOld;
                     return bRet;
                 }
             }
             else
             {
                 bRet = true;
-                for( n = 0; n < aLines.size(); ++n )
+                for( n = 0; n < m_aLines.size(); ++n )
                 {
                     aParam.LoopClear();
-                    if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
+                    if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
                     {
                         bRet = false;
                         break;
@@ -3526,8 +3526,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( 0, aSz.GetWidth() / 2,
                                         0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTableNd );
-                        for( size_t nLn = 0; nLn < aLines.size(); ++nLn )
-                            ::lcl_AjustLines( aLines[ nLn ], aTmpPara );
+                        for( size_t nLn = 0; nLn < m_aLines.size(); ++nLn )
+                            ::lcl_AjustLines( m_aLines[ nLn ], aTmpPara );
                         aSz.SetWidth( aSz.GetWidth() / 2 );
                         aParam.nDiff = nRelDiff /= 2;
                         aParam.nSide /= 2;
@@ -3588,11 +3588,11 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
                 UnlockModify();
 
-                for( n = aLines.size(); n; )
+                for( n = m_aLines.size(); n; )
                 {
                     --n;
                     aParam.LoopClear();
-                    (*fnSelBox)( aLines[ n ], aParam, nDistStt, false );
+                    (*fnSelBox)( m_aLines[ n ], aParam, nDistStt, false );
                 }
 
                 // If the Table happens to contain relative values (USHORT_MAX),
@@ -3610,7 +3610,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 ( bLeft ? nDist != 0 : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
             bRet = true;
-            if( bLeft && TBLFIX_CHGABS == eTableChgMode && !bInsDel )
+            if( bLeft && TBLFIX_CHGABS == m_eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First test if we have room at all
@@ -3618,10 +3618,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             {
                 if( aParam.bBigger )
                 {
-                    for( n = 0; n < aLines.size(); ++n )
+                    for( n = 0; n < m_aLines.size(); ++n )
                     {
                         aParam.LoopClear();
-                        if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
+                        if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
                         {
                             bRet = false;
                             break;
@@ -3633,10 +3633,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     if( ( bRet = bLeft ? nDist != 0
                                             : ( rSz.GetWidth() - nDist ) > COLFUZZY ) )
                     {
-                        for( n = 0; n < aLines.size(); ++n )
+                        for( n = 0; n < m_aLines.size(); ++n )
                         {
                             aParam.LoopClear();
-                            if( !(*fnOtherBox)( aLines[ n ], aParam, 0, true ))
+                            if( !(*fnOtherBox)( m_aLines[ n ], aParam, 0, true ))
                             {
                                 bRet = false;
                                 break;
@@ -3655,10 +3655,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         // We also need to test this!
                         bRet = true;
 
-                        for( n = 0; n < aLines.size(); ++n )
+                        for( n = 0; n < m_aLines.size(); ++n )
                         {
                             aParam.LoopClear();
-                            if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
+                            if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
                             {
                                 bRet = false;
                                 break;
@@ -3669,10 +3669,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
             else if( aParam.bBigger )
             {
-                for( n = 0; n < aLines.size(); ++n )
+                for( n = 0; n < m_aLines.size(); ++n )
                 {
                     aParam.LoopClear();
-                    if( !(*fnOtherBox)( aLines[ n ], aParam, 0, true ))
+                    if( !(*fnOtherBox)( m_aLines[ n ], aParam, 0, true ))
                     {
                         bRet = false;
                         break;
@@ -3681,10 +3681,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
             else
             {
-                for( n = 0; n < aLines.size(); ++n )
+                for( n = 0; n < m_aLines.size(); ++n )
                 {
                     aParam.LoopClear();
-                    if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
+                    if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
                     {
                         bRet = false;
                         break;
@@ -3709,27 +3709,27 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == eTableChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != eTableChgMode && bLeft ) )
+                    ? ( TBLFIX_CHGABS == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TBLFIX_CHGABS != m_eTableChgMode && bLeft ) )
                 {
-                    for( n = aLines.size(); n; )
+                    for( n = m_aLines.size(); n; )
                     {
                         --n;
                         aParam.LoopClear();
                         aParam1.LoopClear();
-                        (*fnSelBox)( aLines[ n ], aParam, nDistStt, false );
-                        (*fnOtherBox)( aLines[ n ], aParam1, nDistStt, false );
+                        (*fnSelBox)( m_aLines[ n ], aParam, nDistStt, false );
+                        (*fnOtherBox)( m_aLines[ n ], aParam1, nDistStt, false );
                     }
                 }
                 else
                 {
-                    for( n = aLines.size(); n; )
+                    for( n = m_aLines.size(); n; )
                     {
                         --n;
                         aParam.LoopClear();
                         aParam1.LoopClear();
-                        (*fnOtherBox)( aLines[ n ], aParam1, nDistStt, false );
-                        (*fnSelBox)( aLines[ n ], aParam, nDistStt, false );
+                        (*fnOtherBox)( m_aLines[ n ], aParam1, nDistStt, false );
+                        (*fnSelBox)( m_aLines[ n ], aParam, nDistStt, false );
                     }
                 }
             }
@@ -3738,21 +3738,21 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
     case nsTableChgWidthHeightType::WH_CELL_RIGHT:
     case nsTableChgWidthHeightType::WH_CELL_LEFT:
-        if( TBLVAR_CHGABS == eTableChgMode )
+        if( TBLVAR_CHGABS == m_eTableChgMode )
         {
             // Then call itself recursively; only with another mode (proportional)
-            TableChgMode eOld = eTableChgMode;
-            eTableChgMode = TBLFIX_CHGABS;
+            TableChgMode eOld = m_eTableChgMode;
+            m_eTableChgMode = TBLFIX_CHGABS;
 
             bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                 ppUndo );
-            eTableChgMode = eOld;
+            m_eTableChgMode = eOld;
             return bRet;
         }
         else if( bInsDel || ( bLeft ? nDist != 0
                                     : (rSz.GetWidth() - nDist) > COLFUZZY ))
         {
-            if( bLeft && TBLFIX_CHGABS == eTableChgMode && !bInsDel )
+            if( bLeft && TBLFIX_CHGABS == m_eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First, see if there is enough room at all
@@ -3824,8 +3824,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == eTableChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != eTableChgMode && bLeft ) )
+                    ? ( TBLFIX_CHGABS == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TBLFIX_CHGABS != m_eTableChgMode && bLeft ) )
                 {
                     (*fnSelBox)( pLine, aParam, nDistStt, false );
                     (*fnOtherBox)( pLine, aParam1, nDistStt, false );
@@ -3858,7 +3858,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
         if (ppUndo && *ppUndo && aParam.pUndo)
         {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTableChgMode), eType,
+            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(m_eTableChgMode), eType,
                                             nAbsDiff, nRelDiff );
             if( !aParam.bBigger )
                 aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );
@@ -4147,7 +4147,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     else
         fnSelLine = lcl_SetSelLineHeight;
 
-    SwTableLines* pLines = &aLines;
+    SwTableLines* pLines = &m_aLines;
 
     // How do we get to the height?
     switch( eType & 0xff )
@@ -4171,7 +4171,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 nAbsDiff = GetRowFrm( *pBaseLine )->Frm().Height();
             }
 
-            if( TBLVAR_CHGABS == eTableChgMode )
+            if( TBLVAR_CHGABS == m_eTableChgMode )
             {
                 // First test if we have room at all
                 if( bBigger )
@@ -4223,7 +4223,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                     nStt = nBaseLinePos + 1, nEnd = pLines->size();
 
                 // Get the current Lines' height
-                if( TBLFIX_CHGPROP == eTableChgMode )
+                if( TBLFIX_CHGPROP == m_eTableChgMode )
                 {
                     for( auto n = nStt; n < nEnd; ++n )
                     {
@@ -4287,7 +4287,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                     CR_SetLineHeight aParam1( aParam );
-                    if( TBLFIX_CHGPROP == eTableChgMode && !bBigger &&
+                    if( TBLFIX_CHGPROP == m_eTableChgMode && !bBigger &&
                         !aParam.nMaxSpace )
                     {
                         // We need to distribute the space evenly among all the Lines.
@@ -4315,13 +4315,13 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 else
                 {
                     // Then call itself recursively; only with another mode (proportional)
-                    TableChgMode eOld = eTableChgMode;
-                    eTableChgMode = TBLVAR_CHGABS;
+                    TableChgMode eOld = m_eTableChgMode;
+                    m_eTableChgMode = TBLVAR_CHGABS;
 
                     bRet = SetRowHeight( rAktBox, eType, nAbsDiff,
                                         nRelDiff, ppUndo );
 
-                    eTableChgMode = eOld;
+                    m_eTableChgMode = eOld;
                     xFndBox.reset();
                 }
             }
@@ -4344,7 +4344,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
         if (ppUndo && *ppUndo && aParam.pUndo)
         {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTableChgMode), eType,
+            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(m_eTableChgMode), eType,
                                             nAbsDiff, nRelDiff );
             if( bBigger )
                 aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );

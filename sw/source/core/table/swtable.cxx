@@ -212,27 +212,27 @@ void _InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
 
 SwTable::SwTable( SwTableFormat* pFormat )
     : SwClient( pFormat ),
-    pHTMLLayout( 0 ),
-    pTableNode( 0 ),
-    nGrfsThatResize( 0 ),
-    nRowsToRepeat( 1 ),
-    bModifyLocked( false ),
-    bNewModel( true )
+    m_pHTMLLayout( 0 ),
+    m_pTableNode( 0 ),
+    m_nGraphicsThatResize( 0 ),
+    m_nRowsToRepeat( 1 ),
+    m_bModifyLocked( false ),
+    m_bNewModel( true )
 {
     // default value set in the options
-    eTableChgMode = (TableChgMode)GetTableChgDefaultMode();
+    m_eTableChgMode = (TableChgMode)GetTableChgDefaultMode();
 }
 
 SwTable::SwTable( const SwTable& rTable )
     : SwClient( rTable.GetFrameFormat() ),
-    pHTMLLayout( 0 ),
-    pTableNode( 0 ),
-    eTableChgMode( rTable.eTableChgMode ),
-    nGrfsThatResize( 0 ),
-    nRowsToRepeat( rTable.GetRowsToRepeat() ),
+    m_pHTMLLayout( 0 ),
+    m_pTableNode( 0 ),
+    m_eTableChgMode( rTable.m_eTableChgMode ),
+    m_nGraphicsThatResize( 0 ),
+    m_nRowsToRepeat( rTable.GetRowsToRepeat() ),
     maTableStyleName(rTable.maTableStyleName),
-    bModifyLocked( false ),
-    bNewModel( rTable.bNewModel )
+    m_bModifyLocked( false ),
+    m_bNewModel( rTable.m_bNewModel )
 {
 }
 
@@ -246,13 +246,13 @@ void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
 
 SwTable::~SwTable()
 {
-    if( refObj.Is() )
+    if( m_xRefObj.Is() )
     {
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
         if( !pDoc->IsInDtor() )         // then remove from the list
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &refObj );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &m_xRefObj );
 
-        refObj->Closed();
+        m_xRefObj->Closed();
     }
 
     // the table can be deleted if it's the last client of the FrameFormat
@@ -268,7 +268,7 @@ SwTable::~SwTable()
     // section need deletion.
     DelBoxNode(m_TabSortContentBoxes);
     m_TabSortContentBoxes.clear();
-    delete pHTMLLayout;
+    delete m_pHTMLLayout;
 }
 
 namespace
@@ -381,8 +381,8 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 void SwTable::AdjustWidths( const long nOld, const long nNew )
 {
     std::vector<SwFormat*> aFormatArr;
-    aFormatArr.reserve( aLines[0]->GetTabBoxes().size() );
-    ::lcl_ModifyLines( aLines, nOld, nNew, aFormatArr, true );
+    aFormatArr.reserve( m_aLines[0]->GetTabBoxes().size() );
+    ::lcl_ModifyLines( m_aLines, nOld, nNew, aFormatArr, true );
 }
 
 static void lcl_RefreshHidden( SwTabCols &rToFill, size_t nPos )
@@ -600,8 +600,8 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         // 4.
         if ( !bCurRowOnly )
         {
-            for ( size_t i = 0; i < aLines.size(); ++i )
-                ::lcl_ProcessLineGet( aLines[i], rToFill, pTabFormat );
+            for ( size_t i = 0; i < m_aLines.size(); ++i )
+                ::lcl_ProcessLineGet( m_aLines[i], rToFill, pTabFormat );
         }
 
         rToFill.Remove( 0 );
@@ -991,9 +991,9 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
     {
         // do some checking for correct table widths
         SwTwips nSize = GetFrameFormat()->GetFrmSize().GetWidth();
-        for (size_t n = 0; n < aLines.size(); ++n)
+        for (size_t n = 0; n < m_aLines.size(); ++n)
         {
-            _CheckBoxWidth( *aLines[ n ], nSize );
+            _CheckBoxWidth( *m_aLines[ n ], nSize );
         }
     }
 #endif
@@ -1950,21 +1950,21 @@ SwTableNode* SwTable::GetTableNode() const
 {
     return !GetTabSortBoxes().empty() ?
            const_cast<SwTableNode*>(GetTabSortBoxes()[ 0 ]->GetSttNd()->FindTableNode()) :
-           pTableNode;
+           m_pTableNode;
 }
 
 void SwTable::SetRefObject( SwServerObject* pObj )
 {
-    if( refObj.Is() )
-        refObj->Closed();
+    if( m_xRefObj.Is() )
+        m_xRefObj->Closed();
 
-    refObj = pObj;
+    m_xRefObj = pObj;
 }
 
 void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
 {
-    delete pHTMLLayout;
-    pHTMLLayout = p;
+    delete m_pHTMLLayout;
+    m_pHTMLLayout = p;
 }
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,

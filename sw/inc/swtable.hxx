@@ -94,36 +94,36 @@ class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrameFormat.
 {
 
 protected:
-    SwTableLines aLines;
+    SwTableLines m_aLines;
     SwTableSortBoxes m_TabSortContentBoxes;
-    tools::SvRef<SwServerObject> refObj;   // In case DataServer -> pointer is set.
+    tools::SvRef<SwServerObject> m_xRefObj;   // In case DataServer -> pointer is set.
 
-    SwHTMLTableLayout *pHTMLLayout;
+    SwHTMLTableLayout *m_pHTMLLayout;
 
     // Usually, the table node of a SwTable can be accessed by getting a box
     // out of m_TabSortContentBoxes, which know their SwStartNode. But in some rare
     // cases, we need to know the table node of a SwTable, before the table
     // boxes have been build (SwTableNode::MakeCopy with tables in tables).
-    SwTableNode* pTableNode;
+    SwTableNode* m_pTableNode;
 
     // Should that be adjustable for every table?
-    TableChgMode  eTableChgMode;
+    TableChgMode  m_eTableChgMode;
 
-    sal_uInt16      nGrfsThatResize;    // Count of Grfs that initiate a resize of table
+    sal_uInt16      m_nGraphicsThatResize;    // Count of Grfs that initiate a resize of table
                                         // at HTML-import.
-    sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
+    sal_uInt16      m_nRowsToRepeat;      // Number of rows to repeat on every page.
 
     /// Name of the table style to be applied on this table.
     OUString maTableStyleName;
 
-    bool        bModifyLocked   :1;
-    bool        bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
+    bool        m_bModifyLocked   :1;
+    bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 #ifdef DBG_UTIL
     /// This is set by functions (like Merge()) to forbid a late model change.
     bool m_bDontChangeModel;
 #endif
 
-    bool IsModifyLocked(){ return bModifyLocked;}
+    bool IsModifyLocked(){ return m_bModifyLocked;}
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
@@ -164,18 +164,18 @@ private:
 
 public:
 
-    SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
-    const SwHTMLTableLayout *GetHTMLTableLayout() const { return pHTMLLayout; }
+    SwHTMLTableLayout *GetHTMLTableLayout() { return m_pHTMLLayout; }
+    const SwHTMLTableLayout *GetHTMLTableLayout() const { return m_pHTMLLayout; }
     void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Change of property!
 
-    sal_uInt16 IncGrfsThatResize() { return ++nGrfsThatResize; }
-    sal_uInt16 DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
+    sal_uInt16 IncGrfsThatResize() { return ++m_nGraphicsThatResize; }
+    sal_uInt16 DecGrfsThatResize() { return m_nGraphicsThatResize ? --m_nGraphicsThatResize : 0; }
 
-    void LockModify()   { bModifyLocked = true; }   // Must be used always
-    void UnlockModify() { bModifyLocked = false;}   // in pairs!
+    void LockModify()   { m_bModifyLocked = true; }   // Must be used always
+    void UnlockModify() { m_bModifyLocked = false;}   // in pairs!
 
-    void SetTableModel( bool bNew ){ bNewModel = bNew; }
-    bool IsNewModel() const { return bNewModel; }
+    void SetTableModel( bool bNew ){ m_bNewModel = bNew; }
+    bool IsNewModel() const { return m_bNewModel; }
 
     /// Return the table style name of this table.
     OUString GetTableStyleName() const { return maTableStyleName; }
@@ -183,14 +183,14 @@ public:
     /// Set the new table style name for this table.
     void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
 
-    sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
-    sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }
-    void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
+    sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), m_nRowsToRepeat ); }
+    sal_uInt16 _GetRowsToRepeat() const { return m_nRowsToRepeat; }
+    void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }
 
     bool IsHeadline( const SwTableLine& rLine ) const;
 
-          SwTableLines &GetTabLines() { return aLines; }
-    const SwTableLines &GetTabLines() const { return aLines; }
+          SwTableLines &GetTabLines() { return m_aLines; }
+    const SwTableLines &GetTabLines() const { return m_aLines; }
 
     SwTableFormat* GetFrameFormat()       { return static_cast<SwTableFormat*>(GetRegisteredIn()); }
     SwTableFormat* GetFrameFormat() const { return const_cast<SwTableFormat*>(static_cast<const SwTableFormat*>(GetRegisteredIn())); }
@@ -226,7 +226,7 @@ public:
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
 #endif
-        return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
+        return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
     bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
@@ -235,7 +235,7 @@ public:
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
 #endif
-        return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
+        return m_bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
                            OldSplitRow( pDoc, rBoxes, nCnt, bSameHeight );
     }
     bool PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
@@ -316,18 +316,18 @@ public:
 
     // Returns the table node via m_TabSortContentBoxes or pTableNode.
     SwTableNode* GetTableNode() const;
-    void SetTableNode( SwTableNode* pNode ) { pTableNode = pNode; }
+    void SetTableNode( SwTableNode* pNode ) { m_pTableNode = pNode; }
 
     // Data server methods.
     void SetRefObject( SwServerObject* );
-    const SwServerObject* GetObject() const     {  return &refObj; }
-          SwServerObject* GetObject()           {  return &refObj; }
+    const SwServerObject* GetObject() const     {  return &m_xRefObj; }
+          SwServerObject* GetObject()           {  return &m_xRefObj; }
 
     // Fill data for chart.
     void UpdateCharts() const;
 
-    TableChgMode GetTableChgMode() const        { return eTableChgMode; }
-    void SetTableChgMode( TableChgMode eMode )  { eTableChgMode = eMode; }
+    TableChgMode GetTableChgMode() const        { return m_eTableChgMode; }
+    void SetTableChgMode( TableChgMode eMode )  { m_eTableChgMode = eMode; }
 
     bool SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
