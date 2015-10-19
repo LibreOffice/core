@@ -2006,7 +2006,9 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
         Rectangle aRect2;
         for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pO=pM->GetMarkedSdrObj();
+            SdrObject* pO = pM->GetMarkedSdrObj();
+            if (!pO)
+                continue;
             Rectangle aR1(pO->GetSnapRect());
             // apply calc offset to marked object rect
             // ( necessary for handles to be displayed in
