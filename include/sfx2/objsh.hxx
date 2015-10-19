@@ -684,9 +684,9 @@ public:
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
     SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet=0 );
     SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString &rFileName, const OUString &rFiltName, SfxItemSet *);
-    SAL_DLLPRIVATE bool APISaveAs_Impl ( const OUString& aFileName, SfxItemSet* aParams );
-    SAL_DLLPRIVATE bool CommonSaveAs_Impl ( const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet* aParams );
+    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet& rItemSet);
+    SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet);
+    SAL_DLLPRIVATE bool CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool GeneralInit_Impl(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     bool bTypeMustBeSetAlready );

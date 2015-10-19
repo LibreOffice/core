@@ -263,13 +263,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_PRINTOUT, bPrinting ) );
 }
 
-
-
-bool SfxObjectShell::APISaveAs_Impl
-(
-    const OUString& aFileName,
-    SfxItemSet*   aParams
-)
+bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet)
 {
     bool bOk = false;
 
@@ -277,14 +271,14 @@ bool SfxObjectShell::APISaveAs_Impl
     if ( GetMedium() )
     {
         OUString aFilterName;
-        const SfxStringItem* pFilterNameItem = SfxItemSet::GetItem<SfxStringItem>(aParams, SID_FILTER_NAME, false);
+        const SfxStringItem* pFilterNameItem = rItemSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
         if( pFilterNameItem )
         {
             aFilterName = pFilterNameItem->GetValue();
         }
         else
         {
-            const SfxStringItem* pContentTypeItem = SfxItemSet::GetItem<SfxStringItem>(aParams, SID_CONTENTTYPE, false);
+            const SfxStringItem* pContentTypeItem = rItemSet.GetItem<SfxStringItem>(SID_CONTENTTYPE, false);
             if ( pContentTypeItem )
             {
                 const SfxFilter* pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
@@ -302,7 +296,7 @@ bool SfxObjectShell::APISaveAs_Impl
             if( pFilt )
                 aFilterName = pFilt->GetFilterName();
 
-            aParams->Put(SfxStringItem( SID_FILTER_NAME, aFilterName));
+            rItemSet.Put(SfxStringItem(SID_FILTER_NAME, aFilterName));
         }
 
 
@@ -310,13 +304,11 @@ bool SfxObjectShell::APISaveAs_Impl
             SfxObjectShellRef xLock( this ); // ???
 
             // use the title that is provided in the media descriptor
-            const SfxStringItem* pDocTitleItem = SfxItemSet::GetItem<SfxStringItem>(aParams, SID_DOCINFO_TITLE, false);
+            const SfxStringItem* pDocTitleItem = rItemSet.GetItem<SfxStringItem>(SID_DOCINFO_TITLE, false);
             if ( pDocTitleItem )
                 getDocProperties()->setTitle( pDocTitleItem->GetValue() );
 
-            bOk = CommonSaveAs_Impl( INetURLObject(aFileName), aFilterName,
-                aParams );
-
+            bOk = CommonSaveAs_Impl(INetURLObject(aFileName), aFilterName, rItemSet);
         }
     }
 

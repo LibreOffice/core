@@ -3012,14 +3012,14 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                                 m_pData->m_pObjectShell ) );
 
-        SfxAllItemSet *aParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-        aParams->Put( SfxStringItem( SID_FILE_NAME, sURL ) );
+        std::unique_ptr<SfxAllItemSet> pItemSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
+        pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
         if ( bSaveTo )
-            aParams->Put( SfxBoolItem( SID_SAVETO, true ) );
+            pItemSet->Put(SfxBoolItem(SID_SAVETO, true));
 
-        TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
+        TransformParameters(SID_SAVEASDOC, seqArguments, *pItemSet);
 
-        const SfxBoolItem* pCopyStreamItem = SfxItemSet::GetItem<SfxBoolItem>(aParams, SID_COPY_STREAM_IF_POSSIBLE, false);
+        const SfxBoolItem* pCopyStreamItem = pItemSet->GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
 
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
         {
@@ -3032,7 +3032,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
         sal_uInt32 nModifyPasswordHash = 0;
         Sequence< beans::PropertyValue > aModifyPasswordInfo;
-        const SfxUnoAnyItem* pModifyPasswordInfoItem = SfxItemSet::GetItem<SfxUnoAnyItem>(aParams, SID_MODIFYPASSWORDINFO, false);
+        const SfxUnoAnyItem* pModifyPasswordInfoItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_MODIFYPASSWORDINFO, false);
         if ( pModifyPasswordInfoItem )
         {
             // it contains either a simple hash or a set of PropertyValues
@@ -3042,7 +3042,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             nModifyPasswordHash = (sal_uInt32)nMPHTmp;
             pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
         }
-        aParams->ClearItem( SID_MODIFYPASSWORDINFO );
+        pItemSet->ClearItem(SID_MODIFYPASSWORDINFO);
         sal_uInt32 nOldModifyPasswordHash = m_pData->m_pObjectShell->GetModifyPasswordHash();
         m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
         Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
@@ -3064,7 +3064,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_xDocumentProperties = xNewDocProps;
         }
 
-        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
+        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl(sURL, *pItemSet);
 
         if ( bCopyTo )
         {
@@ -3073,11 +3073,11 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         }
 
         Reference < task::XInteractionHandler > xHandler;
-        const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(aParams, SID_INTERACTIONHANDLER, false);
+        const SfxUnoAnyItem* pItem = pItemSet->GetItem<SfxUnoAnyItem>(SID_INTERACTIONHANDLER, false);
         if ( pItem )
             pItem->GetValue() >>= xHandler;
 
-        DELETEZ( aParams );
+        pItemSet.reset();
 
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetErrorCode();
         if ( !bRet && !nErrCode )

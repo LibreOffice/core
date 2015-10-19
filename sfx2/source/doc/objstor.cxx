@@ -2606,14 +2606,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     return bSaved;
 }
 
-
-
-bool SfxObjectShell::CommonSaveAs_Impl
-(
-    const INetURLObject&   aURL,
-    const OUString&   aFilterName,
-    SfxItemSet*     aParams
-)
+bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet)
 {
     if( aURL.HasError() )
     {
@@ -2645,9 +2638,9 @@ bool SfxObjectShell::CommonSaveAs_Impl
     }
 
     DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
-    DBG_ASSERT( aParams->Count() != 0, "Incorrect Parameter");
+    DBG_ASSERT( rItemSet.Count() != 0, "Incorrect Parameter");
 
-    const SfxBoolItem* pSaveToItem = SfxItemSet::GetItem<SfxBoolItem>(aParams, SID_SAVETO, false);
+    const SfxBoolItem* pSaveToItem = rItemSet.GetItem<SfxBoolItem>(SID_SAVETO, false);
     bool bSaveTo = pSaveToItem && pSaveToItem->GetValue();
 
     const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
@@ -2659,15 +2652,15 @@ bool SfxObjectShell::CommonSaveAs_Impl
         return false;
     }
 
-    const SfxBoolItem* pCopyStreamItem = SfxItemSet::GetItem<SfxBoolItem>(aParams, SID_COPY_STREAM_IF_POSSIBLE, false);
+    const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
-        if ( pMedium->TryDirectTransfer( aURL.GetMainURL( INetURLObject::NO_DECODE ), *aParams ) )
+        if (pMedium->TryDirectTransfer(aURL.GetMainURL(INetURLObject::NO_DECODE), rItemSet))
             return true;
     }
-    aParams->ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
+    rItemSet.ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
 
-    pImp->bPasswd = SfxItemState::SET == aParams->GetItemState(SID_PASSWORD);
+    pImp->bPasswd = SfxItemState::SET == rItemSet.GetItemState(SID_PASSWORD);
 
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
@@ -2681,14 +2674,14 @@ bool SfxObjectShell::CommonSaveAs_Impl
         return false;
     }
 
-    if( SfxItemState::SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
-        aParams->Put( SfxBoolItem( SID_UNPACK, false ) );
+    if (SfxItemState::SET != rItemSet.GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked())
+        rItemSet.Put(SfxBoolItem(SID_UNPACK, false));
 
     OUString aTempFileURL;
     if ( IsDocShared() )
         aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
 
-    if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
+    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::NO_DECODE), aFilterName, rItemSet))
     {
         // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();
@@ -2713,15 +2706,15 @@ bool SfxObjectShell::CommonSaveAs_Impl
             pSet->ClearItem( SID_DEFAULTFILEPATH );
             pSet->ClearItem( SID_DEFAULTFILENAME );
 
-            const SfxStringItem* pFilterItem = aParams->GetItem<SfxStringItem>(SID_FILTER_NAME, false);
+            const SfxStringItem* pFilterItem = rItemSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
             if ( pFilterItem )
                 pSet->Put( *pFilterItem );
 
-            const SfxStringItem* pOptionsItem = aParams->GetItem<SfxStringItem>(SID_OPTIONS, false);
+            const SfxStringItem* pOptionsItem = rItemSet.GetItem<SfxStringItem>(SID_OPTIONS, false);
             if ( pOptionsItem )
                 pSet->Put( *pOptionsItem );
 
-            const SfxStringItem* pFilterOptItem = aParams->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
+            const SfxStringItem* pFilterOptItem = rItemSet.GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 
@@ -2752,14 +2745,7 @@ bool SfxObjectShell::CommonSaveAs_Impl
         return false;
 }
 
-
-
-bool SfxObjectShell::PreDoSaveAs_Impl
-(
-    const OUString&   rFileName,
-    const OUString&   aFilterName,
-    SfxItemSet*       pParams
-)
+bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet& rItemSet)
 {
     // copy all items stored in the itemset of the current medium
     SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );
@@ -2785,8 +2771,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
 
     // merge the new parameters into the copy
     // all values present in both itemsets will be overwritten by the new parameters
-    if( pParams )
-        pMergedParams->Put( *pParams );
+    pMergedParams->Put(rItemSet);
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SfxItemState::SET )
@@ -2796,11 +2781,8 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     // should be unnecessary - too hot to handle!
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
-    // take over the new merged itemset
-    pParams = pMergedParams;
-
     // create a medium for the target URL
-    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, 0, pParams );
+    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, 0, pMergedParams );
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )
@@ -2817,7 +2799,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     }
 
     // check if a "SaveTo" is wanted, no "SaveAs"
-    const SfxBoolItem* pSaveToItem = SfxItemSet::GetItem<SfxBoolItem>(pParams, SID_SAVETO, false);
+    const SfxBoolItem* pSaveToItem = pMergedParams->GetItem<SfxBoolItem>(SID_SAVETO, false);
     bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
     // distinguish between "Save" and "SaveAs"
