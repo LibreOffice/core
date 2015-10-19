@@ -123,7 +123,7 @@ void GraphicPreviewWindow::ScaleImageToFit()
         }
     }
 
-    maModifyHdl.Call(this);
+    maModifyHdl.Call(nullptr);
 }
 
 void GraphicPreviewWindow::Resize()
@@ -170,15 +170,13 @@ IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
 
 
 
-IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
+IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 {
     if (bIsBitmap)
     {
         maTimer.Stop();
         maTimer.Start();
     }
-
-    return 0;
 }
 
 
@@ -208,14 +206,14 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
     mpMtrWidth->GrabFocus();
 }
 
-IMPL_LINK_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, void)
 {
-    GetModifyHdl().Call(&rCheckBox);
+    GetModifyHdl().Call(nullptr);
 }
 
-IMPL_LINK_TYPED(GraphicFilterMosaic, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, EditModifyHdl, Edit&, void)
 {
-    GetModifyHdl().Call(&rEdit);
+    GetModifyHdl().Call(nullptr);
 }
 
 GraphicFilterMosaic::~GraphicFilterMosaic()
@@ -282,9 +280,9 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
     mpMtrRadius->GrabFocus();
 }
 
-IMPL_LINK_TYPED(GraphicFilterSmooth, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterSmooth, EditModifyHdl, Edit&, void)
 {
-    GetModifyHdl().Call(&rEdit);
+    GetModifyHdl().Call(nullptr);
 }
 
 GraphicFilterSmooth::~GraphicFilterSmooth()
@@ -345,13 +343,13 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     mpCbxInvert->SetToggleHdl( LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl) );
 }
 
-IMPL_LINK_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, void)
 {
-    GetModifyHdl().Call(&rCheckBox);
+    GetModifyHdl().Call(nullptr);
 }
-IMPL_LINK_TYPED(GraphicFilterSolarize, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, EditModifyHdl, Edit&, void)
 {
-    GetModifyHdl().Call(&rEdit);
+    GetModifyHdl().Call(nullptr);
 }
 
 GraphicFilterSolarize::~GraphicFilterSolarize()
@@ -416,9 +414,9 @@ GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGr
     mpMtrSepia->SetModifyHdl( LINK(this, GraphicFilterSepia, EditModifyHdl) );
 }
 
-IMPL_LINK_TYPED(GraphicFilterSepia, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterSepia, EditModifyHdl, Edit&, void)
 {
-    GetModifyHdl().Call(&rEdit);
+    GetModifyHdl().Call(nullptr);
 }
 
 GraphicFilterSepia::~GraphicFilterSepia()
@@ -474,9 +472,9 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
     mpNumPoster->SetModifyHdl( LINK(this, GraphicFilterPoster, EditModifyHdl) );
 }
 
-IMPL_LINK_TYPED(GraphicFilterPoster, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK_NOARG_TYPED(GraphicFilterPoster, EditModifyHdl, Edit&, void)
 {
-    GetModifyHdl().Call(&rEdit);
+    GetModifyHdl().Call(nullptr);
 }
 
 GraphicFilterPoster::~GraphicFilterPoster()
@@ -526,7 +524,7 @@ void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
     SvxRectCtl::MouseButtonDown( rEvt );
 
     if( GetActualRP() != eOldRP )
-        maModifyHdl.Call( this );
+        maModifyHdl.Call( nullptr );
 }
 
 Size EmbossControl::GetOptimalSize() const
