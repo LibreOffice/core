@@ -640,7 +640,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
 
-    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
+    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText);
     OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
 
 

@@ -1312,7 +1312,7 @@ void SmShowSymbolSetWindow::SetScrollBarRange()
     if (aSymbolSet.size() > static_cast<size_t>(nColumns * nRows))
     {
         m_pVScrollBar->SetRange(Range(0, ((aSymbolSet.size() + (nColumns - 1)) / nColumns) - nRows));
-        m_pVScrollBar->Enable(true);
+        m_pVScrollBar->Enable();
     }
     else
     {
