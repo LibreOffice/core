@@ -3937,7 +3937,8 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
     const Sequence< PropertyValue > aFilterData;
 
-    SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, aFilterData );
+    Reference<XMultiServiceFactory> xFactory(mxContext->getServiceManager(), UNO_QUERY);
+    SVGExport* pWriter = new SVGExport(xFactory, xDocumentHandler, aFilterData);
     pWriter->writeMtf( aMtf );
     delete pWriter;
 }
