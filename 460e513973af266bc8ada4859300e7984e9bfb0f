@@ -33,6 +33,24 @@
       "revId": "460e513973af266bc8ada4859300e7984e9bfb0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_94e1c4d3",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-19T17:30:17Z",
+      "side": 1,
+      "message": "This is definitely wrong. Applying upper-/lowercase determined from one string to all other strings from that list is equally wrong and works only by chance if all entries of the list are all uppercase or all lowercase. And it still wouldn\u0027t catch if mixed case is the only difference.\n\nScUserListData already provides case-sensitive Compare() and case-insensitive ICompare() functions that do proper transliteration, to find a matching user list entry. Once the corresponding user list is determined, substrings/elements are not to be altered by upper- or lowercase calls on them.\n\nThe problem probably is that the nested FillAnalyse() does a case-insensitive compare and thus finds an arbitrary match if two lists differ only by case and takes whatever happens to be the first match. This would need to prefer a case-sensitive match if there are more than one case-insensitive matches.\n\nBtw, in the below code instead of hard-coded numbers the types should be checked for proper named values of UnicodeType constants instead.",
+      "parentUuid": "5a18252c_9503840d",
+      "revId": "460e513973af266bc8ada4859300e7984e9bfb0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
