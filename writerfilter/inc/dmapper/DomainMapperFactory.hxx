@@ -12,7 +12,6 @@
 #include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace utl
@@ -41,7 +40,6 @@ public:
                  css::uno::Reference<css::lang::XComponent> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
-                 css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
                  utl::MediaDescriptor& rMediaDesc);
 };
 } // namespace dmapper

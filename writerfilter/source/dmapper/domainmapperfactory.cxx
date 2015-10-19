@@ -20,7 +20,6 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
         css::uno::Reference<css::lang::XComponent> const& xModel,
         bool bRepairStorage,
         SourceDocumentType eDocumentType,
-        css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
         utl::MediaDescriptor& rMediaDesc)
 {
 #ifdef DEBUG_WRITERFILTER
@@ -32,7 +31,7 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
     TagLogger::getInstance().startDocument();
 #endif
 
-    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, xInsertTextRange, rMediaDesc));
+    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, rMediaDesc));
 }
 
 } // namespace dmapper

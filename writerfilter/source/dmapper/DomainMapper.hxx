@@ -80,7 +80,6 @@ public:
                  css::uno::Reference<css::lang::XComponent> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
-                 css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
                  utl::MediaDescriptor& rMediaDesc);
     virtual ~DomainMapper();
 

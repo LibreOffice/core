@@ -95,12 +95,12 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             uno::Reference<lang::XComponent> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
-                            uno::Reference<text::XTextRange> const& xInsertTextRange,
                             utl::MediaDescriptor& rMediaDesc) :
     LoggedProperties("DomainMapper"),
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>()),
+        !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
     mbIsSplitPara(false)
 {
     // #i24363# tab stops relative to indent
