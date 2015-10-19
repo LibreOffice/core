@@ -168,23 +168,23 @@ class SwXStyle : public cppu::WeakImplHelper
     friend class SwXStyleFamily;
     SwDoc*                  m_pDoc;
     OUString                m_sStyleName;
-    SfxStyleSheetBasePool*  pBasePool;
-    SfxStyleFamily          eFamily;    // for Notify
+    SfxStyleSheetBasePool*  m_pBasePool;
+    SfxStyleFamily          m_eFamily;    // for Notify
 
-    bool                    bIsDescriptor  : 1;
-    bool                    bIsConditional : 1;
+    bool                    m_bIsDescriptor  : 1;
+    bool                    m_bIsConditional : 1;
     OUString                m_sParentStyleName;
-    SwStyleProperties_Impl* pPropImpl;
+    SwStyleProperties_Impl* m_pPropertiesImpl;
 
     void    ApplyDescriptorProperties();
 protected:
     void    Invalidate();
 
-    const SfxStyleSheetBasePool*    GetBasePool() const {return pBasePool;}
-    SfxStyleSheetBasePool*  GetBasePool() {return pBasePool;}
+    const SfxStyleSheetBasePool*    GetBasePool() const {return m_pBasePool;}
+    SfxStyleSheetBasePool*  GetBasePool() {return m_pBasePool;}
 
     void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
-    SwStyleProperties_Impl* GetPropImpl(){return pPropImpl;}
+    SwStyleProperties_Impl* GetPropImpl(){return m_pPropertiesImpl;}
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
 
@@ -259,16 +259,16 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     OUString            GetStyleName() const { return m_sStyleName;}
-    SfxStyleFamily      GetFamily() const {return eFamily;}
+    SfxStyleFamily      GetFamily() const {return m_eFamily;}
 
-    bool                IsDescriptor() const {return bIsDescriptor;}
-    bool                IsConditional() const { return bIsConditional;}
+    bool                IsDescriptor() const {return m_bIsDescriptor;}
+    bool                IsConditional() const { return m_bIsConditional;}
     OUString            GetParentStyleName() const { return m_sParentStyleName;}
     void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
                             {
-                                bIsDescriptor = false; m_pDoc = pDc;
-                                pBasePool = pPool;
-                                StartListening(*pBasePool);
+                                m_bIsDescriptor = false; m_pDoc = pDc;
+                                m_pBasePool = pPool;
+                                StartListening(*m_pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
 };
