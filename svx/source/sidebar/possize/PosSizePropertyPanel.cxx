@@ -1152,12 +1152,15 @@ void PosSizePropertyPanel::DisableControls()
 
 void PosSizePropertyPanel::SetPosXYMinMax()
 {
+    SdrPageView* pPV = mpView->GetSdrPageView();
+    if (!pPV)
+        return;
     Rectangle aTmpRect(mpView->GetAllMarkedRect());
-    mpView->GetSdrPageView()->LogicToPagePos(aTmpRect);
+    pPV->LogicToPagePos(aTmpRect);
     maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
 
     Rectangle aTmpRect2(mpView->GetWorkArea());
-    mpView->GetSdrPageView()->LogicToPagePos(aTmpRect2);
+    pPV->LogicToPagePos(aTmpRect2);
     maWorkArea = basegfx::B2DRange(aTmpRect2.Left(), aTmpRect2.Top(), aTmpRect2.Right(), aTmpRect2.Bottom());
 
     const Fraction aUIScale(mpView->GetModel()->GetUIScale());
