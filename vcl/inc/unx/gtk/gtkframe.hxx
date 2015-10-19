@@ -35,6 +35,7 @@
 #include <vcl/sysdata.hxx>
 #include <unx/x11windowprovider.hxx>
 #include <unx/saltype.h>
+#include <unx/screensaverinhibitor.hxx>
 
 #include "tools/link.hxx"
 
@@ -193,6 +194,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     PointerStyle                    m_ePointerStyle;
     int                             m_nSavedScreenSaverTimeout;
     guint                           m_nGSMCookie;
+    ScreenSaverInhibitor            m_ScreenSaverInhibitor;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
     bool                            m_bSpanMonitorsWhenFullscreen;

@@ -2684,6 +2684,8 @@ dbus_uninhibit_gsm (guint cookie)
 
 void GtkSalFrame::StartPresentation( bool bStart )
 {
+    m_ScreenSaverInhibitor.inhibit( bStart, getDisplay()->IsX11Display(), "presentation" );
+
     setAutoLock( !bStart );
 
     if( !getDisplay()->IsX11Display() )

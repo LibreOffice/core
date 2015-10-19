@@ -43,6 +43,12 @@ $(eval $(call gb_Library_set_include,vcl,\
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(MINGW_SYSROOT)/include/gdiplus) \
 ))
 
+ifeq ($(ENABLE_DBUS),TRUE)
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
+	-DENABLE_DBUS \
+))
+endif
+
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
 	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
@@ -575,6 +581,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/gdi/cairotextrender \
     vcl/unx/generic/gdi/x11windowprovider \
+    vcl/unx/generic/window/screensaverinhibitor \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
         vcl/unx/generic/printer/printerinfomanager \
