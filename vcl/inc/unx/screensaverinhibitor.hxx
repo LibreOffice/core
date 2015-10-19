@@ -30,10 +30,13 @@ private:
     boost::optional<guint> mnFDOCookie;
     boost::optional<guint> mnGSMCookie;
 
+    boost::optional<int> mnXScreenSaverTimeout;
+
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
     void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
     void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
 
+    void inhibitXScreenSaver( bool bInhibit, Display* pDisplay );
     static void inhibitXAutoLock( bool bInhibit, Display* pDisplay );
 };
 

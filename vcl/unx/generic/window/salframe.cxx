@@ -803,7 +803,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mbInShow                    = false;
     m_bXEmbed                   = false;
 
-    nScreenSaversTimeout_       = 0;
 
     mpInputContext              = NULL;
     mbInputFocus                = False;
@@ -2219,7 +2218,7 @@ void X11SalFrame::StartPresentation( bool bStart )
     static CARD16 dpms_suspend_timeout=0;
     static CARD16 dpms_off_timeout=0;
 
-    if( bStart || nScreenSaversTimeout_ || DPMSEnabled)
+    if( bStart  || DPMSEnabled)
     {
         if( hPresentationWindow )
         {
@@ -2229,12 +2228,6 @@ void X11SalFrame::StartPresentation( bool bStart )
             int revert_to = 0;
             XGetInputFocus( GetXDisplay(), &hPresFocusWindow, &revert_to );
         }
-        int timeout, interval, prefer_blanking, allow_exposures;
-        XGetScreenSaver( GetXDisplay(),
-                         &timeout,
-                         &interval,
-                         &prefer_blanking,
-                         &allow_exposures );
 
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
@@ -2248,16 +2241,6 @@ void X11SalFrame::StartPresentation( bool bStart )
         }
         if( bStart ) // start show
         {
-            if ( timeout )
-            {
-                nScreenSaversTimeout_ = timeout;
-                XResetScreenSaver( GetXDisplay() );
-                XSetScreenSaver( GetXDisplay(),
-                                 0,
-                                 interval,
-                                 prefer_blanking,
-                                 allow_exposures );
-            }
 #if !defined(SOLARIS) && !defined(AIX)
             if( DPMSEnabled )
             {
@@ -2274,15 +2257,6 @@ void X11SalFrame::StartPresentation( bool bStart )
         }
         else
         {
-            if( nScreenSaversTimeout_ )
-            {
-                XSetScreenSaver( GetXDisplay(),
-                             nScreenSaversTimeout_,
-                             interval,
-                             prefer_blanking,
-                             allow_exposures );
-                nScreenSaversTimeout_ = 0;
-            }
 #if !defined(SOLARIS) && !defined(AIX)
             if ( DPMSEnabled )
             {
