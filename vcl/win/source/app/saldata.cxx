@@ -25,7 +25,7 @@
 
 rtl_TextEncoding ImplSalGetSystemEncoding()
 {
-    static UINT nOldAnsiCodePage = 0;
+    static const UINT nOldAnsiCodePage = 0;
     static rtl_TextEncoding eEncoding = RTL_TEXTENCODING_MS_1252;
 
     UINT nAnsiCodePage = GetACP();
