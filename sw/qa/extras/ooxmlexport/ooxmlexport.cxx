@@ -618,7 +618,13 @@ DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumNone, "outline-num-none.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
-    // This was "Outline", i.e. <w:numId> was not imported from the Heading 2 paragraph style.
+    // Verify that a paragraph style based on heading style shuold be refered as Outline
+    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("Outline"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testNumParentStyleListPara, "num-parent-style-listpara.docx")
+{
+    // Verify that a paragraph style based on another list pargraph style shuold inherits its numId
     CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
 }
 

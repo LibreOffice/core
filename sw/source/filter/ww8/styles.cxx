@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 
-namespace
+namespace ww
 {
     const sal_Char **GetStiNames() throw()
     {
@@ -127,10 +127,7 @@ namespace
 
         return stiName;
     }
-}
 
-namespace ww
-{
     const sal_Char* GetEnglishNameFromSti(sti eSti) throw()
     {
         if (eSti >= stiMax)

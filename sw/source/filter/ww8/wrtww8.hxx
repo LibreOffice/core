@@ -1511,6 +1511,7 @@ public:
 class MSWordStyles
 {
     MSWordExportBase& m_rExport;
+    std::vector<sal_uInt16> m_aOutlineIds;
     SwFormat** m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 m_nUsedSlots;
     bool m_bListStyles; ///< If list styles are requested to be exported as well.
@@ -1562,6 +1563,8 @@ public:
     const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_pFormatA[nId]; }
     /// Get numbering rule of the nId-th style
     const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
+
+    sal_uInt16  GetOutlineId(sal_uInt16 nLvl) { return m_aOutlineIds[nLvl]; }
 };
 
 #define MSWORD_MAX_STYLES_LIMIT 4091

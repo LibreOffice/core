@@ -140,6 +140,8 @@ private:
     // The style name linked to.
     ::rtl::OUString                      m_sNumStyleLink;
 
+    // If this is an outline rule.
+    bool m_outline;
 public:
     typedef std::shared_ptr< AbstractListDef > Pointer;
 
@@ -163,6 +165,8 @@ public:
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
     OUString              GetNumStyleLink() { return m_sNumStyleLink; };
+    bool GetOutline() const { return m_outline; }
+    bool SetOutline(bool bOutline) { return m_outline = bOutline ; }
 };
 
 class ListDef : public AbstractListDef

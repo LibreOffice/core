@@ -1220,6 +1220,18 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 }
 
 
+sal_Int16 StyleSheetEntry::GetOutlineLevel()
+{
+    if (nStyleTypeCode == STYLE_TYPE_PARA)
+    {
+            StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( pProperties.get());
+            if ( pMap )
+                return pMap->GetOutlineLevel();
+    }
+    return -1;
+}
+
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;

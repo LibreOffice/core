@@ -135,7 +135,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwTextFormatColl& rColl ) const
 
 //typedef pFormatT
 MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
-    : m_rExport( rExport ),
+    : m_rExport( rExport ), m_aOutlineIds( MAXLEVEL, SAL_MAX_UINT16 ),
     m_bListStyles(bListStyles)
 {
     // if exist any Foot-/End-Notes then get from the EndNoteInfo struct
@@ -289,7 +289,14 @@ void MSWordStyles::BuildStylesTable()
     for( size_t n = 1; n < rArr2.size(); n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
-        m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
+        sal_uInt16 nId ;
+        m_pFormatA[ nId = BuildGetSlot( *pFormat ) ] = pFormat;
+        if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
+            if (nLvl >= 0 && nLvl < MAXLEVEL)
+                m_aOutlineIds[nLvl] = nId ;
+        }
     }
 
     if (!m_bListStyles)
@@ -317,7 +324,15 @@ void MSWordStyles::BuildStyleIds()
     {
         OUString aName;
         if(m_pFormatA[n])
-            aName = m_pFormatA[n]->GetName();
+        {
+            sal_uInt16 nWwId = GetWWId( *m_pFormatA[n] ) ;
+            if ( nWwId != ww::stiUser && nWwId < ww::stiMax )
+            {
+                aName = OUString::createFromAscii( ww::GetStiNames()[nWwId] );
+            }
+            else
+                aName = m_pFormatA[n]->GetName();
+        }
         else if (m_aNumRules.find(n) != m_aNumRules.end())
             aName = m_aNumRules[n]->GetName();
         OStringBuffer aStyleIdBuf(aName.getLength());

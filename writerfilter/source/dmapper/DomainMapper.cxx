@@ -1189,10 +1189,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             {
                 if( !IsStyleSheetImport() )
                 {
-                    uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
-                    rContext->Insert( PROP_NUMBERING_RULES, aRules );
-                    // erase numbering from pStyle if already set
-                    rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    bool isOutline = pList->GetAbstractDefinition()->GetOutline();
+                    if (!isOutline)
+                    {
+                        uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
+                        rContext->Insert( PROP_NUMBERING_RULES, aRules );
+                        // erase numbering from pStyle if already set
+                        rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    }
+                    else
+                        rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString("Outline")));
+
                 }
             }
             else
@@ -2021,8 +2028,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, pStyleTable) : -1;
             if( pStyleSheetProperties && nListId >= 0 )
             {
+                const OUString sStyleName = pEntry->GetOutlineLevel() >=0 ?
+                    "Outline":ListDef::GetStyleName( nListId );
                 rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(
-                            ListDef::GetStyleName( nListId ) ), false);
+                             sStyleName ), false);
 
                 // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
                 sal_Int32 nParaRightMargin = 0;

@@ -6002,6 +6002,8 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 
 void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
+    const SwNumRule &pRule = *(*m_rExport.m_pUsedNumTable)[nId - 1];
+    m_bExportingOutlineRule = pRule.IsOutlineRule();
     m_pSerializer->startElementNS( XML_w, XML_abstractNum,
             FSNS( XML_w, XML_abstractNumId ), OString::number( nId ).getStr(),
             FSEND );
@@ -6009,6 +6011,7 @@ void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 
 void DocxAttributeOutput::EndAbstractNumbering()
 {
+    m_bExportingOutlineRule = false;
     m_pSerializer->endElementNS( XML_w, XML_abstractNum );
 }
 
@@ -6040,6 +6043,14 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSEND );
     }
 
+    if (m_bExportingOutlineRule)
+    {
+        sal_uInt16 nId = m_rExport.m_pStyles->GetOutlineId( nLevel );
+        if ( nId != SAL_MAX_UINT16 )
+            m_pSerializer->singleElementNS( XML_w, XML_pStyle ,
+                FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nId).getStr(),
+                FSEND );
+    }
     // format
     OString aFormat( impl_LevelNFC( nNumberingType ,pOutSet) );
 

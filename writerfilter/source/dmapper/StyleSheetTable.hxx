@@ -72,6 +72,7 @@ public:
     void AppendInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
     css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
+    sal_Int16 GetOutlineLevel();
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
