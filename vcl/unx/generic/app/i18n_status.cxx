@@ -154,7 +154,7 @@ void XIMStatusWindow::layout()
 
     m_aStatusText->SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText->SetFont( aFont );
-    m_aStatusText->Show( true );
+    m_aStatusText->Show();
 
     if (m_bAnchoredAtRight && IsVisible())
     {
@@ -340,7 +340,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     m_aStatusBtn->SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
     m_aStatusBtn->SetPopupMenu( &m_aMenu );
-    m_aStatusBtn->Show( true );
+    m_aStatusBtn->Show();
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;

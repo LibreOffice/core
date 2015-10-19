@@ -829,7 +829,7 @@ void Window::ImplUpdateOverlapWindowPtr( bool bNewFrame )
     }
 
     if ( bVisible )
-        Show( true );
+        Show();
 }
 
 SystemWindow* Window::GetSystemWindow() const

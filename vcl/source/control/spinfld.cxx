@@ -1044,7 +1044,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
         if (GetStyle() & WB_SPIN)
         {
-            ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false, true, true);
+            ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false);
         }
 
         pDev->Pop();

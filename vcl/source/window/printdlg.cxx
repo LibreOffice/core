@@ -1179,7 +1179,7 @@ void PrintDialog::setupOptionalUI()
     if (!maNUpPage.mpBrochureBtn->IsVisible() && maNUpPage.mpPagesBtn->IsVisible())
     {
         maNUpPage.mpPagesBoxTitleTxt->SetText( maNUpPage.mpPagesBtn->GetText() );
-        maNUpPage.mpPagesBoxTitleTxt->Show( true );
+        maNUpPage.mpPagesBoxTitleTxt->Show();
         maNUpPage.mpPagesBtn->Show( false );
     }
 
@@ -1527,7 +1527,7 @@ IMPL_LINK_TYPED( PrintDialog, SelectHdl, ListBox&, rBox, void )
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
         // update text fields
         updatePrinterText();
-        preparePreview( true );
+        preparePreview();
     }
     else if( &rBox == maNUpPage.mpNupOrientationBox || &rBox == maNUpPage.mpNupOrderBox )
     {
@@ -1640,7 +1640,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
             maPController->setupPrinter( this );
 
             // tdf#63905 don't use cache: page size may change
-            preparePreview( true );
+            preparePreview();
         }
         checkControlDependencies();
     }

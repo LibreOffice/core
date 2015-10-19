@@ -657,7 +657,7 @@ void ToolBox::InsertSpace( sal_uInt16 nPos )
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
-    ImplInvalidate( false );
+    ImplInvalidate();
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
@@ -675,7 +675,7 @@ void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
-    ImplInvalidate( false );
+    ImplInvalidate();
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
@@ -691,7 +691,7 @@ void ToolBox::InsertBreak( sal_uInt16 nPos )
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
-    ImplInvalidate( false );
+    ImplInvalidate();
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
@@ -750,7 +750,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
         mpData->m_aItems.insert( (nNewPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nNewPos : mpData->m_aItems.end(), aNewItem );
         mpData->ImplClearLayoutData();
         // redraw ToolBox
-        ImplInvalidate( false );
+        ImplInvalidate();
 
         // Notify
         sal_uInt16 nNewPos2 = sal::static_int_cast<sal_uInt16>(( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos);
@@ -1520,7 +1520,7 @@ void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
         if ( pItem->mbVisible != bVisible )
         {
             pItem->mbVisible = bVisible;
-            ImplInvalidate( false );
+            ImplInvalidate();
         }
     }
 }
@@ -1857,7 +1857,7 @@ IMPL_LINK_TYPED( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
     {
         sal_uInt16 id = GetMenu()->GetItemId( rEvent.GetItemPos() );
         if( id >= TOOLBOX_MENUITEM_START )
-            TriggerItem( id - TOOLBOX_MENUITEM_START, false );
+            TriggerItem( id - TOOLBOX_MENUITEM_START );
     }
 }
 

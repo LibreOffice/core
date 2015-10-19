@@ -736,7 +736,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                         SalFrameStyleFlags::INTRO |
                         SalFrameStyleFlags::PARTIAL_FULLSCREEN) )
              == SalFrameStyleFlags::DEFAULT )
-            pDisplay_->getWMAdaptor()->maximizeFrame( this, true );
+            pDisplay_->getWMAdaptor()->maximizeFrame( this );
 
         if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
             XChangeProperty( GetXDisplay(), mhWindow,
@@ -2022,7 +2022,7 @@ void X11SalFrame::Maximize()
         nShowState_ = SHOWSTATE_NORMAL;
     }
 
-    pDisplay_->getWMAdaptor()->maximizeFrame( this, true );
+    pDisplay_->getWMAdaptor()->maximizeFrame( this );
 }
 
 void X11SalFrame::Restore()

@@ -2256,7 +2256,7 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
 
         if ( bCheckPopups && pItem->pSubMenu )
         {
-            pItem->pSubMenu->RemoveDisabledEntries( true );
+            pItem->pSubMenu->RemoveDisabledEntries();
             if ( bRemoveEmptyPopups && !pItem->pSubMenu->GetItemCount() )
                 bRemove = true;
         }

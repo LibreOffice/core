@@ -829,7 +829,7 @@ bool Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-    EnableInput( true );
+    EnableInput();
 
     if ( GetParent() )
     {

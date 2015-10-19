@@ -921,7 +921,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
                 {
                     mbTrackingSelect = true;
-                    if ( SelectEntries( nSelect, LET_TRACKING, false, false ) )
+                    if ( SelectEntries( nSelect, LET_TRACKING ) )
                     {
                         if ( mbStackMode )
                         {
@@ -1691,7 +1691,7 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
 
     // actually select
     mnCurrentPos = nSelect;
-    if ( SelectEntries( nSelect, LET_KEYMOVE, false, false ) )
+    if ( SelectEntries( nSelect, LET_KEYMOVE ) )
     {
         mbTravelSelect = true;
         mnSelectModifier = 0;

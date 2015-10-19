@@ -454,7 +454,7 @@ void PNGWriterImpl::ImplWriteIDAT()
         {
             for (nY = 1; nY < mnHeight; nY += 2)
             {
-                mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter (nY, 0));
+                mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter (nY));
             }
         }
     }
