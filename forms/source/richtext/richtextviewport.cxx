@@ -46,7 +46,7 @@ namespace frm
         if (m_pView)
         {
             m_pView->SetSelectionMode( EE_SELMODE_STD );
-            m_pView->ShowCursor( true );
+            m_pView->ShowCursor();
         }
     }
 
