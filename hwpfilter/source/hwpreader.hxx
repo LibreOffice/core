@@ -171,11 +171,11 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     Reference< XFilter > rFilter;
@@ -230,7 +230,7 @@ sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
     return rFilter->filter( aDescriptor );
 }
 
-void HwpImportFilter::cancel() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void HwpImportFilter::cancel() throw(css::uno::RuntimeException, std::exception)
 {
     rFilter->cancel();
 }
@@ -247,18 +247,18 @@ OUString HwpImportFilter::getImplementationName_Static() throw()
     return OUString( IMPLEMENTATION_NAME );
 }
 
-OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString HwpImportFilter::getImplementationName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( IMPLEMENTATION_NAME );
 }
 
-sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 //XExtendedFilterDetection
-OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString sTypeName;
 
@@ -284,7 +284,7 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
     return sTypeName;
 }
 
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
