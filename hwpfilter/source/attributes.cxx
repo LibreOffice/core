@@ -53,7 +53,7 @@ sal_Int16 SAL_CALL AttributeListImpl::getLength() throw (RuntimeException, std::
 
 
 AttributeListImpl::AttributeListImpl( const AttributeListImpl &r ) :
-cppu::WeakImplHelper<com::sun::star::xml::sax::XAttributeList>( r )
+cppu::WeakImplHelper<css::xml::sax::XAttributeList>( r )
 {
     m_pImpl = new AttributeListImpl_impl;
     *m_pImpl = *(r.m_pImpl);
