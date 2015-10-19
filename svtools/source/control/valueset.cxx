@@ -1326,7 +1326,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
             {
                 if (nCurPos == nLastItem)
                 {
-                    const size_t nCol = nLastItem % mnCols;
+                    const size_t nCol = mnCols ? nLastItem % mnCols : 0;
                     if (nCol < mnCurCol)
                     {
                         // Move to previous row/page, keeping the old column
