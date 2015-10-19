@@ -37,12 +37,12 @@ namespace OFOPXMLHelper {
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
     COMPHELPER_DLLPUBLIC
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadRelationsInfoSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
+        const css::uno::Reference< css::io::XInputStream >& xInStream,
         const OUString & aStreamName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext >& rContext )
+            throw( css::uno::Exception );
 
     // returns sequence containing two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -50,21 +50,21 @@ namespace OFOPXMLHelper {
     // the second sequence describes "Override" elements, where each element is described
     // by StringPair object ( First - PartName, Second - ContentType )
     COMPHELPER_DLLPUBLIC
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadContentTypeSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::io::XInputStream >& xInStream,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext )
+            throw( css::uno::Exception );
 
     // writes sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
     COMPHELPER_DLLPUBLIC
     void WriteRelationsInfoSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::io::XOutputStream >& xOutStream,
+        const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aSequence,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext )
+            throw( css::uno::Exception );
 
     // writes two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -73,11 +73,11 @@ namespace OFOPXMLHelper {
     // by StringPair object ( First - PartName, Second - ContentType )
     COMPHELPER_DLLPUBLIC
     void WriteContentSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aDefaultsSequence,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aOverridesSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::io::XOutputStream >& xOutStream,
+        const css::uno::Sequence< css::beans::StringPair >& aDefaultsSequence,
+        const css::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext )
+            throw( css::uno::Exception );
 
 } // namespace OFOPXMLHelper
 

@@ -65,23 +65,23 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,OUString,bool>
+class TPropertyValueEqualFunctor : public ::std::binary_function< css::beans::PropertyValue,OUString,bool>
 {
 public:
     TPropertyValueEqualFunctor()
     {}
-    bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const OUString& rhs) const
+    bool operator() (const css::beans::PropertyValue& lhs, const OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }
 };
 
-class TNamedValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::NamedValue,OUString,bool>
+class TNamedValueEqualFunctor : public ::std::binary_function< css::beans::NamedValue,OUString,bool>
 {
 public:
     TNamedValueEqualFunctor()
     {}
-    bool operator() (const ::com::sun::star::beans::NamedValue& lhs, const OUString& rhs) const
+    bool operator() (const css::beans::NamedValue& lhs, const OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }
@@ -104,12 +104,12 @@ template<class T> struct UniquePtrValueLess
 */
 template < class IAFCE >
 struct OInterfaceCompare
-    :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
-                                    ,   ::com::sun::star::uno::Reference< IAFCE >
+    :public ::std::binary_function  <   css::uno::Reference< IAFCE >
+                                    ,   css::uno::Reference< IAFCE >
                                     ,   bool
                                     >
 {
-    bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
+    bool operator() (const css::uno::Reference< IAFCE >& lhs, const css::uno::Reference< IAFCE >& rhs) const
     {
         return lhs.get() < rhs.get();
             // this does not make any sense if you see the semantics of the pointer returned by get:

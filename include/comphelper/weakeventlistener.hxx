@@ -45,19 +45,19 @@ namespace comphelper
     class OWeakListenerAdapterBase : public OBaseMutex
     {
     private:
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >
+        css::uno::WeakReference< css::uno::XInterface >
                 m_aListener;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                 m_xBroadcaster;
 
     protected:
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        inline css::uno::Reference< css::uno::XInterface >
                 getListener( ) const
         {
             return m_aListener.get();
         }
 
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&
+        inline const css::uno::Reference< css::uno::XInterface >&
                 getBroadcaster( ) const
         {
             return m_xBroadcaster;
@@ -71,8 +71,8 @@ namespace comphelper
 
     protected:
         inline OWeakListenerAdapterBase(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxBroadcaster
+            const css::uno::Reference< css::uno::XWeak >& _rxListener,
+            const css::uno::Reference< css::uno::XInterface >& _rxBroadcaster
         )
             :m_aListener    (  _rxListener )
             ,m_xBroadcaster ( _rxBroadcaster )
@@ -106,18 +106,18 @@ namespace comphelper
             as this can't be done in a generic way</p>
         */
         OWeakListenerAdapter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
-            const ::com::sun::star::uno::Reference< BROADCASTER >& _rxBroadcaster
+            const css::uno::Reference< css::uno::XWeak >& _rxListener,
+            const css::uno::Reference< BROADCASTER >& _rxBroadcaster
         );
 
     protected:
-        inline  ::com::sun::star::uno::Reference< LISTENER > getListener( ) const
+        inline  css::uno::Reference< LISTENER > getListener( ) const
         {
-            return  ::com::sun::star::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), ::com::sun::star::uno::UNO_QUERY );
+            return  css::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), css::uno::UNO_QUERY );
         }
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException) override;
 
     protected:
         // OComponentHelper overridables
@@ -128,8 +128,8 @@ namespace comphelper
 
     //= OWeakEventListenerAdapter
 
-    typedef OWeakListenerAdapter    <   ::com::sun::star::lang::XComponent
-                                    ,   ::com::sun::star::lang::XEventListener
+    typedef OWeakListenerAdapter    <   css::lang::XComponent
+                                    ,   css::lang::XEventListener
                                     >   OWeakEventListenerAdapter_Base;
     /** the most simple listener adapter: for XEventListeners at XComponents
     */
@@ -137,8 +137,8 @@ namespace comphelper
     {
     public:
         OWeakEventListenerAdapter(
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak > _rxListener,
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > _rxBroadcaster
+            css::uno::Reference< css::uno::XWeak > _rxListener,
+            css::uno::Reference< css::lang::XComponent > _rxBroadcaster
         );
 
         // nothing to do except an own ctor - the forwarding of the "disposing" is already done
@@ -155,8 +155,8 @@ namespace comphelper
 
     template< class BROADCASTER, class LISTENER >
     OWeakListenerAdapter< BROADCASTER, LISTENER >::OWeakListenerAdapter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
-        const ::com::sun::star::uno::Reference< BROADCASTER >& _rxBroadcaster
+        const css::uno::Reference< css::uno::XWeak >& _rxListener,
+        const css::uno::Reference< BROADCASTER >& _rxBroadcaster
     )
         : ::cppu::WeakComponentImplHelper< LISTENER >( m_aMutex )
         , OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
@@ -165,9 +165,9 @@ namespace comphelper
 
 
     template< class BROADCASTER, class LISTENER >
-    void SAL_CALL OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException)
     {
-        ::com::sun::star::uno::Reference< LISTENER > xListener( getListener() );
+        css::uno::Reference< LISTENER > xListener( getListener() );
         if ( xListener.is() )
             xListener->disposing( _rSource );
     }

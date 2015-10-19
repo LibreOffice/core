@@ -27,24 +27,24 @@
 namespace comphelper
 {
 /** Base class to implement an UNO object supporting types and weak references, i.e. the object can be held
-    weakly (by a ::com::sun::star::uno::WeakReference).
+    weakly (by a css::uno::WeakReference).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
 
     In addition to the features from cppu::OWeakObject, derivations from this class can
     also used as a base class for ::cppu::ImplInheritanceHelper?
 */
-class COMPHELPER_DLLPUBLIC OWeakTypeObject : public ::cppu::OWeakObject, public ::com::sun::star::lang::XTypeProvider
+class COMPHELPER_DLLPUBLIC OWeakTypeObject : public ::cppu::OWeakObject, public css::lang::XTypeProvider
 {
 public:
     OWeakTypeObject();
     virtual ~OWeakTypeObject();
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType )  throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & rType )  throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

@@ -52,9 +52,9 @@ namespace comphelper
             : m_pAdapter(NULL), m_rMutex(_rMutex) { }
         virtual ~OSelectionChangeListener();
 
-        virtual void _selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void _selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) = 0;
+        virtual void _disposing(const css::lang::EventObject& _rSource)
+            throw (css::uno::RuntimeException, std::exception);
 
     protected:
         // pseudo-private. Making it private now could break compatibility
@@ -65,27 +65,27 @@ namespace comphelper
     //= OSelectionChangeMultiplexer
 
     /// multiplexer for selection changes
-    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer  :public cppu::WeakImplHelper< ::com::sun::star::view::XSelectionChangeListener>
+    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer  :public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
     {
         friend class OSelectionChangeListener;
-         ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>  m_xSet;
-        OSelectionChangeListener*                   m_pListener;
-        sal_Int32                                   m_nLockCount;
-        bool                                    m_bListening        : 1;
-        bool                                    m_bAutoSetRelease   : 1;
+        css::uno::Reference< css::view::XSelectionSupplier>  m_xSet;
+        OSelectionChangeListener*                            m_pListener;
+        sal_Int32                                            m_nLockCount;
+        bool                                                 m_bListening        : 1;
+        bool                                                 m_bAutoSetRelease   : 1;
 
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
     protected:
         virtual ~OSelectionChangeMultiplexer();
     public:
-        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet = true);
+        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet = true);
 
     // XEventListener
-        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
 
     // XSelectionChangeListener
-        virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         /// incremental lock
         void        lock();

@@ -37,11 +37,11 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStartingPoint;
+    css::uno::Reference< css::uno::XInterface>    m_xStartingPoint;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xCurrentObject;
+    css::uno::Reference< css::uno::XInterface>    m_xCurrentObject;
         // The current object
-    ::std::vector<sal_Int32>        m_arrChildIndizies;
+    ::std::vector<sal_Int32>                      m_arrChildIndizies;
 
         // I'm moving through a tree, but its elements have no GetNextSibling,
         // so I have to remember where each child is in relation to its parent.
@@ -51,23 +51,23 @@ protected:
         // The Name of the requested property
 
 public:
-    IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint);
+    IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint);
 
     virtual ~IndexAccessIterator();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    Next();
+    css::uno::Reference< css::uno::XInterface>    Next();
 
     virtual void Invalidate() { m_xCurrentObject = NULL; }
 
 protected:
-    virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*rElement*/) { return true; }
+    virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& /*rElement*/) { return true; }
 
         // This can be used to exclude certain elements; elements for which
         // this function returns sal_True will be simply skipped.
         // If this element is returned from Next(), then one can get
         // here get a little more information on the element.
         // That's why this method is not const.
-    virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*xContainer*/) const { return true; }
+    virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& /*xContainer*/) const { return true; }
 };
 
 

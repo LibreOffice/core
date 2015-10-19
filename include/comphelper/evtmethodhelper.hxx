@@ -22,7 +22,7 @@
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString> getEventMethodsForType(const ::com::sun::star::uno::Type& type);
+    COMPHELPER_DLLPUBLIC css::uno::Sequence< OUString> getEventMethodsForType(const css::uno::Type& type);
 
 
 }   // namespace comphelper

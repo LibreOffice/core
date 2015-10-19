@@ -66,109 +66,109 @@ public:
 class COMPHELPER_DLLPUBLIC OStorageHelper
 {
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
         GetStorageFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
         GetFileSystemStorageFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetTemporaryStorage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
     /// this one will only return Storage
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
     /// this one will return either Storage or FileSystemStorage
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageFromURL2(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
 
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageFromInputStream(
-            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference < css::io::XInputStream >& xStream,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageFromStream(
-            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream,
-            sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference < css::io::XStream >& xStream,
+            sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >() )
+        throw ( css::uno::Exception );
 
     static void CopyInputToOutput(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::io::XInputStream >& xInput,
+            const css::uno::Reference< css::io::XOutputStream >& xOutput )
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    static css::uno::Reference< css::io::XInputStream >
         GetInputStreamFromURL(
             const OUString& aURL,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::uno::XComponentContext >& context )
+        throw ( css::uno::Exception );
 
     static void SetCommonStorageEncryptionData(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
-        throw ( ::com::sun::star::uno::Exception );
+            const css::uno::Reference< css::embed::XStorage >& xStorage,
+            const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData )
+        throw ( css::uno::Exception );
 
     // the following method supports only storages of OOo formats
     static sal_Int32 GetXStorageFormat(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+            const css::uno::Reference< css::embed::XStorage >& xStorage )
+        throw ( css::uno::Exception, std::exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromURL(
             const OUString& aFormat,
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >(),
             bool bRepairStorage = false )
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromInputStream(
             const OUString& aFormat,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
+            const css::uno::Reference < css::io::XInputStream >& xStream,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >(),
             bool bRepairStorage = false )
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    static css::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromStream(
             const OUString& aFormat,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream,
-            sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
+            const css::uno::Reference < css::io::XStream >& xStream,
+            sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< css::uno::XComponentContext >(),
             bool bRepairStorage = false )
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+    static css::uno::Sequence< css::beans::NamedValue >
         CreatePackageEncryptionData(
             const OUString& aPassword );
 
@@ -179,14 +179,14 @@ public:
 
     // Methods to allow easy use of hierarchical names inside storages
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorageAtPath(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+    static css::uno::Reference< css::embed::XStorage > GetStorageAtPath(
+        const css::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPath(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+    static css::uno::Reference< css::io::XStream > GetStreamAtPath(
+        const css::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPackageURL(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+    static css::uno::Reference< css::io::XStream > GetStreamAtPackageURL(
+        const css::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy & rNastiness );
 };

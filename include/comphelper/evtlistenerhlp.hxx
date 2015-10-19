@@ -35,12 +35,12 @@ namespace comphelper
     // is helper class to avoid a cycle in refcount between the XEventListener
     // and the member XComponent
 
-    class COMPHELPER_DLLPUBLIC OEventListenerHelper : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener >
+    class COMPHELPER_DLLPUBLIC OEventListenerHelper : public ::cppu::WeakImplHelper< css::lang::XEventListener >
     {
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XEventListener> m_xListener;
+        css::uno::WeakReference< css::lang::XEventListener> m_xListener;
     public:
-        OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener);
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        OEventListenerHelper(const css::uno::Reference< css::lang::XEventListener>& _rxListener);
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
     };
 
 }   // namespace comphelper

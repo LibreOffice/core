@@ -26,7 +26,7 @@
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
+    COMPHELPER_DLLPUBLIC css::uno::Reference< css::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
 }
 
 #endif // INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX

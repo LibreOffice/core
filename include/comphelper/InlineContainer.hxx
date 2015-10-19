@@ -37,11 +37,11 @@ namespace comphelper
     uno::Sequence< t >( MakeSequence< t >( t_1 )( t_2 )...( t_n ) );
  */
 template < typename T >
-class MakeSequence : public ::com::sun::star::uno::Sequence< T >
+class MakeSequence : public css::uno::Sequence< T >
 {
 public:
     explicit MakeSequence(const T &a)
-        : ::com::sun::star::uno::Sequence< T >( 1 )
+        : css::uno::Sequence< T >( 1 )
     {
         this->operator[](0) = a;
     }

@@ -45,7 +45,7 @@ namespace detail { class ConfigurationWrapper; }
 class COMPHELPER_DLLPUBLIC ConfigurationChanges {
 public:
     static std::shared_ptr<ConfigurationChanges> create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext());
 
     ~ConfigurationChanges();
@@ -57,23 +57,23 @@ private:
     ConfigurationChanges& operator=(const ConfigurationChanges&) = delete;
 
     SAL_DLLPRIVATE ConfigurationChanges(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context);
 
     SAL_DLLPRIVATE void setPropertyValue(
-        OUString const & path, com::sun::star::uno::Any const & value)
+        OUString const & path, css::uno::Any const & value)
         const;
 
-    SAL_DLLPRIVATE com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameReplace >
+    SAL_DLLPRIVATE css::uno::Reference<
+        css::container::XHierarchicalNameReplace >
     getGroup(OUString const & path) const;
 
     SAL_DLLPRIVATE
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
     getSet(OUString const & path) const;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::configuration::XReadWriteAccess > access_;
+    css::uno::Reference<
+        css::configuration::XReadWriteAccess > access_;
 
     friend class detail::ConfigurationWrapper;
 };
@@ -84,44 +84,44 @@ namespace detail {
 class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
 public:
     static ConfigurationWrapper const & get(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context);
 
     SAL_DLLPRIVATE explicit ConfigurationWrapper(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context);
 
     SAL_DLLPRIVATE ~ConfigurationWrapper();
 
     bool isReadOnly(OUString const & path) const;
 
-    com::sun::star::uno::Any getPropertyValue(OUString const & path) const;
+    css::uno::Any getPropertyValue(OUString const & path) const;
 
     static void setPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, com::sun::star::uno::Any const & value);
+        OUString const & path, css::uno::Any const & value);
 
-    com::sun::star::uno::Any getLocalizedPropertyValue(
+    css::uno::Any getLocalizedPropertyValue(
         OUString const & path) const;
 
     static void setLocalizedPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, com::sun::star::uno::Any const & value);
+        OUString const & path, css::uno::Any const & value);
 
-    com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >
+    css::uno::Reference<
+        css::container::XHierarchicalNameAccess >
     getGroupReadOnly(OUString const & path) const;
 
-    static com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameReplace >
+    static css::uno::Reference<
+        css::container::XHierarchicalNameReplace >
     getGroupReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path);
 
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
+    css::uno::Reference< css::container::XNameAccess >
     getSetReadOnly(OUString const & path) const;
 
-    static com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
+    static css::uno::Reference< css::container::XNameContainer >
     getSetReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path);
@@ -132,11 +132,9 @@ private:
     ConfigurationWrapper(const ConfigurationWrapper&) = delete;
     ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        context_;
+    css::uno::Reference< css::uno::XComponentContext >          context_;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::configuration::XReadWriteAccess > access_;
+    css::uno::Reference< css::configuration::XReadWriteAccess > access_;
         // should really be an css.configuration.ReadOnlyAccess (with added
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
@@ -145,10 +143,10 @@ private:
 
 /// @internal
 template< typename T > struct Convert {
-    static com::sun::star::uno::Any toAny(T const & value)
-    { return com::sun::star::uno::makeAny(value); }
+    static css::uno::Any toAny(T const & value)
+    { return css::uno::makeAny(value); }
 
-    static T fromAny(com::sun::star::uno::Any const & value)
+    static T fromAny(css::uno::Any const & value)
     { return value.get< T >(); }
 
 private:
@@ -162,13 +160,13 @@ private:
 /// @internal
 template< typename T > struct Convert< boost::optional< T > >
 {
-    static com::sun::star::uno::Any toAny(boost::optional< T > const & value) {
+    static css::uno::Any toAny(boost::optional< T > const & value) {
         return value
-            ? com::sun::star::uno::makeAny(value.get())
-            : com::sun::star::uno::Any();
+            ? css::uno::makeAny(value.get())
+            : css::uno::Any();
     }
 
-    static boost::optional< T > fromAny(com::sun::star::uno::Any const & value)
+    static boost::optional< T > fromAny(css::uno::Any const & value)
     {
         return value.hasValue()
             ? boost::optional< T >(value.get< T >()) : boost::optional< T >();
@@ -204,12 +202,12 @@ template< typename T, typename U > struct ConfigurationProperty
     ///
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
-        com::sun::star::uno::Any a(
+        css::uno::Any a(
             detail::ConfigurationWrapper::get(context).getPropertyValue(
                 T::path()));
         return detail::Convert< U >::fromAny(a);
@@ -248,12 +246,12 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     ///
     /// For nillable properties, U is of type boost::optional<U'>.
     static U get(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
-        com::sun::star::uno::Any a(
+        css::uno::Any a(
             detail::ConfigurationWrapper::get(context).
             getLocalizedPropertyValue(T::path()));
         return detail::Convert< U >::fromAny(a);
@@ -288,9 +286,9 @@ private:
 /// given configuration group.
 template< typename T > struct ConfigurationGroup {
     /// Get read-only access to the given configuration group.
-    static com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >
-    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    static css::uno::Reference<
+        css::container::XHierarchicalNameAccess >
+    get(css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getGroupReadOnly(
@@ -299,8 +297,8 @@ template< typename T > struct ConfigurationGroup {
 
     /// Get read/write access to the given configuration group, storing any
     /// modifications via the given changes batch.
-    static com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameReplace >
+    static css::uno::Reference<
+        css::container::XHierarchicalNameReplace >
     get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
         return comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
@@ -323,8 +321,8 @@ private:
 template< typename T > struct ConfigurationSet {
     /// Get read-only access to the given configuration set.
     static
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
-    get(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::container::XNameAccess >
+    get(css::uno::Reference< css::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
         return detail::ConfigurationWrapper::get(context).getSetReadOnly(
@@ -334,7 +332,7 @@ template< typename T > struct ConfigurationSet {
     /// Get read/write access to the given configuration set, storing any
     /// modifications via the given changes batch.
     static
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
     get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
         return comphelper::detail::ConfigurationWrapper::getSetReadWrite(

@@ -68,7 +68,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationListener :
 public:
     /// Public health warning, you -must- dispose this if you use it.
     ConfigurationListener(const OUString &rPath,
-                          com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+                          css::uno::Reference< css::uno::XComponentContext >
                           const & xContext = comphelper::getProcessComponentContext())
         : mxConfig( ConfigurationHelper::openConfig( xContext, rPath,
                         ConfigurationHelper::EConfigurationModes::E_READONLY ),

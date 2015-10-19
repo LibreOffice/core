@@ -37,7 +37,7 @@ namespace comphelper
 
     //= OPropertyStateContainer
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::beans::XPropertyState
+    typedef ::cppu::ImplHelper1 <   css::beans::XPropertyState
                                 >   OPropertyStateContainer_TBase;
 
     /** helper implementation for components which have properties with a default
@@ -59,10 +59,10 @@ namespace comphelper
 
 
         // XPropertyState
-        virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 
         // own overridables
@@ -75,7 +75,7 @@ namespace comphelper
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle
         */
-        ::com::sun::star::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle );
+        css::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle );
 
         /** set the property denoted by the given handle to it's default value
 
@@ -89,11 +89,11 @@ namespace comphelper
             @precond
                 <arg>_nHandle</arg> is a valid property handle
         */
-        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const = 0;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const = 0;
 
     protected:
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 

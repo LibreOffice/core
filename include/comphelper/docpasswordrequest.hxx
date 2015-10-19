@@ -45,21 +45,21 @@ class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
         public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
 public:
-    explicit    SimplePasswordRequest( com::sun::star::task::PasswordRequestMode eMode );
+    explicit    SimplePasswordRequest( css::task::PasswordRequestMode eMode );
     virtual     ~SimplePasswordRequest();
 
-    bool            isPassword() const;
+    bool         isPassword() const;
 
     OUString     getPassword() const;
 
 private:
     // XInteractionRequest
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::com::sun::star::uno::Any      maRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
+    css::uno::Any      maRequest;
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
     PasswordContinuation *          mpPassword;
 };
 
@@ -74,7 +74,7 @@ class COMPHELPER_DLLPUBLIC DocPasswordRequest :
 public:
     explicit            DocPasswordRequest(
                             DocPasswordRequestType eType,
-                            ::com::sun::star::task::PasswordRequestMode eMode,
+                            css::task::PasswordRequestMode eMode,
                             const OUString& rDocumentName,
                             bool bPasswordToModify = false );
     virtual             ~DocPasswordRequest();
@@ -88,12 +88,12 @@ public:
 
 private:
     // XInteractionRequest
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::com::sun::star::uno::Any      maRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
+    css::uno::Any      maRequest;
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
     PasswordContinuation *          mpPassword;
 };
 

@@ -60,36 +60,36 @@ namespace comphelper
                 property values, a sequence of named values, or directly a property value or named value.
                 All other cases are worth an assertion in non-product builds.
         */
-        NamedValueCollection( const ::com::sun::star::uno::Any& _rElements );
+        NamedValueCollection( const css::uno::Any& _rElements );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of Any's containing either PropertyValue's or NamedValue's.
         */
-        NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
+        NamedValueCollection( const css::uno::Sequence< css::uno::Any >& _rArguments );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of PropertyValues's
         */
-        NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
+        NamedValueCollection( const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of NamedValue's
         */
-        NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
+        NamedValueCollection( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
         ~NamedValueCollection();
 
-        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
+        inline void assign( const css::uno::Sequence< css::uno::Any >& _rArguments )
         {
             impl_assign( _rArguments );
         }
 
         inline void clear()
         {
-            impl_assign( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
+            impl_assign( css::uno::Sequence< css::beans::NamedValue >() );
         }
 
         /** determines whether or not named values can be extracted from the given value
@@ -98,7 +98,7 @@ namespace comphelper
                 <TRUE/> if and only if the given <code>Any</code> contains a <code>NamedValue</code>, a
                 <code>PropertyValue</code>, or a sequence thereof.
         */
-        static bool canExtractFrom( ::com::sun::star::uno::Any const & i_value );
+        static bool canExtractFrom( css::uno::Any const & i_value );
 
         /// returns the number of elements in the collection
         size_t  size() const;
@@ -178,7 +178,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        const ::com::sun::star::uno::Any& get( const sal_Char* _pAsciiValueName ) const
+        const css::uno::Any& get( const sal_Char* _pAsciiValueName ) const
         {
             return get( OUString::createFromAscii( _pAsciiValueName ) );
         }
@@ -188,7 +188,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        const ::com::sun::star::uno::Any& get( const OUString& _rValueName ) const
+        const css::uno::Any& get( const OUString& _rValueName ) const
         {
             return impl_get( _rValueName );
         }
@@ -213,7 +213,7 @@ namespace comphelper
         template < typename VALUE_TYPE >
         inline bool put( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rValue )
         {
-            return impl_put( OUString::createFromAscii( _pAsciiValueName ), ::com::sun::star::uno::makeAny( _rValue ) );
+            return impl_put( OUString::createFromAscii( _pAsciiValueName ), css::uno::makeAny( _rValue ) );
         }
 
         /** puts a value into the collection
@@ -224,15 +224,15 @@ namespace comphelper
         template < typename VALUE_TYPE >
         inline bool put( const OUString& _rValueName, const VALUE_TYPE& _rValue )
         {
-            return impl_put( _rValueName, ::com::sun::star::uno::makeAny( _rValue ) );
+            return impl_put( _rValueName, css::uno::makeAny( _rValue ) );
         }
 
-        inline bool put( const sal_Char* _pAsciiValueName, const ::com::sun::star::uno::Any& _rValue )
+        inline bool put( const sal_Char* _pAsciiValueName, const css::uno::Any& _rValue )
         {
             return impl_put( OUString::createFromAscii( _pAsciiValueName ), _rValue );
         }
 
-        inline bool put( const OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue )
+        inline bool put( const OUString& _rValueName, const css::uno::Any& _rValue )
         {
             return impl_put( _rValueName, _rValue );
         }
@@ -260,84 +260,84 @@ namespace comphelper
             @return
                 the  number of elements in the sequence
         */
-        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rValues ) const;
+        sal_Int32 operator >>= ( css::uno::Sequence< css::beans::PropertyValue >& _out_rValues ) const;
 
         /** transforms the collection to a sequence of NamedValues
 
             @return
                 the  number of elements in the sequence
         */
-        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rValues ) const;
+        sal_Int32 operator >>= ( css::uno::Sequence< css::beans::NamedValue >& _out_rValues ) const;
 
         /** transforms the collection into a sequence of PropertyValues
         */
-        inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        inline css::uno::Sequence< css::beans::PropertyValue >
                 getPropertyValues() const
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aValues;
+            css::uno::Sequence< css::beans::PropertyValue > aValues;
             *this >>= aValues;
             return aValues;
         }
 
         /** returns a Sequence< Any >, containing PropertyValues
         */
-        inline ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        inline css::uno::Sequence< css::uno::Any >
                 getWrappedPropertyValues() const
         {
-            return impl_wrap< ::com::sun::star::beans::PropertyValue >();
+            return impl_wrap< css::beans::PropertyValue >();
         }
 
         /** returns a Sequence< Any >, containing NamedValues
         */
-        inline ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        inline css::uno::Sequence< css::uno::Any >
                 getWrappedNamedValues() const
         {
-            return impl_wrap< ::com::sun::star::beans::NamedValue >();
+            return impl_wrap< css::beans::NamedValue >();
         }
 
         /** transforms the collection into a sequence of NamedValues
         */
-        inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+        inline css::uno::Sequence< css::beans::NamedValue >
                 getNamedValues() const
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aValues;
+            css::uno::Sequence< css::beans::NamedValue > aValues;
             *this >>= aValues;
             return aValues;
         }
 
     private:
-        void    impl_assign( const ::com::sun::star::uno::Any& i_rWrappedElements );
-        void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
-        void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
-        void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
+        void    impl_assign( const css::uno::Any& i_rWrappedElements );
+        void    impl_assign( const css::uno::Sequence< css::uno::Any >& _rArguments );
+        void    impl_assign( const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
+        void    impl_assign( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
         bool    get_ensureType(
                     const OUString& _rValueName,
                     void* _pValueLocation,
-                    const ::com::sun::star::uno::Type& _rExpectedValueType
+                    const css::uno::Type& _rExpectedValueType
                 ) const;
 
-        const ::com::sun::star::uno::Any&
+        const css::uno::Any&
                 impl_get( const OUString& _rValueName ) const;
 
         bool    impl_has( const OUString& _rValueName ) const;
 
-        bool    impl_put( const OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue );
+        bool    impl_put( const OUString& _rValueName, const css::uno::Any& _rValue );
 
         bool    impl_remove( const OUString& _rValueName );
 
         template< class VALUE_TYPE >
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > impl_wrap() const
+        css::uno::Sequence< css::uno::Any > impl_wrap() const
         {
-            ::com::sun::star::uno::Sequence< VALUE_TYPE > aValues;
+            css::uno::Sequence< VALUE_TYPE > aValues;
             *this >>= aValues;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aWrappedValues( aValues.getLength() );
+            css::uno::Sequence< css::uno::Any > aWrappedValues( aValues.getLength() );
 
-            ::com::sun::star::uno::Any* pO = aWrappedValues.getArray();
+            css::uno::Any* pO = aWrappedValues.getArray();
             const VALUE_TYPE* pV = aValues.getConstArray();
             const sal_Int32 nLen = aValues.getLength();
             for( sal_Int32 i = 0; i < nLen; ++i )
-                *(pO++) = ::com::sun::star::uno::makeAny<VALUE_TYPE>( *(pV++) );
+                *(pO++) = css::uno::makeAny<VALUE_TYPE>( *(pV++) );
 
             return aWrappedValues;
         }

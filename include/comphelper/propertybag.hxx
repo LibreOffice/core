@@ -70,18 +70,18 @@ namespace comphelper
                 the initial value of the property. Must not be <NULL/>, to allow
                 determining the property type.
 
-            @throws ::com::sun::star::beans::IllegalTypeException
+            @throws css::beans::IllegalTypeException
                 if the initial value is <NULL/>
-            @throws ::com::sun::star::beans::PropertyExistException
+            @throws css::beans::PropertyExistException
                 if the name or the handle are already used
-            @throws ::com::sun::star::beans::IllegalArgumentException
+            @throws css::beans::IllegalArgumentException
                 if the name is empty
         */
         void    addProperty(
                     const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
-                    const ::com::sun::star::uno::Any& _rInitialValue
+                    const css::uno::Any& _rInitialValue
                 );
 
         /** adds a property to the bag
@@ -98,16 +98,16 @@ namespace comphelper
             @param _nAttributes
                 the attributes of the property
 
-            @throws ::com::sun::star::beans::IllegalTypeException
+            @throws css::beans::IllegalTypeException
                 if the initial value is <NULL/>
-            @throws ::com::sun::star::beans::PropertyExistException
+            @throws css::beans::PropertyExistException
                 if the name or the handle are already used
-            @throws ::com::sun::star::beans::IllegalArgumentException
+            @throws css::beans::IllegalArgumentException
                 if the name is empty
         */
         void    addVoidProperty(
                     const OUString& _rName,
-                    const ::com::sun::star::uno::Type& _rType,
+                    const css::uno::Type& _rType,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes
                 );
@@ -131,7 +131,7 @@ namespace comphelper
                 takes, upon return, the descriptions of all properties in the bag
         */
         inline void describeProperties(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rProps
+                    css::uno::Sequence< css::beans::Property >& _out_rProps
                 ) const
         {
             OPropertyContainerHelper::describeProperties( _out_rProps );
@@ -147,7 +147,7 @@ namespace comphelper
         */
         void    getFastPropertyValue(
                     sal_Int32 _nHandle,
-                    ::com::sun::star::uno::Any& _out_rValue
+                    css::uno::Any& _out_rValue
                 ) const;
 
         /** converts a to-be-set value of a property (given by handle) so that it can
@@ -169,9 +169,9 @@ namespace comphelper
         */
         bool    convertFastPropertyValue(
                         sal_Int32 _nHandle,
-                        const ::com::sun::star::uno::Any& _rNewValue,
-                        ::com::sun::star::uno::Any& _out_rConvertedValue,
-                        ::com::sun::star::uno::Any& _out_rCurrentValue
+                        const css::uno::Any& _rNewValue,
+                        css::uno::Any& _out_rConvertedValue,
+                        css::uno::Any& _out_rCurrentValue
                     ) const;
 
         /** sets a new value for a property given by handle
@@ -180,7 +180,7 @@ namespace comphelper
         */
         void    setFastPropertyValue(
                         sal_Int32 _nHandle,
-                        const ::com::sun::star::uno::Any& _rValue
+                        const css::uno::Any& _rValue
                     );
 
         /** returns the default value for a property given by handle
@@ -197,7 +197,7 @@ namespace comphelper
         */
         void    getPropertyDefaultByHandle(
                         sal_Int32 _nHandle,
-                        ::com::sun::star::uno::Any& _out_rValue
+                        css::uno::Any& _out_rValue
                     ) const;
 
         /** determines whether a property with a given name is part of the bag

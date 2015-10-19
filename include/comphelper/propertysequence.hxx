@@ -18,10 +18,10 @@
 
 namespace comphelper
 {
-    inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InitPropertySequence(
-        ::std::initializer_list< ::std::pair< OUString, ::com::sun::star::uno::Any > > vInit)
+    inline css::uno::Sequence< css::beans::PropertyValue > InitPropertySequence(
+        ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
+        css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
         size_t nCount{0};
         for(const auto& aEntry : vInit)
         {

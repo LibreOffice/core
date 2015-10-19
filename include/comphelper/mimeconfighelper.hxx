@@ -38,100 +38,100 @@ namespace comphelper {
 
 class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 {
-    ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
+    ::osl::Mutex                                           m_aMutex;
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xObjectConfig;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xVerbsConfig;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xMediaTypeConfig;
+    css::uno::Reference< css::container::XNameAccess > m_xObjectConfig;
+    css::uno::Reference< css::container::XNameAccess > m_xVerbsConfig;
+    css::uno::Reference< css::container::XNameAccess > m_xMediaTypeConfig;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xFilterFactory;
+    css::uno::Reference< css::container::XNameAccess > m_xFilterFactory;
 
 public:
 
-    MimeConfigurationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    MimeConfigurationHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
 
-    static OUString GetStringClassIDRepresentation( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
+    static OUString GetStringClassIDRepresentation( const css::uno::Sequence< sal_Int8 >& aClassID );
 
-    static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const OUString& aClassID );
+    static css::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const OUString& aClassID );
 
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+    css::uno::Reference< css::container::XNameAccess >
                                             GetConfigurationByPath( const OUString& aPath );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetObjConfiguration();
+    css::uno::Reference< css::container::XNameAccess > GetObjConfiguration();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetVerbsConfiguration();
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetMediaTypeConfiguration();
+    css::uno::Reference< css::container::XNameAccess > GetVerbsConfiguration();
+    css::uno::Reference< css::container::XNameAccess > GetMediaTypeConfiguration();
 
 
     OUString GetDocServiceNameFromFilter( const OUString& aFilterName );
 
     OUString GetDocServiceNameFromMediaType( const OUString& aMediaType );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjPropsFromConfigEntry(
-                        const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xObjectProps );
+    css::uno::Sequence< css::beans::NamedValue > GetObjPropsFromConfigEntry(
+                        const css::uno::Sequence< sal_Int8 >& aClassID,
+                        const css::uno::Reference< css::container::XNameAccess >& xObjectProps );
 
     bool GetVerbByShortcut( const OUString& aVerbShortcut,
-                                ::com::sun::star::embed::VerbDescriptor& aDescriptor );
+                                css::embed::VerbDescriptor& aDescriptor );
 
     OUString GetExplicitlyRegisteredObjClassID( const OUString& aMediaType );
 
 
     // retrieving object description from configuration
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByStringClassID(
+    css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByStringClassID(
                                                                 const OUString& aStringClassID );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByClassID(
-                                                const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
+    css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByClassID(
+                                                const css::uno::Sequence< sal_Int8 >& aClassID );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByMediaType(
+    css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByMediaType(
                                                 const OUString& aMediaType );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByFilter(
+    css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByFilter(
                                                 const OUString& aFilterName );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByDocumentName(
+    css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByDocumentName(
                                                 const OUString& aDocumentName );
 
     // retrieving object factory from configuration
     OUString GetFactoryNameByStringClassID( const OUString& aStringClassID );
-    OUString GetFactoryNameByClassID( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
+    OUString GetFactoryNameByClassID( const css::uno::Sequence< sal_Int8 >& aClassID );
     OUString GetFactoryNameByDocumentName( const OUString& aDocName );
     OUString GetFactoryNameByMediaType( const OUString& aMediaType );
 
     // typedetection related
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterFactory();
+    css::uno::Reference< css::container::XNameAccess > GetFilterFactory();
 
     OUString UpdateMediaDescriptorWithFilterName(
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
+                        css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
                         bool bIgnoreType );
     OUString UpdateMediaDescriptorWithFilterName(
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
+                        css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
+                        css::uno::Sequence< css::beans::NamedValue >& aObject );
 #ifdef WNT
     SfxFilterFlags GetFilterFlags( const OUString& aFilterName );
 
     bool AddFilterNameCheckOwnFile(
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
+                        css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
 #endif
 
     OUString GetDefaultFilterFromServiceName( const OUString& aServName, sal_Int32 nVersion );
 
     OUString GetExportFilterFromImportFilter( const OUString& aImportFilterName );
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aSearchRequest,
+    static css::uno::Sequence< css::beans::PropertyValue > SearchForFilter(
+                        const css::uno::Reference< css::container::XContainerQuery >& xFilterQuery,
+                        const css::uno::Sequence< css::beans::NamedValue >& aSearchRequest,
                         SfxFilterFlags nMustFlags,
                         SfxFilterFlags nDontFlags );
 
-    static bool ClassIDsEqual( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID1,
-                        const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID2 );
-    static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+    static bool ClassIDsEqual( const css::uno::Sequence< sal_Int8 >& aClassID1,
+                        const css::uno::Sequence< sal_Int8 >& aClassID2 );
+    static css::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 };

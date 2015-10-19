@@ -25,12 +25,12 @@ template<class T> class unique_disposing_ptr
 {
 private:
     std::unique_ptr<T> m_xItem;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener> m_xTerminateListener;
+    css::uno::Reference< css::frame::XTerminateListener> m_xTerminateListener;
 
     unique_disposing_ptr(const unique_disposing_ptr&) = delete;
     unique_disposing_ptr& operator=(const unique_disposing_ptr&) = delete;
 public:
-    unique_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
+    unique_disposing_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = 0 )
         : m_xItem(p)
     {
         m_xTerminateListener = new TerminateListener(rComponent, *this);
@@ -66,18 +66,18 @@ public:
         reset();
     }
 private:
-    class TerminateListener : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XTerminateListener >
+    class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xComponent;
+        css::uno::Reference< css::lang::XComponent > m_xComponent;
         unique_disposing_ptr<T>& m_rItem;
     public:
-        TerminateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent,
+        TerminateListener(const css::uno::Reference< css::lang::XComponent > &rComponent,
             unique_disposing_ptr<T>& rItem) : m_xComponent(rComponent), m_rItem(rItem)
         {
             if (m_xComponent.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->addTerminateListener(this);
                 else
@@ -89,7 +89,7 @@ private:
         {
             if ( m_xComponent.is() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->removeTerminateListener(this);
                 else
@@ -99,14 +99,14 @@ private:
 
     private:
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvt )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing( const css::lang::EventObject& rEvt )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             bool shutDown = (rEvt.Source == m_xComponent);
 
             if (shutDown && m_xComponent.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->removeTerminateListener(this);
                 else
@@ -119,14 +119,14 @@ private:
         }
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& )
-            throw(::com::sun::star::frame::TerminationVetoException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& )
+            throw(css::frame::TerminationVetoException,
+                  css::uno::RuntimeException, std::exception) override
         {
         }
 
-        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEvt )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& rEvt )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             disposing(rEvt);
         }
@@ -141,7 +141,7 @@ template<class T> class unique_disposing_solar_mutex_reset_ptr
     : public unique_disposing_ptr<T>
 {
 public:
-    unique_disposing_solar_mutex_reset_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
+    unique_disposing_solar_mutex_reset_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = 0 )
         : unique_disposing_ptr<T>(rComponent, p)
     {
     }

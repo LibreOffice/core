@@ -50,17 +50,17 @@ namespace comphelper
         OContainerListener(::osl::Mutex& _rMutex);
         virtual ~OContainerListener();
 
-        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent )
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void _elementInserted( const css::container::ContainerEvent& _rEvent )
+            throw (css::uno::RuntimeException,
                    std::exception);
-        virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event )
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void _elementRemoved( const css::container::ContainerEvent& _Event )
+            throw (css::uno::RuntimeException,
                    std::exception);
-        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent )
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent )
+            throw (css::uno::RuntimeException,
                    std::exception);
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void _disposing(const css::lang::EventObject& _rSource)
+            throw (css::uno::RuntimeException,
                    std::exception);
 
     protected:
@@ -71,12 +71,12 @@ namespace comphelper
     //= OContainerListenerAdapter
 
     class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
-            :public cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener >
+            :public cppu::WeakImplHelper< css::container::XContainerListener >
     {
         friend class OContainerListener;
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
+        css::uno::Reference< css::container::XContainer >
                                 m_xContainer;
         OContainerListener*     m_pListener;
         sal_Int32               m_nLockCount;
@@ -85,15 +85,15 @@ namespace comphelper
 
     public:
         OContainerListenerAdapter(OContainerListener* _pListener,
-            const  ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _rxContainer);
+            const  css::uno::Reference< css::container::XContainer >& _rxContainer);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
 
         // locking the multiplexer
         sal_Int32   locked() const { return m_nLockCount; }

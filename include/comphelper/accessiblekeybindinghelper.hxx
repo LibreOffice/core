@@ -37,7 +37,7 @@ namespace comphelper
     // OAccessibleKeyBindingHelper
 
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::accessibility::XAccessibleKeyBinding
+    typedef ::cppu::WeakImplHelper <   css::accessibility::XAccessibleKeyBinding
                                    >   OAccessibleKeyBindingHelper_Base;
 
     /** a helper class for implementing an accessible keybinding
@@ -45,7 +45,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OAccessibleKeyBindingHelper : public OAccessibleKeyBindingHelper_Base
     {
     private:
-        typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > > KeyBindings;
+        typedef ::std::vector< css::uno::Sequence< css::awt::KeyStroke > > KeyBindings;
 
         KeyBindings     m_aKeyBindings;
 
@@ -58,12 +58,12 @@ namespace comphelper
         OAccessibleKeyBindingHelper();
         OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper );
 
-        void AddKeyBinding( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke >& rKeyBinding ) throw (::com::sun::star::uno::RuntimeException);
-        void AddKeyBinding( const ::com::sun::star::awt::KeyStroke& rKeyStroke ) throw (::com::sun::star::uno::RuntimeException);
+        void AddKeyBinding( const css::uno::Sequence< css::awt::KeyStroke >& rKeyBinding ) throw (css::uno::RuntimeException);
+        void AddKeyBinding( const css::awt::KeyStroke& rKeyStroke ) throw (css::uno::RuntimeException);
 
         // XAccessibleKeyBinding
-        virtual sal_Int32 SAL_CALL getAccessibleKeyBindingCount() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getAccessibleKeyBindingCount() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
     };
 
 

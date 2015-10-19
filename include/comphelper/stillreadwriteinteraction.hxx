@@ -40,18 +40,18 @@ private:
     bool m_bHandledByInternalHandler;
 
 public:
-    StillReadWriteInteraction(const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
-                              const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xAuthenticationHandler);
+    StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
+                              const css::uno::Reference< css::task::XInteractionHandler >& xAuthenticationHandler);
 
     void resetInterceptions();
     void resetErrorStates();
     bool wasWriteError() { return (m_bUsed && m_bHandledByMySelf);}
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xAuthenticationHandler;
+    css::uno::Reference< css::task::XInteractionHandler > m_xAuthenticationHandler;
 
     virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest) override;
+        const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 };
 }

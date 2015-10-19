@@ -33,10 +33,10 @@ namespace comphelper {
 namespace detail {
     inline void unwrapArgsError(
         const OUString& str, sal_Int32 nArg,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xErrorContext =
-       ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() )
+        const css::uno::Reference< css::uno::XInterface >& xErrorContext =
+          css::uno::Reference< css::uno::XInterface >() )
     {
-        throw ::com::sun::star::lang::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             str, xErrorContext, static_cast< sal_Int16 >( nArg ) );
     }
 
@@ -47,15 +47,15 @@ namespace detail {
     }
 
     inline void unwrapArgs(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&,
+        const css::uno::Sequence< css::uno::Any >&,
         sal_Int32,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& )
+        const css::uno::Reference< css::uno::XInterface >& )
     {
         return;
     }
 
     inline void unwrapArgs(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&,
+        const css::uno::Sequence< css::uno::Any >&,
         sal_Int32 )
     {
         return;
@@ -63,12 +63,12 @@ namespace detail {
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        const css::uno::Sequence< css::uno::Any >& seq,
         sal_Int32 nArg, ::boost::optional< T >& v, Args&... args );
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        const css::uno::Sequence< css::uno::Any >& seq,
         sal_Int32 nArg, T& v, Args&... args )
     {
         if( seq.getLength() <= nArg )
@@ -91,7 +91,7 @@ namespace detail {
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        const css::uno::Sequence< css::uno::Any >& seq,
         sal_Int32 nArg, ::boost::optional< T >& v, Args&... args )
     {
         if( nArg < seq.getLength() )
@@ -107,7 +107,7 @@ namespace detail {
 
 template< typename... Args >
 inline void unwrapArgs(
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+    const css::uno::Sequence< css::uno::Any >& seq,
     Args&... args )
 {
     return detail::unwrapArgs( seq, 0, args... );

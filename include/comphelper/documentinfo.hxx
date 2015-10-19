@@ -35,7 +35,7 @@ namespace comphelper {
     {
         /** retrieves the UI title of the given document
         */
-        COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+        COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const css::uno::Reference< css::frame::XModel >& _rxDocument );
     }
 
 

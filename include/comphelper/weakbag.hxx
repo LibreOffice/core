@@ -44,16 +44,16 @@ public:
        @param e
        a non-null reference.
     */
-    void add(com::sun::star::uno::Reference< T > const & e) {
+    void add(css::uno::Reference< T > const & e) {
         OSL_ASSERT(e.is());
         for (typename WeakReferenceList::iterator i(m_list.begin()); i != m_list.end();) {
-            if (com::sun::star::uno::Reference< T >(*i).is()) {
+            if (css::uno::Reference< T >(*i).is()) {
                 ++i;
             } else {
                 i = m_list.erase(i);
             }
         }
-        m_list.push_back(com::sun::star::uno::WeakReference< T >(e));
+        m_list.push_back(css::uno::WeakReference< T >(e));
     }
 
     /**
@@ -62,19 +62,19 @@ public:
        @return
        a living reference, or null if there are none.
     */
-    com::sun::star::uno::Reference< T > remove() {
+    css::uno::Reference< T > remove() {
         while (!m_list.empty()) {
-            com::sun::star::uno::Reference< T > r(m_list.front());
+            css::uno::Reference< T > r(m_list.front());
             m_list.pop_front();
             if (r.is()) {
                 return r;
             }
         }
-        return com::sun::star::uno::Reference< T >();
+        return css::uno::Reference< T >();
     }
 
 private:
-    typedef std::list< com::sun::star::uno::WeakReference< T > > WeakReferenceList;
+    typedef std::list< css::uno::WeakReference< T > > WeakReferenceList;
 
     WeakReferenceList m_list;
 };

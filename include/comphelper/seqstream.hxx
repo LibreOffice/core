@@ -38,7 +38,7 @@ namespace comphelper
 
 
 class COMPHELPER_DLLPUBLIC SequenceInputStream
-: public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
+: public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
     css::uno::Sequence<sal_Int8> m_aData;
@@ -47,28 +47,28 @@ class COMPHELPER_DLLPUBLIC SequenceInputStream
 public:
     SequenceInputStream(css::uno::Sequence<sal_Int8> const & rData);
 
-// com::sun::star::io::XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException,
-              ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+// css::io::XInputStream
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException,
+              css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException,
-              ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException,
+              css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException,
-              ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException,
+              css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL available(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL closeInput(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL seek( sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL seek( sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 private:
     inline sal_Int32 avail();
@@ -76,13 +76,13 @@ private:
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC
 class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
-    : public ::cppu::WeakImplHelper< ::com::sun::star::io::XOutputStream >
+    : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {};
 
 class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
 {
 protected:
-    ::com::sun::star::uno::Sequence< sal_Int8 >&    m_rSequence;
+    css::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32                                       m_nMinimumResize;
     sal_Int32                                       m_nMaximumResize;
@@ -90,7 +90,7 @@ protected:
         // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
         // into the stream at a given moment.
 
-    bool                                        m_bConnected;
+    bool                                            m_bConnected;
         // closeOutput has been called ?
 
     ::osl::Mutex                                    m_aMutex;
@@ -115,21 +115,21 @@ public:
         @see        closeOutput
     */
     OSequenceOutputStream(
-        ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq,
+        css::uno::Sequence< sal_Int8 >& _rSeq,
         double _nResizeFactor = 1.3,
         sal_Int32 _nMinimumResize = 128,
         sal_Int32 _nMaximumResize = -1
         );
 
     /// same as XOutputStream::writeBytes (as expected :)
-    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     /// this is a dummy in this implementation, no buffering is used
-    virtual void SAL_CALL flush(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL flush(  ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     /** closes the output stream. In the case of this class, this means that the sequence used for writing is
         resized to the really used size and not used any further, every subsequent call to one of the XOutputStream
         methods will throw a <code>NotConnectedException</code>.
     */
-    virtual void SAL_CALL closeOutput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL closeOutput(  ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 };
 
 } // namespace comphelper

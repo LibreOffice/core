@@ -41,21 +41,21 @@ namespace comphelper
     class SAL_NO_VTABLE IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const = 0;
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const = 0;
         virtual ~IKeyPredicateLess() {}
     };
 
 
     //= LessPredicateAdapter
 
-    struct LessPredicateAdapter : public ::std::binary_function< ::com::sun::star::uno::Any, ::com::sun::star::uno::Any, bool >
+    struct LessPredicateAdapter : public ::std::binary_function< css::uno::Any, css::uno::Any, bool >
     {
         LessPredicateAdapter( const IKeyPredicateLess& _predicate )
             :m_predicate( _predicate )
         {
         }
 
-        bool operator()( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        bool operator()( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const
         {
             return m_predicate.isLess( _lhs, _rhs );
         }
@@ -74,13 +74,13 @@ namespace comphelper
     class ScalarPredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             SCALAR lhs(0), rhs(0);
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             return lhs < rhs;
         }
     };
@@ -91,13 +91,13 @@ namespace comphelper
     class StringPredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             return lhs < rhs;
         }
     };
@@ -108,23 +108,23 @@ namespace comphelper
     class StringCollationPredicateLess : public IKeyPredicateLess
     {
     public:
-        StringCollationPredicateLess( ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator )
+        StringCollationPredicateLess( css::uno::Reference< css::i18n::XCollator > const & i_collator )
             :m_collator( i_collator )
         {
         }
 
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             return m_collator->compareString( lhs, rhs ) < 0;
         }
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const m_collator;
+        css::uno::Reference< css::i18n::XCollator > const m_collator;
     };
 
 
@@ -133,13 +133,13 @@ namespace comphelper
     class TypePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
-            ::com::sun::star::uno::Type lhs, rhs;
+            css::uno::Type lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             return lhs.getTypeName() < rhs.getTypeName();
         }
     };
@@ -150,12 +150,12 @@ namespace comphelper
     class EnumPredicateLess : public IKeyPredicateLess
     {
     public:
-        EnumPredicateLess( ::com::sun::star::uno::Type const & _enumType )
+        EnumPredicateLess( css::uno::Type const & _enumType )
             :m_enumType( _enumType )
         {
         }
 
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
             sal_Int32 lhs(0), rhs(0);
             if  (   !::cppu::enum2int( lhs, _lhs )
@@ -163,12 +163,12 @@ namespace comphelper
                 ||  !_lhs.getValueType().equals( m_enumType )
                 ||  !_rhs.getValueType().equals( m_enumType )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             return lhs < rhs;
         }
 
     private:
-        ::com::sun::star::uno::Type const   m_enumType;
+        css::uno::Type const   m_enumType;
     };
 
 
@@ -177,15 +177,15 @@ namespace comphelper
     class InterfacePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const override
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
         {
-            if  (   ( _lhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )
-                ||  ( _rhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )
+            if  (   ( _lhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
+                ||  ( _rhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > lhs( _lhs, ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > rhs( _rhs, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::uno::XInterface > lhs( _lhs, css::uno::UNO_QUERY );
+            css::uno::Reference< css::uno::XInterface > rhs( _rhs, css::uno::UNO_QUERY );
             return lhs.get() < rhs.get();
         }
     };
@@ -206,8 +206,8 @@ namespace comphelper
     */
     ::std::unique_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
         getStandardLessPredicate(
-            ::com::sun::star::uno::Type const & i_type,
-            ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator
+            css::uno::Type const & i_type,
+            css::uno::Reference< css::i18n::XCollator > const & i_collator
         );
 
 

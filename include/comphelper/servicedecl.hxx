@@ -118,8 +118,7 @@ public:
     void * getFactory( sal_Char const* pImplName ) const;
 
     /// @return supported service names
-    ::com::sun::star::uno::Sequence< OUString>
-    getSupportedServiceNames() const;
+    css::uno::Sequence< OUString> getSupportedServiceNames() const;
 
     /// @return whether name is in set of supported service names
     bool supportsService( OUString const& name ) const;

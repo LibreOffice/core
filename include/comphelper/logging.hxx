@@ -67,7 +67,7 @@ namespace comphelper
     class EventLogger_Impl;
     typedef ::boost::optional< OUString >    OptionalString;
 
-    /** encapsulates an com::sun::star::logging::XLogger
+    /** encapsulates an css::logging::XLogger
 
         The class silences several (unlikely) errors which could potentially happen
         when working with a logger. Additionally, it provides some convenience methods
@@ -105,7 +105,7 @@ namespace comphelper
                 the ASCII name of the logger to create.
         */
         EventLogger(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const sal_Char* _pAsciiLoggerName
         );
 
@@ -495,7 +495,7 @@ namespace comphelper
 
         */
         ResourceBasedEventLogger(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const sal_Char* _pResourceBundleBaseName,
             const sal_Char* _pAsciiLoggerName = NULL
         );

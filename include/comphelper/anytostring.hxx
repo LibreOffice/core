@@ -34,7 +34,7 @@ namespace comphelper
     @return
            STRING representation of given ANY value
 */
-COMPHELPER_DLLPUBLIC OUString anyToString( ::com::sun::star::uno::Any const & value );
+COMPHELPER_DLLPUBLIC OUString anyToString( css::uno::Any const & value );
 
 }
 

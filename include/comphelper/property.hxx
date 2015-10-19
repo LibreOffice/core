@@ -32,31 +32,31 @@ namespace comphelper
 {
 
     // comparing two property instances
-    struct PropertyCompareByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
+    struct PropertyCompareByName : public ::std::binary_function< css::beans::Property, css::beans::Property, bool >
     {
-        bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
+        bool operator() (const css::beans::Property& x, const css::beans::Property& y) const
         {
             return x.Name.compareTo(y.Name) < 0;
         }
     };
 
-    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, OUString, bool >
+    struct PropertyStringEqualFunctor : ::std::binary_function< css::beans::Property, OUString, bool >
     {
 
-        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const OUString& rhs ) const
+        inline bool operator()( const css::beans::Property& lhs, const OUString& rhs ) const
         {
             return lhs.Name == rhs ;
         }
 
-        inline bool operator()( const OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
+        inline bool operator()( const OUString& lhs, const css::beans::Property& rhs ) const
         {
             return lhs == rhs.Name ;
         }
     };
 
-    struct PropertyEqualByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
+    struct PropertyEqualByName : public ::std::binary_function< css::beans::Property, css::beans::Property, bool >
     {
-        bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
+        bool operator() (const css::beans::Property& x, const css::beans::Property& y) const
         {
             return x.Name == y.Name ;
         }

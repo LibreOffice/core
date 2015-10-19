@@ -74,7 +74,7 @@ namespace comphelper
 
 
 
-    /** get a com::sun::star::awt::FontDescriptor that is fully initialized with
+    /** get a css::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)
     */
@@ -97,8 +97,8 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const css::uno::Any& _rAny);
     COMPHELPER_DLLPUBLIC double         getDouble(const css::uno::Any& _rAny);
     COMPHELPER_DLLPUBLIC float          getFloat(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC OUString    getString(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC bool       getBOOL(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC OUString       getString(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC bool           getBOOL(const css::uno::Any& _rAny);
 
     COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny) throw(css::lang::IllegalArgumentException);
 
