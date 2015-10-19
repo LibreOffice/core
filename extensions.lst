@@ -137,7 +137,7 @@
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
-    c29cd2b68639b4fe78e98f88f1b4dd8e http://sourceforge.net/projects/aoo-extensions/files/1196/30/oo3x-pt-pt-14.7.8.2.oxt/download "dict-pt.oxt"
+    290d182dfad2c65ae2103228a8ed355f http://sourceforge.net/projects/aoo-extensions/files/1196/36/oo3x-pt-pt-15.10.3.1.oxt/download "dict-pt.oxt"
 
 # Catalan.
 [ language=ca ]
