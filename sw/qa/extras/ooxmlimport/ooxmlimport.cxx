@@ -65,6 +65,8 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
 #include <unotest/assertion_traits.hxx>
@@ -74,6 +76,7 @@
 #include <swtypes.hxx>
 #include <tools/datetimeutils.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <bordertest.hxx>
 
@@ -94,6 +97,24 @@ public:
     {
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);
+    }
+protected:
+    /// Copy&paste helper.
+    bool paste(const OUString& rFilename, const uno::Reference<text::XTextRange>& xTextRange)
+    {
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
+        xImporter->setTargetDocument(mxComponent);
+        uno::Sequence<beans::PropertyValue> aDescriptor(3);
+        aDescriptor[0].Name = "InputStream";
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename, StreamMode::READ);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        aDescriptor[0].Value <<= xStream;
+        aDescriptor[1].Name = "InsertMode";
+        aDescriptor[1].Value <<= sal_True;
+        aDescriptor[2].Name = "TextInsertModeRange";
+        aDescriptor[2].Value <<= xTextRange;
+        return xFilter->filter(aDescriptor);
     }
 };
 
@@ -2877,6 +2898,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf90810, "tdf90810short.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf89165, "tdf89165.docx")
 {
     // This must not hang in layout
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf94374, "hello.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    // This failed: it wasn't possible to insert a DOCX document into an existing Writer one.
+    CPPUNIT_ASSERT(paste("tdf94374.docx", xEnd));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
