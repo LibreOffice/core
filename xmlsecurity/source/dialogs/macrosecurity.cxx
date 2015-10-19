@@ -160,7 +160,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
     }
     if (bReadonly && pImage)
     {
-        pImage->Show(true);
+        pImage->Show();
         m_pVeryHighRB->Enable(false);
         m_pHighRB->Enable(false);
         m_pMediumRB->Enable(false);

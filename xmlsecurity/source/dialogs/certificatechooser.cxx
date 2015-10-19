@@ -115,7 +115,7 @@ short CertificateChooser::Execute()
     pMe->Update();
     ImplInitialize();
     if ( pParent )
-        pParent->EnableInput( true );
+        pParent->EnableInput();
     return ModalDialog::Execute();
 }
 
