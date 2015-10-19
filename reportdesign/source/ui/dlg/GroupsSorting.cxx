@@ -413,7 +413,7 @@ void OFieldExpressionControl::lateInit()
         // not the first call
         RowRemoved(0, GetRowCount());
 
-    RowInserted(0, m_aGroupPositions.size(), true);
+    RowInserted(0, m_aGroupPositions.size());
 }
 
 
@@ -929,7 +929,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
         }
     }
 
-    RowInserted( nRow, nSize, true );
+    RowInserted( nRow, nSize );
 }
 
 Size OFieldExpressionControl::GetOptimalSize() const
@@ -969,7 +969,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
     {
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
-        pControlsLst[i]->Show(true);
+        pControlsLst[i]->Show();
     }
 
     for (size_t i = 0; i < (sizeof (pControlsLst) / sizeof (pControlsLst[0])) - 1; ++i)

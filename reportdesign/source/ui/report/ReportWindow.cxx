@@ -70,7 +70,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 
     m_aHRuler->Show();
     m_aHRuler->Activate();
-    m_aHRuler->SetPagePos(0);
+    m_aHRuler->SetPagePos();
     m_aHRuler->SetBorders();
     m_aHRuler->SetIndents();
     m_aHRuler->SetMargin1();

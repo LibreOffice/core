@@ -66,7 +66,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     m_aImage->Show();
     m_aVRuler->Show();
     m_aVRuler->Activate();
-    m_aVRuler->SetPagePos(0);
+    m_aVRuler->SetPagePos();
     m_aVRuler->SetBorders();
     m_aVRuler->SetIndents();
     m_aVRuler->SetMargin1();

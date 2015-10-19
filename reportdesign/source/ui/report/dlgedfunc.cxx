@@ -841,7 +841,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent, false );
+            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent );
         }
     }
 
