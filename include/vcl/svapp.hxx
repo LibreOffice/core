@@ -1485,6 +1485,10 @@ public:
     */
     static void                 EndAllDialogs();
 
+    /** Cancel all open popups
+    */
+    static void                 EndAllPopups();
+
     ///@}
 
     // For vclbootstrapprotector:

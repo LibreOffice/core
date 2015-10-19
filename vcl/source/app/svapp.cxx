@@ -37,6 +37,7 @@
 #include <unotools/syslocaleoptions.hxx>
 
 #include "vcl/dialog.hxx"
+#include "vcl/floatwin.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/keycod.hxx"
 #include "vcl/event.hxx"
@@ -328,6 +329,13 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
+IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    while (pSVData->maWinData.mpFirstFloat)
+        pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
+}
+
 IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
 {
     vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
@@ -342,6 +350,12 @@ void Application::EndAllDialogs()
 {
     Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplEndAllDialogsMsg ) );
 }
+
+void Application::EndAllPopups()
+{
+    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplEndAllPopupsMsg ) );
+}
+
 
 namespace
 {
@@ -382,6 +396,7 @@ namespace
 
     void CloseDialogsAndQuit()
     {
+        Application::EndAllPopups();
         Application::EndAllDialogs();
         Application::Quit();
     }
