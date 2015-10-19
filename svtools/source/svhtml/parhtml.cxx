@@ -1454,7 +1454,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
             // PlugIns require original token name. Convert to lower case only for searching.
             nToken = GetHTMLOption( sName.toAsciiLowerCase() ); // Name is ready
-            DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
+            SAL_WARN_IF( nToken==HTML_O_UNKNOWN, "svtools",
                         "GetOption: unknown HTML option" );
             bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
                                nToken >= HTML_OPTION_SCRIPT_END) &&

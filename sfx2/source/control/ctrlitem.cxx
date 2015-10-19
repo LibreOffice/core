@@ -36,7 +36,7 @@ void SfxControllerItem::CheckConfigure_Impl( SfxSlotMode nType )
 
     // is the ID configurable at all in 'nType'?
     const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nId);
-    DBG_ASSERTWARNING( pSlot, "SfxControllerItem: binding not existing slot" );
+    SAL_WARN_IF( !pSlot, "sfx.control", "SfxControllerItem: binding not existing slot" );
     SAL_WARN_IF(
         pSlot && !pSlot->IsMode(nType), "sfx.control",
         "SfxControllerItem: slot without ...Config-flag at SID "

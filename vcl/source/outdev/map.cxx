@@ -708,7 +708,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
 #ifdef DBG_UTIL
         if ( GetOutDevType() != OUTDEV_PRINTER )
-            DBG_ASSERTWARNING( bRelMap, "Please record only relative MapModes!" );
+            SAL_WARN_IF( !bRelMap, "vcl", "Please record only relative MapModes!" );
 #endif
     }
 
@@ -1516,9 +1516,9 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
                 && eUnitDest != MAP_APPFONT
                 && eUnitDest != MAP_RELATIVE,
                 "Destination MapUnit nicht erlaubt" );
-    DBG_ASSERTWARNING( eUnitSource != MAP_PIXEL,
+    SAL_WARN_IF( eUnitSource == MAP_PIXEL, "vcl",
                        "MAP_PIXEL mit 72dpi angenaehert" );
-    DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,
+    SAL_WARN_IF( eUnitDest == MAP_PIXEL, "vcl",
                        "MAP_PIXEL mit 72dpi angenaehert" );
 }
 

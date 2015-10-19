@@ -27,7 +27,7 @@
 
 SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 {
-    DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
+    SAL_WARN_IF( !rIStream.GetVersion(), "tools", "Pair::>> - Solar-Version not set on rIStream" );
 
     sal_Int32 nTmpA(0), nTmpB(0);
     rIStream.ReadInt32( nTmpA ).ReadInt32( nTmpB );
@@ -39,7 +39,7 @@ SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 
 SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
 {
-    DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "Pair::<< - Solar-Version not set on rOStream" );
 
     rOStream.WriteInt32( rPair.nA ).WriteInt32( rPair.nB );
 
@@ -173,7 +173,7 @@ bool Rectangle::IsOver( const Rectangle& rRect ) const
 
 SvStream& ReadRectangle( SvStream& rIStream, Rectangle& rRect )
 {
-    DBG_ASSERTWARNING( rIStream.GetVersion(), "Rectangle::>> - Solar-Version not set on rIStream" );
+    SAL_WARN_IF( !rIStream.GetVersion(), "tools", "Rectangle::>> - Solar-Version not set on rIStream" );
 
     sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
 
@@ -189,7 +189,7 @@ SvStream& ReadRectangle( SvStream& rIStream, Rectangle& rRect )
 
 SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
 {
-    DBG_ASSERTWARNING( rOStream.GetVersion(), "Rectangle::<< - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "Rectangle::<< - Solar-Version not set on rOStream" );
 
     rOStream.WriteInt32( rRect.nLeft )
             .WriteInt32( rRect.nTop )

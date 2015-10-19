@@ -231,9 +231,9 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
                     pObj->GetObjInventor() == SdrInventor)
                 {
                     // The page object is the preceding page (drawing page)
-                    DBG_ASSERTWARNING(nStartPos, "Position of notes page must not be 0.");
+                    SAL_WARN_IF(!nStartPos, "sd", "Position of notes page must not be 0.");
 
-                    DBG_ASSERTWARNING(nPage > 1, "Page object must not be a handout.");
+                    SAL_WARN_IF(nPage <= 1, "sd", "Page object must not be a handout.");
 
                     if (nStartPos > 0 && nPage > 1)
                         static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetPage(nPage - 1));

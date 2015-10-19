@@ -4179,7 +4179,7 @@ EditSelection* ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 {
     EditSelection* pSel = 0;
     ContentNode* pNode = GetEditDoc().GetObject( nPara );
-    DBG_ASSERTWARNING( pNode, "Paragraph does not exist: SelectParagraph" );
+    SAL_WARN_IF( !pNode, "editeng", "Paragraph does not exist: SelectParagraph" );
     if ( pNode )
         pSel = new EditSelection( EditPaM( pNode, 0 ), EditPaM( pNode, pNode->Len() ) );
 

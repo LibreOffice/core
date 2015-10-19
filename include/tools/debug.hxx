@@ -32,8 +32,7 @@
 
     Because the assertion macro (DBG_ASSERT) has been used for
     true assertions as well as to log warnings, it maps to SAL_WARN instead of
-    standard assert.  The warning and error macros (DBG_ASSERTWARNING) all map to
-    SAL_INFO.
+    standard assert.
 */
 
 #ifdef DBG_UTIL
@@ -58,18 +57,15 @@ do                                          \
 } while(false)
 
 #else
-// NO DBG_UITL
+// NO DBG_UTIL
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
 
 #endif
 
-#define DBG_ASSERTWARNING( sCon, aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", "%s", aWarning)
-
 #define DBG_ASSERT( sCon, aError ) \
     SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", "%s", aError)
 
-#endif
 
+#endif // INCLUDED_TOOLS_DEBUG_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

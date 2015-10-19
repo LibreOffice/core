@@ -1647,7 +1647,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
 {
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == EE_PARA_APPEND, "Paragraph number too large, but not EE_PARA_APPEND!" );
+        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
         nPara = GetParagraphCount();
     }
 
@@ -1669,7 +1669,7 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 {
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == EE_PARA_APPEND, "Paragraph number too large, but not EE_PARA_APPEND!" );
+        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
         nPara = GetParagraphCount();
     }
 

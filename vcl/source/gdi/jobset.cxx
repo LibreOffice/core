@@ -217,7 +217,7 @@ bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 {
-    DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rIStream.GetVersion(), "vcl", "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
         sal_uInt16 nLen = 0;
@@ -311,7 +311,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
 SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 {
-    DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rOStream.GetVersion(), "vcl", "JobSetup::<< - Solar-Version not set on rOStream" );
 
     // We do not have a new FileFormat at this point in time
     // #define JOBSET_FILEFORMAT2      3780

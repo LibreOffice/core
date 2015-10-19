@@ -243,7 +243,7 @@ OUString Color::AsRGBHexString() const
 
 SvStream& ReadColor( SvStream& rIStream, Color& rColor )
 {
-    DBG_ASSERTWARNING( rIStream.GetVersion(), "Color::>> - Solar-Version not set on rIStream" );
+    SAL_WARN_IF( !rIStream.GetVersion(), "tools", "Color::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16      nColorName;
 
@@ -335,7 +335,7 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
 
 SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
 {
-    DBG_ASSERTWARNING( rOStream.GetVersion(), "Color::<< - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "Color::<< - Solar-Version not set on rOStream" );
 
     sal_uInt16 nColorName   = COL_NAME_USER;
     sal_uInt16 nRed         = rColor.GetRed();

@@ -631,7 +631,7 @@ void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
 
 sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
 {
-    DBG_ASSERTWARNING( aLineList.Count(), "Empty ParaPortion in GetLine!" );
+    SAL_WARN_IF( !aLineList.Count(), "editeng", "Empty ParaPortion in GetLine!" );
     DBG_ASSERT( bVisible, "Why GetLine() on an invisible paragraph?" );
 
     for ( sal_Int32 nLine = 0; nLine < aLineList.Count(); nLine++ )

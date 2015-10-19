@@ -994,7 +994,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     Rectangle aR( aOutArea );
     aR = pOutWin->LogicToPixel( aR );
     aR = pOutWin->PixelToLogic( aR );
-    DBG_ASSERTWARNING( aR == aOutArea, "OutArea before Scroll not aligned" );
+    SAL_WARN_IF( aR != aOutArea, "editeng", "OutArea before Scroll not aligned" );
 #endif
 
     Rectangle aNewVisArea( GetVisDocArea() );

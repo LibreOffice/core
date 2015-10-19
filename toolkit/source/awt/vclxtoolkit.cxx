@@ -1270,7 +1270,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
 
     DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
-    DBG_ASSERTWARNING( pNewComp, "createWindow: No special Interface!" );
+    SAL_WARN_IF( !pNewComp, "toolkit", "createWindow: No special Interface!" );
 
     if ( pNewWindow )
     {

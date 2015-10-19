@@ -411,7 +411,7 @@ void SfxItemPool_Impl::readTheItems (
     if ( 0 != pOldArr )
         for ( n = 0; bEmpty && n < pOldArr->size(); ++n )
             bEmpty = pOldArr->operator[](n) == 0;
-    DBG_ASSERTWARNING( bEmpty, "loading non-empty pool" );
+    SAL_WARN_IF( !bEmpty, "svl", "loading non-empty pool" );
     if ( !bEmpty )
     {
         // See if there's a new one for all old ones

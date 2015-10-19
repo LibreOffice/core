@@ -1536,7 +1536,7 @@ bool Polygon::IsEqual( const tools::Polygon& rPoly ) const
 
 SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 {
-    DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
+    SAL_WARN_IF( !rIStream.GetVersion(), "tools", "Polygon::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16          i;
     sal_uInt16          nPoints(0);
@@ -1587,7 +1587,7 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 
 SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 {
-    DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
+    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "Polygon::<< - Solar-Version not set on rOStream" );
 
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();

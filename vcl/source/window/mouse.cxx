@@ -468,7 +468,7 @@ void Window::ReleaseMouse()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    DBG_ASSERTWARNING( pSVData->maWinData.mpCaptureWin.get() == this,
+    SAL_WARN_IF( pSVData->maWinData.mpCaptureWin.get() != this, "vcl",
                        "Window::ReleaseMouse(): window doesn't have the mouse capture" );
 
     if ( pSVData->maWinData.mpCaptureWin.get() == this )

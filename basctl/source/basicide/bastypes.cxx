@@ -653,7 +653,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         nLine++;
     }
 
-    DBG_ASSERTWARNING( nStartPos != -1, "CutLines: Startzeile nicht gefunden!" );
+    SAL_WARN_IF( nStartPos == -1, "basctl", "CutLines: Startzeile nicht gefunden!" );
 
     if ( nStartPos == -1 )
         return;

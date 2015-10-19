@@ -1476,7 +1476,7 @@ SpellInfo * ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
 
 EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
 {
-    DBG_ASSERTWARNING( xSpeller.is(), "No Spell checker set!" );
+    SAL_WARN_IF( !xSpeller.is(), "editeng", "No Spell checker set!" );
 
     if ( !xSpeller.is() )
         return EE_SPELL_NOSPELLER;

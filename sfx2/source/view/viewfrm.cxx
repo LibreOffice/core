@@ -2469,7 +2469,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         nLine++;
     }
 
-    DBG_ASSERTWARNING( nStartPos != -1, "CutLines: Start row not found!" );
+    SAL_WARN_IF( nStartPos == -1, "sfx", "CutLines: Start row not found!" );
 
     if ( nStartPos != -1 )
     {

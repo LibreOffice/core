@@ -164,7 +164,7 @@ void ProgressBar::Resize()
 
 void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 {
-    DBG_ASSERTWARNING( nNewPercent <= 100, "StatusBar::SetProgressValue(): nPercent > 100" );
+    SAL_WARN_IF( nNewPercent > 100, "vcl", "StatusBar::SetProgressValue(): nPercent > 100" );
 
     if ( nNewPercent < mnPercent )
     {

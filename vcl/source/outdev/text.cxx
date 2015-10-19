@@ -496,7 +496,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const OUString& rStr,
                                      DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
-    DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
+    SAL_WARN_IF( nWidth <= 0, "vcl", "ImplGetTextLines: nWidth <= 0!" );
 
     if ( nWidth <= 0 )
         nWidth = 1;
