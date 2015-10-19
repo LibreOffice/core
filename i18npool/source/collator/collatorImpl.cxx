@@ -238,7 +238,7 @@ com_sun_star_i18n_Collator_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new com::sun::star::i18n::CollatorImpl(context));
+    return cppu::acquire(new css::i18n::CollatorImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,22 +31,22 @@ class ChapterCollator : public CollatorImpl
 {
 public:
     // Constructors
-    ChapterCollator( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+    ChapterCollator( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     // Destructor
     virtual ~ChapterCollator();
 
     sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
-        const OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     // CharacterClassification Implementation
-    com::sun::star::uno::Reference< XCharacterClassification > cclass;
+    css::uno::Reference< XCharacterClassification > cclass;
 };
 
 } } } }

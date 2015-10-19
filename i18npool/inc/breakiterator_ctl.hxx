@@ -34,21 +34,21 @@ public:
     virtual ~BreakIterator_CTL();
     virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
-        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        sal_Int32& nDone) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL nextCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
-        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        sal_Int32& nDone) throw(css::uno::RuntimeException, std::exception) override;
     virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
+        const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 protected:
     OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
 
-    virtual void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(css::uno::RuntimeException);
 };
 
 } } } }

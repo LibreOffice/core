@@ -28,7 +28,7 @@ using namespace ::com::sun::star::lang;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
-    const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext ) :
+    const css::uno::Reference < css::uno::XComponentContext >& rxContext ) :
     IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
@@ -107,7 +107,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
     }
 }
 
-Index::Index(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext)
+Index::Index(const css::uno::Reference < css::uno::XComponentContext >& rxContext)
     : table_count(0)
     , key_count(0)
     , mkey_count(0)

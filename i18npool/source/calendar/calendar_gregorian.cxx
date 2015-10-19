@@ -188,8 +188,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
         // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
-        com::sun::star::lang::Locale jaLocale =
-            com::sun::star::lang::Locale(OUString("ja"), OUString(), OUString());
+        css::lang::Locale jaLocale(OUString("ja"), OUString(), OUString());
         if (idx == 0) return LocaleDataImpl().getLocaleItem(jaLocale).timeAM;
         else if (idx == 1) return LocaleDataImpl().getLocaleItem(jaLocale).timePM;
         else throw ERROR;
@@ -199,7 +198,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 }
 
 void SAL_CALL
-Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException, std::exception)
+Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const css::lang::Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     // Since this class could be called by service name 'hanja_yoil', we have to
     // rename uniqueID to get right calendar defined in locale data.
@@ -237,7 +236,7 @@ Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
 }
 
 void SAL_CALL
-Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException, std::exception)
+Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     // init. fieldValue[]
     getValue();
@@ -269,13 +268,13 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
 }
 
 
-com::sun::star::i18n::Calendar2 SAL_CALL
+css::i18n::Calendar2 SAL_CALL
 Calendar_gregorian::getLoadedCalendar2() throw(RuntimeException, std::exception)
 {
     return aCalendar;
 }
 
-com::sun::star::i18n::Calendar SAL_CALL
+css::i18n::Calendar SAL_CALL
 Calendar_gregorian::getLoadedCalendar() throw(RuntimeException, std::exception)
 {
     return LocaleDataImpl::downcastCalendar( aCalendar);
@@ -466,7 +465,7 @@ bool Calendar_gregorian::getDSTOffset( sal_Int32 & o_nOffset ) const
             CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
 }
 
-void Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeException)
+void Calendar_gregorian::submitFields() throw(css::uno::RuntimeException)
 {
     for (sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++)
     {
@@ -495,7 +494,7 @@ void Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeExcept
 void Calendar_gregorian::submitValues( sal_Int32 nYear,
         sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute,
         sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST )
-            throw(com::sun::star::uno::RuntimeException)
+            throw(css::uno::RuntimeException)
 {
     submitFields();
     if (nYear >= 0)
@@ -843,7 +842,7 @@ Calendar_gregorian::isValid() throw(RuntimeException, std::exception)
 // NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
 // NatNum4                                                              NatNum9/9/11/11
 
-static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
+static sal_Int16 SAL_CALL NatNumForCalendar(const css::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
     bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||

@@ -605,7 +605,7 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
 }
 
-sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(com::sun::star::uno::RuntimeException)
+sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(css::uno::RuntimeException)
 {
     if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
         for (sal_Int16 i = 0; i < NumberChar_Count; i++)

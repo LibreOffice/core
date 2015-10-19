@@ -78,7 +78,7 @@ public:
             return nBytesToRead;
         }
     virtual sal_Int32 SAL_CALL readSomeBytes(
-        ::com::sun::star::uno::Sequence< sal_Int8 >& aData,
+        css::uno::Sequence< sal_Int8 >& aData,
         sal_Int32 nMaxBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
         {

@@ -30,27 +30,27 @@ class Index;
 
 class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_Unicode( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Unicode();
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
-        const com::sun::star::lang::Locale& rLocale,
+        const css::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
-        const OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
+        const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
-        const com::sun::star::lang::Locale& rLocale2 )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale2 )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-        const com::sun::star::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     Index *index;
@@ -81,12 +81,12 @@ public:
 class Index
 {
 public:
-    Index(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext);
+    Index(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
     ~Index();
 
-    void init(const com::sun::star::lang::Locale& rLocale, const OUString& algorithm) throw (com::sun::star::uno::RuntimeException);
+    void init(const css::lang::Locale& rLocale, const OUString& algorithm) throw (css::uno::RuntimeException);
 
-    void makeIndexKeys(const com::sun::star::lang::Locale &rLocale, const OUString &algorithm) throw (com::sun::star::uno::RuntimeException);
+    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm) throw (css::uno::RuntimeException);
     sal_Int16 getIndexWeight(const OUString& rIndexEntry);
     OUString getIndexDescription(const OUString& rIndexEntry);
 

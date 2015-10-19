@@ -32,8 +32,8 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
 class NativeNumberSupplierService : public cppu::WeakImplHelper
 <
-        com::sun::star::i18n::XNativeNumberSupplier,
-        com::sun::star::lang::XServiceInfo
+        css::i18n::XNativeNumberSupplier,
+        css::lang::XServiceInfo
 >
 {
 public:
@@ -41,40 +41,40 @@ public:
 
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
-                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
+                throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual sal_Bool SAL_CALL isValidNatNum( const ::com::sun::star::lang::Locale& aLocale,
+        virtual sal_Bool SAL_CALL isValidNatNum( const css::lang::Locale& aLocale,
                 sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
-                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
+                throw (css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
-                const ::com::sun::star::i18n::NativeNumberXmlAttributes& aAttr )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::i18n::NativeNumberXmlAttributes& aAttr )
+                throw (css::uno::RuntimeException, std::exception) override;
 
         //XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                throw( css::uno::RuntimeException, std::exception ) override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
-                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
-                com::sun::star::uno::Sequence< sal_Int32 >& offset  )
-                throw (::com::sun::star::uno::RuntimeException);
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
+                css::uno::Sequence< sal_Int32 >& offset  )
+                throw (css::uno::RuntimeException);
         sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
-                const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw(com::sun::star::uno::RuntimeException) ;
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
+                throw(css::uno::RuntimeException) ;
 
 private:
-        ::com::sun::star::lang::Locale aLocale;
+        css::lang::Locale aLocale;
         bool useOffset;
 };
 

@@ -31,37 +31,37 @@
 
 class NumberFormatCodeMapper : public cppu::WeakImplHelper
 <
-    ::com::sun::star::i18n::XNumberFormatCode,
-    ::com::sun::star::lang::XServiceInfo
+    css::i18n::XNumberFormatCode,
+    css::lang::XServiceInfo
 >
 {
 public:
-    NumberFormatCodeMapper( const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::uno::XComponentContext >& rxContext );
+    NumberFormatCodeMapper( const css::uno::Reference <
+                    css::uno::XComponentContext >& rxContext );
     virtual ~NumberFormatCodeMapper();
 
-    virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::com::sun::star::lang::Locale aLocale;
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > aFormatSeq;
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XLocaleData4 > mxLocaleData;
+    css::lang::Locale aLocale;
+    css::uno::Reference < css::uno::XComponentContext > mxContext;
+    css::uno::Sequence< css::i18n::FormatElement > aFormatSeq;
+    css::uno::Reference < css::i18n::XLocaleData4 > mxLocaleData;
     bool bFormatsValid;
 
-    void setupLocale( const ::com::sun::star::lang::Locale& rLocale );
-    void getFormats( const ::com::sun::star::lang::Locale& rLocale );
+    void setupLocale( const css::lang::Locale& rLocale );
+    void getFormats( const css::lang::Locale& rLocale );
     static OUString mapElementTypeShortToString(sal_Int16 formatType);
     static sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);

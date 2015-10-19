@@ -626,7 +626,7 @@ com_sun_star_i18n_BreakIterator_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new com::sun::star::i18n::BreakIteratorImpl(context));
+    return cppu::acquire(new css::i18n::BreakIteratorImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

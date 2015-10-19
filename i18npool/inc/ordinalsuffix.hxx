@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 class OrdinalSuffixService : public cppu::WeakImplHelper
 <
     XOrdinalSuffix,
-    com::sun::star::lang::XServiceInfo
+    css::lang::XServiceInfo
 >
 {
     public:
@@ -39,12 +39,12 @@ class OrdinalSuffixService : public cppu::WeakImplHelper
         virtual ~OrdinalSuffixService();
 
         // XOrdinalSuffix
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const css::lang::Locale &rLocale ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual com::sun::star::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
 };
 } } } }

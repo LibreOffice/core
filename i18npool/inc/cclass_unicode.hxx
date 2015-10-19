@@ -38,35 +38,35 @@ typedef sal_uInt32 UPT_FLAG_TYPE;
 class cclass_Unicode : public cppu::WeakImplHelper < XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
-    cclass_Unicode(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+    cclass_Unicode(const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~cclass_Unicode();
 
     virtual OUString SAL_CALL toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getType( const OUString& Text, sal_Int32 nPos )  throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getType( const OUString& Text, sal_Int32 nPos )  throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL getCharacterDirection( const OUString& Text, sal_Int32 nPos )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getScript( const OUString& Text, sal_Int32 nPos ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getScript( const OUString& Text, sal_Int32 nPos ) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getCharacterType( const OUString& text, sal_Int32 nPos,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getStringType( const OUString& text, sal_Int32 nPos, sal_Int32 nCount,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
-        const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
-        sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
+        sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
-        sal_Int32 nPos, const com::sun::star::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
+        sal_Int32 nPos, const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
         const OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
-        const OUString& userDefinedCharactersCont ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        const OUString& userDefinedCharactersCont ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     Transliteration_casemapping *trans;
@@ -117,12 +117,12 @@ private:
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_Unicode c );
 
 
-    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     /// used for parser only
-    com::sun::star::lang::Locale    aParserLocale;
-    com::sun::star::uno::Reference < XLocaleData4 > mxLocaleData;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XNativeNumberSupplier > xNatNumSup;
+    css::lang::Locale    aParserLocale;
+    css::uno::Reference < XLocaleData4 > mxLocaleData;
+    css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;
     UPT_FLAG_TYPE*              pTable;
@@ -150,12 +150,12 @@ private:
     UPT_FLAG_TYPE getContCharsFlags( sal_Unicode c );
 
     /// Setup parser table. Calls initParserTable() only if needed.
-    void setupParserTable( const com::sun::star::lang::Locale& rLocale, sal_Int32 startCharTokenType,
+    void setupParserTable( const css::lang::Locale& rLocale, sal_Int32 startCharTokenType,
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
         const OUString& userDefinedCharactersCont );
 
     /// Init parser table.
-    void initParserTable( const com::sun::star::lang::Locale& rLocale, sal_Int32 startCharTokenType,
+    void initParserTable( const css::lang::Locale& rLocale, sal_Int32 startCharTokenType,
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
         const OUString& userDefinedCharactersCont );
 
@@ -167,7 +167,7 @@ private:
         sal_Int32 nTokenType = 0xffffffff );
 
     /// Setup International class, new'ed only if different from existing.
-    bool setupInternational( const com::sun::star::lang::Locale& rLocale );
+    bool setupInternational( const css::lang::Locale& rLocale );
 
     /// Implementation of getCharacterType() for one single character
     static sal_Int32 SAL_CALL getCharType( const OUString& Text, sal_Int32 *nPos, sal_Int32 increment);
