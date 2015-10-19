@@ -32,6 +32,7 @@ class ScVbaStyle : public ScVbaStyle_BASE
 {
 protected:
     css::uno::Reference< css::style::XStyle > mxStyle;
+    css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::container::XNameContainer > mxStyleFamilyNameContainer;
     void initialise() throw ( css::uno::RuntimeException, css::script::BasicErrorException );
 public:

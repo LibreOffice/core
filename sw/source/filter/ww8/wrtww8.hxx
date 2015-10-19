@@ -555,6 +555,7 @@ public:
 
     bool m_bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
     bool m_bExportModeRTF;
+    bool m_bOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
     /// Is font size written already as part of the current character properties?
     bool m_bFontSizeWritten;
 
