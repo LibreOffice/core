@@ -139,7 +139,7 @@ namespace dbaui
         bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
         m_pPB_CreateDB->Show( bEnableCreateButton );
 
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
+        const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
 
         // forward the values to the controls
         if ( bValid )

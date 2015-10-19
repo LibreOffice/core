@@ -345,14 +345,14 @@ namespace offapp
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet, bool /*_bFromReset*/)
     {
         // the enabled flag
-        SFX_ITEMSET_GET( _rSet, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, true );
+        const SfxBoolItem* pEnabled = _rSet.GetItem<SfxBoolItem>(SID_SB_POOLING_ENABLED);
         OSL_ENSURE(pEnabled, "ConnectionPoolOptionsPage::implInitControls: missing the Enabled item!");
         m_pEnablePooling->Check(pEnabled == nullptr || pEnabled->GetValue());
 
         m_pEnablePooling->SaveValue();
 
         // the settings for the single drivers
-        SFX_ITEMSET_GET( _rSet, pDriverSettings, DriverPoolingSettingsItem, SID_SB_DRIVER_TIMEOUTS, true );
+        const DriverPoolingSettingsItem* pDriverSettings = _rSet.GetItem<DriverPoolingSettingsItem>(SID_SB_DRIVER_TIMEOUTS);
         if (pDriverSettings)
             m_pDriverList->Update(pDriverSettings->getSettings());
         else

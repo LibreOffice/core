@@ -226,7 +226,7 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         // get the name of the data source we're working for
-        SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, true);
+        const SfxStringItem* pNameItem = _rSet.GetItem<SfxStringItem>(DSID_NAME);
         OSL_ENSURE(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
         OUString sDSName = pNameItem->GetValue();
 
@@ -350,7 +350,7 @@ namespace dbaui
         }
 
         // get the current table filter
-        SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, true);
+        const OStringListItem* pTableFilter = _rSet.GetItem<OStringListItem>(DSID_TABLEFILTER);
         Sequence< OUString > aTableFilter;
         if (pTableFilter)
             aTableFilter = pTableFilter->getList();

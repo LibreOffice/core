@@ -240,12 +240,12 @@ namespace dbaui
         if ( !_bValid )
             return;
 
-        SFX_ITEMSET_GET( _rSet, pDelItem, SfxStringItem, DSID_FIELDDELIMITER, true );
-        SFX_ITEMSET_GET( _rSet, pStrItem, SfxStringItem, DSID_TEXTDELIMITER, true );
-        SFX_ITEMSET_GET( _rSet, pDecdelItem, SfxStringItem, DSID_DECIMALDELIMITER, true );
-        SFX_ITEMSET_GET( _rSet, pThodelItem, SfxStringItem, DSID_THOUSANDSDELIMITER, true );
-        SFX_ITEMSET_GET( _rSet, pExtensionItem, SfxStringItem, DSID_TEXTFILEEXTENSION, true );
-        SFX_ITEMSET_GET( _rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, true );
+        const SfxStringItem* pDelItem = _rSet.GetItem<SfxStringItem>(DSID_FIELDDELIMITER);
+        const SfxStringItem* pStrItem = _rSet.GetItem<SfxStringItem>(DSID_TEXTDELIMITER);
+        const SfxStringItem* pDecdelItem = _rSet.GetItem<SfxStringItem>(DSID_DECIMALDELIMITER);
+        const SfxStringItem* pThodelItem = _rSet.GetItem<SfxStringItem>(DSID_THOUSANDSDELIMITER);
+        const SfxStringItem* pExtensionItem = _rSet.GetItem<SfxStringItem>(DSID_TEXTFILEEXTENSION);
+        const SfxStringItem* pCharsetItem = _rSet.GetItem<SfxStringItem>(DSID_CHARSET);
 
         if ( ( m_nAvailableSections & TC_EXTENSION ) != 0 )
         {
@@ -255,7 +255,7 @@ namespace dbaui
 
         if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
         {
-            SFX_ITEMSET_GET( _rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, true );
+            const SfxBoolItem* pHdrItem = _rSet.GetItem<SfxBoolItem>(DSID_TEXTFILEHEADER);
             m_pRowHeader->Check( pHdrItem->GetValue() );
         }
 

@@ -220,8 +220,8 @@ using namespace ::com::sun::star;
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, true);
-        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, true);
+        const SfxStringItem* pBaseDN = _rSet.GetItem<SfxStringItem>(DSID_CONN_LDAP_BASEDN);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(DSID_CONN_LDAP_PORTNUMBER);
 
         if ( bValid )
         {
@@ -412,8 +412,8 @@ using namespace ::com::sun::star;
         m_pETDriverClass->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pPBTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
 
-        SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
-        SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, true);
+        const SfxStringItem* pUrlItem = _rCoreAttrs.GetItem<SfxStringItem>(DSID_CONNECTURL);
+        const DbuTypeCollectionItem* pTypesItem = _rCoreAttrs.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
         ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
         if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
         {
@@ -500,10 +500,10 @@ using namespace ::com::sun::star;
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pDatabaseName, SfxStringItem, DSID_DATABASENAME, true);
-        SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, true);
-        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, true);
-        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, m_nPortId, true);
+        const SfxStringItem* pDatabaseName = _rSet.GetItem<SfxStringItem>(DSID_DATABASENAME);
+        const SfxStringItem* pDrvItem = _rSet.GetItem<SfxStringItem>(DSID_JDBCDRIVERCLASS);
+        const SfxStringItem* pHostName = _rSet.GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(m_nPortId);
 
         if ( bValid )
         {
@@ -621,7 +621,7 @@ using namespace ::com::sun::star;
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, true);
+        const SfxStringItem* pDrvItem = _rSet.GetItem<SfxStringItem>(DSID_JDBCDRIVERCLASS);
 
         if ( bValid )
         {
@@ -789,8 +789,8 @@ using namespace ::com::sun::star;
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
-        SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
-        SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
+        const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
+        const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
 
         m_pETUserName->SetText(pUidItem->GetValue());
         m_pCBPasswordRequired->Check(pAllowEmptyPwd->GetValue());

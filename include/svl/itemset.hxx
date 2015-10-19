@@ -33,10 +33,6 @@ typedef SfxPoolItem const** SfxItemArray;
 
 #define USHORT_ARG int
 
-#define SFX_ITEMSET_GET( rSet, pItem, ItemType, nSlotId, bDeep ) \
-    const ItemType *pItem = static_cast<const ItemType*>( \
-                            (rSet).GetItem( nSlotId, bDeep, TYPE(ItemType) ) )
-
 class SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;

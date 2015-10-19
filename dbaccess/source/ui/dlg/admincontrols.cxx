@@ -238,16 +238,16 @@ namespace dbaui
 
     void MySQLNativeSettings::implInitControls(const SfxItemSet& _rSet )
     {
-        SFX_ITEMSET_GET( _rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, true );
+        const SfxBoolItem* pInvalid = _rSet.GetItem<SfxBoolItem>(DSID_INVALID_SELECTION);
         bool bValid = !pInvalid || !pInvalid->GetValue();
         if ( !bValid )
             return;
 
-        SFX_ITEMSET_GET( _rSet, pDatabaseName,  SfxStringItem,  DSID_DATABASENAME,      true );
-        SFX_ITEMSET_GET( _rSet, pHostName,      SfxStringItem,  DSID_CONN_HOSTNAME,     true );
-        SFX_ITEMSET_GET( _rSet, pPortNumber,    SfxInt32Item,   DSID_MYSQL_PORTNUMBER,  true );
-        SFX_ITEMSET_GET( _rSet, pSocket,        SfxStringItem,  DSID_CONN_SOCKET,       true );
-        SFX_ITEMSET_GET( _rSet, pNamedPipe,     SfxStringItem,  DSID_NAMED_PIPE,       true );
+        const SfxStringItem* pDatabaseName = _rSet.GetItem<SfxStringItem>(DSID_DATABASENAME);
+        const SfxStringItem* pHostName = _rSet.GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(DSID_MYSQL_PORTNUMBER);
+        const SfxStringItem* pSocket = _rSet.GetItem<SfxStringItem>(DSID_CONN_SOCKET);
+        const SfxStringItem* pNamedPipe = _rSet.GetItem<SfxStringItem>(DSID_NAMED_PIPE);
 
         m_pDatabaseName->SetText( pDatabaseName->GetValue() );
         m_pDatabaseName->ClearModifyFlag();

@@ -895,7 +895,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         GetMedium()->SetUpdatePickList( false );
     else if ( rReq.GetArgs() )
     {
-        SFX_ITEMSET_GET( *rReq.GetArgs(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );
+        const SfxBoolItem* pPicklistItem = rReq.GetArgs()->GetItem<SfxBoolItem>(SID_PICKLIST, false);
         if ( pPicklistItem )
             GetMedium()->SetUpdatePickList( pPicklistItem->GetValue() );
     }

@@ -219,7 +219,7 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
 void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
 {
     // the settings for the single drivers
-    SFX_ITEMSET_GET( *rSet, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, true );
+    const DatabaseMapItem* pRegistrations = rSet->GetItem<DatabaseMapItem>(SID_SB_DB_REGISTER);
     if ( !pRegistrations )
         return;
 

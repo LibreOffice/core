@@ -2713,15 +2713,15 @@ bool SfxObjectShell::CommonSaveAs_Impl
             pSet->ClearItem( SID_DEFAULTFILEPATH );
             pSet->ClearItem( SID_DEFAULTFILENAME );
 
-            SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, false );
+            const SfxStringItem* pFilterItem = aParams->GetItem<SfxStringItem>(SID_FILTER_NAME, false);
             if ( pFilterItem )
                 pSet->Put( *pFilterItem );
 
-            SFX_ITEMSET_GET( (*aParams), pOptionsItem, SfxStringItem, SID_OPTIONS, false );
+            const SfxStringItem* pOptionsItem = aParams->GetItem<SfxStringItem>(SID_OPTIONS, false);
             if ( pOptionsItem )
                 pSet->Put( *pOptionsItem );
 
-            SFX_ITEMSET_GET( (*aParams), pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, false );
+            const SfxStringItem* pFilterOptItem = aParams->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 

@@ -73,7 +73,7 @@ namespace svx
     void DbRegisteredNamesConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
         // the settings for the single drivers
-        SFX_ITEMSET_GET( _rSourceItems, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, true );
+        const DatabaseMapItem* pRegistrations = _rSourceItems.GetItem<DatabaseMapItem>(SID_SB_DB_REGISTER);
         if ( !pRegistrations )
             return;
 

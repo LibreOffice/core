@@ -223,11 +223,11 @@ namespace dbaui
             m_pPasswordRequired->SetPosPixel(m_pUserNameLabel->GetPosPixel());
 
         // collect the items
-        SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
+        const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
 
-        SFX_ITEMSET_GET(_rSet, pJdbcDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, true);
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
-        SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
+        const SfxStringItem* pJdbcDrvItem = _rSet.GetItem<SfxStringItem>(DSID_JDBCDRIVERCLASS);
+        const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
+        const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
 
         // forward the values to the controls
         if ( bValid )

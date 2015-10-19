@@ -257,7 +257,7 @@ namespace dbaui
             ::boost::optional< bool > aValue(false);
             aValue.reset();
 
-            SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, true );
+            const SfxPoolItem* pItem = _rSet.GetItem<SfxPoolItem>(setting->nItemId);
             if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
             {
                 aValue.reset( pBoolItem->GetValue() );
@@ -285,13 +285,13 @@ namespace dbaui
         // the non-boolean items
         if ( m_bHasBooleanComparisonMode )
         {
-            SFX_ITEMSET_GET( _rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, true );
+            const SfxInt32Item* pBooleanComparison = _rSet.GetItem<SfxInt32Item>(DSID_BOOLEANCOMPARISON);
             m_pBooleanComparisonMode->SelectEntryPos( static_cast< sal_uInt16 >( pBooleanComparison->GetValue() ) );
         }
 
         if ( m_bHasMaxRowScan )
         {
-            SFX_ITEMSET_GET(_rSet, pMaxRowScan, SfxInt32Item, DSID_MAX_ROW_SCAN, true);
+            const SfxInt32Item* pMaxRowScan = _rSet.GetItem<SfxInt32Item>(DSID_MAX_ROW_SCAN);
             m_pMaxRowScan->SetValue(pMaxRowScan->GetValue());
         }
 
@@ -385,9 +385,9 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         // collect the items
-        SFX_ITEMSET_GET(_rSet, pAutoIncrementItem, SfxStringItem, DSID_AUTOINCREMENTVALUE, true);
-        SFX_ITEMSET_GET(_rSet, pAutoRetrieveValueItem, SfxStringItem, DSID_AUTORETRIEVEVALUE, true);
-        SFX_ITEMSET_GET(_rSet, pAutoRetrieveEnabledItem, SfxBoolItem, DSID_AUTORETRIEVEENABLED, true);
+        const SfxStringItem* pAutoIncrementItem = _rSet.GetItem<SfxStringItem>(DSID_AUTOINCREMENTVALUE);
+        const SfxStringItem* pAutoRetrieveValueItem = _rSet.GetItem<SfxStringItem>(DSID_AUTORETRIEVEVALUE);
+        const SfxBoolItem* pAutoRetrieveEnabledItem = _rSet.GetItem<SfxBoolItem>(DSID_AUTORETRIEVEENABLED);
 
         // forward the values to the controls
         if (bValid)
