@@ -52,7 +52,7 @@ bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlo
 const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich, true ) : 0;
+    return (rItemSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : 0;
 }
 
 const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
