@@ -533,7 +533,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
 
     friend class ::svt::PopupWindowControllerImpl;
 
-private:
+public:
     // NOTE: to remove many dependencies of other modules
     //       to this central file, all members are now hidden
     //       in the WindowImpl class and all inline functions
@@ -570,6 +570,7 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
+    SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
     SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion );
@@ -635,8 +636,6 @@ protected:
     SAL_DLLPRIVATE void                 ImplValidate( const vcl::Region* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
-
-    SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
     SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
 

@@ -235,6 +235,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/wordcount \
 	sw/uiconfig/swriter/ui/wrapdialog \
 	sw/uiconfig/swriter/ui/wrappage \
+	sw/uiconfig/swriter/notebookbar/notebookbar \
 ))
 
 # vim: set noet sw=4 ts=4:

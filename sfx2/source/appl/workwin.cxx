@@ -173,6 +173,10 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
         if ( xFrame.is() )
         {
+            vcl::Window* pTopWin = SfxGetpApp()->GetTopWindow();
+            static_cast<ImplBorderWindow>(pTopWin->mpWindowImpl->mpBorderWindow.get())
+                    ->SetNotebookBarWindow("sw/uiconfig/swriter/notebookbar/notebookbar.ui", m_xFrame);
+
             css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
             css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
             if ( xPropSet.is() )
