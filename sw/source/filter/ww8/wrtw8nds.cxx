@@ -3068,8 +3068,7 @@ void MSWordExportBase::OutputContentNode( const SwContentNode& rNode )
         case ND_TEXTNODE:
         {
             const SwTextNode& rTextNode = *rNode.GetTextNode();
-            if( !m_bOutOutlineOnly || rTextNode.IsOutline() )
-                OutputTextNode( rTextNode );
+            OutputTextNode( rTextNode );
         }
         break;
         case ND_GRFNODE:
