@@ -1651,20 +1651,28 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
 {
     OpenGLZone aZone;
 
-    rtl::OString aKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
-
-    if( !aKey.isEmpty() )
+    // We cache the shader programs in a per-process run-time cache
+    // based on only the names and the preamble. We don't expect
+    // shader source files to change during the lifetime of a
+    // LibreOffice process.
+    rtl::OString aNameBasedKey = OUStringToOString(rVertexShader + "+" + rFragmentShader, RTL_TEXTENCODING_UTF8) + "+" + preamble;
+    if( !aNameBasedKey.isEmpty() )
     {
-        ProgramCollection::iterator it = maPrograms.find( aKey );
+        ProgramCollection::iterator it = maPrograms.find( aNameBasedKey );
         if( it != maPrograms.end() )
             return it->second.get();
     }
 
+    // Binary shader programs are cached persistently (between
+    // LibreOffice process instances) based on a hash of their source
+    // code, as the source code can and will change between
+    // LibreOffice versions even if the shader names don't change.
+    rtl::OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
     std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
-    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aKey ) )
+    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aPersistentKey ) )
         return NULL;
 
-    maPrograms.insert(std::make_pair(aKey, pProgram));
+    maPrograms.insert(std::make_pair(aNameBasedKey, pProgram));
     return pProgram.get();
 }
 
