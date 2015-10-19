@@ -439,7 +439,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         if( mpImpl->pGraphic )
-            rGF.ImportGraphic( *mpImpl->pGraphic, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+            rGF.ImportGraphic( *mpImpl->pGraphic, OUString(), *pGraphicStream );
         mpImpl->mnGraphicVersion++;
     }
 }
@@ -537,7 +537,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( *mpImpl->pGraphic, "", *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        rGF.ImportGraphic( *mpImpl->pGraphic, "", *pGraphicStream );
         mpImpl->mnGraphicVersion++;
 
         if ( mpImpl->pContainer )

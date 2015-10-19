@@ -288,9 +288,9 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if( !bOwnDataChangedHdl )
         {
-            InitSettings_Impl(this, true, true);
+            InitSettings_Impl(this);
             Invalidate();
-            InitSettings_Impl(GetParent(), true, true);
+            InitSettings_Impl(GetParent());
             GetParent()->Invalidate();
             GetParent()->Resize();
         }

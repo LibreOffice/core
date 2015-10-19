@@ -504,7 +504,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
     }
     else
         if ( !bMultiSelection || !IsRowSelected( rEvt.GetRow() ) )
-            SelectRow( rEvt.GetRow(), true );
+            SelectRow( rEvt.GetRow() );
 
     GoToRow( rEvt.GetRow(), false );
     DoShowCursor( "ExpandRowSelection" );
@@ -1620,7 +1620,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                     // select directly
                     SetNoSelection();
                     GoToRow( rEvt.GetRow() );
-                    SelectRow( rEvt.GetRow(), true );
+                    SelectRow( rEvt.GetRow() );
                     aSelRange = Range( rEvt.GetRow(), rEvt.GetRow() );
                     bSelect = true;
                 }
@@ -1682,7 +1682,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
             else
             {
                 GoToRow( rEvt.GetRow() );
-                SelectRow( rEvt.GetRow(), true );
+                SelectRow( rEvt.GetRow() );
             }
         }
         bSelect = true;
@@ -1834,7 +1834,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 SelectRow( nRow, bLocalSelect );
                 bool bDone = GoToRow( GetCurRow() + 1, false );
                 if ( bDone )
-                    SelectRow( GetCurRow(), true );
+                    SelectRow( GetCurRow() );
             }
             else
                 ScrollRows( 1 );
@@ -1851,7 +1851,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 SelectRow( nCurRow, bLocalSelect );
                 bool bDone = GoToRow( nRow - 1, false );
                 if ( bDone )
-                    SelectRow( GetCurRow(), true );
+                    SelectRow( GetCurRow() );
             }
             break;
         case BROWSER_CURSORPAGEDOWN:

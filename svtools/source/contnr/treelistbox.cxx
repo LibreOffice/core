@@ -1201,7 +1201,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView )
 {
     DBG_ASSERT( pSourceView, "SvTreeListBox::ExecuteDrop(): no source view" );
-    pSourceView->EnableSelectionAsDropTarget( true );
+    pSourceView->EnableSelectionAsDropTarget();
 
     ImplShowTargetEmphasis( pTargetEntry, false );
     pDDTarget = this;
@@ -1312,7 +1312,7 @@ nAction
 #endif
 )
 {
-    EnableSelectionAsDropTarget( true );
+    EnableSelectionAsDropTarget();
 
 #ifndef UNX
     if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
@@ -2137,7 +2137,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if( !pParent->HasChildren() )
-        InsertEntry( OUString("<dummy>"), pParent, false, TREELIST_APPEND );
+        InsertEntry( OUString("<dummy>"), pParent );
 }
 
 void SvTreeListBox::GetFocus()

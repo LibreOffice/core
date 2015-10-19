@@ -216,7 +216,7 @@ public:
     virtual ~QueryDeleteDlg_Impl();
     virtual void dispose() override;
 
-    void EnableAllButton() { m_pAllButton->Enable(true); }
+    void EnableAllButton() { m_pAllButton->Enable(); }
 };
 
 }

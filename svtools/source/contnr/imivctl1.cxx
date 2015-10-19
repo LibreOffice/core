@@ -1163,7 +1163,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_DIVIDE :
         case KEY_A:
             if( bMod1 && (eSelectionMode != SINGLE_SELECTION))
-                SelectAll( true );
+                SelectAll();
             else
                 bKeyUsed = false;
             break;
@@ -2058,7 +2058,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
     {
         if( pCursor && eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection &&
                 !pCursor->IsSelected() )
-            SelectEntry( pCursor, true, true );
+            SelectEntry( pCursor, true );
         return;
     }
     ShowCursor( false );
@@ -2068,14 +2068,14 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry, bool bSy
     {
         pOldCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
         if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
-            SelectEntry( pOldCursor, false, true ); // deselect old cursor
+            SelectEntry( pOldCursor, false ); // deselect old cursor
     }
     if( pCursor )
     {
         ToTop( pCursor );
         pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
         if( eSelectionMode == SINGLE_SELECTION && bSyncSingleSelection )
-            SelectEntry( pCursor, true, true );
+            SelectEntry( pCursor, true );
         if( !bShowFocusAsync )
             ShowCursor( true );
         else

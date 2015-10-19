@@ -1095,7 +1095,7 @@ namespace
         //Make sure it fits in the available height
         while (aSize.Height() > 0)
         {
-            if (!rDevice.GetTextBoundRect(rTextRect, rSampleText, 0, 0))
+            if (!rDevice.GetTextBoundRect(rTextRect, rSampleText))
                 break;
             if (rTextRect.GetHeight() <= nH)
             {
@@ -1155,7 +1155,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         if (!bUsingCorrectFont)
         {
             pRenderContext->SetFont(aOldFont);
-            pRenderContext->GetTextBoundRect(aTextRect, sFontName, 0, 0);
+            pRenderContext->GetTextBoundRect(aTextRect, sFontName);
         }
 
         long nTextHeight = aTextRect.GetHeight();
@@ -1273,7 +1273,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
                 {
                     sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
-                    nWidth = pRenderContext->GetTextBoundRect(aTextRect, sSampleText, 0, 0) ?
+                    nWidth = pRenderContext->GetTextBoundRect(aTextRect, sSampleText) ?
                              aTextRect.GetWidth() : 0;
                 }
 

@@ -1572,7 +1572,7 @@ void SvImpLBox::CollapsingEntry( SvTreeListEntry* pEntry )
     if( !pView->IsEntryVisible( pEntry ) || !pStartEntry )
         return;
 
-    SelAllDestrAnch( false, true ); // deselect all
+    SelAllDestrAnch( false ); // deselect all
 
     // is the collapsed cursor visible?
     long nY = GetEntryLine( pEntry );
@@ -1763,7 +1763,7 @@ void SvImpLBox::EntryRemoved()
 void SvImpLBox::MovingEntry( SvTreeListEntry* pEntry )
 {
     int bDeselAll = nFlags & F_DESEL_ALL;
-    SelAllDestrAnch( false, true );  // DeselectAll();
+    SelAllDestrAnch( false );  // DeselectAll();
     if( !bDeselAll )
         nFlags &= (~F_DESEL_ALL);
 
@@ -1839,7 +1839,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
             return;
         int bDeselAll = nFlags & F_DESEL_ALL;
         if( bDeselAll )
-            SelAllDestrAnch( false, true );
+            SelAllDestrAnch( false );
         else
             DestroyAnchor();
         //  nFlags &= (~F_DESEL_ALL);
@@ -2067,7 +2067,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // select anew & bye
                 if( !bSimpleTravel && !aSelEng.IsAlwaysAdding())
-                    SelAllDestrAnch( false, true ); // DeselectAll();
+                    SelAllDestrAnch( false ); // DeselectAll();
                 SetCursor( pEntry );
 
                 return;
@@ -3119,7 +3119,7 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
     if  (  ( aSelEng.GetSelectionMode() != SINGLE_SELECTION )
         && ( aSelEng.GetSelectionMode() != NO_SELECTION )
         )
-        SelAllDestrAnch( false, true );
+        SelAllDestrAnch( false );
     if ( pEntry )
         MakeVisible( pEntry );
     SetCursor( pEntry );
