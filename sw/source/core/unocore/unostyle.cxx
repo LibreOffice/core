@@ -4033,7 +4033,7 @@ uno::Reference< container::XNameReplace > SwXFrameStyle::getEvents(  ) throw(uno
 }
 
 SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
-    SwUnoCollection(rDocShell.GetDoc()), pDocShell( &rDocShell )
+    SwUnoCollection(rDocShell.GetDoc()), m_pDocShell( &rDocShell )
 {
 }
 
@@ -4062,23 +4062,23 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
         {
             case IStyleAccess::AUTO_STYLE_CHAR:
             {
-                if(!xAutoCharStyles.is())
-                    xAutoCharStyles = new SwXAutoStyleFamily(pDocShell, nType);
-                aRef = xAutoCharStyles;
+                if(!m_xAutoCharStyles.is())
+                    m_xAutoCharStyles = new SwXAutoStyleFamily(m_pDocShell, nType);
+                aRef = m_xAutoCharStyles;
             }
             break;
             case IStyleAccess::AUTO_STYLE_RUBY:
             {
-                if(!xAutoRubyStyles.is())
-                    xAutoRubyStyles = new SwXAutoStyleFamily(pDocShell, nType );
-                aRef = xAutoRubyStyles;
+                if(!m_xAutoRubyStyles.is())
+                    m_xAutoRubyStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
+                aRef = m_xAutoRubyStyles;
             }
             break;
             case IStyleAccess::AUTO_STYLE_PARA:
             {
-                if(!xAutoParaStyles.is())
-                    xAutoParaStyles = new SwXAutoStyleFamily(pDocShell, nType );
-                aRef = xAutoParaStyles;
+                if(!m_xAutoParaStyles.is())
+                    m_xAutoParaStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
+                aRef = m_xAutoParaStyles;
             }
             break;
 

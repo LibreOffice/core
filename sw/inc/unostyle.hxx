@@ -326,11 +326,11 @@ class SwXAutoStyles :
     public cppu::WeakImplHelper< ::com::sun::star::style::XAutoStyles >,
     public SwUnoCollection
 {
-    SwDocShell *pDocShell;
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > xAutoCharStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > xAutoRubyStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > xAutoParaStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > xAutoNotxtStyles;
+    SwDocShell *m_pDocShell;
+    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > m_xAutoCharStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > m_xAutoRubyStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > m_xAutoParaStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyleFamily > m_xAutoNotxtStyles;
     virtual ~SwXAutoStyles();
 
 public:
