@@ -398,7 +398,7 @@ namespace dbtools
                     OSQLParseNode* pFuncSpecParent = pOdbcSpec->getParent();
                     OSL_ENSURE( pFuncSpecParent, "OPredicateInputController::getPredicateValue: an ODBC func spec node without parent?" );
                     if ( pFuncSpecParent )
-                        pFuncSpecParent->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), false);
+                        pFuncSpecParent->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext());
                 }
                 else
                 {
@@ -406,7 +406,7 @@ namespace dbtools
                     if ( SQL_NODE_STRING == pValueNode->getNodeType() )
                         sReturn = pValueNode->getTokenValue();
                     else
-                        pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), false);
+                        pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext());
                 }
             }
             else
@@ -427,12 +427,12 @@ namespace dbtools
                             sReturn = pValueNode->getTokenValue();
                         else
                             pValueNode->parseNodeToStr(
-                                sReturn, m_xConnection, &m_aParser.getContext(), false
+                                sReturn, m_xConnection, &m_aParser.getContext()
                             );
                     }
                     else
                         pValueNode->parseNodeToStr(
-                            sReturn, m_xConnection, &m_aParser.getContext(), false
+                            sReturn, m_xConnection, &m_aParser.getContext()
                         );
                 }
                 else

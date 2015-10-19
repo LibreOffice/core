@@ -1243,7 +1243,7 @@ bool OResultSet::OpenImpl()
                     bool bOK = true;
                     while (bOK)
                     {
-                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT);
 
                         if (bOK)
                         {
@@ -1379,7 +1379,7 @@ bool OResultSet::OpenImpl()
                 bool bOK = true;
                 while (bOK)
                 {
-                    bOK = ExecuteRow(IResultSetHelper::NEXT,1,true);
+                    bOK = ExecuteRow(IResultSetHelper::NEXT);
 
                     if (bOK)
                     {
