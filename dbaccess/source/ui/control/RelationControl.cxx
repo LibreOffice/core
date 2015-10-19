@@ -178,7 +178,7 @@ namespace dbaui
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList().size() + 1, true); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList().size() + 1); // add one extra row
     }
 
     void ORelationControl::Resize()

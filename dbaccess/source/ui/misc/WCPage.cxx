@@ -249,7 +249,7 @@ bool OCopyTable::LeavePage()
 
 void OCopyTable::ActivatePage()
 {
-    m_pParent->GetOKButton().Enable( true );
+    m_pParent->GetOKButton().Enable();
     m_nOldOperation = m_pParent->getOperation();
     m_pEdTableName->GrabFocus();
     m_pCB_UseHeaderLine->Check(m_pParent->UseHeaderLine());

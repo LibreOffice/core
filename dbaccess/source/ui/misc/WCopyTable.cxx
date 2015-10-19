@@ -959,7 +959,7 @@ void OCopyTableWizard::CheckButtons()
     if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
-            m_pbNext->Enable(true);
+            m_pbNext->Enable();
         else
             m_pbNext->Enable(false);
 
@@ -968,11 +968,11 @@ void OCopyTableWizard::CheckButtons()
     else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
         m_pbNext->Enable(false);
-        m_pbPrev->Enable(true);
+        m_pbPrev->Enable();
     }
     else
     {
-        m_pbPrev->Enable(true);
+        m_pbPrev->Enable();
         // next already has its state
     }
 }

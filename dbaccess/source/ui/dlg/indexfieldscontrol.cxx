@@ -311,7 +311,7 @@ namespace dbaui
                         OIndexField aNewField;
                         aNewField.sFieldName = sFieldSelected;
                         m_aFields.push_back(aNewField);
-                        RowInserted(GetRowCount(), 1, true);
+                        RowInserted(GetRowCount());
                     }
                 }
                 else
@@ -403,14 +403,14 @@ namespace dbaui
                 {   // in the last row, an non-empty string has been selected
                     // -> insert a new row
                     m_aFields.push_back(OIndexField());
-                    RowInserted(GetRowCount(), 1);
+                    RowInserted(GetRowCount());
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }
                 else if (sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 2))
                 {   // in the (last-1)th row, an empty entry has been selected
                     // -> remove the last row
                     m_aFields.erase(m_aFields.end() - 1);
-                    RowRemoved(GetRowCount() - 1, 1);
+                    RowRemoved(GetRowCount() - 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }
             }

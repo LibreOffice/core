@@ -279,7 +279,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                     WaitObject aWaitCursor( getView() );
                     m_pAddTableDialog->Update();
                 }
-                m_pAddTableDialog->Show( true );
+                m_pAddTableDialog->Show();
                 ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;

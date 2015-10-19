@@ -1170,7 +1170,7 @@ bool OSelectionBrowseBox::SaveModified()
 
         if ( bAppendRow )
         {
-            RowInserted( GetRowCount()-1, 1, true );
+            RowInserted( GetRowCount()-1 );
             m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
@@ -1700,7 +1700,7 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
             pEntry->SetCriteria( nNewLevel, sValue);
             if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
             {
-                RowInserted( GetRowCount()-1, 1, true );
+                RowInserted( GetRowCount()-1 );
                 m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
@@ -1747,7 +1747,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
                 pEntry->SetCriteria( nLevel, rValue);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
-                    RowInserted( GetRowCount()-1, 1, true );
+                    RowInserted( GetRowCount()-1 );
                     m_bVisibleRow.push_back(true);
                     ++m_nVisibleCount;
                 }
@@ -1775,7 +1775,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
         pLastEntry->SetCriteria( nLevel, sCriteria);
         if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
         {
-            RowInserted( GetRowCount()-1, 1, true );
+            RowInserted( GetRowCount()-1 );
             m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
@@ -1791,7 +1791,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             pTmp->SetCriteria( nLevel, rValue);
             if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
             {
-                RowInserted( GetRowCount()-1, 1, true );
+                RowInserted( GetRowCount()-1 );
                 m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
@@ -2029,12 +2029,12 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, bool _bVis)
     long nId = GetBrowseRow(_nWhich);
     if (_bVis)
     {
-        RowInserted(nId,1);
+        RowInserted(nId);
         ++m_nVisibleCount;
     }
     else
     {
-        RowRemoved(nId,1);
+        RowRemoved(nId);
         --m_nVisibleCount;
     }
 

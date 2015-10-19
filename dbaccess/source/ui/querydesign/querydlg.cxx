@@ -205,7 +205,7 @@ IMPL_LINK_NOARG_TYPED( DlgQryJoin, LBChangeHdl, ListBox&, void )
                 m_pCBNatural->Check(false);
                 m_pTableControl->enableRelation(false);
                 m_pConnData->AppendConnLine("","");
-                m_pPB_OK->Enable(true);
+                m_pPB_OK->Enable();
             }
             break;
     }

@@ -461,7 +461,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     SvTreeListEntry* pRet = NULL;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
-        pRet = InsertEntry( sName, pParentEntry, false, TREELIST_APPEND );
+        pRet = InsertEntry( sName, pParentEntry );
 
         Image aImage;
         m_xImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );

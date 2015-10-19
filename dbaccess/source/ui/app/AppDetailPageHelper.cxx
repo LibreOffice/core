@@ -205,7 +205,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview->EnableMenuStrings();
-    m_aTBPreview->Enable(true);
+    m_aTBPreview->Enable();
 
     m_aBorder->SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 

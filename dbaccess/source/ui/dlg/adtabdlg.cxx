@@ -382,7 +382,7 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_pTableList->Show( true );  m_pCaseTables->Check();
+        m_pTableList->Show();  m_pCaseTables->Check();
         m_pQueryList->Show( false ); m_pCaseQueries->Check( false );
         m_xCurrentList.reset( new TableListFacade( *m_pTableList, m_rContext.getConnection() ) );
         m_pTableList->GrabFocus();
@@ -390,7 +390,7 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
 
     case Queries:
         m_pTableList->Show( false ); m_pCaseTables->Check( false );
-        m_pQueryList->Show( true );  m_pCaseQueries->Check();
+        m_pQueryList->Show();  m_pCaseQueries->Check();
         m_xCurrentList.reset( new QueryListFacade( *m_pQueryList, m_rContext.getConnection() ) );
         m_pQueryList->GrabFocus();
         break;

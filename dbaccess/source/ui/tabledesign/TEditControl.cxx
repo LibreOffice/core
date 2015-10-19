@@ -129,7 +129,7 @@ void OTableEditorCtrl::Init()
     InitCellController();
 
     // Insert the rows
-    RowInserted(0, m_pRowList->size(), true);
+    RowInserted(0, m_pRowList->size());
 }
 
 OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
@@ -814,7 +814,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     // RowInserted calls CursorMoved.
     // The UI data should not be stored here.
     bSaveOnMove = false;
-    RowInserted( nRow,vInsertedUndoRedoRows.size(), true );
+    RowInserted( nRow,vInsertedUndoRedoRows.size() );
     bSaveOnMove = true;
 
     // Create the Undo-Action
@@ -838,11 +838,11 @@ void OTableEditorCtrl::DeleteRows()
     {
         // Remove rows
         m_pRowList->erase( m_pRowList->begin()+nIndex );
-        RowRemoved( nIndex, 1 );
+        RowRemoved( nIndex );
 
         // Insert the empty row at the end
         m_pRowList->push_back( std::shared_ptr<OTableRow>(new OTableRow()));
-        RowInserted( GetRowCount()-1, 1, true );
+        RowInserted( GetRowCount()-1 );
 
         nIndex = FirstSelectedRow();
     }
@@ -871,7 +871,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     // Insert the number of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
         m_pRowList->insert( m_pRowList->begin()+i ,std::shared_ptr<OTableRow>(new OTableRow()));
-    RowInserted( nRow, nInsertRows, true );
+    RowInserted( nRow, nInsertRows );
 
     GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
