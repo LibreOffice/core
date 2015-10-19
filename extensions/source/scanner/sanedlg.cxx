@@ -396,7 +396,7 @@ void SaneDlg::InitFields()
 
         if( mrSane.GetOptionValue( nOption, fRes ) )
         {
-            mpReslBox->Enable( true );
+            mpReslBox->Enable();
 
             mpReslBox->SetValue( (long)fRes );
             double *pDouble = NULL;
@@ -516,7 +516,7 @@ void SaneDlg::InitFields()
                     case 3: aMaxBottomRight.Y() = (int)fValue;break;
                 }
             }
-            pField->Enable( true );
+            pField->Enable();
         }
         else
         {
@@ -754,8 +754,8 @@ IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
                             mpVectorBox->SetMin( 1 );
                             mpVectorBox->SetMax(
                                 mrSane.GetOptionElements( mnCurrentOption ) );
-                            mpVectorBox->Show( true );
-                            mpVectorTxt->Show( true );
+                            mpVectorBox->Show();
+                            mpVectorTxt->Show();
                         }
                         else
                         {
@@ -987,7 +987,7 @@ void SaneDlg::EstablishBoolOption()
     {
         mpBoolCheckBox->SetText( mrSane.GetOptionName( mnCurrentOption ) );
         mpBoolCheckBox->Check( bValue );
-        mpBoolCheckBox->Show( true );
+        mpBoolCheckBox->Show();
     }
 }
 
@@ -1000,9 +1000,9 @@ void SaneDlg::EstablishStringOption()
     if( bSuccess )
     {
         mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        mpOptionDescTxt->Show( true );
+        mpOptionDescTxt->Show();
         mpStringEdit->SetText(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-        mpStringEdit->Show( true );
+        mpStringEdit->Show();
     }
 }
 
@@ -1015,9 +1015,9 @@ void SaneDlg::EstablishStringRange()
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
     mpStringRangeBox->SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-    mpStringRangeBox->Show( true );
+    mpStringRangeBox->Show();
     mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    mpOptionDescTxt->Show( true );
+    mpOptionDescTxt->Show();
 }
 
 void SaneDlg::EstablishQuantumRange()
@@ -1053,12 +1053,12 @@ void SaneDlg::EstablishQuantumRange()
             sprintf( pBuf, "%g", fValue );
             mpQuantumRangeBox->SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
-        mpQuantumRangeBox->Show( true );
+        mpQuantumRangeBox->Show();
         OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
         aText += " ";
         aText += mrSane.GetOptionUnitName( mnCurrentOption );
         mpOptionDescTxt->SetText( aText );
-        mpOptionDescTxt->Show( true );
+        mpOptionDescTxt->Show();
     }
 }
 
@@ -1081,17 +1081,17 @@ void SaneDlg::EstablishNumericOption()
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
     mpOptionDescTxt->SetText( aText );
-    mpOptionDescTxt->Show( true );
+    mpOptionDescTxt->Show();
     sprintf( pBuf, "%g", fValue );
     mpNumericEdit->SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-    mpNumericEdit->Show( true );
+    mpNumericEdit->Show();
 }
 
 void SaneDlg::EstablishButtonOption()
 {
     mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    mpOptionDescTxt->Show( true );
-    mpButtonOption->Show( true );
+    mpOptionDescTxt->Show();
+    mpButtonOption->Show();
 }
 
 void ScanPreview::MouseMove(const MouseEvent& rMEvt)

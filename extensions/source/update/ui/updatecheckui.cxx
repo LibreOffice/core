@@ -356,7 +356,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
         mpBubbleWin = GetBubbleWindow();
         if ( mpBubbleWin )
         {
-            mpBubbleWin->Show( true );
+            mpBubbleWin->Show();
             maTimeoutTimer.Start();
         }
         mbShowBubble = false;
