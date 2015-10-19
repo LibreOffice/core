@@ -171,8 +171,9 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
             return sal_False;
 
         writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::OOXML;
+        uno::Reference<text::XTextRange> xInsertTextRange = aMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>());
         writerfilter::Stream::Pointer_t pStream(
-            writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>(), aMediaDesc));
+            writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, xInsertTextRange, aMediaDesc));
         //create the tokenizer and domain mapper
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
