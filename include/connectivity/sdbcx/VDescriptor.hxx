@@ -38,7 +38,7 @@ namespace connectivity
         typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
         class OOO_DLLPUBLIC_DBTOOLS ODescriptor
                     :public ODescriptor_PBASE
-                    ,public ::com::sun::star::lang::XUnoTunnel
+                    ,public css::lang::XUnoTunnel
         {
         protected:
             OUString         m_Name;
@@ -69,8 +69,8 @@ namespace connectivity
             virtual void construct();
 
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception);
 
             // compare
             inline bool operator == ( const OUString & _rRH )
@@ -78,13 +78,13 @@ namespace connectivity
                 return m_aCase(m_Name,_rRH);
             }
 
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            static ODescriptor* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSomeComp );
+            static ODescriptor* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxSomeComp );
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
-            static bool isNew( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDescriptor );
+            static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
         };
     }
 

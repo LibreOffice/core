@@ -60,16 +60,16 @@ namespace dbtools
                 if this connection denotes an application-level connection, i.e. supports
                 the com.sun.star.sdb.Connection service.
 
-            @throws ::com::sun::star::lang::IllegalArgumentException
+            @throws css::lang::IllegalArgumentException
                 if the given connection is not <NULL/>, but the XDatabaseMetaData provided by it
                 are <NULL/>
-            @throws ::com::sun::star::sdbc::SQLException
+            @throws css::sdbc::SQLException
                 if obtaining the meta data from the connection throws an SQLException
-            @throws ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
                 if obtaining the meta data from the connection throws an RuntimeException
         */
         DatabaseMetaData(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _connection );
+            const css::uno::Reference< css::sdbc::XConnection >& _connection );
         DatabaseMetaData( const DatabaseMetaData& _copyFrom );
         DatabaseMetaData& operator=( const DatabaseMetaData& _copyFrom );
 
@@ -85,7 +85,7 @@ namespace dbtools
 
         /** resets the instance so that it's based on a new connection
         */
-        inline  void    reset( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _connection )
+        inline  void    reset( const css::uno::Reference< css::sdbc::XConnection >& _connection )
         {
             *this = DatabaseMetaData( _connection );
         }
@@ -98,7 +98,7 @@ namespace dbtools
 
         /** determines whether the database supports sub queries in the FROM part
             of a SELECT clause are supported.
-            @throws ::com::sun::star::sdbc::SQLException
+            @throws css::sdbc::SQLException
                 with SQLState 08003 (connection does not exist) if the instances was
                 default-constructed and does not have a connection, yet.
         */
@@ -140,7 +140,7 @@ namespace dbtools
 
         /** determines the syntax to use for boolean comparison predicates
 
-            @see ::com::sun::star::sdb::BooleanComparisonMode
+            @see css::sdb::BooleanComparisonMode
         */
         sal_Int32
             getBooleanComparisonMode() const;

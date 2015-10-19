@@ -45,11 +45,11 @@ namespace connectivity
         // other drivers can be derived their catalog from this class when they want to support sdbcx
         // it holds already tables, views, groups and users
 
-        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbcx::XTablesSupplier,
-                                                 ::com::sun::star::sdbcx::XViewsSupplier,
-                                                 ::com::sun::star::sdbcx::XUsersSupplier,
-                                                 ::com::sun::star::sdbcx::XGroupsSupplier,
-                                                 ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
+        typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XTablesSupplier,
+                                                 css::sdbcx::XViewsSupplier,
+                                                 css::sdbcx::XUsersSupplier,
+                                                 css::sdbcx::XGroupsSupplier,
+                                                 css::lang::XServiceInfo> OCatalog_BASE;
 
 
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCatalog :
@@ -70,14 +70,14 @@ namespace connectivity
             OCollection*        m_pGroups;
             OCollection*        m_pUsers;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
             /** builds the name which should be used to access the object later on in the collection.
                 Will only be called in fillNames.
                 @param  _xRow
                     The current row from the resultset given to fillNames.
             */
-            virtual OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+            virtual OUString buildName(  const css::uno::Reference< css::sdbc::XRow >& _xRow);
 
             /** fills a vector with the necessary names which can be used in combination with the collections.
                 For each row buildName will be called.
@@ -86,10 +86,10 @@ namespace connectivity
                 @param  _rNames
                     The vector who will be filled.
             */
-            void fillNames(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResult,TStringVector& _rNames);
+            void fillNames(css::uno::Reference< css::sdbc::XResultSet >& _xResult,TStringVector& _rNames);
 
         public:
-            OCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> &_xConnection);
+            OCatalog(const css::uno::Reference< css::sdbc::XConnection> &_xConnection);
             virtual ~OCatalog();
 
             DECLARE_SERVICE_INFO();
@@ -108,13 +108,13 @@ namespace connectivity
             void SAL_CALL acquire() throw() override;
             void SAL_CALL release() throw() override;
             // XTablesSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XViewsSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getViews(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getViews(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XUsersSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XGroupsSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getGroups(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         };
     }

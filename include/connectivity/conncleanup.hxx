@@ -34,15 +34,15 @@ namespace dbtools
 
     //= OAutoConnectionDisposer
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener,
-                                       ::com::sun::star::sdbc::XRowSetListener
+    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener,
+                                       css::sdbc::XRowSetListener
                                    >   OAutoConnectionDisposer_Base;
 
     class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                     m_xOriginalConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > m_xRowSet; // needed to add as listener
+        css::uno::Reference< css::sdbc::XRowSet > m_xRowSet; // needed to add as listener
         bool    m_bRSListening          : 1; // true when we're listening on rowset
         bool    m_bPropertyListening    : 1; // true when we're listening for property changes
 
@@ -53,21 +53,21 @@ namespace dbtools
             here) will be disposed.</p>
         */
         OAutoConnectionDisposer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
 
     protected:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         void clearConnection();
@@ -76,8 +76,8 @@ namespace dbtools
         void        stopRowSetListening();
         bool        isRowSetListening() const { return m_bRSListening; }
 
-        void        startPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps );
-        void        stopPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxEventSource );
+        void        startPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxProps );
+        void        stopPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxEventSource );
         bool        isPropertyListening() const { return m_bPropertyListening; }
     };
 

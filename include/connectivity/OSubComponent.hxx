@@ -42,8 +42,8 @@ namespace connectivity
     OOO_DLLPUBLIC_DBTOOLS
     void release(oslInterlockedCount& _refCount,
                  ::cppu::OBroadcastHelper& rBHelper,
-                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                 ::com::sun::star::lang::XComponent* _pObject);
+                 css::uno::Reference< css::uno::XInterface >& _xInterface,
+                 css::lang::XComponent* _pObject);
 
     // OSubComponent
 
@@ -51,12 +51,12 @@ namespace connectivity
     {
     protected:
         // the parent must support the tunnel implementation
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
+        css::uno::Reference< css::uno::XInterface > m_xParent;
         SELF*   m_pDerivedImplementation;
 
     public:
         OSubComponent(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,
+                const css::uno::Reference< css::uno::XInterface >& _xParent,
                 SELF* _pDerivedImplementation)
             :m_xParent(_xParent)
             ,m_pDerivedImplementation(_pDerivedImplementation)

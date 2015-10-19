@@ -65,14 +65,14 @@ public:
     enum TYPE { SQL_EXCEPTION, SQL_WARNING, SQL_CONTEXT, UNDEFINED };
 
 private:
-    ::com::sun::star::uno::Any  m_aContent;
+    css::uno::Any  m_aContent;
     TYPE            m_eType;    // redundant (could be derived from m_aContent.getValueType())
 
 public:
     SQLExceptionInfo();
-    SQLExceptionInfo(const ::com::sun::star::sdbc::SQLException& _rError);
-    SQLExceptionInfo(const ::com::sun::star::sdbc::SQLWarning& _rError);
-    SQLExceptionInfo(const ::com::sun::star::sdb::SQLContext& _rError);
+    SQLExceptionInfo(const css::sdbc::SQLException& _rError);
+    SQLExceptionInfo(const css::sdbc::SQLWarning& _rError);
+    SQLExceptionInfo(const css::sdb::SQLContext& _rError);
 
     /** convenience constructor
 
@@ -86,7 +86,7 @@ public:
     SQLExceptionInfo(const SQLExceptionInfo& _rCopySource);
 
             // use for events got via XSQLErrorListener::errorOccured
-    SQLExceptionInfo(const ::com::sun::star::uno::Any& _rError);
+    SQLExceptionInfo(const css::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException
 
     /** prepends a plain error message to the chain of exceptions
@@ -121,22 +121,22 @@ public:
     */
     void    doThrow();
 
-    const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLException& _rError);
-    const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLWarning& _rError);
-    const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLContext& _rError);
-    const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent);
-    const SQLExceptionInfo& operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException);
+    const SQLExceptionInfo& operator=(const css::sdbc::SQLException& _rError);
+    const SQLExceptionInfo& operator=(const css::sdbc::SQLWarning& _rError);
+    const SQLExceptionInfo& operator=(const css::sdb::SQLContext& _rError);
+    const SQLExceptionInfo& operator=(const css::sdb::SQLErrorEvent& _rErrorEvent);
+    const SQLExceptionInfo& operator=(const css::uno::Any& _rCaughtSQLException);
 
     bool        isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
     bool        isValid() const { return m_eType != UNDEFINED; }
     TYPE        getType() const { return m_eType; }
 
-    operator const ::com::sun::star::sdbc::SQLException*    () const;
-    operator const ::com::sun::star::sdbc::SQLWarning*      () const;
-    operator const ::com::sun::star::sdb::SQLContext*       () const;
+    operator const css::sdbc::SQLException*    () const;
+    operator const css::sdbc::SQLWarning*      () const;
+    operator const css::sdb::SQLContext*       () const;
 
-    const ::com::sun::star::uno::Any& get() const { return m_aContent; }
+    const css::uno::Any& get() const { return m_aContent; }
 
     void    clear()
     {
@@ -155,7 +155,7 @@ protected:
 class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper
 {
 protected:
-    const ::com::sun::star::sdbc::SQLException* m_pCurrent;
+    const css::sdbc::SQLException* m_pCurrent;
     SQLExceptionInfo::TYPE                      m_eCurrentType;
 
 public:
@@ -165,7 +165,7 @@ public:
             the start of the exception chain to iterate. Must live as long as the iterator
             instances lives, at least.
     */
-    SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart );
+    SQLExceptionIteratorHelper( const css::sdbc::SQLException& _rChainStart );
 
     /** constructs an iterator instance from an SQLExceptionInfo
 
@@ -182,7 +182,7 @@ public:
     /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
         traveled.
     */
-    const ::com::sun::star::sdbc::SQLException* current() const { return m_pCurrent; }
+    const css::sdbc::SQLException* current() const { return m_pCurrent; }
 
     /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
         traveled.
@@ -196,7 +196,7 @@ public:
 
         @return the current element in the chain, as <b>before</em> the chain move.
     */
-    const ::com::sun::star::sdbc::SQLException* next();
+    const css::sdbc::SQLException* next();
 
     /** proceeds to the next element in the chain
 
@@ -224,52 +224,52 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedSQLException(
         const OUString& _rFunctionName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::com::sun::star::uno::Any& _rNextException = ::com::sun::star::uno::Any()
+        const css::uno::Reference< css::uno::XInterface >& _rxContext,
+        const css::uno::Any& _rNextException = css::uno::Any()
     )
-    throw ( ::com::sun::star::sdbc::SQLException );
+    throw ( css::sdbc::SQLException );
 
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
         const OUString& _rFunctionName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        const css::uno::Reference< css::uno::XInterface >& _rxContext
     )
     throw (css::uno::RuntimeException );
 
 /** throws a function sequence (HY010) exception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
+        const css::uno::Reference< css::uno::XInterface >& _Context,
+        const css::uno::Any& _Next = css::uno::Any()
     )
-    throw ( ::com::sun::star::sdbc::SQLException );
+    throw ( css::sdbc::SQLException );
 
 
 /** throw a invalid index sqlexception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
+        const css::uno::Reference< css::uno::XInterface >& _Context,
+        const css::uno::Any& _Next = css::uno::Any()
     )
-    throw ( ::com::sun::star::sdbc::SQLException );
+    throw ( css::sdbc::SQLException );
 
 
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource
+        const css::uno::Reference< css::uno::XInterface >& _rxSource
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
 
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
-        const ::com::sun::star::uno::Any& _rNextException
+        const css::uno::Reference< css::uno::XInterface >& _rxSource,
+        const css::uno::Any& _rNextException
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
 
 /** throw a SQLException with SQLState HYC00 (Optional feature not implemented)
@@ -283,8 +283,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::com::sun::star::uno::Any* _pNextException = NULL
+        const css::uno::Reference< css::uno::XInterface >& _rxContext,
+        const css::uno::Any* _pNextException = NULL
     )
     throw (css::sdbc::SQLException);
 
@@ -299,7 +299,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
         const OUString& _rFeatureName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        const css::uno::Reference< css::uno::XInterface >& _rxContext
     )
     throw (css::uno::RuntimeException);
 
@@ -311,9 +311,9 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
 */
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
         const OUString& _rColumnName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        const css::uno::Reference< css::uno::XInterface >& _rxContext
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
 
 /** throws an SQLException
@@ -321,11 +321,11 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rMessage,
         const OUString& _rSQLState,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
-        const ::com::sun::star::uno::Any* _pNextException = NULL
+        const css::uno::Any* _pNextException = NULL
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
 
 /** throws an SQLException
@@ -333,11 +333,11 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rMessage,
         StandardSQLState _eSQLState,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
-        const ::com::sun::star::uno::Any* _pNextException = NULL
+        const css::uno::Any* _pNextException = NULL
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
 
 }   // namespace dbtools

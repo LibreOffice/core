@@ -45,15 +45,15 @@ namespace connectivity
         class OTable;
         class OCollection;
 
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbcx::XColumnsSupplier,
-                                                   ::com::sun::star::sdbcx::XKeysSupplier,
-                                                   ::com::sun::star::container::XNamed,
-                                                   ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbcx::XColumnsSupplier,
+                                                   css::sdbcx::XKeysSupplier,
+                                                   css::container::XNamed,
+                                                   css::lang::XServiceInfo> OTableDescriptor_BASE;
 
-        typedef ::cppu::ImplHelper4<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                                    ::com::sun::star::sdbcx::XIndexesSupplier,
-                                                    ::com::sun::star::sdbcx::XRename,
-                                                    ::com::sun::star::sdbcx::XAlterTable > OTable_BASE;
+        typedef ::cppu::ImplHelper4<               css::sdbcx::XDataDescriptorFactory,
+                                                   css::sdbcx::XIndexesSupplier,
+                                                   css::sdbcx::XRename,
+                                                   css::sdbcx::XAlterTable > OTable_BASE;
 
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OTable> OTable_PROP;
 
@@ -100,9 +100,9 @@ namespace connectivity
             //XInterface
             virtual void    SAL_CALL acquire() throw() override;
             virtual void    SAL_CALL release() throw() override;
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // ODescriptor
             virtual void construct() override;
@@ -112,26 +112,26 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XColumnsSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XKeysSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getKeys(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getKeys(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XNamed
-            virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) override;
             // XDataDescriptorFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor() throw(css::uno::RuntimeException, std::exception) override;
             // XIndexesSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getIndexes(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
             // helper method
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const;
         };
     }
 }

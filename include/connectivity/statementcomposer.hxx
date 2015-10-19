@@ -48,7 +48,7 @@ namespace dbtools
                 the connection to work with. Must not be <NULL/>.
         */
         StatementComposer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const OUString&  _rCommand,
             const sal_Int32  _nCommandType,
             const bool       _bEscapeProcessing
@@ -70,10 +70,10 @@ namespace dbtools
 
         /** returns the composer which has been fed with the current settings
 
-            @throws ::com::sun::star::sdbc::SQLException
+            @throws css::sdbc::SQLException
                 if such an exception occurs while creating the composer
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                 getComposer();
 
         /** returns the composer statement
@@ -81,7 +81,7 @@ namespace dbtools
             Effectively, this is equivalent to calling getComposer, and asking the composer
             for its Query attribute.
 
-            @throws ::com::sun::star::sdbc::SQLException
+            @throws css::sdbc::SQLException
                 if such an exception occurs while creating the composer
         */
         OUString

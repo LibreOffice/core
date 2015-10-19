@@ -76,15 +76,15 @@ namespace connectivity
 
     struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
     {
-        const ::com::sun::star::lang::Locale&   rLocale;
-        ::dbtools::DatabaseMetaData             aMetaData;
-        OSQLParser*                             pParser;
-        std::shared_ptr< QueryNameSet >         pSubQueryHistory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    xFormatter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
-        OUString                                                                        sPredicateTableAlias;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
-        const IParseContext& m_rContext;
+        const css::lang::Locale&                              rLocale;
+        ::dbtools::DatabaseMetaData                           aMetaData;
+        OSQLParser*                                           pParser;
+        std::shared_ptr< QueryNameSet >                       pSubQueryHistory;
+        css::uno::Reference< css::util::XNumberFormatter >    xFormatter;
+        css::uno::Reference< css::beans::XPropertySet >       xField;
+        OUString                                              sPredicateTableAlias;
+        css::uno::Reference< css::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
+        const IParseContext&                                  m_rContext;
         sal_Char            cDecSep;
         bool                bQuote                      : 1;    /// should we quote identifiers?
         bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
@@ -92,11 +92,11 @@ namespace connectivity
         bool                bParseToSDBCLevel           : 1;    /// should we create an SDBC-level statement (e.g. with substituted sub queries)?
 
         SQLParseNodeParameter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xField,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
+            const css::uno::Reference< css::beans::XPropertySet >& _xField,
             const OUString &_sPredicateTableAlias,
-            const ::com::sun::star::lang::Locale& _rLocale,
+            const css::lang::Locale& _rLocale,
             const IParseContext* _pContext,
             bool _bIntl,
             bool _bQuote,
@@ -309,30 +309,30 @@ namespace connectivity
                 <arg>_pErrorHolder</arg>.
         */
         bool parseNodeToExecutableStatement( OUString& _out_rString,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             OSQLParser& _rParser,
-            ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const;
+            css::sdbc::SQLException* _pErrorHolder ) const;
 
         void parseNodeToStr(OUString& rString,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                             const IParseContext* pContext = NULL,
                             bool _bIntl = false,
                             bool _bQuote= true) const;
 
         // quoted and internationalised
         void parseNodeToPredicateStr(OUString& rString,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
-                                     const ::com::sun::star::lang::Locale& rIntl,
+                                     const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                     const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                                     const css::lang::Locale& rIntl,
                                      sal_Char _cDec,
                                      const IParseContext* pContext = NULL ) const;
 
         void parseNodeToPredicateStr(OUString& rString,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
+                                     const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                     const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                                     const css::uno::Reference< css::beans::XPropertySet > & _xField,
                                      const OUString &_sTableAlias,
-                                     const ::com::sun::star::lang::Locale& rIntl,
+                                     const css::lang::Locale& rIntl,
                                      sal_Char _cDec,
                                      const IParseContext* pContext = NULL ) const;
 
@@ -392,10 +392,10 @@ namespace connectivity
         // return the catalog, schema and tablename form this node
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
         static bool getTableComponents(const OSQLParseNode* _pTableNode,
-                                            ::com::sun::star::uno::Any &_rCatalog,
+                                            css::uno::Any &_rCatalog,
                                             OUString &_rSchema,
-                                            OUString &_rTable
-                                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
+                                            OUString &_rTable,
+                                            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);
 
         // substitute all occurrences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
@@ -408,11 +408,11 @@ namespace connectivity
     protected:
         // ParseNodeToStr concatenates all Tokens (leaves) of the ParseNodes.
         void parseNodeToStr(OUString& rString,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
+                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                            const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                            const css::uno::Reference< css::beans::XPropertySet > & _xField,
                             const OUString &_sPredicateTableAlias,
-                            const ::com::sun::star::lang::Locale& rIntl,
+                            const css::lang::Locale& rIntl,
                             const IParseContext* pContext,
                             bool _bIntl,
                             bool _bQuote,
