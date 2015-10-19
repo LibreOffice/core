@@ -27,11 +27,11 @@ class B2DPolyPolygon;
 namespace unotools
 {
 
-    BASEGFX_DLLPUBLIC B2DPolyPolygon polyPolygonBezierToB2DPolyPolygon(const ::com::sun::star::drawing::PolyPolygonBezierCoords& rSourcePolyPolygon)
-        throw( ::com::sun::star::lang::IllegalArgumentException );
+    BASEGFX_DLLPUBLIC B2DPolyPolygon polyPolygonBezierToB2DPolyPolygon(const css::drawing::PolyPolygonBezierCoords& rSourcePolyPolygon)
+        throw( css::lang::IllegalArgumentException );
 
     BASEGFX_DLLPUBLIC void b2DPolyPolygonToPolyPolygonBezier( const B2DPolyPolygon& rPolyPoly,
-                                            ::com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
+                                            css::drawing::PolyPolygonBezierCoords& rRetval );
 }
 }
 

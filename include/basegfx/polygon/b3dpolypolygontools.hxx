@@ -126,13 +126,13 @@ namespace basegfx
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         BASEGFX_DLLPUBLIC bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
 
-        /// converters for com::sun::star::drawing::PolyPolygonShape3D
+        /// converters for css::drawing::PolyPolygonShape3D
         BASEGFX_DLLPUBLIC B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
-            const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
+            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
             bool bCheckClosed = true);
         BASEGFX_DLLPUBLIC void B3DPolyPolygonToUnoPolyPolygonShape3D(
             const B3DPolyPolygon& rPolyPolygonSource,
-            com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval);
+            css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval);
 
     } // end of namespace tools
 } // end of namespace basegfx

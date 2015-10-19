@@ -68,7 +68,7 @@ namespace basegfx
                 need key stop lerping in the first place). All
                 elements must be of monotonically increasing value.
              */
-            explicit KeyStopLerp( const ::com::sun::star::uno::Sequence<double>& rKeyStops );
+            explicit KeyStopLerp( const css::uno::Sequence<double>& rKeyStops );
 
             /** Find two nearest bucket index & interpolate
 

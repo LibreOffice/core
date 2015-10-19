@@ -134,7 +134,7 @@ namespace basegfx
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin = B2DLineJoin::Round,
-            com::sun::star::drawing::LineCap eCap = com::sun::star::drawing::LineCap_BUTT,
+            css::drawing::LineCap eCap = css::drawing::LineCap_BUTT,
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
             double fMiterMinimumAngle = (15.0 * F_PI180));
