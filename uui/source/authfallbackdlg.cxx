@@ -26,7 +26,7 @@ AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
 
     m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
     m_pBTCancel->SetClickHdl( LINK( this, AuthFallbackDlg, CancelHdl) );
-    m_pBTOk->Enable( true );
+    m_pBTOk->Enable();
 
     m_pTVInstructions->SetText( instructions );
     m_pEDUrl->SetText( url );

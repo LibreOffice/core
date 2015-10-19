@@ -64,8 +64,8 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
 
         m_pFTConfirmPassword->Show();
         m_pEDConfirmPassword->Show();
-        m_pFTConfirmPassword->Enable( true );
-        m_pEDConfirmPassword->Enable( true );
+        m_pFTConfirmPassword->Enable();
+        m_pEDConfirmPassword->Enable();
     }
 
     SetText( aTitle );
