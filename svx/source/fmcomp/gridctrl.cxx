@@ -2258,14 +2258,14 @@ sal_Int32 DbGridControl::AlignSeekCursor()
             if ( m_pDataCursor->isBeforeFirst() )
             {
                 // this is somewhat strange, but can nevertheless happen
-                DBG_WARNING( "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (before first)!" );
+                SAL_INFO( "svx", "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (before first)!" );
                 m_pSeekCursor->first();
                 m_pSeekCursor->previous();
                 m_nSeekPos = -1;
             }
             else if ( m_pDataCursor->isAfterLast() )
             {
-                DBG_WARNING( "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (after last)!" );
+                SAL_INFO( "svx", "DbGridControl::AlignSeekCursor: nobody should tamper with my cursor this way (after last)!" );
                 m_pSeekCursor->last();
                 m_pSeekCursor->next();
                 m_nSeekPos = -1;

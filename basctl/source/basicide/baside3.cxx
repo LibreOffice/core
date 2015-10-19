@@ -336,12 +336,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                             case OBJ_DLG_TREECONTROL:       nObj = SVX_SNAP_TREECONTROL; break;
                             default:                        nObj = 0;
                         }
-#ifdef DBG_UTIL
-                        if( !nObj )
-                        {
-                            DBG_WARNING( "SID_CHOOSE_CONTROLS: Unbekannt!" );
-                        }
-#endif
+                        SAL_INFO_IF( !nObj, "basctl.basicide", "SID_CHOOSE_CONTROLS: Unbekannt!" );
                         aItem.SetValue( nObj );
                     }
 

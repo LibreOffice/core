@@ -1318,7 +1318,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
             nSize = 0;
         }
         else {
-            DBG_WARNING("Not truncatable!");
+            SAL_INFO("unotools", "Not truncatable!");
         }
     }
 

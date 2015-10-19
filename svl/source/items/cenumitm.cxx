@@ -71,7 +71,7 @@ bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
 
 OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
 {
-    DBG_WARNING("SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
+    SAL_INFO("svl", "SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
     return OUString();
 }
 

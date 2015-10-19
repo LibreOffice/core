@@ -1567,7 +1567,7 @@ namespace svx
         }
         else
         {
-            DBG_WARNING( "+HangulHanjaEditDictDialog::NewPBPushHdl(): dictionary faded away..." );
+            SAL_INFO( "cui.dialogs", "dictionary faded away..." );
         }
     }
 
@@ -1650,7 +1650,7 @@ namespace svx
         }
         else
         {
-            DBG_WARNING( "+HangulHanjaEditDictDialog::UpdateOriginalLB(): dictionary faded away..." );
+            SAL_INFO( "cui.dialogs", "dictionary faded away..." );
         }
     }
 

@@ -369,7 +369,7 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
         }
     }
 
-    DBG_WARNING( "W1: Can not find ItemPool!" );
+    SAL_INFO( "sfx.control", "W1: Can not find ItemPool!" );
     return SFX_MAPUNIT_100TH_MM;
 }
 

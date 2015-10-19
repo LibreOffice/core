@@ -138,7 +138,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         xConn = Reference< XConnection > (*static_cast<Reference< XInterface > const *>(xFormProps->getPropertyValue("ActiveConnection").getValue()), UNO_QUERY);
         if (!xConn.is())
         {
-            DBG_WARNING("no active connection");
+            SAL_INFO("extensions", "no active connection");
         }
     }
     catch (const Exception&)

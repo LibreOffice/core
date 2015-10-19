@@ -69,7 +69,7 @@ bool SfxFlagItem::GetPresentation
 
 sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
-    DBG_WARNING("calling GetValueText(sal_uInt16) on SfxFlagItem -- override!");
+    SAL_INFO("svl", "calling GetValueText(sal_uInt16) on SfxFlagItem -- override!");
     return 0;
 }
 
@@ -77,7 +77,7 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
 
 SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 {
-    DBG_WARNING("calling Create() on SfxFlagItem -- override!");
+    SAL_INFO("svl", "calling Create() on SfxFlagItem -- override!");
     return 0;
 }
 

@@ -379,7 +379,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             break;
 
         default:
-            DBG_WARNING("wrong slot id given to CreateOrDuplicatePage");
+            SAL_INFO("sd", "wrong slot id given to CreateOrDuplicatePage");
             // Try to handle another slot id gracefully.
     }
     SdPage* pNewPage = 0;

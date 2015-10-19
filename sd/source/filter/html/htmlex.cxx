@@ -1785,7 +1785,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             default:
                             {
-                                DBG_WARNING("unknown IMAP_OBJ_type");
+                                SAL_INFO("sd", "unknown IMAP_OBJ_type");
                             }
                             break;
                         }

@@ -32,8 +32,7 @@
 
     Because the assertion macro (DBG_ASSERT) has been used for
     true assertions as well as to log warnings, it maps to SAL_WARN instead of
-    standard assert.  The warning and error macros (DBG_ASSERTWARNING,
-    DBG_WARNING) all map to
+    standard assert.  The warning and error macros (DBG_ASSERTWARNING) all map to
     SAL_INFO.
 */
 
@@ -70,9 +69,6 @@ do                                          \
 
 #define DBG_ASSERT( sCon, aError ) \
     SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", "%s", aError)
-
-#define DBG_WARNING( aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", "%s", aWarning)
 
 #endif
 

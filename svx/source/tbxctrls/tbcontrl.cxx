@@ -2373,7 +2373,7 @@ void SvxStyleToolBoxControl::Update()
 
         if ( !pItem )
         {
-            DBG_WARNING( "Unknown Family" ); // can happen
+            SAL_INFO( "svx", "Unknown Family" ); // can happen
         }
     }
     else if ( pPool != pStyleSheetPool )

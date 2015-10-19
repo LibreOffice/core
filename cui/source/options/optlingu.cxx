@@ -2122,7 +2122,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
                 const bool bHasLang = rTable.count( eCurLanguage );
                 if (!bHasLang)
                 {
-                    DBG_WARNING( "language entry missing" );    // only relevant if all languages found should be supported
+                    SAL_INFO( "cui.dialogs", "language entry missing" );    // only relevant if all languages found should be supported
                 }
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
@@ -2166,7 +2166,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
                 const bool bHasLang = rTable.count( eCurLanguage );
                 if (!bHasLang)
                 {
-                    DBG_WARNING( "language entry missing" );    // only relevant if all languages found should be supported
+                    SAL_INFO( "cui.dialogs", "language entry missing" );    // only relevant if all languages found should be supported
                 }
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
@@ -2210,7 +2210,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
                 const bool bHasLang = rTable.count( eCurLanguage );
                 if (!bHasLang)
                 {
-                    DBG_WARNING( "language entry missing" );    // only relevant if all languages found should be supported
+                    SAL_INFO( "cui.dialogs", "language entry missing" );    // only relevant if all languages found should be supported
                 }
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );
@@ -2254,7 +2254,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
                 const bool bHasLang = rTable.count( eCurLanguage );
                 if (!bHasLang)
                 {
-                    DBG_WARNING( "language entry missing" );    // only relevant if all languages found should be supported
+                    SAL_INFO( "cui.dialogs", "language entry missing" );    // only relevant if all languages found should be supported
                 }
                 const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
                 lcl_SetCheckButton( pNewEntry, bCheck );

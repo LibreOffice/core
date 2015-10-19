@@ -198,7 +198,7 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
         {
             //this case is not 100% correct -> feel free to complete
             //i consider this case as seldom and not that problematic and a simple correct fix is not in sight
-            DBG_WARNING("you tried to deselect the animation of the form for random animation-> this has been refused");
+            SAL_INFO("sd", "you tried to deselect the animation of the form for random animation-> this has been refused");
             return;
         }
 

@@ -50,27 +50,27 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
     {
-        DBG_WARNING( pw1 );
+        SAL_INFO( "svl", pw1 );
         pw1 = NULL;
     }
     if ( pw2 && nItemCount>=100000 )
     {
-        DBG_WARNING( pw2 );
+        SAL_INFO( "svl", pw2 );
         pw2 = NULL;
     }
     if ( pw3 && nItemCount>=1000000 )
     {
-        DBG_WARNING( pw3 );
+        SAL_INFO( "svl", pw3 );
         pw3 = NULL;
     }
     if ( pw4 && nItemCount>=5000000 )
     {
-        DBG_WARNING( pw4 );
+        SAL_INFO( "svl", pw4 );
         pw4 = NULL;
     }
     if ( pw5 && nItemCount>=10000000 )
     {
-        DBG_WARNING( pw5 );
+        SAL_INFO( "svl", pw5 );
         pw5 = NULL;
     }
 #endif
@@ -86,27 +86,27 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
     {
-        DBG_WARNING( pw1 );
+        SAL_INFO( "svl", pw1 );
         pw1 = NULL;
     }
     if ( pw2 && nItemCount>=100000 )
     {
-        DBG_WARNING( pw2 );
+        SAL_INFO( "svl", pw2 );
         pw2 = NULL;
     }
     if ( pw3 && nItemCount>=1000000 )
     {
-        DBG_WARNING( pw3 );
+        SAL_INFO( "svl", pw3 );
         pw3 = NULL;
     }
     if ( pw4 && nItemCount>=5000000 )
     {
-        DBG_WARNING( pw4 );
+        SAL_INFO( "svl", pw4 );
         pw4 = NULL;
     }
     if ( pw5 && nItemCount>=10000000 )
     {
-        DBG_WARNING( pw5 );
+        SAL_INFO( "svl", pw5 );
         pw5 = NULL;
     }
 #endif

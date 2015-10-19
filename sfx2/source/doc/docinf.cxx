@@ -293,7 +293,7 @@ bool SaveOlePropertySet(
         catch (const uno::Exception &)
         {
             // may happen with concurrent modification...
-            DBG_WARNING("SavePropertySet: exception");
+            SAL_INFO("sfx", "SavePropertySet: exception");
         }
     }
 

@@ -524,7 +524,7 @@ void GenPspGraphics::drawMask( const SalTwoRect&,
 
 SalBitmap* GenPspGraphics::getBitmap( long, long, long, long )
 {
-    DBG_WARNING ("Warning: PrinterGfx::GetBitmap() not implemented");
+    SAL_INFO("vcl", "Warning: PrinterGfx::GetBitmap() not implemented");
     return NULL;
 }
 

@@ -226,7 +226,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             catch (const uno::Exception&)
             {
                 // may happen with concurrent modification...
-                DBG_WARNING("SfxFrameHTMLWriter::Out_DocInfo: exception");
+                SAL_INFO("sfx", "SfxFrameHTMLWriter::Out_DocInfo: exception");
             }
         }
     }

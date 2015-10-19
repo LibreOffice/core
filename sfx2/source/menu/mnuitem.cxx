@@ -188,7 +188,7 @@ void SfxMenuControl::StateChanged
 
         if ( pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
         {
-             DBG_WARNING("Title of menu item changed - please check if this needs correction!");
+             SAL_INFO("sfx", "Title of menu item changed - please check if this needs correction!");
         }
         return;
     }

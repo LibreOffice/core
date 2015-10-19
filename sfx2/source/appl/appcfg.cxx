@@ -480,7 +480,7 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
                 break;
 
                 default:
-                    DBG_WARNING( "W1:Wrong ID while getting Options!" );
+                    SAL_INFO( "sfx", "W1:Wrong ID while getting Options!" );
                     break;
             }
 #ifdef DBG_UTIL

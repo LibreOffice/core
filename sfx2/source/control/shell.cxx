@@ -291,7 +291,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
 
         while ( pIF );
 
-        DBG_WARNING( "W3: invalidating slot-id unknown in shell" );
+        SAL_INFO( "sfx.control", "W3: invalidating slot-id unknown in shell" );
     }
 }
 
