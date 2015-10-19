@@ -2260,7 +2260,10 @@ MessageToXAutoLock( Display *p_display, int n_message )
 
 void X11SalFrame::StartPresentation( bool bStart )
 {
-    maScreenSaverInhibitor.inhibit( bStart, /* isX11 */ true, "presentation" );
+    maScreenSaverInhibitor.inhibit( bStart,
+                                    "presentation",
+                                    true, // isX11
+                                    mhWindow );
 
     vcl::I18NStatus::get().show( !bStart, vcl::I18NStatus::presentation );
     if ( bStart )
