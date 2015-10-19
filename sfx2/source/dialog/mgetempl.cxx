@@ -355,7 +355,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox
 IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectEntry());
-    if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 ))
+    if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily() ))
     {
     }
 }
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, 
 {
     OUString aTemplName(m_pBaseLb->GetSelectEntry());
     if (aTemplName != SfxResId(STR_NONE))
-        Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 );
+        Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily() );
 }
 
 // Internal: Perform functions through the Dispatcher

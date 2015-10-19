@@ -180,7 +180,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      const OUString pDelim ( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
-     aStr += rWrapper.getTime( aT, true );
+     aStr += rWrapper.getTime( aT );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
@@ -2257,7 +2257,7 @@ CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
 {
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aValueEdit, "value");
-    m_aValueEdit->Show( true );
+    m_aValueEdit->Show();
     m_aValueEdit->SetText( aStr );
 }
 
@@ -2266,8 +2266,8 @@ CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTim
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aDateField, "date");
     get( m_aTimeField, "time");
-    m_aDateField->Show( true );
-    m_aTimeField->Show( true );
+    m_aDateField->Show();
+    m_aTimeField->Show();
     m_aDateField->SetDate( Date( aDateTime ) );
     m_aTimeField->SetTime( tools::Time( aDateTime ) );
 }
@@ -2277,8 +2277,8 @@ CmisYesNo::CmisYesNo( vcl::Window* pParent, bool bValue )
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aYesButton, "yes");
     get( m_aNoButton, "no");
-    m_aYesButton->Show( true );
-    m_aNoButton->Show( true );
+    m_aYesButton->Show();
+    m_aNoButton->Show();
     if ( bValue )
         m_aYesButton->Check( );
     else
@@ -2461,9 +2461,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
 
     }
     pNewLine->m_aName->SetText( sName );
-    pNewLine->m_aName->Show( true );
+    pNewLine->m_aName->Show();
     pNewLine->m_aType->SetText( sType );
-    pNewLine->m_aType->Show( true );
+    pNewLine->m_aType->Show();
 
     m_aCmisPropertiesLines.push_back( pNewLine );
 }

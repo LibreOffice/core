@@ -1469,7 +1469,7 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( bool bRea
             // should it be possible at all?
             if ( !bReadOnly && pImp->xStream.is() )
             {
-                pImp->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImp->xStream, embed::ElementModes::READWRITE );
+                pImp->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImp->xStream );
             }
             else if ( pImp->xInputStream.is() )
             {

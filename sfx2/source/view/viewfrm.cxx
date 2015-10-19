@@ -992,7 +992,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
         OUString aTmp(SvtResId(STR_UNDO).toString());
-        aTmp+= pShUndoMgr->GetUndoActionComment(0);
+        aTmp+= pShUndoMgr->GetUndoActionComment();
         rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
     }
     else
@@ -1001,7 +1001,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
         OUString aTmp(SvtResId(STR_REDO).toString());
-        aTmp += pShUndoMgr->GetRedoActionComment(0);
+        aTmp += pShUndoMgr->GetRedoActionComment();
         rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
     }
     else

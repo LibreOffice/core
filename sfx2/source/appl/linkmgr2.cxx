@@ -567,7 +567,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
     if( INetProtocol::NotValid == aURL.GetProtocol() )
         osl::FileBase::getFileURLFromSystemPath(rTopic, sRet);
     if( sRet.isEmpty() )
-        sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
+        sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl() );
     return sRet;
 }
 

@@ -46,13 +46,13 @@ sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16
 
 bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
-    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), true ) != SfxItemState::UNKNOWN;
+    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ) ) != SfxItemState::UNKNOWN;
 }
 
 const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : 0;
+    return (rItemSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : 0;
 }
 
 const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )

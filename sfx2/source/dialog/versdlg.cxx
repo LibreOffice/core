@@ -411,7 +411,7 @@ IMPL_LINK_TYPED( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
             const SfxPoolItem* aItems[2];
             aItems[0] = &aComment;
             aItems[1] = NULL;
-            pViewFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, aItems, 0 );
+            pViewFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, aItems );
             m_pVersionBox->SetUpdateMode( false );
             m_pVersionBox->Clear();
             Init_Impl();

@@ -156,8 +156,8 @@ void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
 
     mnCurRegionId = static_cast<TemplateContainerItem*>(pItem)->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
-    maAllButton->Show(true);
-    maFTName->Show(true);
+    maAllButton->Show();
+    maFTName->Show();
 
     insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
 

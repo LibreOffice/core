@@ -569,7 +569,7 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
     try
     {
         uno::Reference< embed::XStorage > xStorage =
-            ::comphelper::OStorageHelper::GetStorageFromStream( xStream, embed::ElementModes::READWRITE );
+            ::comphelper::OStorageHelper::GetStorageFromStream( xStream );
 
         if ( !xStorage.is() )
             throw uno::RuntimeException();
