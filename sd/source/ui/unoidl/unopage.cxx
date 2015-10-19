@@ -1789,8 +1789,8 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
             const long nWidth = aPageSize.Width();
             const long nHeight = aPageSize.Height();
 
-            Point aPageOrg = Point(nWidth, nHeight / 2);
-            Size aViewSize = Size(nWidth * 3, nHeight * 2);
+            Point aPageOrg(nWidth, nHeight / 2);
+            Size aViewSize(nWidth * 3, nHeight * 2);
 
             pDoc->SetMaxObjSize(aViewSize);
 

@@ -624,7 +624,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 
     // Objects can not be bigger than ViewSize
     Size aPageSize = mpDoc->GetSdPage(0, ePageKind)->GetSize();
-    Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
+    Size aViewSize(aPageSize.Width() * 3, aPageSize.Height() * 2);
     mpDoc->SetMaxObjSize(aViewSize);
 
     // if necessary, we tell Preview the new context

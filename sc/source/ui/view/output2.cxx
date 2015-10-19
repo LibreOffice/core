@@ -2803,7 +2803,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     //  Initial page size - large for normal text, cell size for automatic line breaks
 
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     if (rParam.mbBreak)
     {
         //  call GetOutputArea with nNeeded=0, to get only the cell width
@@ -3298,7 +3298,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     //  Initial page size - large for normal text, cell size for automatic line breaks
 
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     if (rParam.mbBreak)
     {
         //  call GetOutputArea with nNeeded=0, to get only the cell width
@@ -3558,7 +3558,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
     //  Initial page size - large for normal text, cell size for automatic line breaks
 
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     if (rParam.hasLineBreak())
     {
         //  call GetOutputArea with nNeeded=0, to get only the cell width
@@ -3825,7 +3825,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     //  Initial page size - large for normal text, cell size for automatic line breaks
 
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     //  call GetOutputArea with nNeeded=0, to get only the cell width
 
     //! handle nArrY == 0
@@ -4179,7 +4179,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     //  Initial page size - large for normal text, cell size for automatic line breaks
 
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     //  call GetOutputArea with nNeeded=0, to get only the cell width
 
     //! handle nArrY == 0
@@ -4864,7 +4864,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 }
                             }
 
-                            Size aPaperSize = Size( 1000000, 1000000 );
+                            Size aPaperSize( 1000000, 1000000 );
                             if (eOrient==SVX_ORIENTATION_STACKED)
                                 aPaperSize.Width() = nOutWidth;             // to center
                             else if (bBreak)
@@ -5000,7 +5000,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             if (!bHidden)
                             {
                                 bool bClip = false;
-                                Size aClipSize = Size( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
+                                Size aClipSize( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
 
                                 // go on writing
 

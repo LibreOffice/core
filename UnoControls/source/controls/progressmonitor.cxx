@@ -419,8 +419,8 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException, std:
     Size        aTopicSize_Top      =   xTopicLayout_Top->getPreferredSize          ();
     Size        aTopicSize_Bottom   =   xTopicLayout_Bottom->getPreferredSize       ();
     Size        aButtonSize         =   xButtonLayout->getPreferredSize             ();
-    Rectangle aTempRectangle = m_xProgressBar->getPosSize();
-    Size        aProgressBarSize    =   Size( aTempRectangle.Width, aTempRectangle.Height );
+    Rectangle   aTempRectangle      = m_xProgressBar->getPosSize();
+    Size        aProgressBarSize( aTempRectangle.Width, aTempRectangle.Height );
 
     aGuard.clear ();
 

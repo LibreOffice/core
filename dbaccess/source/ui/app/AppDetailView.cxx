@@ -500,7 +500,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
             SvTreeListEntry* pEntry = m_aCreation->InsertEntry( pTask->sTitle );
             pEntry->SetUserData( new TaskEntry( *pTask ) );
 
-            Image aImage = Image( *pImages );
+            Image aImage( *pImages );
             m_aCreation->SetExpandedEntryBmp(  pEntry, aImage );
             m_aCreation->SetCollapsedEntryBmp( pEntry, aImage );
         }

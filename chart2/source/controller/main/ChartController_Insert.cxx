@@ -532,7 +532,7 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
         if( xEqProp.is())
         {
             // using assignment for broken gcc 3.3
-            UndoGuard aUndoGuard = UndoGuard(
+            UndoGuard aUndoGuard(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
                 m_xUndoManager );
@@ -549,7 +549,7 @@ void ChartController::executeDispatch_InsertR2Value()
         ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
     if( xEqProp.is())
     {
-        UndoGuard aUndoGuard = UndoGuard(
+        UndoGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
@@ -564,7 +564,7 @@ void ChartController::executeDispatch_DeleteR2Value()
         ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
     if( xEqProp.is())
     {
-        UndoGuard aUndoGuard = UndoGuard(
+        UndoGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
@@ -639,7 +639,7 @@ void ChartController::executeDispatch_InsertDataLabels()
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
     if( xSeries.is() )
     {
-        UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
+        UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
             SCH_RESSTR( STR_OBJECT_DATALABELS )),
             m_xUndoManager );
         DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
@@ -649,7 +649,7 @@ void ChartController::executeDispatch_InsertDataLabels()
 
 void ChartController::executeDispatch_InsertDataLabel()
 {
-    UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
         SCH_RESSTR( STR_OBJECT_LABEL )),
         m_xUndoManager );
     DataSeriesHelper::insertDataLabelToPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ) );

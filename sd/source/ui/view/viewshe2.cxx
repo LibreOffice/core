@@ -583,8 +583,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     long nWidth = pPage->GetSize().Width();
     long nHeight = pPage->GetSize().Height();
 
-    Point aPageOrg = Point(nWidth, nHeight / 2);
-    Size aViewSize = Size(nWidth * 3, nHeight * 2);
+    Point aPageOrg(nWidth, nHeight / 2);
+    Size aViewSize(nWidth * 3, nHeight * 2);
 
     InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 

@@ -235,7 +235,7 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
 void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
 {
     svtools::ColorConfig aColorConfig;
-    Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+    Color aFillColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     this->SetApplicationBackgroundColor(aFillColor);
     this->E3dView::CompleteRedraw( pOut, rReg );
 }

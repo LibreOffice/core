@@ -450,7 +450,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
                     nOff += 6;
 
                 Color aTextColor( mpVDev->GetTextColor() );
-                Color aShadowColor = Color( COL_BLACK );
+                Color aShadowColor( COL_BLACK );
 
                 if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
                     aShadowColor = Color( COL_LIGHTGRAY );

@@ -769,7 +769,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 // Get without proportion
                 const sal_uInt8 nOldProp = rFnt.GetPropr();
                 rFnt.SetProportion( 100 );
-                Size aOldSize = Size( 0, rFnt.GetHeight( rFnt.GetActual() ) );
+                Size aOldSize( 0, rFnt.GetHeight( rFnt.GetActual() ) );
 
                 Size aNewSize( 0, ( nFactor * nCurrHeight ) / 1000 );
                 rFnt.SetSize( aNewSize, rFnt.GetActual() );
