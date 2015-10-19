@@ -290,7 +290,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     if ( pChild && !pChild->pWindow )
     {
         DELETEZ(pChild);
-        DBG_WARNING("ChildWindow has no Window!");
+        SAL_INFO("sfx2.appl", "ChildWindow has no Window!");
     }
 
     return pChild;

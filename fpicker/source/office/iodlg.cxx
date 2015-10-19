@@ -224,7 +224,7 @@ namespace
                         }
                         catch( const css::uno::Exception& )
                         {
-                            DBG_WARNING( "Exception in lcl_autoUpdateFileExtension" );
+                            SAL_INFO( "fpicker", "Exception in lcl_autoUpdateFileExtension" );
                         }
                     }
                 }

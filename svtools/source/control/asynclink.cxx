@@ -37,7 +37,7 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles, bool bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )
-        DBG_WARNING( "Recursives Call. Eher ueber Timer. TLX Fragen" );
+        SAL_INFO( "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" );
 #endif
     if( _aLink.IsSet() )
     {

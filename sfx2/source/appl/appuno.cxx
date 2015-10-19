@@ -247,7 +247,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             {
                 OStringBuffer aStr("MacroPlayer: wrong number of parameters for slot: ");
                 aStr.append(static_cast<sal_Int32>(nSlotId));
-                DBG_WARNING(aStr.getStr());
+                SAL_INFO("sfx2.appl", aStr.getStr());
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
@@ -908,7 +908,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         // except for the "special" slots: assure that every argument was convertible
         OStringBuffer aStr("MacroPlayer: Some properties didn't match to any formal argument for slot: ");
         aStr.append(pSlot->pUnoName);
-        DBG_WARNING( aStr.getStr() );
+        SAL_INFO( "sfx2.appl", aStr.getStr() );
     }
 #endif
 }

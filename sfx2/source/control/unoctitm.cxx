@@ -850,7 +850,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     }
 #ifdef DBG_UTIL
                     else
-                        DBG_WARNING("MacroPlayer: Unknown slot dispatched!");
+                        SAL_INFO("sfx.control", "MacroPlayer: Unknown slot dispatched!");
 #endif
                 }
             }

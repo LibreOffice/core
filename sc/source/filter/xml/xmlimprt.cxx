@@ -367,7 +367,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
             xAttrList );
         break;
     case XML_TOK_DOC_META:
-        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+        SAL_INFO("sc", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
     case XML_TOK_DOC_SCRIPTS:
         if (GetScImport().getImportFlags() & SvXMLImportFlags::SCRIPTS)

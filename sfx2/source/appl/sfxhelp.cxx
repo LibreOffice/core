@@ -279,7 +279,7 @@ OUString getCurrentModuleIdentifier_Impl()
         }
         catch (const ::com::sun::star::frame::UnknownModuleException&)
         {
-            DBG_WARNING( "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
+            SAL_INFO( "sfx2.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
         catch (const Exception&)
         {

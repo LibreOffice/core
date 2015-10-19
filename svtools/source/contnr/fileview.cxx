@@ -956,12 +956,12 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException const & )
     {
-        DBG_WARNING( "CommandAbortedException" );
+        SAL_INFO( "svtools", "CommandAbortedException" );
         bRet = false;
     }
     catch( Exception const & )
     {
-        DBG_WARNING( "Any other exception" );
+        SAL_INFO( "svtools", "Any other exception" );
         bRet = false;
     }
 
@@ -2034,7 +2034,7 @@ bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl* co
                     bEqual = true;
                 break;
             default:
-                DBG_WARNING( "CompareSortingData_Impl: Compare unknown type!" );
+                SAL_INFO( "svtools", "CompareSortingData_Impl: Compare unknown type!" );
                 bRet = false;
         }
     }

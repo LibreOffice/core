@@ -255,7 +255,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, cons
             }
         }
         else {
-            DBG_WARNING( "PropagateEvents_Impl: Got unknown event" );
+            SAL_INFO( "sfx.config", "PropagateEvents_Impl: Got unknown event" );
         }
     }
 }

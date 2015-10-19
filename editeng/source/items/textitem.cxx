@@ -353,7 +353,7 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
         if ( ePitch != rItem.ePitch || eTextEncoding != rItem.eTextEncoding )
         {
             bRet = false;
-            DBG_WARNING( "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
+            SAL_INFO( "editeng", "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
     return bRet;

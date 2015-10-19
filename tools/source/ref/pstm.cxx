@@ -501,7 +501,7 @@ sal_uInt32 SvPersistStream::ReadObj
                 OStringBuffer aStr("no class with id: " );
                 aStr.append(static_cast<sal_Int32>(nClassId));
                 aStr.append(" registered");
-                DBG_WARNING(aStr.getStr());
+                SAL_INFO("tools", aStr.getStr());
 #else
                 (void)nObjLen;
 #endif

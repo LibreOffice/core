@@ -361,7 +361,7 @@ SfxTabDialog::SfxTabDialog
     , pExampleSet(0)
 {
     Init_Impl(bEditFmt);
-    DBG_WARNING( "Please use the Construtor with the ViewFrame" );
+    SAL_INFO( "sfx.config", "Please use the Construtor with the ViewFrame" );
 }
 
 
@@ -1234,7 +1234,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
     DBG_ASSERT( pDataObject, "no Data structure for current page" );
     if ( pPage->HasExchangeSupport() && pDataObject->bOnDemand )
     {
-        DBG_WARNING( "Data exchange in ItemsOnDemand is not desired!" );
+        SAL_INFO( "sfx.config", "Data exchange in ItemsOnDemand is not desired!" );
     }
 #endif
 

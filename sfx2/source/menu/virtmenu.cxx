@@ -900,7 +900,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
         bool bRet = pMenu && Bind_Impl(pMenu);
 #ifdef DBG_UTIL
         if ( !bRet)
-            DBG_WARNING( "W1: Virtual menu could not be created!" );
+            SAL_INFO( "sfx", "W1: Virtual menu could not be created!" );
 #endif
         return bRet;
     }

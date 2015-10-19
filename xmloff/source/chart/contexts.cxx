@@ -112,9 +112,8 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
                 pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
-          // we come here in the flat ODF file format,
-          // if XDocumentPropertiesSupplier is not supported at the model
-//        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+            // we come here in the flat ODF file format,
+            // if XDocumentPropertiesSupplier is not supported at the model
             pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_BODY:

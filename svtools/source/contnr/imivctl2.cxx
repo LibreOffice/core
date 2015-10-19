@@ -473,12 +473,12 @@ void IcnCursor_Impl::SetDeltas()
     if( !nDeltaHeight )
     {
         nDeltaHeight = 1;
-        DBG_WARNING("SetDeltas:Bad height");
+        SAL_INFO("svtools", "SetDeltas:Bad height");
     }
     if( !nDeltaWidth )
     {
         nDeltaWidth = 1;
-        DBG_WARNING("SetDeltas:Bad width");
+        SAL_INFO("svctools", "SetDeltas:Bad width");
     }
 }
 

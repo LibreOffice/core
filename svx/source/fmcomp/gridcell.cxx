@@ -1310,7 +1310,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             }
             else
             {
-                DBG_WARNING("DbFormattedField::Init : my uno-model has no format-key, but a formats supplier !");
+                SAL_INFO("svx", "DbFormattedField::Init : my uno-model has no format-key, but a formats supplier !");
                 // the OFormattedModel which we usually are working with ensures that the model has a format key
                 // as soon as the form is loaded. Unfortunally this method here is called from within loaded, too.
                 // So if our LoadListener is called before the LoadListener of the model, this "else case" is

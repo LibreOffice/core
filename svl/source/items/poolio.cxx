@@ -480,7 +480,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
-                        DBG_WARNING( "loading non-empty ItemPool" );
+                        SAL_INFO( "svl", "loading non-empty ItemPool" );
 
                         AddRef( **ppHtArr );
                     }

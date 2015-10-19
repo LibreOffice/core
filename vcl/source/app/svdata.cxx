@@ -134,7 +134,7 @@ vcl::Window* ImplGetDefaultWindow()
 
         if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
         {
-            DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
+            SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
             pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
             pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
 

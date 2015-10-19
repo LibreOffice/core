@@ -1917,11 +1917,11 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
                     if( !nLen && aString[ 0 ] != '0' )
                     {
-                        DBG_WARNING( "SOLK: 1. len=0" );
+                        SAL_INFO( "svtools", "SOLK: 1. len=0" );
                     }
                     if( nStart == -1 || nLen > aString.getLength() - nStart - 3 )
                     {
-                        DBG_WARNING( "SOLK: 1. illegal start or wrong len" );
+                        SAL_INFO( "svtools", "SOLK: 1. illegal start or wrong len" );
                     }
                     aURL = aString.copy( nStart + 1, nLen );
 
@@ -1931,11 +1931,11 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
                     if( !nLen && aString[ 0 ] != '0' )
                     {
-                        DBG_WARNING( "SOLK: 2. len=0" );
+                        SAL_INFO( "svtools", "SOLK: 2. len=0" );
                     }
                     if( nStart == -1 || nLen > aString.getLength() - nStart - 1 )
                     {
-                        DBG_WARNING( "SOLK: 2. illegal start or wrong len" );
+                        SAL_INFO( "svtools", "SOLK: 2. illegal start or wrong len" );
                     }
                     aDesc = aString.copy( nStart+1, nLen );
 
