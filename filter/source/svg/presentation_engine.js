@@ -3771,6 +3771,25 @@ function PriorityQueue( aCompareFunc )
     this.bSorted = true;
 }
 
+PriorityQueue.prototype.clone = function()
+{
+    var aCopy = new PriorityQueue( this.aCompareFunc );
+    var src = this.aSequence;
+    var dest = [];
+    var i, l;
+    for( i = 0, l = src.length; i < l; ++i )
+    {
+        if( i in src )
+        {
+            dest.push( src[i] );
+        }
+    }
+    aCopy.aSequence = dest;
+    aCopy.bSorted = this.bSorted;
+
+    return aCopy;
+};
+
 PriorityQueue.prototype.top = function()
 {
     if( !this.bSorted )
