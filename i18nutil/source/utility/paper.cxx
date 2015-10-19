@@ -335,7 +335,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         aLocaleStr = OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
 
     // convert locale string to locale struct
-    ::com::sun::star::lang::Locale aSysLocale;
+    css::lang::Locale aSysLocale;
     sal_Int32 nDashPos = aLocaleStr.indexOf( '-' );
     if( nDashPos < 0 ) nDashPos = aLocaleStr.getLength();
     aSysLocale.Language = aLocaleStr.copy( 0, nDashPos );
@@ -405,8 +405,7 @@ Paper PaperInfo::fromPSName(const OString &rName)
 //http://sourceware.org/git/?p=glibc.git;a=tree;f=localedata/locales
 //http://en.wikipedia.org/wiki/Paper_size
 //http://msdn.microsoft.com/en-us/library/cc195164.aspx
-PaperInfo PaperInfo::getDefaultPaperForLocale(
-    const ::com::sun::star::lang::Locale & rLocale)
+PaperInfo PaperInfo::getDefaultPaperForLocale( const css::lang::Locale & rLocale )
 {
     Paper eType = PAPER_A4;
 
