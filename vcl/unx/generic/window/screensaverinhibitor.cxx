@@ -41,6 +41,7 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     {
         if ( pDisplay != boost::none )
         {
+            inhibitXScreenSaver( bInhibit, pDisplay.get() );
             inhibitXAutoLock( bInhibit, pDisplay.get() );
         }
 
@@ -167,6 +168,37 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, cons
                  },
                  mnGSMCookie );
 }
+
+/**
+ * Disable screensavers using the XSetScreenSaver/XGetScreenSaver API.
+ *
+ * Worth noting: xscreensaver explicitly ignores this and does it's own
+ * timeout handling.
+ */
+void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay )
+{
+    int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
+    XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
+                     &bPreferBlanking, &bAllowExposures );
+
+    // To disable/reenable we simply fiddle the timeout, whilst
+    // retaining all other properties.
+    if ( bInhibit && nTimeout)
+    {
+        mnXScreenSaverTimeout = nTimeout;
+        XResetScreenSaver( pDisplay );
+        XSetScreenSaver( pDisplay, 0, nInterval,
+                         bPreferBlanking, bAllowExposures );
+    }
+    else if ( !bInhibit && ( mnXScreenSaverTimeout != boost::none ) )
+    {
+        XSetScreenSaver( pDisplay, mnXScreenSaverTimeout.get(),
+                         nInterval, bPreferBlanking,
+                         bAllowExposures );
+        mnXScreenSaverTimeout = boost::none;
+    }
+}
+
 
 /* definitions from xautolock.c (pl15) */
 #define XAUTOLOCK_DISABLE 1

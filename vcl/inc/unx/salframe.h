@@ -100,7 +100,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     int             m_nWorkArea;
     bool            m_bSetFocusOnMap;
 
-    int             nScreenSaversTimeout_;
     ScreenSaverInhibitor maScreenSaverInhibitor;
     Rectangle       maPaintRegion;
 

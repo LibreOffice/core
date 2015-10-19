@@ -1118,7 +1118,6 @@ void GtkSalFrame::InitCommon()
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
-    m_nSavedScreenSaverTimeout = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
@@ -2553,39 +2552,6 @@ void GtkSalFrame::StartPresentation( bool bStart )
                                     getDisplay()->IsX11Display(),
                                     aWindow,
                                     aDisplay );
-
-    if( !getDisplay()->IsX11Display() )
-        return;
-
-#if !GTK_CHECK_VERSION(3,0,0)
-    Display *pDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
-
-    int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
-    XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
-                     &bPreferBlanking, &bAllowExposures );
-#endif
-    if( bStart )
-    {
-#if !GTK_CHECK_VERSION(3,0,0)
-        if ( nTimeout )
-        {
-            m_nSavedScreenSaverTimeout = nTimeout;
-            XResetScreenSaver( pDisplay );
-            XSetScreenSaver( pDisplay, 0, nInterval,
-                             bPreferBlanking, bAllowExposures );
-        }
-#endif
-    }
-    else
-    {
-#if !GTK_CHECK_VERSION(3,0,0)
-        if( m_nSavedScreenSaverTimeout )
-            XSetScreenSaver( pDisplay, m_nSavedScreenSaverTimeout,
-                             nInterval, bPreferBlanking,
-                             bAllowExposures );
-#endif
-        m_nSavedScreenSaverTimeout = 0;
-    }
 }
 
 void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
