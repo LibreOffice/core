@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_b4e84018",
+        "filename": "offapi/com/sun/star/task/DocumentMSPasswordRequest.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-19T10:23:43Z",
+      "side": 1,
+      "message": "missing space between \"document\" and \"(more\"",
+      "revId": "caaf7c1df734f401b7ed70934aa099c6d7719ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_94ed4428",
+        "filename": "offapi/com/sun/star/task/DocumentPasswordRequest.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-19T10:23:43Z",
+      "side": 1,
+      "message": "missing space between \"document\" and \"(more\"",
+      "revId": "caaf7c1df734f401b7ed70934aa099c6d7719ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_f4f2b805",
+        "filename": "sc/source/filter/ftools/fapihelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-19T10:23:43Z",
+      "side": 1,
+      "message": "this still only passes the GetName part of the URL, should just be\n\n  OUString aDocName \u003d rMedium.GetOrigURL();\n\ninstead",
+      "revId": "caaf7c1df734f401b7ed70934aa099c6d7719ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_d4f7bcf3",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-19T10:23:43Z",
+      "side": 1,
+      "message": "no need to pass the URL through INetURLObject here, just\n\n  OUString aDocumentName \u003d pFile-\u003eGetOrigURL();",
+      "revId": "caaf7c1df734f401b7ed70934aa099c6d7719ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_34dd5071",
+        "filename": "uui/source/passworddlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-19T10:23:43Z",
+      "side": 1,
+      "message": "DECODE_WITH_CHARSET still generates misleading output in general, see my Mar 4 comment \"Also, given that tdf#89694\u0027s example involves a filename also containing a space, ...\"",
+      "revId": "caaf7c1df734f401b7ed70934aa099c6d7719ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
