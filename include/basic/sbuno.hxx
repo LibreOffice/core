@@ -30,16 +30,16 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 
 // Returns a SbxObject that wrapps an Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
-BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const com::sun::star::uno::Any& aUnoObj_ );
+BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const css::uno::Any& aUnoObj_ );
 
 // Force creation of all properties for debugging
 BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
 BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
-BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( const SbxValue* pVar );
-BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( const SbxValue* pVar, const ::com::sun::star::uno::Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
+BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar );
+BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property* pUnoProperty = NULL );
 
-BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
+BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const css::uno::Any& aValue );
 
 #endif
 

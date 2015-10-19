@@ -24,29 +24,29 @@
 #include <cppuhelper/implbase1.hxx>
 #include <basic/basicdllapi.h>
 
-class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< css::task::XInteractionRequest >
 {
-    // C++ interface
-    public:
-    ModuleSizeExceeded( const com::sun::star::uno::Sequence<OUString>& sModules );
+// C++ interface
+public:
+    ModuleSizeExceeded( const css::uno::Sequence<OUString>& sModules );
 
     bool isAbort() const;
     bool isApprove() const;
 
-    // UNO interface
-    public:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override { return m_lContinuations; }
-    com::sun::star::uno::Any SAL_CALL getRequest() throw( com::sun::star::uno::RuntimeException, std::exception ) override
+// UNO interface
+public:
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override { return m_lContinuations; }
+    css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override
     {
         return m_aRequest;
     }
 
-    // member
-    private:
-    com::sun::star::uno::Any m_aRequest;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > m_lContinuations;
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > m_xAbort;
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation> m_xApprove;
+// member
+private:
+    css::uno::Any m_aRequest;
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
+    css::uno::Reference< css::task::XInteractionContinuation > m_xAbort;
+    css::uno::Reference< css::task::XInteractionContinuation> m_xApprove;
 };
 
 #endif

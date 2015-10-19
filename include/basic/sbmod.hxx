@@ -60,7 +60,7 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject
     SbModule(const SbModule&) = delete;
     SbModule& operator=(const SbModule&) = delete;
 protected:
-    com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
+    css::uno::Reference< css::script::XInvocation > mxWrapper;
     OUString            aOUSource;
     OUString            aComment;
     SbiImage*           pImage;        // the Image
@@ -129,8 +129,8 @@ public:
     bool     isProxyModule() { return bIsProxyModule; }
     void     AddVarName( const OUString& aName );
     void     RemoveVars();
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
-    bool     createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
+    css::uno::Reference< css::script::XInvocation > GetUnoModule();
+    bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     SbxArrayRef GetMethods() { return pMethods;}
     static OUString GetKeywordCase( const OUString& sKeyword );

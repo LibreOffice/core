@@ -27,7 +27,7 @@
 #include <vector>
 
 // Basic XML Import/Export
-BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
+BASIC_DLLPUBLIC css::uno::Reference< css::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 class SotStorage;
@@ -76,8 +76,8 @@ protected:
 
 struct LibraryContainerInfo
 {
-    ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer > mxScriptCont;
-    ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer > mxDialogCont;
+    css::uno::Reference< css::script::XPersistentLibraryContainer > mxScriptCont;
+    css::uno::Reference< css::script::XPersistentLibraryContainer > mxDialogCont;
     OldBasicPassword* mpOldBasicPassword;
 
     LibraryContainerInfo()
@@ -87,8 +87,8 @@ struct LibraryContainerInfo
 
     LibraryContainerInfo
     (
-        com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer > xScriptCont,
-        com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer > xDialogCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > xScriptCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > xDialogCont,
         OldBasicPassword* pOldBasicPassword
     )
         : mxScriptCont( xScriptCont )
@@ -167,9 +167,9 @@ public:
     */
     void            SetLibraryContainerInfo( const LibraryContainerInfo& rInfo );
 
-    const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
+    const css::uno::Reference< css::script::XPersistentLibraryContainer >&
                     GetDialogLibraryContainer()  const;
-    const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
+    const css::uno::Reference< css::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
     bool            LoadLib( sal_uInt16 nLib );
@@ -185,17 +185,17 @@ public:
         If a constant with this name already existed before, its value is changed, and the old constant is
         returned. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
-    ::com::sun::star::uno::Any
-                    SetGlobalUNOConstant( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rValue );
+    css::uno::Any
+                    SetGlobalUNOConstant( const sal_Char* _pAsciiName, const css::uno::Any& _rValue );
 
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
-                    bool GetGlobalUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
+                    bool GetGlobalUNOConstant( const sal_Char* _pAsciiName, css::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceedes the
         legacy module size
         @param _out_rModuleNames
             takes the names of modules whose size exceeds the legacy limit
     */
-    bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& _out_rModuleNames );
+    bool            LegacyPsswdBinaryLimitExceeded( css::uno::Sequence< OUString >& _out_rModuleNames );
     bool HasExeCode( const OUString& );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;
@@ -213,8 +213,7 @@ private:
     BASIC_DLLPRIVATE bool HasLib( const OUString& rName ) const;
 
     BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const OUString& rLibName,
-                        const com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >&
-                            xScriptCont );
+                        const css::uno::Reference< css::script::XLibraryContainer >& xScriptCont );
     // For XML import/export:
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName );
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName, const OUString& Password,

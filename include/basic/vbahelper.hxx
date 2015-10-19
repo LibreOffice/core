@@ -48,7 +48,7 @@ namespace vba {
         Passing true will lock all controllers, passing false will unlock them.
  */
 BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+    const css::uno::Reference< css::frame::XModel >& rxModel,
     bool bLockControllers );
 
 
@@ -69,7 +69,7 @@ BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
         passing false will disable them.
  */
 BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+    const css::uno::Reference< css::frame::XModel >& rxModel,
     bool bEnableWindows );
 
 
@@ -85,7 +85,7 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
         The new working directory.
  */
 BASIC_DLLPUBLIC void registerCurrentDirectory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+    const css::uno::Reference< css::frame::XModel >& rxModel,
     const OUString& rPath );
 
 

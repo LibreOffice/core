@@ -175,9 +175,9 @@ public:
     bool PutNull();
 
             // Special methods
-    bool PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    bool PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
     bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
-    bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec ) const;
+    bool fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
     bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
     static SbxError ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
@@ -330,7 +330,7 @@ public:
 
     const OUString& GetDeclareClassName();
     void SetDeclareClassName( const OUString& );
-    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+    void SetComListener( css::uno::Reference< css::uno::XInterface > xComListener,
                          StarBASIC* pParentBasic );
     void ClearComListener();
 
