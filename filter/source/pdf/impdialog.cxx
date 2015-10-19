@@ -656,9 +656,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     if ( mbIsPresentation )
     {
         mpRbRange->SetText(get<FixedText>("slides")->GetText());
-        mpCbExportNotesPages->Show(true);
+        mpCbExportNotesPages->Show();
         mpCbExportNotesPages->Check(paParent->mbExportNotesPages);
-        mpCbExportHiddenSlides->Show(true);
+        mpCbExportHiddenSlides->Show();
         mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
     }
     else
@@ -671,7 +671,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
 
     mpCbExportEmptyPages->Check(!paParent->mbIsSkipEmptyPages);
 
-    mpCbAddStream->Show(true);
+    mpCbAddStream->Show();
     mpCbAddStream->Check(paParent->mbAddStream);
 
     mpCbAddStream->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
@@ -794,9 +794,9 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
         }
         else
         {
-            mpRbAll->Enable( true );
-            mpRbRange->Enable( true );
-            mpRbSelection->Enable( true );
+            mpRbAll->Enable();
+            mpRbRange->Enable();
+            mpRbSelection->Enable();
         }
     }
 }
@@ -997,7 +997,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
         break;
     case 4:
         mpRbMagnZoom->Check();
-        mpNumZoom->Enable( true );
+        mpNumZoom->Enable();
         break;
     }
 
@@ -1122,7 +1122,7 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     else
     {
         m_pRbVisibleBookmarkLevels->Check();
-        m_pNumBookmarkLevels->Enable( true );
+        m_pNumBookmarkLevels->Enable();
         m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
     }
 }
@@ -1651,7 +1651,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSe
     get(mpEdSignReason, "reason");
     get(mpLBSignTSA, "tsa");
 
-    mpPbSignCertSelect->Enable( true );
+    mpPbSignCertSelect->Enable();
     mpPbSignCertSelect->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
     mpPbSignCertClear->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
 }
@@ -1686,11 +1686,11 @@ IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, v
     if (maSignCertificate.is())
     {
         mpEdSignCert->SetText(maSignCertificate->getSubjectName());
-        mpPbSignCertClear->Enable( true );
-        mpEdSignLocation->Enable( true );
-        mpEdSignPassword->Enable( true );
-        mpEdSignContactInfo->Enable( true );
-        mpEdSignReason->Enable( true );
+        mpPbSignCertClear->Enable();
+        mpEdSignLocation->Enable();
+        mpEdSignPassword->Enable();
+        mpEdSignContactInfo->Enable();
+        mpEdSignReason->Enable();
 
         try
         {

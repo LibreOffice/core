@@ -2761,7 +2761,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                    ImplWriteRect( static_cast<const MetaRectAction*>(pAction)->GetRect(), 0, 0 );
+                    ImplWriteRect( static_cast<const MetaRectAction*>(pAction)->GetRect() );
                 }
             }
             break;
