@@ -32,59 +32,59 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class TextConversionImpl : public cppu::WeakImplHelper
 <
-    com::sun::star::i18n::XExtendedTextConversion,
-    com::sun::star::lang::XServiceInfo
+    css::i18n::XExtendedTextConversion,
+    css::lang::XServiceInfo
 >
 {
 public:
-    TextConversionImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext ) : m_xContext(rxContext) {};
+    TextConversionImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext ) : m_xContext(rxContext) {};
 
         // Methods
-        com::sun::star::i18n::TextConversionResult SAL_CALL
+        css::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
-            throw(  com::sun::star::uno::RuntimeException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::NoSupportException, std::exception ) override;
+            throw(  css::uno::RuntimeException,
+                    css::lang::IllegalArgumentException,
+                    css::lang::NoSupportException, std::exception ) override;
         OUString SAL_CALL
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
-            throw(  com::sun::star::uno::RuntimeException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::NoSupportException, std::exception ) override;
+            throw(  css::uno::RuntimeException,
+                    css::lang::IllegalArgumentException,
+                    css::lang::NoSupportException, std::exception ) override;
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
-            throw(  com::sun::star::uno::RuntimeException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::NoSupportException, std::exception ) override;
+            const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset )
+            throw(  css::uno::RuntimeException,
+                    css::lang::IllegalArgumentException,
+                    css::lang::NoSupportException, std::exception ) override;
         sal_Bool SAL_CALL
-        interactiveConversion( const ::com::sun::star::lang::Locale& aLocale,
+        interactiveConversion( const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
-            throw(  com::sun::star::uno::RuntimeException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::NoSupportException, std::exception ) override;
+            throw(  css::uno::RuntimeException,
+                    css::lang::IllegalArgumentException,
+                    css::lang::NoSupportException, std::exception ) override;
 
     //XServiceInfo
     OUString SAL_CALL
         getImplementationName()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL
         supportsService(const OUString& ServiceName)
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    com::sun::star::uno::Sequence< OUString > SAL_CALL
+            throw( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 private:
-    com::sun::star::lang::Locale aLocale;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedTextConversion > xTC;
-    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
+    css::lang::Locale aLocale;
+    css::uno::Reference < css::i18n::XExtendedTextConversion > xTC;
+    css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    void SAL_CALL getLocaleSpecificTextConversion( const com::sun::star::lang::Locale& rLocale )
-            throw( com::sun::star::lang::NoSupportException );
+    void SAL_CALL getLocaleSpecificTextConversion( const css::lang::Locale& rLocale )
+            throw( css::lang::NoSupportException );
 };
 
 } // i18n

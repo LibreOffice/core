@@ -33,69 +33,70 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class IndexEntrySupplier_Common : public cppu::WeakImplHelper
 <
-    com::sun::star::i18n::XExtendedIndexEntrySupplier,
-    com::sun::star::lang::XServiceInfo
+    css::i18n::XExtendedIndexEntrySupplier,
+    css::lang::XServiceInfo
 >
 {
 public:
-    IndexEntrySupplier_Common( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_Common( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Common();
 
-    virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList()
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual com::sun::star::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
-        const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
+        const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL usePhoneticEntry(
-        const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getPhoneticCandidate( const OUString& IndexEntry,
-        const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
-        const com::sun::star::lang::Locale& rLocale,
+        const css::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
-        const OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
+        const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
-        const com::sun::star::lang::Locale& rLocale2 )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale2 )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-        const com::sun::star::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
-        const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
-    const sal_Char *implementationName;
-    bool usePhonetic;
-    CollatorImpl *collator;
+    const sal_Char *   implementationName;
+    bool               usePhonetic;
+    CollatorImpl*      collator;
+    css::lang::Locale  aLocale;
+    OUString           aAlgorithm;
+
     const OUString& SAL_CALL getEntry( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException);
-    com::sun::star::lang::Locale aLocale;
-    OUString aAlgorithm;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException);
 };
 
 } } } }

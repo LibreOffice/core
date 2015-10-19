@@ -33,62 +33,62 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class DefaultNumberingProvider : public cppu::WeakImplHelper
 <
-    com::sun::star::text::XDefaultNumberingProvider,
-    com::sun::star::text::XNumberingFormatter,
-    com::sun::star::text::XNumberingTypeInfo,
-    com::sun::star::lang::XServiceInfo
+    css::text::XDefaultNumberingProvider,
+    css::text::XNumberingFormatter,
+    css::text::XNumberingTypeInfo,
+    css::lang::XServiceInfo
 >
 {
     void impl_loadTranslit();
 public:
     DefaultNumberingProvider(
-        const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+        const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~DefaultNumberingProvider();
 
     //XDefaultNumberingProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        com::sun::star::container::XIndexAccess > > SAL_CALL
-        getDefaultOutlineNumberings( const com::sun::star::lang::Locale& aLocale )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference<
+        css::container::XIndexAccess > > SAL_CALL
+        getDefaultOutlineNumberings( const css::lang::Locale& aLocale )
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Sequence<
-        com::sun::star::beans::PropertyValue > > SAL_CALL
-        getDefaultContinuousNumberingLevels( const com::sun::star::lang::Locale& aLocale )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence<
+        css::beans::PropertyValue > > SAL_CALL
+        getDefaultContinuousNumberingLevels( const css::lang::Locale& aLocale )
+        throw(css::uno::RuntimeException, std::exception) override;
 
     //XNumberingFormatter
     virtual OUString SAL_CALL makeNumberingString(
-        const com::sun::star::uno::Sequence<
-        com::sun::star::beans::PropertyValue >& aProperties,
-        const com::sun::star::lang::Locale& aLocale )
-        throw(com::sun::star::lang::IllegalArgumentException,
-        com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<
+        css::beans::PropertyValue >& aProperties,
+        const css::lang::Locale& aLocale )
+        throw(css::lang::IllegalArgumentException,
+        css::uno::RuntimeException, std::exception) override;
 
     //XNumberingTypeInfo
-    virtual com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                throw( css::uno::RuntimeException, std::exception ) override;
 private:
-    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
+    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     TransliterationImpl* translit;
     OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception);
     bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 };
 } } } }
 

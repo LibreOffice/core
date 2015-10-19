@@ -80,7 +80,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
 sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
         const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
         const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
-throw (com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     if (xIES.is())
         return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
@@ -109,7 +109,7 @@ bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const O
     return false;
 }
 
-Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
+Reference < css::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
     if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&

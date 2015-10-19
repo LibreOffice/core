@@ -31,24 +31,24 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_asian( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_asian( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_asian();
 
     OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-            const com::sun::star::lang::Locale& rLocale, const OUString& rAlgorithm )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& rLocale, const OUString& rAlgorithm )
+            throw (css::uno::RuntimeException, std::exception) override;
     OUString SAL_CALL getIndexKey( const OUString& rIndexEntry,
-            const OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            const OUString& rPhoneticEntry, const css::lang::Locale& rLocale)
+            throw (css::uno::RuntimeException, std::exception) override;
     sal_Int16 SAL_CALL compareIndexEntry(
             const OUString& rIndexEntry1, const OUString& rPhoneticEntry1,
-            const com::sun::star::lang::Locale& rLocale1,
+            const css::lang::Locale& rLocale1,
             const OUString& rIndexEntry2, const OUString& rPhoneticEntry2,
-            const com::sun::star::lang::Locale& rLocale2 )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& rLocale2 )
+            throw (css::uno::RuntimeException, std::exception) override;
     OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
-            const com::sun::star::lang::Locale& rLocale )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& rLocale )
+            throw (css::uno::RuntimeException, std::exception) override;
 #ifndef DISABLE_DYNLOADING
 private:
     oslModule hModule;
