@@ -20,12 +20,14 @@
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
-    void inhibit( bool bInhibit, bool bIsX11, const rtl::OUString& sReason );
+    void inhibit( bool bInhibit, const rtl::OUString& sReason, bool bIsX11, const boost::optional<guint> xid );
 
 private:
     boost::optional<guint> mnFDOCookie;
+    boost::optional<guint> mnGSMCookie;
 
     void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
+    void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX

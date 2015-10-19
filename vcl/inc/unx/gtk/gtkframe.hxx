@@ -193,7 +193,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
     int                             m_nSavedScreenSaverTimeout;
-    guint                           m_nGSMCookie;
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
