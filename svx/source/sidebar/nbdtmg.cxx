@@ -1385,7 +1385,7 @@ bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     SvxNumRule aTmpRule1(aNum);
     SvxNumRule aTmpRule2(aNum);
     ApplyNumRule(aTmpRule1,nIndex,mLevel,true);
-    ApplyNumRule(aTmpRule2,nIndex,mLevel,false);
+    ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) _pSet->bIsCustomized=false;
     if (_pSet->bIsCustomized) {
         OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION);
@@ -1675,7 +1675,7 @@ bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     SvxNumRule aTmpRule1(aNum);
     SvxNumRule aTmpRule2(aNum);
     ApplyNumRule(aTmpRule1,nIndex,mLevel,true);
-    ApplyNumRule(aTmpRule2,nIndex,mLevel,false);
+    ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) pItemArr->bIsCustomized=false;
     if (pItemArr->bIsCustomized) {
         OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION);

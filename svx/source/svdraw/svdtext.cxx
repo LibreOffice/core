@@ -127,7 +127,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
     if( mpOutlinerParaObject && pOldModel!=NULL && pNewModel!=NULL)
     {
-        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT, true) == SfxItemState::SET;
+        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
 
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());

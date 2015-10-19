@@ -897,7 +897,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
     m_pFileListLB->SetBackground( rStyleSettings.GetDialogColor() );
 
-    m_pNextBtn->Enable(true);
+    m_pNextBtn->Enable();
     m_pNextBtn->SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
 
@@ -973,7 +973,7 @@ short RecoveryDialog::execute()
                  // let the user decide the next step.
                  m_pDescrFT->SetText(m_aRecoveryOnlyFinishDescr);
                  m_pNextBtn->SetText(m_aRecoveryOnlyFinish);
-                 m_pNextBtn->Enable(true);
+                 m_pNextBtn->Enable();
                  m_pCancelBtn->Enable(false);
                  return 0;
              }

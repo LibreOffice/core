@@ -769,7 +769,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,true,&pPoolItem)==SfxItemState::SET) {
         long nAngle=static_cast<const SdrHorzShearAllItem*>(pPoolItem)->GetValue();
-        ShearMarkedObj(aAllSnapRect.Center(),nAngle,false);
+        ShearMarkedObj(aAllSnapRect.Center(),nAngle);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,true,&pPoolItem)==SfxItemState::SET) {
         long nAngle=static_cast<const SdrVertShearAllItem*>(pPoolItem)->GetValue();

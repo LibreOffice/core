@@ -56,13 +56,13 @@ GalleryControl::GalleryControl (
       mbIsInitialResize(true)
 {
     mpBrowser1->SelectTheme(0);
-    mpBrowser1->Show(true);
+    mpBrowser1->Show();
 
-    mpBrowser2->Show(true);
+    mpBrowser2->Show();
 
     mpSplitter->SetHorizontal(false);
     mpSplitter->SetSplitHdl( LINK( this, GalleryControl, SplitHdl ) );
-    mpSplitter->Show( true );
+    mpSplitter->Show();
 
     InitSettings();
 }

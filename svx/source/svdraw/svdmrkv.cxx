@@ -1453,7 +1453,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
         }
     }
     // nothing found, in this case, just select an object
-    if (pTopMarkHit==NULL) return MarkObj(rPnt,sal_uInt16(nTol),false);
+    if (pTopMarkHit==NULL) return MarkObj(rPnt,sal_uInt16(nTol));
 
     SdrObject* pTopObjHit=pTopMarkHit->GetMarkedSdrObj();
     SdrObjList* pObjList=pTopObjHit->GetObjList();

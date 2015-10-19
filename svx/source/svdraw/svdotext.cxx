@@ -1244,7 +1244,7 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
         nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
     rOutl.Init( nOutlinerMode );
 
-    rOutl.SetGlobalCharStretching(100);
+    rOutl.SetGlobalCharStretching();
     EEControlBits nStat=rOutl.GetControlWord();
     nStat &= ~EEControlBits(EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);
     rOutl.SetControlWord(nStat);

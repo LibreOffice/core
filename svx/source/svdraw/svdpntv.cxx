@@ -1072,7 +1072,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {
-            if (pStyleSheet->GetItemSet().GetItemState(nWhich,true)==SfxItemState::SET) {
+            if (pStyleSheet->GetItemSet().GetItemState(nWhich)==SfxItemState::SET) {
                 maDefaultAttr.ClearItem(nWhich);
             }
             nWhich=aIter.NextWhich();

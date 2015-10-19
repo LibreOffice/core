@@ -1328,7 +1328,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
         if (xCursorForm.is())
         {   // wenn wir vom Cursor den Formatter nehmen, dann auch den Key vom Feld, an das wir gebunden sind
-            m_xSupplier = getNumberFormats(getConnection(xCursorForm), false);
+            m_xSupplier = getNumberFormats(getConnection(xCursorForm));
 
             if (m_rColumn.GetField().is())
                 nFormatKey = ::comphelper::getINT32(m_rColumn.GetField()->getPropertyValue(FM_PROP_FORMATKEY));
@@ -2087,7 +2087,7 @@ double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XCol
     {
         // OSL_TRACE("double = %.64f ",fValue);
         fValue = ::rtl::math::pow10Exp(fValue, m_nScale);
-        fValue = ::rtl::math::round(fValue, 0);
+        fValue = ::rtl::math::round(fValue);
     }
     return fValue;
 }
@@ -2142,7 +2142,7 @@ void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
         if ( m_nScale )
         {
             dValue = ::rtl::math::pow10Exp( dValue, m_nScale );
-            dValue = ::rtl::math::round(dValue, 0);
+            dValue = ::rtl::math::round(dValue);
         }
 
         static_cast< LongCurrencyField* >( m_pWindow.get() )->SetValue( dValue );

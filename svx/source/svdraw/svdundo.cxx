@@ -1515,14 +1515,14 @@ void SdrUndoDelPage::Redo()
 OUString SdrUndoDelPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoDelPage,aStr);
     return aStr;
 }
 
 OUString SdrUndoDelPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoDelPage,aStr);
     return aStr;
 }
 
@@ -1554,7 +1554,7 @@ void SdrUndoNewPage::Redo()
 OUString SdrUndoNewPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoNewPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoNewPage,aStr);
     return aStr;
 }
 
@@ -1563,14 +1563,14 @@ OUString SdrUndoNewPage::GetComment() const
 OUString SdrUndoCopyPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoCopPage,aStr);
     return aStr;
 }
 
 OUString SdrUndoCopyPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoCopPage,aStr);
     return aStr;
 }
 
@@ -1599,7 +1599,7 @@ void SdrUndoSetPageNum::Redo()
 OUString SdrUndoSetPageNum::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoMovPage,aStr);
     return aStr;
 }
 
@@ -1642,7 +1642,7 @@ void SdrUndoPageRemoveMasterPage::Redo()
 OUString SdrUndoPageRemoveMasterPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr);
     return aStr;
 }
 
@@ -1686,7 +1686,7 @@ void SdrUndoPageChangeMasterPage::Redo()
 OUString SdrUndoPageChangeMasterPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr,0);
+    ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr);
     return aStr;
 }
 

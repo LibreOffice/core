@@ -1115,7 +1115,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                     }
                     bool bNo=false;
                     if (!IsMirrorAllowed(true,true)) bNo=true; // any mirroring is forbidden
-                    if (!IsMirrorAllowed(false) && !b45) bNo=true; // mirroring freely is forbidden
+                    if (!IsMirrorAllowed() && !b45) bNo=true; // mirroring freely is forbidden
                     if (!IsMirrorAllowed(true) && !b90) bNo=true;  // mirroring horizontally/vertically is allowed
                     if (bNo) return Pointer(PointerStyle::NotAllowed);
                     if (b90) {

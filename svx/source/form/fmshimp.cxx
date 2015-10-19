@@ -1606,7 +1606,7 @@ bool FmXFormShell::GetY2KState(sal_uInt16& n)
     Reference< XRowSet> xDB(xForm, UNO_QUERY);
     DBG_ASSERT(xDB.is(), "FmXFormShell::GetY2KState : current form has no dbform-interface !");
 
-    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getConnection(xDB), false));
+    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getConnection(xDB)));
     if (xSupplier.is())
     {
         Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1637,7 +1637,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     Reference< XRowSet > xActiveRowSet( xActiveForm, UNO_QUERY );
     if ( xActiveRowSet.is() )
     {
-        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xActiveRowSet ), false ) );
+        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xActiveRowSet ) ) );
         if (xSupplier.is())
         {
             Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1677,7 +1677,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
         Reference< XRowSet> xElementAsRowSet( xCurrentElement, UNO_QUERY );
         if ( xElementAsRowSet.is() )
         {
-            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xElementAsRowSet ), false ) );
+            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getConnection( xElementAsRowSet ) ) );
             if (!xSupplier.is())
                 continue;
 

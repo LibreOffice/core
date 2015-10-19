@@ -140,8 +140,8 @@ GalleryBrowser1::GalleryBrowser1(
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
-    maNewTheme->Show( true );
-    mpThemes->Show( true );
+    maNewTheme->Show();
+    mpThemes->Show();
 }
 
 GalleryBrowser1::~GalleryBrowser1()

@@ -1315,7 +1315,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         }
         nModifyFlag = 0;
         const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
-        rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs, 0L );
+        rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs );
     }
     else if ( pBtn == m_pCloseBtn )
     {
@@ -1720,7 +1720,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
     if ( m_pSearchAllBtn == pCtrl &&
          ( SearchOptionFlags::SEARCHALL & nOptions )  )
     {
-        m_pSearchAllBtn->Enable( true );
+        m_pSearchAllBtn->Enable();
         return;
     }
     if ( m_pReplaceBtn == pCtrl && ( SearchOptionFlags::REPLACE & nOptions )  )

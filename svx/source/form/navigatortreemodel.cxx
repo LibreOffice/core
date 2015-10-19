@@ -525,7 +525,7 @@ namespace svxform
 
                 xForms->getByIndex(i) >>= xSubForm;
                 FmFormData* pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
-                Insert( pSubFormData, CONTAINER_APPEND );
+                Insert( pSubFormData );
 
 
                 // new branch, if SubForm contains Subforms itself
@@ -554,7 +554,7 @@ namespace svxform
                 if (xSubForm.is())
                 {   // actual component is a form
                     pSubFormData = new FmFormData(xSubForm, m_aNormalImages, pFormData);
-                    Insert(pSubFormData, CONTAINER_APPEND);
+                    Insert(pSubFormData);
 
 
                     // new branch, if SubForm contains Subforms itself
@@ -563,7 +563,7 @@ namespace svxform
                 else
                 {
                     pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, pFormData);
-                    Insert(pNewControlData, CONTAINER_APPEND);
+                    Insert(pNewControlData);
                 }
             }
         }
@@ -602,7 +602,7 @@ namespace svxform
         if( !pParentData )
         {
             pParentData = new FmFormData( xForm, m_aNormalImages, NULL );
-            Insert( pParentData, CONTAINER_APPEND );
+            Insert( pParentData );
         }
 
         if (!FindData(xComp, pParentData->GetChildList(),false))

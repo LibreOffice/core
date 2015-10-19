@@ -1297,14 +1297,14 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
         if (m_nOptions & OPT_INSERT)
         {   // the insert option is to be set
             m_xEmptyRow = new DbGridRow();
-            RowInserted(GetRowCount(), 1, true);
+            RowInserted(GetRowCount());
         }
         else
         {   // the insert option is to be reset
             m_xEmptyRow = NULL;
             if ((GetCurRow() == GetRowCount() - 1) && (GetCurRow() > 0))
                 GoToRowColumnId(GetCurRow() - 1, GetCurColumnId());
-            RowRemoved(GetRowCount(), 1);
+            RowRemoved(GetRowCount());
         }
     }
 
@@ -1952,7 +1952,7 @@ void DbGridControl::AdjustRows()
             m_aBar->InvalidateAll(m_nCurrentPos, true);
         }
         else  // too few
-            RowInserted(GetRowCount(), -nDelta, true);
+            RowInserted(GetRowCount(), -nDelta);
     }
 
     if (m_bRecordCountFinal && m_nTotalCount < 0)
@@ -2614,7 +2614,7 @@ void DbGridControl::SetFilterMode(bool bMode)
             }
 
             // one row for filtering
-            RowInserted(0, 1, true);
+            RowInserted(0);
             SetUpdateMode(true);
         }
         else
@@ -2717,7 +2717,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 // -> we've to add a new grid row
                 if ((nRecordCount == GetRowCount() - 1)  && m_xCurrentRow->IsNew())
                 {
-                    RowInserted(GetRowCount(), 1, true);
+                    RowInserted(GetRowCount());
                     InvalidateStatusCell(m_nCurrentPos);
                     m_aBar->InvalidateAll(m_nCurrentPos);
                 }
@@ -2729,7 +2729,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 // one is about to be cleaned, too, the second one is obsolete now.
                 if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
                 {
-                    RowRemoved(GetRowCount() - 1, 1);
+                    RowRemoved(GetRowCount() - 1);
                     InvalidateStatusCell(m_nCurrentPos);
                     m_aBar->InvalidateAll(m_nCurrentPos);
                 }
@@ -2937,7 +2937,7 @@ void DbGridControl::CellModified()
             if (m_nCurrentPos == GetRowCount() - 1)
             {
                 // increment RowCount
-                RowInserted(GetRowCount(), 1, true);
+                RowInserted(GetRowCount());
                 InvalidateStatusCell(m_nCurrentPos);
                 m_aBar->InvalidateAll(m_nCurrentPos);
             }
@@ -3021,7 +3021,7 @@ void DbGridControl::Undo()
             if (m_nCurrentPos == GetRowCount() - 2)
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
                 // caused our data source form to be reset - which should be the usual case ....)
-                RowRemoved(GetRowCount() - 1, 1);
+                RowRemoved(GetRowCount() - 1);
                 m_aBar->InvalidateAll(m_nCurrentPos);
             }
 
@@ -3048,7 +3048,7 @@ void DbGridControl::resetCurrentRow()
             {
                 if (m_nCurrentPos == GetRowCount() - 2)
                 {
-                    RowRemoved(GetRowCount() - 1, 1);
+                    RowRemoved(GetRowCount() - 1);
                     m_aBar->InvalidateAll(m_nCurrentPos);
                 }
             }

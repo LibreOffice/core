@@ -1250,7 +1250,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         if ( !xField.is() )
             return NULL;
 
-        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, false ), UNO_SET_THROW );
+        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection ), UNO_SET_THROW );
         Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
 
         OUString sLabelPostfix;

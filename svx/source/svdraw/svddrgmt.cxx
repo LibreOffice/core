@@ -1068,7 +1068,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
             if (getSdrDragView().IsMirrorAllowed(true,true))
             { // limited
-                if (!getSdrDragView().IsMirrorAllowed(false)) nSA=4500;
+                if (!getSdrDragView().IsMirrorAllowed()) nSA=4500;
                 if (!getSdrDragView().IsMirrorAllowed(true)) nSA=9000;
             }
 
@@ -2581,7 +2581,7 @@ bool SdrDragMirror::BeginSdrDrag()
         bool b45=b90 || (std::abs(aDif.X()) == std::abs(aDif.Y()));
         nAngle=NormAngle360(GetAngle(aDif));
 
-        if (!getSdrDragView().IsMirrorAllowed(false) && !b45)
+        if (!getSdrDragView().IsMirrorAllowed() && !b45)
             return false; // free choice of axis angle not allowed
 
         if (!getSdrDragView().IsMirrorAllowed() && !b90)
