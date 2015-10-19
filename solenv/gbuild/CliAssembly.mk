@@ -55,13 +55,15 @@ gb_CliAssemblyTarget_KEYFILE_DEFAULT := $(SRCDIR)/cli_ure/source/cliuno.snk
 define gb_CliAssemblyTarget__command
 $(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
+	$(GNUCOPY) $(CLI_ASSEMBLY_KEYFILE) $(1).tmp.snk && \
 	al \
 		-nologo \
 		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
-		-keyfile:$(CLI_ASSEMBLY_KEYFILE) \
+		-keyfile:$(1).tmp.snk \
 		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
+	rm -f $(1).tmp/snk && \
 	touch $(1) \
 )
 endef
