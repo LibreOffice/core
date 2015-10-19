@@ -37,23 +37,23 @@ namespace connectivity
     //= OConnectionWrapper - wraps all methods to the real connection from the driver
     //= but when disposed it doesn't dispose the real connection
 
-    typedef ::cppu::ImplHelper2<        ::com::sun::star::lang::XServiceInfo,
-                                        ::com::sun::star::lang::XUnoTunnel
+    typedef ::cppu::ImplHelper2<        css::lang::XServiceInfo,
+                                        css::lang::XUnoTunnel
                                 > OConnection_BASE;
 
     class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper :     public OConnection_BASE
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > m_xProxyConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > m_xTypeProvider;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > m_xUnoTunnel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo > m_xServiceInfo;
+        css::uno::Reference< css::uno::XAggregation >   m_xProxyConnection;
+        css::uno::Reference< css::sdbc::XConnection >   m_xConnection;
+        css::uno::Reference< css::lang::XTypeProvider > m_xTypeProvider;
+        css::uno::Reference< css::lang::XUnoTunnel >    m_xUnoTunnel;
+        css::uno::Reference< css::lang::XServiceInfo >  m_xServiceInfo;
 
         virtual ~OConnectionWrapper();
-        void setDelegation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
-        void setDelegation(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
+        void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
+        void setDelegation(const css::uno::Reference< css::sdbc::XConnection >& _xConnection
+            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext
             ,oslInterlockedCount& _rRefCount);
         // must be called from derived classes
         void disposing();
@@ -62,12 +62,12 @@ namespace connectivity
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-        // com::sun::star::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        // css::lang::XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
         /** method to create unique ids
             @param  _rURL
                 The URL.
@@ -81,7 +81,7 @@ namespace connectivity
                 The password.
         */
         static void createUniqueId( const OUString& _rURL
-                    ,::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo
+                    ,css::uno::Sequence< css::beans::PropertyValue >& _rInfo
                     ,sal_uInt8* _pBuffer
                     ,const OUString& _rUserName = OUString()
                     ,const OUString& _rPassword = OUString());

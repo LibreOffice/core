@@ -37,8 +37,8 @@ namespace connectivity
     namespace sdbcx
     {
 
-        typedef ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,
-                                        ::com::sun::star::container::XNamed> OView_BASE;
+        typedef ::cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                        css::container::XNamed> OView_BASE;
 
 
 
@@ -54,7 +54,7 @@ namespace connectivity
             OUString m_Command;
             sal_Int32       m_CheckOption;
             // need for the getName method
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
@@ -64,10 +64,10 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OView(bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
+            OView(bool _bCase,const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);
             OView(  bool _bCase,
                     const OUString& _rName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
                     sal_Int32 _nCheckOption = 0,
                     const OUString& _rCommand = OUString(),
                     const OUString& _rSchemaName = OUString(),
@@ -78,16 +78,16 @@ namespace connectivity
             virtual void construct() override;
 
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
             // XNamed
-            virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getName(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setName( const OUString& ) throw(css::uno::RuntimeException, std::exception) override;
         };
     }
 }

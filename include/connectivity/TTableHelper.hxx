@@ -73,7 +73,7 @@ namespace connectivity
     };
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-    OOO_DLLPUBLIC_DBTOOLS OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
+    OOO_DLLPUBLIC_DBTOOLS OUString getTypeString(const css::uno::Reference< css::beans::XPropertySet >& xColProp);
 
     typedef std::map<OUString, sdbcx::TKeyProperties> TKeyMap;
 
@@ -126,10 +126,10 @@ namespace connectivity
 
     public:
         OTableHelper(   sdbcx::OCollection* _pTables,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                         bool _bCase);
         OTableHelper(   sdbcx::OCollection* _pTables,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                         bool _bCase,
                         const OUString& _Name,
                         const OUString& _Type,
@@ -138,19 +138,19 @@ namespace connectivity
                         const OUString& _CatalogName = OUString()
             );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const override;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
+        css::uno::Reference< css::sdbc::XConnection> getConnection() const;
 
         virtual void SAL_CALL acquire() throw() override;
         virtual void SAL_CALL release() throw() override;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
 
         // XAlterTable
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
         // XNamed
-        virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
 
         // helper method to get key properties
         sdbcx::TKeyProperties getKeyProperties(const OUString& _sName) const;
@@ -158,10 +158,10 @@ namespace connectivity
 
         virtual OUString getTypeCreatePattern() const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableRename>      getRenameService() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableAlteration>  getAlterService() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    getKeyService() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  getIndexService() const;
+        css::uno::Reference< css::sdb::tools::XTableRename>      getRenameService() const;
+        css::uno::Reference< css::sdb::tools::XTableAlteration>  getAlterService() const;
+        css::uno::Reference< css::sdb::tools::XKeyAlteration>    getKeyService() const;
+        css::uno::Reference< css::sdb::tools::XIndexAlteration>  getIndexService() const;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX

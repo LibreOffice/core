@@ -25,17 +25,17 @@
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS BlobHelper : public ::cppu::WeakImplHelper< com::sun::star::sdbc::XBlob >
+    class OOO_DLLPUBLIC_DBTOOLS BlobHelper : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
     {
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_aValue;
+        css::uno::Sequence< sal_Int8 > m_aValue;
     public:
-        BlobHelper(const ::com::sun::star::uno::Sequence< sal_Int8 >& _val);
+        BlobHelper(const css::uno::Sequence< sal_Int8 >& _val);
     private:
-        virtual ::sal_Int64 SAL_CALL length(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getBinaryStream(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL position( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& pattern, ::sal_Int64 start ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL length(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL position( const css::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& pattern, ::sal_Int64 start ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
     };
 }
 

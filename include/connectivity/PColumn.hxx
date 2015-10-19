@@ -57,7 +57,7 @@ namespace connectivity
 
             virtual ~OParseColumn();
         public:
-            OParseColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, bool _bCase);
+            OParseColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
             OParseColumn(const OUString& _Name,
                     const OUString& _TypeName,
                     const OUString& _DefaultValue,
@@ -87,9 +87,9 @@ namespace connectivity
             */
             static ::rtl::Reference< OSQLColumns >
                 createColumnsForResultSet(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns
+                    const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                    const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns
                 );
 
             typedef std::map<OUString, int> StringMap;
@@ -98,8 +98,8 @@ namespace connectivity
             */
             static OParseColumn*
                 createColumnForResultSet(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                    const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
                     sal_Int32 _nColumnPos,
                     StringMap& _rColumns
                 );
@@ -125,21 +125,21 @@ namespace connectivity
             virtual ~OOrderColumn();
         public:
             OOrderColumn(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
                 const OUString& i_rOriginatingTableName,
                 bool _bCase,
                 bool _bAscending
             );
 
             OOrderColumn(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
                 bool _bCase,
                 bool _bAscending
             );
 
             virtual void construct() override;
 
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

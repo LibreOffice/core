@@ -45,12 +45,12 @@ namespace connectivity
     class DriversConfigImpl
     {
         mutable ::utl::OConfigurationTreeRoot   m_aInstalled;
-        mutable TInstalledDrivers       m_aDrivers;
-        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB) const;
+        mutable TInstalledDrivers               m_aDrivers;
+        void Load(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const;
     public:
         DriversConfigImpl();
 
-        const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
+        const TInstalledDrivers& getInstalledDrivers(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
     };
 
     // Allows to access all driver which are located in the configuration
@@ -61,7 +61,7 @@ namespace connectivity
 
         const ::comphelper::NamedValueCollection& impl_get(const OUString& _sURL,sal_Int32 _nProps) const;
     public:
-        DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        DriversConfig(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         ~DriversConfig();
 
         DriversConfig( const DriversConfig& );
@@ -72,10 +72,10 @@ namespace connectivity
         const ::comphelper::NamedValueCollection& getProperties(const OUString& _sURL) const;
         const ::comphelper::NamedValueCollection& getFeatures(const OUString& _sURL) const;
         const ::comphelper::NamedValueCollection& getMetaData(const OUString& _sURL) const;
-        ::com::sun::star::uno::Sequence< OUString > getURLs() const;
+        css::uno::Sequence< OUString > getURLs() const;
     private:
-        OSharedConfigNode   m_aNode;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xORB;
+        OSharedConfigNode                                  m_aNode;
+        css::uno::Reference< css::uno::XComponentContext > m_xORB;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX

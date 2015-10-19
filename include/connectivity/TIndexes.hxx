@@ -32,9 +32,9 @@ namespace connectivity
         OTableHelper*   m_pTable;
     protected:
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
-        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) override;
+        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
     public:
         OIndexesHelper(OTableHelper* _pTable,

@@ -42,7 +42,7 @@ namespace dbtools
 {
 
 
-    typedef ::utl::SharedUNOComponent< ::com::sun::star::sdb::XSingleSelectQueryComposer, ::utl::DisposableComponent >
+    typedef ::utl::SharedUNOComponent< css::sdb::XSingleSelectQueryComposer, ::utl::DisposableComponent >
             SharedQueryComposer;
 
 
@@ -75,7 +75,7 @@ namespace dbtools
             /// the type of the parameter
             ParameterClassification     eType;
             /// the column object for this parameter, as returned by the query composer
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            css::uno::Reference< css::beans::XPropertySet >
                                         xComposerColumn;
             /// the indices of inner parameters which need to be filled when this concrete parameter is set
             ::std::vector< sal_Int32 >  aInnerIndexes;
@@ -87,7 +87,7 @@ namespace dbtools
             }
 
             /// ctor with composer column
-            ParameterMetaData( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
+            ParameterMetaData( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
                 :eType           ( eFilledExternally )
                 ,xComposerColumn ( _rxColumn         )
             {
@@ -100,18 +100,18 @@ namespace dbtools
         ::osl::Mutex&                       m_rMutex;
         ::cppu::OInterfaceContainerHelper   m_aParameterListeners;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                             m_xContext;
 
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::beans::XPropertySet >
+        css::uno::WeakReference< css::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
+        css::uno::Reference< css::uno::XAggregation >
                                             m_xAggregatedRowSet;    // the aggregated row set - necessary for unwrapped access to some interfaces
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >
+        css::uno::Reference< css::sdbc::XParameters >
                                             m_xInnerParamUpdate;    // write access to the inner parameters
         SharedQueryComposer                 m_xComposer;            // query composer wrapping the statement which the *aggregate* is based on
         SharedQueryComposer                 m_xParentComposer;      // query composer wrapping the statement of our parent database component
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
+        css::uno::Reference< css::container::XIndexAccess >
                                             m_xInnerParamColumns;   // index access to the parameter columns, as got from the query composer
 
         ::dbtools::param::ParametersContainerRef
@@ -121,12 +121,12 @@ namespace dbtools
 
         ParameterInformation                m_aParameterInformation;
 
-        ::com::sun::star::uno::Sequence< OUString >  m_aMasterFields;
-        ::com::sun::star::uno::Sequence< OUString >  m_aDetailFields;
+        css::uno::Sequence< OUString >      m_aMasterFields;
+        css::uno::Sequence< OUString >      m_aDetailFields;
 
-        OUString                     m_sIdentifierQuoteString;
-        OUString                     m_sSpecialCharacters;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
+        OUString                            m_sIdentifierQuoteString;
+        OUString                            m_sSpecialCharacters;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
 
         ::std::vector< bool >               m_aParametersVisited;
 
@@ -137,13 +137,13 @@ namespace dbtools
         */
         explicit ParameterManager(
             ::osl::Mutex& _rMutex,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         /// late ctor
         void    initialize(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxComponentAggregate
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxComponent,
+                    const css::uno::Reference< css::uno::XAggregation >& _rxComponentAggregate
                 );
 
         /// makes the object forgetting the references to the database component
@@ -177,7 +177,7 @@ namespace dbtools
                 <TRUE/> if and only if the parameter filling has <em>not</em> been cancelled by the user
         */
         bool    fillParameterValues(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler,
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
                     ::osl::ResettableMutexGuard& _rClearForNotifies
                 );
 
@@ -202,13 +202,13 @@ namespace dbtools
         /** adds the given listener to the list of parameter listeners
         */
         void    addParameterListener(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& _rxListener
+                    const css::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
                 );
 
         /** removes the given listener from the list of parameter listeners
         */
         void    removeParameterListener(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& _rxListener
+                    const css::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
                 );
 
         // XParameters equivalents
@@ -222,18 +222,18 @@ namespace dbtools
         void setFloat           ( sal_Int32 _nIndex, float x);
         void setDouble          ( sal_Int32 _nIndex, double x);
         void setString          ( sal_Int32 _nIndex, const OUString& x);
-        void setBytes           ( sal_Int32 _nIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x);
-        void setDate            ( sal_Int32 _nIndex, const ::com::sun::star::util::Date& x);
-        void setTime            ( sal_Int32 _nIndex, const ::com::sun::star::util::Time& x);
-        void setTimestamp       ( sal_Int32 _nIndex, const ::com::sun::star::util::DateTime& x);
-        void setBinaryStream    ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length);
-        void setCharacterStream ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length);
-        void setObject          ( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x);
-        void setObjectWithInfo  ( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale);
-        void setRef             ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef>& x);
-        void setBlob            ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>& x);
-        void setClob            ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob>& x);
-        void setArray           ( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray>& x);
+        void setBytes           ( sal_Int32 _nIndex, const css::uno::Sequence< sal_Int8 >& x);
+        void setDate            ( sal_Int32 _nIndex, const css::util::Date& x);
+        void setTime            ( sal_Int32 _nIndex, const css::util::Time& x);
+        void setTimestamp       ( sal_Int32 _nIndex, const css::util::DateTime& x);
+        void setBinaryStream    ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
+        void setCharacterStream ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
+        void setObject          ( sal_Int32 _nIndex, const css::uno::Any& x);
+        void setObjectWithInfo  ( sal_Int32 _nIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale);
+        void setRef             ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x);
+        void setBlob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x);
+        void setClob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x);
+        void setArray           ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XArray>& x);
         void clearParameters();
 
     private:
@@ -245,7 +245,7 @@ namespace dbtools
         OUString
                 createFilterConditionFromColumnLink(
                     const OUString& /* [in]  */ _rMasterColumn,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /* [in]  */ xDetailColumn,
+                    const css::uno::Reference< css::beans::XPropertySet >& /* [in]  */ xDetailColumn,
                           OUString& /* [out] */ _rNewParamName
                 );
 
@@ -261,7 +261,7 @@ namespace dbtools
                 inner parameters
         */
         bool    initializeComposerByComponent(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponent
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxComponent
                 );
 
         /** collects initial meta information about inner parameters (i.e. it initially fills
@@ -306,8 +306,8 @@ namespace dbtools
                 <member>m_aMasterFields</member> and <member>m_aDetailFields</member> have the same length
         */
         void    classifyLinks(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentColumns,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
+                    const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns,
+                    const css::uno::Reference< css::container::XNameAccess >& _rxColumns,
                     ::std::vector< OUString >& _out_rAdditionalFilterComponents
                 );
 
@@ -330,7 +330,7 @@ namespace dbtools
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
         */
         void    fillLinkedParameters(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentColumns
+                    const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns
                 );
 
         /** completes all missing parameters via an interaction handler
@@ -342,8 +342,8 @@ namespace dbtools
                 <TRUE/> if and only if the parameter filling has <em>not</em> been cancelled by the user
         */
         bool    completeParameters(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
+                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
                 );
 
         /** asks the parameter listeners to fill in final values
@@ -369,7 +369,7 @@ namespace dbtools
                 <TRUE/> if and only if the columns could be successfully retrieved
         */
         bool    getParentColumns(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _out_rxParentColumns,
+                    css::uno::Reference< css::container::XNameAccess >& /* [out] */ _out_rxParentColumns,
                     bool _bFromComposer
                 );
 
@@ -381,14 +381,14 @@ namespace dbtools
                 <TRUE/> if and only if the columns could be successfully retrieved
         */
         bool    getColumns(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _rxColumns,
+                    css::uno::Reference< css::container::XNameAccess >& /* [out] */ _rxColumns,
                     bool _bFromComposer
                 );
 
         /** retrieves the active connection of the database component
         */
         bool    getConnection(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& /* [out] */ _rxConnection
+                    css::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
                 );
 
         /** caches some info about the connection of our database component

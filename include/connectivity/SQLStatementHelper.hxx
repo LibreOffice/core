@@ -28,7 +28,7 @@ namespace dbtools
     class OOO_DLLPUBLIC_DBTOOLS ISQLStatementHelper
     {
     public:
-        virtual void addComment(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut) = 0;
+        virtual void addComment(const css::uno::Reference< css::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut) = 0;
 
     protected:
         ~ISQLStatementHelper() {}

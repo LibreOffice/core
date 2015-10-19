@@ -57,10 +57,10 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator
     {
     private:
-        ::com::sun::star::sdbc::SQLException            m_aErrors;          // conatins the error while iterating through the statement
-        const OSQLParseNode*                            m_pParseTree;       // current ParseTree
-        const OSQLParser&                               m_rParser;          // if set used for general error messages from the context
-        OSQLStatementType                               m_eStatementType;
+        css::sdbc::SQLException                             m_aErrors;          // conatins the error while iterating through the statement
+        const OSQLParseNode*                                m_pParseTree;       // current ParseTree
+        const OSQLParser&                                   m_rParser;          // if set used for general error messages from the context
+        OSQLStatementType                                   m_eStatementType;
         ::rtl::Reference<OSQLColumns>                       m_aSelectColumns;   // all columns from the Select clause
         ::rtl::Reference<OSQLColumns>                       m_aParameters;      // all parameters
         ::rtl::Reference<OSQLColumns>                       m_aGroupColumns;    // the group by columns
@@ -95,7 +95,7 @@ namespace connectivity
             @return
                 the desired column object, or <NULL/> if no such column could be found
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
+        static css::uno::Reference< css::beans::XPropertySet > findColumn(
             const OSQLTables& _rTables, const OUString & rColumnName, OUString & rTableRange );
 
         /** finds a column with a given name, belonging to a given table
@@ -108,7 +108,7 @@ namespace connectivity
                 should be searched
             @return
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
+        css::uno::Reference< css::beans::XPropertySet > findColumn(
             const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables );
 
         /** finds a column with a given name among the select columns
@@ -116,11 +116,11 @@ namespace connectivity
                 the column name to look for
             @return
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findSelectColumn(
+        css::uno::Reference< css::beans::XPropertySet > findSelectColumn(
             const OUString & rColumnName );
 
       protected:
-        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR, bool bAggFkt=false);
+        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
         void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
@@ -133,8 +133,8 @@ namespace connectivity
 
       public:
         OSQLParseTreeIterator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxTables,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::container::XNameAccess >& _rxTables,
             const OSQLParser& _rParser,
             const OSQLParseNode* pRoot = NULL );
         ~OSQLParseTreeIterator();
@@ -171,7 +171,7 @@ namespace connectivity
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
-        inline const ::com::sun::star::sdbc::SQLException&   getErrors() const { return m_aErrors; }
+        inline const css::sdbc::SQLException&   getErrors() const { return m_aErrors; }
         inline bool hasErrors() const { return !m_aErrors.Message.isEmpty(); }
 
         // statement type (already set in setParseTree):
@@ -266,7 +266,7 @@ namespace connectivity
                 The table range to be set.
         */
         static void getColumnRange( const OSQLParseNode* _pColumnRef,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                                     OUString &_rColumnName,
                                     OUString& _rTableRange);
 
@@ -349,13 +349,13 @@ namespace connectivity
 
         /** appends an SQLException corresponding to the given error code to our error collection
         */
-        void impl_appendError( const ::com::sun::star::sdbc::SQLException& _rError );
+        void impl_appendError( const css::sdbc::SQLException& _rError );
 
         /** resets our errors
         */
         inline void impl_resetErrors()
         {
-            m_aErrors = ::com::sun::star::sdbc::SQLException();
+            m_aErrors = css::sdbc::SQLException();
         }
         void impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition);
     };

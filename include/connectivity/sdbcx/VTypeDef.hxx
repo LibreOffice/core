@@ -29,9 +29,9 @@ namespace connectivity
 {
     namespace sdbcx
     {
-        typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::sdbcx::XColumnsSupplier,
-                                                  ::com::sun::star::container::XNamed,
-                                                  ::com::sun::star::lang::XServiceInfo> ODescriptor_BASE;
+        typedef ::cppu::WeakComponentImplHelper3< css::sdbcx::XColumnsSupplier,
+                                                  css::container::XNamed,
+                                                  css::lang::XServiceInfo> ODescriptor_BASE;
     }
 }
 

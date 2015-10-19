@@ -31,8 +31,8 @@ namespace connectivity
         OTableKeyHelper* m_pKey;
     protected:
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
     public:
         OKeyColumnsHelper(  OTableKeyHelper* _pKey,
                         ::osl::Mutex& _rMutex,

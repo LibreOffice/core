@@ -78,7 +78,7 @@ namespace connectivity
 
     public:
         ORowSetValue()
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
+            :m_eTypeKind(css::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -88,7 +88,7 @@ namespace connectivity
         }
 
         ORowSetValue(const ORowSetValue& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
+            :m_eTypeKind(css::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -99,7 +99,7 @@ namespace connectivity
         }
 
         ORowSetValue(const OUString& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
+            :m_eTypeKind(css::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -110,7 +110,7 @@ namespace connectivity
         }
 
         ORowSetValue(const double& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::DOUBLE)
+            :m_eTypeKind(css::sdbc::DataType::DOUBLE)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -121,7 +121,7 @@ namespace connectivity
         }
 
         ORowSetValue(const float& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::FLOAT)
+            :m_eTypeKind(css::sdbc::DataType::FLOAT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -132,7 +132,7 @@ namespace connectivity
         }
 
         ORowSetValue(const sal_Int8& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
+            :m_eTypeKind(css::sdbc::DataType::TINYINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -143,7 +143,7 @@ namespace connectivity
         }
 
         ORowSetValue(const sal_uInt8& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
+            :m_eTypeKind(css::sdbc::DataType::TINYINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -153,7 +153,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int16& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
+            :m_eTypeKind(css::sdbc::DataType::SMALLINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -163,7 +163,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt16& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
+            :m_eTypeKind(css::sdbc::DataType::SMALLINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -173,7 +173,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int32& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
+            :m_eTypeKind(css::sdbc::DataType::INTEGER)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -183,7 +183,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt32& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
+            :m_eTypeKind(css::sdbc::DataType::INTEGER)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -193,7 +193,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int64& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
+            :m_eTypeKind(css::sdbc::DataType::BIGINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -203,7 +203,7 @@ namespace connectivity
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt64& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
+            :m_eTypeKind(css::sdbc::DataType::BIGINT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -214,7 +214,7 @@ namespace connectivity
         }
 
         ORowSetValue(const bool& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
+            :m_eTypeKind(css::sdbc::DataType::BIT)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -224,8 +224,8 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::Date& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::DATE)
+        ORowSetValue(const css::util::Date& _rRH)
+            :m_eTypeKind(css::sdbc::DataType::DATE)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -235,8 +235,8 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::Time& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::TIME)
+        ORowSetValue(const css::util::Time& _rRH)
+            :m_eTypeKind(css::sdbc::DataType::TIME)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -246,8 +246,8 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::util::DateTime& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::TIMESTAMP)
+        ORowSetValue(const css::util::DateTime& _rRH)
+            :m_eTypeKind(css::sdbc::DataType::TIMESTAMP)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -257,8 +257,8 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH)
-            :m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARBINARY)
+        ORowSetValue(const css::uno::Sequence<sal_Int8>& _rRH)
+            :m_eTypeKind(css::sdbc::DataType::LONGVARBINARY)
             ,m_bNull(true)
             ,m_bBound(true)
             ,m_bModified(false)
@@ -306,15 +306,15 @@ namespace connectivity
         ORowSetValue& operator=(const float& _rRH);
 
         // ADT's
-        ORowSetValue& operator=(const ::com::sun::star::util::Date& _rRH);
-        ORowSetValue& operator=(const ::com::sun::star::util::Time& _rRH);
-        ORowSetValue& operator=(const ::com::sun::star::util::DateTime& _rRH);
+        ORowSetValue& operator=(const css::util::Date& _rRH);
+        ORowSetValue& operator=(const css::util::Time& _rRH);
+        ORowSetValue& operator=(const css::util::DateTime& _rRH);
 
         ORowSetValue& operator=(const OUString& _rRH);
         // the type isn't set it will be set to VARCHAR if the type is different change it
-        ORowSetValue& operator=(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH);
+        ORowSetValue& operator=(const css::uno::Sequence<sal_Int8>& _rRH);
         // we the possibility to save a any for bookmarks
-        ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
+        ORowSetValue& operator=(const css::uno::Any& _rAny);
 
         operator bool() const   {   return !isNull() && getBool();    }
         operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8();   }
@@ -337,24 +337,24 @@ namespace connectivity
             return isNull() ? OUString() : getString();
         }
 
-        operator ::com::sun::star::util::Date() const
+        operator css::util::Date() const
         {
-            return isNull() ? ::com::sun::star::util::Date() : getDate();
+            return isNull() ? css::util::Date() : getDate();
         }
 
-        operator ::com::sun::star::util::Time() const
+        operator css::util::Time() const
         {
-            return isNull() ? ::com::sun::star::util::Time() : getTime();
+            return isNull() ? css::util::Time() : getTime();
         }
 
-        operator ::com::sun::star::util::DateTime() const
+        operator css::util::DateTime() const
         {
-            return isNull() ? ::com::sun::star::util::DateTime() : getDateTime();
+            return isNull() ? css::util::DateTime() : getDateTime();
         }
 
-        operator ::com::sun::star::uno::Sequence<sal_Int8>() const
+        operator css::uno::Sequence<sal_Int8>() const
         {
-            return isNull() ? ::com::sun::star::uno::Sequence<sal_Int8>() : getSequence();
+            return isNull() ? css::uno::Sequence<sal_Int8>() : getSequence();
         }
 
         bool operator==(const ORowSetValue& _rRH) const;
@@ -405,13 +405,13 @@ namespace connectivity
         float           getFloat()  const;
 
         OUString getString() const;      // makes a automatic conversion if type isn't a string
-        ::com::sun::star::util::Date                getDate()       const;
-        ::com::sun::star::util::Time                getTime()       const;
-        ::com::sun::star::util::DateTime            getDateTime()   const;
-        ::com::sun::star::uno::Sequence<sal_Int8>   getSequence()   const;
+        css::util::Date                getDate()       const;
+        css::util::Time                getTime()       const;
+        css::util::DateTime            getDateTime()   const;
+        css::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
-        ::com::sun::star::uno::Any                  getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
-        ::com::sun::star::uno::Any                  makeAny()       const;
+        css::uno::Any                  getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
+        css::uno::Any                  makeAny()       const;
 
         /**
             fetches a single value out of the row
@@ -421,7 +421,7 @@ namespace connectivity
         */
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
+                  const css::uno::Reference< css::sdbc::XRow>& _xRow);
 
         /**
             fetches a single value out of the row
@@ -433,12 +433,12 @@ namespace connectivity
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
                   bool      _bNullable,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
+                  const css::uno::Reference< css::sdbc::XRow>& _xRow);
 
-        void fill(const ::com::sun::star::uno::Any& _rValue);
+        void fill(const css::uno::Any& _rValue);
 
         void fill( const sal_Int32 _nType,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn );
+                   const css::uno::Reference< css::sdb::XColumn >& _rxColumn );
 
     private:
         void impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource );

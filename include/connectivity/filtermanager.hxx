@@ -69,7 +69,7 @@ namespace dbtools
         };
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                             m_xComponentAggregate;
         ::std::vector< OUString >           m_aFilterComponents;
         bool                                m_bApplyPublicFilter;
@@ -79,7 +79,7 @@ namespace dbtools
         explicit FilterManager();
 
         /// late ctor
-        void    initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponentAggregate );
+        void    initialize(const css::uno::Reference< css::beans::XPropertySet >& _rxComponentAggregate );
 
         /// makes the object forgetting the references to the database component
         void    dispose( );

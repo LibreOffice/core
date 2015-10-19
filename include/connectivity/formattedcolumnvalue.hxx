@@ -53,9 +53,9 @@ namespace dbtools
             examining its <code>ActiveConnection</code>.
         */
         FormattedColumnValue(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );
 
         /** constructs an instance
@@ -67,8 +67,8 @@ namespace dbtools
             The locale of this fallback format is the current system locale.
         */
         FormattedColumnValue(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& i_rNumberFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rColumn
+            const css::uno::Reference< css::util::XNumberFormatter >& i_rNumberFormatter,
+            const css::uno::Reference< css::beans::XPropertySet >& i_rColumn
         );
 
         // note that all methods of this class need to be virtual, since it's
@@ -80,7 +80,7 @@ namespace dbtools
 
         // access to the details of the formatting we determined
         sal_Int16   getKeyType() const;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >&
+        const css::uno::Reference< css::sdb::XColumn >&
                     getColumn() const;
 
         bool        setFormattedValue( const OUString& _rFormattedStringValue ) const;

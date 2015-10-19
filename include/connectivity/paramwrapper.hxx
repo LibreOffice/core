@@ -66,13 +66,13 @@ namespace param
         ::std::vector< sal_Int32 >      m_aIndexes;
 
         /// the "delegator" column to which standard property requests are forwarded
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDelegator;
+        css::uno::Reference< css::beans::XPropertySet >       m_xDelegator;
         /// the property set info for our delegator
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDelegatorPSI;
+        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDelegatorPSI;
         /// the component taking the value
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >         m_xValueDestination;
+        css::uno::Reference< css::sdbc::XParameters >         m_xValueDestination;
         /// helper for implementing XPropertySetInfo
-        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >                               m_pInfoHelper;
+        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >     m_pInfoHelper;
 
 
     public:
@@ -81,28 +81,28 @@ namespace param
 
     public:
         ParameterWrapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );
 
         ParameterWrapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >& _rxAllParameters,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
+            const css::uno::Reference< css::sdbc::XParameters >& _rxAllParameters,
             const ::std::vector< sal_Int32 >& _rIndexes
         );
 
         DECLARE_XINTERFACE()
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( css::uno::RuntimeException, std::exception ) override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw( ::com::sun::star::lang::IllegalArgumentException ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw( ::com::sun::star::uno::Exception, std::exception ) override;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) throw( css::lang::IllegalArgumentException ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw( css::uno::Exception, std::exception ) override;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // pseudo-XComponent
         void SAL_CALL dispose();
@@ -128,8 +128,8 @@ namespace param
 
     //= ParameterWrapperContainer
 
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::container::XIndexAccess
-                                               ,   ::com::sun::star::container::XEnumerationAccess
+    typedef ::cppu::WeakComponentImplHelper    <   css::container::XIndexAccess
+                                               ,   css::container::XEnumerationAccess
                                                >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
@@ -153,18 +153,18 @@ namespace param
             Note that here, the simple constructor of the ParameterWrapper will be used, which does not
             use a XParameters instance to forward values to, but only remembers the values itself.
         */
-        ParameterWrapperContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
+        ParameterWrapperContainer( const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
 
-        // ::com::sun::star::container::XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL hasElements() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::container::XElementAccess
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) override;
 
-        // ::com::sun::star::container::XEnumerationAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::container::XEnumerationAccess
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) override;
 
-        // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::container::XIndexAccess
+        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
 
     public:
         const Parameters& getParameters() { return m_aParameters; }

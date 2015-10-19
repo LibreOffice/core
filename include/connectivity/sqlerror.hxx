@@ -35,11 +35,11 @@ namespace connectivity
 
     /** the type of error codes to be used in SQLExceptions
 
-        @see com::sun::star::sdbc::SQLException::ErrorCode
+        @see css::sdbc::SQLException::ErrorCode
     */
     typedef ::sal_Int32 ErrorCode;
 
-    /** error condition values as defined in com::sun::star::sdb::ErrorCondition
+    /** error condition values as defined in css::sdb::ErrorCondition
     */
     typedef ::sal_Int32 ErrorCondition;
 
@@ -55,7 +55,7 @@ namespace connectivity
         database drivers, and checked in application-level code, to properly
         recognize highly specific error conditions.
 
-        @see ::com::sun::star::sdb::ErrorCondition
+        @see css::sdb::ErrorCondition
     */
     class OOO_DLLPUBLIC_DBTOOLS SQLError
     {
@@ -79,7 +79,7 @@ namespace connectivity
 
 
     public:
-        explicit        SQLError( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext );
+        explicit        SQLError( const css::uno::Reference< css::uno::XComponentContext > & _rxContext );
                         ~SQLError();
 
         /** returns the message associated with a given error condition, after (optionally) replacing
@@ -94,7 +94,7 @@ namespace connectivity
             In a non-product build, assertions will fire if the number of placeholders in the
             message's resource string does not match the number of passed parameter values.
 
-            As specified in the com::sun::star::sdb::ErrorCondition type,
+            As specified in the css::sdb::ErrorCondition type,
             error messages thrown by core components of OpenOffice.org Base will contain
             a standardized prefix &quot;[OOoBase]&quot; in every message.
 
@@ -114,7 +114,7 @@ namespace connectivity
                 not present (see <code>::boost::optional::operator !</code>), then no replacement
                 will happen.
 
-            @see ::com::sun::star::sdb::ErrorCondition
+            @see css::sdb::ErrorCondition
         */
         OUString getErrorMessage(
                             const ErrorCondition _eCondition,
@@ -126,15 +126,15 @@ namespace connectivity
         /** returns the error code associated with a given error condition
 
             @see getErrorMessage
-            @see ::com::sun::star::sdb::ErrorCondition
-            @see ::com::sun::star::sdbc::SQLException::ErrorCode
+            @see css::sdb::ErrorCondition
+            @see css::sdbc::SQLException::ErrorCode
         */
         static ErrorCode
                         getErrorCode( const ErrorCondition _eCondition );
 
         /** returns the prefix which is used for OpenOffice.org Base's error messages
 
-            As specified in the com::sun::star::sdb::ErrorCondition type,
+            As specified in the css::sdb::ErrorCondition type,
             error messages thrown by core components of OpenOffice.org Base will
             contain a standardized prefix in every message. <code>getBaseErrorMessagePrefix</code>
             returns this prefix, so clients of such error messages might decide to strip this
@@ -155,7 +155,7 @@ namespace connectivity
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="com::sun::star::uno">Exception::Context</member> member.
+                <member scope="css::uno">Exception::Context</member> member.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -177,7 +177,7 @@ namespace connectivity
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
                             const ParamValue& _rParamValue1 = ParamValue(),
                             const ParamValue& _rParamValue2 = ParamValue(),
                             const ParamValue& _rParamValue3 = ParamValue()
@@ -221,18 +221,18 @@ namespace connectivity
                         ) const;
 
         /** raises a typed exception, that is, a UNO exception which is derived from
-            com::sun::star::sdbc::SQLException
+            css::sdbc::SQLException
 
             @param  _eCondition
                 the ErrorCondition which hit you
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="com::sun::star::uno">Exception::Context</member> member.
+                <member scope="css::uno">Exception::Context</member> member.
 
             @param _rExceptionType
                 the type of the exception to throw. This type <em>must</em> specify
-                an exception class derived from com::sun::star::sdbc::SQLException.
+                an exception class derived from css::sdbc::SQLException.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -251,15 +251,15 @@ namespace connectivity
 
             @throws ::std::bad_cast
                 if <arg>_rExceptionType</arg> does not specify an exception class derived from
-                com::sun::star::sdbc::SQLException.
+                css::sdbc::SQLException.
 
             @see getErrorMessage
             @see getErrorCode
         */
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-                            const ::com::sun::star::uno::Type& _rExceptionType,
+                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+                            const css::uno::Type& _rExceptionType,
                             const ParamValue& _rParamValue1 = ParamValue(),
                             const ParamValue& _rParamValue2 = ParamValue(),
                             const ParamValue& _rParamValue3 = ParamValue()
@@ -273,7 +273,7 @@ namespace connectivity
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="com::sun::star::uno">Exception::Context</member> member.
+                <member scope="css::uno">Exception::Context</member> member.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -293,10 +293,10 @@ namespace connectivity
             @see getErrorMessage
             @see getErrorCode
         */
-        ::com::sun::star::sdbc::SQLException
+        css::sdbc::SQLException
                         getSQLException(
                             const ErrorCondition _eCondition,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
                             const ParamValue& _rParamValue1 = ParamValue(),
                             const ParamValue& _rParamValue2 = ParamValue(),
                             const ParamValue& _rParamValue3 = ParamValue()

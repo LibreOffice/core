@@ -28,17 +28,17 @@ namespace dbtools
 
     //= OParameterContinuation
 
-    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation : public comphelper::OInteraction< ::com::sun::star::sdb::XInteractionSupplyParameters >
+    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aValues;
+        css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
 
     public:
         OParameterContinuation() { }
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   getValues() const { return m_aValues; }
+        css::uno::Sequence< css::beans::PropertyValue >   getValues() const { return m_aValues; }
 
         // XInteractionSupplyParameters
-        virtual void SAL_CALL setParameters( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rValues ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) throw(css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual ~OParameterContinuation() { }
