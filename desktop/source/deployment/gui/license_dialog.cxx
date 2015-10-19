@@ -217,7 +217,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     get(m_pDown, "down");
     get(m_pAcceptButton, "accept");
     get(m_pDeclineButton, "decline");
-    m_pArrow1->Show(true);
+    m_pArrow1->Show();
     m_pArrow2->Show(false);
     get(m_pLicense, "textview");
 
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)
     m_pAcceptButton->Enable();
     m_pAcceptButton->GrabFocus();
     m_pArrow1->Show(false);
-    m_pArrow2->Show(true);
+    m_pArrow2->Show();
     m_bLicenseRead = true;
 }
 

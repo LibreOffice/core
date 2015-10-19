@@ -752,7 +752,7 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 {
 
     const SolarMutexGuard aGuard;
-    m_pUpdateBtn->Enable(true);
+    m_pUpdateBtn->Enable();
 
     m_pExtensionBox->removeEntry(xPackage);
 
@@ -1229,7 +1229,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         const SolarMutexGuard aGuard;
-        m_pUpdateBtn->Enable( true );
+        m_pUpdateBtn->Enable();
         return m_pExtensionBox->addEntry( xPackage );
     }
     return 0;
