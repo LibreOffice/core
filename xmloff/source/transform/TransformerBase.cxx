@@ -593,7 +593,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             // convert twips value to inch
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue, util::MeasureUnit::MM_100TH))
+                                    aAttrValue))
                             {
 
                                 // #i13778#,#i36248# apply correct twip-to-1/100mm
@@ -756,7 +756,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             // convert inch value to twips and export as faked inch
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue, util::MeasureUnit::MM_100TH))
+                                    aAttrValue))
                             {
 
                                 // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
@@ -784,7 +784,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                         sal_Int32 nMeasure;
                         if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue, util::MeasureUnit::MM_100TH))
+                                    aAttrValue))
                         {
 
                             if( nMeasure > 0 )
@@ -811,7 +811,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                         sal_Int32 nMeasure;
                         if (::sax::Converter::convertMeasure(nMeasure,
-                                aAttrValue, util::MeasureUnit::MM_100TH))
+                                aAttrValue))
                         {
 
                             if( nMeasure > 0 )

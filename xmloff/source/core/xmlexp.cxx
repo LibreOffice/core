@@ -2232,7 +2232,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
         {
             sValue = INetURLObject::GetRelURL( msOrigFileName, sValue,
-                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8);
+                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
         }
     }
     return sValue;

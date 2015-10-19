@@ -2147,7 +2147,7 @@ void XMLTextParagraphExport::exportParagraph(
         if( bHasContentEnum )
             exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
-                                    bIsProgress, true, 0, true );
+                                    bIsProgress, true, 0 );
         if ( bHasPortions )
             exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress );
     }
