@@ -24,7 +24,7 @@
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
-    pSet(rSet.Clone(true))
+    pSet(rSet.Clone())
 {
 }
 
