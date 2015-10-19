@@ -768,17 +768,14 @@ void ScOpenCLTest::testSystematic()
         }
     }
 
-    assert(nAVertBegin != 0);
-    assert(nBVertBegin != 0);
-    assert(nAVertEnd > nAVertBegin + 100);
-    assert(nBVertEnd > nBVertBegin + 100);
-    assert((nAVertEnd-nAVertBegin) == (nBVertEnd-nBVertBegin));
-    assert(nAHorEnd > 10);
-    assert(nBHorEnd > 10);
-    assert(nAHorEnd == nBHorEnd);
-
-    (void) nBVertEnd;
-    (void) nBHorEnd;
+    CPPUNIT_ASSERT(nAVertBegin != 0);
+    CPPUNIT_ASSERT(nBVertBegin != 0);
+    CPPUNIT_ASSERT(nAVertEnd > nAVertBegin + 100);
+    CPPUNIT_ASSERT(nBVertEnd > nBVertBegin + 100);
+    CPPUNIT_ASSERT((nAVertEnd-nAVertBegin) == (nBVertEnd-nBVertBegin));
+    CPPUNIT_ASSERT(nAHorEnd > 10);
+    CPPUNIT_ASSERT(nBHorEnd > 10);
+    CPPUNIT_ASSERT(nAHorEnd == nBHorEnd);
 
     for (SCROW i = nAVertBegin; i < nAVertEnd; ++i)
     {
