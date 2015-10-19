@@ -26,6 +26,7 @@
 #include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
+#include <unx/screensaverinhibitor.hxx>
 #include <unx/x11windowprovider.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
@@ -100,6 +101,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     bool            m_bSetFocusOnMap;
 
     int             nScreenSaversTimeout_;
+    ScreenSaverInhibitor maScreenSaverInhibitor;
     Rectangle       maPaintRegion;
 
     Timer           maAlwaysOnTopRaiseTimer;
