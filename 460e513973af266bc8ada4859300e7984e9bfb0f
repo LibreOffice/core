@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a18252c_b5fe8003",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-19T01:11:12Z",
+      "side": 1,
+      "message": "Instead of a function pointer this should most likely be a std::function.",
+      "revId": "460e513973af266bc8ada4859300e7984e9bfb0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a18252c_9503840d",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-19T01:11:12Z",
+      "side": 1,
+      "message": "IMHO there is something wrong with the feature if we need to check for the string type. This needs some inspection.",
+      "revId": "460e513973af266bc8ada4859300e7984e9bfb0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
