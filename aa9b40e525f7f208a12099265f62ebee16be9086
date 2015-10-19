@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_943b849c",
+        "filename": "i18npool/source/localedata/localedata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-19T11:14:01Z",
+      "side": 0,
+      "message": "This changes file access mode to executable. I\u0027ll undo that part and submit an amended commit.",
+      "revId": "aa9b40e525f7f208a12099265f62ebee16be9086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
