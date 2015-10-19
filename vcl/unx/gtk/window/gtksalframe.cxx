@@ -2538,40 +2538,21 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     }
 }
 
-/* definitions from xautolock.c (pl15) */
-#define XAUTOLOCK_DISABLE 1
-#define XAUTOLOCK_ENABLE  2
-
-void GtkSalFrame::setAutoLock( bool bLock )
-{
-    if( isChild() || !getDisplay()->IsX11Display() )
-        return;
-
-    GdkScreen  *pScreen = gtk_window_get_screen( GTK_WINDOW(m_pWindow) );
-    GdkDisplay *pDisplay = gdk_screen_get_display( pScreen );
-    GdkWindow  *pRootWin = gdk_screen_get_root_window( pScreen );
-
-    Atom nAtom = XInternAtom( GDK_DISPLAY_XDISPLAY( pDisplay ),
-                              "XAUTOLOCK_MESSAGE", False );
-
-    int nMessage = bLock ? XAUTOLOCK_ENABLE : XAUTOLOCK_DISABLE;
-
-    XChangeProperty( GDK_DISPLAY_XDISPLAY( pDisplay ),
-                     GDK_WINDOW_XID( pRootWin ),
-                     nAtom, XA_INTEGER,
-                     8, PropModeReplace,
-                     reinterpret_cast<unsigned char*>(&nMessage),
-                     sizeof( nMessage ) );
-}
-
 void GtkSalFrame::StartPresentation( bool bStart )
 {
+    boost::optional<guint> aWindow;
+    boost::optional<Display*> aDisplay;
+    if( getDisplay()->IsX11Display() )
+    {
+        aWindow = widget_get_xid(m_pWindow);
+        aDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
+    }
+
     m_ScreenSaverInhibitor.inhibit( bStart,
                                     "presentation",
                                     getDisplay()->IsX11Display(),
-                                    widget_get_xid(m_pWindow) );
-
-    setAutoLock( !bStart );
+                                    aWindow,
+                                    aDisplay );
 
     if( !getDisplay()->IsX11Display() )
         return;

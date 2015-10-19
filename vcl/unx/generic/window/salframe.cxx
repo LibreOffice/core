@@ -2189,87 +2189,15 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     }
 }
 
-/* ---------------------------------------------------------------------
-   the xautolock pseudo screen saver needs special treatment since it
-   doesn't cooperate with XxxxScreenSaver settings
-   ------------------------------------------------------------------- */
-
-static Bool
-IsRunningXAutoLock( Display *p_display, ::Window a_window )
-{
-    const char *p_atomname = "XAUTOLOCK_SEMAPHORE_PID";
-    Atom        a_pidatom;
-
-    // xautolock interns this atom
-    a_pidatom    = XInternAtom( p_display, p_atomname, True );
-    if ( a_pidatom == None )
-        return False;
-
-    Atom          a_type;
-    int           n_format;
-    unsigned long n_items;
-    unsigned long n_bytes_after;
-    pid_t        *p_pid;
-    pid_t         n_pid;
-    // get pid of running xautolock
-    XGetWindowProperty (p_display, a_window, a_pidatom, 0L, 2L, False,
-            AnyPropertyType, &a_type, &n_format, &n_items, &n_bytes_after,
-            reinterpret_cast<unsigned char**>(&p_pid) );
-    n_pid = *p_pid;
-    XFree( p_pid );
-
-      if ( a_type == XA_INTEGER )
-      {
-        // check if xautolock pid points to a running process
-        if ( kill(n_pid, 0) == -1 )
-            return False;
-        else
-            return True;
-    }
-
-    return False;
-}
-
-/* definitions from xautolock.c (pl15) */
-#define XAUTOLOCK_DISABLE 1
-#define XAUTOLOCK_ENABLE  2
-
-static Bool
-MessageToXAutoLock( Display *p_display, int n_message )
-{
-    const char *p_atomname = "XAUTOLOCK_MESSAGE" ;
-    Atom        a_messageatom;
-    ::Window    a_rootwindow;
-
-    a_rootwindow = RootWindowOfScreen( ScreenOfDisplay(p_display, 0) );
-    if ( ! IsRunningXAutoLock(p_display, a_rootwindow) )
-    {
-        // remove any pending messages
-        a_messageatom = XInternAtom( p_display, p_atomname, True );
-        if ( a_messageatom != None )
-            XDeleteProperty( p_display, a_rootwindow, a_messageatom );
-        return False;
-    }
-
-    a_messageatom = XInternAtom( p_display, p_atomname, False );
-    XChangeProperty (p_display, a_rootwindow, a_messageatom, XA_INTEGER,
-            8, PropModeReplace, reinterpret_cast<unsigned char*>(&n_message), sizeof(n_message) );
-
-    return True;
-}
-
 void X11SalFrame::StartPresentation( bool bStart )
 {
     maScreenSaverInhibitor.inhibit( bStart,
                                     "presentation",
                                     true, // isX11
-                                    mhWindow );
+                                    mhWindow,
+                                    GetXDisplay() );
 
     vcl::I18NStatus::get().show( !bStart, vcl::I18NStatus::presentation );
-    if ( bStart )
-        MessageToXAutoLock( GetXDisplay(), XAUTOLOCK_DISABLE );
-    else
-        MessageToXAutoLock( GetXDisplay(), XAUTOLOCK_ENABLE );
 
     if( ! bStart && hPresentationWindow != None )
         doReparentPresentationDialogues( GetDisplay() );

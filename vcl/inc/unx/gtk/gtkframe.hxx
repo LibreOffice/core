@@ -262,7 +262,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
     void            Center();
     void            SetDefaultSize();
-    void            setAutoLock( bool bLock );
 
     void            doKeyCallback( guint state,
                                    guint keyval,
