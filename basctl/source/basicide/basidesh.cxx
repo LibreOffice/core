@@ -170,7 +170,7 @@ void Shell::Init()
     SvxSimpleUndoRedoController::RegisterControl( SID_UNDO );
     SvxSimpleUndoRedoController::RegisterControl( SID_REDO );
 
-    SvxSearchDialogWrapper::RegisterChildWindow(false);
+    SvxSearchDialogWrapper::RegisterChildWindow();
 
     GetExtraData()->ShellInCriticalSection() = true;
 
@@ -721,7 +721,7 @@ void Shell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
                                 OUString aModName = pModNames[ j ];
-                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, false );
+                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
@@ -752,7 +752,7 @@ void Shell::UpdateWindows()
                                 OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
-                                VclPtr<DialogWindow> pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
+                                VclPtr<DialogWindow> pWin = FindDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
@@ -798,7 +798,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
         }
         else
         {
-            SetCurWindow( NULL, false );
+            SetCurWindow( NULL );
         }
     }
     if ( bDestroy )

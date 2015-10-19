@@ -168,7 +168,7 @@ bool DlgEditor::RemarkDialog()
     bool bWasMarked = pDlgEdView->IsObjMarked( pDlgObj );
 
     if( !bWasMarked )
-        pDlgEdView->MarkObj( pDlgObj, pPgView, false );
+        pDlgEdView->MarkObj( pDlgObj, pPgView );
 
     return bWasMarked;
 }
@@ -423,7 +423,7 @@ void DlgEditor::ResetDialog ()
     pPage->SetDlgEdForm( NULL );
     SetDialog( m_xUnoControlDialogModel );
     if( bWasMarked )
-        pDlgEdView->MarkObj( pDlgEdForm, pPgView, false );
+        pDlgEdView->MarkObj( pDlgEdForm, pPgView );
 }
 
 

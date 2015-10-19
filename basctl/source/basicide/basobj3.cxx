@@ -335,7 +335,7 @@ void BasicStopped(
     vcl::Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
-        pDefParent->Enable(true);
+        pDefParent->Enable();
         if ( pbAppWindowDisabled )
             *pbAppWindowDisabled = true;
     }

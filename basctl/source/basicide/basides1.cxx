@@ -597,9 +597,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
                 BaseWindow* pWin = 0;
                 if ( aType == aModType )
-                    pWin = FindBasWin( *pDocument, aLibName, aName, false );
+                    pWin = FindBasWin( *pDocument, aLibName, aName );
                 else if ( aType == aDlgType )
-                    pWin = FindDlgWin( *pDocument, aLibName, aName, false );
+                    pWin = FindDlgWin( *pDocument, aLibName, aName );
 
                 if ( pWin )
                 {
