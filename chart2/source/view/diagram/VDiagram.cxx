@@ -624,7 +624,7 @@ void VDiagram::createShapes_3d()
 
         uno::Reference< drawing::XShape > xShape =
             m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
-                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0 );
+                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )

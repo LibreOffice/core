@@ -217,7 +217,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_pBtnOK->Enable( true );
+        m_pBtnOK->Enable();
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }

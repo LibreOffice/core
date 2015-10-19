@@ -549,7 +549,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
         case CurveStyle_CUBIC_SPLINES:
         case CurveStyle_B_SPLINES:
             m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
-            m_pPB_DetailsDialog->Enable(true);
+            m_pPB_DetailsDialog->Enable();
             m_pPB_DetailsDialog->SetClickHdl( LINK( this, SplineResourceGroup, SplineDetailsDialogHdl ) );
             m_pPB_DetailsDialog->SetQuickHelpText( SCH_RESSTR(STR_DLG_SMOOTH_LINE_PROPERTIES) );
             getSplinePropertiesDialog().fillControls( rParameter );
@@ -559,7 +559,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
         case CurveStyle_STEP_CENTER_X:
         case CurveStyle_STEP_CENTER_Y:
             m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
-            m_pPB_DetailsDialog->Enable(true);
+            m_pPB_DetailsDialog->Enable();
             m_pPB_DetailsDialog->SetClickHdl( LINK( this, SplineResourceGroup, SteppedDetailsDialogHdl ) );
             m_pPB_DetailsDialog->SetQuickHelpText( SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES) );
             getSteppedPropertiesDialog().fillControls( rParameter );

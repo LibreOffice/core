@@ -505,7 +505,7 @@ void DataSourceTabPage::updateControlState()
         bHasValidRole = (pRoleEntry != 0);
     }
 
-    m_pBTN_ADD->Enable( true );
+    m_pBTN_ADD->Enable();
     m_pBTN_REMOVE->Enable( bHasSelectedSeries );
 
     m_pBTN_UP->Enable( bHasSelectedSeries && (pSeriesEntry != m_pLB_SERIES->First()));

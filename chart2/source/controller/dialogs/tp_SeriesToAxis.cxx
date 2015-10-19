@@ -203,11 +203,11 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                    m_pRB_DontPaint->Enable(true);
+                    m_pRB_DontPaint->Enable();
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                    m_pRB_AssumeZero->Enable(true);
+                    m_pRB_AssumeZero->Enable();
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                    m_pRB_ContinueLine->Enable(true);
+                    m_pRB_ContinueLine->Enable();
             }
 
             long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();

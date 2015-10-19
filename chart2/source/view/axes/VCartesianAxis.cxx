@@ -1802,7 +1802,7 @@ void VCartesianAxis::createShapes()
                 if( apTickIter )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false ), fRotationAngleDegree ) );
+                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
                     nOffset += nCurrentLength;
