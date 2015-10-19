@@ -217,7 +217,7 @@ bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 
 void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
-    if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID, true))
+    if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID))
     {
         const SwTextGridItem& rGridItem = static_cast<const SwTextGridItem&>(rSet->Get(RES_TEXTGRID));
         RadioButton* pButton = 0;
@@ -306,7 +306,7 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
 
 void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 {
-    if( SfxItemState::UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, true ))
+    if( SfxItemState::UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR ))
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));

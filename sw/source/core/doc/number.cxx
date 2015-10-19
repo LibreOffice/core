@@ -629,7 +629,7 @@ OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings,
 {
     if (rNum.IsCounted())
         return MakeNumString(rNum.GetNumberVector(),
-                             bInclStrings, bOnlyArabic, MAXLEVEL);
+                             bInclStrings, bOnlyArabic);
 
     return OUString();
 }

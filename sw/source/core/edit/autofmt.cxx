@@ -1267,7 +1267,7 @@ void SwAutoFormat::BuildIndent()
                     !CalcLevel( *pNxtNd ) );
         }
     }
-    DeleteCurrentParagraph( true );
+    DeleteCurrentParagraph();
     AutoCorrect();
 }
 
@@ -1305,7 +1305,7 @@ void SwAutoFormat::BuildTextIndent()
             pNxtNd = GetNextNode();
         }
     }
-    DeleteCurrentParagraph( true );
+    DeleteCurrentParagraph();
     AutoCorrect();
 }
 
@@ -1342,7 +1342,7 @@ void SwAutoFormat::BuildText()
                 break;
         }
     }
-    DeleteCurrentParagraph( true );
+    DeleteCurrentParagraph();
     AutoCorrect();
 }
 
@@ -1375,7 +1375,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     IsBlanksInString( *m_pCurTextNd ) ||
                     IsSentenceAtEnd( *m_pCurTextNd );
     bool bRTL = m_pEditShell->IsInRightToLeftText();
-    DeleteCurrentParagraph( true );
+    DeleteCurrentParagraph();
 
     bool bChgBullet = false, bChgEnum = false;
     sal_Int32 nAutoCorrPos = 0;
@@ -1740,7 +1740,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             pNxtNd = GetNextNode();
         }
     }
-    DeleteCurrentParagraph( true );
+    DeleteCurrentParagraph();
     AutoCorrect();
 }
 
@@ -1771,7 +1771,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
     }
     else
     {
-        DeleteCurrentParagraph( true );
+        DeleteCurrentParagraph();
         AutoCorrect();
     }
 }

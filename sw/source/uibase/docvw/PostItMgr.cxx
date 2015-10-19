@@ -321,7 +321,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 if (!pField)
                 {
-                    AddPostIts(true);
+                    AddPostIts();
                     break;
                 }
                 // get field to be inserted from hint

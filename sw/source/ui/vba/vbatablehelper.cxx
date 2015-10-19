@@ -162,7 +162,7 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, 
     rCols.SetLeft    ( 0 );
     rCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     rCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
-    pTable->GetTabCols( rCols, pStart, false );
+    pTable->GetTabCols( rCols, pStart );
 }
 
 sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols )

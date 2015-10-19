@@ -705,8 +705,8 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
                 m_pFieldCB->InsertEntry(*aIterator);
         }
         m_pFieldCB->SetText(sSelect);
-        m_pFieldCB->Enable(true);
-        m_pFieldFT->Enable(true);
+        m_pFieldCB->Enable();
+        m_pFieldFT->Enable();
     }
     else
     {

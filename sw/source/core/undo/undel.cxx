@@ -959,7 +959,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pRedlSaveData )
     {
-        const bool bSuccess = FillSaveData(rPam, *pRedlSaveData, true);
+        const bool bSuccess = FillSaveData(rPam, *pRedlSaveData);
         OSL_ENSURE(bSuccess,
             "SwUndoDelete::Redo: used to have redline data, but now none?");
         if (!bSuccess)

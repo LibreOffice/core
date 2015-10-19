@@ -2839,7 +2839,7 @@ void SwWW8ImplReader::PostProcessAttrs()
                 m_pCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
                                    *pItem);
                 m_pCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
-                                   pItem->Which(), true);
+                                   pItem->Which());
             }
             while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
         }

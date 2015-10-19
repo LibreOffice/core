@@ -104,10 +104,10 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
                 rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, false, true );
                 break;
             case FN_LINE_UP:
-                rSh.Up( bSelect, 1 );
+                rSh.Up( bSelect );
                 break;
             case FN_LINE_DOWN:
-                rSh.Down( bSelect, 1 );
+                rSh.Down( bSelect );
                 break;
             default:
                 OSL_FAIL("wrong Dispatcher");
@@ -415,7 +415,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bRet = rSh.GotoNxtPrvTOXMark( false );
             break;
         case FN_NEXT_TBLFML:
-            bRet = rSh.GotoNxtPrvTableFormula( true );
+            bRet = rSh.GotoNxtPrvTableFormula();
             break;
         case FN_PREV_TBLFML:
             bRet = rSh.GotoNxtPrvTableFormula( false );

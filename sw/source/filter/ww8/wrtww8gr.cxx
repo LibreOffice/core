@@ -169,13 +169,13 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 {
                     Graphic aGr1;
                     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                    if( rGF.ImportGraphic( aGr1, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    if( rGF.ImportGraphic( aGr1, OUString(), *pGraphicStream ) == GRFILTER_OK )
                     {
                         Graphic aGr2;
                         delete pGraphicStream;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( pGraphicStream && rGF.ImportGraphic( aGr2, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        if( pGraphicStream && rGF.ImportGraphic( aGr2, OUString(), *pGraphicStream ) == GRFILTER_OK )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;

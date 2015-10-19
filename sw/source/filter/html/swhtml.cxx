@@ -433,8 +433,7 @@ SwHTMLParser::~SwHTMLParser()
         sal_uInt16 nLinkMode = pDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SfxObjectCreateMode::INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
-                                                   true, false );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL );
 
         if ( pDoc->GetDocShell()->IsLoading() )
         {

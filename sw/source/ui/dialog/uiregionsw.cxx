@@ -573,12 +573,12 @@ IMPL_LINK_TYPED( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void 
 {
     bDontCheckPasswd = true;
     SvTreeListEntry* pEntry=pBox->FirstSelected();
-    m_pHideCB->Enable(true);
+    m_pHideCB->Enable();
     // edit in readonly sections
-    m_pEditInReadonlyCB->Enable(true);
+    m_pEditInReadonlyCB->Enable();
 
-    m_pProtectCB->Enable(true);
-    m_pFileCB->Enable(true);
+    m_pProtectCB->Enable();
+    m_pFileCB->Enable();
     ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
@@ -676,8 +676,8 @@ IMPL_LINK_TYPED( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void 
     }
     else if (pEntry )
     {
-        m_pCurName->Enable(true);
-        m_pOptionsPB->Enable(true);
+        m_pCurName->Enable();
+        m_pOptionsPB->Enable();
         SectRepr* pRepr=static_cast<SectRepr*>(pEntry->GetUserData());
         SwSectionData const& rData( pRepr->GetSectionData() );
         m_pConditionED->SetText(rData.GetCondition());

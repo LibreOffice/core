@@ -1015,7 +1015,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_MERGE_TABLE:
         {
-            bool bPrev = rSh.CanMergeTable( true );
+            bool bPrev = rSh.CanMergeTable();
             bool bNext = rSh.CanMergeTable( false );
 
             if( bPrev && bNext )

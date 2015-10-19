@@ -108,8 +108,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         {
             SwContentAtPos aSwContentAtPos( SwContentAtPos::SW_INETATTR );
             bStart = rSh.GetContentAtPos( aDocPos,
-                        aSwContentAtPos,
-                        false );
+                        aSwContentAtPos );
         }
 
         if ( bStart && !m_bIsInDrag )

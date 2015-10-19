@@ -245,7 +245,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 Point aPt( pLayout->Frm().Pos() );
                 aPt.Y()++;      // get out of the header
-                pCntFrm = pPgFrm->GetContentPos( aPt, false, true, false );
+                pCntFrm = pPgFrm->GetContentPos( aPt, false, true );
                 pTextNode = GetFirstTextNode( rDoc, rPos, pCntFrm, aPt );
             }
         }
@@ -594,7 +594,7 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
             pNd->GetNodes().IsDocNodes() )
         {
             _SeqFieldLstElem* pNew = new _SeqFieldLstElem(
-                    pNd->GetExpandText( 0, -1 ),
+                    pNd->GetExpandText(),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }

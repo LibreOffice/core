@@ -91,7 +91,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
         m_pPathLB->SetEntryData(i, reinterpret_cast<void*>(nCaseReadonly));
     }
     m_pPathLB->SelectEntryPos(0);
-    m_pPathLB->Enable(true);
+    m_pPathLB->Enable();
 
     const size_t nCount = pHdl->GetGroupCnt();
     for( size_t i = 0; i < nCount; ++i)

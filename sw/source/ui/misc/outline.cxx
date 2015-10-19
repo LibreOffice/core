@@ -512,8 +512,8 @@ void    SwOutlineSettingsTabPage::Update()
         else
             m_pCharFormatLB->SetNoSelection();
 
-        m_pAllLevelFT->Enable(true);
-        m_pAllLevelNF->Enable(true);
+        m_pAllLevelFT->Enable();
+        m_pAllLevelNF->Enable();
         m_pAllLevelNF->SetMax(MAXLEVEL);
         if(bSameComplete)
         {
@@ -545,8 +545,8 @@ void    SwOutlineSettingsTabPage::Update()
 
         if(nTmpLevel)
         {
-            m_pAllLevelFT->Enable(true);
-            m_pAllLevelNF->Enable(true);
+            m_pAllLevelFT->Enable();
+            m_pAllLevelNF->Enable();
             m_pAllLevelNF->SetMax(nTmpLevel + 1);
             m_pAllLevelNF->SetValue(rFormat.GetIncludeUpperLevels());
         }

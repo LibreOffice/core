@@ -3031,7 +3031,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     aFndBox.DelFrms( *pTable );
     // ? TL_CHART2: notification or locking of controller required ?
 
-    SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx, true );
+    SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx );
 
     // update layout
     aFndBox.MakeFrms( *pTable );

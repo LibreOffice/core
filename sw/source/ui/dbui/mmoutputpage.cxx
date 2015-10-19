@@ -432,7 +432,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
         Control** pSaveMergeControl = aSaveMergedControls;
         do
         {
-            (*pSaveMergeControl)->Show(true);
+            (*pSaveMergeControl)->Show();
 
         } while(*(++pSaveMergeControl));
         if(!m_pFromRB->IsChecked() && !m_pSaveAsOneRB->IsChecked())
@@ -453,7 +453,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
         Control** pPrinterControl = aPrintControls;
         do
         {
-            (*pPrinterControl)->Show(true);
+            (*pPrinterControl)->Show();
 
         } while(*(++pPrinterControl));
         if(!m_pFromRB->IsChecked())
@@ -475,7 +475,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
         vcl::Window** pMailControl = aMailControls;
         do
         {
-            (*pMailControl)->Show(true);
+            (*pMailControl)->Show();
 
         } while(*(++pMailControl));
 

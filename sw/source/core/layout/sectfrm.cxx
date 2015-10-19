@@ -1919,7 +1919,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, bool bTst )
                 if( bInCalcContent )
                     _InvalidateSize();
                 else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
-                         Grow( nGrow - nSpace, false ) )
+                         Grow( nGrow - nSpace ) )
                     InvalidateSize();
                 else
                 {

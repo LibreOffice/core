@@ -495,7 +495,7 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     {
         // Refuse to edit editeng text of the shape if it has textbox attached.
         if (!lcl_isTextBox(pObj))
-            bReturn = BeginTextEdit( pObj, pPV, m_pEditWin, false );
+            bReturn = BeginTextEdit( pObj, pPV, m_pEditWin );
     }
 
     pSdrView->SetHitTolerancePixel( nOld );

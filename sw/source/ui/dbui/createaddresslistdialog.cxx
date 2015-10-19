@@ -218,7 +218,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         }
         else
         {
-            m_pScrollBar->Enable(true);
+            m_pScrollBar->Enable();
             m_pScrollBar->SetRange(Range(0, nLines));
             m_pScrollBar->SetThumbPos(0);
             m_pScrollBar->SetVisibleSize(nVisibleLines);

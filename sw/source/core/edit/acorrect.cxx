@@ -425,7 +425,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, bool bPrevPara ) const
                             : rCrsr.GetPoint()->nNode ).GetNode().GetTextNode();
 
     if( pNd )
-        eRet = pNd->GetLang( nPos, 0 );
+        eRet = pNd->GetLang( nPos );
     if(LANGUAGE_SYSTEM == eRet)
         eRet = GetAppLanguage();
     return eRet;

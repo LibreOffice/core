@@ -205,7 +205,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
         nLang = (sal_uInt16)GetAppLanguage();
 
-    m_pLangLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, true, false);
+    m_pLangLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, true );
     m_pLangLB->SelectLanguage( nLang );
 
     LanguageHdl( 0 );

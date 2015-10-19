@@ -44,7 +44,7 @@
 // Taking the updated values from the set
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
-    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR, true))
+    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
@@ -633,7 +633,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
     //get the grid information
-    if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
+    if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
         pGridItem = static_cast<SwTextGridItem*>(static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone());
     SwPageExample::UpdateExample(rSet);
 }

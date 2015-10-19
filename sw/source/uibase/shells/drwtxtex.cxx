@@ -500,7 +500,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         : text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION ) );
                 pTmpView->SetAttributes( aAttr );
 
-                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), false);
+                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin());
                 rSh.GetView().AttrChangedNotify( &rSh );
             }
             return;
@@ -543,7 +543,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
             }
             pTmpView->SetAttributes( aAttr );
-            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), false );
+            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin() );
             rSh.GetView().AttrChangedNotify( &rSh );
         }
         return;

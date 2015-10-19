@@ -182,7 +182,7 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTextAttr *pAttr )
 
     const SfxItemSet* pItemSet = CharFormat::GetItemSet( pAttr->GetAttr() );
     if ( pItemSet )
-        bRet = SfxItemState::SET == pItemSet->GetItemState( nWhich, true );
+        bRet = SfxItemState::SET == pItemSet->GetItemState( nWhich );
 
     return bRet;
 }

@@ -114,7 +114,7 @@ void SwScrollbar::AutoShow()
         }
         else if ( !ScrollBar::IsVisible() )
         {
-            ScrollBar::Show(true);
+            ScrollBar::Show();
         }
 }
 

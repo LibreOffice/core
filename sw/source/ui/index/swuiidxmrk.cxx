@@ -1068,7 +1068,7 @@ SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
     m_rDialog.get(m_pEntryLB, "entrylb");
     m_rDialog.get(m_pActionBT,
         bNewEntry ? OString("insert") : OString("modify"));
-    m_pActionBT->Show(true);
+    m_pActionBT->Show();
     m_rDialog.get(m_pCloseBT, "close");
     m_rDialog.get(m_pCreateEntryPB, "new");
     m_rDialog.get(m_pEditEntryPB, "edit");

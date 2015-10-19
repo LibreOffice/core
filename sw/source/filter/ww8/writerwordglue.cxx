@@ -75,7 +75,7 @@ namespace myImplHelpers
             nDist += rSz.GetHeight();
         else
         {
-            SwRect aRect(rFormat.FindLayoutRect(false));
+            SwRect aRect(rFormat.FindLayoutRect());
             if (aRect.Height())
                 nDist += aRect.Height();
             else

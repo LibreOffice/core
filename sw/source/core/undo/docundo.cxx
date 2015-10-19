@@ -332,7 +332,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
         return false;
     }
 
-    SfxUndoAction *const pAction( SdrUndoManager::GetRedoAction(0) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetRedoAction() );
     if ( pAction == NULL )
     {
         return false;

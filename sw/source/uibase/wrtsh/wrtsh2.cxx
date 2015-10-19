@@ -422,7 +422,7 @@ void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nF
     {
         SwCallMouseEvent aCallEvent;
         aCallEvent.Set( &rItem );
-        GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, false );
+        GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent );
     }
 
     // So that the implementation of templates is displayed immediately
@@ -452,7 +452,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
         {
             SwCallMouseEvent aCallEvent;
             aCallEvent.Set( EVENT_OBJECT_URLITEM, pFnd );
-            GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, false );
+            GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent );
         }
 
         ::LoadURL(*this, sURL, nFilter, sTargetFrameName);

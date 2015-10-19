@@ -474,7 +474,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     }
     if (m_pProspectCB->IsChecked())
     {
-        m_pProspectCB_RTL->Enable(true);
+        m_pProspectCB_RTL->Enable();
         m_pNoRB->Enable( false );
         m_pOnlyRB->Enable( false );
         m_pEndRB->Enable( false );

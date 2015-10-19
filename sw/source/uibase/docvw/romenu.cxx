@@ -94,7 +94,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( sURL.isEmpty() )
     {
         SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
-        if( rSh.GetContentAtPos( rDocPos, aContentAtPos, false))
+        if( rSh.GetContentAtPos( rDocPos, aContentAtPos))
         {
             const SwFormatINetFormat &rIItem = *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
             sURL = rIItem.GetValue();

@@ -1227,7 +1227,7 @@ void SwColumnPage::Update(MetricField *pInteractiveField)
 void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
     bool bVertical = false;
-    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR, true))
+    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));

@@ -225,7 +225,7 @@ SwFlyFrameFormat* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         else
         {
             if( eRequestId != aAnch.GetAnchorId() &&
-                SfxItemState::SET != pFormat->GetItemState( RES_ANCHOR, true ) )
+                SfxItemState::SET != pFormat->GetItemState( RES_ANCHOR ) )
             {
                 aAnch.SetType( eRequestId );
             }
@@ -733,7 +733,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
-                SfxItemSet* pNewSet = pNewFormat->GetAttrSet().Clone( true );
+                SfxItemSet* pNewSet = pNewFormat->GetAttrSet().Clone();
 
                 // Copy only the set attributes.
                 // The others should apply from the Templates.
@@ -755,14 +755,14 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                             GetItemState( RES_BOX, true, &pItem ))
                         pNewSet->Put( *pItem );
                     else if( SfxItemState::SET == pNewFormat->GetAttrSet().
-                            GetItemState( RES_BOX, true ))
+                            GetItemState( RES_BOX ))
                         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
                     if( SfxItemState::SET == pOldFormat->GetAttrSet().
                             GetItemState( RES_SHADOW, true, &pItem ))
                         pNewSet->Put( *pItem );
                     else if( SfxItemState::SET == pNewFormat->GetAttrSet().
-                            GetItemState( RES_SHADOW, true ))
+                            GetItemState( RES_SHADOW ))
                         pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
                 }
                 else
@@ -1089,10 +1089,10 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
                  rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME ) );
 
     // Set border and shadow to default if the template contains any.
-    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState( RES_BOX, true ))
+    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState( RES_BOX ))
         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
-    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(RES_SHADOW,true))
+    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(RES_SHADOW))
         pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
 
     pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));

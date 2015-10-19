@@ -156,7 +156,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_SOFT_HYPHEN:
-        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true ) &&
+        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar() &&
             CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, -1 ))
             rSh.Insert( OUString( CHAR_SOFTHYPHEN ) );
         break;
@@ -473,7 +473,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             // the suggestion has to be removed before
             GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
-            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, true );
+            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName );
         }
         break;
 
@@ -580,7 +580,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
                                                   &GetView().GetViewFrame()->GetWindow(),
-                                                  aSet, true));
+                                                  aSet));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {

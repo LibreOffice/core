@@ -644,9 +644,9 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, TimerHandler, Timer *, void)
             // take the center point of VisArea to
             // decide in which direction the user want.
             if( aModPt.Y() < ( rVisArea.Top() + rVisArea.Height() / 2 ) )
-                rSh.Up( true, 1 );
+                rSh.Up( true );
             else
-                rSh.Down( true, 1 );
+                rSh.Down( true );
         }
     }
 
@@ -780,7 +780,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
             SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
             SwWrtShell& rSh = rView.GetWrtShell();
             rSh.GetCurAttr(aLangSet);
-            if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich, true))
+            if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich))
             {
                 LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
                 if ( eLang == eBufferLanguage )
@@ -1833,7 +1833,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_DELETE:
                     if ( !rSh.HasReadonlySel() || rSh.CrsrInsideInputField())
                     {
-                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(false))
+                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum())
                             eKeyState = KS_NumOrNoNum;
                     }
                     else
@@ -2259,7 +2259,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 if( bNormalChar && rSh.IsInFrontOfLabel() )
                 {
-                    rSh.NumOrNoNum(false);
+                    rSh.NumOrNoNum();
                 }
 
                 if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsDocReadOnly ))
@@ -3592,7 +3592,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         {
                             SwContentAtPos aContentAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                         SwContentAtPos::SW_INETATTR );
-                            if( rSh.GetContentAtPos( aDocPos, aContentAtPos, false ) &&
+                            if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) &&
                                 !rSh.IsReadOnlyAvailable() &&
                                 aContentAtPos.IsInProtectSect() )
                                 bLockView = true;
@@ -4282,14 +4282,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if (aTextBoxShapes.find(pFormat) == aTextBoxShapes.end())
                 {
                     pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pObj,pPV,false);
+                    pSdrView->MarkObj(pObj,pPV);
                 }
                 else
                 {
                     // If the fly frame is a textbox of a shape, then select the shape instead.
                     SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
                     pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pShape, pPV, false);
+                    pSdrView->MarkObj(pShape, pPV);
                 }
             }
         }
@@ -4399,7 +4399,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if ( aSttPt != aEndPt )
                         {
                             rSh.StartUndo( UNDO_UI_DRAG_AND_COPY );
-                            rSh.Copy(&rSh, aSttPt, aEndPt, false);
+                            rSh.Copy(&rSh, aSttPt, aEndPt);
                             rSh.EndUndo( UNDO_UI_DRAG_AND_COPY );
                         }
                     }
@@ -4525,7 +4525,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
-                        if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false ) )
+                        if( rSh.GetContentAtPos( aDocPt, aContentAtPos ) )
                         {
                             // Do it again if we're not on a field/hyperlink to update the cursor accordingly
                             if ( SwContentAtPos::SW_FIELD != aContentAtPos.eContentAtPos
@@ -5642,7 +5642,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
             bool bUnLockView = !rSh.IsViewLocked();
             rSh.LockView( true );
-            bool bSelObj = rSh.SelectObj( aDocPos, 0);
+            bool bSelObj = rSh.SelectObj( aDocPos );
             if( bUnLockView )
                 rSh.LockView( false );
 

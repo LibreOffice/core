@@ -3074,7 +3074,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
             && sDlgType != "PictureDialog" && sDlgType != "ObjectDialog" &&
         SfxItemState::UNKNOWN != ( eState = rSet->GetItemState(
-                                        RES_FRAMEDIR, true )) )
+                                        RES_FRAMEDIR )) )
     {
         pTextFlowFT->Show();
         pTextFlowLB->Show();

@@ -402,7 +402,7 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, _GCLinePara* pGCPara)
                 SwTableLines& rBoxLns = pBox->GetTabLines();
                 for( auto pBoxLine : rBoxLns )
                     if( SfxItemState::SET != pBoxLine->GetFrameFormat()->
-                            GetItemState( RES_BACKGROUND, true ))
+                            GetItemState( RES_BACKGROUND ))
                         pGCPara->pShareFormats->SetAttr( *pBoxLine, *pItem );
             }
 

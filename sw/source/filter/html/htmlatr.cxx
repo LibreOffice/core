@@ -135,7 +135,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
         {
             if( bLFPossible )
                 OutNewLine();
-            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, true );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist );
             IncIndentLevel();
             bLFPossible = true;
         }

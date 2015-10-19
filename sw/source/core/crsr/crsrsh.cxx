@@ -845,7 +845,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
                 bRet = CRSR_POSOLD;
             else
             {
-                UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE );
+                UpdateCrsr();
                 bRet &= ~CRSR_POSOLD;
             }
         }

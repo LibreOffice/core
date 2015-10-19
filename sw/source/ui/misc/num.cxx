@@ -344,8 +344,8 @@ void SwNumPositionTabPage::InitControls()
 
     if ( aNumFormatArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
     {
-        m_pListtabFT->Enable( true );
-        m_pListtabMF->Enable( true );
+        m_pListtabFT->Enable();
+        m_pListtabMF->Enable();
         if ( bSameListtab )
         {
             m_pListtabMF->SetValue(m_pListtabMF->Normalize(aNumFormatArr[nLvl]->GetListtabPos()),FUNIT_TWIP);

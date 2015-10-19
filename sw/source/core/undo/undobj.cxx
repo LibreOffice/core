@@ -824,7 +824,7 @@ void SwUndoSaveSection::SaveSection(
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, true ))
+    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData ))
         delete pRedlSaveData, pRedlSaveData = 0;
 
     nStartPos = rRange.aStart.GetIndex();

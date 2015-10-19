@@ -622,7 +622,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)
 {
-    m_pExampleContainerWIN->Show(true);
+    m_pExampleContainerWIN->Show();
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
     //now the ViewOptions should be set properly

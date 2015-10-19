@@ -2375,7 +2375,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // rows of a band can be duplicated easy.
     pTable = pIo->m_rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, false );
+            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0 );
 
     OSL_ENSURE(pTable && pTable->GetFrameFormat(), "insert table failed");
     if (!pTable || !pTable->GetFrameFormat())

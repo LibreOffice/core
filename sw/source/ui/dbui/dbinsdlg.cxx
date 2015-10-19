@@ -1743,8 +1743,8 @@ void SwInsertDBColAutoPilot::Load()
                     m_pIbDbcolAllTo->Enable( false );
                     m_pIbDbcolOneTo->Enable( false );
                 }
-                m_pIbDbcolOneFrom->Enable( true );
-                m_pIbDbcolAllFrom->Enable( true );
+                m_pIbDbcolOneFrom->Enable();
+                m_pIbDbcolAllFrom->Enable();
             }
             m_pEdDbText->SetText( pNewData->sEdit );
 

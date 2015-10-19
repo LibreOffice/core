@@ -1944,7 +1944,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetContentNode(),0);
                     }
                 }
-                CorrRel( aIdx, aInsPos, 0 );
+                CorrRel( aIdx, aInsPos );
 
                 if (pCNd)
                     pCNd->JoinNext();

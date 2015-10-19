@@ -313,7 +313,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
         OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SfxItemState::SET == rSet2.GetItemState( nWhichId, false ) )
         {
-            pNewSet = rSet2.Clone( true );
+            pNewSet = rSet2.Clone();
             pNewSet->ClearItem( nWhichId );
         }
     }
@@ -326,7 +326,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
             if ( SfxItemState::SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
                 if ( !pNewSet )
-                    pNewSet = rSet2.Clone( true );
+                    pNewSet = rSet2.Clone();
                 pNewSet->ClearItem( pItem->Which() );
             }
 
@@ -1938,7 +1938,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwIndex( this, nMyOff ), nCnt, false );
+            Update( SwIndex( this, nMyOff ), nCnt );
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;

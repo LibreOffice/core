@@ -1825,7 +1825,7 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
         *pCrsr->GetPoint() = *ppPos[0];
         pCrsr->GetPtPos() = paPt[0];
 
-        if ( !pCrsr->IsInProtectTable( false ) )
+        if ( !pCrsr->IsInProtectTable() )
         {
             bool bNewSelection = true;
 

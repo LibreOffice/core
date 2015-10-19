@@ -1204,7 +1204,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
                 Point aCrsrPos2( nXTmp, nYTmp );
                 bSelectObj = m_pWrtShell->IsObjSelectable( aCrsrPos2 );
 
-                m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos2, false );
+                m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos2 );
                 if( bSelectObj )
                 {
                     m_pWrtShell->SelectObj( aCrsrPos2 );

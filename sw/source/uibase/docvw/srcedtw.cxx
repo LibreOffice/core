@@ -542,7 +542,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pTextEngine->EnableUndo( true );
     pTextEngine->SetUpdateMode( true );
 
-    pTextView->ShowCursor( true );
+    pTextView->ShowCursor();
     InitScrollBars();
     StartListening( *pTextEngine );
 

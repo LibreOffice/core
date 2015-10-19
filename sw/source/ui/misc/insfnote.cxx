@@ -96,7 +96,7 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberEditHdl, Edit&, void)
 
 IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberAutoBtnHdl, Button*, void)
 {
-    m_pOkBtn->Enable( true );
+    m_pOkBtn->Enable();
 }
 
 IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)

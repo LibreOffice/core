@@ -2126,9 +2126,9 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
     {
         const SvxLRSpaceItem *pLRItem = 0;
         const SvxULSpaceItem *pULItem = 0;
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE ) )
             pLRItem = &aLRItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE ) )
             pULItem = &aULItem;
         if( pLRItem || pULItem )
             OutCSS1_SvxULSpace_SvxLRSpace( *this, pULItem, pLRItem );

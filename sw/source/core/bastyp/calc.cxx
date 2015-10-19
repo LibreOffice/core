@@ -524,7 +524,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
         if( pMgr && !sSourceName.isEmpty() && !sTableName.isEmpty() &&
-            pMgr->OpenDataSource(sSourceName, sTableName, -1))
+            pMgr->OpenDataSource(sSourceName, sTableName))
         {
             OUString sColumnName( GetColumnName( sTmpName ));
             OSL_ENSURE(!sColumnName.isEmpty(), "Missing DB column name");
@@ -587,7 +587,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
         if( pMgr && !sSourceName.isEmpty() && !sTableName.isEmpty() &&
-            pMgr->OpenDataSource(sSourceName, sTableName, -1) &&
+            pMgr->OpenDataSource(sSourceName, sTableName) &&
             !pMgr->IsInMerge())
         {
             pNewExp->nValue.PutULong( pMgr->GetSelectedRecordId(sSourceName, sTableName));

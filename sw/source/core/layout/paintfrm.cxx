@@ -4226,7 +4226,7 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 SwRect aPaintRect( aRect );
                 aPaintRect._Intersection( pParentFlyFrm->Frm() );
-                pParentFlyFrm->PaintBackground( aPaintRect, pPage, rAttrs, false, false );
+                pParentFlyFrm->PaintBackground( aPaintRect, pPage, rAttrs );
 
                 gProp.pSRetoucheFly2 = pOldRet;
             }
@@ -7650,7 +7650,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         gProp.pSGlobalShell = pSh;
 
         bool bNoteURL = pMap &&
-            SfxItemState::SET != GetAttrSet().GetItemState( RES_URL, true );
+            SfxItemState::SET != GetAttrSet().GetItemState( RES_URL );
         if( bNoteURL )
         {
             OSL_ENSURE( !pNoteURL, "MakeGraphic: pNoteURL already used? " );

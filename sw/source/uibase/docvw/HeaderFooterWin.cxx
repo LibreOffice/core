@@ -510,8 +510,8 @@ IMPL_LINK_NOARG_TYPED(SwHeaderFooterWin, FadeHandler, Timer *, void)
 
     if (m_nFadeRate != 100 && !IsVisible())
     {
-        Show(true);
-        m_pLine->Show(true);
+        Show();
+        m_pLine->Show();
     }
     else if (m_nFadeRate == 100 && IsVisible())
     {

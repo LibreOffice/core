@@ -901,7 +901,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                             if ( !pCurrentCharFormat || 0 == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
                             {
                                 if ( !pNewSet )
-                                    pNewSet = pNewStyle->Clone( true );
+                                    pNewSet = pNewStyle->Clone();
                                 pNewSet->ClearItem( pItem->Which() );
                             }
                         }
@@ -1995,7 +1995,7 @@ static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         {
             if( ( nWhich < RES_CHRATR_END ||
                   RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) &&
-                ( SfxItemState::SET == pCFSet->GetItemState( nWhich, true ) ) )
+                ( SfxItemState::SET == pCFSet->GetItemState( nWhich ) ) )
                 rSet.Put( pCFSet->Get( nWhich ) );
             nWhich = aIter.NextWhich();
         }
@@ -2020,7 +2020,7 @@ static void lcl_MergeAttr_ExpandChrFormat( SfxItemSet& rSet, const SfxPoolItem& 
             {
                 if( ( nWhich < RES_CHRATR_END ||
                       ( RES_TXTATR_AUTOFMT == rAttr.Which() && RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) ) &&
-                    ( SfxItemState::SET == pCFSet->GetItemState( nWhich, true ) ) )
+                    ( SfxItemState::SET == pCFSet->GetItemState( nWhich ) ) )
                     rSet.Put( pCFSet->Get( nWhich ) );
                 nWhich = aIter.NextWhich();
             }

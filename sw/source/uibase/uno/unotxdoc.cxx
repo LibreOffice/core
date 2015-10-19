@@ -1066,7 +1066,7 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             sEntry += ".";
         }
     sEntry += rOutlineNodes[ nIndex ]->
-                    GetTextNode()->GetExpandText( 0, -1, false );
+                    GetTextNode()->GetExpandText();
     return sEntry;
 }
 

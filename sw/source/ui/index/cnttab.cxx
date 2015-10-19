@@ -847,7 +847,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
-                                 false, false );
+                                 false );
 
     //Default mode is arranged to be the tallest mode
     //of alphabetical index, lock that height in now
@@ -4105,7 +4105,7 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     }
     if( pToInsert )
         aEntryArr.push_back(pToInsert);
-    RowInserted(0, aEntryArr.size() + 1, true);
+    RowInserted(0, aEntryArr.size() + 1);
 }
 
 void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
@@ -4172,7 +4172,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
     SetText(GetText() + ": " + sAutoMarkURL);
     bool bError = false;
     if( bCreateMode )
-        m_pEntriesBB->RowInserted(0, 1, true);
+        m_pEntriesBB->RowInserted(0);
     else
     {
         SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ );

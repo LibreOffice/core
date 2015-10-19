@@ -1062,7 +1062,7 @@ const SwContentFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         // With this we won't run into problems with the columns.
         Point aTmp( aNew );
         const SwContentFrm *pTmp = pCnt->FindPageFrm()->
-                                        GetContentPos( aTmp, false, true, false );
+                                        GetContentPos( aTmp, false, true );
         if ( pTmp && pTmp->Frm().IsInside( aNew ) )
             return pTmp;
     }

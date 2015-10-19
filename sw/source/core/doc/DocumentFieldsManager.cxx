@@ -1656,7 +1656,7 @@ void DocumentFieldsManager::UpdateDBNumFields( SwDBNameInfField& rDBField, SwCal
 
         SwDBData aTmpDBData( rDBField.GetDBData(&m_rDoc) );
 
-        if( pMgr->OpenDataSource( aTmpDBData.sDataSource, aTmpDBData.sCommand, -1 ))
+        if( pMgr->OpenDataSource( aTmpDBData.sDataSource, aTmpDBData.sCommand ))
             rCalc.VarChange( lcl_GetDBVarName( m_rDoc, rDBField),
                         pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType) );
     }

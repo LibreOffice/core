@@ -2622,7 +2622,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 {
     // Position hinter dem eingefuegt wird
     SwNodeIndex aIdx( rPos.nNode, 1 );
-    SwTextNode* pNew = _MakeNewTextNode( aIdx, true );
+    SwTextNode* pNew = _MakeNewTextNode( aIdx );
 
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
@@ -3343,7 +3343,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 
         OUString aTmpText( sInserted.copy(1) );
         m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpText);
-        Update( rStart, aTmpText.getLength(), false );
+        Update( rStart, aTmpText.getLength() );
     }
     else
     {
@@ -3351,7 +3351,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
         Update( rStart, nLen, true );
 
         m_Text = m_Text.replaceAt(nStartPos, 0, sInserted);
-        Update( rStart, sInserted.getLength(), false );
+        Update( rStart, sInserted.getLength() );
     }
 
     SetIgnoreDontExpand( bOldExpFlg );

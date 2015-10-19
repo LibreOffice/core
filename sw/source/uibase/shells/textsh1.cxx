@@ -1370,7 +1370,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         RES_TXTATR_INETFMT,
                         RES_TXTATR_INETFMT);
         rWrtSh.GetCurAttr(aSet);
-        if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
+        if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
             const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
             if( nSlot == FN_COPY_HYPERLINK_LOCATION )
@@ -1718,7 +1718,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         RES_TXTATR_INETFMT,
                         RES_TXTATR_INETFMT);
                     rSh.GetCurAttr(aSet);
-                    if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT, true ) || rSh.HasReadonlySel())
+                    if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT ) || rSh.HasReadonlySel())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -1732,8 +1732,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetCurAttr(aSet);
 
                 // If a hyperlink is selected, either alone or along with other text...
-                if ((aSet.GetItemState(RES_TXTATR_INETFMT, true) < SfxItemState::SET &&
-                    aSet.GetItemState(RES_TXTATR_INETFMT, true) != SfxItemState::DONTCARE) ||
+                if ((aSet.GetItemState(RES_TXTATR_INETFMT) < SfxItemState::SET &&
+                    aSet.GetItemState(RES_TXTATR_INETFMT) != SfxItemState::DONTCARE) ||
                     rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);

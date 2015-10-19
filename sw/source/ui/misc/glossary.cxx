@@ -446,8 +446,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     if (sItemIdent == "replace")
     {
         pGlossaryHdl->NewGlossary(m_pNameED->GetText(),
-                                  m_pShortNameEdit->GetText(),
-                                  false);
+                                  m_pShortNameEdit->GetText());
     }
     else if (sItemIdent == "replacetext")
     {

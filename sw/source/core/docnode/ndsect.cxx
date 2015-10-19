@@ -297,7 +297,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         if( !pPos->nContent.GetIndex() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFormat, rNewData, pTOXBase, 0, true);
+                pPos->nNode, *pFormat, rNewData, pTOXBase, 0);
         }
         else if( pPos->nContent.GetIndex() == pCNd->Len() )
         {
@@ -312,7 +312,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             }
             getIDocumentContentOperations().SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFormat, rNewData, pTOXBase, 0, true);
+                pPos->nNode, *pFormat, rNewData, pTOXBase, 0);
         }
     }
 

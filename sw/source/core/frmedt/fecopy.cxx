@@ -192,7 +192,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                 aSet.Put( aAnchor );
 
                 SdrObject *const pNew =
-                    pClpDoc->CloneSdrObj( *pObj, false );
+                    pClpDoc->CloneSdrObj( *pObj );
 
                 SwPaM aTemp(aPos);
                 pClpDoc->getIDocumentContentOperations().InsertDrawObj(aTemp, *pNew, aSet );
@@ -867,8 +867,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     ::PaMCorrAbs(tmpPaM, aPos);
                 }
 
-                bRet = GetDoc()->InsCopyOfTable( aDestPos, aBoxes, &pSrcNd->GetTable(),
-                                            false );
+                bRet = GetDoc()->InsCopyOfTable( aDestPos, aBoxes, &pSrcNd->GetTable() );
 
                 if( bParkTableCrsr )
                     GetCrsr();

@@ -1745,7 +1745,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
         SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
         if ( pLayout )
             m_bCalcLowers = pLayout->Resize(
-                            pLayout->GetBrowseWidthByTabFrm( *this ), false );
+                            pLayout->GetBrowseWidthByTabFrm( *this ) );
     }
 
     // as long as bMakePage is true, a new page can be created (exactly once)
@@ -1868,7 +1868,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     delete pAccess;
                     m_bCalcLowers |= pLayout->Resize(
-                        pLayout->GetBrowseWidthByTabFrm( *this ), false );
+                        pLayout->GetBrowseWidthByTabFrm( *this ) );
                     pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
                 }
@@ -1912,7 +1912,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 delete pAccess;
                 m_bCalcLowers |= pLayout->Resize(
-                    pLayout->GetBrowseWidthByTabFrm( *this ), false );
+                    pLayout->GetBrowseWidthByTabFrm( *this ) );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
@@ -1961,8 +1961,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         {
                             delete pAccess;
                             m_bCalcLowers |= pHTMLLayout->Resize(
-                                pHTMLLayout->GetBrowseWidthByTabFrm( *this ),
-                                false );
+                                pHTMLLayout->GetBrowseWidthByTabFrm( *this ) );
 
                             pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
@@ -3488,7 +3487,7 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             const SwPageDesc *pDesc = GetFormat()->GetPageDesc().GetPageDesc();
             if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
                  (!pDesc && pPage->GetPageDesc() != &GetFormat()->GetDoc()->GetPageDesc(0)) )
-                CheckPageDescs( pPage, true );
+                CheckPageDescs( pPage );
         }
     }
 }

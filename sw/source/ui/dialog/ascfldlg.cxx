@@ -168,7 +168,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                 }
             }
 
-            m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL, true, false );
+            m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL, true );
             m_pLanguageLB->SelectLanguage( aOpt.GetLanguage() );
         }
 

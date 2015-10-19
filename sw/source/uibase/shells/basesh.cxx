@@ -1107,7 +1107,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     rSh.EnterStdMode();
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( false, false, false );
+                    rSh.GetLinkManager().UpdateAllLinks( false, false );
                     rSh.EndAllAction();
                 }
             }
@@ -2559,7 +2559,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             rSh.StartUndo(UNDO_INSTABLE);
             bCallEndUndo = true;
 
-            bool bInserted = rSh.TextToTable( aInsTableOpts, '\t', text::HoriOrientation::FULL );
+            bool bInserted = rSh.TextToTable( aInsTableOpts, '\t' );
             rSh.EnterStdMode();
             if (bInserted)
                 rTempView.AutoCaption(TABLE_CAP);

@@ -1544,7 +1544,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetCurAttr(aSet);
                             if(SfxItemState::DEFAULT <=
-                               aSet.GetItemState(RES_PARATR_NUMRULE, true))
+                               aSet.GetItemState(RES_PARATR_NUMRULE))
                             {
                                 const OUString& rNumStyle =
                                     static_cast<const SfxStringItem &>(

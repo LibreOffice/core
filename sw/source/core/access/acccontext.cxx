@@ -1365,7 +1365,7 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
                          pFEShell->IsObjSelected()) )
         {
             Point aPt( LONG_MIN, LONG_MIN );
-            pFEShell->SelectObj( aPt, 0 );
+            pFEShell->SelectObj( aPt );
             bCallShowCrsr = true;
         }
         pCrsrShell->KillPams();

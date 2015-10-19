@@ -208,7 +208,7 @@ void SwFootnoteContFrm::Format( vcl::RenderContext* /*pRenderContext*/, const Sw
                 bGrow = false;
         }
         if( bGrow )
-                Grow( LONG_MAX, false );
+                Grow( LONG_MAX );
         else
         {
             // VarSize is determined based on the content plus the borders

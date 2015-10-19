@@ -327,7 +327,7 @@ void SwWrtShell::UnSelectFrm()
 {
     // Remove Frame selection with guaranteed invalid position
     Point aPt(LONG_MIN, LONG_MIN);
-    SelectObj(aPt, 0);
+    SelectObj(aPt);
     SwTransferable::ClearSelection( *this );
 }
 
@@ -875,7 +875,7 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
         return NO_WORD;
 
     cPrev = GetChar(false, -1);
-    cNext = GetChar(true);
+    cNext = GetChar();
 
     int cWord = NO_WORD;
         // is a word selected?
