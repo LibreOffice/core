@@ -68,7 +68,7 @@ struct IsoLanguageCountryEntry
     OUString getTagString() const;
 
     /** Obtain a locale. */
-    ::com::sun::star::lang::Locale getLocale() const;
+    css::lang::Locale getLocale() const;
 };
 
 struct IsoLanguageScriptCountryEntry
@@ -82,7 +82,7 @@ struct IsoLanguageScriptCountryEntry
     OUString getTagString() const;
 
     /** Obtain a locale. */
-    ::com::sun::star::lang::Locale getLocale() const;
+    css::lang::Locale getLocale() const;
 
     /** If rStr starts with maLanguageScript ignoring case.
 
@@ -102,7 +102,7 @@ struct Bcp47CountryEntry
     OUString getTagString() const;
 
     /** Obtain a locale. */
-    ::com::sun::star::lang::Locale getLocale() const;
+    css::lang::Locale getLocale() const;
 };
 
 struct IsoLangEngEntry
@@ -766,7 +766,7 @@ OUString IsoLanguageCountryEntry::getTagString() const
         return OUString::createFromAscii( maLanguage);
 }
 
-::com::sun::star::lang::Locale IsoLanguageCountryEntry::getLocale() const
+css::lang::Locale IsoLanguageCountryEntry::getLocale() const
 {
     return lang::Locale( OUString::createFromAscii( maLanguage), OUString::createFromAscii( maCountry), OUString());
 }
@@ -779,7 +779,7 @@ OUString IsoLanguageScriptCountryEntry::getTagString() const
         return OUString::createFromAscii( maLanguageScript);
 }
 
-::com::sun::star::lang::Locale IsoLanguageScriptCountryEntry::getLocale() const
+css::lang::Locale IsoLanguageScriptCountryEntry::getLocale() const
 {
     return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
@@ -794,7 +794,7 @@ OUString Bcp47CountryEntry::getTagString() const
     return OUString::createFromAscii( mpBcp47);
 }
 
-::com::sun::star::lang::Locale Bcp47CountryEntry::getLocale() const
+css::lang::Locale Bcp47CountryEntry::getLocale() const
 {
     return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
@@ -922,7 +922,7 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 
 // static
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
-        ::com::sun::star::lang::Locale & rLocale, bool bIgnoreOverride )
+        css::lang::Locale & rLocale, bool bIgnoreOverride )
 {
     const IsoLanguageScriptCountryEntry* pScriptEntryOverride = NULL;
     const IsoLanguageCountryEntry* pEntryOverride = NULL;
@@ -1005,7 +1005,7 @@ Label_Override_Lang_Locale:
 
 
 // static
-com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageCountryEntry * pEntry )
+css::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageCountryEntry * pEntry )
 {
     if (pEntry->mnOverride)
     {
@@ -1018,7 +1018,7 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageC
 }
 
 // static
-com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageScriptCountryEntry * pEntry )
+css::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageScriptCountryEntry * pEntry )
 {
     if (pEntry->mnOverride)
     {
@@ -1031,8 +1031,8 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageS
 }
 
 // static
-::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
-        const ::com::sun::star::lang::Locale & rLocale )
+css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
+        const css::lang::Locale & rLocale )
 {
     // language is lower case in table
     OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
@@ -1168,7 +1168,7 @@ LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& 
 
 // static
 LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
-        const ::com::sun::star::lang::Locale& rLocale )
+        const css::lang::Locale& rLocale )
 {
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
@@ -1215,7 +1215,7 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::Conversion::getOverride( const ::com::sun::star::lang::Locale& rLocale )
+css::lang::Locale MsLangId::Conversion::getOverride( const css::lang::Locale& rLocale )
 {
     if (rLocale.Language == I18NLANGTAG_QLT)
     {

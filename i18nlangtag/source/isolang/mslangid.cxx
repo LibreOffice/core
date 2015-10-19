@@ -118,17 +118,17 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
         return nLang;
 
     nLang = getRealLanguage(nLang);
-    if (nType != ::com::sun::star::i18n::ScriptType::WEAK && getScriptType(nLang) != nType)
+    if (nType != css::i18n::ScriptType::WEAK && getScriptType(nLang) != nType)
     {
         switch(nType)
         {
-            case ::com::sun::star::i18n::ScriptType::ASIAN:
+            case css::i18n::ScriptType::ASIAN:
                 if (nConfiguredAsianFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_CHINESE_SIMPLIFIED;
                 else
                     nLang = nConfiguredAsianFallback;
                 break;
-            case ::com::sun::star::i18n::ScriptType::COMPLEX:
+            case css::i18n::ScriptType::COMPLEX:
                 if (nConfiguredComplexFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_HINDI;
                 else
@@ -147,10 +147,10 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
+css::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
         LanguageType nLang, bool bResolveSystem )
 {
-    ::com::sun::star::lang::Locale aLocale;
+    css::lang::Locale aLocale;
     if (!bResolveSystem && simplifySystemLanguages( nLang) == LANGUAGE_SYSTEM)
         ;   // nothing => empty locale
     else
@@ -175,7 +175,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 
 // static
 LanguageType MsLangId::Conversion::convertLocaleToLanguage(
-        const ::com::sun::star::lang::Locale& rLocale )
+        const css::lang::Locale& rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
@@ -186,8 +186,8 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
-            const ::com::sun::star::lang::Locale & rLocale )
+css::lang::Locale MsLangId::getFallbackLocale(
+            const css::lang::Locale & rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
@@ -248,7 +248,7 @@ bool MsLangId::isSimplifiedChinese( LanguageType nLang )
 }
 
 // static
-bool MsLangId::isSimplifiedChinese( const ::com::sun::star::lang::Locale & rLocale )
+bool MsLangId::isSimplifiedChinese( const css::lang::Locale & rLocale )
 {
     return rLocale.Language == "zh" && !isTraditionalChinese(rLocale);
 }
@@ -270,7 +270,7 @@ bool MsLangId::isTraditionalChinese( LanguageType nLang )
 }
 
 // static
-bool MsLangId::isTraditionalChinese( const ::com::sun::star::lang::Locale & rLocale )
+bool MsLangId::isTraditionalChinese( const css::lang::Locale & rLocale )
 {
     return rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO");
 }
@@ -351,7 +351,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
         case LANGUAGE_USER_KYRGYZ_CHINA:
-            nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
+            nScript = css::i18n::ScriptType::COMPLEX;
             break;
 
         // "Western"
@@ -359,7 +359,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
         case LANGUAGE_USER_KURDISH_SYRIA:
         case LANGUAGE_USER_KURDISH_TURKEY:
-            nScript = ::com::sun::star::i18n::ScriptType::LATIN;
+            nScript = css::i18n::ScriptType::LATIN;
             break;
 
 // currently not knowing scripttype - defaulted to LATIN:
@@ -380,7 +380,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_KOREAN               & LANGUAGE_MASK_PRIMARY:
-                    nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+                    nScript = css::i18n::ScriptType::ASIAN;
                     break;
 
                     // CTL catcher
@@ -420,13 +420,13 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 case LANGUAGE_USER_MAITHILI_INDIA & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_USER_NKO            & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY:
-                    nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
+                    nScript = css::i18n::ScriptType::COMPLEX;
                     break;
 
                 // Western (actually not necessarily Latin but also Cyrillic,
                 // for example)
                 default:
-                    nScript = ::com::sun::star::i18n::ScriptType::LATIN;
+                    nScript = css::i18n::ScriptType::LATIN;
             }
             break;
     }
@@ -461,7 +461,7 @@ bool MsLangId::isNonLatinWestern( LanguageType nLang )
             return true;
         default:
             {
-                if (getScriptType( nLang) != com::sun::star::i18n::ScriptType::LATIN)
+                if (getScriptType( nLang) != css::i18n::ScriptType::LATIN)
                     return false;
                 LanguageTag aLanguageTag( nLang);
                 if (aLanguageTag.hasScript())
