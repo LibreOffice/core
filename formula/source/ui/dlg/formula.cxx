@@ -979,7 +979,7 @@ void FormulaDlg_Impl::ClearAllParas()
         m_pFtEditName->Hide();
         m_pParaWinBox->Hide();
 
-        m_pBtnForward->Enable(true); //@new
+        m_pBtnForward->Enable(); //@new
         m_pFtHeadLine->Show();
         m_pFtFuncName->Show();
         m_pFtFuncDesc->Show();
@@ -1059,7 +1059,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
     else if ( pBtn == m_pBtnBackward )
     {
         bEditFlag=false;
-        m_pBtnForward->Enable(true);
+        m_pBtnForward->Enable();
         EditNextFunc( false );
         m_pMEFormula->Invalidate();
         m_pMEFormula->Update();
@@ -1243,7 +1243,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
 {
     if(&rPtr==pParaWin)
     {
-        m_pBtnForward->Enable(true); //@ In order to be able to input another function.
+        m_pBtnForward->Enable(); //@ In order to be able to input another function.
         m_pTabCtrl->SetCurPageId(TP_FUNCTION);
 
         OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
@@ -1597,7 +1597,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
     {
         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
 
-        if(pDesc!=pFuncDesc) m_pBtnForward->Enable(true); //new
+        if(pDesc!=pFuncDesc) m_pBtnForward->Enable(); //new
 
         if (pDesc)
         {
