@@ -329,10 +329,10 @@ public:
 
     void KeyMove(int dx, int dy);
 
-    void SetModifyHdl(Link<>& rLink) { maModifyHdl = rLink; }
+    void SetModifyHdl(const Link<ColorFieldControl&,void>& rLink) { maModifyHdl = rLink; }
 
 private:
-    Link<> maModifyHdl;
+    Link<ColorFieldControl&,void> maModifyHdl;
     ColorMode meMode;
     Color maColor;
     double mdX;
@@ -682,7 +682,7 @@ void ColorFieldControl::Resize()
 
 void ColorFieldControl::Modify()
 {
-    maModifyHdl.Call( this );
+    maModifyHdl.Call( *this );
 }
 
 void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, double y )
@@ -732,7 +732,7 @@ public:
 
     void KeyMove( int dy );
 
-    void SetModifyHdl( Link<>& rLink ) { maModifyHdl = rLink; }
+    void SetModifyHdl( const Link<>& rLink ) { maModifyHdl = rLink; }
 
     sal_Int16 GetLevel() const { return mnLevel; }
 
@@ -990,6 +990,7 @@ public:
     void update_color(sal_uInt16 n = UPDATE_ALL);
 
     DECL_LINK(ColorModifyHdl, void*);
+    DECL_LINK_TYPED(ColorFieldControlModifydl, ColorFieldControl&, void);
     DECL_LINK_TYPED(ColorModifyEditHdl, Edit&, void);
     DECL_LINK_TYPED(ModeModifyHdl, RadioButton&, void);
 
@@ -1071,9 +1072,8 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     set_width_request(aDialogSize.Width() + 50);
     set_height_request(aDialogSize.Height() + 30);
 
-    Link<> aLink( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
-    mpColorField->SetModifyHdl( aLink );
-    mpColorSlider->SetModifyHdl( aLink );
+    mpColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
+    mpColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
 
     Link<Edit&,void> aLink3( LINK( this, ColorPickerDialog, ColorModifyEditHdl ) );
     mpMFRed->SetModifyHdl( aLink3 );
@@ -1284,46 +1284,52 @@ IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 {
     ColorModifyHdl(&rEdit);
 }
+IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
+{
+    sal_uInt16 n = 0;
+
+    double x = mpColorField->GetX();
+    double y = mpColorField->GetY();
+
+    switch( meMode )
+    {
+    case HUE:
+        mdSat = x;
+        setColorComponent( COLORCOMP_BRI, y );
+        break;
+    case SATURATION:
+        mdHue = x * 360.0;
+        setColorComponent( COLORCOMP_BRI, y );
+        break;
+    case BRIGHTNESS:
+        mdHue = x * 360.0;
+        setColorComponent( COLORCOMP_SAT, y );
+        break;
+    case RED:
+        mdBlue = x;
+        setColorComponent( COLORCOMP_GREEN, y );
+        break;
+    case GREEN:
+        mdBlue = x;
+        setColorComponent( COLORCOMP_RED, y );
+        break;
+    case BLUE:
+        mdRed = x;
+        setColorComponent( COLORCOMP_GREEN, y );
+        break;
+    }
+
+    n = UPDATE_ALL &~ (UPDATE_COLORCHOOSER);
+
+    if (n)
+        update_color(n);
+
+}
 IMPL_LINK(ColorPickerDialog, ColorModifyHdl, void *, p)
 {
     sal_uInt16 n = 0;
 
-    if (p == mpColorField)
-    {
-        double x = mpColorField->GetX();
-        double y = mpColorField->GetY();
-
-        switch( meMode )
-        {
-        case HUE:
-            mdSat = x;
-            setColorComponent( COLORCOMP_BRI, y );
-            break;
-        case SATURATION:
-            mdHue = x * 360.0;
-            setColorComponent( COLORCOMP_BRI, y );
-            break;
-        case BRIGHTNESS:
-            mdHue = x * 360.0;
-            setColorComponent( COLORCOMP_SAT, y );
-            break;
-        case RED:
-            mdBlue = x;
-            setColorComponent( COLORCOMP_GREEN, y );
-            break;
-        case GREEN:
-            mdBlue = x;
-            setColorComponent( COLORCOMP_RED, y );
-            break;
-        case BLUE:
-            mdRed = x;
-            setColorComponent( COLORCOMP_GREEN, y );
-            break;
-        }
-
-        n = UPDATE_ALL &~ (UPDATE_COLORCHOOSER);
-    }
-    else if (p == mpColorSlider)
+    if (p == mpColorSlider)
     {
         double dValue = mpColorSlider->GetValue();
         switch (meMode)
