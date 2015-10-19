@@ -1023,7 +1023,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
 
     switch ( unicode::getUnicodeType(uChar) )
     {
-        case ::com::sun::star::i18n::UnicodeType::SURROGATE:
+        case css::i18n::UnicodeType::SURROGATE:
             if( bPreventNonHex )
             {
                 mbAllowMoreChars = false;
@@ -1045,8 +1045,8 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
             mbAllowMoreChars = false;
             break;
 
-        case ::com::sun::star::i18n::UnicodeType::NON_SPACING_MARK:
-        case ::com::sun::star::i18n::UnicodeType::COMBINING_SPACING_MARK:
+        case css::i18n::UnicodeType::NON_SPACING_MARK:
+        case css::i18n::UnicodeType::COMBINING_SPACING_MARK:
             if( bPreventNonHex )
             {
                 mbAllowMoreChars = false;
