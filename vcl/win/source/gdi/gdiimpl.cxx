@@ -1256,7 +1256,7 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
             }
 
             if ( mrParent.mpClipRgnData != mrParent.mpStdClipRgnData )
-                delete [] mrParent.mpClipRgnData;
+                delete [] (BYTE*)mrParent.mpClipRgnData;
         }
     }
 
