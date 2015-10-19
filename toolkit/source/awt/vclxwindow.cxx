@@ -2306,7 +2306,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->SetPosPixel( aOldPos );
                 if ( bWasVisible )
-                    pWindow->Show( true );
+                    pWindow->Show();
             }
         }
         else if ( pDev )
