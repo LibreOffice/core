@@ -322,7 +322,7 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
             pView->pImpEditView->DrawSelection();
             pView->pImpEditView->SetEditSelection( aNewSelection );
             pView->pImpEditView->DrawSelection();
-            pView->ShowCursor( true );
+            pView->ShowCursor();
         }
         else if ( rMEvt.GetClicks() == 3 )
         {

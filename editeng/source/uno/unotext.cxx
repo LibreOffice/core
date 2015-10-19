@@ -697,7 +697,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
 
     case EE_PARA_NUMBULLET:
         {
-            SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET, true );
+            SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET );
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
                 throw uno::RuntimeException();
 
@@ -739,7 +739,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
     case EE_PARA_BULLETSTATE:
         {
             bool bState = false;
-            SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE, true );
+            SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE );
             if( eState == SfxItemState::SET || eState == SfxItemState::DEFAULT )
             {
                 const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(rSet.GetItem( EE_PARA_BULLETSTATE ));

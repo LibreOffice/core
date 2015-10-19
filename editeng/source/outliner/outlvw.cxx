@@ -210,7 +210,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                                     ESelection aTmpSel(nTemp,0,nTemp,0);
                                     pEditView->SetSelection( aTmpSel );
                                 }
-                                pEditView->ShowCursor( true );
+                                pEditView->ShowCursor();
                                 pOwner->UndoActionEnd( OLUNDO_INSERT );
                                 bKeyProcessed = true;
                             }
@@ -228,7 +228,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                         // Position the cursor
                         ESelection aTmpSel(nTemp,0,nTemp,0);
                         pEditView->SetSelection( aTmpSel );
-                        pEditView->ShowCursor( true );
+                        pEditView->ShowCursor();
                         pOwner->UndoActionEnd( OLUNDO_INSERT );
                         bKeyProcessed = true;
                     }
@@ -668,7 +668,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionEnd( OLUNDO_INSERT );
 
-    pEditView->ShowCursor( true );
+    pEditView->ShowCursor();
 }
 
 
@@ -707,7 +707,7 @@ void OutlinerView::PasteSpecial()
 
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
-        pEditView->ShowCursor( true );
+        pEditView->ShowCursor();
 
         // Chaining handling
         // NOTE: We need to do this last because it pEditView may be deleted if a switch of box occurs

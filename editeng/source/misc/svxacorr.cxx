@@ -1550,7 +1550,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 {
     OSL_ENSURE(m_pLangTable->find(rLanguageTag) == m_pLangTable->end(), "Language already exists ");
 
-    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true, false ));
+    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true ));
     OUString sShareDirFile( sUserDirFile );
 
     SvxAutoCorrectLanguageLists* pLists = 0;
@@ -1576,7 +1576,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
     else if(
              ( FStatHelper::IsDocument( sUserDirFile ) ||
                FStatHelper::IsDocument( sShareDirFile =
-                   GetAutoCorrFileName( rLanguageTag, false, false ) ) ||
+                   GetAutoCorrFileName( rLanguageTag ) ) ||
                FStatHelper::IsDocument( sShareDirFile =
                    GetAutoCorrFileName( rLanguageTag, false, false, true) )
              ) ||
