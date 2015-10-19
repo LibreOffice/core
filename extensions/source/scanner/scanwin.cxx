@@ -83,7 +83,7 @@ class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
     ScannerManager&                             mrMgr;
     TW_IDENTITY                                 aAppIdent;
     TW_IDENTITY                                 aSrcIdent;
-    Link<>                                      aNotifyLink;
+    Link<unsigned long,void>                    aNotifyLink;
     DSMENTRYPROC                                pDSM;
     osl::Module*                                pMod;
     ULONG_PTR                                   nCurState;
@@ -116,7 +116,7 @@ class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
 
 public:
 
-                                                ImpTwain( ScannerManager& rMgr, const Link<>& rNotifyLink );
+                                                ImpTwain( ScannerManager& rMgr, const Link<unsigned long,void>& rNotifyLink );
                                                 ~ImpTwain();
 
     void                                        Destroy();
@@ -150,7 +150,7 @@ LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 }
 
 // #107835# hold reference to ScannerManager, to prevent premature death
-ImpTwain::ImpTwain( ScannerManager& rMgr, const Link<>& rNotifyLink ) :
+ImpTwain::ImpTwain( ScannerManager& rMgr, const Link<unsigned long,void>& rNotifyLink ) :
             mxMgr( uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( &rMgr ), uno::UNO_QUERY) ),
             mrMgr( rMgr ),
             aNotifyLink( rNotifyLink ),
@@ -215,7 +215,7 @@ bool ImpTwain::SelectSource()
         TW_IDENTITY aIdent;
 
         aIdent.Id = 0, aIdent.ProductName[ 0 ] = '\0';
-        aNotifyLink.Call( (void*) TWAIN_EVENT_SCANNING );
+        aNotifyLink.Call( TWAIN_EVENT_SCANNING );
         nRet = PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_IDENTITY, MSG_USERSELECT, &aIdent );
     }
 
@@ -296,7 +296,7 @@ bool ImpTwain::ImplEnableSource()
     {
         TW_USERINTERFACE aUI = { true, true, hTwainWnd };
 
-        aNotifyLink.Call( (void*) TWAIN_EVENT_SCANNING );
+        aNotifyLink.Call( TWAIN_EVENT_SCANNING );
         nCurState = 5;
 
         // register as vetoable close listener, to prevent application to die under us
@@ -480,7 +480,7 @@ IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
         default:
         {
             if( nEvent != TWAIN_EVENT_NONE )
-                aNotifyLink.Call( (void*) nEvent );
+                aNotifyLink.Call( nEvent );
 
             bFallback = false;
         }
@@ -637,7 +637,7 @@ class Twain
     ImpTwain*                                   mpImpTwain;
     TwainState                                  meState;
 
-                                                DECL_LINK( ImpNotifyHdl, ImpTwain* );
+    DECL_LINK_TYPED( ImpNotifyHdl, unsigned long, void );
 
 public:
 
@@ -704,9 +704,9 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
     return bRet;
 }
 
-IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
+IMPL_LINK_TYPED( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
 {
-    switch( (sal_uIntPtr)(void*) nEvent )
+    switch( nEvent )
     {
         case( TWAIN_EVENT_SCANNING ):
             meState = TWAIN_STATE_SCANNING;
@@ -752,8 +752,6 @@ IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
         default:
         break;
     }
-
-    return 0L;
 }
 
 static Twain aTwain;
