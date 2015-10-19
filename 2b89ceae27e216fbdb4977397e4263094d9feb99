@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_f40bd87b",
+        "filename": "sfx2/source/sidebar/SidebarToolBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-10-19T19:16:06Z",
+      "side": 1,
+      "message": "Please use \u003d\u003d instead of compareTo. It\u0027s more readable, and to my understanding won\u0027t create temporary OUString.",
+      "revId": "2b89ceae27e216fbdb4977397e4263094d9feb99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
