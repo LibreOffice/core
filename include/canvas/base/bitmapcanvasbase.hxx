@@ -61,26 +61,26 @@ namespace canvas
     template< class Base,
               class CanvasHelper,
               class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class BitmapCanvasBase :
+              class UnambiguousBase=css::uno::XInterface > class BitmapCanvasBase :
         public CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
     {
     public:
         typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
 
         // XBitmap
-        virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual css::geometry::IntegerSize2D SAL_CALL getSize(  ) throw (css::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.getSize();
         }
 
-        virtual sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual sal_Bool SAL_CALL hasAlpha(  ) throw (css::uno::RuntimeException) override
         {
             return sal_True;
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize,
                                                                                                                    sal_Bool                                      beFast ) throw (css::uno::RuntimeException, std::exception) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -93,7 +93,7 @@ namespace canvas
     template< class Base,
               class CanvasHelper,
               class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class BitmapCanvasBase2 :
+              class UnambiguousBase = css::uno::XInterface > class BitmapCanvasBase2 :
         public BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
     {
         typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
@@ -101,14 +101,14 @@ namespace canvas
 
     public:
         // XBitmapCanvas
-        virtual void SAL_CALL copyRect( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >&   sourceCanvas,
-                                        const ::com::sun::star::geometry::RealRectangle2D&                                      sourceRect,
-                                        const ::com::sun::star::rendering::ViewState&                                           sourceViewState,
-                                        const ::com::sun::star::rendering::RenderState&                                         sourceRenderState,
-                                        const ::com::sun::star::geometry::RealRectangle2D&                                      destRect,
-                                        const ::com::sun::star::rendering::ViewState&                                           destViewState,
-                                        const ::com::sun::star::rendering::RenderState&                                         destRenderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                         ::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
+                                        const css::geometry::RealRectangle2D&                                      sourceRect,
+                                        const css::rendering::ViewState&                                           sourceViewState,
+                                        const css::rendering::RenderState&                                         sourceRenderState,
+                                        const css::geometry::RealRectangle2D&                                      destRect,
+                                        const css::rendering::ViewState&                                           destViewState,
+                                        const css::rendering::RenderState&                                         destRenderState ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                         css::uno::RuntimeException) override
         {
             tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
                               destRect, destViewState, destRenderState,

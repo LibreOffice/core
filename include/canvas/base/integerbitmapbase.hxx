@@ -41,8 +41,8 @@ namespace canvas
     {
     public:
         // XIntegerBitmap
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getData( ::com::sun::star::rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                                              const ::com::sun::star::geometry::IntegerRectangle2D& rect ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
+                                                                              const css::geometry::IntegerRectangle2D& rect ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(rect,
                               BOOST_CURRENT_FUNCTION,
@@ -55,9 +55,9 @@ namespace canvas
                                                      rect );
         }
 
-        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&,
-                                       const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                                       const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL setData( const css::uno::Sequence< sal_Int8 >&,
+                                       const css::rendering::IntegerBitmapLayout& bitmapLayout,
+                                       const css::geometry::IntegerRectangle2D&   rect ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(bitmapLayout, rect,
                               BOOST_CURRENT_FUNCTION,
@@ -69,9 +69,9 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&,
-                                        const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                                        const ::com::sun::star::geometry::IntegerPoint2D&       pos ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL setPixel( const css::uno::Sequence< sal_Int8 >&,
+                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
+                                        const css::geometry::IntegerPoint2D&       pos ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(bitmapLayout, pos,
                               BOOST_CURRENT_FUNCTION,
@@ -83,8 +83,8 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                                                                               const ::com::sun::star::geometry::IntegerPoint2D& pos ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
+                                                                  const css::geometry::IntegerPoint2D& pos ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(pos,
                               BOOST_CURRENT_FUNCTION,
@@ -97,7 +97,7 @@ namespace canvas
                                                       pos );
         }
 
-        virtual ::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (css::uno::RuntimeException) override
         {
             typename Base::MutexType aGuard( Base::m_aMutex );
 

@@ -73,7 +73,7 @@ namespace canvas
     template< class Base,
               class DeviceHelper,
               class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class BufferedGraphicDeviceBase :
+              class UnambiguousBase = css::uno::XInterface > class BufferedGraphicDeviceBase :
         public GraphicDeviceBase< Base, DeviceHelper, Mutex, UnambiguousBase >
     {
     public:
@@ -93,26 +93,26 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (css::uno::RuntimeException) override
         {
             return this;
         }
 
         // XBufferController
-        virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                  ::com::sun::star::uno::RuntimeException) override
+        virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) throw (css::lang::IllegalArgumentException,
+                                                                                  css::uno::RuntimeException) override
         {
             tools::verifyRange( nBuffers, (sal_Int32)1 );
 
             return 1;
         }
 
-        virtual void SAL_CALL destroyBuffers(  ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL destroyBuffers(  ) throw (css::uno::RuntimeException) override
         {
         }
 
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll )
-            throw (::com::sun::star::uno::RuntimeException,
+            throw (css::uno::RuntimeException,
                    std::exception) override
         {
             MutexType aGuard( BaseType::m_aMutex );
@@ -120,7 +120,7 @@ namespace canvas
             return BaseType::maDeviceHelper.showBuffer( mbIsVisible, bUpdateAll );
         }
 
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -139,8 +139,7 @@ namespace canvas
             is called, with rBounds the window bound rect relative to
             the frame window.
          */
-        void setWindow( const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::awt::XWindow2 >& rWindow )
+        void setWindow( const css::uno::Reference< css::awt::XWindow2 >& rWindow )
         {
             if( mxWindow.is() )
                 mxWindow->removeWindowListener( this );
@@ -151,23 +150,23 @@ namespace canvas
             {
                 mbIsVisible = mxWindow->isVisible();
                 mbIsTopLevel =
-                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >(
+                    css::uno::Reference< css::awt::XTopWindow >(
                         mxWindow,
-                        ::com::sun::star::uno::UNO_QUERY ).is();
+                        css::uno::UNO_QUERY ).is();
 
                 maBounds = transformBounds( mxWindow->getPosSize() );
                 mxWindow->addWindowListener( this );
             }
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 > getWindow() const
+        css::uno::Reference< css::awt::XWindow2 > getWindow() const
         {
             return mxWindow;
         }
 
-        ::com::sun::star::uno::Any getXWindow() const
+        css::uno::Any getXWindow() const
         {
-            return ::com::sun::star::uno::makeAny(mxWindow);
+            return css::uno::makeAny(mxWindow);
         }
 
         virtual void disposeThis() override
@@ -184,7 +183,7 @@ namespace canvas
             BaseType::disposeThis();
         }
 
-        ::com::sun::star::awt::Rectangle transformBounds( const ::com::sun::star::awt::Rectangle& rBounds )
+        css::awt::Rectangle transformBounds( const css::awt::Rectangle& rBounds )
         {
             // notifySizeUpdate's bounds are relative to the toplevel
             // window
@@ -193,16 +192,15 @@ namespace canvas
                     rBounds,
                     mxWindow );
             else
-                return ::com::sun::star::awt::Rectangle( 0,0,rBounds.Width,rBounds.Height );
+                return css::awt::Rectangle( 0,0,rBounds.Width,rBounds.Height );
         }
 
-        void boundsChanged( const ::com::sun::star::awt::WindowEvent& e )
+        void boundsChanged( const css::awt::WindowEvent& e )
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            const ::com::sun::star::awt::Rectangle& rNewBounds(
-                transformBounds(
-                    ::com::sun::star::awt::Rectangle( e.X,
+            const css::awt::Rectangle& rNewBounds(
+                transformBounds( css::awt::Rectangle( e.X,
                                                       e.Y,
                                                       e.Width,
                                                       e.Height )));
@@ -218,7 +216,7 @@ namespace canvas
         }
 
         // XWindowListener
-        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void disposeEventSource( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -228,24 +226,24 @@ namespace canvas
             BaseType::disposeEventSource(Source);
         }
 
-        virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException) override
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException) override
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& ) throw (css::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             mbIsVisible = true;
         }
 
-        virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException) override
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& ) throw (css::uno::RuntimeException) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -253,17 +251,17 @@ namespace canvas
         }
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 >  mxWindow;
+        css::uno::Reference< css::awt::XWindow2 >               mxWindow;
 
         /// Current bounds of the owning Window
-        ::com::sun::star::awt::Rectangle                                     maBounds;
+        css::awt::Rectangle                                     maBounds;
 
         /// True, if the window this canvas is contained in, is visible
-        bool                                                                 mbIsVisible;
+        bool                                                    mbIsVisible;
 
     private:
         /// True, if the window this canvas is contained in, is a toplevel window
-        bool                                                                 mbIsTopLevel;
+        bool                                                    mbIsTopLevel;
     };
 }
 

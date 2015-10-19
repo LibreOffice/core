@@ -48,7 +48,7 @@ namespace canvas
             Note that the primitive will <em>always</em> be redrawn on
             the bitmap it was created from.
          */
-        virtual sal_Int8 redraw( const ::com::sun::star::rendering::ViewState& aState ) const = 0;
+        virtual sal_Int8 redraw( const css::rendering::ViewState& aState ) const = 0;
     };
 
     typedef std::shared_ptr< ICachedPrimitive > ICachedPrimitiveSharedPtr;

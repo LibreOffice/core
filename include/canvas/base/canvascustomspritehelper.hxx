@@ -51,7 +51,7 @@ namespace canvas
             @param rOwningSpriteCanvas
             The XSpriteCanvas this sprite is displayed on
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
+        void init( const css::geometry::RealSize2D&                 rSpriteSize,
                    const SpriteSurface::Reference&                  rOwningSpriteCanvas );
 
         /** Object is being disposed, release all internal references
@@ -66,22 +66,22 @@ namespace canvas
         void clearingContent( const Sprite::Reference& rSprite );
 
         /// need to call this method for XCanvas::drawBitmap(), for opacity tracking
-        void checkDrawBitmap( const Sprite::Reference&                                                          rSprite,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >&   xBitmap,
-                              const ::com::sun::star::rendering::ViewState&                                     viewState,
-                              const ::com::sun::star::rendering::RenderState&                                   renderState );
+        void checkDrawBitmap( const Sprite::Reference&                                rSprite,
+                              const css::uno::Reference< css::rendering::XBitmap >&   xBitmap,
+                              const css::rendering::ViewState&                        viewState,
+                              const css::rendering::RenderState&                      renderState );
 
         // XSprite
         void setAlpha( const Sprite::Reference& rSprite,
                        double                   alpha );
-        void move( const Sprite::Reference&                         rSprite,
-                   const ::com::sun::star::geometry::RealPoint2D&   aNewPos,
-                   const ::com::sun::star::rendering::ViewState&    viewState,
-                   const ::com::sun::star::rendering::RenderState&  renderState );
-        void transform( const Sprite::Reference&                            rSprite,
-                       const ::com::sun::star::geometry::AffineMatrix2D&    aTransformation );
-        void clip( const Sprite::Reference&                                                                 rSprite,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&   aClip );
+        void move( const Sprite::Reference&            rSprite,
+                   const css::geometry::RealPoint2D&   aNewPos,
+                   const css::rendering::ViewState&    viewState,
+                   const css::rendering::RenderState&  renderState );
+        void transform( const Sprite::Reference&               rSprite,
+                       const css::geometry::AffineMatrix2D&    aTransformation );
+        void clip( const Sprite::Reference&                                       rSprite,
+                   const css::uno::Reference< css::rendering::XPolyPolygon2D >&   aClip );
         void setPriority( const Sprite::Reference&  rSprite,
                           double                    nPriority );
         void show( const Sprite::Reference& rSprite );
@@ -138,8 +138,8 @@ namespace canvas
         double getAlpha() const { return mfAlpha; }
 
         /// Retrieve current clip
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XPolyPolygon2D >& getClip() const { return mxClipPoly; }
+        const css::uno::Reference<
+            css::rendering::XPolyPolygon2D >& getClip() const { return mxClipPoly; }
 
         const ::basegfx::B2DHomMatrix& getTransformation() const { return maTransform; }
 
@@ -204,7 +204,7 @@ namespace canvas
             @derive Needs to be provided by backend-specific code
          */
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const = 0;
+            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const = 0;
 
         /** Update clip information from current state
 
@@ -239,8 +239,7 @@ namespace canvas
         ::basegfx::B2DPoint                                 maPosition;
         ::basegfx::B2DVector                                maSize;
         ::basegfx::B2DHomMatrix                             maTransform;
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
+        css::uno::Reference< css::rendering::XPolyPolygon2D > mxClipPoly;
         double                                              mfPriority;
         double                                              mfAlpha;
         bool                                                mbActive; // true, if not hidden

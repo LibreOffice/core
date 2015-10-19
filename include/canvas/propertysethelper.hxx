@@ -50,8 +50,8 @@ namespace canvas
     class CANVASTOOLS_DLLPUBLIC PropertySetHelper
     {
     public:
-        typedef std::function<::com::sun::star::uno::Any ()> GetterType;
-        typedef std::function<void (const ::com::sun::star::uno::Any&)> SetterType;
+        typedef std::function<css::uno::Any ()> GetterType;
+        typedef std::function<void (const css::uno::Any&)> SetterType;
         struct Callbacks
         {
             GetterType getter;
@@ -128,14 +128,14 @@ namespace canvas
         const InputMap& getPropertyMap() const { return maMapEntries; }
 
         // XPropertySet implementation
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
-        void setPropertyValue( const OUString&                   aPropertyName,
-                               const ::com::sun::star::uno::Any& aValue );
-        ::com::sun::star::uno::Any getPropertyValue( const OUString& PropertyName ) const;
+        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() const;
+        void setPropertyValue( const OUString&      aPropertyName,
+                               const css::uno::Any& aValue );
+        css::uno::Any getPropertyValue( const OUString& PropertyName ) const;
         void addPropertyChangeListener( const OUString& aPropertyName,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
+                                        const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener );
         void addVetoableChangeListener( const OUString& aPropertyName,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
+                                        const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener );
 
     private:
         std::unique_ptr<MapType> mpMap;
