@@ -424,7 +424,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
             sal_Int32 nIdx = 0;
             do
             {
-                aControls[nIdx]->Enable(true);
+                aControls[nIdx]->Enable();
             }
             while(aControls[++nIdx]);
 

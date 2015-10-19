@@ -146,7 +146,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
     m_pStartED->SetModifyHdl(aLk);
     m_pEndED->SetModifyHdl(aLk);
 
-    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::FBD_CHARS, false, false );
+    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::FBD_CHARS, false );
 }
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()

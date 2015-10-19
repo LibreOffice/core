@@ -352,7 +352,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     m_pEastFontStyleFT->SetText(sFontStyleString);
     m_pCTLFontStyleFT->SetText(sFontStyleString);
 
-    m_pWestFrame->Show(true);
+    m_pWestFrame->Show();
     m_pEastFrame->Show(bShowCJK);
     m_pCTLFrame->Show(bShowCTL);
 
@@ -2281,7 +2281,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
         bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich, true );
+                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxUnderlineItem& rItem = *static_cast<const SvxUnderlineItem*>(pOld);
         if ( (FontUnderline)rItem.GetValue() == eUnder &&
@@ -2315,7 +2315,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
         bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich, true );
+                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxOverlineItem& rItem = *static_cast<const SvxOverlineItem*>(pOld);
         if ( (FontUnderline)rItem.GetValue() == eOver &&
@@ -2349,7 +2349,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! changing the strikeout style will be allowed if a style is
         //! selected in the listbox.
         bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich, true );
+                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCrossedOutItem& rItem = *static_cast<const SvxCrossedOutItem*>(pOld);
         if ( !m_pStrikeoutLB->IsEnabled()
@@ -2447,7 +2447,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! changing the effect style will be allowed if a style is
         //! selected in the listbox.
         bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich, true );
+                         SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCaseMapItem& rItem = *static_cast<const SvxCaseMapItem*>(pOld);
         if ( (SvxCaseMap)rItem.GetValue() == eCaseMap  &&  !bAllowChg )

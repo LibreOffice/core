@@ -156,7 +156,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     /*  Use SvxMarginItem instead of margins from SvxBoxItem, if present.
         ->  Remember this state in mbUseMarginItem, because other special handling
             is needed across various functions... */
-    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),true) != SfxItemState::UNKNOWN;
+    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN)) != SfxItemState::UNKNOWN;
 
     const SfxPoolItem* pItem = NULL;
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
@@ -217,7 +217,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, false );
     bool bIsDontCare = true;
 
-    if ( rCoreAttrs.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
+    if ( rCoreAttrs.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         // paragraph or table
         const SvxBoxInfoItem* pBoxInfo =
@@ -445,7 +445,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
                 if ( pBoxInfoItem->IsDist() )
                 {
-                    if( rSet->GetItemState( nWhichBox, true ) >= SfxItemState::DEFAULT )
+                    if( rSet->GetItemState( nWhichBox ) >= SfxItemState::DEFAULT )
                     {
                         bool bIsAnyBorderVisible = m_pFrameSel->IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )

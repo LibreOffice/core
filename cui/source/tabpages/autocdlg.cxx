@@ -2633,7 +2633,7 @@ IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void
 
     const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
-        m_pPropertiesPB->Enable( true );
+        m_pPropertiesPB->Enable();
     else
         m_pPropertiesPB->Enable( false );
 }

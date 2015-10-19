@@ -1121,7 +1121,7 @@ IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, 
         if (pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
-                m_pRemoveButton->Enable( true );
+                m_pRemoveButton->Enable();
             m_pChangeButton->Enable( pEntry->m_sCommand != sPossibleNewCommand );
         }
     }
@@ -1147,7 +1147,7 @@ IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, 
             if (pEntry->m_bIsConfigurable)
             {
                 if (pEntry->isConfigured())
-                    m_pRemoveButton->Enable( true );
+                    m_pRemoveButton->Enable();
                 m_pChangeButton->Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
@@ -1160,7 +1160,7 @@ IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, 
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo* pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, true, TREELIST_APPEND );
+                    SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, true );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( false );
                 }

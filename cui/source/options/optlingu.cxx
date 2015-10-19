@@ -1346,7 +1346,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
     OUString aTxt( ::GetDicInfoStr( rxDic->getName(),
                         LanguageTag( rxDic->getLocale() ).getLanguageType(),
                         DictionaryType_NEGATIVE == rxDic->getDictionaryType() ) );
-    m_pLinguDicsCLB->InsertEntry( aTxt, TREELIST_APPEND );  // append at end
+    m_pLinguDicsCLB->InsertEntry( aTxt );  // append at end
     SvTreeListEntry* pEntry = m_pLinguDicsCLB->GetEntry( m_pLinguDicsCLB->GetEntryCount() - 1 );
     DBG_ASSERT( pEntry, "failed to add entry" );
     if (pEntry)
@@ -1392,7 +1392,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
         for (sal_uLong i = 0;  i < nDispSrvcCount;  ++i)
         {
             const ServiceInfo_Impl &rInfo = rAllDispSrvcArr[i];
-            m_pLinguModulesCLB->InsertEntry( rInfo.sDisplayName, TREELIST_APPEND );
+            m_pLinguModulesCLB->InsertEntry( rInfo.sDisplayName );
             SvTreeListEntry* pEntry = m_pLinguModulesCLB->GetEntry(i);
             pEntry->SetUserData( const_cast<ServiceInfo_Impl *>(&rInfo) );
             m_pLinguModulesCLB->CheckEntryPos( i, rInfo.bConfigured );
@@ -1771,7 +1771,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
             DicUserData aData( reinterpret_cast<sal_uLong>( pEntry->GetUserData() ) );
 
             // always allow to edit (i.e. at least view the content of the dictionary)
-            m_pLinguDicsEditPB->Enable( true/*aData.IsEditable()*/ );
+            m_pLinguDicsEditPB->Enable( /*aData.IsEditable()*/ );
             m_pLinguDicsDelPB->Enable( aData.IsDeletable() );
         }
     }

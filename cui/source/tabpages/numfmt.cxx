@@ -1274,8 +1274,8 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
         }
         else
         {
-            m_pIbAdd->Enable(true );
-            m_pIbInfo->Enable(true );
+            m_pIbAdd->Enable();
+            m_pIbInfo->Enable();
             m_pIbRemove->Enable(false );
             m_pFtComment->SetText(m_pEdComment->GetText());
 
@@ -1541,8 +1541,8 @@ void SvxNumberFormatTabPage::EditHdl_Impl( Edit* pEdFormat )
         else
         {
 
-            m_pIbAdd->Enable(true );
-            m_pIbInfo->Enable(true);
+            m_pIbAdd->Enable();
+            m_pIbInfo->Enable();
             m_pIbRemove->Enable(false );
 
             m_pFtComment->SetText(m_pEdComment->GetText());

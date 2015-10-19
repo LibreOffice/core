@@ -968,7 +968,7 @@ SvxScriptSelectorDialog::UpdateUI()
             m_pCommands->GetHelpText(m_pCommands->FirstSelected());
         m_pDescriptionText->SetText(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
 
-        m_pOKButton->Enable( true );
+        m_pOKButton->Enable();
     }
     else
     {

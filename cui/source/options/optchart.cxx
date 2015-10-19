@@ -190,7 +190,7 @@ IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, ResetToDefaults, Button*, void)
 
         m_pLbChartColors->GetFocus();
         m_pLbChartColors->SelectEntryPos( 0 );
-        m_pPBRemove->Enable( true );
+        m_pPBRemove->Enable();
     }
 }
 
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 
         m_pLbChartColors->GetFocus();
         m_pLbChartColors->SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
-        m_pPBRemove->Enable( true );
+        m_pPBRemove->Enable();
     }
 }
 
@@ -242,7 +242,7 @@ IMPL_LINK_TYPED( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, voi
             else if (m_pLbChartColors->GetEntryCount() > 0)
                 m_pLbChartColors->SelectEntryPos( nIndex );
             else
-                m_pPBRemove->Enable(true);
+                m_pPBRemove->Enable();
         }
     }
 }

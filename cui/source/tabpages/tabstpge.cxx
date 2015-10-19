@@ -115,8 +115,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet&
     SvtCJKOptions aCJKOptions;
     get(m_pLeftTab,  aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_LEFTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_LEFT");
     get(m_pRightTab, aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_RIGHTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_RIGHT");
-    m_pLeftTab->Show(true);
-    m_pRightTab->Show(true);
+    m_pLeftTab->Show();
+    m_pRightTab->Show();
     get(m_pCenterTab,"radiobuttonBTN_TABTYPE_CENTER");
     get(m_pDezTab,"radiobuttonBTN_TABTYPE_DECIMAL");
     get(m_pDezChar,"entryED_TABTYPE_DECCHAR");

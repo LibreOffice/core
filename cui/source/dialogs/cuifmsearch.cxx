@@ -603,7 +603,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
         {   // this means we're preparing for starting a search
             // In this case, EnableSearchForDependees disabled the search button
             // But as we're about to use it for cancelling the search, we really need to enable it, again
-            m_pbSearchAgain->Enable( true );
+            m_pbSearchAgain->Enable();
         }
     }
 

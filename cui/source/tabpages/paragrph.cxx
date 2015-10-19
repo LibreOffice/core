@@ -2250,7 +2250,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
 static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBox)
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
-    SfxItemState eState = rSet.GetItemState(_nWhich, true);
+    SfxItemState eState = rSet.GetItemState(_nWhich);
     if( eState == SfxItemState::UNKNOWN || eState == SfxItemState::DISABLED )
         rBox.Enable(false);
     else if(eState >= SfxItemState::DEFAULT)

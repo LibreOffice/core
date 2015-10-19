@@ -379,7 +379,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         if ( bIsInputEnabled )
-            GetParent()->EnableInput( true );
+            GetParent()->EnableInput();
         // execute dlg
         DisableClose( true );
         short nRet = aDlg->Execute();

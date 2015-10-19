@@ -3038,8 +3038,8 @@ void SvxNumPositionTabPage::InitControls()
 
     if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
     {
-        m_pListtabFT->Enable( true );
-        m_pListtabMF->Enable( true );
+        m_pListtabFT->Enable();
+        m_pListtabMF->Enable();
         if ( bSameListtab )
         {
             SetMetricValue(*m_pListtabMF, aNumFmtArr[nLvl]->GetListtabPos(), eCoreUnit);

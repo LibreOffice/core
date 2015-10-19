@@ -2882,8 +2882,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     // Always enable Up and Down buttons
     // added for issue i53677 by shizhoubo
-    m_pMoveDownButton->Enable( true );
-    m_pMoveUpButton->Enable( true );
+    m_pMoveDownButton->Enable();
+    m_pMoveUpButton->Enable();
 
     PopupMenu* pMenu = new PopupMenu( CUI_RES( MODIFY_TOOLBAR ) );
     pMenu->SetMenuFlags(
@@ -4322,9 +4322,9 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         return;
     }
 
-    m_pModifyTopLevelButton->Enable( true );
-    m_pModifyCommandButton->Enable( true );
-    m_pAddCommandsButton->Enable( true );
+    m_pModifyTopLevelButton->Enable();
+    m_pModifyCommandButton->Enable();
+    m_pAddCommandsButton->Enable();
 
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
 
@@ -4967,7 +4967,7 @@ IMPL_LINK_TYPED( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
     OUString aSelImageText = pTbSymbol->GetItemText( nId );
     if ( m_xImportedImageManager->hasImage( GetImageType(), aSelImageText ) )
     {
-        pBtnDelete->Enable( true );
+        pBtnDelete->Enable();
     }
     else
     {

@@ -1094,7 +1094,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                  // NEW
                  if( (eSavedStyle != eStyle) &&
                      ( bModified ||
-                       SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true ) ) )
+                       SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ) ) ) )
                  {
                      XFillStyleItem aStyleItem( drawing::FillStyle_SOLID );
                      pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );
@@ -1125,7 +1125,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
-                      SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true ) ) )
+                      SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ) ) ) )
                 {
                     XFillStyleItem aStyleItem( drawing::FillStyle_GRADIENT );
                     pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );
@@ -1171,7 +1171,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
-                      SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true ) ) )
+                      SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ) ) ) )
                 {
                     XFillStyleItem aStyleItem( drawing::FillStyle_HATCH );
                     pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );
@@ -1212,7 +1212,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                     // NEW
                     if( (eSavedStyle != eStyle) &&
                         ( bModified ||
-                          SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), true ) ) )
+                          SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ) ) ) )
                     {
                             XFillStyleItem aStyleItem( drawing::FillStyle_BITMAP );
                             pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );

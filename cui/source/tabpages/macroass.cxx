@@ -363,7 +363,7 @@ IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
     FillMacroList();
     if ( pTabDlg )
     {
-        pTabDlg->EnableInput( true );
+        pTabDlg->EnableInput();
         pTabDlg->LeaveWait();
     }
 }
@@ -393,9 +393,9 @@ void _SfxMacroTabPage::InitAndSetHandler()
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
 
-    mpImpl->pEventLB->Enable( true );
-    mpImpl->pGroupLB->Enable( true );
-    mpImpl->pMacroLB->Enable( true );
+    mpImpl->pEventLB->Enable();
+    mpImpl->pGroupLB->Enable();
+    mpImpl->pMacroLB->Enable();
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
 

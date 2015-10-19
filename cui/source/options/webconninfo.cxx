@@ -304,7 +304,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, EntrySelectedHdl, SvTreeListBox*,
     }
     else
     {
-        m_pRemoveBtn->Enable( true );
+        m_pRemoveBtn->Enable();
 
         // url container entries (-> use system credentials) have
         // no password

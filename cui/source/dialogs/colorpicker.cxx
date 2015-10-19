@@ -1102,7 +1102,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     Image aSliderImage( maSliderImage );
 
     mpFISliderLeft->SetImage( aSliderImage );
-    mpFISliderLeft->Show(true);
+    mpFISliderLeft->Show();
 
     BitmapEx aTmpBmp( maSliderImage.GetBitmapEx() );
     aTmpBmp.Mirror( BmpMirrorFlags::Horizontal );
@@ -1128,7 +1128,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     {
         mpColorPreview->SetSizePixel( mpColorPrevious->GetSizePixel() );
         mpColorPrevious->SetColor( aColor );
-        mpColorPrevious->Show( true );
+        mpColorPrevious->Show();
     }
 
     mdRed = ((double)aColor.GetRed()) / 255.0;

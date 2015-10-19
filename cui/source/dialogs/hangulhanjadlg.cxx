@@ -851,9 +851,9 @@ namespace svx
     {
         // default state: try both direction
         m_pHangulOnly->Check( false );
-        m_pHangulOnly->Enable( true );
+        m_pHangulOnly->Enable();
         m_pHanjaOnly->Check( false );
-        m_pHanjaOnly->Enable( true );
+        m_pHanjaOnly->Enable();
 
         if (!_bTryBothDirections)
         {

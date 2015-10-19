@@ -66,7 +66,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
 
     // set defaults
     m_pRbtLinktypInternet->Check ();
-    m_pBtBrowse->Enable( true );
+    m_pBtBrowse->Enable();
 
 
     // set handlers

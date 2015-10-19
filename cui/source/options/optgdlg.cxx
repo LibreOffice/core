@@ -1105,7 +1105,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
     m_pComplexLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::COMPLEX );
 
-    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false);
+    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false );
     m_pLocaleSettingLB->InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
@@ -1538,7 +1538,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     //overwrite them by the values provided by the DocShell
     if(pCurrentDocShell)
     {
-        m_pCurrentDocCB->Enable(true);
+        m_pCurrentDocCB->Enable();
         m_pCurrentDocCB->Check(bLanguageCurrentDoc_Impl);
         const SfxPoolItem* pLang;
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_LANGUAGE, false, &pLang))
@@ -1603,7 +1603,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     if ( SfxItemState::SET == rSet->GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && static_cast<const SfxBoolItem*>(pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();
-        m_pCurrentDocCB->Enable(true);
+        m_pCurrentDocCB->Enable();
         m_pCurrentDocCB->Check();
     }
 }
