@@ -24,6 +24,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <framework/imageproducer.hxx>
@@ -31,6 +32,24 @@
 
 using namespace css;
 using namespace css::uno;
+
+namespace {
+    void lcl_RTLizeCommandURL( OUString& rCommandURL )
+    {
+        if (rCommandURL.compareTo(".uno:ParaLeftToRight") == 0)
+            rCommandURL = ".uno:ParaRightToLeft";
+        else if (rCommandURL.compareTo(".uno:ParaRightToLeft") == 0)
+            rCommandURL = ".uno:ParaLeftToRight";
+        else if (rCommandURL.compareTo(".uno:LeftPara") == 0)
+            rCommandURL = ".uno:RightPara";
+        else if (rCommandURL.compareTo(".uno:RightPara") == 0)
+            rCommandURL = ".uno:LeftPara";
+        else if (rCommandURL.compareTo(".uno:AlignLeft") == 0)
+            rCommandURL = ".uno:AlignRight";
+        else if (rCommandURL.compareTo(".uno:AlignRight") == 0)
+            rCommandURL = ".uno:AlignLeft";
+    }
+}
 
 namespace sfx2 { namespace sidebar {
 
@@ -87,9 +106,16 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
         const css::uno::Reference<css::frame::XFrame>& rFrame,
         ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
-    ToolBox::InsertItem(rCommand, rFrame, nBits, rRequestedSize, nPos);
+    OUString aCommand( rCommand );
 
-    CreateController(GetItemId(rCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
+    if( AllSettings::GetLayoutRTL() )
+    {
+        lcl_RTLizeCommandURL( aCommand );
+    }
+
+    ToolBox::InsertItem(aCommand, rFrame, nBits, rRequestedSize, nPos);
+
+    CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
     RegisterHandlers();
 }
 
