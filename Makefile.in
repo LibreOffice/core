@@ -170,7 +170,6 @@ distclean : clean compilerplugins-clean
 	rm -fr \
         $(BUILDDIR)/Makefile \
         $(BUILDDIR)/aclocal.m4 \
-        $(BUILDDIR)/android/source/AndroidManifest.xml \
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/config.log \
         $(BUILDDIR)/config.Build.log \
