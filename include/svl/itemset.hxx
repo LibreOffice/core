@@ -80,16 +80,26 @@ public:
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
-    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSearchInParent = true,
-                                         TypeId aItemType = 0 ) const;
 
-    /// Templatized version to directly return the correct type.
+    /** This method eases accessing single Items in the SfxItemSet.
+
+        @param nId SlotId or the Item's WhichId
+        @param bSearchInParent also search in parent ItemSets
+        @returns 0 if the ItemSet does not contain an Item with the Id 'nWhich'
+    */
+    const SfxPoolItem*          GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const;
+
+    /// Templatized version of GetItem() to directly return the correct type.
     template<class T> const T* GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
     {
-        return dynamic_cast<const T*>(GetItem(nWhich, bSearchInParent));
+        const SfxPoolItem* pItem = GetItem(nWhich, bSearchInParent);
+        const T* pCastedItem = dynamic_cast<const T*>(pItem);
+
+        assert(!pItem || pCastedItem); // if it exists, must have the correct type
+        return pCastedItem;
     }
 
-    /// Templatized static version to directly return the correct type if the SfxItemSet is available.
+    /// Templatized static version of GetItem() to directly return the correct type if the SfxItemSet is available.
     template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent = true)
     {
         if (pItemSet)

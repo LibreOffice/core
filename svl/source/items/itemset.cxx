@@ -812,47 +812,20 @@ bool SfxItemSet::Set
     return bRet;
 }
 
-/**
- * This method eases accessing single Items in the SfxItemSet.
- * Type checking is done via assertion, which makes client code
- * much more readable.
- *
- * The PRODUCT version returns 0, if the Item found is not of the
- * specified class.
- *
- * @returns 0 if the ItemSet does not contain an Item with the Id 'nWhich'
- */
-const SfxPoolItem* SfxItemSet::GetItem
-(
-    sal_uInt16          nId,            // SlotId or the Item's WhichId
-    bool                bSrchInParent,  // sal_True: also search in Parent ItemSets
-    TypeId              aItemType       // != 0 =>  RTTI check using assertion
-)   const
+const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) const
 {
     // Convert to WhichId
     sal_uInt16 nWhich = GetPool()->GetWhich(nId);
 
     // Is the Item set or 'bDeep == true' available?
     const SfxPoolItem *pItem = 0;
-    SfxItemState eState = GetItemState( nWhich, bSrchInParent, &pItem );
-    if ( bSrchInParent && SfxItemState::DEFAULT == eState &&
-         nWhich <= SFX_WHICH_MAX )
+    SfxItemState eState = GetItemState(nWhich, bSearchInParent, &pItem);
+    if (bSearchInParent && SfxItemState::DEFAULT == eState && nWhich <= SFX_WHICH_MAX)
     {
         pItem = &m_pPool->GetDefaultItem(nWhich);
     }
 
-    if ( pItem )
-    {
-        // Does the type match?
-        if ( !aItemType || pItem->IsA(aItemType) )
-            return pItem;
-
-        // Else report error
-        assert(!"invalid argument type");
-    }
-
-    // No Item of wrong type found
-    return 0;
+    return pItem;
 }
 
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
