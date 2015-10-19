@@ -204,7 +204,6 @@ void AnnotationTextWindow::MouseButtonDown( const MouseEvent& rMEvt )
     GrabFocus();
     if ( mpOutlinerView )
         mpOutlinerView->MouseButtonDown( rMEvt );
-    // todo mpOutlinerView->DocView()->GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 void AnnotationTextWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -276,7 +275,6 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 : FloatingWindow(pParent, WB_SYSTEMWINDOW|WB_BORDER|WB_NEEDSFOCUS)
 , mrManager( rManager )
 , mpDocShell( pDocShell )
-, mpView( pDocShell->GetViewShell()->GetView() )
 , mpDoc( pDocShell->GetDoc() )
 , mpOutlinerView(0)
 , mpOutliner(0)
@@ -638,7 +636,7 @@ void AnnotationWindow::Deactivate()
                 if( mpDoc->IsUndoEnabled() )
                     mpDoc->EndUndo();
 
-                DocView()->GetDocSh()->SetModified();
+                mpDocShell->SetModified();
             }
 
         }

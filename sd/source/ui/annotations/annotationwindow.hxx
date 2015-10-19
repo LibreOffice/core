@@ -79,7 +79,6 @@ class AnnotationWindow : public FloatingWindow
     private:
         AnnotationManagerImpl&  mrManager;
         DrawDocShell*           mpDocShell;
-        View*                   mpView;
         SdDrawDocument*         mpDoc;
 
         OutlinerView*           mpOutlinerView;
@@ -114,7 +113,6 @@ class AnnotationWindow : public FloatingWindow
 
         DrawDocShell*           DocShell()      { return mpDocShell; }
         OutlinerView*           getView()       { return mpOutlinerView; }
-        sd::View*               DocView()       { return mpView; }
         Outliner*               Engine()        { return mpOutliner; }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
