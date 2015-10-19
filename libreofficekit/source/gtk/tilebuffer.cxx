@@ -55,6 +55,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
                             GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
+    GError* error = NULL;
     if (m_mTiles.find(index) != m_mTiles.end())
     {
         m_mTiles[index].valid = false;
@@ -64,7 +65,12 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
+        if (error != NULL)
+        {
+            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+            g_clear_error(&error);
+        }
     }
 }
 
@@ -72,6 +78,7 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
                           GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
+    GError* error = NULL;
 
     if (m_mTiles.find(index) != m_mTiles.end() && !m_mTiles[index].valid)
     {
@@ -80,7 +87,12 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
+        if (error != NULL)
+        {
+            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+            g_clear_error(&error);
+        }
         return m_mTiles[index];
     }
     else if(m_mTiles.find(index) == m_mTiles.end())
@@ -90,7 +102,12 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
+        if (error != NULL)
+        {
+            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+            g_clear_error(&error);
+        }
         return m_DummyTile;
     }
 
