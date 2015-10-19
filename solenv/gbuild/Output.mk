@@ -20,7 +20,7 @@
 # user notifications and formatting
 
 define gb_Output__format_type
-[$(word 2,$(1) build clean) $(2)]
+$(call gb_Output_time)[$(word 2,$(1) build clean) $(2)]
 endef
 
 define gb_Output__format_target
@@ -43,6 +43,10 @@ endef
 
 define gb_Output_warn
 $(warning $(NEWLINE)[WARN  $(2)] !!!$(NEWLINE)[WARN  $(2)] !!! $(1)$(NEWLINE)[WARN  $(2)] !!!)
+endef
+
+define gb_Output_time
+$(if $(gb_TIME),$(shell date +"%k:%M:%S "))
 endef
 
 gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
@@ -100,7 +104,7 @@ gb_Output_COLOR_INCLEAN_LEVEL6 := $(gb_Output_COLOR_RESETANDESCAPE)[37;1;41m
 gb_Output_COLOR_ERROR := $(gb_Output_COLOR_RESETANDESCAPE)[37;1;41m
 
 define gb_Output__format_type
-$(subst :, ,$(word 2,$(1) \
+$(call gb_Output_time)$(subst :, ,$(word 2,$(1) \
 	$(gb_Output_COLOR_OUTBUILD_LEVEL$(3))[$(gb_Output_COLOR_INBUILD_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTBUILD_LEVEL$(3))] \
 	$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))[$(gb_Output_COLOR_INCLEAN_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))]))$(gb_Output_COLOR_RESET)
 endef
