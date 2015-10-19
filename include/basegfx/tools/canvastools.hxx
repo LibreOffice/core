@@ -73,86 +73,77 @@ namespace basegfx
         // Polygon conversions
 
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolygon( const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice,
+        BASEGFX_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+            xPolyPolygonFromB2DPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >&  xGraphicDevice,
                                         const ::basegfx::B2DPolygon&                        rPoly    );
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolyPolygon( const ::com::sun::star::uno::Reference<
-                                                 ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
+        BASEGFX_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::uno::Sequence<
-              ::com::sun::star::uno::Sequence<
-                  ::com::sun::star::geometry::RealBezierSegment2D > >
+        BASEGFX_DLLPUBLIC css::uno::Sequence<
+              css::uno::Sequence< css::geometry::RealBezierSegment2D > >
                     bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::uno::Sequence<
-              ::com::sun::star::uno::Sequence<
-                  ::com::sun::star::geometry::RealPoint2D > >
+        BASEGFX_DLLPUBLIC css::uno::Sequence<
+              css::uno::Sequence< css::geometry::RealPoint2D > >
                     pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon polygonFromPoint2DSequence(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::geometry::RealPoint2D >& rPoints );
+            const css::uno::Sequence< css::geometry::RealPoint2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& rPoints );
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon polygonFromBezier2DSequence(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::geometry::RealBezierSegment2D >& rPoints );
+            const css::uno::Sequence< css::geometry::RealBezierSegment2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& rPoints );
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
-            const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::rendering::XPolyPolygon2D >& rPoly );
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
 
         // Matrix conversions
 
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::AffineMatrix2D&
-            affineMatrixFromHomMatrix( ::com::sun::star::geometry::AffineMatrix2D&  matrix,
+        BASEGFX_DLLPUBLIC css::geometry::AffineMatrix2D&
+            affineMatrixFromHomMatrix( css::geometry::AffineMatrix2D&  matrix,
                                        const ::basegfx::B2DHomMatrix&               transform);
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
-            ::com::sun::star::geometry::AffineMatrix3D& matrix,
+        BASEGFX_DLLPUBLIC css::geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
+            css::geometry::AffineMatrix3D& matrix,
             const ::basegfx::B3DHomMatrix& transform);
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix&
-            homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
-                                       const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
+            homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                transform,
+                                       const css::geometry::AffineMatrix2D&    matrix );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
+        BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const css::geometry::AffineMatrix3D& matrix );
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::Matrix2D&
-            matrixFromHomMatrix( ::com::sun::star::geometry::Matrix2D& matrix,
-                                 const ::basegfx::B2DHomMatrix&        transform);
+        BASEGFX_DLLPUBLIC css::geometry::Matrix2D&
+            matrixFromHomMatrix( css::geometry::Matrix2D&         matrix,
+                                 const ::basegfx::B2DHomMatrix&   transform);
 
         // Geometry conversions
 
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealSize2D        size2DFromB2DSize( const ::basegfx::B2DVector& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealPoint2D       point2DFromB2DPoint( const ::basegfx::B2DPoint& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealRectangle2D   rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::RealRectangle3D   rectangle3DFromB3DRectangle( const ::basegfx::B3DRange& );
+        BASEGFX_DLLPUBLIC css::geometry::RealSize2D        size2DFromB2DSize( const ::basegfx::B2DVector& );
+        BASEGFX_DLLPUBLIC css::geometry::RealPoint2D       point2DFromB2DPoint( const ::basegfx::B2DPoint& );
+        BASEGFX_DLLPUBLIC css::geometry::RealRectangle2D   rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
+        BASEGFX_DLLPUBLIC css::geometry::RealRectangle3D   rectangle3DFromB3DRectangle( const ::basegfx::B3DRange& );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DPoint       b2DPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
-        BASEGFX_DLLPUBLIC ::basegfx::B2DRange       b2DRectangleFromRealRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
-        BASEGFX_DLLPUBLIC ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const ::com::sun::star::geometry::RealRectangle3D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2DPoint       b2DPointFromRealPoint2D( const css::geometry::RealPoint2D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2DRange       b2DRectangleFromRealRectangle2D( const css::geometry::RealRectangle2D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const css::geometry::RealRectangle3D& );
 
-        BASEGFX_DLLPUBLIC ::com::sun::star::geometry::IntegerSize2D         integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
+        BASEGFX_DLLPUBLIC css::geometry::IntegerSize2D         integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromIntegerSize2D( const ::com::sun::star::geometry::IntegerSize2D& );
-        BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2IVector      b2ISizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromAwtRectangle( const ::com::sun::star::awt::Rectangle& );
+        BASEGFX_DLLPUBLIC ::basegfx::B2IRange       b2IRectangleFromAwtRectangle( const css::awt::Rectangle& );
 
         // Geometry comparisons
 

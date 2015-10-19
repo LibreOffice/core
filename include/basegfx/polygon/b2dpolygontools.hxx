@@ -455,25 +455,25 @@ namespace basegfx
         /// polygon path data. Take into account all stuff like closed state, zero-length edges and others.
         BASEGFX_DLLPUBLIC B2DVector getTangentLeavingPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
-        /// converters for com::sun::star::drawing::PointSequence
+        /// converters for css::drawing::PointSequence
         BASEGFX_DLLPUBLIC B2DPolygon UnoPointSequenceToB2DPolygon(
-            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            const css::drawing::PointSequence& rPointSequenceSource,
             bool bCheckClosed = true);
         BASEGFX_DLLPUBLIC void B2DPolygonToUnoPointSequence(
             const B2DPolygon& rPolygon,
-            com::sun::star::drawing::PointSequence& rPointSequenceRetval);
+            css::drawing::PointSequence& rPointSequenceRetval);
 
-        /* converters for com::sun::star::drawing::PointSequence and
-           com::sun::star::drawing::FlagSequence to B2DPolygon (curved polygons)
+        /* converters for css::drawing::PointSequence and
+           css::drawing::FlagSequence to B2DPolygon (curved polygons)
          */
         B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
-            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
-            const com::sun::star::drawing::FlagSequence& rFlagSequenceSource,
+            const css::drawing::PointSequence& rPointSequenceSource,
+            const css::drawing::FlagSequence& rFlagSequenceSource,
             bool bCheckClosed = true);
         void B2DPolygonToUnoPolygonBezierCoords(
             const B2DPolygon& rPolyPolygon,
-            com::sun::star::drawing::PointSequence& rPointSequenceRetval,
-            com::sun::star::drawing::FlagSequence& rFlagSequenceRetval);
+            css::drawing::PointSequence& rPointSequenceRetval,
+            css::drawing::FlagSequence& rFlagSequenceRetval);
 
         /** Read poly-polygon from SVG.
 

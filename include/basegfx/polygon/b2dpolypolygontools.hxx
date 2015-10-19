@@ -292,21 +292,21 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC bool containsOnlyHorizontalAndVerticalEdges(const B2DPolyPolygon& rCandidate);
 
-        /// converters for com::sun::star::drawing::PointSequence
+        /// converters for css::drawing::PointSequence
         BASEGFX_DLLPUBLIC B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
-            const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
+            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
             bool bCheckClosed = true);
         BASEGFX_DLLPUBLIC void B2DPolyPolygonToUnoPointSequenceSequence(
             const B2DPolyPolygon& rPolyPolygon,
-            com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceRetval);
+            css::drawing::PointSequenceSequence& rPointSequenceSequenceRetval);
 
-        /// converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
+        /// converters for css::drawing::PolyPolygonBezierCoords (curved polygons)
         BASEGFX_DLLPUBLIC B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-            const com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
+            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
             bool bCheckClosed = true);
         BASEGFX_DLLPUBLIC void B2DPolyPolygonToUnoPolyPolygonBezierCoords(
             const B2DPolyPolygon& rPolyPolygon,
-            com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval);
+            css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval);
 
     } // end of namespace tools
 } // end of namespace basegfx
