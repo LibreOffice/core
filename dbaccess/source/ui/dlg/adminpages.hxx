@@ -206,7 +206,7 @@ namespace dbaui
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
-        DECL_LINK(OnControlModified, void*);
+        DECL_LINK_TYPED(OnControlModified, void*, void);
         DECL_LINK_TYPED(OnControlEditModifyHdl, Edit&, void);
         DECL_LINK_TYPED(OnControlModifiedClick, Button*, void);
         DECL_LINK_TYPED(ControlModifiedCheckBoxHdl, CheckBox&, void);

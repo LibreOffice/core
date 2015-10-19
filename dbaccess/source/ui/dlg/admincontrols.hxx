@@ -47,14 +47,14 @@ namespace dbaui
         VclPtr<FixedText>           m_pDefaultPort;
         VclPtr<Edit>                m_pSocket;
         VclPtr<Edit>                m_pNamedPipe;
-        Link<>                      m_aControlModificationLink;
+        Link<void*,void>            m_aControlModificationLink;
         ::svt::ControlDependencyManager
-                            m_aControlDependencies;
+                                    m_aControlDependencies;
         DECL_LINK_TYPED(RadioToggleHdl, RadioButton&, void);
         DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
 
     public:
-        MySQLNativeSettings( vcl::Window& _rParent, const Link<>& _rControlModificationLink );
+        MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink );
         virtual ~MySQLNativeSettings();
         virtual void dispose() override;
         void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );

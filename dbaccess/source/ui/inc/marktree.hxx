@@ -35,7 +35,7 @@ namespace dbaui
 class OMarkableTreeListBox : public DBTreeListBox
 {
     SvLBoxButtonData*   m_pCheckButton;
-    Link<>              m_aCheckButtonHandler;
+    Link<void*,void>    m_aCheckButtonHandler;
 
 public:
     OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
@@ -47,7 +47,7 @@ public:
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
     /// the handler given is called whenever the check state of one or more items changed
-    void SetCheckHandler(const Link<>& _rHdl) { m_aCheckButtonHandler = _rHdl; }
+    void SetCheckHandler(const Link<void*,void>& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
 protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) override;

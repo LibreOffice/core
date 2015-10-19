@@ -102,10 +102,9 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnControlModified, void*, pCtrl)
+    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModified, void*, pCtrl, void)
     {
         callModifiedHdl(pCtrl);
-        return 0;
     }
     IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
     {

@@ -402,9 +402,9 @@ namespace dbaui
     {
         callModifiedHdl();
     }
-    IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, Control*, _pControl )
+    IMPL_LINK_TYPED( OTableSubscriptionPage, OnTreeEntryChecked, void*, _pControl, void )
     {
-        return OnControlModified(static_cast<Button*>(_pControl));
+        OnControlModified(_pControl);
     }
     IMPL_LINK_TYPED( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
     {

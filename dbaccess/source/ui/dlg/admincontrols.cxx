@@ -125,7 +125,7 @@ namespace dbaui
     };
 
     // MySQLNativeSettings
-    MySQLNativeSettings::MySQLNativeSettings( vcl::Window& _rParent, const Link<>& _rControlModificationLink )
+    MySQLNativeSettings::MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink )
         :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" ),
         m_aControlModificationLink(_rControlModificationLink)
     {

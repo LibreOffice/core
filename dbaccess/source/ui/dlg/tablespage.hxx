@@ -65,7 +65,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
-        DECL_LINK( OnTreeEntryChecked, Control* );
+        DECL_LINK_TYPED( OnTreeEntryChecked, void*, void );
         DECL_LINK_TYPED( OnTreeEntryButtonChecked, SvTreeListBox*, void );
 
     private:
