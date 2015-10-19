@@ -33,7 +33,7 @@ namespace canvas
         methods provided here are used from the individual sprites to
         notify the canvas about necessary screen updates.
      */
-    class SpriteSurface : public ::com::sun::star::uno::XInterface
+    class SpriteSurface : public css::uno::XInterface
     {
     public:
         typedef ::rtl::Reference< SpriteSurface > Reference;

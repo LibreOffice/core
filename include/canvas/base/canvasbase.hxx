@@ -47,10 +47,10 @@ namespace canvas
 
         <pre>
         Example:
-        typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XSpriteCanvas,
-                                                   ::com::sun::star::lang::XInitialization,
-                                                  ::com::sun::star::lang::XServiceInfo,
-                                                  ::com::sun::star::lang::XServiceName > CanvasBase_Base;
+        typedef ::cppu::WeakComponentImplHelper4< css::rendering::XSpriteCanvas,
+                                                  css::lang::XInitialization,
+                                                  css::lang::XServiceInfo,
+                                                  css::lang::XServiceName > CanvasBase_Base;
         typedef ::canvas::internal::CanvasBase< CanvasBase_Base, CanvasHelper > ExampleCanvas_Base;
 
         class ExampleCanvas : public ExampleCanvas_Base,
@@ -94,7 +94,7 @@ namespace canvas
     template< class Base,
               class CanvasHelper,
               class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class CanvasBase :
+              class UnambiguousBase=css::uno::XInterface > class CanvasBase :
             public Base
     {
     public:
@@ -122,7 +122,7 @@ namespace canvas
         }
 
         // XCanvas
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL clear() throw (css::uno::RuntimeException, std::exception) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -185,10 +185,10 @@ namespace canvas
             maCanvasHelper.drawBezier( this, aBezierSegment, aEndPoint, viewState, renderState );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawPolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                            const css::rendering::ViewState&                                          viewState,
-                            const css::rendering::RenderState&                                        renderState)
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                            const css::rendering::ViewState&                             viewState,
+                            const css::rendering::RenderState&                           renderState)
                                 throw (css::lang::IllegalArgumentException,
                                        css::uno::RuntimeException,
                                        std::exception) override
@@ -204,11 +204,11 @@ namespace canvas
             return maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokePolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                              const css::rendering::ViewState&                                            viewState,
-                              const css::rendering::RenderState&                                          renderState,
-                              const css::rendering::StrokeAttributes&                                     strokeAttributes)
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+                              const css::rendering::ViewState&                               viewState,
+                              const css::rendering::RenderState&                             renderState,
+                              const css::rendering::StrokeAttributes&                        strokeAttributes)
                                 throw (css::lang::IllegalArgumentException,
                                        css::uno::RuntimeException,
                                        std::exception) override
@@ -224,13 +224,13 @@ namespace canvas
             return maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokeTexturedPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                       const ::com::sun::star::rendering::ViewState&                                            viewState,
-                                       const ::com::sun::star::rendering::RenderState&                                          renderState,
-                                       const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&           textures,
-                                       const ::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                          ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            strokeTexturedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+                                       const css::rendering::ViewState&                               viewState,
+                                       const css::rendering::RenderState&                             renderState,
+                                       const css::uno::Sequence< css::rendering::Texture >&           textures,
+                                       const css::rendering::StrokeAttributes&                        strokeAttributes ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                          css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -243,14 +243,14 @@ namespace canvas
             return maCanvasHelper.strokeTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, strokeAttributes );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokeTextureMappedPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                            const ::com::sun::star::rendering::ViewState&                                           viewState,
-                                            const ::com::sun::star::rendering::RenderState&                                         renderState,
-                                            const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&          textures,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::geometry::XMapping2D >&       xMapping,
-                                            const ::com::sun::star::rendering::StrokeAttributes&                                    strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                              ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            strokeTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&  xPolyPolygon,
+                                            const css::rendering::ViewState&                              viewState,
+                                            const css::rendering::RenderState&                            renderState,
+                                            const css::uno::Sequence< css::rendering::Texture >&          textures,
+                                            const css::uno::Reference< css::geometry::XMapping2D >&       xMapping,
+                                            const css::rendering::StrokeAttributes&                       strokeAttributes ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                              css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -263,12 +263,12 @@ namespace canvas
             return maCanvasHelper.strokeTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >   SAL_CALL
-            queryStrokeShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const ::com::sun::star::rendering::ViewState&                                            viewState,
-                               const ::com::sun::star::rendering::RenderState&                                          renderState,
-                               const ::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                  ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D >   SAL_CALL
+            queryStrokeShapes( const css::uno::Reference< css::rendering::XPolyPolygon2D >&                xPolyPolygon,
+                               const css::rendering::ViewState&                                            viewState,
+                               const css::rendering::RenderState&                                          renderState,
+                               const css::rendering::StrokeAttributes&                                     strokeAttributes ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                  css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -281,8 +281,8 @@ namespace canvas
             return maCanvasHelper.queryStrokeShapes( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillPolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
                              const css::rendering::ViewState&                                          viewState,
                              const css::rendering::RenderState&                                        renderState)
                                 throw (css::lang::IllegalArgumentException,
@@ -300,11 +300,11 @@ namespace canvas
             return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillTexturedPolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                                    const css::rendering::ViewState&                                          viewState,
-                                    const css::rendering::RenderState&                                        renderState,
-                                    const css::uno::Sequence< ::com::sun::star::rendering::Texture >&         textures)
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                                    const css::rendering::ViewState&                             viewState,
+                                    const css::rendering::RenderState&                           renderState,
+                                    const css::uno::Sequence< css::rendering::Texture >&         textures)
                                         throw (css::lang::IllegalArgumentException,
                                                css::uno::RuntimeException,
                                                std::exception) override
@@ -320,12 +320,12 @@ namespace canvas
             return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillTextureMappedPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                          const ::com::sun::star::rendering::ViewState&                                             viewState,
-                                          const ::com::sun::star::rendering::RenderState&                                           renderState,
-                                          const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&            textures,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::geometry::XMapping2D >&         xMapping ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            fillTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
+                                          const css::rendering::ViewState&                                viewState,
+                                          const css::rendering::RenderState&                              renderState,
+                                          const css::uno::Sequence< css::rendering::Texture >&            textures,
+                                          const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
                               BOOST_CURRENT_FUNCTION,
@@ -339,11 +339,11 @@ namespace canvas
         }
 
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > SAL_CALL
-            createFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
-                        const ::com::sun::star::geometry::Matrix2D&                                         fontMatrix ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL
+            createFont( const css::rendering::FontRequest&                                     fontRequest,
+                        const css::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                        const css::geometry::Matrix2D&                                         fontMatrix ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                css::uno::RuntimeException) override
         {
             tools::verifyArgs(fontRequest,
                               // dummy, to keep argPos in sync
@@ -358,10 +358,10 @@ namespace canvas
         }
 
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::FontInfo > SAL_CALL
-            queryAvailableFonts( const ::com::sun::star::rendering::FontInfo&                                       aFilter,
-                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&   aFontProperties ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                             ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Sequence< css::rendering::FontInfo > SAL_CALL
+            queryAvailableFonts( const css::rendering::FontInfo&                          aFilter,
+                                 const css::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                             css::uno::RuntimeException) override
         {
             tools::verifyArgs(aFilter,
                               BOOST_CURRENT_FUNCTION,
@@ -373,9 +373,9 @@ namespace canvas
         }
 
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
             drawText(const css::rendering::StringContext&                                     text,
-                     const css::uno::Reference< ::com::sun::star::rendering::XCanvasFont >&   xFont,
+                     const css::uno::Reference< css::rendering::XCanvasFont >&                xFont,
                      const css::rendering::ViewState&                                         viewState,
                      const css::rendering::RenderState&                                       renderState,
                      sal_Int8                                                                 textDirection)
@@ -387,8 +387,8 @@ namespace canvas
                               BOOST_CURRENT_FUNCTION,
                               static_cast< UnambiguousBaseType* >(this));
             tools::verifyRange( textDirection,
-                                ::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-                                ::com::sun::star::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
+                                css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+                                css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
 
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -398,8 +398,8 @@ namespace canvas
         }
 
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawTextLayout(const css::uno::Reference< ::com::sun::star::rendering::XTextLayout >& laidOutText,
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            drawTextLayout(const css::uno::Reference< css::rendering::XTextLayout >&               laidOutText,
                             const css::rendering::ViewState&                                       viewState,
                             const css::rendering::RenderState&                                     renderState)
                             throw (css::lang::IllegalArgumentException,
@@ -418,10 +418,10 @@ namespace canvas
         }
 
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
-                        const ::com::sun::star::rendering::ViewState&                                   viewState,
-                        const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
+                        const css::rendering::ViewState&                                   viewState,
+                        const css::rendering::RenderState&                                 renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -434,10 +434,10 @@ namespace canvas
             return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawBitmapModulated( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >&    xBitmap,
-                                 const ::com::sun::star::rendering::ViewState&                                      viewState,
-                                 const ::com::sun::star::rendering::RenderState&                                    renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+            drawBitmapModulated( const css::uno::Reference< css::rendering::XBitmap >&                 xBitmap,
+                                 const css::rendering::ViewState&                                      viewState,
+                                 const css::rendering::RenderState&                                    renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -450,8 +450,8 @@ namespace canvas
             return maCanvasHelper.drawBitmapModulated( this, xBitmap, viewState, renderState );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >   SAL_CALL
-            getDevice() throw (::com::sun::star::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XGraphicDevice >   SAL_CALL
+            getDevice() throw (css::uno::RuntimeException) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 

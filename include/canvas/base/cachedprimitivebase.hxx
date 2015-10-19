@@ -34,8 +34,8 @@
 
 namespace canvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCachedPrimitive,
-                                                   ::com::sun::star::lang::XServiceInfo > CachedPrimitiveBase_Base;
+    typedef ::cppu::WeakComponentImplHelper2< css::rendering::XCachedPrimitive,
+                                              css::lang::XServiceInfo > CachedPrimitiveBase_Base;
 
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.
@@ -60,21 +60,20 @@ namespace canvas
             objects where re-transforming the generated output is not
             desirable, e.g. for hinted font output.
          */
-        CachedPrimitiveBase( const ::com::sun::star::rendering::ViewState&  rUsedViewState,
-                             const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::rendering::XCanvas >& rTarget,
-                             bool                                           bFailForChangedViewTransform );
+        CachedPrimitiveBase( const css::rendering::ViewState&  rUsedViewState,
+                             const css::uno::Reference< css::rendering::XCanvas >& rTarget,
+                             bool                              bFailForChangedViewTransform );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;
 
         // XCachedPrimitive
-        virtual ::sal_Int8 SAL_CALL redraw( const ::com::sun::star::rendering::ViewState& aState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual ~CachedPrimitiveBase(); // we're a ref-counted UNO class. _We_ destroy ourselves.
@@ -100,15 +99,14 @@ namespace canvas
             @param bSameViewTransform
             When true, rNewState and rOldState have the same transformation.
          */
-        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
-                                     const ::com::sun::star::rendering::ViewState&  rOldState,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                                           bSameViewTransform ) = 0;
+        virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
+                                     const css::rendering::ViewState&  rOldState,
+                                     const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
+                                     bool                              bSameViewTransform ) = 0;
 
-        ::com::sun::star::rendering::ViewState                                      maUsedViewState;
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >    mxTarget;
-        const bool                                                                  mbFailForChangedViewTransform;
+        css::rendering::ViewState                         maUsedViewState;
+        css::uno::Reference< css::rendering::XCanvas >    mxTarget;
+        const bool                                        mbFailForChangedViewTransform;
     };
 }
 

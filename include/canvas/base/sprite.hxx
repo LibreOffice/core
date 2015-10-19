@@ -51,7 +51,7 @@ namespace canvas
         functionality (which, of course, is impossible here in a
         generic way)
     */
-    class Sprite : public ::com::sun::star::lang::XComponent
+    class Sprite : public css::lang::XComponent
     {
     public:
         typedef ::rtl::Reference< Sprite > Reference;
