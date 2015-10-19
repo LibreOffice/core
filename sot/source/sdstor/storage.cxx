@@ -696,7 +696,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
         // egal was kommt, nur exclusiv gestattet
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
-        BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode, true );
+        BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode );
         pStm = new SotStorageStream( p );
 
         if( !nE )
