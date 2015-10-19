@@ -595,7 +595,7 @@ namespace
     struct TransBody
     {
         OUString Name;
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration > Body;
+        css::uno::Reference< css::i18n::XExtendedTransliteration > Body;
     };
     class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};
 }
@@ -671,7 +671,7 @@ com_sun_star_i18n_Transliteration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new com::sun::star::i18n::TransliterationImpl(context));
+    return cppu::acquire(new css::i18n::TransliterationImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -321,15 +321,15 @@ static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
 struct LocaleDataLookupTableItem
 {
-    LocaleDataLookupTableItem(const sal_Char *name, osl::Module* m, const sal_Char* lname) : dllName(name), module(m), localeName(lname)
-    {
-    }
     const sal_Char* dllName;
     osl::Module *module;
     const sal_Char* localeName;
+    css::lang::Locale aLocale;
 
-    com::sun::star::lang::Locale aLocale;
-    bool equals(const com::sun::star::lang::Locale& rLocale)
+    LocaleDataLookupTableItem(const sal_Char *name, osl::Module* m, const sal_Char* lname) : dllName(name), module(m), localeName(lname)
+    {
+    }
+    bool equals(const css::lang::Locale& rLocale)
     {
         return (rLocale == aLocale);
     }
@@ -1337,7 +1337,7 @@ namespace com{ namespace sun{ namespace star{ namespace lang {
 struct OutlineNumberingLevel_Impl
 {
     OUString        sPrefix;
-    sal_Int16       nNumType; //com::sun::star::style::NumberingType
+    sal_Int16       nNumType; //css::style::NumberingType
     OUString        sSuffix;
     sal_Unicode     cBulletChar;
     OUString        sBulletFontName;
@@ -1608,7 +1608,7 @@ LocaleDataImpl::getSupportedServiceNames() throw( RuntimeException, std::excepti
 }
 
 // static
-OUString LocaleDataImpl::getFirstLocaleServiceName( const com::sun::star::lang::Locale & rLocale )
+OUString LocaleDataImpl::getFirstLocaleServiceName( const css::lang::Locale & rLocale )
 {
     if (rLocale.Language == I18NLANGTAG_QLT)
         return rLocale.Variant.replace( cHyphen, cUnder);
@@ -1619,7 +1619,7 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const com::sun::star::lang::
 }
 
 // static
-::std::vector< OUString > LocaleDataImpl::getFallbackLocaleServiceNames( const com::sun::star::lang::Locale & rLocale )
+::std::vector< OUString > LocaleDataImpl::getFallbackLocaleServiceNames( const css::lang::Locale & rLocale )
 {
     ::std::vector< OUString > aVec;
     if (rLocale.Language == I18NLANGTAG_QLT)

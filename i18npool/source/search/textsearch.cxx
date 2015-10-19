@@ -160,7 +160,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     }
 
     if ( !xBreak.is() )
-        xBreak = com::sun::star::i18n::BreakIterator::create( m_xContext );
+        xBreak = css::i18n::BreakIterator::create( m_xContext );
 
     sSrchStr = aSrchPara.searchString;
 
@@ -172,7 +172,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
             if (maskSimpleRegexTrans( aSrchPara.transliterateFlags) !=
                     maskSimpleTrans( aSrchPara.transliterateFlags))
             {
-                com::sun::star::uno::Reference< XExtendedTransliteration > xTranslitPattern(
+                css::uno::Reference< XExtendedTransliteration > xTranslitPattern(
                          Transliteration::create( m_xContext ));
                 if (xTranslitPattern.is())
                 {
@@ -265,7 +265,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     if ( xTranslit.is() )
     {
         // apply normal transliteration (1<->1, 1<->0)
-        com::sun::star::uno::Sequence<sal_Int32> offset(endPos - startPos);
+        css::uno::Sequence<sal_Int32> offset(endPos - startPos);
         in_str = xTranslit->transliterate( searchStr, startPos, endPos - startPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
@@ -323,7 +323,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         SearchResult sres2;
 
         in_str = OUString(searchStr);
-        com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
 
@@ -374,7 +374,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     if ( xTranslit.is() )
     {
         // apply only simple 1<->1 transliteration here
-        com::sun::star::uno::Sequence<sal_Int32> offset(startPos - endPos);
+        css::uno::Sequence<sal_Int32> offset(startPos - endPos);
     in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
@@ -423,7 +423,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     SearchResult sres2;
 
     in_str = OUString(searchStr);
-        com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);
 
@@ -762,7 +762,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     return aRet;
 }
 
-void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOptions)
+void TextSearch::RESrchPrepare( const css::util::SearchOptions& rOptions)
 {
     // select the transliterated pattern string
     const OUString& rPatternStr =
@@ -770,7 +770,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
         : (isComplexTrans( rOptions.transliterateFlags) ? sSrchStr2 : rOptions.searchString));
 
     sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capability
-    // map com::sun::star::util::SearchFlags to ICU uregex.h flags
+    // map css::util::SearchFlags to ICU uregex.h flags
     // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
     // REG_NEWLINE is neither properly defined nor used anywhere => not implemented
     // REG_NOSUB is not used anywhere => not implemented
@@ -778,7 +778,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     // LEV_RELAXED is only used for SearchAlgorithm==Approximate
     // Note that the search flag ALL_IGNORE_CASE is deprecated in UNO
     // probably because the transliteration flag IGNORE_CASE handles it as well.
-    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0
+    if( (rOptions.searchFlag & css::util::SearchFlags::ALL_IGNORE_CASE) != 0
     ||  (rOptions.transliterateFlags & TransliterationModules_IGNORE_CASE) != 0)
         nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
     UErrorCode nIcuErr = U_ZERO_ERROR;
@@ -1097,13 +1097,13 @@ TextSearch::getSupportedServiceNames() throw( RuntimeException, std::exception )
     return aRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+css::uno::Reference< css::uno::XInterface >
 SAL_CALL TextSearch_CreateInstance(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory >& rxMSF )
+        const css::uno::Reference<
+        css::lang::XMultiServiceFactory >& rxMSF )
 {
-    return ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >(
+    return css::uno::Reference<
+        css::uno::XInterface >(
                 static_cast<cppu::OWeakObject*>(new TextSearch(
                         comphelper::getComponentContext( rxMSF ) )) );
 }
@@ -1117,15 +1117,15 @@ i18nsearch_component_getFactory( const sal_Char* sImplementationName,
 {
     void* pRet = NULL;
 
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager =
-        static_cast< ::com::sun::star::lang::XMultiServiceFactory* >
+    css::lang::XMultiServiceFactory* pServiceManager =
+        static_cast< css::lang::XMultiServiceFactory* >
             ( _pServiceManager );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XSingleServiceFactory > xFactory;
+    css::uno::Reference<
+            css::lang::XSingleServiceFactory > xFactory;
 
     if ( 0 == rtl_str_compare( sImplementationName, cSearchImpl) )
     {
-        ::com::sun::star::uno::Sequence< OUString > aServiceNames(1);
+        css::uno::Sequence< OUString > aServiceNames(1);
         aServiceNames[0] = getServiceName_Static();
         xFactory = ::cppu::createSingleFactory(
                 pServiceManager, getImplementationName_Static(),

@@ -56,70 +56,70 @@ public:
     virtual ~Calendar_gregorian();
 
     // Methods in XCalendar
-    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDateTime(double fTimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isValid() throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual Calendar SAL_CALL getLoadedCalendar() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getUniqueID() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getFirstDayOfWeek() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFirstDayOfWeek(sal_Int16 nDay) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMinimumNumberOfDaysForFirstWeek(sal_Int16 nDays) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getMinimumNumberOfDaysForFirstWeek() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getNumberOfMonthsInYear() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getNumberOfDaysInWeek() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem > SAL_CALL getMonths() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem > SAL_CALL getDays() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDateTime(double fTimeInDays) throw(css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getDateTime() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isValid() throw (css::uno::RuntimeException, std::exception) override;
+    virtual Calendar SAL_CALL getLoadedCalendar() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getUniqueID() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getFirstDayOfWeek() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFirstDayOfWeek(sal_Int16 nDay) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMinimumNumberOfDaysForFirstWeek(sal_Int16 nDays) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getMinimumNumberOfDaysForFirstWeek() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getNumberOfMonthsInYear() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getNumberOfDaysInWeek() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem > SAL_CALL getMonths() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem > SAL_CALL getDays() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods in XExtendedCalendar
-    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XCalendar3
-    virtual Calendar2 SAL_CALL getLoadedCalendar2() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getDays2() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual Calendar2 SAL_CALL getLoadedCalendar2() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem2 > SAL_CALL getDays2() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem2 > SAL_CALL getMonths2() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(css::uno::RuntimeException, std::exception) override;
 
     // XCalendar4
-    virtual void SAL_CALL setLocalDateTime(double TimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getLocalDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLocalDateTime(double TimeInDays) throw(css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getLocalDateTime() throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
     const Era *eraArray;
     icu::Calendar *body;
     css::uno::Reference<NativeNumberSupplierService> mxNatNum;
     const sal_Char* cCalendar;
-    com::sun::star::lang::Locale aLocale;
+    css::lang::Locale aLocale;
     sal_uInt32 fieldSet;
     sal_Int16 fieldValue[FIELD_INDEX_COUNT];
     sal_Int16 fieldSetValue[FIELD_INDEX_COUNT];
 
-    virtual void mapToGregorian() throw(com::sun::star::uno::RuntimeException);
-    virtual void mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
-    void getValue() throw(com::sun::star::uno::RuntimeException);
+    virtual void mapToGregorian() throw(css::uno::RuntimeException);
+    virtual void mapFromGregorian() throw(css::uno::RuntimeException);
+    void getValue() throw(css::uno::RuntimeException);
 
-    OUString getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode ) throw (com::sun::star::uno::RuntimeException);
+    OUString getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode ) throw (css::uno::RuntimeException);
 
 private:
     Calendar2 aCalendar;
 
     /** Submit fieldSetValue array according to fieldSet. */
-    void submitFields() throw(com::sun::star::uno::RuntimeException);
+    void submitFields() throw(css::uno::RuntimeException);
     /** Submit fieldSetValue array according to fieldSet, plus YMDhms if >=0,
         plus zone and DST if != 0 */
-    void submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST) throw(com::sun::star::uno::RuntimeException);
+    void submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST) throw(css::uno::RuntimeException);
     /** Set fields internally. */
-    void setValue() throw(com::sun::star::uno::RuntimeException);
+    void setValue() throw(css::uno::RuntimeException);
     /** Obtain combined field values for timezone offset (minutes+secondmillis)
         in milliseconds and whether fields were set. */
     bool getZoneOffset( sal_Int32 & o_nOffset ) const;
@@ -140,8 +140,8 @@ class Calendar_hanja : public Calendar_gregorian
 public:
     // Constructors
     Calendar_hanja();
-    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -174,7 +174,7 @@ public:
     Calendar_buddhist();
 
     // Methods in XExtendedCalendar
-    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } } } }

@@ -39,26 +39,23 @@ typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 
 class TextSearch: public cppu::WeakImplHelper
 <
-    ::com::sun::star::util::XTextSearch,
-    ::com::sun::star::lang::XServiceInfo
+    css::util::XTextSearch,
+    css::lang::XServiceInfo
 >
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    ::com::sun::star::util::SearchOptions aSrchPara;
+    css::util::SearchOptions aSrchPara;
     OUString sSrchStr;
     OUString sSrchStr2;
 
-    mutable com::sun::star::uno::Reference<
-        com::sun::star::i18n::XCharacterClassification > xCharClass;
+    mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::i18n::XExtendedTransliteration > xTranslit;
-    com::sun::star::uno::Reference<
-        com::sun::star::i18n::XExtendedTransliteration > xTranslit2;
+    css::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit;
+    css::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit2;
 
     // define a function pointer for the different search methods
-    typedef ::com::sun::star::util::SearchResult
+    typedef css::util::SearchResult
         (SAL_CALL TextSearch:: *FnSrch)( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
@@ -75,72 +72,72 @@ class TextSearch: public cppu::WeakImplHelper
     void MakeBackwardTab();
     void MakeBackwardTab2();
     sal_Int32 GetDiff( const sal_Unicode ) const;
-    ::com::sun::star::util::SearchResult SAL_CALL
+    css::util::SearchResult SAL_CALL
         NSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::util::SearchResult SAL_CALL
+                            throw(css::uno::RuntimeException);
+    css::util::SearchResult SAL_CALL
         NSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
+                            throw(css::uno::RuntimeException);
 
     // Members and methods for the regular expression search
     RegexMatcher* pRegexMatcher;
-    ::com::sun::star::util::SearchResult SAL_CALL
+    css::util::SearchResult SAL_CALL
         RESrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::util::SearchResult SAL_CALL
+                            throw(css::uno::RuntimeException);
+    css::util::SearchResult SAL_CALL
         RESrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
-    void RESrchPrepare( const ::com::sun::star::util::SearchOptions&);
+                            throw(css::uno::RuntimeException);
+    void RESrchPrepare( const css::util::SearchOptions&);
 
     // Members and methods for the "Weight Levenshtein-Distance" search
     int nLimit;
     WLevDistance* pWLD;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > xBreak;
-    ::com::sun::star::util::SearchResult SAL_CALL
+    css::uno::Reference < css::i18n::XBreakIterator > xBreak;
+    css::util::SearchResult SAL_CALL
         ApproxSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::util::SearchResult SAL_CALL
+                            throw(css::uno::RuntimeException);
+    css::util::SearchResult SAL_CALL
         ApproxSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException);
+                            throw(css::uno::RuntimeException);
 
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
     bool checkCTLStart, checkCTLEnd;
     bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos)
-                            throw(::com::sun::star::uno::RuntimeException);
+                            throw(css::uno::RuntimeException);
 
 public:
     TextSearch(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& rxContext );
+        const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
     virtual ~TextSearch();
 
     // Methods
     virtual void SAL_CALL
-        setOptions( const ::com::sun::star::util::SearchOptions& options )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::util::SearchResult SAL_CALL
+        setOptions( const css::util::SearchOptions& options )
+                            throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::util::SearchResult SAL_CALL
         searchForward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::util::SearchResult SAL_CALL
+                            throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::util::SearchResult SAL_CALL
         searchBackward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
-                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif
