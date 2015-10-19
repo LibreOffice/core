@@ -1143,7 +1143,9 @@ SdPage* AnnotationManagerImpl::GetLastPage()
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()
 {
-    return mrBase.GetMainViewShell()->getCurrentPage();
+    if (mrBase.GetMainViewShell().get())
+        return mrBase.GetMainViewShell()->getCurrentPage();
+    return nullptr;
 }
 
 AnnotationManager::AnnotationManager( ViewShellBase& rViewShellBase )
