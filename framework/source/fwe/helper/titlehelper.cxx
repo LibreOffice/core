@@ -643,7 +643,7 @@ OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
     }
     else
     {
-        if (aURL.hasExtension(INetURLObject::LAST_SEGMENT))
+        if (aURL.hasExtension())
             sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
 
         if ( sTitle.isEmpty() )

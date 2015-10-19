@@ -611,7 +611,7 @@ namespace framework
         }
         else
         {
-            aContextEvent.UndoActionTitle = rUndoManager.GetUndoActionComment( 0 );
+            aContextEvent.UndoActionTitle = rUndoManager.GetUndoActionComment();
             notificationMethod = &XUndoManagerListener::leftContext;
         }
 

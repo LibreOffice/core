@@ -134,7 +134,7 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
         Graphic aGraphic;
 
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( aGraphic, OUString(), *pStream, GRFILTER_FORMAT_DONTKNOW );
+        rGF.ImportGraphic( aGraphic, OUString(), *pStream );
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 

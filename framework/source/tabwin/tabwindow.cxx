@@ -387,7 +387,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
                     SolarMutexGuard aGuard;
                     vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
-                        pWindow->Show( true );
+                        pWindow->Show();
 
                     pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                     if ( pWindow )
