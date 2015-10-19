@@ -112,7 +112,10 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
 
     Size aTargetSizePixel(mTargetWidth, mTargetHeight);
 
-    Graphic aGraphic = aRenderer.renderToGraphic( aCurrentPage, aDocumentSizePixel, aTargetSizePixel );
+    if (mTargetWidth == 0 || mTargetHeight == 0)
+        aTargetSizePixel = aDocumentSizePixel;
+
+    Graphic aGraphic = aRenderer.renderToGraphic(aCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
