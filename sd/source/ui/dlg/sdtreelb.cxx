@@ -1083,6 +1083,8 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     {
         // commented code from svtools/source/contnr/svimpbox.cxx
         SvTreeListEntry* pCursor = GetCurEntry();
+        if (!pCursor)
+            return;
         if( pCursor->HasChildren() || pCursor->HasChildrenOnDemand() )
         {
             if( IsExpanded( pCursor ) )
