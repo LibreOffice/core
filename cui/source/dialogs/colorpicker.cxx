@@ -732,12 +732,12 @@ public:
 
     void KeyMove( int dy );
 
-    void SetModifyHdl( const Link<>& rLink ) { maModifyHdl = rLink; }
+    void SetModifyHdl( const Link<ColorSliderControl&,void>& rLink ) { maModifyHdl = rLink; }
 
     sal_Int16 GetLevel() const { return mnLevel; }
 
 private:
-    Link<> maModifyHdl;
+    Link<ColorSliderControl&,void> maModifyHdl;
     Color maColor;
     ColorMode meMode;
     Bitmap* mpBitmap;
@@ -951,7 +951,7 @@ void ColorSliderControl::Resize()
 
 void ColorSliderControl::Modify()
 {
-    maModifyHdl.Call(this);
+    maModifyHdl.Call(*this);
 }
 
 void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double dValue)
@@ -989,8 +989,8 @@ public:
 
     void update_color(sal_uInt16 n = UPDATE_ALL);
 
-    DECL_LINK(ColorModifyHdl, void*);
     DECL_LINK_TYPED(ColorFieldControlModifydl, ColorFieldControl&, void);
+    DECL_LINK_TYPED(ColorSliderControlModifyHdl, ColorSliderControl&, void);
     DECL_LINK_TYPED(ColorModifyEditHdl, Edit&, void);
     DECL_LINK_TYPED(ModeModifyHdl, RadioButton&, void);
 
@@ -1073,7 +1073,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
     set_height_request(aDialogSize.Height() + 30);
 
     mpColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
-    mpColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
+    mpColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
 
     Link<Edit&,void> aLink3( LINK( this, ColorPickerDialog, ColorModifyEditHdl ) );
     mpMFRed->SetModifyHdl( aLink3 );
@@ -1280,10 +1280,6 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
     mpColorPreview->SetColor(aColor);
 }
 
-IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
-{
-    ColorModifyHdl(&rEdit);
-}
 IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
 {
     sal_uInt16 n = 0;
@@ -1325,88 +1321,92 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldCo
         update_color(n);
 
 }
-IMPL_LINK(ColorPickerDialog, ColorModifyHdl, void *, p)
+IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
 {
     sal_uInt16 n = 0;
 
-    if (p == mpColorSlider)
+    double dValue = mpColorSlider->GetValue();
+    switch (meMode)
     {
-        double dValue = mpColorSlider->GetValue();
-        switch (meMode)
-        {
-        case HUE:
-            setColorComponent( COLORCOMP_HUE, dValue * 360.0 );
-            break;
-        case SATURATION:
-            setColorComponent( COLORCOMP_SAT, dValue );
-            break;
-        case BRIGHTNESS:
-            setColorComponent( COLORCOMP_BRI, dValue );
-            break;
-        case RED:
-            setColorComponent( COLORCOMP_RED, dValue );
-            break;
-        case GREEN:
-            setColorComponent( COLORCOMP_GREEN, dValue );
-            break;
-        case BLUE:
-            setColorComponent( COLORCOMP_BLUE, dValue );
-            break;
-        }
-
-        n = UPDATE_ALL&~(UPDATE_COLORSLIDER);
+    case HUE:
+        setColorComponent( COLORCOMP_HUE, dValue * 360.0 );
+        break;
+    case SATURATION:
+        setColorComponent( COLORCOMP_SAT, dValue );
+        break;
+    case BRIGHTNESS:
+        setColorComponent( COLORCOMP_BRI, dValue );
+        break;
+    case RED:
+        setColorComponent( COLORCOMP_RED, dValue );
+        break;
+    case GREEN:
+        setColorComponent( COLORCOMP_GREEN, dValue );
+        break;
+    case BLUE:
+        setColorComponent( COLORCOMP_BLUE, dValue );
+        break;
     }
-    else if (p == mpMFRed)
+
+    n = UPDATE_ALL&~(UPDATE_COLORSLIDER);
+    if (n)
+        update_color(n);
+}
+IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
+{
+    sal_uInt16 n = 0;
+
+    if (&rEdit == mpMFRed)
     {
         setColorComponent( COLORCOMP_RED, ((double)mpMFRed->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
-    else if (p == mpMFGreen)
+    else if (&rEdit == mpMFGreen)
     {
         setColorComponent( COLORCOMP_GREEN, ((double)mpMFGreen->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
-    else if (p == mpMFBlue)
+    else if (&rEdit == mpMFBlue)
     {
         setColorComponent( COLORCOMP_BLUE, ((double)mpMFBlue->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
-    else if (p == mpMFHue)
+    else if (&rEdit == mpMFHue)
     {
         setColorComponent( COLORCOMP_HUE, (double)mpMFHue->GetValue() );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
-    else if (p == mpMFSaturation)
+    else if (&rEdit == mpMFSaturation)
     {
         setColorComponent( COLORCOMP_SAT, ((double)mpMFSaturation->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
-    else if (p == mpMFBrightness)
+    else if (&rEdit == mpMFBrightness)
     {
         setColorComponent( COLORCOMP_BRI, ((double)mpMFBrightness->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
-    else if (p == mpMFCyan)
+    else if (&rEdit == mpMFCyan)
     {
         setColorComponent( COLORCOMP_CYAN, ((double)mpMFCyan->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
-    else if (p == mpMFMagenta)
+    else if (&rEdit == mpMFMagenta)
     {
         setColorComponent( COLORCOMP_MAGENTA, ((double)mpMFMagenta->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
-    else if (p == mpMFYellow)
+    else if (&rEdit == mpMFYellow)
     {
         setColorComponent( COLORCOMP_YELLOW, ((double)mpMFYellow->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
-    else if (p == mpMFKey)
+    else if (&rEdit == mpMFKey)
     {
         setColorComponent( COLORCOMP_KEY, ((double)mpMFKey->GetValue()) / 100.0 );
         n = UPDATE_ALL&~(UPDATE_CMYK);
     }
-    else if (p == mpEDHex)
+    else if (&rEdit == mpEDHex)
     {
         sal_Int32 nColor = mpEDHex->GetColor();
 
@@ -1429,8 +1429,6 @@ IMPL_LINK(ColorPickerDialog, ColorModifyHdl, void *, p)
 
     if (n)
         update_color(n);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
