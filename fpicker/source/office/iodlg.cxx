@@ -1814,7 +1814,7 @@ void SvtFileDialog::onAsyncOperationStarted()
 {
     EnableUI( false );
     // the cancel button must be always enabled
-    _pImp->_pBtnCancel->Enable( true );
+    _pImp->_pBtnCancel->Enable();
     _pImp->_pBtnCancel->GrabFocus();
 }
 
@@ -2919,7 +2919,7 @@ IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, NameHdl, Edit&, void)
     if ( !aName.isEmpty() )
     {
         if ( !m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable( true );
+            m_pOKBtn->Enable();
     }
     else
     {

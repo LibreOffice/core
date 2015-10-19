@@ -619,7 +619,7 @@ void RemoteFilesDialog::EnableControls()
 {
     if( m_pServices_lb->GetEntryCount() > 0 )
     {
-        m_pServices_lb->Enable( true );
+        m_pServices_lb->Enable();
 
         if( m_pServices_lb->GetSelectEntryCount() )
         {
@@ -653,12 +653,12 @@ void RemoteFilesDialog::EnableControls()
 
     if( m_bIsConnected )
     {
-        m_pFilter_lb->Enable( true );
-        m_pName_ed->Enable( true );
-        m_pContainer->Enable( true );
+        m_pFilter_lb->Enable();
+        m_pName_ed->Enable();
+        m_pContainer->Enable();
 
         if( !m_pName_ed->GetText().isEmpty() )
-            m_pOk_btn->Enable( true );
+            m_pOk_btn->Enable();
         else
             m_pOk_btn->Enable( false );
     }
@@ -671,7 +671,7 @@ void RemoteFilesDialog::EnableControls()
     }
 
     m_pPath->EnableFields( true );
-    m_pAddService_btn->Enable( true );
+    m_pAddService_btn->Enable();
 
     Invalidate(InvalidateFlags::Update);
 }
@@ -686,7 +686,7 @@ void RemoteFilesDialog::DisableControls()
     m_pOk_btn->Enable( false );
     m_pPath->EnableFields( false );
 
-    m_pCancel_btn->Enable( true );
+    m_pCancel_btn->Enable();
 }
 
 void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUser
