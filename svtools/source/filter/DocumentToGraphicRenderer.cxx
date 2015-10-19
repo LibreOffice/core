@@ -94,7 +94,8 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 Graphic DocumentToGraphicRenderer::renderToGraphic(
     sal_Int32 aCurrentPage,
     Size aDocumentSizePixel,
-    Size aTargetSizePixel)
+    Size aTargetSizePixel,
+    Color aPageColor)
 
 {
     if (!mxModel.is() || !mxController.is() || !mxRenderable.is())
@@ -126,6 +127,12 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     pOutputDev->SetMapMode( mm );
 
     aMtf.Record( pOutputDev );
+
+    if (aPageColor != Color(COL_TRANSPARENT))
+    {
+        pOutputDev->SetBackground(Wallpaper(aPageColor));
+        pOutputDev->Erase();
+    }
 
     uno::Any aSelection;
     aSelection <<= mxDocument;
