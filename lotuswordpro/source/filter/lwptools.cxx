@@ -323,7 +323,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
                 if (j==1)
                     pDateStyle->AddMonth(false);
                 else if (j==2)
-                    pDateStyle->AddMonth(true);
+                    pDateStyle->AddMonth();
                 else if (j==3)
                     pDateStyle->AddMonth(false,true);
                 else

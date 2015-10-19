@@ -94,7 +94,7 @@ void LwpFontAttrEntry::Override( rtl::Reference<XFFont> const & pFont )
     if (IsSuperOverridden())
     {
         if(Is(SUPERSCRIPT))
-            pFont->SetPosition(true);
+            pFont->SetPosition();
     }
 
     if (IsSubOverridden())
