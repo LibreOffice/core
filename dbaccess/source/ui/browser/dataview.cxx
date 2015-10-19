@@ -92,7 +92,7 @@ namespace dbaui
         Rectangle aPlayground( _rPlayground );
 
         // position the separator
-        const Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
+        const Size aSeparatorSize( aPlayground.GetWidth(), 2 );
         m_aSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
         aPlayground.Top() += aSeparatorSize.Height() + 1;
 

@@ -5381,7 +5381,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // without draw scaleing
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
-    Size aPaperSize = Size( 1000000, 1000000 );
+    Size aPaperSize( 1000000, 1000000 );
     if (aCell.meType == CELLTYPE_FORMULA)
     {
         long nSizeX  = 0;
@@ -5484,7 +5484,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
 
     std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
-    Size aPaperSize = Size(1000000, 1000000);
+    Size aPaperSize(1000000, 1000000);
     pEngine->SetPaperSize(aPaperSize);
 
     if (aCell.meType == CELLTYPE_EDIT)
@@ -6212,7 +6212,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
         sal_Int32 nScale = GetDPIScaleFactor();
         // Size should be even
-        Size aFillHandleSize = Size(6 * nScale, 6 * nScale);
+        Size aFillHandleSize(6 * nScale, 6 * nScale);
 
         Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
         long nSizeXPix;

@@ -136,7 +136,7 @@ bool lcl_deleteDataCurve(
 
         if( xRegressionCurveContainer.is())
         {
-            UndoGuard aUndoGuard = UndoGuard(
+            UndoGuard aUndoGuard(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_CURVE )),
                 xUndoManager );
@@ -179,7 +179,7 @@ void ChartController::executeDispatch_NewArrangement()
         if( xDiagram.is())
         {
             // using assignment for broken gcc 3.3
-            UndoGuard aUndoGuard = UndoGuard(
+            UndoGuard aUndoGuard(
                 SCH_RESSTR( STR_ACTION_REARRANGE_CHART ),
                 m_xUndoManager );
             ControllerLockGuardUNO aCtlLockGuard( xModel );
@@ -235,7 +235,7 @@ void ChartController::executeDispatch_ScaleText()
 {
     SolarMutexGuard aSolarGuard;
     // using assignment for broken gcc 3.3
-    UndoGuard aUndoGuard = UndoGuard(
+    UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_SCALE_TEXT ),
         m_xUndoManager );
     ControllerLockGuardUNO aCtlLockGuard( getModel() );
@@ -616,7 +616,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_TITLE:
             {
                 // using assignment for broken gcc 3.3
-                UndoGuard aUndoGuard = UndoGuard(
+                UndoGuard aUndoGuard(
                     ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_TITLE )),
                     m_xUndoManager );
@@ -635,7 +635,7 @@ bool ChartController::executeDispatch_Delete()
                     if( xLegendProp.is())
                     {
                         // using assignment for broken gcc 3.3
-                        UndoGuard aUndoGuard = UndoGuard(
+                        UndoGuard aUndoGuard(
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_LEGEND )),
                             m_xUndoManager );
@@ -682,7 +682,7 @@ bool ChartController::executeDispatch_Delete()
                 if( xRegCurveCnt.is())
                 {
                     // using assignment for broken gcc 3.3
-                    UndoGuard aUndoGuard = UndoGuard(
+                    UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_AVERAGE_LINE )),
                         m_xUndoManager );
@@ -708,7 +708,7 @@ bool ChartController::executeDispatch_Delete()
                 {
                     uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
-                    UndoGuard aUndoGuard = UndoGuard(
+                    UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
                         m_xUndoManager );
@@ -742,7 +742,7 @@ bool ChartController::executeDispatch_Delete()
 
                     uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
-                    UndoGuard aUndoGuard = UndoGuard(
+                    UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( nId )),
                         m_xUndoManager );
@@ -765,7 +765,7 @@ bool ChartController::executeDispatch_Delete()
                     ObjectIdentifier::getObjectPropertySet( aCID, getModel() );
                 if( xObjectProperties.is() )
                 {
-                    UndoGuard aUndoGuard = UndoGuard(
+                    UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE,
                             SCH_RESSTR( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )),
@@ -832,7 +832,7 @@ bool ChartController::executeDispatch_Delete()
 void ChartController::executeDispatch_ToggleLegend()
 {
     Reference< frame::XModel > xModel( getModel() );
-    UndoGuard aUndoGuard = UndoGuard(
+    UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
     ChartModel& rModel = dynamic_cast<ChartModel&>(*xModel.get());
     Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(rModel), uno::UNO_QUERY );
@@ -867,7 +867,7 @@ void ChartController::executeDispatch_ToggleLegend()
 void ChartController::executeDispatch_ToggleGridHorizontal()
 {
     Reference< frame::XModel > xModel( getModel() );
-    UndoGuard aUndoGuard = UndoGuard(
+    UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
     if( xDiagram.is())
@@ -901,7 +901,7 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 void ChartController::executeDispatch_ToggleGridVertical()
 {
     Reference< frame::XModel > xModel( getModel() );
-    UndoGuard aUndoGuard = UndoGuard(
+    UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
     if( xDiagram.is())

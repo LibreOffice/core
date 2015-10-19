@@ -1643,7 +1643,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
                 OUString aTitle( xRow->getString( 1 ) );
 
                 OUString aId = xContentAccess->queryContentIdentifierString();
-                Content  aContent = Content( aId, aCmdEnv, comphelper::getProcessComponentContext() );
+                Content  aContent( aId, aCmdEnv, comphelper::getProcessComponentContext() );
 
                 AddRegion( aTitle, aContent );
             }

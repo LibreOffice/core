@@ -1136,7 +1136,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     // Background Color
-    Color aBackgroundColor = Color( 0xEC, 0xEC, 0xEC );
+    Color aBackgroundColor( 0xEC, 0xEC, 0xEC );
     aStyleSettings.Set3DColors( aBackgroundColor );
     aStyleSettings.SetFaceColor( aBackgroundColor );
     Color aInactiveTabColor( aBackgroundColor );

@@ -355,8 +355,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
         if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
             aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
-        Size aSize = Size( pGridItem->GetFieldDrawX()  ,
-                            pGridItem->GetFieldDrawY()  );
+        Size aSize( pGridItem->GetFieldDrawX(), pGridItem->GetFieldDrawY()  );
         if( aViewOpt.GetSnapSize() != aSize )
             aViewOpt.SetSnapSize( aSize );
         short nDiv = (short)pGridItem->GetFieldDivisionX() ;

@@ -512,7 +512,7 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
                 // If the Colour is the same as the 'ToolTip' System colour then
                 // use the default rather than the explicit colour value. This will
                 // be incorrect where user has chosen to use this colour explicity.
-                Color aColor = Color( (sal_uInt8)nValue, (sal_uInt8)( nValue >> 8 ), (sal_uInt8)( nValue >> 16 ) );
+                Color aColor( (sal_uInt8)nValue, (sal_uInt8)( nValue >> 8 ), (sal_uInt8)( nValue >> 16 ) );
                 const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
                 if( aColor == rSett.GetHelpColor().GetColor() )
                 {

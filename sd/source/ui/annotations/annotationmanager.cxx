@@ -152,7 +152,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         com::sun::star::util::DateTime aDateTime( xAnnotation->getDateTime() );
 
         Date aSysDate( Date::SYSTEM );
-        Date aDate = Date( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+        Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         if (aDate==aSysDate)
             sRet = SdResId(STR_ANNOTATION_TODAY);
         else if (aDate == Date(aSysDate-1))

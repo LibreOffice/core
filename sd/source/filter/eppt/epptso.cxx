@@ -834,7 +834,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 {
                     case ::com::sun::star::drawing::FillStyle_GRADIENT :
                     {
-                        Point aEmptyPoint = Point();
+                        Point aEmptyPoint;
                         Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
                         EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
@@ -857,7 +857,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                         {
                             case ::com::sun::star::drawing::FillStyle_GRADIENT :
                             {
-                                Point aEmptyPoint = Point();
+                                Point aEmptyPoint;
                                 Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
                                 EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );

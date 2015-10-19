@@ -253,7 +253,7 @@ SvxMetricField::SvxMetricField(
     , ePoolUnit(SFX_MAPUNIT_CM)
     , mxFrame(rFrame)
 {
-    Size aSize = Size(GetTextWidth( OUString("99,99mm") ),GetTextHeight());
+    Size aSize(GetTextWidth( OUString("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
     aSize.Height() += 6;
     SetSizePixel( aSize );

@@ -2360,7 +2360,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                     nOff += 6;
 
                 Color aTextColor( mpVDev->GetTextColor() );
-                Color aShadowColor = Color( COL_BLACK );
+                Color aShadowColor( COL_BLACK );
 
                 if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
                     aShadowColor = Color( COL_LIGHTGRAY );
@@ -2591,8 +2591,8 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 {
     if( !!rBmpEx )
     {
-        BitmapEx        aBmpEx( rBmpEx );
-         Point aPoint = Point();
+        BitmapEx aBmpEx( rBmpEx );
+        Point    aPoint;
         const Rectangle aBmpRect( aPoint, rBmpEx.GetSizePixel() );
         const Rectangle aSrcRect( rSrcPt, rSrcSz );
 

@@ -1632,7 +1632,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
         {
             aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
         }
-        Point aEmptyPoint = Point();
+        Point aEmptyPoint;
         Rectangle aRect( aEmptyPoint, aSize );
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRect, NULL, 0 );
         if (nBlibId)
@@ -1722,7 +1722,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
                     aGraphic.GetPrefMapMode(), aMap100mm );
             }
 
-            Point aEmptyPoint = Point();
+            Point aEmptyPoint;
             Rectangle aRect( aEmptyPoint, aSize );
 
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
@@ -1928,7 +1928,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                     rGraphic.GetPrefMapMode(), aMap100mm);
             }
 
-            Point aEmptyPoint = Point();
+            Point aEmptyPoint;
             Rectangle aRect(aEmptyPoint, aSize);
 
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),

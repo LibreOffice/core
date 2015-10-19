@@ -380,7 +380,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         }
 
         svtools::ColorConfig aColorConfig;
-        Color aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+        Color aFillColor( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
         if (comphelper::LibreOfficeKit::isActive())
             aFillColor = COL_TRANSPARENT;
 

@@ -2603,8 +2603,8 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
     }
 
     // normalize the split pos
-    Point   aSplitPos       = Point( _rPlayground.Left(), nSplitPos );
-    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
+    Point   aSplitPos( _rPlayground.Left(), nSplitPos );
+    Size    aSplitSize( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
 
     if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
         aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
