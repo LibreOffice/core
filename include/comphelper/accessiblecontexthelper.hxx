@@ -76,8 +76,8 @@ namespace comphelper
 
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::accessibility::XAccessibleContext,
-                                                    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext,
+                                                    css::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
 
     /** helper class for implementing an AccessibleContext
@@ -133,11 +133,11 @@ namespace comphelper
             XAccessible, we can compare it with all the children, instead of asking all children for their
             context and comparing this context with ourself.</p>
         */
-        void    lateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccessible );
+        void    lateInit( const css::uno::Reference< css::accessibility::XAccessible >& _rxAccessible );
 
         /** retrieves the creator previously set with <method>lateInit</method>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
                 getAccessibleCreator( ) const;
 
     private:
@@ -152,30 +152,30 @@ namespace comphelper
 
     public:
         // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addAccessibleEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeAccessibleEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XAccessibleContext - still waiting to be overwritten
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
 
         // XAccessibleContext - default implementations
         /** default implementation for retrieving the index of this object within the parent
             <p>This basic implementation here returns the index <code>i</code> of the child for which
                 <code>&lt;parent&gt;.getAccessibleChild( i )</code> equals our creator.</p>
         */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) override;
         /** default implementation for retrieving the locale
             <p>This basic implementation returns the locale of the parent context,
             as retrieved via getAccessibleParent()->getAccessibleContext.</p>
         */
-        virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::lang::Locale SAL_CALL getLocale(  ) throw (css::accessibility::IllegalAccessibleComponentStateException, css::uno::RuntimeException, std::exception) override;
 
     public:
         // helper struct for granting selective access rights
@@ -211,8 +211,8 @@ namespace comphelper
         */
         void NotifyAccessibleEvent(
                     const sal_Int16 _nEventId,
-                    const ::com::sun::star::uno::Any& _rOldValue,
-                    const ::com::sun::star::uno::Any& _rNewValue
+                    const css::uno::Any& _rOldValue,
+                    const css::uno::Any& _rNewValue
                 );
 
         // life time control
@@ -229,7 +229,7 @@ namespace comphelper
 
         /** shortcut for retrieving the context of the parent (returned by getAccessibleParent)
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        css::uno::Reference< css::accessibility::XAccessibleContext >
                     implGetParentContext();
 
         // access to the base class' broadcast helper/mutex

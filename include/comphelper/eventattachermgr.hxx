@@ -40,10 +40,10 @@ namespace beans {
 namespace comphelper
 {
 
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
+COMPHELPER_DLLPUBLIC css::uno::Reference< css::script::XEventAttacherManager >
 createEventAttacherManager(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext )
-    throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+    throw( css::uno::Exception );
 
 }
 

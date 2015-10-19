@@ -48,13 +48,13 @@ class COMPHELPER_DLLPUBLIC OStreamSection
 public:
     /** starts reading of a "skippable" section of data within the given input stream<BR>
         @param      _rxInput    the stream to read from. Must support the
-                                com::sun::star::io::XMarkableStream interface
+                                css::io::XMarkableStream interface
     */
     OStreamSection(const css::uno::Reference< css::io::XDataInputStream >& _rxInput);
 
     /** starts writing of a "skippable" section of data into the given output stream
         @param      _rxOutput           the stream the stream to write to. Must support the
-                                        com::sun::star::io::XMarkableStream interface
+                                        css::io::XMarkableStream interface
         @param      _nPresumedLength    estimation for the length of the upcoming section. If greater 0, this
                                         value will be written as section length and corrected (in the dtor) only if
                                         needed. If you know how much bytes you are about to write, you may

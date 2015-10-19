@@ -26,8 +26,8 @@
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-        NameContainer_createInstance( ::com::sun::star::uno::Type aType );
+    COMPHELPER_DLLPUBLIC css::uno::Reference< css::container::XNameContainer >
+        NameContainer_createInstance( css::uno::Type aType );
 }
 
 #endif // INCLUDED_COMPHELPER_NAMECONTAINER_HXX

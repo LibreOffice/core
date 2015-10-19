@@ -49,12 +49,12 @@ namespace comphelper
     class SynchronousDispatch
     {
     public:
-        static COMPHELPER_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::lang::XComponent > dispatch(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &xStartPoint,
+        static COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XComponent > dispatch(
+            const css::uno::Reference< css::uno::XInterface > &xStartPoint,
             const OUString &sURL,
             const OUString &sTarget,
             const sal_Int32 nFlags,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &lArguments );
+            const css::uno::Sequence< css::beans::PropertyValue > &lArguments );
     };
 
 

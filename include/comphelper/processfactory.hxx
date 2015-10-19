@@ -36,7 +36,7 @@ namespace comphelper
  *
  * @author Juergen Schmidt
  */
-COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
+COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMgr);
 
 /**
  * This function gets the process service factory.
@@ -45,7 +45,7 @@ COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const ::com::sun::star::uno::
  *
  * @author Juergen Schmidt
  */
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
+COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XMultiServiceFactory > getProcessServiceFactory();
 
 /** Obtains a component context from a service factory.
 
@@ -55,9 +55,9 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::X
     @return may be null
  */
 COMPHELPER_DLLPUBLIC
-com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+css::uno::Reference< css::uno::XComponentContext >
 getComponentContext(
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
         const & factory);
 
 /**
@@ -66,7 +66,7 @@ getComponentContext(
  * Throws a RuntimeException if no component context can be obtained.
  */
 COMPHELPER_DLLPUBLIC
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+css::uno::Reference< css::uno::XComponentContext >
 getProcessComponentContext();
 
 }

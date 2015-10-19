@@ -51,10 +51,10 @@ namespace comphelper
             : m_pAdapter(NULL), m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
-        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent)
+        virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent)
             throw (css::uno::RuntimeException, std::exception) = 0;
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
-            throw( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void _disposing(const css::lang::EventObject& _rSource)
+            throw( css::uno::RuntimeException, std::exception);
 
     protected:
         /** If the derivee also owns the mutex which we know as reference, then call this within your
@@ -70,26 +70,26 @@ namespace comphelper
     //= OPropertyChangeMultiplexer
 
     /// multiplexer for property changes
-    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener>
+    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
-         ::com::sun::star::uno::Sequence< OUString >     m_aProperties;
-         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
-        OPropertyChangeListener*                    m_pListener;
-        sal_Int32                                   m_nLockCount;
-        bool                                    m_bListening        : 1;
-        bool                                    m_bAutoSetRelease   : 1;
+        css::uno::Sequence< OUString >                  m_aProperties;
+        css::uno::Reference< css::beans::XPropertySet>  m_xSet;
+        OPropertyChangeListener*                        m_pListener;
+        sal_Int32                                       m_nLockCount;
+        bool                                            m_bListening        : 1;
+        bool                                            m_bAutoSetRelease   : 1;
 
 
         virtual ~OPropertyChangeMultiplexer();
     public:
-        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet, bool _bAutoReleaseSet = true);
+        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  css::uno::Reference< css::beans::XPropertySet>& _rxSet, bool _bAutoReleaseSet = true);
 
     // XEventListener
-        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
 
     // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException, std::exception) override;
 
         /// incremental lock
         void        lock();

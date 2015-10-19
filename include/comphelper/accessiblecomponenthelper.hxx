@@ -54,11 +54,11 @@ namespace comphelper
             note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
                  which itself implements XAccessibleComponent
         */
-        bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException);
+        css::awt::Point SAL_CALL getLocation(  ) throw (css::uno::RuntimeException);
+        css::awt::Point SAL_CALL getLocationOnScreen(  ) throw (css::uno::RuntimeException);
+        css::awt::Size SAL_CALL getSize(  ) throw (css::uno::RuntimeException);
+        css::awt::Rectangle SAL_CALL getBounds(  ) throw (css::uno::RuntimeException);
     };
 
 
@@ -66,7 +66,7 @@ namespace comphelper
 
 
     struct OAccessibleComponentHelper_Base :
-        public ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleComponent >
+        public ::cppu::ImplHelper1< css::accessibility::XAccessibleComponent >
     {
     protected:
         ~OAccessibleComponentHelper_Base() {}
@@ -89,18 +89,18 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Point SAL_CALL getLocation(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL getSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Rectangle SAL_CALL getBounds(  ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 
     //= OAccessibleExtendedComponentHelper
 
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
+    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessibleExtendedComponent
                                 >   OAccessibleExtendedComponentHelper_Base;
 
     /** a helper class for implementing an AccessibleContext which at the same time
@@ -120,11 +120,11 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Point SAL_CALL getLocation(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL getSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Rectangle SAL_CALL getBounds(  ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 

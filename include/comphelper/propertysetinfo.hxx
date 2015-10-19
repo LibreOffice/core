@@ -33,11 +33,11 @@ namespace comphelper
 
 struct PropertyMapEntry
 {
-    OUString maName;
-    sal_Int32 mnHandle;
-    com::sun::star::uno::Type maType;
-    sal_Int16 mnAttributes;
-    sal_uInt8 mnMemberId;
+    OUString       maName;
+    sal_Int32      mnHandle;
+    css::uno::Type maType;
+    sal_Int16      mnAttributes;
+    sal_uInt8      mnMemberId;
 };
 
 typedef std::map<OUString, PropertyMapEntry const *> PropertyMap;
@@ -46,7 +46,7 @@ class PropertyMapImpl;
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC
 class SAL_DLLPUBLIC_TEMPLATE PropertySetInfo_BASE
-    : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
+    : public ::cppu::WeakImplHelper< css::beans::XPropertySetInfo >
 {};
 
 /** this class implements a XPropertySetInfo that is initialized with arrays of PropertyMapEntry.
@@ -76,9 +76,9 @@ public:
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const OUString& aName ) throw();
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 }

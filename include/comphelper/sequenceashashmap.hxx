@@ -42,7 +42,7 @@ namespace comphelper{
 
 struct SequenceAsHashMapBase : public std::unordered_map<
     OUString                    ,
-    ::com::sun::star::uno::Any         ,
+    css::uno::Any         ,
     OUStringHash                ,
     ::std::equal_to< OUString > >
 {
@@ -59,24 +59,24 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         SequenceAsHashMap();
 
 
-        /** @see    operator<<(const ::com::sun::star::uno::Any&)
+        /** @see    operator<<(const css::uno::Any&)
          */
-        SequenceAsHashMap(const ::com::sun::star::uno::Any& aSource);
+        SequenceAsHashMap(const css::uno::Any& aSource);
 
 
-        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
+        /** @see    operator<<(const css::uno::Sequence< css::uno::Any >&)
          */
-        SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
+        SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& lSource);
 
 
-        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&)
+        /** @see    operator<<(const css::uno::Sequence< css::beans::PropertyValue >&)
          */
-        SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
+        SequenceAsHashMap(const css::uno::Sequence< css::beans::PropertyValue >& lSource);
 
 
-        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >&)
+        /** @see    operator<<(const css::uno::Sequence< css::beans::NamedValue >&)
          */
-        SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
+        SequenceAsHashMap(const css::uno::Sequence< css::beans::NamedValue >& lSource);
 
 
         /** @short  not really used but maybe useful :-)
@@ -97,11 +97,11 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  aSource
                     contains the new items for this map.
 
-            @throw  A com::sun::star::lang::IllegalArgumentException
+            @throw  A css::lang::IllegalArgumentException
                     is thrown, if the given Any does not contain a suitable sequence ...
                     but not if it's a VOID Any!
          */
-        void operator<<(const ::com::sun::star::uno::Any& aSource);
+        void operator<<(const css::uno::Any& aSource);
 
 
         /** @short  fill this map from the given
@@ -112,11 +112,11 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
 
-            @throw  A com::sun::star::lang::IllegalArgumentException
+            @throw  A css::lang::IllegalArgumentException
                     is thrown, if the given Any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */
-        void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
+        void operator<<(const css::uno::Sequence< css::uno::Any >& lSource);
 
 
         /** @short  fill this map from the given
@@ -125,7 +125,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
          */
-        void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
+        void operator<<(const css::uno::Sequence< css::beans::PropertyValue >& lSource);
 
 
         /** @short  fill this map from the given
@@ -134,7 +134,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
          */
-        void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
+        void operator<<(const css::uno::Sequence< css::beans::NamedValue >& lSource);
 
 
         /** @short  converts this map instance to an
@@ -143,7 +143,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lDestination
                     target sequence for converting.
          */
-        void operator>>(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDestination) const;
+        void operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const;
 
 
         /** @short  converts this map instance to an
@@ -152,7 +152,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lDestination
                     target sequence for converting.
          */
-        void operator>>(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lDestination) const;
+        void operator>>(css::uno::Sequence< css::beans::NamedValue >& lDestination) const;
 
 
         /** @short  return this map instance as an
@@ -170,7 +170,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @return A const Any, which
                     contains all items of this map.
          */
-        const ::com::sun::star::uno::Any getAsConstAny(bool bAsPropertyValue) const;
+        const css::uno::Any getAsConstAny(bool bAsPropertyValue) const;
 
 
         /** @short  return this map instance to as a
@@ -184,7 +184,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @return A const sequence of type NamedValue, which
                     contains all items of this map.
          */
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getAsConstNamedValueList() const;
+        const css::uno::Sequence< css::beans::NamedValue > getAsConstNamedValueList() const;
 
 
         /** @short  return this map instance to as a
@@ -198,7 +198,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @return A const sequence of type PropertyValue, which
                     contains all items of this map.
          */
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getAsConstPropertyValueList() const;
+        const css::uno::Sequence< css::beans::PropertyValue > getAsConstPropertyValueList() const;
 
 
         /** @short  check if the specified item exists
@@ -265,7 +265,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         {
             if (find(sKey) == end())
             {
-                (*this)[sKey] = ::com::sun::star::uno::toAny(aValue);
+                (*this)[sKey] = css::uno::toAny(aValue);
                 return true;
             }
 

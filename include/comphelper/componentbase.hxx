@@ -37,7 +37,7 @@ namespace comphelper
         /** creates a ComponentBase instance
 
             The instance is not initialized. As a consequence, every ComponentMethodGuard instantiated for
-            this component will throw a com::sun::star::lang::NotInitializedException,
+            this component will throw a css::lang::NotInitializedException,
             until ->setInitialized() is called.
         */
         ComponentBase( ::cppu::OBroadcastHelper& _rBHelper )
@@ -100,7 +100,7 @@ namespace comphelper
 
             The default implementation returns <NULL/>.
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        static css::uno::Reference< css::uno::XInterface >
                 getComponent();
 
     private:

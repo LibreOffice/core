@@ -33,8 +33,7 @@ inline ::boost::optional<T> make_optional( T const& v )
 }
 
 template <typename T>
-inline ::boost::optional<T> make_optional(
-    ::com::sun::star::beans::Optional<T> const& o )
+inline ::boost::optional<T> make_optional( css::beans::Optional<T> const& o )
 {
     if (o.IsPresent)
         return ::boost::optional<T>(o.Value);

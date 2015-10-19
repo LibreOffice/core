@@ -31,15 +31,15 @@ namespace comphelper {
  *  you can use the static helper methods to combine your services with that of parent
  *  or aggregated classes.
  */
-class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public ::com::sun::star::lang::XServiceInfo
+class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public css::lang::XServiceInfo
 {
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // helper
-    static void addToSequence( ::com::sun::star::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* sal_Char* */... ) throw();
+    static void addToSequence( css::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* sal_Char* */... ) throw();
 
 protected:
     ~ServiceInfoHelper() {}

@@ -142,21 +142,21 @@ namespace comphelper
     public:
         /** contrcuct a sequence iterator from a sequence
         */
-        OSequenceIterator(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq);
+        OSequenceIterator(const css::uno::Sequence< TYPE >& _rSeq);
         /** contrcuct a sequence iterator from a Any containing a sequence
         */
-        OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny);
+        OSequenceIterator(const css::uno::Any& _rSequenceAny);
 
         bool hasMoreElements() const;
-        ::com::sun::star::uno::Any  nextElement();
+        css::uno::Any  nextElement();
 
     private:
-        inline void construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq);
+        inline void construct(const css::uno::Sequence< TYPE >& _rSeq);
     };
 
 
     template <class TYPE>
-    inline OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
+    inline OSequenceIterator<TYPE>::OSequenceIterator(const css::uno::Sequence< TYPE >& _rSeq)
         :m_pElements(NULL)
         ,m_nLen(0)
         ,m_pCurrent(NULL)
@@ -166,12 +166,12 @@ namespace comphelper
 
 
     template <class TYPE>
-    inline OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny)
+    inline OSequenceIterator<TYPE>::OSequenceIterator(const css::uno::Any& _rSequenceAny)
         :m_pElements(NULL)
         ,m_nLen(0)
         ,m_pCurrent(NULL)
     {
-        ::com::sun::star::uno::Sequence< TYPE > aContainer;
+        css::uno::Sequence< TYPE > aContainer;
         bool bSuccess = _rSequenceAny >>= aContainer;
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
         (void)bSuccess;
@@ -180,7 +180,7 @@ namespace comphelper
 
 
     template <class TYPE>
-    void OSequenceIterator<TYPE>::construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
+    void OSequenceIterator<TYPE>::construct(const css::uno::Sequence< TYPE >& _rSeq)
     {
         m_pElements = _rSeq.getConstArray();
         m_nLen = _rSeq.getLength();
@@ -196,9 +196,9 @@ namespace comphelper
 
 
     template <class TYPE>
-    inline ::com::sun::star::uno::Any OSequenceIterator<TYPE>::nextElement()
+    inline css::uno::Any OSequenceIterator<TYPE>::nextElement()
     {
-        return ::com::sun::star::uno::toAny(*m_pCurrent++);
+        return css::uno::toAny(*m_pCurrent++);
     }
 
     /** Copy from a plain C/C++ array into a Sequence.
@@ -223,9 +223,9 @@ namespace comphelper
         prevent or detect precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline ::com::sun::star::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
+    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
-        ::com::sun::star::uno::Sequence< DstType > result( nNum );
+        css::uno::Sequence< DstType > result( nNum );
         ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
         return result;
     }
@@ -254,7 +254,7 @@ namespace comphelper
         detect precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType* sequenceToArray( DstType* io_pArray, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType* sequenceToArray( DstType* io_pArray, const css::uno::Sequence< SrcType >& i_Sequence )
     {
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), io_pArray );
         return io_pArray;
@@ -284,18 +284,18 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline ::com::sun::star::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
+    inline css::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
     {
-        ::com::sun::star::uno::Sequence< DstType > result( i_Container.size() );
+        css::uno::Sequence< DstType > result( i_Container.size() );
         ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
         return result;
     }
 
     template <typename T>
-    inline ::com::sun::star::uno::Sequence<T> containerToSequence(
+    inline css::uno::Sequence<T> containerToSequence(
         ::std::vector<T> const& v )
     {
-        return ::com::sun::star::uno::Sequence<T>(
+        return css::uno::Sequence<T>(
             v.data(), static_cast<sal_Int32>(v.size()) );
     }
 
@@ -324,7 +324,7 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType sequenceToContainer( const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
@@ -362,7 +362,7 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType& sequenceToContainer( DstType& o_Output, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType& sequenceToContainer( DstType& o_Output, const css::uno::Sequence< SrcType >& i_Sequence )
     {
         o_Output.resize( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), o_Output.begin() );

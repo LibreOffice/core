@@ -46,34 +46,34 @@ namespace comphelper
 
     /// helper class for implementing property states
     class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper2
-                                                    ,public ::com::sun::star::beans::XPropertyState
+                                                    ,public css::beans::XPropertyState
     {
     public:
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp):OPropertySetHelper2(rBHlp) { }
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertyState
-        virtual ::com::sun::star::beans::PropertyState SAL_CALL
-            getPropertyState(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL
-            getPropertyStates(const ::com::sun::star::uno::Sequence< OUString >& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::beans::PropertyState SAL_CALL
+            getPropertyState(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::beans::PropertyState> SAL_CALL
+            getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL
-            setPropertyToDefault(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL
-            getPropertyDefault(const OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            setPropertyToDefault(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL
+            getPropertyDefault(const OUString& aPropertyName) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // access via handle
-        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
+        virtual css::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
         virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
-        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        virtual css::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     protected:
         virtual ~OPropertyStateHelper();
 
-        void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
+        void firePropertyChange(sal_Int32 nHandle, const css::uno::Any& aNewValue, const css::uno::Any& aOldValue);
 
         static css::uno::Sequence<css::uno::Type> getTypes();
     };
@@ -82,7 +82,7 @@ namespace comphelper
     //= OPropertyStateHelper
 
     class COMPHELPER_DLLPUBLIC OStatefulPropertySet  :public ::cppu::OWeakObject
-                                ,public ::com::sun::star::lang::XTypeProvider
+                                ,public css::lang::XTypeProvider
                                 ,public OMutexAndBroadcastHelper    // order matters: before OPropertyStateHelper/OPropertySetHelper
                                 ,public OPropertyStateHelper
     {

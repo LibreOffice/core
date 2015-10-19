@@ -40,7 +40,7 @@ namespace comphelper
             :m_aGuard( i_broadcastHelper.rMutex )
         {
             if ( i_broadcastHelper.bDisposed )
-                throw ::com::sun::star::lang::DisposedException( OUString(), &i_component );
+                throw css::lang::DisposedException( OUString(), &i_component );
         }
 
         ~ComponentGuard()

@@ -29,10 +29,10 @@
 namespace comphelper
 {
 
-    /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formats
+    /// returns the css::util::NumberFormat of the given key under the given formats
     COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey);
 
-    /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formatter
+    /// returns the css::util::NumberFormat of the given key under the given formatter
     COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormatter>& xFormatter, sal_Int32 nKey);
 
     /// returns the decimals of the given numeric number formatunder the given formats
@@ -47,8 +47,8 @@ namespace comphelper
 
     /** retrieves a the value of a given property for a given format key, relating to a given formatter
     */
-    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Any getNumberFormatProperty(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+    COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatProperty(
+        const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
         sal_Int32 _nKey,
         const OUString& _rPropertyName
     );

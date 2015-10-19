@@ -35,15 +35,15 @@ namespace cppu
  * @param rType         enum type
  * @return enum or empty any.
  */
-inline ::com::sun::star::uno::Any SAL_CALL int2enum(
-    sal_Int32 nEnum, const ::com::sun::star::uno::Type & rType )
+inline css::uno::Any SAL_CALL int2enum(
+    sal_Int32 nEnum, const css::uno::Type & rType )
 {
-    if (rType.getTypeClass() == ::com::sun::star::uno::TypeClass_ENUM)
+    if (rType.getTypeClass() == css::uno::TypeClass_ENUM)
     {
         int nVal = nEnum;
-        return ::com::sun::star::uno::Any( &nVal, rType );
+        return css::uno::Any( &nVal, rType );
     }
-    return ::com::sun::star::uno::Any();
+    return css::uno::Any();
 }
 
 /**
@@ -53,9 +53,9 @@ inline ::com::sun::star::uno::Any SAL_CALL int2enum(
  * @param rAny          enum or int
  * @param sal_True if enum or int value was set else sal_False.
  */
-inline bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::Any & rAny )
+inline bool SAL_CALL enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
 {
-    if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_ENUM)
+    if (rAny.getValueTypeClass() == css::uno::TypeClass_ENUM)
     {
         rnEnum = * static_cast< const int * >( rAny.getValue() );
         return true;
@@ -69,11 +69,11 @@ inline bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::
  * <BR>
  * @param rAny          enum or int
  * @param eRet          the enum value as int. If there is not enum of the given type or
- *                      a ::com::sun::star::lang::IllegalArgumentException is thrown
+ *                      a css::lang::IllegalArgumentException is thrown
  */
 template< typename E >
-inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny )
-    throw( ::com::sun::star::lang::IllegalArgumentException )
+inline void SAL_CALL any2enum( E & eRet, const css::uno::Any & rAny )
+    throw( css::lang::IllegalArgumentException )
 {
     // check for typesafe enum
     if (! (rAny >>= eRet))
@@ -81,7 +81,7 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
         // if not enum, maybe integer?
         sal_Int32 nValue = 0;
         if (! (rAny >>= nValue))
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
 
         eRet = static_cast<E>(nValue);
     }
@@ -94,21 +94,21 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
  *
  */
 template< typename E >
-inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
+inline css::uno::Any SAL_CALL enum2any( E eEnum )
 {
-    return ::com::sun::star::uno::Any( &eEnum, ::cppu::UnoType< E >::get() );
+    return css::uno::Any( &eEnum, ::cppu::UnoType< E >::get() );
 }
 
 /**
  * extracts a boolean either as a sal_Bool or an integer from
  * an any. If there is no sal_Bool or integer inside the any
- * a ::com::sun::star::lang::IllegalArgumentException is thrown
+ * a css::lang::IllegalArgumentException is thrown
  *
  */
-inline bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
-    throw( ::com::sun::star::lang::IllegalArgumentException )
+inline bool SAL_CALL any2bool( const css::uno::Any & rAny )
+    throw( css::lang::IllegalArgumentException )
 {
-    if (rAny.getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+    if (rAny.getValueTypeClass() == css::uno::TypeClass_BOOLEAN)
     {
         return *static_cast<sal_Bool const *>(rAny.getValue());
     }
@@ -116,7 +116,7 @@ inline bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
     {
         sal_Int32 nValue = 0;
         if (! (rAny >>= nValue))
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         return nValue != 0;
     }
 }

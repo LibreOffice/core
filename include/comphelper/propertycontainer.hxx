@@ -49,32 +49,32 @@ protected:
     OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper);
 
     /// for scripting : the types of the interfaces supported by this class
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getBaseTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    static css::uno::Sequence< css::uno::Type > getBaseTypes() throw (css::uno::RuntimeException, std::exception);
 
 // OPropertySetHelper overridables
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                            ::com::sun::star::uno::Any & rConvertedValue,
-                            ::com::sun::star::uno::Any & rOldValue,
+                            css::uno::Any & rConvertedValue,
+                            css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException) override;
+                            const css::uno::Any& rValue )
+                                throw (css::lang::IllegalArgumentException) override;
 
     virtual void SAL_CALL   setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
+                                const css::uno::Any& rValue
                             )
-                            throw (::com::sun::star::uno::Exception,
+                            throw (css::uno::Exception,
                                    std::exception) override;
 
     using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;
 
     // disambiguate a base class method (XFastPropertySet)
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 };
 
 

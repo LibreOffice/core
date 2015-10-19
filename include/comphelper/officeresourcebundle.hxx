@@ -36,7 +36,7 @@ namespace comphelper
     //= OfficeResourceBundle
 
     class ResourceBundle_Impl;
-    /** wraps the com::sun::star::resource::OfficeResourceAccess service
+    /** wraps the css::resource::OfficeResourceAccess service
     */
     class COMPHELPER_DLLPUBLIC OfficeResourceBundle
     {
@@ -53,11 +53,11 @@ namespace comphelper
                 the component context to operate in
             @param  _bundleBaseName
                 the base name of the resource file which should be accessed (*without* the SUPD!)
-            @raises ::com::sun::star::lang::NullPointerException
+            @raises css::lang::NullPointerException
                 if the given component context is <NULL/>
         */
         OfficeResourceBundle(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _context,
+            const css::uno::Reference< css::uno::XComponentContext >& _context,
             const sal_Char* _bundleBaseAsciiName
         );
 

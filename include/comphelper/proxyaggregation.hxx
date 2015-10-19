@@ -84,30 +84,30 @@ namespace comphelper
     class OProxyAggregation
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxyAggregate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >           m_xProxyTypeAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::uno::XAggregation >             m_xProxyAggregate;
+        css::uno::Reference< css::lang::XTypeProvider >           m_xProxyTypeAccess;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
 
     protected:
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext()
+        inline const css::uno::Reference< css::uno::XComponentContext >& getComponentContext()
         {
             return m_xContext;
         }
 
     protected:
-        OProxyAggregation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        OProxyAggregation( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         ~OProxyAggregation();
 
         /// to be called from within your ctor
         void baseAggregateProxyFor(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+            const css::uno::Reference< css::uno::XInterface >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
         );
 
         // XInterface and XTypeProvider
-        ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException);
+        css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException);
 
     private:
         OProxyAggregation( const OProxyAggregation& ) = delete;
@@ -126,16 +126,16 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   com::sun::star::lang::XEventListener
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   css::lang::XEventListener
                                                                         >
                                             ,private OProxyAggregation
     {
     private:
-        typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
+        typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
                                     >   BASE;   // prevents some MSVC problems
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                                             m_xInner;
         ::cppu::OBroadcastHelper&           m_rBHelper;
 
@@ -144,30 +144,30 @@ namespace comphelper
         using OProxyAggregation::getComponentContext;
 
         // XInterface
-        ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 
     protected:
         OComponentProxyAggregationHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             ::cppu::OBroadcastHelper& _rBHelper
         );
         virtual ~OComponentProxyAggregationHelper( );
 
         /// to be called from within your ctor
         void componentAggregateProxyFor(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComponent,
+            const css::uno::Reference< css::lang::XComponent >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
         );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) = 0;
 
     private:
         OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) = delete;
@@ -183,8 +183,8 @@ namespace comphelper
     {
     protected:
         OComponentProxyAggregation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComponent
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::lang::XComponent >& _rxComponent
         );
 
         virtual ~OComponentProxyAggregation();
@@ -195,13 +195,13 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER()
 
         // OComponentHelper
-        virtual void SAL_CALL disposing()  throw (::com::sun::star::uno::RuntimeException) override;
+        virtual void SAL_CALL disposing()  throw (css::uno::RuntimeException) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent/OComponentProxyAggregationHelper
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     protected:
         // be called from within the dtor of derived classes

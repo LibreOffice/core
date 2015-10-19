@@ -48,13 +48,12 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
         sal_Int32   nOwnClassVectorIndex;       // an index within m_aHoldProperties
     };
 
-    ::com::sun::star::beans::Property
-                        aProperty;
-    LocationType        eLocated;       // where is the object containing the value located ?
-    LocationAccess      aLocation;      // access to the property value
+    css::beans::Property aProperty;
+    LocationType         eLocated;       // where is the object containing the value located ?
+    LocationAccess       aLocation;      // access to the property value
 
     PropertyDescription()
-        :aProperty( OUString(), -1, ::com::sun::star::uno::Type(), 0 )
+        :aProperty( OUString(), -1, css::uno::Type(), 0 )
         ,eLocated( ltHoldMyself )
     {
         aLocation.nOwnClassVectorIndex = -1;
@@ -73,7 +72,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
-    typedef ::std::vector< ::com::sun::star::uno::Any > PropertyContainer;
+    typedef ::std::vector< css::uno::Any >              PropertyContainer;
     typedef PropertyContainer::iterator                 PropertyContainerIterator;
     typedef PropertyContainer::const_iterator           ConstPropertyContainerIterator;
     PropertyContainer   m_aHoldProperties;
@@ -100,21 +99,21 @@ protected:
                                         to which _pPointerToMember points.
     */
     void    registerProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType);
+        void* _pPointerToMember, const css::uno::Type& _rMemberType);
 
 
-    /** register a property. The property is represented through a ::com::sun::star::uno::Any member of the
+    /** register a property. The property is represented through a css::uno::Any member of the
         derived class which calls this methdod.
         @param      _rName              the name of the property
         @param      _nHandle            the handle of the property
         @param      _nAttributes        the attributes of the property
         @param      _pPointerToMember   the pointer to the member representing the property
-                                        within the derived class, which has to be a ::com::sun::star::uno::Any.
+                                        within the derived class, which has to be a css::uno::Any.
         @param      _rExpectedType      the expected type of the property. NOT the type of the object to which
                                         _pPointerToMember points (this is always an Any).
     */
     void    registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType);
+        css::uno::Any* _pPointerToMember, const css::uno::Type& _rExpectedType);
 
     /** register a property. The repository will create an own object holding this property, so there is no
         need to declare an extra member in your derived class
@@ -123,14 +122,14 @@ protected:
         @param      _nAttributes        the attributes of the property
         @param      _rType              the type of the property
         @param      _pInitialValue      the initial value of the property. May be null if _nAttributes includes
-                                        the ::com::sun::star::beans::PropertyAttribute::MAYBEVOID flag.
+                                        the css::beans::PropertyAttribute::MAYBEVOID flag.
                                         Else it must be a pointer to an object of the type described by _rType.
     */
     void    registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue);
+        const css::uno::Type& _rType, const void* _pInitialValue);
 
     /** revokes a previously registered property
-        @throw  com::sun::star::beans::UnknownPropertyException
+        @throw  css::beans::UnknownPropertyException
             if no property with the given handle is registered
     */
     void    revokeProperty( sal_Int32 _nHandle );
@@ -145,19 +144,19 @@ protected:
 
     // helper for implementing OPropertySetHelper overridables
     bool    convertFastPropertyValue(
-                    ::com::sun::star::uno::Any & rConvertedValue,
-                    ::com::sun::star::uno::Any & rOldValue,
+                    css::uno::Any & rConvertedValue,
+                    css::uno::Any & rOldValue,
                     sal_Int32 nHandle,
-                    const ::com::sun::star::uno::Any& rValue
+                    const css::uno::Any& rValue
                 );
 
     bool        setFastPropertyValue(
                         sal_Int32 nHandle,
-                        const ::com::sun::star::uno::Any& rValue
+                        const css::uno::Any& rValue
                     );
 
     void        getFastPropertyValue(
-                        ::com::sun::star::uno::Any& rValue,
+                        css::uno::Any& rValue,
                         sal_Int32 nHandle
                     ) const;
 
@@ -169,13 +168,13 @@ protected:
         @param  _rProps
             initial property sequence which is to be extended
     */
-    void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
+    void    describeProperties(css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps) const;
 
     /** retrieves the description for a registered property
-        @throw  com::sun::star::beans::UnknownPropertyException
+        @throw  css::beans::UnknownPropertyException
             if no property with the given name is registered
     */
-    const ::com::sun::star::beans::Property&
+    const css::beans::Property&
             getProperty( const OUString& _rName ) const;
 
 private:

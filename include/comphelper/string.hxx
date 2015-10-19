@@ -309,7 +309,7 @@ COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
                     list, interspersed with the string ", ".
  */
 COMPHELPER_DLLPUBLIC OUString convertCommaSeparated(
-    ::com::sun::star::uno::Sequence< OUString > const & i_rSeq);
+    css::uno::Sequence< OUString > const & i_rSeq);
 
 /// Return a string which is the concatenation of the strings in the sequence.
 COMPHELPER_DLLPUBLIC OString join(const OString& rSeparator, const std::vector<OString>& rSequence);
@@ -344,7 +344,7 @@ COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
     @return         A sequence of strings resulting from splitting the given
                     string at ',' tokens and stripping whitespace.
  */
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString >
+COMPHELPER_DLLPUBLIC css::uno::Sequence< OUString >
     convertCommaSeparated( OUString const & i_rString );
 
 /**
@@ -364,25 +364,25 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString >
             > 0 - if this string is greater than the string argument
 */
 COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const OUString &rLHS, const OUString &rRHS,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > &rCollator,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > &rBI,
-    const ::com::sun::star::lang::Locale &rLocale );
+    const css::uno::Reference< css::i18n::XCollator > &rCollator,
+    const css::uno::Reference< css::i18n::XBreakIterator > &rBI,
+    const css::lang::Locale &rLocale );
 
 class COMPHELPER_DLLPUBLIC NaturalStringSorter
 {
 private:
-    ::com::sun::star::lang::Locale m_aLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > m_xCollator;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > m_xBI;
+    css::lang::Locale                                m_aLocale;
+    css::uno::Reference< css::i18n::XCollator >      m_xCollator;
+    css::uno::Reference< css::i18n::XBreakIterator > m_xBI;
 public:
     NaturalStringSorter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext,
-        const ::com::sun::star::lang::Locale &rLocale);
+        const css::uno::Reference< css::uno::XComponentContext > &rContext,
+        const css::lang::Locale &rLocale);
     sal_Int32 compare(const OUString &rLHS, const OUString &rRHS) const
     {
         return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);
     }
-    const ::com::sun::star::lang::Locale& getLocale() const { return m_aLocale; }
+    const css::lang::Locale& getLocale() const { return m_aLocale; }
 };
 
 /** Determine if an OString contains solely ASCII numeric digits
