@@ -676,7 +676,7 @@ SbError SbiStream::Read( char& ch )
     nExpandOnWriteTo = 0;
     if (aLine.isEmpty())
     {
-        Read( aLine, 0 );
+        Read( aLine );
         aLine = aLine + OString('\n');
     }
     ch = aLine[0];
