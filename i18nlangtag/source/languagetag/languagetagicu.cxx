@@ -17,7 +17,7 @@ icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag )
     if (rLanguageTag.isIsoLocale())
     {
         // The simple case.
-        const com::sun::star::lang::Locale& rLocale = rLanguageTag.getLocale();
+        const css::lang::Locale& rLocale = rLanguageTag.getLocale();
         if (rLocale.Country.isEmpty())
             return icu::Locale( OUStringToOString( rLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr());
         return icu::Locale(
