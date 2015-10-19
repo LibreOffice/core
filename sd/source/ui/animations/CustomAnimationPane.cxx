@@ -606,7 +606,7 @@ void CustomAnimationPane::updateControls()
             mpCBSpeed->SelectEntryPos( nPos );
         }
 
-        mpPBPropertyMore->Enable( true );
+        mpPBPropertyMore->Enable();
     }
     else
     {
@@ -2247,7 +2247,7 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
                 if( pObj )
-                    pView->MarkObj(pObj, pView->GetSdrPageView(), false);
+                    pView->MarkObj(pObj, pView->GetSdrPageView());
             }
         }
     }

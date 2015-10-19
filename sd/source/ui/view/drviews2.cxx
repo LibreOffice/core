@@ -1153,7 +1153,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( mpDrawView->IsPresObjSelected(false, true) )
+            if ( mpDrawView->IsPresObjSelected(false) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 ScopedVclPtr<InfoBox>::Create(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
@@ -2397,7 +2397,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
 
                     WaitObject aWait( GetActiveWindow() );
-                    mpDrawView->ConvertMarkedObjTo3D(true);
+                    mpDrawView->ConvertMarkedObjTo3D();
                 }
             }
 

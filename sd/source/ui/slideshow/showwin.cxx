@@ -617,7 +617,7 @@ void ShowWindow::AddWindowToPaintView()
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
-        GetChild( nChild )->Show( true );
+        GetChild( nChild )->Show();
 }
 
 // Override the sd::Window's CreateAccessible to create a different accessible object

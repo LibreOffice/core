@@ -432,7 +432,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
     // is there a masterpage edit?
     if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
-        if (IsPresObjSelected(false, true))
+        if (IsPresObjSelected(false))
         {
             ScopedVclPtr<InfoBox>::Create(mpDrawViewShell->GetActiveWindow(),
                     SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();

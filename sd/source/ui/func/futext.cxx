@@ -630,7 +630,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (bDragWithCopy)
         {
-            bDragWithCopy = !mpView->IsPresObjSelected(false, true);
+            bDragWithCopy = !mpView->IsPresObjSelected(false);
         }
 
         mpView->SetDragWithCopy(bDragWithCopy);
@@ -660,7 +660,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 if (pPV->IsObjSelectable(pObj))
                 {
                     mpView->UnmarkAllObj();
-                    mpView->MarkObj(pObj,pPV,false);
+                    mpView->MarkObj(pObj,pPV);
                     return bReturn;
                 }
             }

@@ -226,7 +226,7 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
             // Removing the precious flag so that the following call to
             // RemoveUnnessesaryMasterPages() will remove this master page.
             pMasterPage->SetPrecious(false);
-            mrDocument.RemoveUnnecessaryMasterPages(pMasterPage, false);
+            mrDocument.RemoveUnnecessaryMasterPages(pMasterPage);
         }
     }
     else

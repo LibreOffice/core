@@ -663,7 +663,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (bDragWithCopy)
             {
-                bDragWithCopy = !mpView->IsPresObjSelected(false, true);
+                bDragWithCopy = !mpView->IsPresObjSelected(false);
             }
 
             mpView->SetDragWithCopy(bDragWithCopy);
@@ -687,7 +687,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     if (pPV->IsObjSelectable(pObj))
                     {
                         mpView->UnmarkAllObj();
-                        mpView->MarkObj(pObj,pPV,false);
+                        mpView->MarkObj(pObj,pPV);
                         return true;
                     }
                 }
@@ -867,7 +867,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if (bDragWithCopy)
                 {
-                    bDragWithCopy = !mpView->IsPresObjSelected(false, true);
+                    bDragWithCopy = !mpView->IsPresObjSelected(false);
                 }
 
                 mpView->SetDragWithCopy(bDragWithCopy);
@@ -1362,7 +1362,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Assign verb
                     mpView->UnmarkAll();
-                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), false);
+                    mpView->MarkObj(pObj, mpView->GetSdrPageView());
                     pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
                     bAnimated = true;
                 }

@@ -138,7 +138,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     //aKern.SetWhich(SID_ATTR_CHAR_KERNING);
     rSet.Put(aKern);
 
-    SfxItemState eState = aCharAttrSet.GetItemState( EE_CHAR_KERNING, true );
+    SfxItemState eState = aCharAttrSet.GetItemState( EE_CHAR_KERNING );
     if ( eState == SfxItemState::DONTCARE )
     {
         rSet.InvalidateItem(EE_CHAR_KERNING);

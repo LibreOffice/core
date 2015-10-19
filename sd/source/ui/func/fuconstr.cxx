@@ -147,7 +147,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (bDragWithCopy)
         {
-            bDragWithCopy = !mpView->IsPresObjSelected(false, true);
+            bDragWithCopy = !mpView->IsPresObjSelected(false);
         }
 
         mpView->SetDragWithCopy(bDragWithCopy);

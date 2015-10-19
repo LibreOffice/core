@@ -917,7 +917,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {
                 const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>(aNewAttr.GetItem(EE_PARA_NUMBULLET));
                 SvxNumRule* pRule = pBulletItem->GetNumRule();

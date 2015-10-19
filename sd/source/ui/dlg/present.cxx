@@ -221,8 +221,8 @@ void SdStartPresentationDlg::InitMonitorSettings()
 {
     try
     {
-        maFtMonitor->Show( true );
-        maLBMonitor->Show( true );
+        maFtMonitor->Show();
+        maLBMonitor->Show();
 
         mnMonitors = Application::GetScreenCount();
 

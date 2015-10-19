@@ -960,7 +960,7 @@ IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, Timer *, void)
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
         if ( pHdl==NULL && mpView->IsMarkedHit(aMDPos, nHitLog)
-             && !mpView->IsPresObjSelected(false, true) )
+             && !mpView->IsPresObjSelected(false) )
         {
             mpWindow->ReleaseMouse();
             bIsInDragMode = true;

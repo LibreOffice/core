@@ -2191,7 +2191,7 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     }
     else
     {
-        maCBXAnimateForm->Enable(true);
+        maCBXAnimateForm->Enable();
     }
 }
 

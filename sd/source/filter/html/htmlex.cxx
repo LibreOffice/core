@@ -830,7 +830,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if(pSheet)
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
-        if(rSet.GetItemState(EE_CHAR_COLOR,true) == SfxItemState::SET)
+        if(rSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
             maTextColor = static_cast<const SvxColorItem*>(rSet.GetItem(EE_CHAR_COLOR))->GetValue();
     }
 

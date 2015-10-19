@@ -1039,7 +1039,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
                         pPV = pBMView->ShowSdrPage(pPage);
                 }
 
-                pBMView->MarkObj(pObj, pPV, false);
+                pBMView->MarkObj(pObj, pPV);
             }
         }
     }

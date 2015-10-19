@@ -823,7 +823,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
 
     if( !aStr.isEmpty() && aURL.GetProtocol() == INetProtocol::NotValid )
-        aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
+        aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl() ) );
 
     // get adjusted file name
     aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );

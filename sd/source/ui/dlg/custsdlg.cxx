@@ -111,7 +111,7 @@ void SdCustomShowDlg::CheckState()
     m_pBtnRemove->Enable( bEnable );
     m_pBtnCopy->Enable( bEnable );
     m_pCbxUseCustomShow->Enable( bEnable );
-    m_pBtnStartShow->Enable( true );
+    m_pBtnStartShow->Enable();
 
     if (bEnable && pCustomShowList)
         pCustomShowList->Seek( nPos );

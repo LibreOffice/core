@@ -411,14 +411,14 @@ bool ImplSdPPTImport::Import()
                                         if ( nType != VT_I4 )
                                             break;
                                         aPropItem.ReadInt32( pHyperlink->nInfo );
-                                        if ( !aPropItem.Read( pHyperlink->aTarget, VT_EMPTY ) )
+                                        if ( !aPropItem.Read( pHyperlink->aTarget ) )
                                             break;
 
                                         // Convert '\\' notation to 'smb://'
                                         INetURLObject aUrl( pHyperlink->aTarget, INetProtocol::File );
                                         pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
 
-                                        if ( !aPropItem.Read( pHyperlink->aSubAdress, VT_EMPTY ) )
+                                        if ( !aPropItem.Read( pHyperlink->aSubAdress ) )
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
 
@@ -1019,7 +1019,7 @@ bool ImplSdPPTImport::Import()
                     pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
                     ImportPage( pNotesPage, pMasterPersist2 );  // page must be inserted before importing
                     SetHeaderFooterPageSettings( pNotesPage, pMasterPersist2 );
-                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, false );
+                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES );
                 }
                 else
                 {
@@ -1027,7 +1027,7 @@ bool ImplSdPPTImport::Import()
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                     pSdrModel->InsertPage( pNotesPage );
-                    SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
+                    SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE );
                     if ( pPageObj )
                         static_cast<SdrPageObj*>(pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
                 }
@@ -1197,7 +1197,7 @@ bool ImplSdPPTImport::Import()
                     break;
                 }
                 if ( eAutoLayout != AUTOLAYOUT_NONE )
-                    pPage->SetAutoLayout( eAutoLayout, false );
+                    pPage->SetAutoLayout( eAutoLayout );
             }
         }
 
@@ -2130,7 +2130,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                                         != osl::FileBase::E_None) )
                                     aBookmarkURL.clear();
                                 if( aBookmarkURL.isEmpty() )
-                                    aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
+                                    aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl() );
                                 pInfo->SetBookmark( aBookmarkURL );
                                 pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
                             }

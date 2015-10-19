@@ -459,7 +459,7 @@ void DocumentHelper::AssignMasterPageToPage (
             // 3. Replace the master page A by a copy of the given master
             // page B.
             pDocument->RemoveUnnecessaryMasterPages (
-                pPage, false);
+                pPage);
         }
     }
 }

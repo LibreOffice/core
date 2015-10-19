@@ -816,7 +816,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                     pDrawViewShell->GetView()->UnmarkAll();
                     pDrawViewShell->GetView()->MarkObj(
                         pObj,
-                        pDrawViewShell->GetView()->GetSdrPageView(), false);
+                        pDrawViewShell->GetView()->GetSdrPageView());
                 }
             }
         }

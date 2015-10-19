@@ -1028,7 +1028,7 @@ void AssistentDlgImpl::UpdatePage()
         {
             // Show elements on first page depending of start type
             SetStartType( GetStartType() );
-            mpPage1TemplateRB->Enable(true /*mbTemplatesReady*/);
+            mpPage1TemplateRB->Enable(/*mbTemplatesReady*/);
             break;
         }
 
@@ -1039,7 +1039,7 @@ void AssistentDlgImpl::UpdatePage()
 
             if( GetStartType() != ST_EMPTY )
             {
-                mpPage2Medium5RB->Enable( true );
+                mpPage2Medium5RB->Enable();
             }
             else
             {

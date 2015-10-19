@@ -612,8 +612,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
         m_pRbtBitmap->Enable();
         m_pBtnCreateGroup->Enable(!m_FrameList.empty());
-        m_pFtAdjustment->Enable( true );
-        m_pLbAdjustment->Enable( true );
+        m_pFtAdjustment->Enable();
+        m_pLbAdjustment->Enable();
     }
 
     ClickRbtHdl( NULL );

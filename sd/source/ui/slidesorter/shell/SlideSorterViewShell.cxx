@@ -633,7 +633,7 @@ void SlideSorterViewShell::UpdateScrollBars()
 {
     // Do not call the overwritten method of the base class: We do all the
     // scroll bar setup by ourselves.
-    mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars (false);
+    mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars ();
 }
 
 void SlideSorterViewShell::StartDrag (

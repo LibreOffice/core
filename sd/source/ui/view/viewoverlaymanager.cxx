@@ -298,7 +298,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV, false);
+                mrView.MarkObj(mxPlaceholderObj.get(), pPV);
             }
         }
 
