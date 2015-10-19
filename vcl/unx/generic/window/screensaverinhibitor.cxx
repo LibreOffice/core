@@ -10,6 +10,11 @@
 #include <generic/gensys.h>
 #include <unx/screensaverinhibitor.hxx>
 
+#include <prex.h>
+#include <X11/Xatom.h>
+#include <X11/Xlib.h>
+#include <postx.h>
+
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
 
@@ -24,16 +29,25 @@
 
 #include <sal/log.hxx>
 
-void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason, bool bIsX11, const boost::optional<guint> xid )
+void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
+                                    bool bIsX11, const boost::optional<guint> xid, boost::optional<Display*> pDisplay )
 {
     const gchar* appname = SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
     inhibitFDO( bInhibit, appname, aReason.getStr() );
 
-    if ( bIsX11 && ( xid != boost::none ) )
+    if ( bIsX11 )
     {
-        inhibitGSM( bInhibit, appname, aReason.getStr(), xid.get() );
+        if ( pDisplay != boost::none )
+        {
+            inhibitXAutoLock( bInhibit, pDisplay.get() );
+        }
+
+        if ( xid != boost::none )
+        {
+            inhibitGSM( bInhibit, appname, aReason.getStr(), xid.get() );
+        }
     }
 }
 
@@ -152,6 +166,35 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnGSMCookie );
+}
+
+/* definitions from xautolock.c (pl15) */
+#define XAUTOLOCK_DISABLE 1
+#define XAUTOLOCK_ENABLE  2
+
+void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
+{
+    ::Window aRootWindow = RootWindowOfScreen( ScreenOfDisplay( pDisplay, 0 ) );
+
+    Atom nAtom = XInternAtom( pDisplay,
+                              "XAUTOLOCK_MESSAGE",
+                              False );
+
+    if ( nAtom == None )
+    {
+        return;
+    }
+
+    int nMessage = bInhibit ? XAUTOLOCK_DISABLE : XAUTOLOCK_ENABLE;
+
+    XChangeProperty( pDisplay,
+                     aRootWindow,
+                     nAtom,
+                     XA_INTEGER,
+                     8, // format -- 8 bit quantity
+                     PropModeReplace,
+                     reinterpret_cast<unsigned char*>( &nMessage ),
+                     sizeof( nMessage ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

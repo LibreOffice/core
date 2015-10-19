@@ -10,6 +10,9 @@
 #ifndef INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 #define INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 
+#include <prex.h>
+#include <postx.h>
+
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
@@ -20,7 +23,8 @@
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
-    void inhibit( bool bInhibit, const rtl::OUString& sReason, bool bIsX11, const boost::optional<guint> xid );
+    void inhibit( bool bInhibit, const rtl::OUString& sReason,
+                  bool bIsX11, const boost::optional<guint> xid, boost::optional<Display*> pDisplay );
 
 private:
     boost::optional<guint> mnFDOCookie;
@@ -29,6 +33,8 @@ private:
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
     void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
     void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
+
+    static void inhibitXAutoLock( bool bInhibit, Display* pDisplay );
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
