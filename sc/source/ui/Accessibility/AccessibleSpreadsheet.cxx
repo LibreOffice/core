@@ -1255,7 +1255,7 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bD
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
 
     mpViewShell->DoneBlockMode( true ); // continue selecting
-    mpViewShell->InitBlockMode( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), maRange.aStart.Tab(), bDeselect, false, false );
+    mpViewShell->InitBlockMode( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), maRange.aStart.Tab(), bDeselect );
 
     mpViewShell->SelectionChanged();
 }
@@ -1494,8 +1494,8 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
 
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
-    mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true, false );
-    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true, false );
+    mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true );
+    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
     return sal_True;
 }
@@ -1532,7 +1532,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
     mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true, false, true );
-    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true, false );
+    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
     mpViewShell->DoneBlockMode( true );
     return sal_True;

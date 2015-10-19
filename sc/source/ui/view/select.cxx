@@ -776,7 +776,7 @@ void ScHeaderFunctionSet::CreateAnchor()
     pView->DoneBlockMode( true );
     if (bColumn)
     {
-        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), true, true, false );
+        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), true, true );
         pView->MarkCursor( static_cast<SCCOL>(nCursorPos), MAXROW, pViewData->GetTabNo() );
     }
     else

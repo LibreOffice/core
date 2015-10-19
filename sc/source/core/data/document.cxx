@@ -4138,7 +4138,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
             maTabs[nTab]->SetOptimalHeightOnly(rCxt, 0, MAXROW, &aProgress, nProgressStart);
-            maTabs[nTab]->SetDrawPageSize(true);
+            maTabs[nTab]->SetDrawPageSize();
             nProgressStart += maTabs[nTab]->GetWeightedCount();
         }
 }

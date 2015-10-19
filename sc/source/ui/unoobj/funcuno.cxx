@@ -153,7 +153,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
     ScClipParam aClipParam(rSrcRange, false);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark);
 
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                 HASATTR_MERGED | HASATTR_OVERLAPPED ) )

@@ -315,7 +315,7 @@ void ScUndoOutlineLevel::Redo()
 void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SelectLevel( bColumns, nLevel );
 }
 
 bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const

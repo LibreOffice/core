@@ -325,7 +325,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         EditView* pTableView = pInputHdl->GetTableView();
         if (pTableView)
             pTableView->InsertText( aString);
-        pInputHdl->DataChanged( false );
+        pInputHdl->DataChanged();
     }
     else
     {

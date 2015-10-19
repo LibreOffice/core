@@ -3790,7 +3790,7 @@ void Test::testCutPasteRefUndo()
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
-    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false);
+    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0,1,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "C2"))
@@ -5130,7 +5130,7 @@ void Test::testNoteLifeCycle()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true, true);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true);
 
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
@@ -5210,7 +5210,7 @@ void Test::testNoteCopyPaste()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
     ScClipParam aClipParam(aCopyRange, false);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false, false, true);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     // Make sure the notes are in the clipboard.
     pNote = aClipDoc.GetNote(ScAddress(1,1,0));
@@ -5894,7 +5894,7 @@ void Test::testCondCopyPasteSheetBetweenDoc()
     m_pDoc->AddCondFormat(pFormat, 0);
 
     ScDocument aDoc;
-    aDoc.TransferTab(m_pDoc, 0, 0, true);
+    aDoc.TransferTab(m_pDoc, 0, 0);
 
     ScConditionalFormatList* pList = aDoc.GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());

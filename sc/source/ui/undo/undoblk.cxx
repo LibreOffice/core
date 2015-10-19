@@ -321,7 +321,7 @@ void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
             pPasteUndo->Repeat( rTarget );
         }
         else
-            static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertCells( eCmd, true );
+            static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertCells( eCmd );
     }
 }
 
@@ -1388,7 +1388,7 @@ void ScUndoDragDrop::Redo()
     // do not clone objects and note captions into clipdoc (see above)
     // but at least copy notes
     ScClipParam aClipParam(aSrcRange, bCut);
-    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, bKeepScenarioFlags, false, true);
+    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, bKeepScenarioFlags);
 
     if (bCut)
     {

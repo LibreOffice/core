@@ -170,7 +170,7 @@ public:
     void    SetShrinkScale( long nScale, SvtScriptType nScript );
 
     bool    HasCondHeight() const   { return pCondSet && SfxItemState::SET ==
-                                        pCondSet->GetItemState( ATTR_FONT_HEIGHT, true ); }
+                                        pCondSet->GetItemState( ATTR_FONT_HEIGHT ); }
 
     bool    HasEditCharacters() const;
 
@@ -1432,7 +1432,7 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
 
 void ScOutputData::DrawStrings( bool bPixelToLogic )
 {
-    LayoutStrings(bPixelToLogic, true);
+    LayoutStrings(bPixelToLogic);
 }
 
 Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
@@ -3022,7 +3022,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
         else
             bSimClip = true;
@@ -3234,7 +3234,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
         else
             bSimClip = true;
@@ -3996,7 +3996,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
         else
             bSimClip = true;
@@ -4342,7 +4342,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
         else
             bSimClip = true;

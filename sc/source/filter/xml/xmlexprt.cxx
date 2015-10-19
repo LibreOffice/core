@@ -3092,7 +3092,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 OUString sFormattedString(lcl_GetFormattedString(pDoc, aCell.maCellAddress));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sCellString, sFormattedString, true, true);
+                        sCellString, sFormattedString);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             sCellString, sFormattedString, false, true, XML_NAMESPACE_CALC_EXT);

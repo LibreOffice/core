@@ -438,7 +438,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
                     pView->UnmarkAllObj();
-                    pView->MarkObj(pObj,pPV,false);
+                    pView->MarkObj(pObj,pPV);
                     return true;
                 }
             }

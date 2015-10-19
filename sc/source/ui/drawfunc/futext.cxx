@@ -333,7 +333,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     pView->UnmarkAllObj();
                     ScViewData& rViewData = pViewShell->GetViewData();
                     rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
-                    pView->MarkObj(pObj,pPV,false);
+                    pView->MarkObj(pObj,pPV);
 
                     pHdl=pView->PickHandle(aMDPos);
                     pView->BegDragObj(aMDPos, nullptr, pHdl);

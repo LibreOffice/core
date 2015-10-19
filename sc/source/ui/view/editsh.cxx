@@ -1130,7 +1130,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     // underline
 
-    SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, true );
+    SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );
@@ -1172,7 +1172,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     pViewData->GetBindings().Invalidate( SID_SET_SUPER_SCRIPT );
     pViewData->GetBindings().Invalidate( SID_SET_SUB_SCRIPT );
 
-    eState = aAttribs.GetItemState( EE_CHAR_KERNING, true );
+    eState = aAttribs.GetItemState( EE_CHAR_KERNING );
     pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_KERNING );
     if ( eState == SfxItemState::DONTCARE )
     {

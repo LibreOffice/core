@@ -411,7 +411,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pLbCharSet->SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
     pLbCustomLang->SetLanguageList(
-        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false);
+        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
     pLbCustomLang->InsertLanguage(LANGUAGE_SYSTEM);
     pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage));
 

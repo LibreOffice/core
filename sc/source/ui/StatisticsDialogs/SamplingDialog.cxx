@@ -329,11 +329,11 @@ void ScSamplingDialog::ToggleSamplingMethod()
     if (mpRandomMethodRadio->IsChecked())
     {
         mpPeriod->Enable(false);
-        mpSampleSize->Enable(true);
+        mpSampleSize->Enable();
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
-        mpPeriod->Enable(true);
+        mpPeriod->Enable();
         mpSampleSize->Enable(false);
     }
 }

@@ -2170,7 +2170,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
                     rSet.ClearItem(nId);
 
             if ( aNewPattern == *pDefPattern )
-                SetPatternArea( nThisRow, nAttrRow, pDefPattern, false );
+                SetPatternArea( nThisRow, nAttrRow, pDefPattern );
             else
                 SetPatternArea( nThisRow, nAttrRow, &aNewPattern, true );
 

@@ -157,10 +157,10 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
     ::sax::Converter::convertMeasure(
-            maModel.mnPaperWidth, aStr, util::MeasureUnit::MM_100TH);
+            maModel.mnPaperWidth, aStr);
     aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
     ::sax::Converter::convertMeasure(
-            maModel.mnPaperHeight, aStr, util::MeasureUnit::MM_100TH );
+            maModel.mnPaperHeight, aStr );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnScale         = rAttribs.getInteger( XML_scale, 100 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
@@ -185,10 +185,10 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, const Attr
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
     ::sax::Converter::convertMeasure(
-            maModel.mnPaperWidth, aStr, util::MeasureUnit::MM_100TH );
+            maModel.mnPaperWidth, aStr );
     aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
     ::sax::Converter::convertMeasure(
-            maModel.mnPaperHeight, aStr, util::MeasureUnit::MM_100TH );
+            maModel.mnPaperHeight, aStr );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
     maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );

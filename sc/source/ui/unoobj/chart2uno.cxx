@@ -2265,8 +2265,6 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
 OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXMLRange )
     throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
-    const sal_Unicode cSep = ' ';
-
     if (!m_pDocument)
     {
         // #i74062# When loading flat XML, this is called before the referenced sheets are in the document,
@@ -2277,7 +2275,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
         while( nOffset >= 0 )
         {
             OUString sToken;
-            ScRangeStringConverter::GetTokenByOffset( sToken, sXMLRange, nOffset, cSep );
+            ScRangeStringConverter::GetTokenByOffset( sToken, sXMLRange, nOffset );
             if( nOffset >= 0 )
             {
                 // convert one address (remove dots)

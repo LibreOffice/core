@@ -618,7 +618,7 @@ void ScHTMLExport::WriteBody()
                         {
                             aGrfNm = URIHelper::SmartRel2Abs(
                                     INetURLObject(aBaseURL),
-                                    aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
+                                    aGrfNm, URIHelper::GetMaybeFileHdl());
                             if ( HasCId() )
                                 MakeCIdURL( aGrfNm );
                             aLink = aGrfNm;
@@ -637,7 +637,7 @@ void ScHTMLExport::WriteBody()
                     else
                         aGrfNm = URIHelper::SmartRel2Abs(
                                 INetURLObject(aBaseURL),
-                                aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
+                                aGrfNm, URIHelper::GetMaybeFileHdl());
                     aLink = aGrfNm;
                 }
                 if( !aLink.isEmpty() )

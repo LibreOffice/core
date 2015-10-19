@@ -1160,7 +1160,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), false));
+                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();

@@ -216,7 +216,7 @@ void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
         case ScCalcConfig::StringConversion::LOCALE:
             // Reset to the value the user selected before.
             maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
-            mpEmptyAsZero->Enable(true);
+            mpEmptyAsZero->Enable();
             mpEmptyAsZero->Check( mbSelectedEmptyStringAsZero);
             break;
     }

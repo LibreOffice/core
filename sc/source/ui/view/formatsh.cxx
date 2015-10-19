@@ -2175,7 +2175,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
     // underline
 
-    eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE, true );
+    eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );

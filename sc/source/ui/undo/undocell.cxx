@@ -136,9 +136,9 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
     }
 
     const SfxItemSet& rApplySet = pApplyPattern->GetItemSet();
-    bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, true ) != SfxItemState::DEFAULT ||
-                       rApplySet.GetItemState( ATTR_CONDITIONAL, true ) != SfxItemState::DEFAULT );
-    bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, true ) != SfxItemState::DEFAULT );
+    bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW ) != SfxItemState::DEFAULT ||
+                       rApplySet.GetItemState( ATTR_CONDITIONAL ) != SfxItemState::DEFAULT );
+    bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::DEFAULT );
 
     sal_uInt16 nFlags = SC_PF_TESTMERGE;
     if (bPaintExt)
@@ -564,9 +564,9 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bInsert)
-            rViewShell.InsertPageBreak(bColumn, true);
+            rViewShell.InsertPageBreak(bColumn);
         else
-            rViewShell.DeletePageBreak(bColumn, true);
+            rViewShell.DeletePageBreak(bColumn);
     }
 }
 

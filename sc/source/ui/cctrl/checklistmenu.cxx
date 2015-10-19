@@ -1241,7 +1241,7 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 
         if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
         {
-            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent );
             ++nSelCount;
         }
         else
@@ -1425,7 +1425,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     SvTreeListEntry* pDayEntry = maChecks->FindEntry(pMonthEntry, aDayName);
     if (!pDayEntry)
     {
-        maChecks->InsertEntry(aDayName, pMonthEntry, false);
+        maChecks->InsertEntry(aDayName, pMonthEntry);
         Member aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;

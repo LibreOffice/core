@@ -138,7 +138,7 @@ void ScHighlightChgDlg::Init()
         OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
         m_pFilterCtr->SetRange(aRefStr);
     }
-    m_pFilterCtr->Enable(true);
+    m_pFilterCtr->Enable();
     HighlightHandle(m_pHighlightBox);
 }
 
@@ -189,7 +189,7 @@ IMPL_LINK_TYPED( ScHighlightChgDlg, HighlightHandle, Button*, pCb, void )
     {
         if(m_pHighlightBox->IsChecked())
         {
-            m_pFilterCtr->Enable(true);
+            m_pFilterCtr->Enable();
             m_pCbAccept->Enable();
             m_pCbReject->Enable();
         }

@@ -1105,7 +1105,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Unterstreichung
 
-    eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, true );
+    eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )
     {
         rDestSet.InvalidateItem( SID_ULINE_VAL_NONE );

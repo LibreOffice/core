@@ -149,8 +149,8 @@ void ScAnalysisOfVarianceDialog::FactorChanged()
 {
     if (mpSingleFactorRadio->IsChecked())
     {
-        mpGroupByRowsRadio->Enable(true);
-        mpGroupByColumnsRadio->Enable(true);
+        mpGroupByRowsRadio->Enable();
+        mpGroupByColumnsRadio->Enable();
         mpRowsPerSampleField->Enable(false);
         meFactor = SINGLE_FACTOR;
     }

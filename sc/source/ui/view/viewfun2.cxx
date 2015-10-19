@@ -2088,7 +2088,7 @@ bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
     {
         rDoc.CreateValidTabNames(aNames, nCount);
     }
-    if (rDoc.InsertTabs(nTab, aNames, false))
+    if (rDoc.InsertTabs(nTab, aNames))
     {
         pDocSh->Broadcast( ScTablesHint( SC_TABS_INSERTED, nTab, nCount ) );
         bFlag = true;

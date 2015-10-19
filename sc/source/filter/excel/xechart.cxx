@@ -1181,7 +1181,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
     {
         case EXC_CHOBJLINK_TITLE:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_TITLE );         break;
         case EXC_CHOBJLINK_YAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 1 );  break;
-        case EXC_CHOBJLINK_XAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 0 );  break;
+        case EXC_CHOBJLINK_XAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE );  break;
         case EXC_CHOBJLINK_ZAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 2 );  break;
     }
 

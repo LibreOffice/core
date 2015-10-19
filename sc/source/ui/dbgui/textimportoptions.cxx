@@ -81,7 +81,7 @@ void ScTextImportOptionsDlg::init()
     m_pRbAutomatic->Check();
 
     m_pLbCustomLang->SetLanguageList(
-        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false);
+        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
 
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     m_pLbCustomLang->SelectLanguage(eLang);

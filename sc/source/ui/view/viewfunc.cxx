@@ -1101,9 +1101,9 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     //  New alignment is checked (check in PostPaint isn't enough) in case a right
     //  alignment is changed to left.
     const SfxItemSet& rNewSet = rAttr.GetItemSet();
-    bool bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SfxItemState::SET ||
-                     rNewSet.GetItemState( ATTR_SHADOW, true ) == SfxItemState::SET;
-    bool bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SfxItemState::SET;
+    bool bSetLines = rNewSet.GetItemState( ATTR_BORDER ) == SfxItemState::SET ||
+                     rNewSet.GetItemState( ATTR_SHADOW ) == SfxItemState::SET;
+    bool bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY ) == SfxItemState::SET;
 
     sal_uInt16 nExtFlags = 0;
     if ( bSetLines )
@@ -1661,7 +1661,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
         //  all Formulas because of references
         SCTAB nTabCount = rDoc.GetTableCount();
-        pUndoDoc->AddUndoTab( 0, nTabCount-1, false );
+        pUndoDoc->AddUndoTab( 0, nTabCount-1 );
         rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA,false,pUndoDoc );
 
         pUndoData = new ScRefUndoData( &rDoc );
@@ -2415,7 +2415,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
     rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
     //  ATTR_LANGUAGE_FORMAT not
-    ApplySelectionPattern( aNewAttrs, true );
+    ApplySelectionPattern( aNewAttrs );
 }
 
 void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
@@ -2460,7 +2460,7 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
         rSet.Put( SvxLanguageItem( eLanguage, ATTR_LANGUAGE_FORMAT ) );
-        ApplySelectionPattern( aNewAttrs, true );
+        ApplySelectionPattern( aNewAttrs );
     }
 
     //! else return error / issue warning ???
@@ -2594,7 +2594,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
         //  ATTR_LANGUAGE_FORMAT not
-        ApplySelectionPattern( aNewAttrs, true );
+        ApplySelectionPattern( aNewAttrs );
     }
 }
 
@@ -2778,9 +2778,9 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     if ( pAttr )
     {
         const SfxItemSet& rNewSet = pAttr->GetItemSet();
-        bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SfxItemState::SET ||
-        rNewSet.GetItemState( ATTR_SHADOW, true ) == SfxItemState::SET;
-        bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SfxItemState::SET;
+        bSetLines = rNewSet.GetItemState( ATTR_BORDER ) == SfxItemState::SET ||
+        rNewSet.GetItemState( ATTR_SHADOW ) == SfxItemState::SET;
+        bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY ) == SfxItemState::SET;
     }
 
     sal_uInt16 nExtFlags = 0;

@@ -1227,7 +1227,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         {
             for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
             {
-                if (rStyleSet.GetItemState(i, true) == SfxItemState::SET)
+                if (rStyleSet.GetItemState(i) == SfxItemState::SET)
                     rPatternSet.ClearItem(i);
             }
         }

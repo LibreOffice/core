@@ -649,7 +649,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         rDestDoc.CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
-        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc, 0 );
+        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc );
 
         ScRange aMergeRange = aDestRange;
         rDestDoc.ExtendMerge( aMergeRange, true );

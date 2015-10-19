@@ -68,7 +68,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
 
-#define WAS_DEFAULT(w,s)    (SfxItemState::DEFAULT==(s).GetItemState((w),true))
+#define WAS_DEFAULT(w,s)    (SfxItemState::DEFAULT==(s).GetItemState((w)))
 #define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
 #define GET_USHORT(sid,set) (sal_uInt16)static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
 #define GET_SHOW(sid,set)   ( ScVObjMode( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() ) \
@@ -185,7 +185,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 
     // scaling:
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
+    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
         if( nScale > 0 )
@@ -194,7 +194,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
+    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet->Get( nWhich ) );
         sal_uInt16 nWidth = rItem.GetWidth();
@@ -210,7 +210,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
+    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         sal_uInt16 nPages = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
         if( nPages > 0 )

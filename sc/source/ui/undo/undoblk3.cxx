@@ -488,7 +488,7 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
         if (pLineOuter)
             rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner );
         else
-            rViewShell.ApplySelectionPattern( *pApplyPattern, true );
+            rViewShell.ApplySelectionPattern( *pApplyPattern );
     }
 }
 
@@ -761,7 +761,7 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         bool bCont = false;
-        rViewShell.MergeCells( false, bCont, true );
+        rViewShell.MergeCells( false, bCont );
     }
 }
 

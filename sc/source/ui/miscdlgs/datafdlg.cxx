@@ -254,7 +254,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 IMPL_LINK_TYPED( ScDataFormDlg, Impl_DataModifyHdl, Edit&, rEdit, void)
 {
     if ( rEdit.IsModified() )
-        m_pBtnRestore->Enable( true );
+        m_pBtnRestore->Enable();
 }
 
 IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NewHdl, Button*, void)
@@ -363,14 +363,14 @@ void ScDataFormDlg::SetButtonState()
     }
     else
     {
-        m_pBtnDelete->Enable( true );
-        m_pBtnNext->Enable( true );
+        m_pBtnDelete->Enable();
+        m_pBtnNext->Enable();
     }
 
     if (nCurrentRow == nStartRow + 1)
         m_pBtnPrev->Enable( false );
     else
-        m_pBtnPrev->Enable( true );
+        m_pBtnPrev->Enable();
 
     m_pBtnRestore->Enable( false );
     if ( maEdits.size()>=1 && maEdits[0] != nullptr )
