@@ -1666,7 +1666,7 @@ inline bool CmpBrdLn( const SvxBorderLine* pBrd1, const SvxBorderLine* pBrd2 )
 {
     if( pBrd1 == pBrd2 )
         return true;
-    if( pBrd1 == nullptr )
+    if( pBrd1 == nullptr || pBrd2 == nullptr)
         return false;
     return *pBrd1 == *pBrd2;
 }

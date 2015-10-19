@@ -360,7 +360,7 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
     const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
     if( pField == pOtherFld )
         return true;
-    if( pOtherFld == nullptr )
+    if( pField == nullptr || pOtherFld == nullptr )
         return false;
     return ( pField->Type() == pOtherFld->Type() )
             && ( *pField == *pOtherFld );
