@@ -105,7 +105,7 @@ public:
     // Compiler-Interface
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
-    SbModule*       MakeModule32( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, const OUString& rSrc );
+    SbModule*       MakeModule32( const OUString& rName, const css::script::ModuleInfo& mInfo, const OUString& rSrc );
     static bool     Compile( SbModule* );
     static void     Stop();
     static void     Error( SbError );
@@ -161,11 +161,11 @@ public:
     SbxObjectRef getRTL() { return pRtl; }
     bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
-    bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
+    bool GetUNOConstant( const sal_Char* _pAsciiName, css::uno::Any& aOut );
     void QuitAndExitApplication();
     bool IsQuitApplication() { return bQuit; };
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    static css::uno::Reference< css::frame::XModel >
         GetModelFromBasic( SbxObject* pBasic );
 
     static void DetachAllDocBasicItems();

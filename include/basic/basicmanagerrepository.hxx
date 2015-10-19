@@ -51,7 +51,7 @@ namespace basic
                 decide to add global variables to it, or otherwise initialize it.
         */
         virtual void onBasicManagerCreated(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxForDocument,
+            const css::uno::Reference< css::frame::XModel >& _rxForDocument,
             BasicManager& _rBasicManager
         ) = 0;
 
@@ -92,7 +92,7 @@ namespace basic
                 as it's closed, the associated BasicManager is deleted.
         */
         static BasicManager* getDocumentBasicManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
+            const css::uno::Reference< css::frame::XModel >& _rxDocumentModel
         );
 
         /** returns the application-wide BasicManager
