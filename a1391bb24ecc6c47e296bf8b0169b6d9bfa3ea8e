@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_f4fd986f",
+        "filename": "sd/source/ui/annotations/annotationmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-19T17:43:21Z",
+      "side": 1,
+      "message": "This misses a return ...",
+      "revId": "a1391bb24ecc6c47e296bf8b0169b6d9bfa3ea8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
