@@ -77,6 +77,7 @@
 #include <tools/datetimeutils.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <bordertest.hxx>
 
@@ -105,15 +106,14 @@ protected:
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
         xImporter->setTargetDocument(mxComponent);
-        uno::Sequence<beans::PropertyValue> aDescriptor(3);
-        aDescriptor[0].Name = "InputStream";
         SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename, StreamMode::READ);
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-        aDescriptor[0].Value <<= xStream;
-        aDescriptor[1].Name = "InsertMode";
-        aDescriptor[1].Value <<= sal_True;
-        aDescriptor[2].Name = "TextInsertModeRange";
-        aDescriptor[2].Value <<= xTextRange;
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        {
+            {"InputStream", uno::makeAny(xStream)},
+            {"InputMode", uno::makeAny(sal_True)},
+            {"TextInsertModeRange", uno::makeAny(xTextRange)},
+        }));
         return xFilter->filter(aDescriptor);
     }
 };
