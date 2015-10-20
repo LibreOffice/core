@@ -365,7 +365,9 @@ public final class WikiEditorImpl extends WeakBase
                 {
                     // remove the temporary file
                     File aFile = new File( new URI( sTemp2Url ) );
-                    aFile.delete();
+                    if (!aFile.delete()) {
+                        throw new java.lang.Exception("could not remove" + sTemp2Url);
+                    }
                 }
                 catch ( java.lang.Exception e )
                 {
