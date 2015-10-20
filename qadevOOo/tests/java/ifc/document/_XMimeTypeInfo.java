@@ -37,7 +37,6 @@ import com.sun.star.lang.XComponent;
 public class _XMimeTypeInfo extends MultiMethodTest {
 
     public XMimeTypeInfo oObj = null;
-    public XComponent source = null ;
     public String[] smi = null;
 
     /**
