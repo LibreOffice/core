@@ -5673,65 +5673,11 @@
         <!-- UIHints: Tools  Options General View -->
         <info>
           <desc>Specifies which style of the symbols is used for the toolbars,
-          menus, etc.</desc>
+          menus, etc.: "auto" means chosen according to the desktop; "default"
+          means the LibreOffice default theme; other possible values are the
+          names of the various icon themes ("breeze", "crystal", "elementary",
+          etc.).</desc>
         </info>
-        <constraints>
-          <enumeration oor:value="auto">
-            <info>
-              <desc>Automatic, chosen according to the desktop</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="default">
-            <info>
-              <desc>Default - the OpenOffice.org default theme</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="hicontrast">
-            <info>
-              <desc>HiContrast</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="industrial">
-            <info>
-              <desc>Industrial</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="crystal">
-            <info>
-              <desc>Crystal - the KDE default theme</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="tango">
-            <info>
-              <desc>Tango - the Gnome default theme</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="human">
-            <info>
-              <desc>Human - the Gnome default theme for Ubuntu</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="tango_testing">
-            <info>
-              <desc>Tango Testing - used for testing by the design team</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="sifr">
-            <info>
-              <desc>Sifr - an adaptation of the Gnome symbolic theme</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="breeze">
-            <info>
-              <desc>Breeze - the icon theme from KDE Plasma 5</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="oxygen">
-            <info>
-              <desc>Oxygen - the icon theme from KDE 4</desc>
-            </info>
-          </enumeration>
-        </constraints>
         <value>auto</value>
       </prop>
       <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
