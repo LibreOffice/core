@@ -599,7 +599,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                             if( mpSdrModel )
                             {
-                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
+                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner();
 
                                 maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
                                 maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
@@ -1322,7 +1322,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
                     // specifying the wanted position, they will result
                     // misplaced.
                     pAction->Move( -aPt.X(), -aPt.Y() );
-                    mpSVGWriter->WriteMetaFile( aTopLeft, aSize, aMtf, 0xffffffff, NULL );
+                    mpSVGWriter->WriteMetaFile( aTopLeft, aSize, aMtf, 0xffffffff );
                     // We reset to the original values so that when the <use>
                     // element is created the x, y attributes are correct.
                     pAction->Move( aPt.X(), aPt.Y() );
@@ -2421,7 +2421,7 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
 
         SVGActionWriter aWriter( *this, aSVGFontExport );
         aWriter.WriteMetaFile( aPoint100thmm, aSize100thmm, rMtf,
-            SVGWRITER_WRITE_FILL | SVGWRITER_WRITE_TEXT, NULL );
+            SVGWRITER_WRITE_FILL | SVGWRITER_WRITE_TEXT );
     }
 }
 

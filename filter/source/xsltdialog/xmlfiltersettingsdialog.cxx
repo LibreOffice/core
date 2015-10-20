@@ -1466,7 +1466,7 @@ IMPL_LINK_TYPED( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             long nW = m_pHeaderBar->GetItemSize(i);
             aSz.Width() =  nW + nTmpSz;
             nTmpSz += nW;
-            SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+            SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
         }
     }
 }

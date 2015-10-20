@@ -1569,7 +1569,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 {
                     if( p->bStroke )
                     {
-                        SetPen( aAttr.aPatCol, aAttr.nStrLinWidth, PEN_SOLID );
+                        SetPen( aAttr.aPatCol, aAttr.nStrLinWidth );
                         ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
                         SetRasterOp( aAttr.ePatMix );
                         if ( IsLineInfo() )

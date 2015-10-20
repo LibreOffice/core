@@ -2739,7 +2739,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
-                    ImplWriteLine( pA->GetPoint(), pA->GetPoint(), NULL );
+                    ImplWriteLine( pA->GetPoint(), pA->GetPoint() );
                 }
             }
             break;
@@ -2751,7 +2751,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
-                    ImplWriteLine( pA->GetStartPoint(), pA->GetEndPoint(), NULL );
+                    ImplWriteLine( pA->GetStartPoint(), pA->GetEndPoint() );
                 }
             }
             break;

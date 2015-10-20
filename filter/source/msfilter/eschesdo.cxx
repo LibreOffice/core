@@ -452,7 +452,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.Line" )
         {
             css::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect );
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -477,7 +477,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             css::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }
@@ -488,7 +488,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             css::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
@@ -499,7 +499,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             css::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
@@ -513,7 +513,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             css::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }

@@ -1332,10 +1332,10 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             {
                 Graphic aGraf;
                 // first try to get BLIP from cache
-                bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip, 0 ), aGraf, NULL );
+                bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip, 0 ), aGraf );
                 // then try directly from stream (i.e. Excel chart hatches/bitmaps)
                 if ( !bOK )
-                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && SvxMSDffManager::GetBLIPDirect( rIn, aGraf, NULL );
+                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && SvxMSDffManager::GetBLIPDirect( rIn, aGraf );
                 if ( bOK )
                 {
                     if ( eMSO_FillType == mso_fillPattern )
@@ -4170,8 +4170,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt );
     if( maShapeRecords.SeekToContent( rSt,
-        DFF_msofbtUDefProp,
-        SEEK_FROM_BEGINNING ) )
+        DFF_msofbtUDefProp ) )
     {
         sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
         while( 5 < nBytesLeft )
@@ -4192,7 +4191,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             nBytesLeft  -= 6;
         }
     }
-    aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
+    aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp );
     if ( aObjData.bShapeType )
     {
         rSt.ReadUInt32( aObjData.nShapeId )
@@ -7086,8 +7085,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         aDstStgName += OUString::number( ++nMSOleObjCntr );
 
         {
-            tools::SvRef<SotStorage> xObjStg = rSrcStorage->OpenSotStorage( rStorageName,
-                                STREAM_READWRITE| StreamMode::SHARE_DENYALL );
+            tools::SvRef<SotStorage> xObjStg = rSrcStorage->OpenSotStorage( rStorageName );
             if( xObjStg.Is()  )
             {
                 {

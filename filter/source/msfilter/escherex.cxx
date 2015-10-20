@@ -1296,7 +1296,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const css::uno::Reference
                 aAny >>= (*pVisArea);
             }
             Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea.get(), NULL );
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea.get() );
             if ( nBlibId )
             {
                 AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -1614,8 +1614,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                         INetURLObject aBaseURI( rBaseURI );
                         if( aBaseURI.GetProtocol() == aTmp.GetProtocol() )
                         {
-                            OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl,
-                                                    INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
+                            OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl ) );
                             if ( !aRelUrl.isEmpty() )
                                 aGraphicUrl = aRelUrl;
                         }
@@ -3842,7 +3841,7 @@ bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const css::uno
             {
                 Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
 
-                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL );
+                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect );
                 if ( nBlibId )
                 {
                     AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -4321,7 +4320,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     const char* pString = "MSOFFICE9.0";
                     aGIFStream.Write( pString, strlen(pString) );
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
-                        rFilter.GetExportFormatNumberForShortName( OUString( "GIF" ) ), NULL );
+                        rFilter.GetExportFormatNumberForShortName( OUString( "GIF" ) ) );
                     css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
                     css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence( 1 );
                     sal_uInt32 nGIFSreamLen = aGIFStream.Tell();

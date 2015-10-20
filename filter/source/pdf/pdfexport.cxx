@@ -1081,7 +1081,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 
     // adjust font height for text to fit
     OutputDevice* pDev = rWriter.GetReferenceDevice();
-    pDev->Push( PushFlags::ALL );
+    pDev->Push();
     pDev->SetFont( aFont );
     pDev->SetMapMode( MapMode( MAP_POINT ) );
     int w = 0;
@@ -1105,7 +1105,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     nTextHeight += nTextHeight/20;
     pDev->Pop();
 
-    rWriter.Push( PushFlags::ALL );
+    rWriter.Push();
     rWriter.SetMapMode( MapMode( MAP_POINT ) );
     rWriter.SetFont( aFont );
     rWriter.SetTextColor( COL_LIGHTGREEN );
