@@ -52,7 +52,6 @@ public class ScriptContext extends PropertySet implements XScriptContext {
     private final XComponentContext m_xComponentContext;
 
     // property, accessed via reflection
-    @SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
     public String m_sDocURI = null;
 
     private ScriptContext(XComponentContext xmComponentContext, XDesktop xDesktop,
