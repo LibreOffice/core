@@ -617,7 +617,7 @@ bool Converter::convertDouble(double& rValue,
     const OUString& rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus, NULL );
+    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
 
     if(eStatus == rtl_math_ConversionStatus_Ok)
     {
@@ -636,7 +636,7 @@ bool Converter::convertDouble(double& rValue,
 bool Converter::convertDouble(double& rValue, const OUString& rString)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus, NULL );
+    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
