@@ -199,30 +199,29 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     return xComponent;
 }
 
-utl::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
+namespace {
+
+utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    utl::MediaDescriptor lDescriptor(lOutsideDescriptor);
-    css::uno::Reference< css::frame::XModel > xModel     = lDescriptor.getUnpackedValueOrDefault(
-                                                            utl::MediaDescriptor::PROP_MODEL (),
-                                                            css::uno::Reference< css::frame::XModel > ());
-    if (xModel.is ())
+    utl::MediaDescriptor rResult(rDescriptor);
+    uno::Reference<frame::XModel> xModel(rResult.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MODEL(), uno::Reference<frame::XModel>()));
+
+    if (xModel.is())
     {
-        utl::MediaDescriptor lModelDescriptor(xModel->getArgs());
-        utl::MediaDescriptor::iterator pIt = lModelDescriptor.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE() );
-        if ( pIt != lModelDescriptor.end() )
-            lDescriptor[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
+        utl::MediaDescriptor aModelArgs(xModel->getArgs());
+        utl::MediaDescriptor::iterator pIt = aModelArgs.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE());
+        if (pIt != aModelArgs.end())
+            rResult[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
     }
 
-    return lDescriptor;
+    return rResult;
 }
 
-void LoadEnv::initializeLoading(const OUString&                                           sURL            ,
-                                const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
-                                const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
-                                const OUString&                                           sTarget         ,
-                                      sal_Int32                                                  nSearchFlags    ,
-                                      EFeature                                                   eFeature        , // => use default ...
-                                      EContentType                                               eContentType    ) // => use default ...
+}
+
+void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
+        const uno::Reference<frame::XFrame>& xBaseFrame, const OUString& sTarget,
+        sal_Int32 nSearchFlags, EFeature eFeature, EContentType eContentType)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -232,15 +231,15 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
     // take over all new parameters.
     m_xTargetFrame.clear();
-    m_xBaseFrame                    = xBaseFrame;
-    m_lMediaDescriptor              = impl_mergeMediaDescriptorWithMightExistingModelArgs(lMediaDescriptor);
-    m_sTarget                       = sTarget;
-    m_nSearchFlags                  = nSearchFlags;
-    m_eFeature                      = eFeature;
-    m_eContentType                  = eContentType;
-    m_bCloseFrameOnError            = false;
-    m_bReactivateControllerOnError  = false;
-    m_bLoaded                       = false;
+    m_xBaseFrame = xBaseFrame;
+    m_lMediaDescriptor = addModelArgs(lMediaDescriptor);
+    m_sTarget = sTarget;
+    m_nSearchFlags = nSearchFlags;
+    m_eFeature = eFeature;
+    m_eContentType = eContentType;
+    m_bCloseFrameOnError = false;
+    m_bReactivateControllerOnError = false;
+    m_bLoaded = false;
 
     // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
@@ -260,7 +259,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
     // parse it - because some following code require that
     m_aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
     xParser->parseStrict(m_aURL);
 
     // BTW: Split URL and JumpMark ...
@@ -281,16 +280,11 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
     // UI mode
     const bool bUIMode =
-        ( ( m_eFeature & E_WORK_WITH_UI )                                                                          == E_WORK_WITH_UI ) &&
-        !m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(), false ) &&
-        !m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), false );
+        ((m_eFeature & E_WORK_WITH_UI) == E_WORK_WITH_UI) &&
+        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false) &&
+        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
 
-    initializeUIDefaults(
-        m_xContext,
-        m_lMediaDescriptor,
-        bUIMode,
-        &m_pQuietInteraction
-    );
+    initializeUIDefaults(m_xContext, m_lMediaDescriptor, bUIMode, &m_pQuietInteraction);
 }
 
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
