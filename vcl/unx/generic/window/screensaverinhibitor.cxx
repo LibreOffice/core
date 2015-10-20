@@ -29,6 +29,11 @@
 #define GSM_DBUS_SERVICE        "org.gnome.SessionManager"
 #define GSM_DBUS_PATH           "/org/gnome/SessionManager"
 #define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
+
+// Mate <= 1.10 uses org.mate.SessionManager, > 1.10 will use org.gnome.SessionManager
+#define MSM_DBUS_SERVICE        "org.mate.SessionManager"
+#define MSM_DBUS_PATH           "/org/mate/SessionManager"
+#define MSM_DBUS_INTERFACE      "org.mate.SessionManager"
 #endif
 
 #include <sal/log.hxx>
@@ -54,6 +59,7 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
         if ( xid != boost::none )
         {
             inhibitGSM( bInhibit, appname, aReason.getStr(), xid.get() );
+            inhibitMSM( bInhibit, appname, aReason.getStr(), xid.get() );
         }
     }
 }
@@ -196,6 +202,31 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnGSMCookie );
+}
+
+void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid )
+{
+    dbusInhibit( bInhibit,
+                 MSM_DBUS_SERVICE, MSM_DBUS_PATH, MSM_DBUS_INTERFACE,
+                 [appname, reason, xid] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
+                     return dbus_g_proxy_call( proxy,
+                                               "Inhibit", &error,
+                                               G_TYPE_STRING, appname,
+                                               G_TYPE_UINT, xid,
+                                               G_TYPE_STRING, reason,
+                                               G_TYPE_UINT, 8, //Inhibit the session being marked as idle
+                                               G_TYPE_INVALID,
+                                               G_TYPE_UINT, &nCookie,
+                                               G_TYPE_INVALID );
+                 },
+                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
+                     return dbus_g_proxy_call( proxy,
+                                               "Uninhibit", &error,
+                                               G_TYPE_UINT, nCookie,
+                                               G_TYPE_INVALID,
+                                               G_TYPE_INVALID );
+                 },
+                 mnMSMCookie );
 }
 
 /**
