@@ -28,10 +28,12 @@
 namespace dbaui
 {
 
+    class DbaMouseDownListBoxController;
+
     // IndexFieldsControl
     class IndexFieldsControl : public ::svt::EditBrowseBox
     {
-        OModuleClient        m_aModuleClient;
+        OModuleClient               m_aModuleClient;
     protected:
         IndexFields                 m_aSavedValue;
 
@@ -84,7 +86,7 @@ namespace dbaui
 
         bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 
-        DECL_LINK( OnListEntrySelected, void* );
+        DECL_LINK_TYPED( OnListEntrySelected, DbaMouseDownListBoxController&, void );
 
     private:
         using ::svt::EditBrowseBox::Init;

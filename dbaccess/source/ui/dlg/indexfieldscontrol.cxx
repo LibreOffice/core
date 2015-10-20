@@ -40,7 +40,7 @@ namespace dbaui
     class DbaMouseDownListBoxController : public ListBoxCellController
     {
     protected:
-        Link<>  m_aAdditionalModifyHdl;
+        Link<DbaMouseDownListBoxController&,void>  m_aAdditionalModifyHdl;
 
     public:
         explicit DbaMouseDownListBoxController(ListBoxControl* _pParent)
@@ -48,21 +48,21 @@ namespace dbaui
         {
         }
 
-        void SetAdditionalModifyHdl(const Link<>& _rHdl);
+        void SetAdditionalModifyHdl(const Link<DbaMouseDownListBoxController&,void>& _rHdl);
 
     protected:
         virtual bool WantMouseEvent() const override { return true; }
         virtual void callModifyHdl() override;
     };
 
-    void DbaMouseDownListBoxController::SetAdditionalModifyHdl(const Link<>& _rHdl)
+    void DbaMouseDownListBoxController::SetAdditionalModifyHdl(const Link<DbaMouseDownListBoxController&,void>& _rHdl)
     {
         m_aAdditionalModifyHdl = _rHdl;
     }
 
     void DbaMouseDownListBoxController::callModifyHdl()
     {
-        m_aAdditionalModifyHdl.Call(nullptr);
+        m_aAdditionalModifyHdl.Call(*this);
         ListBoxCellController::callModifyHdl();
     }
 
@@ -383,13 +383,13 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK( IndexFieldsControl, OnListEntrySelected, void*, p )
+    IMPL_LINK_TYPED( IndexFieldsControl, OnListEntrySelected, DbaMouseDownListBoxController&, rController, void )
     {
-        ListBox* _pBox = static_cast<ListBox*>(p);
-        if (!_pBox->IsTravelSelect())
+        ListBoxControl& rListBox = rController.GetListBox();
+        if (!rListBox.IsTravelSelect())
             m_aModifyHdl.Call(this);
 
-        if (_pBox == m_pFieldNameCell)
+        if (&rListBox == m_pFieldNameCell.get())
         {   // a field has been selected
             if (GetCurRow() >= GetRowCount() - 2)
             {   // and we're in one of the last two rows
@@ -417,7 +417,6 @@ namespace dbaui
 
             SaveModified();
         }
-        return 0L;
     }
     OUString IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {
