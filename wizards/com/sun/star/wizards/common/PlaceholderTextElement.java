@@ -41,7 +41,7 @@ public class PlaceholderTextElement extends TextElement
     public void write(Object textRange)
     {
         super.write(textRange);
-        if (text == null || text.equals(PropertyNames.EMPTY_STRING))
+        if (text.equals(PropertyNames.EMPTY_STRING))
         {
             XTextRange xTextRange = UnoRuntime.queryInterface(XTextRange.class, textRange);
             try
