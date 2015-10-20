@@ -1161,7 +1161,7 @@ Sequence<OUString> SwXFrames::getSupportedServiceNames() throw( RuntimeException
 
 SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
     SwUnoCollection(_pDoc),
-    eType(eSet)
+    m_eType(eSet)
 {}
 
 SwXFrames::~SwXFrames()
@@ -1172,7 +1172,7 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration() throw(uno
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    switch(eType)
+    switch(m_eType)
     {
         case FLYCNTTYPE_FRM:
             return uno::Reference< container::XEnumeration >(
@@ -1194,7 +1194,7 @@ sal_Int32 SwXFrames::getCount() throw(uno::RuntimeException, std::exception)
     if(!IsValid())
         throw uno::RuntimeException();
     // Ignore TextBoxes for TextFrames.
-    return static_cast<sal_Int32>(GetDoc()->GetFlyCount(eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM));
+    return static_cast<sal_Int32>(GetDoc()->GetFlyCount(m_eType, /*bIgnoreTextBoxes=*/m_eType == FLYCNTTYPE_FRM));
 }
 
 uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
@@ -1206,10 +1206,10 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     if(nIndex < 0)
         throw IndexOutOfBoundsException();
     // Ignore TextBoxes for TextFrames.
-    SwFrameFormat* pFormat = GetDoc()->GetFlyNum(static_cast<size_t>(nIndex), eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
+    SwFrameFormat* pFormat = GetDoc()->GetFlyNum(static_cast<size_t>(nIndex), m_eType, /*bIgnoreTextBoxes=*/m_eType == FLYCNTTYPE_FRM);
     if(!pFormat)
         throw IndexOutOfBoundsException();
-    return lcl_UnoWrapFrame(pFormat, eType);
+    return lcl_UnoWrapFrame(pFormat, m_eType);
 }
 
 uno::Any SwXFrames::getByName(const OUString& rName)
@@ -1219,7 +1219,7 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwFrameFormat* pFormat;
-    switch(eType)
+    switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
             pFormat = GetDoc()->FindFlyByName(rName, ND_GRFNODE);
@@ -1233,7 +1233,7 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     }
     if(!pFormat)
         throw NoSuchElementException();
-    return lcl_UnoWrapFrame(const_cast<SwFrameFormat*>(pFormat), eType);
+    return lcl_UnoWrapFrame(const_cast<SwFrameFormat*>(pFormat), m_eType);
 }
 
 uno::Sequence<OUString> SwXFrames::getElementNames() throw( uno::RuntimeException, std::exception )
@@ -1258,7 +1258,7 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    switch(eType)
+    switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
             return GetDoc()->FindFlyByName(rName, ND_GRFNODE) != NULL;
@@ -1272,7 +1272,7 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
 uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    switch(eType)
+    switch(m_eType)
     {
         case FLYCNTTYPE_FRM:
             return cppu::UnoType<XTextFrame>::get();
@@ -1290,7 +1290,7 @@ sal_Bool SwXFrames::hasElements() throw(uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetFlyCount(eType) > 0;
+    return GetDoc()->GetFlyCount(m_eType) > 0;
 }
 
 
