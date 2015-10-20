@@ -98,8 +98,9 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
         // Headless mode for FAT Office, auto cancels any dialogs that popup
-        bool bHeadlessMode = rCmdLine.IsHeadless() && !rCmdLine.IsEventTesting();
-        if (bHeadlessMode)
+        if (rCmdLine.IsEventTesting())
+            Application::EnableEventTestingMode();
+        else if (rCmdLine.IsHeadless())
             Application::EnableHeadlessMode(false);
 
         // read accept string from configuration

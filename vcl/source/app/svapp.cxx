@@ -65,7 +65,9 @@
 
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/awt/XToolkit.hpp"
+#include <com/sun/star/frame/Desktop.hpp>
 #include "com/sun/star/uno/XNamingService.hpp"
+#include <com/sun/star/util/XModifiable.hpp>
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "comphelper/solarmutex.hxx"
 #include "osl/process.h"
@@ -359,7 +361,7 @@ void Application::EndAllPopups()
 
 namespace
 {
-    bool InjectKeyEvent(SvStream& rStream)
+    VclPtr<vcl::Window> GetEventWindow()
     {
         VclPtr<vcl::Window> xWin(Application::GetFirstTopLevelWindow());
         while (xWin)
@@ -368,6 +370,12 @@ namespace
                 break;
             xWin.reset(Application::GetNextTopLevelWindow(xWin));
         }
+        return xWin;
+    }
+
+    bool InjectKeyEvent(SvStream& rStream)
+    {
+        VclPtr<vcl::Window> xWin(GetEventWindow());
         if (!xWin)
             return false;
 
@@ -398,6 +406,7 @@ namespace
     {
         Application::EndAllPopups();
         Application::EndAllDialogs();
+        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplPrepareExitMsg ) );
         Application::Quit();
     }
 }
@@ -437,25 +446,26 @@ IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplVclEventTestingHdl, void*, void
     }
 }
 
+IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplPrepareExitMsg, void*, void )
+{
+    //now close top level frames
+    (void)GetpApp()->QueryExit();
+}
+
 void Application::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mbInAppExecute = true;
     pSVData->maAppData.mbAppQuit = false;
 
-    sal_uInt16 n = GetCommandLineParamCount();
-    for (sal_uInt16 i = 0; i != n; ++i)
+    if (Application::IsEventTestingModeEnabled())
     {
-        if (GetCommandLineParam(i) == "--eventtesting")
-        {
-            pSVData->maAppData.mnEventTestLimit = 50;
-            pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
-            pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
-            pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::MEDIUM);
-            pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
-            pSVData->maAppData.mpEventTestingIdle->Start();
-            break;
-        }
+        pSVData->maAppData.mnEventTestLimit = 50;
+        pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
+        pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
+        pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::MEDIUM);
+        pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
+        pSVData->maAppData.mpEventTestingIdle->Start();
     }
 
     while ( !pSVData->maAppData.mbAppQuit )
@@ -1653,6 +1663,18 @@ void Application::EnableConsoleOnly()
 {
     EnableHeadlessMode(true);
     bConsoleOnly = true;
+}
+
+static bool bEventTestingMode = false;
+
+bool Application::IsEventTestingModeEnabled()
+{
+    return bEventTestingMode;
+}
+
+void Application::EnableEventTestingMode()
+{
+    bEventTestingMode = true;
 }
 
 void Application::ShowNativeErrorBox(const OUString& sTitle  ,

@@ -231,7 +231,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    bool bAllowUI      = true;
+    bool bAllowUI = !Application::IsEventTestingModeEnabled();
     bool bFramesClosed = impl_closeFrames(bAllowUI);
     if ( ! bFramesClosed )
     {

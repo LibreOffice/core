@@ -162,6 +162,7 @@ struct ImplSVAppData
     int                 mnEventTestLimit;
 
     DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplQuitMsg, void*, void);
+    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplPrepareExitMsg, void*, void);
     DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
     DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
     DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplVclEventTestingHdl, void*, void);
