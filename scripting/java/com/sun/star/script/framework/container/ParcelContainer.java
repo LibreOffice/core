@@ -694,7 +694,7 @@ public class ParcelContainer implements XNameAccess {
             LogUtils.DEBUG("** parcelName = " + parsedUri.parcel);
         }
 
-        if (parsedUri.function != null && (parsedUri.function.length() > 0)) {
+        if (parsedUri.function.length() > 0) {
 
             // strip out parcel name
             parsedUri.function =
