@@ -169,14 +169,14 @@ task createFullConfig(type: Copy) {
 }
 
 task createStrippedConfig {
-    def preserveDir = file("assets_strippedUI/share/share/config/soffice.cfg/empty")
+    def preserveDir = file("assets_strippedUI/share/config/soffice.cfg/empty")
     outputs.dir "assets_strippedUI"
     outputs.dir "assets_strippedUI/share/registry/res"
     outputs.file preserveDir
 
     doLast {
         file('assets_strippedUI/share/registry/res').mkdirs()
-        file("assets_strippedUI/share/share/config/soffice.cfg").mkdirs()
+        file("assets_strippedUI/share/config/soffice.cfg").mkdirs()
         // just empty file
         preserveDir.text = ""
     }
