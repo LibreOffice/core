@@ -46,16 +46,6 @@ public class TypeInspector
     };
     static final int INVALID = 999999;
 
-    public static class TypeInfo
-    {
-        public boolean bisAutoIncrementable;
-
-        public TypeInfo(boolean _bisAutoIncrementable)
-        {
-            bisAutoIncrementable = _bisAutoIncrementable;
-        }
-    }
-
     public TypeInspector(XResultSet _xResultSet)
     {
         try
