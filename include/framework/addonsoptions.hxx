@@ -51,7 +51,7 @@ struct FWE_DLLPUBLIC MergeMenuInstruction
     OUString     aMergeCommandParameter;
     OUString     aMergeFallback;
     OUString     aMergeContext;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeMenu;
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeMenu;
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
@@ -63,7 +63,7 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
     OUString     aMergeCommandParameter;
     OUString     aMergeFallback;
     OUString     aMergeContext;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeToolbarItems;
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeToolbarItems;
 };
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
@@ -75,7 +75,7 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
     ::rtl::OUString     aMergeCommandParameter;
     ::rtl::OUString     aMergeFallback;
     ::rtl::OUString     aMergeContext;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeStatusbarItems;
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
 };
 
 typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
@@ -140,7 +140,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenu() const;
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenu() const;
 
         /*-****************************************************************************************************
             @short      Gets the menu bar part of all addon components registered
@@ -149,7 +149,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
 
         /*-****************************************************************************************************
             @short      Gets a toolbar part of an single addon
@@ -158,7 +158,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
             @short      Gets a unique toolbar resource name of an single addon
@@ -192,7 +192,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsHelpMenu() const;
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsHelpMenu() const;
 
         const MergeStatusbarInstructionContainer& GetMergeStatusbarInstructions() const;
 

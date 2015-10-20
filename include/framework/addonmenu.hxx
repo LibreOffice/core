@@ -37,11 +37,11 @@ namespace framework
 class FWE_DLLPUBLIC AddonMenu : public PopupMenu
 {
     public:
-        AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        AddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
         virtual ~AddonMenu();
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+        css::uno::Reference< css::frame::XFrame > m_xFrame;
 };
 
 class AddonMenuManager;
@@ -57,7 +57,7 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
         void               SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
 
     private:
-        AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+        AddonPopupMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
 
         OUString               m_aCommandURL;
 
@@ -81,7 +81,7 @@ class FWE_DLLPUBLIC AddonMenuManager
         static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 
         // Factory method to create different Add-On menu types
-        static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+        static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const css::uno::Reference< css::frame::XFrame >& rFrame );
 
         // Create the Add-Ons menu
         static AddonMenu* CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -106,18 +106,18 @@ class FWE_DLLPUBLIC AddonMenuManager
                                      MenuType    nSubMenuType,
                                      sal_uInt16      nInsPos,
                                      sal_uInt16&     nUniqueMenuId,
-                                     const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& aAddonMenuDefinition,
-                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+                                     const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,
+                                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                                      const ::rtl::OUString& rModuleIdentifier );
 
         // Retrieve the menu entry property values from a sequence
-        static void       GetMenuEntry( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
+        static void       GetMenuEntry( const css::uno::Sequence< css::beans::PropertyValue >& rAddonMenuEntry,
                                         OUString& rTitle,
                                         OUString& rURL,
                                         OUString& rTarget,
                                         OUString& rImageId,
                                         OUString& rContext,
-                                        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonSubMenu );
+                                        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonSubMenu );
 };
 
 } // namespace framework

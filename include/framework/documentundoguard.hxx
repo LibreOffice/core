@@ -37,13 +37,13 @@ namespace framework
         the XUndoManagerSupplier interface). When entering the scope (i.e. when the <code>DocumentUndoGuard</code>
         instances is constructed), the current state of the undo contexts of the undo manager is examined.
         Upon leaving the scope (i.e. when the <code>DocumentUndoGuard</code> is destructed), the guard will execute
-        as many calls to <member scope="com::sun::star::document">XUndoManager::leaveUndoContext</member> as are
+        as many calls to <member scope="css::document">XUndoManager::leaveUndoContext</member> as are
         necessary to restore the manager's initial state.
     */
     class FWE_DLLPUBLIC DocumentUndoGuard
     {
     public:
-        DocumentUndoGuard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_undoSupplierComponent );
+        DocumentUndoGuard( const css::uno::Reference< css::uno::XInterface >& i_undoSupplierComponent );
         ~DocumentUndoGuard();
 
     private:

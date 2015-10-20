@@ -62,12 +62,12 @@ class FWE_DLLPUBLIC RequestFilterSelect
 {
     RequestFilterSelect_Impl* pImp;
 
-    public:
-        RequestFilterSelect( const OUString& sURL );
-        ~RequestFilterSelect();
-        bool     isAbort  () const;
-        OUString getFilter() const;
-    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
+public:
+    RequestFilterSelect( const OUString& sURL );
+    ~RequestFilterSelect();
+    bool     isAbort  () const;
+    OUString getFilter() const;
+    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 
 /*-************************************************************************************************************
@@ -84,9 +84,9 @@ class FWE_DLLPUBLIC RequestFilterSelect
 class FWE_DLLPUBLIC InteractionRequest
 {
 public:
-    static com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >
-        CreateRequest( const ::com::sun::star::uno::Any& aRequest,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations );
+    static css::uno::Reference < css::task::XInteractionRequest > CreateRequest(
+        const css::uno::Any& aRequest,
+        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations );
 };
 
 

@@ -34,10 +34,10 @@ namespace framework
     {
         public:
             static bool ImportCustomToolbars(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 >& rContainerFactory,
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > >& rSeqContainer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rToolbarStorage );
+                        const css::uno::Reference< css::ui::XUIConfigurationManager2 >& rContainerFactory,
+                        css::uno::Sequence< css::uno::Reference< css::container::XIndexContainer > >& rSeqContainer,
+                        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< css::embed::XStorage >& rToolbarStorage );
     };
 
 } // namespace framework
