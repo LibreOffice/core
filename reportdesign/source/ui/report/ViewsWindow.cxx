@@ -921,7 +921,7 @@ void OViewsWindow::setGridSnap(bool bOn)
     for (; aIter != aEnd ; ++aIter)
     {
         (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
-        (*aIter)->getReportSection().Invalidate(InvalidateFlags::NONE);
+        (*aIter)->getReportSection().Invalidate();
     }
 }
 
@@ -1154,7 +1154,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
             "reportdesign",
             "X:" << aNewPos.X() << " Y:" << aNewPos.Y() << " on View#"
                 << nViewCount++);
-        rReportSection.getSectionView().BegDragObj(aNewPos, nullptr, pHdl, nDrgLog, NULL);
+        rReportSection.getSectionView().BegDragObj(aNewPos, nullptr, pHdl, nDrgLog);
 
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewPos.Y() -= nSectionHeight;
