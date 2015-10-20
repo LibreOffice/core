@@ -98,32 +98,32 @@ public:
 class SwUpdateAttr : public SwMsgPoolItem
 {
 private:
-    sal_Int32 nStart;
-    sal_Int32 nEnd;
-    sal_uInt16 nWhichAttr;
-    std::vector<sal_uInt16> aWhichFormatAttr; // attributes changed inside RES_TXTATR_AUTOFMT
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
+    sal_uInt16 m_nWhichAttr;
+    std::vector<sal_uInt16> m_aWhichFormatAttr; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
 
     sal_Int32 getStart() const
     {
-        return nStart;
+        return m_nStart;
     }
 
     sal_Int32 getEnd() const
     {
-        return nEnd;
+        return m_nEnd;
     }
 
     sal_uInt16 getWhichAttr() const
     {
-        return nWhichAttr;
+        return m_nWhichAttr;
     }
 
     const std::vector<sal_uInt16>& getFormatAttr() const
     {
-        return aWhichFormatAttr;
+        return m_aWhichFormatAttr;
     }
 };
 
