@@ -41,13 +41,11 @@ import lib.MultiMethodTest;
 */
 public class _XConfirmDeleteBroadcaster extends MultiMethodTest {
     public XConfirmDeleteBroadcaster oObj = null;
-    protected boolean confirmed = false;
     protected XConfirmDeleteListener mxConfirmDeleteListener =
                                                 new ConfirmDeleteImpl();
 
     private class ConfirmDeleteImpl implements XConfirmDeleteListener {
         public boolean confirmDelete(RowChangeEvent rowChangeEvent) {
-            confirmed = true;
             return true;
         }
         public void disposing(EventObject eventObject) {
