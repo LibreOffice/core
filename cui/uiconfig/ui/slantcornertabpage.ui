@@ -394,28 +394,18 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
+      <widget name="label5"/>
+      <widget name="label6"/>
       <widget name="FT_RADIUS"/>
       <widget name="FT_ANGLE"/>
+      <widget name="label4"/>
+      <widget name="label7"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
       <widget name="MTR_FLD_RADIUS:0.00cm"/>
       <widget name="MTR_FLD_ANGLE:0.00degrees"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <widgets>
-      <widget name="label5"/>
-      <widget name="label6"/>
-      <widget name="FT_RADIUS"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup4">
-    <widgets>
-      <widget name="FT_ANGLE"/>
-      <widget name="label4"/>
-      <widget name="label7"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup5">
