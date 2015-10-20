@@ -40,13 +40,6 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
     if (n == 0 || !functionDecl->getParamDecl(n - 1)->hasDefaultArg()) {
         return true;
     }
-if(callExpr->getNumArgs()>n){
-    report(
-        DiagnosticsEngine::Warning, "TODO %0 != %1", callExpr->getLocStart())
-        << callExpr->getNumArgs() << n << callExpr->getSourceRange();
-    callExpr->dump();
-    return true;
-}
     assert(callExpr->getNumArgs() <= n); // can be < in template code
     for (unsigned i = callExpr->getNumArgs(); i != 0;) {
         --i;
