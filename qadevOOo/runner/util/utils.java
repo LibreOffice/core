@@ -240,23 +240,19 @@ public class utils {
         String settingPath = null;
         try {
             Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
-            XPropertySet pthSettings = null;
             try {
-                pthSettings = (XPropertySet) AnyConverter.toObject(
+                XPropertySet pthSettings = (XPropertySet) AnyConverter.toObject(
                     new Type(XPropertySet.class), settings);
+                settingPath = (String) pthSettings.getPropertyValue(setting);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
                 System.out.println("### couldn't get Office Settings");
             }
-            settingPath = (String) pthSettings.getPropertyValue(setting);
-
         } catch (Exception e) {
             System.out.println("Couldn't get string value for " + setting);
             e.printStackTrace();
         }
         return settingPath;
     }
-
-
 
     /**
      * This method returns the temp dicrectory of the user.
