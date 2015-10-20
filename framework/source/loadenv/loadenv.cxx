@@ -160,8 +160,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                lArgs,
                                css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
                                sTarget,
-                               nFlags,
-                               LoadEnv::E_NO_FEATURE);
+                               nFlags);
         aEnv.startLoading();
         aEnv.waitWhileLoading(); // wait for ever!
 
