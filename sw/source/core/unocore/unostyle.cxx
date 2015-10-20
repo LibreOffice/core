@@ -4443,7 +4443,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
 }
 
 SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam )
-: pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
+: m_pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -4451,7 +4451,7 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwA
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
 {
-    delete pImpl;
+    delete m_pImpl;
 }
 
 void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -4459,30 +4459,30 @@ void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        delete pImpl;
-        pImpl = 0;
+        delete m_pImpl;
+        m_pImpl = 0;
     }
 }
 
 sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
     throw (uno::RuntimeException, std::exception)
 {
-    if( !pImpl )
+    if( !m_pImpl )
         throw uno::RuntimeException();
-    return pImpl->hasMoreElements();
+    return m_pImpl->hasMoreElements();
 }
 
 uno::Any SwXAutoStylesEnumerator::nextElement(  )
     throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    if( !pImpl )
+    if( !m_pImpl )
         throw uno::RuntimeException();
     uno::Any aRet;
-    if( pImpl->hasMoreElements() )
+    if( m_pImpl->hasMoreElements() )
     {
-        SfxItemSet_Pointer_t pNextSet = pImpl->nextElement();
-        uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(pImpl->getDoc(),
-                                                        pNextSet, pImpl->getFamily());
+        SfxItemSet_Pointer_t pNextSet = m_pImpl->nextElement();
+        uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(m_pImpl->getDoc(),
+                                                        pNextSet, m_pImpl->getFamily());
         aRet.setValue(&xAutoStyle, cppu::UnoType<style::XAutoStyle>::get());
     }
     return aRet;

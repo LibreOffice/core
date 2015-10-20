@@ -380,7 +380,7 @@ public:
 class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration >,
     public SwClient
 {
-    SwAutoStylesEnumImpl *pImpl;
+    SwAutoStylesEnumImpl *m_pImpl;
 public:
     SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStylesEnumerator();
