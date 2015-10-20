@@ -693,7 +693,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                         else
                             aStrConverted = aStr;
                     }
-                    const double nVal = ::rtl::math::stringToDouble(aStrConverted,'.',',',NULL,NULL);
+                    const double nVal = ::rtl::math::stringToDouble(aStrConverted,'.',',');
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )

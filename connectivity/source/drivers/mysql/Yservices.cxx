@@ -53,7 +53,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mysql_component_getFactory(
         try
         {
             xRet = ::cppu::createSingleFactory( xServiceManager, sImplementationName, ODriverDelegator_CreateInstance,
-                       ODriverDelegator::getSupportedServiceNames_Static(), 0);
+                       ODriverDelegator::getSupportedServiceNames_Static());
         }
         catch(...)
         {

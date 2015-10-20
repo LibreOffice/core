@@ -986,7 +986,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                          SQL_ISRULE(pColumnRef,num_value_exp)   || SQL_ISRULE(pColumnRef,term))*/
                 {
                     // Function call present
-                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL );
+                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection );
                     // check if the column is also a parameter
                     traverseSearchCondition(pColumnRef); // num_value_exp
 

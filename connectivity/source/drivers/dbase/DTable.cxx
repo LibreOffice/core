@@ -1671,7 +1671,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
 
 static double toDouble(const OString& rString)
 {
-    return ::rtl::math::stringToDouble( rString, '.', ',', NULL, NULL );
+    return ::rtl::math::stringToDouble( rString, '.', ',' );
 }
 
 
