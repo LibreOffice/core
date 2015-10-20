@@ -43,6 +43,7 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
         {
             inhibitXScreenSaver( bInhibit, pDisplay.get() );
             inhibitXAutoLock( bInhibit, pDisplay.get() );
+            inhibitDPMS( bInhibit, pDisplay.get() );
         }
 
         if ( xid != boost::none )
@@ -227,6 +228,46 @@ void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
                      PropModeReplace,
                      reinterpret_cast<unsigned char*>( &nMessage ),
                      sizeof( nMessage ) );
+}
+
+void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
+{
+#if !defined(SOLARIS) && !defined(AIX)
+    int dummy;
+    // This won't change while X11 is running, hence
+    // we can evaluate only once and store as static
+    static bool bDPMSExtensionAvailable = ( DPMSQueryExtension( pDisplay, &dummy, &dummy) != 0 );
+
+    if ( !bDPMSExtensionAvailable )
+    {
+        return;
+    }
+
+    if ( bInhibit )
+    {
+        CARD16 state; // unused by us
+        DPMSInfo( pDisplay, &state, &mbDPMSWasEnabled );
+
+        if ( mbDPMSWasEnabled )
+        {
+            DPMSGetTimeouts( pDisplay,
+                             &mnDPMSStandbyTimeout,
+                             &mnDPMSSuspendTimeout,
+                             &mnDPMSOffTimeout );
+            DPMSSetTimeouts( pDisplay,
+                             0,
+                             0,
+                             0 );
+        }
+    }
+    else if ( !bInhibit && mbDPMSWasEnabled )
+    {
+        DPMSSetTimeouts( pDisplay,
+                         mnDPMSStandbyTimeout,
+                         mnDPMSSuspendTimeout,
+                         mnDPMSOffTimeout );
+    }
+#endif // !defined(SOLARIS) && !defined(AIX)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

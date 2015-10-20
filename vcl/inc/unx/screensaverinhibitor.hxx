@@ -11,6 +11,9 @@
 #define INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 
 #include <prex.h>
+#if !defined(SOLARIS) && !defined(AIX)
+#include <X11/extensions/dpms.h>
+#endif
 #include <postx.h>
 
 #include <rtl/ustring.hxx>
@@ -32,12 +35,20 @@ private:
 
     boost::optional<int> mnXScreenSaverTimeout;
 
+#if !defined(SOLARIS) && !defined(AIX)
+    BOOL mbDPMSWasEnabled;
+    CARD16 mnDPMSStandbyTimeout;
+    CARD16 mnDPMSSuspendTimeout;
+    CARD16 mnDPMSOffTimeout;
+#endif
+
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
     void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
     void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
 
     void inhibitXScreenSaver( bool bInhibit, Display* pDisplay );
     static void inhibitXAutoLock( bool bInhibit, Display* pDisplay );
+    void inhibitDPMS( bool bInhibit, Display* pDisplay );
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX

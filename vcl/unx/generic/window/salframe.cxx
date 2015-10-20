@@ -41,9 +41,6 @@
 #include <X11/keysym.h>
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
-#if !defined(SOLARIS) && !defined(AIX)
-#include <X11/extensions/dpms.h>
-#endif
 #include <postx.h>
 
 #include "unx/salunx.h"
@@ -2202,73 +2199,13 @@ void X11SalFrame::StartPresentation( bool bStart )
         doReparentPresentationDialogues( GetDisplay() );
     hPresentationWindow = (bStart && IsOverrideRedirect() ) ? GetWindow() : None;
 
-    // needs static here to save DPMS settings
-    int dummy;
-    static bool DPMSExtensionAvailable =
-#if !defined(SOLARIS) && !defined(AIX)
-        (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
-    static sal_Bool DPMSEnabled = false;
-#else
-        false;
-    bool DPMSEnabled = false;
-    (void)dummy;
-#define CARD16 unsigned short
-#endif
-    static CARD16 dpms_standby_timeout=0;
-    static CARD16 dpms_suspend_timeout=0;
-    static CARD16 dpms_off_timeout=0;
-
-    if( bStart  || DPMSEnabled)
+    if( bStart && hPresentationWindow )
     {
-        if( hPresentationWindow )
-        {
-            /*  #i10559# workaround for WindowMaker: try to restore
-             *  current focus after presentation window is gone
-             */
-            int revert_to = 0;
-            XGetInputFocus( GetXDisplay(), &hPresFocusWindow, &revert_to );
-        }
-
-        // get the DPMS state right before the start
-        if (DPMSExtensionAvailable)
-        {
-#if !defined(SOLARIS) && !defined(AIX)
-            CARD16 state; // card16 is defined in Xdm.h
-            DPMSInfo(   GetXDisplay(),
-                        &state,
-                        &DPMSEnabled);
-#endif
-        }
-        if( bStart ) // start show
-        {
-#if !defined(SOLARIS) && !defined(AIX)
-            if( DPMSEnabled )
-            {
-                if ( DPMSExtensionAvailable )
-                {
-                    DPMSGetTimeouts(    GetXDisplay(),
-                                        &dpms_standby_timeout,
-                                        &dpms_suspend_timeout,
-                                        &dpms_off_timeout);
-                    DPMSSetTimeouts(GetXDisplay(), 0,0,0);
-                }
-            }
-#endif
-        }
-        else
-        {
-#if !defined(SOLARIS) && !defined(AIX)
-            if ( DPMSEnabled )
-            {
-                if ( DPMSExtensionAvailable )
-                {
-                // restore timeouts
-                    DPMSSetTimeouts(GetXDisplay(), dpms_standby_timeout,
-                        dpms_suspend_timeout, dpms_off_timeout);
-                }
-            }
-#endif
-        }
+        /*  #i10559# workaround for WindowMaker: try to restore
+         *  current focus after presentation window is gone
+         */
+        int revert_to = 0;
+        XGetInputFocus( GetXDisplay(), &hPresFocusWindow, &revert_to );
     }
 }
 

@@ -734,6 +734,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-lpthread \
     -lGL \
     -lX11 \
+	-lXext \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
