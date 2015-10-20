@@ -77,17 +77,17 @@ static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, Sc
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try the default calc address convention
+    // try the default Calc (A1) address convention
     nResult = rScRange.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try the default calc address convention
+    // try the Excel A1 address convention
     nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try excel a1
+    // try Excel R1C1 address convention
     return rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
@@ -99,17 +99,17 @@ static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddre
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try the default calc address convention
+    // try the default Calc (A1) address convention
     nResult = rScAddress.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try the default calc address convention
+    // try the Excel A1 address convention
     nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    // try excel a1
+    // try Excel R1C1 address convention
     return rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
