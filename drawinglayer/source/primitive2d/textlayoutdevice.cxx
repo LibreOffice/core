@@ -269,10 +269,7 @@ namespace drawinglayer
                     rText,
                     nIndex,
                     nIndex,
-                    nLength,
-                    true,
-                    0,
-                    0);
+                    nLength);
             }
         }
 

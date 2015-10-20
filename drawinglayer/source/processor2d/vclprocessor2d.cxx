@@ -1365,8 +1365,7 @@ namespace drawinglayer
                         mpOutputDevice->DrawEPS(
                         aRectangle.TopLeft(),
                         aRectangle.GetSize(),
-                        rEpsPrimitive2D.getGfxLink(),
-                        0);
+                        rEpsPrimitive2D.getGfxLink());
 
                     if(!bEPSPaintedDirectly)
                     {
