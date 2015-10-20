@@ -130,8 +130,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
             xFactory = ::cppu::createSingleComponentFactory(
                 pComponents->pFactory,
                 sImplementationName,
-                sServices,
-                NULL
+                sServices
             );
             break;
         }
