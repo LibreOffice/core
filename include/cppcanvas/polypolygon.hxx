@@ -69,8 +69,8 @@ namespace cppcanvas
         virtual void                        setStrokeWidth( const double& rStrokeWidth ) = 0;
         virtual double                      getStrokeWidth() const = 0;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
+        virtual css::uno::Reference<
+            css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
     };
 
     typedef std::shared_ptr< ::cppcanvas::PolyPolygon > PolyPolygonSharedPtr;

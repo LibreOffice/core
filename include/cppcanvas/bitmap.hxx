@@ -61,8 +61,7 @@ namespace cppcanvas
 
         virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
+        virtual css::uno::Reference< css::rendering::XBitmap >  getUNOBitmap() const = 0;
     };
 
     typedef std::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;

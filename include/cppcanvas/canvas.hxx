@@ -90,9 +90,9 @@ namespace cppcanvas
 
         // this should be considered private. if RTTI gets enabled
         // someday, remove that to a separate interface
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XCanvas >          getUNOCanvas() const = 0;
-        virtual ::com::sun::star::rendering::ViewState      getViewState() const = 0;
+        virtual css::uno::Reference<
+            css::rendering::XCanvas >           getUNOCanvas() const = 0;
+        virtual css::rendering::ViewState       getViewState() const = 0;
     };
 
 }

@@ -39,7 +39,7 @@ namespace cppcanvas
 
         virtual ~Color() {}
 
-        virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const = 0;
+        virtual css::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const = 0;
     };
 
     typedef std::shared_ptr< ::cppcanvas::Color > ColorSharedPtr;

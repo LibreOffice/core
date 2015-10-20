@@ -53,8 +53,8 @@ namespace cppcanvas
 
         virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const = 0;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
+        virtual css::uno::Reference<
+            css::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
     };
 
 }
