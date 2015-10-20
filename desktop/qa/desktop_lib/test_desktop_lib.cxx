@@ -21,6 +21,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <unotools/tempfile.hxx>
 
 #include "../../inc/lib/init.hxx"
 
@@ -62,6 +63,7 @@ public:
     void testGetPartPageRectangles();
     void testSearchCalc();
     void testPaintTile();
+    void testSaveAs();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -71,6 +73,7 @@ public:
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPaintTile);
+    CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -307,6 +310,14 @@ void DesktopLOKTest::testPaintTile()
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     closeDoc();
+}
+
+void DesktopLOKTest::testSaveAs()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

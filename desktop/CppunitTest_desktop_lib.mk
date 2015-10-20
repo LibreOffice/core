@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	sw \
 	test \
 	unotest \
+	utl \
 	vcl \
     $(gb_UWINAPI) \
 ))
@@ -64,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     unoxml/source/service/unoxml \
     xmloff/util/xo \
     i18npool/source/search/i18nsearch \
+    filter/source/graphic/graphicfilter \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))

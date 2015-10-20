@@ -120,6 +120,7 @@ static const ExtensionMap aWriterExtensionMap[] =
     { "pdf",   "writer_pdf_Export" },
     { "txt",   "Text" },
     { "xhtml", "XHTML Writer File" },
+    { "png",   "writer_png_Export" },
     { NULL, NULL }
 };
 
@@ -153,6 +154,7 @@ static const ExtensionMap aImpressExtensionMap[] =
     { "svg",   "impress_svg_Export" },
     { "swf",   "impress_flash_Export" },
     { "xhtml", "XHTML Impress File" },
+    { "png",   "impress_png_Export"},
     { NULL, NULL }
 };
 
@@ -165,6 +167,7 @@ static const ExtensionMap aDrawExtensionMap[] =
     { "svg",   "draw_svg_Export" },
     { "swf",   "draw_flash_Export" },
     { "xhtml", "XHTML Draw File" },
+    { "png",   "draw_png_Export"},
     { NULL, NULL }
 };
 
