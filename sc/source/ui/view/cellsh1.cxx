@@ -1865,7 +1865,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else                            // CANCEL
                 {
-                    pScMod->ActivateInputWindow( nullptr );
+                    pScMod->ActivateInputWindow();
                 }
                 rReq.Ignore();      // only SID_ENTER_STRING is recorded
             }

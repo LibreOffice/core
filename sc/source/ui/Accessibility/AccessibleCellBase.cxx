@@ -219,7 +219,7 @@ OUString SAL_CALL
 {
     // Document not needed, because only the cell address, but not the tablename is needed
     // always us OOO notation
-    return maCellAddress.Format(SCA_VALID, NULL);
+    return maCellAddress.Format(SCA_VALID);
 }
 
     //=====  XAccessibleValue  ================================================

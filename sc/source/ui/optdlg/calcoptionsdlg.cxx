@@ -538,7 +538,7 @@ struct Round : Area
                         "," + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                         ")");
 
-        pDoc->SetValue(ScAddress(3,1+nRow,nTab), ::rtl::math::round(nX, (short) nN, rtl_math_RoundingMode_Corrected));
+        pDoc->SetValue(ScAddress(3,1+nRow,nTab), ::rtl::math::round(nX, (short) nN));
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
                         "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +

@@ -293,10 +293,10 @@ IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
     rHeaderBar.SetItemSize(ITEMID_RANGE, nItemRangeSize);
     rHeaderBar.SetItemSize(ITEMID_SCOPE, nItemScopeSize);
 
-    SetTab(0, 0, MAP_APPFONT );
-    SetTab(1, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    SetTab(0, 0);
+    SetTab(1, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
     aSz.Width() += nItemRangeSize;
-    SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
 }
 
 IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, ScrollHdl, SvTreeListBox*, void)

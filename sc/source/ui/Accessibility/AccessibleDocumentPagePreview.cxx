@@ -174,7 +174,7 @@ sal_Int32 ScNotesChildren::AddNotes(const ScPreviewLocationData& rData, const Re
                 if (bMark)
                 {
                     // Document not needed, because only the cell address, but not the tablename is needed
-                    aNote.maNoteText = aNote.maNoteCell.Format(SCA_VALID, NULL);
+                    aNote.maNoteText = aNote.maNoteCell.Format(SCA_VALID);
                 }
                 else
                 {
@@ -346,7 +346,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                 if (bMark)
                 {
                     // Document not needed, because only the cell address, but not the tablename is needed
-                    aNote.maNoteText = aNote.maNoteCell.Format(SCA_VALID, NULL);
+                    aNote.maNoteText = aNote.maNoteCell.Format(SCA_VALID);
                 }
                 else
                 {

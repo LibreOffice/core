@@ -833,7 +833,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         // Update failed.  Notify the user.
 
         OUString aFile;
-        sfx2::LinkManager::GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+        sfx2::LinkManager::GetDisplayNames(pRefLink, NULL, &aFile);
         // Decode encoded URL for display friendliness.
         INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
         aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);

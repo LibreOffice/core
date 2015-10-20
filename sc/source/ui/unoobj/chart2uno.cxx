@@ -2680,7 +2680,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
     pRefMgr->addLinkListener(nFileId, pExtRefListener);
     pExtRefListener->addFileId(nFileId);
 
-    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false, nullptr);
+    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false);
     sal_Int32 nDataCount = 0;
     for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
@@ -3162,7 +3162,7 @@ public:
                     OUString aString = ScGlobal::GetRscString(STR_COLUMN);
                     aString += " ";
                     ScAddress aPos( nCol, 0, 0 );
-                    OUString aColStr(aPos.Format(SCA_VALID_COL, nullptr));
+                    OUString aColStr(aPos.Format(SCA_VALID_COL));
                     aString += aColStr;
                     pArr[mnCount] = aString;
                 }

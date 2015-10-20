@@ -1151,7 +1151,7 @@ static bool lcl_PutString(
                     OUString aT( &cDec, 1);
                     aT += rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
                     rtl_math_ConversionStatus eStatus;
-                    double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus, 0);
+                    double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)
                         nMilli = (sal_Int16) (1000.0 * fV + 0.5);
                 }

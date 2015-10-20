@@ -2048,7 +2048,7 @@ void Test::testEnterMixedMatrix()
     // Create a matrix range in A4:B5 referencing A1:B2.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    m_pDoc->InsertMatrixFormula(0, 3, 1, 4, aMark, "=A1:B2", NULL);
+    m_pDoc->InsertMatrixFormula(0, 3, 1, 4, aMark, "=A1:B2");
 
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), m_pDoc->GetString(0,3,0));
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(1,0,0), m_pDoc->GetString(1,3,0));
@@ -2075,7 +2075,7 @@ void Test::testMatrixEditable()
     ScRange aMatRange(0,2,0,0,3,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aMatRange);
-    m_pDoc->InsertMatrixFormula(0, 2, 0, 3, aMark, "=TRANSPOSE(A1:B1)", NULL);
+    m_pDoc->InsertMatrixFormula(0, 2, 0, 3, aMark, "=TRANSPOSE(A1:B1)");
 
     // Check their values.
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,1,0)));
@@ -6153,7 +6153,7 @@ void Test::testImportStream()
     ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
     aObj.SetExtOptions(aOpt);
-    aObj.ImportString("1,2,3", SotClipboardFormatId::STRING);
+    aObj.ImportString("1,2,3");
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,0,0)));

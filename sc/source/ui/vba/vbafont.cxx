@@ -220,7 +220,7 @@ uno::Any SAL_CALL
 ScVbaFont::getSize() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getSize();
 }
@@ -246,7 +246,7 @@ uno::Any SAL_CALL
 ScVbaFont::getColorIndex() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getColorIndex();
 }
@@ -337,7 +337,7 @@ uno::Any SAL_CALL
 ScVbaFont::getBold() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_WEIGHT, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_WEIGHT) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getBold();
 }
@@ -380,7 +380,7 @@ uno::Any SAL_CALL
 ScVbaFont::getUnderline() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_UNDERLINE, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_UNDERLINE) == SfxItemState::DONTCARE )
             return aNULL();
 
     sal_Int32 nValue = awt::FontUnderline::NONE;
@@ -407,7 +407,7 @@ uno::Any SAL_CALL
 ScVbaFont::getStrikethrough() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_CROSSEDOUT, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_CROSSEDOUT) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getStrikethrough();
 }
@@ -416,7 +416,7 @@ uno::Any SAL_CALL
 ScVbaFont::getShadow() throw (uno::RuntimeException, std::exception)
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_SHADOWED, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_SHADOWED) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getShadow();
 }
@@ -425,7 +425,7 @@ uno::Any SAL_CALL
 ScVbaFont::getItalic() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_POSTURE, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_POSTURE) == SfxItemState::DONTCARE )
             return aNULL();
 
     return ScVbaFont_BASE::getItalic();
@@ -435,7 +435,7 @@ uno::Any SAL_CALL
 ScVbaFont::getName() throw ( uno::RuntimeException, std::exception )
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT) == SfxItemState::DONTCARE )
             return aNULL();
     return ScVbaFont_BASE::getName();
 }
@@ -458,7 +458,7 @@ uno::Any SAL_CALL
 ScVbaFont::getOutlineFont() throw (uno::RuntimeException, std::exception)
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR, true, NULL) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR) == SfxItemState::DONTCARE )
             return aNULL();
     return mxFont->getPropertyValue("CharContoured");
 }

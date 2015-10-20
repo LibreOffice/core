@@ -1256,7 +1256,7 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
     aCxt.mnColDelta = aFrmRange.aStart.Col() - aToRange.aStart.Col();
     aCxt.mnRowDelta = aFrmRange.aStart.Row() - aToRange.aStart.Row();
     aCxt.mnTabDelta = aFrmRange.aStart.Tab() - aToRange.aStart.Tab();
-    pDoc->UpdateReference(aCxt, NULL);
+    pDoc->UpdateReference(aCxt);
 
     // Free LinkDependent, set succeeding UpdateReference Undo
     // ToRange->FromRange Dependents
@@ -1999,9 +1999,9 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
         aRefCxt.mnTabDelta = nDz;
 
         if ( bOldFormula )
-            maOldCell.mpFormula->UpdateReference(aRefCxt, NULL);
+            maOldCell.mpFormula->UpdateReference(aRefCxt);
         if ( bNewFormula )
-            maNewCell.mpFormula->UpdateReference(aRefCxt, NULL);
+            maNewCell.mpFormula->UpdateReference(aRefCxt);
 
         if ( !aBigRange.aStart.IsValid( pTrack->GetDocument() ) )
         {   //FIXME:

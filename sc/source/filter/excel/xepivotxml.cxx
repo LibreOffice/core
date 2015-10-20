@@ -379,8 +379,7 @@ void XclExpXmlPivotTables::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName(NULL, "../pivotTables/pivotTable", nPivotId),
             pWSStrm->getOutputStream(),
             CREATE_XL_CONTENT_TYPE("pivotTable"),
-            CREATE_OFFICEDOC_RELATION_TYPE("pivotTable"),
-            NULL);
+            CREATE_OFFICEDOC_RELATION_TYPE("pivotTable"));
 
         rStrm.PushStream(pPivotStrm);
         SavePivotTableXml(rStrm, rObj, nCacheId);

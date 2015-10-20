@@ -644,7 +644,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         const ScPatternAttr* pPattern = GetPattern( 0 );
         vcl::Font aFont;
         // font color doesn't matter here
-        pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX, NULL );
+        pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
         pDev->SetFont( aFont );
         const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
         long nMargin = (long) ( pMargin->GetLeftMargin() * nPPTX ) +
@@ -1424,7 +1424,7 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
     {
         nRow--;
         SCROW nStartRow = MAXROW;
-        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow, NULL);
+        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow);
         if(bHidden)
             return std::max<SCROW>(0, nStartRow - 1);
         else
@@ -1470,7 +1470,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
     {
         nRow--;
         SCROW nStartRow = MAXROW;
-        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow, NULL);
+        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow);
         if (bHidden)
         {
             nRow = nStartRow - 1;

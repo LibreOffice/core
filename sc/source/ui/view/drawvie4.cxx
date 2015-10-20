@@ -109,7 +109,7 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         if (bAnyOle)
         {
             aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-            aDragShellRef->DoInitNew(NULL);
+            aDragShellRef->DoInitNew();
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetMarkedObjModel();

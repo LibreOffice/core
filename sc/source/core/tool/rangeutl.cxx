@@ -417,7 +417,7 @@ void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUStrin
 {
     // quote character is always "'"
     OUString aQuotedTab(rTabName);
-    ScCompiler::CheckTabQuotes(aQuotedTab, ::formula::FormulaGrammar::CONV_OOO);
+    ScCompiler::CheckTabQuotes(aQuotedTab);
     rBuf.append(aQuotedTab);
 }
 

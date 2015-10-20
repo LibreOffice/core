@@ -116,7 +116,7 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
         aBuf.append(' ');
 
         ScAddress aColAddr(nCol, 0, 0);
-        aBuf.append(aColAddr.Format(SCA_VALID_COL, NULL));
+        aBuf.append(aColAddr.Format(SCA_VALID_COL));
         aDocStr = aBuf.makeStringAndClear();
     }
     return aDocStr;

@@ -3747,7 +3747,7 @@ void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
         and the returned group object contains them all. ImportObj() calls the
         virtual functions ProcessClientAnchor2() and ProcessObj() and writes
         the pointer to the related draw object data (OBJ record) into pDrawObj. */
-    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy, 0, 0 ) );
+    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy ) );
     if( pDrawObj && xSdrObj )
         InsertSdrObject( GetConvData().mrSdrPage, *pDrawObj, xSdrObj.release() );
     rShHeader.SeekToEndOfRecord( rDffStrm );
@@ -3988,7 +3988,7 @@ void XclImpDrawing::ReadWmf( Graphic& rGraphic, const XclImpRoot&, XclImpStream&
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     // import the graphic from memory stream
     GDIMetaFile aGDIMetaFile;
-    if( ::ReadWindowMetafile( aMemStrm, aGDIMetaFile, 0 ) )
+    if( ::ReadWindowMetafile( aMemStrm, aGDIMetaFile ) )
         rGraphic = aGDIMetaFile;
 }
 

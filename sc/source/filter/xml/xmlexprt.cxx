@@ -232,7 +232,7 @@ OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
 
             EditEngine& rEngine = pDoc->GetEditEngine();
             rEngine.SetText(*pData);
-            return rEngine.GetText(LINEEND_LF);
+            return rEngine.GetText();
         }
         break;
         default:
@@ -3584,7 +3584,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
         {
             Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
             if (xShape.is())
-                GetShapeExport()->exportShape(xShape, SEF_DEFAULT|XMLShapeExportFlags::ANNOTATION, NULL);
+                GetShapeExport()->exportShape(xShape, SEF_DEFAULT|XMLShapeExportFlags::ANNOTATION);
         }
 
         pCurrentCell = NULL;

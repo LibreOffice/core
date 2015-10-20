@@ -722,7 +722,7 @@ void ScDrawTransferObj::InitDocShell()
         ScDocShell* pDocSh = new ScDocShell;
         aDocShellRef = pDocSh;      // ref must be there before InitNew
 
-        pDocSh->DoInitNew(NULL);
+        pDocSh->DoInitNew();
 
         ScDocument& rDestDoc = pDocSh->GetDocument();
         rDestDoc.InitDrawLayer( pDocSh );

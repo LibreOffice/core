@@ -1749,7 +1749,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(nCol, nStart, nTab, nCol, nEnd, nTab);
             aRefCxt.mnTabDelta = nTab - rSrcCol.nTab;
-            UpdateReferenceOnCopy(aRefCxt, NULL);
+            UpdateReferenceOnCopy(aRefCxt);
             UpdateCompile();
         }
 
@@ -1779,7 +1779,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab);
             aRefCxt.mnTabDelta = rDestCol.nTab - nTab;
-            rDestCol.UpdateReferenceOnCopy(aRefCxt, NULL);
+            rDestCol.UpdateReferenceOnCopy(aRefCxt);
             rDestCol.UpdateCompile();
         }
 
@@ -3419,7 +3419,7 @@ SCsROW ScColumn::SearchStyle(
             return -1;
     }
     else
-        return pAttrArray->SearchStyle( nRow, pSearchStyle, bUp, NULL );
+        return pAttrArray->SearchStyle( nRow, pSearchStyle, bUp );
 }
 
 bool ScColumn::SearchStyleRange(
@@ -3435,7 +3435,7 @@ bool ScColumn::SearchStyleRange(
             return false;
     }
     else
-        return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp, NULL );
+        return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

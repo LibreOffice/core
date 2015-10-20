@@ -2334,7 +2334,7 @@ void ScInterpreter::ScCellExternal()
         // For SHEET, No idea what number we should set, but let's always set
         // 1 if the external sheet exists, no matter what sheet.  Excel does
         // the same.
-        if (pRefMgr->getCacheTable(nFileId, aTabName, false, NULL).get())
+        if (pRefMgr->getCacheTable(nFileId, aTabName, false).get())
             PushInt(1);
         else
             SetError(errNoName);

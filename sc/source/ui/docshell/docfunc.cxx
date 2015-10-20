@@ -2605,7 +2605,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     if ( rDoc.HasOLEObjectsInArea( rSource ) )
     {
         aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-        aDragShellRef->DoInitNew(NULL);
+        aDragShellRef->DoInitNew();
     }
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
@@ -3364,7 +3364,7 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
     ScDocument& rDoc = rDocShell.GetDocument();
     Fraction aOne(1,1);
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
-                                                    bFormula, NULL );
+                                                    bFormula );
 
     return nTwips;
 }

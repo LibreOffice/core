@@ -274,7 +274,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
         {
             ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
             rEngine.SetText(*pData);
-            aVal = rEngine.GetText(LINEEND_LF);
+            aVal = rEngine.GetText();
         }
         //  also do not format EditCells as numbers
         //  (fitting to output)

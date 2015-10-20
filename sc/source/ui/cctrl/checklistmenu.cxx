@@ -1551,8 +1551,7 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
         if ( !pEntry )
         {
             pEntry = InsertEntry(
-                sName, nullptr, false, TREELIST_APPEND, nullptr,
-                SvLBoxButtonKind_enabledCheckbox);
+                sName);
 
             SetCheckButtonState(
                 pEntry, bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
@@ -1644,8 +1643,7 @@ void ScCheckListMenuWindow::initMembers()
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
             SvTreeListEntry* pEntry = maChecks->InsertEntry(
-                aLabel, nullptr, false, TREELIST_APPEND, nullptr,
-                SvLBoxButtonKind_enabledCheckbox);
+                aLabel);
 
             maChecks->SetCheckButtonState(
                 pEntry, maMembers[i].mbVisible ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);

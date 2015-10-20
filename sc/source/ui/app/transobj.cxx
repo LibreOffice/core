@@ -590,7 +590,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         ScDocShell* pDocSh = new ScDocShell;
         aDocShellRef = pDocSh;      // ref must be there before InitNew
 
-        pDocSh->DoInitNew(NULL);
+        pDocSh->DoInitNew();
 
         ScDocument& rDestDoc = pDocSh->GetDocument();
         ScMarkData aDestMark;
@@ -737,7 +737,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     {
         ScGlobal::pDrawClipDocShellRef =
                         new ScDocShellRef(new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS));      // there must be a ref
-        (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
+        (*ScGlobal::pDrawClipDocShellRef)->DoInitNew();
         return *ScGlobal::pDrawClipDocShellRef;
     }
     else

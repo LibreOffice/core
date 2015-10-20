@@ -895,7 +895,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         aRefCxt.meMode = URM_COPY;
         aRefCxt.maRange = ScRange(0, 0, nNewPos, MAXCOL, MAXROW, nNewPos);
         aRefCxt.mnTabDelta = nDz;
-        maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
+        maTabs[nNewPos]->UpdateReference(aRefCxt);
 
         maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // move all paragraphs up by one!!
         maTabs[nOldPos]->UpdateInsertTab(aCxt);
@@ -1004,7 +1004,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(0, 0, nDestPos, MAXCOL, MAXROW, nDestPos);
             aRefCxt.mnTabDelta = nDestPos - nSrcPos;
-            maTabs[nDestPos]->UpdateReference(aRefCxt, NULL);
+            maTabs[nDestPos]->UpdateReference(aRefCxt);
 
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);

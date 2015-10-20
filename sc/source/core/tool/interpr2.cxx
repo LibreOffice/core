@@ -1739,7 +1739,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
     // convert any fPayType situation to fPayType == zero situation
     fFv = fFv - fPayment * fPayType;
     fPv = fPv + fPayment * fPayType;
-    if (fNper == ::rtl::math::round( fNper, 0, rtl_math_RoundingMode_Corrected ))
+    if (fNper == ::rtl::math::round( fNper ))
     { // Nper is an integer value
         fX = fGuess;
         while (!bFound && nCount < nIterationsMax)

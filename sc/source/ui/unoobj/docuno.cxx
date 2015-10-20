@@ -434,7 +434,7 @@ SfxObjectShell* ScModelObj::GetEmbeddedObject() const
 void ScModelObj::UpdateAllRowHeights()
 {
     if (pDocShell)
-        pDocShell->UpdateAllRowHeights(NULL);
+        pDocShell->UpdateAllRowHeights();
 }
 
 void ScModelObj::BeforeXMLLoading()
@@ -1108,7 +1108,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, Rec
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference
     }
-    else if ( ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_NAMES ) ||
+    else if ( ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange ) ||
               ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
     {
         bRangeValid = true;             // named range or database range

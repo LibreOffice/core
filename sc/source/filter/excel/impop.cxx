@@ -545,7 +545,7 @@ void ImportExcel::Array25()
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert(pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
+        pFormConv->Convert(pErgebnis, maStrm, nFormLen, true);
 
         SAL_WARN_IF(!pErgebnis, "sc", "*ImportExcel::Array25(): ScTokenArray is NULL!");
     }
@@ -1039,7 +1039,7 @@ void ImportExcel::Array34()
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true );
 
         SAL_WARN_IF(!pErgebnis, "sc", "+ImportExcel::Array34(): ScTokenArray is NULL!");
     }

@@ -2929,7 +2929,7 @@ Size ScPrintFunc::GetDocPageSize()
 void ScPrintFunc::ResetBreaks( SCTAB nTab )         // Set Breaks correctly for view
 {
     pDoc->SetPageSize( nTab, GetDocPageSize() );
-    pDoc->UpdatePageBreaks( nTab, NULL );
+    pDoc->UpdatePageBreaks( nTab );
 }
 
 static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
@@ -2976,7 +2976,7 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     }
     else
     {
-        pDoc->UpdatePageBreaks( nPrintTab, NULL );      // else, end is marked
+        pDoc->UpdatePageBreaks( nPrintTab );      // else, end is marked
     }
 
     const size_t nRealCnt = nEndRow-nStartRow+1;

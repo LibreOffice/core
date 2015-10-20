@@ -75,7 +75,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
     : bEnabled(true)
 {
 
-    if ( pGlobalProgress || SfxProgress::GetActiveProgress( NULL ) )
+    if ( pGlobalProgress || SfxProgress::GetActiveProgress() )
     {
         if ( lcl_IsHiddenDocument(pObjSh) )
         {

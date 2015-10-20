@@ -971,7 +971,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SvMemoryStream aStream;
                     aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
                     ScImportExport::SetNoEndianSwap( aStream );
-                    aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
+                    aExport.ExportStream( aStream, OUString() );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
@@ -996,7 +996,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aImport.SetImportBroadcast( true );
                         aImport.SetOverwriting( true );
                         aStream.Seek( 0 );
-                        aImport.ImportStream( aStream, OUString(), SotClipboardFormatId::STRING );
+                        aImport.ImportStream( aStream, OUString() );
 
                         pDocSh->GetUndoManager()->LeaveListAction();
                     }

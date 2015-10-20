@@ -1306,7 +1306,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
             {
                 EditEngine& rEngine = pDoc->GetEditEngine();
                 rEngine.SetText(*pData);
-                return rEngine.GetText(LINEEND_LF);
+                return rEngine.GetText();
             }
             //  also don't format EditCells per NumberFormatter
         }

@@ -45,7 +45,7 @@ bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUStr
 
     EditEngine& rEngine = pDoc->GetEditEngine();
     rEngine.SetText(rData);
-    rVal = rEngine.GetText( LINEEND_LF );
+    rVal = rEngine.GetText();
     return ( rEngine.GetParagraphCount() > 1 );
 }
 
@@ -265,7 +265,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
             return;
 
         SCROW nFirstRow = rRow;
-        if (RowFiltered(rRow, &nFirstRow, NULL))
+        if (RowFiltered(rRow, &nFirstRow))
             // move to the first non-filtered row.
             rRow = nFirstRow - 1;
         else

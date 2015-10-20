@@ -324,7 +324,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     // also adjusted )
                     Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
 
-                    bool bRet = pView->BegCreateObj(aMDPos, nullptr);
+                    bool bRet = pView->BegCreateObj(aMDPos);
                     if ( bRet )
                     pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }

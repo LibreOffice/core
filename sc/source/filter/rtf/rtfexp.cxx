@@ -179,7 +179,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
             {
                 EditEngine& rEngine = GetEditEngine();
                 rEngine.SetText(*pObj);
-                aContent = rEngine.GetText(LINEEND_LF); // LineFeed in between paragraphs!
+                aContent = rEngine.GetText(); // LineFeed in between paragraphs!
             }
         }
         break;

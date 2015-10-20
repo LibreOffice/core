@@ -1361,7 +1361,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         {
             EditEngine& rEngine = rDoc.GetEditEngine();
             rEngine.SetText(*pData);
-            aVal = rEngine.GetText(LINEEND_LF);
+            aVal = rEngine.GetText();
         }
     }
     else
@@ -3940,7 +3940,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 SCROW nRow = 0;
                 SCTAB nTab = 0;
                 bool bFound = rDoc.SearchAndReplace(
-                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo);
                 if (bFound)
                 {
                     //  bei findAll immer CellRanges, egal wieviel gefunden wurde
@@ -3986,7 +3986,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 OUString aDummyUndo;
                 ScRangeList aMatchedRanges;
                 bool bFound = rDoc.SearchAndReplace(
-                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo);
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
@@ -4987,7 +4987,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         else
         {
             ScRangeUtil aRangeUtil;
-            if ( ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_NAMES ) ||
+            if ( ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange ) ||
                  ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
                 bFound = true;
         }

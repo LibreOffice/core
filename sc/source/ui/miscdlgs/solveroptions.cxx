@@ -472,7 +472,7 @@ double ScSolverValueDialog::GetValue() const
     double fValue = rtl::math::stringToDouble( aInput,
                             pLocaleData->getNumDecimalSep()[0],
                             pLocaleData->getNumThousandSep()[0],
-                            &eStatus, NULL );
+                            &eStatus );
     return fValue;
 }
 

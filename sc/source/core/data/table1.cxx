@@ -1081,7 +1081,7 @@ SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
     {
         nCol--;
         SCCOL nStart = MAXCOL;
-        bool bHidden = pDocument->ColHidden(nCol, nTab, &nStart, nullptr);
+        bool bHidden = pDocument->ColHidden(nCol, nTab, &nStart);
         if(bHidden)
             nCol = nStart - 1;
 
@@ -1124,7 +1124,7 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
         {
             nCol--;
             SCCOL nStartCol = MAXCOL;
-            bool bHidden = pDocument->ColHidden( nCol, nTab, &nStartCol, nullptr );
+            bool bHidden = pDocument->ColHidden( nCol, nTab, &nStartCol );
             if(bHidden)
             {
                 nCol = nStartCol -1;

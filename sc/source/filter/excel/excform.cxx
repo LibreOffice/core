@@ -149,7 +149,7 @@ void ImportExcel::Formula(
         }
     }
 
-    ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
+    ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true );
 
     ScFormulaCell* pCell = NULL;
 

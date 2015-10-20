@@ -87,7 +87,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             // In case there was a micro version, e.g. "1.2.3", this would
             // still yield major.minor, but pParsedEnd (5th parameter, not
             // passed here) would point before string end upon return.
-            double fVer = ::rtl::math::stringToDouble( aVer, '.', 0, NULL, NULL);
+            double fVer = ::rtl::math::stringToDouble( aVer, '.', 0 );
             if (fVer < 1.2)
                 eGrammar = formula::FormulaGrammar::GRAM_PODF;
         }

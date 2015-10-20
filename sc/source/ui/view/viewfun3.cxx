@@ -682,8 +682,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 return;
 
             PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                GetViewData().GetCurX(), GetViewData().GetCurY(),
-                NULL );
+                GetViewData().GetCurX(), GetViewData().GetCurY() );
         }
     }
 }
@@ -911,7 +910,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bPasteDraw )
         {
             aTransShellRef = new ScDocShell;        // DocShell needs a Ref immediately
-            aTransShellRef->DoInitNew(NULL);
+            aTransShellRef->DoInitNew();
         }
         ScDrawLayer::SetGlobalDrawPersist(aTransShellRef);
 
@@ -1691,7 +1690,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     {
         pDoc->CopyFromClip(
             *aRanges[i], aMark, (nFlags & ~IDF_OBJECTS), NULL, pClipDoc,
-            false, false, true, bSkipEmpty, NULL);
+            false, false, true, bSkipEmpty);
     }
 
     if (pMixDoc.get())
@@ -1709,7 +1708,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         {
             pDoc->CopyFromClip(
                 *aRanges[i], aMark, IDF_OBJECTS, NULL, pClipDoc,
-                false, false, true, bSkipEmpty, NULL);
+                false, false, true, bSkipEmpty);
         }
     }
 

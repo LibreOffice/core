@@ -377,7 +377,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         if ( aHelpText.isEmpty() )                                 // Text-URL
         {
             OUString aUrl;
-            if ( GetEditUrl( aPosPixel, NULL, &aUrl, NULL ) )
+            if ( GetEditUrl( aPosPixel, NULL, &aUrl ) )
             {
                 aHelpText = INetURLObject::decode( aUrl,
                     INetURLObject::DECODE_UNAMBIGUOUS );

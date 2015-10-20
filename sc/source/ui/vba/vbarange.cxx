@@ -541,7 +541,7 @@ public:
         {
 
             SfxItemSet* pDataSet =  excel::ScVbaCellRangeAccess::GetDataSet( pUnoCellRange );
-            SfxItemState eState = pDataSet->GetItemState( ATTR_VALUE_FORMAT, true, NULL);
+            SfxItemState eState = pDataSet->GetItemState( ATTR_VALUE_FORMAT);
             // one of the cells in the range is not like the other ;-)
             // so return a zero length format to indicate that
             if ( eState == SfxItemState::DONTCARE )
@@ -2659,7 +2659,7 @@ ScVbaRange::getWrapText() throw (script::BasicErrorException, uno::RuntimeExcept
 
     SfxItemSet* pDataSet = getCurrentDataSet();
 
-    SfxItemState eState = pDataSet->GetItemState( ATTR_LINEBREAK, true, NULL);
+    SfxItemState eState = pDataSet->GetItemState( ATTR_LINEBREAK);
     if ( eState == SfxItemState::DONTCARE )
         return aNULL();
 
