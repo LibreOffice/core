@@ -45,12 +45,9 @@ public class _XLoadable extends MultiMethodTest {
     * Listener implementation which sets flags on appropriate method calls
     */
     protected static class TestLoadListener implements com.sun.star.form.XLoadListener {
-        public boolean disposingCalled = false ;
         public boolean loadedCalled = false ;
         public boolean reloadedCalled = false ;
-        public boolean reloadingCalled = false ;
         public boolean unloadedCalled = false ;
-        public boolean unloadingCalled = false ;
         private final java.io.PrintWriter log;
 
         public TestLoadListener(java.io.PrintWriter log) {
@@ -58,7 +55,6 @@ public class _XLoadable extends MultiMethodTest {
         }
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
             log.println(" disposing was called.") ;
         }
 
@@ -73,7 +69,6 @@ public class _XLoadable extends MultiMethodTest {
         }
 
         public void reloading(com.sun.star.lang.EventObject e) {
-            reloadingCalled = true ;
             log.println(" reloading was called.") ;
         }
 
@@ -83,7 +78,6 @@ public class _XLoadable extends MultiMethodTest {
         }
 
         public void unloading(com.sun.star.lang.EventObject e) {
-            unloadingCalled = true ;
             log.println(" unloading was called.") ;
         }
     }
