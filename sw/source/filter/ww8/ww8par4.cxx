@@ -156,7 +156,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         OSL_ENSURE( !pSt, "+OLE: size of 0?" );
         return false;
     }
-    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL );   // read WMF
+    bool bOk = ReadWindowMetafile( *pSt, rWMF );   // read WMF
                     // *pSt >> aWMF  doesn't work without the placable header
     if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {
@@ -348,8 +348,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     aSrcStgName += OUString::number( m_nObjLocFc );
 
     tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(OUString(SL::aObjectPool));
-    tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
-            STREAM_READWRITE| StreamMode::SHARE_DENYALL );
+    tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( aSrcStgName );
 
     if (pGrf)
     {

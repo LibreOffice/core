@@ -841,7 +841,7 @@ void SwUndoSaveSection::SaveSection(
     // Keep positions as SwIndex so that this section can be deleted in DTOR
     sal_uLong nEnd;
     pMvStt = new SwNodeIndex( rRange.aStart );
-    MoveToUndoNds(aPam, pMvStt, &nEnd, 0);
+    MoveToUndoNds(aPam, pMvStt, &nEnd);
     nMvLen = nEnd - pMvStt->GetIndex() + 1;
 }
 
@@ -870,7 +870,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     {
         SwPosition aInsPos( rInsPos );
         sal_uLong nEnd = pMvStt->GetIndex() + nMvLen - 1;
-        MoveFromUndoNds(*pDoc, pMvStt->GetIndex(), aInsPos, &nEnd, 0);
+        MoveFromUndoNds(*pDoc, pMvStt->GetIndex(), aInsPos, &nEnd);
 
         // destroy indices again, content was deleted from UndoNodes array
         DELETEZ( pMvStt );

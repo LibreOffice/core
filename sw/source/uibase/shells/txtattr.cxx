@@ -236,7 +236,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             else
                 vItems = rWrtSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );
 
-            rWrtSh.StartUndo( UNDO_INSATTR, NULL);
+            rWrtSh.StartUndo( UNDO_INSATTR );
             for( std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >& iPair : vItems )
             {
                 std::unique_ptr<SwPaM> pPaM = std::move(iPair.second);
@@ -265,7 +265,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                         rWrtSh.SetAttrSet( aAttrSet, SetAttrMode::DEFAULT, pPaM.get() );
                 }
             }
-            rWrtSh.EndUndo( UNDO_INSATTR, NULL);
+            rWrtSh.EndUndo( UNDO_INSATTR );
             rReq.Done();
         }
         break;

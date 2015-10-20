@@ -191,7 +191,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     if (pSh)
     {
         SwPaM* pShellCrsr = pSh->GetCrsr();
-        nCurrentPage = pShellCrsr->GetPageNum(true, 0);
+        nCurrentPage = pShellCrsr->GetPageNum();
     }
     else if (!bSwSrcView)
     {
@@ -900,8 +900,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
             nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
-                        !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0,
-                        0 );
+                        !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0 );
         }
         else if(pSearch->bStyles)
         {

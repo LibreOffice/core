@@ -368,7 +368,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         break;
         case ContentTypeId::REFERENCE:
         {
-            nMemberCount = pWrtShell->GetRefMarks( 0 );
+            nMemberCount = pWrtShell->GetRefMarks();
             bDelete = false;
         }
         break;

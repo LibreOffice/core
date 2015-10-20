@@ -1082,7 +1082,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                         OSL_ENSURE( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
                         pUp = static_cast<SwLayoutFrm*>(pUp->Lower());
                     }
-                    pNew->Paste( pUp, NULL );
+                    pNew->Paste( pUp );
                     // #i27138#
                     // notify accessibility paragraphs objects about changed
                     // CONTENT_FLOWS_FROM/_TO relation.

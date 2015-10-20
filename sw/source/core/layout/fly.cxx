@@ -500,7 +500,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
             if( (pInva->Frm().*fnRect->fnBottomDist)( nBottom ) <= 0 )
             {
                 pInva->InvalidateSize();
-                pInva->Prepare( PREP_CLEAR );
+                pInva->Prepare();
                 pInva = pInva->FindPrev();
             }
             else

@@ -1940,7 +1940,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
                 const sal_Int32 nEnd = pTextNode->GetText().getLength();
                 SwDocStat aStat;
                 pTextNode->CountWords( aStat, 0, nEnd );
-                if ( Application::AnyInput( VCL_INPUT_ANY ) )
+                if ( Application::AnyInput() )
                     return true;
                 break;
             }

@@ -649,9 +649,9 @@ void SwInsertConfig::ImplCommit()
         const InsCaptionOpt* pOLEDrawOpt = 0;
         if(pCapOptions)
         {
-            pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
-            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
-            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
+            pWriterTableOpt = pCapOptions->Find(TABLE_CAP);
+            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP);
+            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP);
             pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
             pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
             pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
@@ -883,9 +883,9 @@ void SwInsertConfig::Load()
     InsCaptionOpt* pOLEDrawOpt = 0;
     if (pCapOptions)
     {
-        pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
-        pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
-        pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
+        pWriterTableOpt = pCapOptions->Find(TABLE_CAP);
+        pWriterFrameOpt = pCapOptions->Find(FRAME_CAP);
+        pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP);
         pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
         pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
         pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);

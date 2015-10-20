@@ -974,7 +974,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     rSh.StartAllAction();
     bool bUndo = rSh.DoesUndo();
     if( bUndo )
-        rSh.StartUndo( UNDO_EMPTY );
+        rSh.StartUndo();
 
     bool bAsTable = m_pRbAsTable->IsChecked();
     SvNumberFormatter& rNumFormatr = *rSh.GetNumberFormatter();
@@ -1413,7 +1413,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     {
         rSh.DoUndo();
         rSh.AppendUndoForInsertFromDB( bAsTable );
-        rSh.EndUndo( UNDO_EMPTY );
+        rSh.EndUndo();
     }
     rSh.ClearMark();
     rSh.EndAllAction();

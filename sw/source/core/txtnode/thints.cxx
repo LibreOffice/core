@@ -1932,7 +1932,7 @@ bool SwTextNode::SetAttr(
                      static_cast<const SwFormatCharFormat*>(pItem)->GetCharFormat()))
                 {
                     SwIndex aIndex( this, nStt );
-                    RstTextAttr( aIndex, nEnd - nStt, RES_TXTATR_CHARFMT, 0 );
+                    RstTextAttr( aIndex, nEnd - nStt, RES_TXTATR_CHARFMT );
                     DontExpandFormat( aIndex );
                 }
                 else

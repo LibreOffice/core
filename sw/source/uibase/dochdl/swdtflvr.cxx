@@ -597,7 +597,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 SwDocShell* pNewDocSh = new SwDocShell( pDoc,
                                          SfxObjectCreateMode::EMBEDDED );
                 m_aDocShellRef = pNewDocSh;
-                m_aDocShellRef->DoInitNew( NULL );
+                m_aDocShellRef->DoInitNew();
                 SwTransferable::InitOle( m_aDocShellRef, *pDoc );
             }
             bOK = SetObject( &m_aDocShellRef, SWTRANSFER_OBJECTTYPE_SWOLE,
@@ -826,7 +826,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         m_pClpDocFac = new SwDocFac;
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
         m_aDocShellRef = new SwDocShell( pDoc, SfxObjectCreateMode::EMBEDDED);
-        m_aDocShellRef->DoInitNew( NULL );
+        m_aDocShellRef->DoInitNew();
         m_pWrtShell->Copy( pDoc );
 
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
@@ -1056,7 +1056,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
 
     pCDoc->getIDocumentFieldsAccess().LockExpFields();   // never update fields - leave text as it is
 
-    pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
+    pCDoc->InsertGlossary( rGlossary, rStr, aPam );
 
     // a new one was created in CORE (OLE-Objects copied!)
     m_aDocShellRef = pCDoc->GetTmpDocShell();

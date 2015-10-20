@@ -289,7 +289,7 @@ void SwPageFrm::CheckGrid( bool bInvalidate )
             SwContentFrm* pFrm = pBody->ContainsContent();
             while( pBody->IsAnLower( pFrm ) )
             {
-                static_cast<SwTextFrm*>(pFrm)->Prepare( PREP_CLEAR );
+                static_cast<SwTextFrm*>(pFrm)->Prepare();
                 pFrm = pFrm->GetNextContentFrm();
             }
         }

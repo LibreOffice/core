@@ -875,7 +875,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwNodeIndex aIdx( m_pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
-        const SwRect aPageRect = pNd->FindPageFrmRect( false, 0 );
+        const SwRect aPageRect = pNd->FindPageFrmRect();
         return aPageRect.SVRect();
     }
     return SfxObjectShell::GetVisArea( nAspect );
@@ -1115,7 +1115,7 @@ void SwDocShell::LoadingFinished()
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( m_pDoc->getIDocumentState().IsModified() && m_pDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
-    FinishedLoading( SfxLoadedFlags::ALL );
+    FinishedLoading();
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {

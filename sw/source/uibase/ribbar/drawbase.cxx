@@ -199,7 +199,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
                 if (!m_pSh->IsSelFrmMode())
-                    m_pSh->EnterSelFrmMode(NULL);
+                    m_pSh->EnterSelFrmMode();
 
                 if( (bReturn = m_pSh->BeginMark(m_aStartPos)) )
                     m_pWin->SetDrawAction(true);

@@ -1376,7 +1376,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection *const pTOX =
-        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0 );
+        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase );
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 

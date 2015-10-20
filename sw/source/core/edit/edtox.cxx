@@ -111,7 +111,7 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, bool bReadonly)
 
     SwSectionData aSectionData(rTOXSect);
     aSectionData.SetProtectFlag(bReadonly);
-    UpdateSection( GetSectionFormatPos( *rTOXSect.GetFormat()  ), aSectionData, 0 );
+    UpdateSection( GetSectionFormatPos( *rTOXSect.GetFormat()  ), aSectionData );
 }
 
 const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )

@@ -988,7 +988,7 @@ bool SwContentFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             // 4. The spacing for TextFrms corresponds to the interline lead,
             //    at a minimum.
 
-            nUpper = CalcUpperSpace( &rAttrs, NULL );
+            nUpper = CalcUpperSpace( &rAttrs );
 
             SwTwips nLower = CalcLowerSpace( &rAttrs );
             if (IsCollapse()) {

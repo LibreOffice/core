@@ -284,7 +284,7 @@ bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
                     OSL_ENSURE( !pMyFollow->GetPrev(), "SwTextFrm::CalcFollow: cheesy follow" );
                     if( pMyFollow->GetPrev() )
                     {
-                        pMyFollow->Prepare( PREP_CLEAR );
+                        pMyFollow->Prepare();
                         pMyFollow->Calc(pRenderContext);
                         OSL_ENSURE( !pMyFollow->GetPrev(), "SwTextFrm::CalcFollow: very cheesy follow" );
                     }
@@ -797,7 +797,7 @@ bool SwTextFrm::CalcPreps()
                 if( bPrepMustFit )
                 {
                     GetFollow()->SetJustWidow( true );
-                    GetFollow()->Prepare( PREP_CLEAR );
+                    GetFollow()->Prepare();
                 }
                 else if ( bVert )
                 {
@@ -823,7 +823,7 @@ bool SwTextFrm::CalcPreps()
                 nChgHeight = (Prt().*fnRect->fnGetHeight)() - nChgHeight;
 
                 GetFollow()->SetJustWidow( true );
-                GetFollow()->Prepare( PREP_CLEAR );
+                GetFollow()->Prepare();
                 Shrink( nChgHeight );
                 SwRect &rRepaint = pPara->GetRepaint();
 

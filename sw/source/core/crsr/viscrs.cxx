@@ -131,7 +131,7 @@ void SwVisCrsr::_SetPosAndShow()
     }
 
     // check if cursor should show the current cursor bidi level
-    m_aTextCrsr.SetDirection( CursorDirection::NONE );
+    m_aTextCrsr.SetDirection();
     const SwCursor* pTmpCrsr = m_pCrsrShell->_GetCrsr();
 
     if ( pTmpCrsr && !m_pCrsrShell->IsOverwriteCrsr() )

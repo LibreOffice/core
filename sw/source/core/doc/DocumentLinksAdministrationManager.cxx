@@ -75,7 +75,7 @@ namespace
                     ::sfx2::SvBaseLinkRef xLink = pLnk;
 
                     OUString sFName;
-                    sfx2::LinkManager::GetDisplayNames( xLink, 0, &sFName, 0, 0 );
+                    sfx2::LinkManager::GetDisplayNames( xLink, 0, &sFName );
 
                     INetURLObject aURL( sFName );
                     if( INetProtocol::File == aURL.GetProtocol() ||

@@ -2955,7 +2955,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Po
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
-                const SwRect aPageRect = pParTextNode->FindPageFrmRect( false, 0 );
+                const SwRect aPageRect = pParTextNode->FindPageFrmRect();
 
                 aOffset = rFrameFormat.FindLayoutRect().Pos();
                 aOffset -= aPageRect.Pos();

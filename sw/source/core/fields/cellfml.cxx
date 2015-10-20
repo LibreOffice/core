@@ -201,7 +201,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         {
             const SwTextInputField * pTextInputField =
                 dynamic_cast< const SwTextInputField* >(
-                    pTextNd->GetTextAttrAt( nSttPos, RES_TXTATR_INPUTFIELD, SwTextNode::DEFAULT ) );
+                    pTextNd->GetTextAttrAt( nSttPos, RES_TXTATR_INPUTFIELD ) );
             if ( pTextInputField == NULL )
                 break;
             nRet = rCalcPara.rCalc.Calculate( pTextInputField->GetFieldContent() ).GetDouble();

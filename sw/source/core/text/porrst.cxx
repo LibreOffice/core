@@ -154,9 +154,9 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
             OUString aTextDouble("  ");
 
             SwRect aClipRect;
-            rInf.CalcRect( *this, &aClipRect, 0 );
+            rInf.CalcRect( *this, &aClipRect );
             SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
-            aClip.ChgClip( aClipRect, 0 );
+            aClip.ChgClip( aClipRect );
             rInf.DrawText( aTextDouble, *this, 0, 2, true );
         }
     }

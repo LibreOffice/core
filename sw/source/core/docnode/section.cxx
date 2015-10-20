@@ -1161,7 +1161,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         {
             // It's in the Section, so update. But only if it's not in the same File!
             OUString sFName;
-            sfx2::LinkManager::GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
+            sfx2::LinkManager::GetDisplayNames( pBLink, 0, &sFName );
             if( sFName != sName )
             {
                 pBLink->DataChanged( sMimeType, aValue );
@@ -1351,7 +1351,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if ( pSrcDoc != pDoc &&
                      rSection.IsProtectFlag() )
                 {
-                    pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false, true, false, 0 );
+                    pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false );
                 }
 
                 if( pCpyRg )

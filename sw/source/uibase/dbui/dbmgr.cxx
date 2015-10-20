@@ -545,7 +545,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
     {
         {
             pSh->StartAllAction();
-            pSh->StartUndo(UNDO_EMPTY);
+            pSh->StartUndo();
             bool bGroupUndo(pSh->DoesGroupUndo());
             pSh->DoGroupUndo(false);
 
@@ -566,7 +566,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
             }
 
             pSh->DoGroupUndo(bGroupUndo);
-            pSh->EndUndo(UNDO_EMPTY);
+            pSh->EndUndo();
             pSh->EndAllAction();
         }
     }
@@ -1032,7 +1032,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SfxObjectCreateMode::STANDARD );
-                xTargetDocShell->DoInitNew( 0 );
+                xTargetDocShell->DoInitNew();
                 if (nMaxDumpDocs)
                     lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
                 SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
@@ -2100,7 +2100,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             // aNumber is overwritten by SwDBField::FormatValue, so store initial status
             bool colIsNumber = aNumber != DBL_MAX;
             bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFormat,
-                                                       aNumber, nColumnType, NULL );
+                                                       aNumber, nColumnType );
             if( colIsNumber )
             {
                 if( bValidValue )

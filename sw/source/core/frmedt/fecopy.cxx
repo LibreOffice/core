@@ -168,7 +168,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                     rIdx.GetIndex(), RES_TXTATR_FLYCNT));
             if( pTextFly )
             {
-                const_cast<SwFormatFlyCnt&>(pTextFly->GetFlyCnt()).SetFlyFormat( 0 );
+                const_cast<SwFormatFlyCnt&>(pTextFly->GetFlyCnt()).SetFlyFormat();
                 pTextNd->EraseText( rIdx, 1 );
             }
         }
@@ -216,7 +216,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
         bRet = true;
     }
     else
-        bRet = _CopySelToDoc( pClpDoc, 0 );     // copy the selections
+        bRet = _CopySelToDoc( pClpDoc );     // copy the selections
 
     pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)0 );
     pClpDoc->getIDocumentFieldsAccess().UnlockExpFields();

@@ -269,7 +269,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
 
     GDIMetaFile aWMF;
     pSt->Seek( nPosFc );
-    bool bOk = ReadWindowMetafile( *pSt, aWMF, NULL );
+    bool bOk = ReadWindowMetafile( *pSt, aWMF );
 
     if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;

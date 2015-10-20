@@ -255,7 +255,7 @@ void SwFrm::CheckDirChange()
                 pBody->AdjustColumns( pCol, true );
         }
         else if( IsTextFrm() )
-            static_cast<SwTextFrm*>(this)->Prepare( PREP_CLEAR );
+            static_cast<SwTextFrm*>(this)->Prepare();
 
         // #i31698# - notify anchored objects also for page frames.
         // Remove code above for special handling of page frames

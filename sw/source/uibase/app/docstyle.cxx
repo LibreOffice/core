@@ -1401,7 +1401,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwFormat *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0 );
+                    SwFormat *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle );
                     if (pFindFormat)
                     {
                         aCond.RegisterToFormat( *pFindFormat );
@@ -1433,7 +1433,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0 );
+                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle );
                     if (pFindFormat)
                     {
                         pCColl->InsertCondition( SwCollCondition( pFindFormat,
@@ -1445,9 +1445,9 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 pColl = pCColl;
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
-                 rSet.GetItemState( RES_PARATR_NUMRULE, false, 0 ) == SfxItemState::SET &&
-                 rSet.GetItemState( RES_LR_SPACE, false, 0 ) != SfxItemState::SET &&
-                 pColl->GetItemState( RES_LR_SPACE, false, 0 ) == SfxItemState::SET )
+                 rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
+                 rSet.GetItemState( RES_LR_SPACE, false ) != SfxItemState::SET &&
+                 pColl->GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
             {
                 rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
             }

@@ -215,7 +215,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         {
             SwWebGlosDocShell* pDocSh = new SwWebGlosDocShell();
             xDocSh = pDocSh;
-            pDocSh->DoInitNew( 0 );
+            pDocSh->DoInitNew();
             pDocSh->SetLongName( sLongName );
             pDocSh->SetShortName( rShortName);
             pDocSh->SetGroupName( rGroup );
@@ -224,7 +224,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         {
             SwGlosDocShell* pDocSh = new SwGlosDocShell(bShow);
             xDocSh = pDocSh;
-            pDocSh->DoInitNew( 0 );
+            pDocSh->DoInitNew();
             pDocSh->SetLongName( sLongName );
             pDocSh->SetShortName( rShortName );
             pDocSh->SetGroupName( rGroup );

@@ -254,7 +254,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             INetURLObject url;
             url.SetSmartProtocol( INetProtocol::File );
 
-            if ( url.SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
+            if ( url.SetURL( aStrURL ) )
             {
                 OUString aName;
                 comphelper::EmbeddedObjectContainer aCnt;

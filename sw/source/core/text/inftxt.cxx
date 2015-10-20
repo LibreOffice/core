@@ -1082,7 +1082,7 @@ void SwTextPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
 void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const
 {
     SwRect aIntersect;
-    CalcRect( rPor, &aIntersect, 0 );
+    CalcRect( rPor, &aIntersect );
     if ( aIntersect.HasArea() )
     {
         if (OnWin() && SwViewOption::IsFieldShadings() &&

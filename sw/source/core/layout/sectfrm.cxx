@@ -2483,7 +2483,7 @@ SwFootnoteContFrm* SwSectionFrm::ContainsFootnoteCont( const SwFootnoteContFrm* 
 
 void SwSectionFrm::InvalidateFootnotePos()
 {
-    SwFootnoteContFrm* pCont = ContainsFootnoteCont( NULL );
+    SwFootnoteContFrm* pCont = ContainsFootnoteCont();
     if( pCont )
     {
         SwFrm *pTmp = pCont->ContainsContent();

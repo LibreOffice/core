@@ -1130,7 +1130,7 @@ bool SwTableAutoFormatTable::Load()
     bool bRet = false;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
-    if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
+    if( aOpt.SearchFile( sNm ))
     {
         SfxMedium aStream( sNm, STREAM_STD_READ );
         bRet = Load( *aStream.GetInStream() );

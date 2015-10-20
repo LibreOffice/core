@@ -2716,8 +2716,7 @@ void WW8Export::WriteFkpPlcUsw()
          some magic.
         */
         // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
-        xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
-            STREAM_READWRITE | StreamMode::SHARE_DENYALL);
+        xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool));
     }
 
     // dggInfo - escher stream

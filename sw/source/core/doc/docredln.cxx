@@ -1170,8 +1170,7 @@ void SwRangeRedline::MoveToSection()
         }
         else
         {
-            pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ),
-                                            SwNormalStartNode );
+            pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ) );
 
             SwPosition aPos( *pSttNd->EndOfSectionNode() );
             pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
@@ -1243,8 +1242,7 @@ void SwRangeRedline::CopyToSection()
         }
         else
         {
-            pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ),
-                                            SwNormalStartNode );
+            pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ) );
 
             if( pCEndNd )
             {

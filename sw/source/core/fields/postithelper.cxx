@@ -60,7 +60,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 aRet = VISIBLE;
 
                 o_rInfo.mpAnchorFrm = pTextFrm;
-                pTextFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos, 0 );
+                pTextFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos );
                 if ( pAnnotationStartPos != NULL )
                 {
                     o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();

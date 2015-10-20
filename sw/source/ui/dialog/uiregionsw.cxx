@@ -1022,7 +1022,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
 // call dialog paste file
 IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, FileSearchHdl, Button*, void)
 {
-    if(!CheckPasswd(0))
+    if(!CheckPasswd())
         return;
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -1231,7 +1231,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, DDEHdl, Button*, pButton, void )
 IMPL_LINK_TYPED( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
 {
     bool bChange = pBox == m_pPasswdPB;
-    if(!CheckPasswd(0))
+    if(!CheckPasswd())
     {
         if(!bChange)
             m_pPasswdCB->Check(!m_pPasswdCB->IsChecked());
@@ -1284,7 +1284,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
 // editing, with empty string no Ok()
 IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, NameEditHdl, Edit&, void)
 {
-    if(!CheckPasswd(0))
+    if(!CheckPasswd())
         return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
@@ -1302,7 +1302,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, NameEditHdl, Edit&, void)
 IMPL_LINK_TYPED( SwEditRegionDlg, ConditionEditHdl, Edit&, rEdit, void )
 {
     Selection aSelect = rEdit.GetSelection();
-    if(!CheckPasswd(0))
+    if(!CheckPasswd())
         return;
     rEdit.SetSelection(aSelect);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
@@ -2199,7 +2199,7 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
     //set sensible values at the preview
     m_pPreviewWin->SetAdjust(SVX_ADJUST_BLOCK);
     m_pPreviewWin->SetLastLine(SVX_ADJUST_BLOCK);
-    const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, 0 );
+    const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE );
     Size aPageSize(rPageRect.Width(), rPageRect.Height());
     m_pPreviewWin->SetSize(aPageSize);
 }

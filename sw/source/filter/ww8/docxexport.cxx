@@ -370,7 +370,7 @@ OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaTyp
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
-    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj, NULL );
+    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj );
 
     OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
     uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()

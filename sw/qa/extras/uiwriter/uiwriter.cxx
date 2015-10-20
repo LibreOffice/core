@@ -1707,14 +1707,14 @@ void SwUiWriterTest::testSearchWithTransliterate()
     SearchOpt.insertedChars = 0;
     SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     //transliteration option set so that at least one of the search strings is not found
-    sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY);
+    sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END);
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
-    sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY);
+    sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END);
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
@@ -2234,7 +2234,7 @@ void SwUiWriterTest::testTdf83798()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
-    pWrtShell->UpdateTableOf(*pTOXBase, nullptr);
+    pWrtShell->UpdateTableOf(*pTOXBase);
     SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
     pCrsr->SetMark();
     pCrsr->Move(fnMoveForward, fnGoNode);

@@ -663,7 +663,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
         SdrHdl* pHdl = pView->PickHandle( *pPt );
         if (pView->BegDragObj( *pPt, 0, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
         return 1;
     }
     return 0;
@@ -677,7 +677,7 @@ long SwFEShell::Drag( const Point *pPt, bool )
         ScrollTo( *pPt );
         Imp()->GetDrawView()->MovDragObj( *pPt );
         Imp()->GetDrawView()->ShowDragAnchor();
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
         return 1;
     }
     return 0;
@@ -719,7 +719,7 @@ long SwFEShell::EndDrag( const Point *, bool )
         }
 
         GetDoc()->getIDocumentState().SetModified();
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
 
         return 1;
     }
@@ -1510,7 +1510,7 @@ void SwFEShell::MoveCreate( const Point &rPos )
     {
         ScrollTo( rPos );
         Imp()->GetDrawView()->MovCreateObj( rPos );
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
     }
 }
 
@@ -1535,7 +1535,7 @@ bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
 
     if ( (SdrCreateCmd)eSdrCreateCmd == SDRCREATE_NEXTPOINT )
     {
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
         return true;
     }
     return ImpEndCreate();
@@ -1564,7 +1564,7 @@ bool SwFEShell::ImpEndCreate()
         // OD 2004-04-05 #i26791# - direct object positioning for group members
         rSdrObj.NbcSetRelativePos( aTmpPos - aNewAnchor );
         rSdrObj.NbcSetAnchorPos( aNewAnchor );
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
         return true;
     }
 
@@ -2040,7 +2040,7 @@ void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
 
         EndAllAction();
 
-        ::FrameNotify( this, FLY_DRAG );
+        ::FrameNotify( this );
     }
 }
 

@@ -700,7 +700,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 sal_uInt8 nPara = pDlg->GetPara();
                 SwDoc* pSmryDoc = new SwDoc();
                 SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SfxObjectCreateMode::STANDARD));
-                xDocSh->DoInitNew( 0 );
+                xDocSh->DoInitNew();
 
                 bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
                 m_pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );

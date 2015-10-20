@@ -67,7 +67,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
         0, nAppFontUnits
     };
 
-    m_pGroupTLB->SetTabs( &nTabs[0], MAP_APPFONT );
+    m_pGroupTLB->SetTabs( &nTabs[0] );
     m_pGroupTLB->SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
     m_pGroupTLB->GetModel()->SetSortMode(SortAscending);
     m_pNewPB->SetClickHdl(LINK(this, SwGlossaryGroupDlg, NewHdl));

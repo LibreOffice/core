@@ -210,8 +210,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        OUString(SL::aObjectPool), STREAM_READWRITE |
-        StreamMode::SHARE_DENYALL );
+        OUString(SL::aObjectPool) );
 
     if( xObjStg.Is()  )
     {
@@ -232,8 +231,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             Set_UInt32(pDataAdr, nPictureId);
             OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
-            tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName,
-                                STREAM_READWRITE| StreamMode::SHARE_DENYALL );
+            tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName );
             if( xOleStg.Is() )
             {
                 /*
@@ -328,13 +326,11 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
     tools::SvRef<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        OUString(SL::aObjectPool), STREAM_READWRITE |
-        StreamMode::SHARE_DENYALL );
+        OUString(SL::aObjectPool) );
 
     if( xObjStg.Is() && xObjSrc.Is() )
     {
-        tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId,
-                STREAM_READWRITE | StreamMode::SHARE_DENYALL );
+        tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
         if ( xOleDst.Is() )
             xObjSrc->CopyTo( xOleDst );
 

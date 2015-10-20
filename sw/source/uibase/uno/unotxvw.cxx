@@ -645,7 +645,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess().getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellLock xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SfxObjectCreateMode::STANDARD ) );
-    xDocSh->DoInitNew( 0 );
+    xDocSh->DoInitNew();
     SwDoc *const pTempDoc( pDocSh->GetDoc() );
     // #i103634#, #i112425#: do not expand numbering and fields on PDF export
     pTempDoc->SetClipBoard(true);
@@ -1314,7 +1314,7 @@ sal_Int16 SwXTextViewCursor::getPage()
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        nRet = static_cast<sal_Int16>(pShellCrsr->GetPageNum( true, 0 ));
+        nRet = static_cast<sal_Int16>(pShellCrsr->GetPageNum());
     }
     else
         throw uno::RuntimeException();

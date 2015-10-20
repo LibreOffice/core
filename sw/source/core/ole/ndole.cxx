@@ -267,7 +267,7 @@ bool SwOLENode::RestorePersistentData()
             // What happens to this document?
             OSL_ENSURE( false, "Why are we creating a DocShell here?" );
             p = new SwDocShell( GetDoc(), SfxObjectCreateMode::INTERNAL );
-            p->DoInitNew( NULL );
+            p->DoInitNew();
         }
 
         uno::Reference < container::XChild > xChild( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
@@ -427,7 +427,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // the created document will be closed by pDoc ( should use SfxObjectShellLock )
         pPersistShell = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
         pDoc->SetTmpDocShell( pPersistShell );
-        pPersistShell->DoInitNew( NULL );
+        pPersistShell->DoInitNew();
     }
 
     // We insert it at SvPersist level
@@ -519,7 +519,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
     if ( mpObjectLink )
     {
         OUString aNewLinkURL;
-        sfx2::LinkManager::GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( mpObjectLink, 0, &aNewLinkURL );
         if ( !aNewLinkURL.equalsIgnoreAsciiCase( maLinkURL ) )
         {
             if ( !aOLEObj.xOLERef.is() )
@@ -609,7 +609,7 @@ void SwOLENode::CheckFileLink_Impl()
                     // this is a file link so the model link manager should handle it
                     mpObjectLink = new SwEmbedObjectLink( this );
                     maLinkURL = aLinkURL;
-                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
+                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
                     mpObjectLink->Connect();
                 }
             }
@@ -730,7 +730,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
             // What happens to the document?
             OSL_ENSURE( false, "Why are we creating a DocShell here??" );
             p = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
-            p->DoInitNew( NULL );
+            p->DoInitNew();
         }
 
         OUString aObjName;

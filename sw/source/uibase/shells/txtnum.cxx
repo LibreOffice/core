@@ -151,7 +151,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                              // #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
-            const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
+            const bool bRightToLeft = GetShell().IsInRightToLeftText();
 
             if ( bHtml || bRightToLeft )
             {

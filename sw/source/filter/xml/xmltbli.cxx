@@ -2771,7 +2771,7 @@ void SwXMLTableContext::MakeTable()
     pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
     pBoxFormat = static_cast<SwTableBoxFormat*>(pBox1->GetFrameFormat());
 
-    _MakeTable( 0 );
+    _MakeTable();
 
     if( bSetHoriOrient )
         pFrameFormat->SetFormatAttr( SwFormatHoriOrient( 0, eHoriOrient ) );

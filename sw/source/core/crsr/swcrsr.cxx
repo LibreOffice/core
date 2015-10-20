@@ -70,7 +70,7 @@ struct _PercentHdl
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;
         }
-        ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd, 0 );
+        ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd );
     }
 
     explicit _PercentHdl( const SwPaM& rPam )

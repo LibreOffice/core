@@ -2726,7 +2726,7 @@ SdrObject* SwFrameFormat::FindRealSdrObject()
     {
         Point aNullPt;
         SwFlyFrm* pFly = static_cast<SwFlyFrm*>(::GetFrmOfModify( 0, *this, FRM_FLY,
-                                                    &aNullPt, 0 ));
+                                                    &aNullPt ));
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
     return FindSdrObject();

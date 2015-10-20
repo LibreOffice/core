@@ -577,8 +577,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
-        tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName,
-            STREAM_READWRITE| StreamMode::SHARE_DENYALL );
+        tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName );
         OSL_ENSURE(rReader.m_pFormImpl, "No Form Implementation!");
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
         if ( (!(rReader.m_bIsHeader || rReader.m_bIsFooter)) &&
@@ -6083,7 +6082,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    xDocSh->DoInitNew(0);
+    xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
     SwNodeIndex aIdx(

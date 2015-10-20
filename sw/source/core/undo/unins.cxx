@@ -811,13 +811,13 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 
     if( pOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString(), 0, 0 );
+        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString() );
         delete pOldNm;
         delete pOldFltr;
     }
     else
     {
-        pGrfNd->ReRead( OUString(), OUString(), pOldGrf, 0 );
+        pGrfNd->ReRead( OUString(), OUString(), pOldGrf );
         delete pOldGrf;
     }
 

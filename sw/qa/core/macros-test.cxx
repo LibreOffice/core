@@ -464,7 +464,7 @@ void SwMacrosTest::testFindReplace()
 
     // find newline on 1st paragraph
     bool bFound = pPaM->Find(
-            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_BODY);
+            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetText());

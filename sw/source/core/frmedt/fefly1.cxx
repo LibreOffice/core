@@ -523,7 +523,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                         {
                             SwPosition pos = *aAnch.GetContentAnchor();
                             Point aTmpPnt( rAbsPos );
-                            if( pTextFrm->GetCrsrOfst( &pos, aTmpPnt, NULL ) )
+                            if( pTextFrm->GetCrsrOfst( &pos, aTmpPnt ) )
                             {
                                 SwRect aTmpRect;
                                 pTextFrm->GetCharRect( aTmpRect, pos );

@@ -1885,7 +1885,7 @@ SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
     bool bSelect = false;
 
     // First try: Do we get the row/col move cursor?
-    const SwCellFrm* pFrm = static_cast<const SwCellFrm*>(GetBox( rPt, &bRow, 0 ));
+    const SwCellFrm* pFrm = static_cast<const SwCellFrm*>(GetBox( rPt, &bRow ));
 
     if ( !pFrm )
     {

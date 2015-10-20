@@ -161,7 +161,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     if (!mvPostItFields.empty())
     {
         mbWaitingForCalcRects = true;
-        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
+        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl) );
     }
 }
 
@@ -262,7 +262,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
             {
                 mbWaitingForCalcRects = true;
-                mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
+                mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl) );
             }
         }
     }
@@ -288,7 +288,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
                     {
                         mbWaitingForCalcRects = true;
-                        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
+                        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl) );
                     }
                 }
                 break;

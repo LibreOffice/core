@@ -911,7 +911,7 @@ void NewXForms( SfxRequest& rReq )
 
     // create new document
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD) );
-    xDocSh->DoInitNew( 0 );
+    xDocSh->DoInitNew();
 
     // initialize XForms
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );

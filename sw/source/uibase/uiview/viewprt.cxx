@@ -232,7 +232,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             //#i61455# if master documentes are printed silently without loaded links then update the links now
             if( bSilent && pSh->IsGlobalDoc() && !pSh->IsGlblDocSaveLinks() )
             {
-                pSh->GetLinkManager().UpdateAllLinks( false, false, false, 0 );
+                pSh->GetLinkManager().UpdateAllLinks( false, false );
             }
             SfxRequest aReq( rReq );
             SfxBoolItem aBool(SID_SELECTION, bPrintSelection);

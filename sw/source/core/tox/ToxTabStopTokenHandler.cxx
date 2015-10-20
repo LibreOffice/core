@@ -106,7 +106,7 @@ DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNod
     if (!pageDescription) {
         return false;
     }
-    const SwFrm* pFrm = targetNode.getLayoutFrm(currentLayout, 0, 0);
+    const SwFrm* pFrm = targetNode.getLayoutFrm(currentLayout);
     if (!pFrm) {
         return false;
     }

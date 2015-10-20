@@ -623,7 +623,7 @@ void SwTextFrm::HideAndShowObjects()
                     sal_Int32 nHiddenStart;
                     sal_Int32 nHiddenEnd;
                     const sal_Int32 nObjAnchorPos = pContact->GetContentAnchorIndex().GetIndex();
-                    SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
+                    SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd );
                     // #120729# - hotfix
                     // under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
@@ -918,7 +918,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         if( nWhich == RES_FMT_CHG && getRootFrm()->GetCurrShell() )
         {
             // collection has changed
-            Prepare( PREP_CLEAR );
+            Prepare();
             _InvalidatePrt();
             lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             SetDerivedR2L( false );
@@ -961,7 +961,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     if( nPos )
                         InvalidateSize();
                     else
-                        Prepare( PREP_CLEAR );
+                        Prepare();
                 }
                 else
                     _InvalidateRange( SwCharRange( nPos, nLen ), nLen );
@@ -1170,7 +1170,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 if ( GetPrev() )
                     CheckKeep();
-                Prepare( PREP_CLEAR );
+                Prepare();
                 InvalidateSize();
                 nClear |= 0x08;
                 --nCount;
@@ -1243,7 +1243,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 if( getRootFrm()->GetCurrShell() )
                 {
-                    Prepare( PREP_CLEAR );
+                    Prepare();
                     _InvalidatePrt();
                 }
 
@@ -1316,7 +1316,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         case RES_PARATR_SPLIT:
             if ( GetPrev() )
                 CheckKeep();
-            Prepare( PREP_CLEAR );
+            Prepare();
             bSetFieldsDirty = true;
             break;
         case RES_FRAMEDIR :
@@ -1325,7 +1325,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             break;
         default:
         {
-            Prepare( PREP_CLEAR );
+            Prepare();
             _InvalidatePrt();
             if ( !nWhich )
             {

@@ -279,7 +279,7 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
             pItem->Which() == RES_CHRATR_POSTURE ||
             pItem->Which() == RES_CHRATR_CJK_POSTURE ||
             pItem->Which() == RES_CHRATR_CTL_POSTURE) {
-            SfxPoolItem* clonedItem = pItem->Clone(NULL);
+            SfxPoolItem* clonedItem = pItem->Clone();
             retval->Put(*clonedItem);
         }
         if (aIter.IsAtEnd()) {

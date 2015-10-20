@@ -3883,8 +3883,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     nWidth /=7;
     --nWidth;
     for(sal_uInt16 i = 1; i < 8; i++)
-        InsertDataColumn( i, *aTitles[i - 1], nWidth,
-                          HeaderBarItemBits::STDSTYLE );
+        InsertDataColumn( i, *aTitles[i - 1], nWidth );
 }
 
 SwEntryBrowseBox::~SwEntryBrowseBox()

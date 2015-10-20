@@ -230,7 +230,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         return pFilter;
     }
 
-    return SwIoSystem::GetFilterOfFormat(FILTER_TEXT, 0);
+    return SwIoSystem::GetFilterOfFormat(FILTER_TEXT);
 }
 
 bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,

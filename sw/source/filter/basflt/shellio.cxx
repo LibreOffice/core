@@ -500,7 +500,7 @@ SwDoc* Reader::GetTemplateDoc()
                     SwDocShell *pDocSh =
                         new SwDocShell ( SfxObjectCreateMode::INTERNAL );
                     SfxObjectShellLock xDocSh = pDocSh;
-                    if( pDocSh->DoInitNew( 0 ) )
+                    if( pDocSh->DoInitNew() )
                     {
                         pTemplate = pDocSh->GetDoc();
                         pTemplate->SetOle2Link( Link<bool,void>() );

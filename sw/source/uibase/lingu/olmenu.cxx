@@ -218,8 +218,8 @@ void SwSpellPopup::fillLangPopupMenu(
     if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == aCurLang )
         pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET );
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), MenuItemBits::NONE );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), MenuItemBits::NONE );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )) );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )) );
 }
 
 OUString RetrieveLabelFromCommand( const OUString& aCmdURL )

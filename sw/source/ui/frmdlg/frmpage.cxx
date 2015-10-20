@@ -2235,14 +2235,14 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         m_pAutoHeightCB->Check( bCheck );
         HandleAutoCB( bCheck, *m_pHeightFT, *m_pHeightAutoFT, *m_aWidthED.get() );
         if( eSize == ATT_VAR_SIZE )
-            m_aHeightED.SetValue( m_aHeightED.GetMin(), FUNIT_NONE );
+            m_aHeightED.SetValue( m_aHeightED.GetMin() );
 
         eSize = rSize.GetWidthSizeType();
         bCheck = eSize != ATT_FIX_SIZE;
         m_pAutoWidthCB->Check( bCheck );
         HandleAutoCB( bCheck, *m_pWidthFT, *m_pWidthAutoFT, *m_aWidthED.get() );
         if( eSize == ATT_VAR_SIZE )
-            m_aWidthED.SetValue( m_aWidthED.GetMin(), FUNIT_NONE );
+            m_aWidthED.SetValue( m_aWidthED.GetMin() );
 
         if ( !bFormat )
         {

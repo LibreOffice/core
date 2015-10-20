@@ -3086,7 +3086,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     if (rpOurNewObject)
     {
         if (!m_bHdFtFootnoteEdn)
-            m_pMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject, 0 );
+            m_pMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject );
 
         // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit in
         // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!

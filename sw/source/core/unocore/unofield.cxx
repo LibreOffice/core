@@ -2018,7 +2018,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 SwFormatField aFormatField( *pPostItField );
                 delete pPostItField;
                 SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
-                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField, SetAttrMode::DEFAULT );
+                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
                 // delete former annotation
                 {
                     const SwTextField* pTextField = m_pImpl->m_pFormatField->GetTextField();

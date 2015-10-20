@@ -133,7 +133,7 @@ BitmapEx CreatePreview(OUString& aUrl, OUString& aName)
     SfxMedium aMedium(aUrl, STREAM_STD_READWRITE);
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
     SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
-    xTemplDoc->DoInitNew(0);
+    xTemplDoc->DoInitNew();
     if (xTemplDoc->LoadFrom(aMedium))
     {
         return GenerateStylePreview(*xTemplDoc, aName);

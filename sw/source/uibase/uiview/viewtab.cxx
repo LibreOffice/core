@@ -358,8 +358,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 //change the section indents and the columns if available
                 //at first determine the changes
-                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
-                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
+                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT);
+                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION);
                 aSectRect.Pos() += aTmpRect.Pos();
                 long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - rPageRect.Left() );
                 long nRightDiff = aLongLR.GetRight() - (long)( rPageRect.Right() - aSectRect.Right());
@@ -471,8 +471,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 //change the section indents and the columns if available
                 //at first determine the changes
-                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
-                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
+                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT);
+                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION);
                 aSectRect.Pos() += aTmpRect.Pos();
                 const long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPageRect.Top());
                 const long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPageRect.Top());

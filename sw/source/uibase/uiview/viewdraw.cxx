@@ -241,7 +241,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         }
 
         if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrmMode())
-            m_pWrtShell->EnterSelFrmMode(NULL);
+            m_pWrtShell->EnterSelFrmMode();
         LeaveDrawCreate();
 
         GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
@@ -384,7 +384,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     else
     {
         if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrmMode())
-            m_pWrtShell->EnterSelFrmMode(NULL);
+            m_pWrtShell->EnterSelFrmMode();
     }
 
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())

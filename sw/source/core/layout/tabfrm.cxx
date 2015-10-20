@@ -1318,7 +1318,7 @@ void SwInvalidateAll( SwFrm *pFrm, long nBottom )
                 ::SwInvalidateAll( pToInvalidate->Lower(), nBottom);
         }
         else
-            pFrm->Prepare( PREP_CLEAR );
+            pFrm->Prepare();
 
         pFrm = pFrm->GetNext();
     } while ( pFrm &&

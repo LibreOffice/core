@@ -160,7 +160,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     // Create new document (don't show!)
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
-    xDocSh->DoInitNew( 0 );
+    xDocSh->DoInitNew();
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = static_cast<SwView*>( pFrame->GetViewShell());
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
@@ -268,7 +268,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
             // Here it goes (insert)
-            pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
+            pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE);
             pSh->StartAllAction();
             pSh->SttEndDoc(true);
 

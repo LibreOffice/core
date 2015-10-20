@@ -191,7 +191,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         // Create new document
         SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD));
-        xDocSh->DoInitNew( 0 );
+        xDocSh->DoInitNew();
 
         // Printer
         Printer *pPrt = pDlg->GetPrt();

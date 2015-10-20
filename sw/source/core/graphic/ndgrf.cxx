@@ -1095,7 +1095,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
 
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm );
         OUString sReferer;
         SfxObjectShell * sh = GetDoc()->GetPersist();
         if (sh != 0 && sh->HasName())
@@ -1150,7 +1150,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     if ( IsLinkedFile() )
     {
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm );
         if ( !sGrfNm.startsWith( "vnd.sun.star.pkg:" ) )
         {
             bRet = true;

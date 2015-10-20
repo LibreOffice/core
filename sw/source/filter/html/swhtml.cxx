@@ -535,7 +535,7 @@ SvParserState SwHTMLParser::CallParser()
     {
         if( !bViewCreated )
         {
-            nEventId = Application::PostUserEvent( LINK( this, SwHTMLParser, AsyncCallback ), 0 );
+            nEventId = Application::PostUserEvent( LINK( this, SwHTMLParser, AsyncCallback ) );
         }
         else
         {

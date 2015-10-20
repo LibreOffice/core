@@ -227,7 +227,7 @@ void SwDocTest::testFileNameFields()
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
 
-    m_xDocShRef->DoInitNew(0);
+    m_xDocShRef->DoInitNew();
 }
 
 //See http://lists.freedesktop.org/archives/libreoffice/2011-August/016666.html
@@ -1629,7 +1629,7 @@ void SwDocTest::setUp()
     SwGlobals::ensure();
     m_pDoc = new SwDoc;
     m_xDocShRef = new SwDocShell(m_pDoc, SfxObjectCreateMode::EMBEDDED);
-    m_xDocShRef->DoInitNew(0);
+    m_xDocShRef->DoInitNew();
 }
 
 void SwDocTest::tearDown()

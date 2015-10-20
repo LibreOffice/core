@@ -621,7 +621,7 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat, &aSet );
         }
         else
-            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat, 0 );
+            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat );
 
         rContext.SetSelections(pFrameFormat, 0);
     }
