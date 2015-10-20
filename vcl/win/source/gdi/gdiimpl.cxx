@@ -981,8 +981,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
 
     POINT* pWinPtAry;
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolyLine(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     pWinPtAry = (POINT*)pPtAry;
     // for Windows 95 and its maximum number of points
@@ -1648,8 +1647,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolyLine(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
 
@@ -1695,8 +1693,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAr
 void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolygon(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
     // for Windows 95 and its maximum number of points
@@ -1732,8 +1729,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
     else
         pWinPointAryAry = new POINT[nPolyPolyPoints];
     // for NT, we can handover the array directly
-   DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolyPolygon(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
     UINT            n = 0;
     for ( i = 0; i < (UINT)nPoly; i++ )
     {
@@ -1774,8 +1770,7 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolyLineBezier(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     ImplRenderPath( mrParent.getHDC(), nPoints, pPtAry, pFlgAry );
 
@@ -1789,8 +1784,7 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolygonBezier(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     POINT   aStackAry1[SAL_POLY_STACKBUF];
     BYTE    aStackAry2[SAL_POLY_STACKBUF];
@@ -1840,8 +1834,7 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphicsImpl::DrawPolyPolygonBezier(): POINT != SalPoint" );
+    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     sal_uLong nCurrPoly, nTotalPoints;
     const sal_uInt32* pCurrPoints = pPoints;
