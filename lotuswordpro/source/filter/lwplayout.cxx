@@ -1360,7 +1360,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
             if(pLay->GetScaleCenter())
             {
                 //center
-                pXFBGImage->SetPosition(enumXFAlignCenter,enumXFAlignCenter);
+                pXFBGImage->SetPosition();
             }
             else if(pLay->GetScaleTile())
             {
