@@ -3425,7 +3425,7 @@ void ServiceType::dumpHxxFile(
                     {
                         if (m_typeMgr->getSort(
                                 b2u(codemaker::UnoType::decompose(
-                                        u2b(j->type), 0, 0)))
+                                        u2b(j->type))))
                             == codemaker::UnoType::SORT_CHAR)
                         {
                             includes.addCppuUnotypeHxx();
@@ -3594,7 +3594,7 @@ void ServiceType::dumpHxxFile(
                         sal_Int32 rank;
                         if (m_typeMgr->getSort(
                                 b2u(codemaker::UnoType::decompose(
-                                        u2b(j->type), &rank, 0)))
+                                        u2b(j->type), &rank)))
                             == codemaker::UnoType::SORT_CHAR)
                         {
                             o << "= ::css::uno::Any(&" << param
