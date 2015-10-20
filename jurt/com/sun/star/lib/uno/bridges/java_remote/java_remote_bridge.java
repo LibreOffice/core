@@ -449,9 +449,12 @@ public class java_remote_bridge
      * @see com.sun.star.uno.IBridge#acquire
      */
     public void acquire() {
-        int x = _life_count.incrementAndGet();
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".acquire:" + x);
+        if(DEBUG) {
+            int x = _life_count.incrementAndGet();
+            System.err.println("##### " + getClass().getName() + ".acquire:" + x);
+        } else {
+            _life_count.incrementAndGet();
+        }
     }
 
     /**
