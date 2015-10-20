@@ -1528,7 +1528,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         {
             Reference<XTextContent> xTxtCntnt(xTextFramesEnum->nextElement(), UNO_QUERY);
             if(xTxtCntnt.is())
-                exportTextFrame(xTxtCntnt, bAutoStyles, bIsProgress, bExportContent, 0);
+                exportTextFrame(xTxtCntnt, bAutoStyles, bIsProgress, bExportContent);
         }
 
     // Export graphic objects:
@@ -1538,7 +1538,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         {
             Reference<XTextContent> xTxtCntnt(xGraphicsEnum->nextElement(), UNO_QUERY);
             if(xTxtCntnt.is())
-                exportTextGraphic(xTxtCntnt, true, 0);
+                exportTextGraphic(xTxtCntnt, true);
         }
 
     // Export embedded objects:
@@ -1548,7 +1548,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         {
             Reference<XTextContent> xTxtCntnt(xEmbeddedsEnum->nextElement(), UNO_QUERY);
             if(xTxtCntnt.is())
-                exportTextEmbedded(xTxtCntnt, true, 0);
+                exportTextEmbedded(xTxtCntnt, true);
         }
 
     // Export shapes:
@@ -1561,7 +1561,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             {
                 Reference<XServiceInfo> xServiceInfo(xTxtCntnt, UNO_QUERY);
                 if( xServiceInfo->supportsService(sShapeService))
-                    exportShape(xTxtCntnt, true, 0);
+                    exportShape(xTxtCntnt, true);
             }
         }
 
@@ -2147,7 +2147,7 @@ void XMLTextParagraphExport::exportParagraph(
         if( bHasContentEnum )
             exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
-                                    bIsProgress, true, 0 );
+                                    bIsProgress );
         if ( bHasPortions )
             exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress );
     }

@@ -141,13 +141,13 @@ void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
         }
     }
     exportStyleFamily( "ParagraphStyles", GetXMLToken(XML_PARAGRAPH), GetParaPropMapper(),
-                       bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
+                       bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH);
     exportStyleFamily( "CharacterStyles", GetXMLToken(XML_TEXT), GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
     // get shape export to make sure the frame family is added correctly.
     GetExport().GetShapeExport();
     exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), GetFramePropMapper(),
-                       bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);
+                       bUsed, XML_STYLE_FAMILY_TEXT_FRAME);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )
     {

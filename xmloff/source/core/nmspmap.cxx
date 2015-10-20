@@ -430,7 +430,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName(
                             OUString *pLocalName,
                             sal_uInt16 /*nIdxGuess*/) const
 {
-    return _GetKeyByAttrName( rAttrName, 0, pLocalName, 0 );
+    return _GetKeyByAttrName( rAttrName, 0, pLocalName );
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,

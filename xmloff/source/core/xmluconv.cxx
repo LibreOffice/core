@@ -527,19 +527,19 @@ bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const 
     rtl_math_ConversionStatus eStatus;
 
     rVector.setX(::rtl::math::stringToDouble(aContentX, '.',
-            ',', &eStatus, NULL));
+            ',', &eStatus));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return false;
 
     rVector.setY(::rtl::math::stringToDouble(aContentY, '.',
-            ',', &eStatus, NULL));
+            ',', &eStatus));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return false;
 
     rVector.setZ(::rtl::math::stringToDouble(aContentZ, '.',
-            ',', &eStatus, NULL));
+            ',', &eStatus));
 
 
     return ( eStatus == rtl_math_ConversionStatus_Ok );

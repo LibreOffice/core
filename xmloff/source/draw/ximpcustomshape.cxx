@@ -144,7 +144,7 @@ void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& r
     {
         rtl_math_ConversionStatus eStatus;
         double fAttrDouble = ::rtl::math::stringToDouble( rValue,
-            '.', ',', &eStatus, NULL );
+            '.', ',', &eStatus );
         if ( eStatus == rtl_math_ConversionStatus_Ok )
         {
             beans::PropertyValue aProp;

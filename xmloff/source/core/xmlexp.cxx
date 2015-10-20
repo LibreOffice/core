@@ -2231,8 +2231,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         //conversion for matching schemes only
         if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
         {
-            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue,
-                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue );
         }
     }
     return sValue;
