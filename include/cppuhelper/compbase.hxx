@@ -45,8 +45,8 @@ namespace osl { class Mutex; }
 namespace cppu {
 
 /** Implementation helper implementing interfaces
-    com::sun::star::uno::XInterface, com::sun::star::lang::XTypeProvider, and
-    com::sun::star::lang::XComponent.
+    css::uno::XInterface, css::lang::XTypeProvider, and
+    css::lang::XComponent.
 
     Like WeakComponentImplHelper, but does not define
     XComponent::add/removeEventListener.  Use for classes deriving from multiple
@@ -99,8 +99,8 @@ public:
 };
 
 /** Implementation helper implementing interfaces
-    com::sun::star::uno::XInterface, com::sun::star::lang::XTypeProvider, and
-    com::sun::star::lang::XComponent.
+    css::uno::XInterface, css::lang::XTypeProvider, and
+    css::lang::XComponent.
 
     Upon disposing objects of this class, sub-classes receive a disposing()
     call.

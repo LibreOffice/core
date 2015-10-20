@@ -31,7 +31,7 @@ namespace cppu
 */
 class CPPUHELPER_DLLPUBLIC AccessControl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessController > m_xController;
+    css::uno::Reference< css::security::XAccessController > m_xController;
 
 public:
     /** Ctor.
@@ -39,15 +39,13 @@ public:
         @param xContext component context to retrieve access controller singleton
     */
     AccessControl(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext );
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
     /** Ctor.
 
         @param xController access controller
     */
     AccessControl(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::security::XAccessController > const & xController );
+        css::uno::Reference< css::security::XAccessController > const & xController );
     /** Copy ctor.
 
         @param ac another object
@@ -63,15 +61,14 @@ public:
 
         @return access controller
     */
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::security::XAccessController > const & SAL_CALL get() const
+    inline css::uno::Reference< css::security::XAccessController > const & SAL_CALL get() const
         { return m_xController; }
 
     /** Returns access to the access controller reference being used.
 
         @return access controller
     */
-    inline ::com::sun::star::security::XAccessController * SAL_CALL operator -> () const
+    inline css::security::XAccessController * SAL_CALL operator -> () const
         { return m_xController.get(); }
 
 

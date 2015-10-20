@@ -36,7 +36,7 @@ struct ContextEntry_Init
 {
     /** late init denotes a object that will be raised when first get() is calling for it
 
-        The context implementation expects either a com::sun::star::lang::XSingleComponentFactory
+        The context implementation expects either a css::lang::XSingleComponentFactory
         object as value (to instanciate the object) or a string as value for raising
         a service via the used service manager.
     */
@@ -46,7 +46,7 @@ struct ContextEntry_Init
     ::rtl::OUString name;
     /** context value
     */
-    ::com::sun::star::uno::Any value;
+    css::uno::Any value;
 
     /** Default ctor.
     */
@@ -65,7 +65,7 @@ struct ContextEntry_Init
     */
     inline ContextEntry_Init(
         ::rtl::OUString const & name_,
-        ::com::sun::star::uno::Any const & value_,
+        css::uno::Any const & value_,
         bool bLateInitService_ = false )
             : bLateInitService( bLateInitService_ ),
               name( name_ ),
@@ -80,11 +80,11 @@ struct ContextEntry_Init
     @param xDelegate delegation to further context, if value was not found
     @return new context object
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
 SAL_CALL createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xDelegate =
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() );
+    css::uno::Reference< css::uno::XComponentContext > const & xDelegate =
+    css::uno::Reference< css::uno::XComponentContext >() );
 
 }
 

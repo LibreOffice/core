@@ -36,14 +36,14 @@ namespace cppu
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -55,16 +55,16 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -78,18 +78,18 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -105,20 +105,20 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -136,22 +136,22 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -172,25 +172,25 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -213,27 +213,27 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -258,29 +258,29 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else if (rType == Interface8::static_type())
-        return ::com::sun::star::uno::Any( &p8, rType );
+        return css::uno::Any( &p8, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -307,31 +307,31 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else if (rType == Interface8::static_type())
-        return ::com::sun::star::uno::Any( &p8, rType );
+        return css::uno::Any( &p8, rType );
     else if (rType == Interface9::static_type())
-        return ::com::sun::star::uno::Any( &p9, rType );
+        return css::uno::Any( &p9, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -360,33 +360,33 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else if (rType == Interface8::static_type())
-        return ::com::sun::star::uno::Any( &p8, rType );
+        return css::uno::Any( &p8, rType );
     else if (rType == Interface9::static_type())
-        return ::com::sun::star::uno::Any( &p9, rType );
+        return css::uno::Any( &p9, rType );
     else if (rType == Interface10::static_type())
-        return ::com::sun::star::uno::Any( &p10, rType );
+        return css::uno::Any( &p10, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -418,36 +418,36 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else if (rType == Interface8::static_type())
-        return ::com::sun::star::uno::Any( &p8, rType );
+        return css::uno::Any( &p8, rType );
     else if (rType == Interface9::static_type())
-        return ::com::sun::star::uno::Any( &p9, rType );
+        return css::uno::Any( &p9, rType );
     else if (rType == Interface10::static_type())
-        return ::com::sun::star::uno::Any( &p10, rType );
+        return css::uno::Any( &p10, rType );
     else if (rType == Interface11::static_type())
-        return ::com::sun::star::uno::Any( &p11, rType );
+        return css::uno::Any( &p11, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 /** Compares demanded type to given template argument types.
 
@@ -481,38 +481,38 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12 >
-inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
-    const ::com::sun::star::uno::Type & rType,
+inline css::uno::Any SAL_CALL queryInterface(
+    const css::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11, Interface12 * p12 )
 {
     if (rType == Interface1::static_type())
-        return ::com::sun::star::uno::Any( &p1, rType );
+        return css::uno::Any( &p1, rType );
     else if (rType == Interface2::static_type())
-        return ::com::sun::star::uno::Any( &p2, rType );
+        return css::uno::Any( &p2, rType );
     else if (rType == Interface3::static_type())
-        return ::com::sun::star::uno::Any( &p3, rType );
+        return css::uno::Any( &p3, rType );
     else if (rType == Interface4::static_type())
-        return ::com::sun::star::uno::Any( &p4, rType );
+        return css::uno::Any( &p4, rType );
     else if (rType == Interface5::static_type())
-        return ::com::sun::star::uno::Any( &p5, rType );
+        return css::uno::Any( &p5, rType );
     else if (rType == Interface6::static_type())
-        return ::com::sun::star::uno::Any( &p6, rType );
+        return css::uno::Any( &p6, rType );
     else if (rType == Interface7::static_type())
-        return ::com::sun::star::uno::Any( &p7, rType );
+        return css::uno::Any( &p7, rType );
     else if (rType == Interface8::static_type())
-        return ::com::sun::star::uno::Any( &p8, rType );
+        return css::uno::Any( &p8, rType );
     else if (rType == Interface9::static_type())
-        return ::com::sun::star::uno::Any( &p9, rType );
+        return css::uno::Any( &p9, rType );
     else if (rType == Interface10::static_type())
-        return ::com::sun::star::uno::Any( &p10, rType );
+        return css::uno::Any( &p10, rType );
     else if (rType == Interface11::static_type())
-        return ::com::sun::star::uno::Any( &p11, rType );
+        return css::uno::Any( &p11, rType );
     else if (rType == Interface12::static_type())
-        return ::com::sun::star::uno::Any( &p12, rType );
+        return css::uno::Any( &p12, rType );
     else
-        return ::com::sun::star::uno::Any();
+        return css::uno::Any();
 }
 
 }

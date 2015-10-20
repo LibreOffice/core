@@ -29,7 +29,7 @@ namespace cppu
 {
 
 /** Base class to implement an UNO object supporting weak references, i.e. the object can be held
-    weakly (by a ::com::sun::star::uno::WeakReference) and aggregation, i.e. the object can be
+    weakly (by a css::uno::WeakReference) and aggregation, i.e. the object can be
     aggregated by another (delegator).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
@@ -40,7 +40,7 @@ namespace cppu
 */
 class CPPUHELPER_DLLPUBLIC OWeakAggObject
     : public ::cppu::OWeakObject
-    , public ::com::sun::star::uno::XAggregation
+    , public css::uno::XAggregation
 {
 public:
     /** Constructor.  No delegator set.
@@ -64,22 +64,22 @@ public:
         @return demanded type or empty any
         @see queryAggregation.
     */
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Set the delegator.  The delegator member reference is a weak reference.
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
-    virtual void SAL_CALL setDelegator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Delegator )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
 
         @see queryInterface
     */
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /** Virtual dtor. Called when reference count is 0.
@@ -92,7 +92,7 @@ protected:
 
     /** weak reference to delegator.
     */
-    ::com::sun::star::uno::WeakReferenceHelper xDelegator;
+    css::uno::WeakReferenceHelper xDelegator;
 private:
     OWeakAggObject( const OWeakAggObject & rObj ) SAL_DELETED_FUNCTION;
     OWeakAggObject & operator = ( const OWeakAggObject & rObj )

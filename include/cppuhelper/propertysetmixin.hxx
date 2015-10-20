@@ -85,9 +85,9 @@ template< typename T > class PropertySetMixin;
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #endif
 class CPPUHELPER_DLLPUBLIC PropertySetMixinImpl:
-    public com::sun::star::beans::XPropertySet,
-    public com::sun::star::beans::XFastPropertySet,
-    public com::sun::star::beans::XPropertyAccess
+    public css::beans::XPropertySet,
+    public css::beans::XFastPropertySet,
+    public css::beans::XPropertyAccess
 {
 protected:
     /**
@@ -98,20 +98,20 @@ protected:
     enum Implements {
         /**
            @short Flag specifying that the UNO interface type
-           <code>com::sun::star::beans::XPropertySet</code> shall be supported.
+           <code>css::beans::XPropertySet</code> shall be supported.
         */
         IMPLEMENTS_PROPERTY_SET = 1,
 
         /**
            @short Flag specifying that the UNO interface type
-           <code>com::sun::star::beans::XFastPropertySet</code> shall be
+           <code>css::beans::XFastPropertySet</code> shall be
            supported.
         */
         IMPLEMENTS_FAST_PROPERTY_SET = 2,
 
         /**
            @short Flag specifying that the UNO interface type
-           <code>com::sun::star::beans::XPropertyAccess</code> shall be
+           <code>css::beans::XPropertyAccess</code> shall be
            supported.
         */
         IMPLEMENTS_PROPERTY_ACCESS = 4
@@ -147,9 +147,9 @@ protected:
 
         /**
            @short Notifies any
-           <code>com::sun::star::beans::XPropertyChangeListener</code>s.
+           <code>css::beans::XPropertyChangeListener</code>s.
 
-           May throw <code>com::sun::star::uno::RuntimeException</code>
+           May throw <code>css::uno::RuntimeException</code>
            and <code>std::bad_alloc</code>.
 
            See <code>cppu::PropertySetMixinImpl::prepareSet</code>
@@ -174,14 +174,14 @@ protected:
 
        First, this function checks whether this instance has already been
        disposed (see <code>cppu::PropertySetMixinImpl::dispose</code>),
-       and throws a <code>com::sun::star::lang::DisposedException</code> if
+       and throws a <code>css::lang::DisposedException</code> if
        applicable.  For a constrained attribute (whose setter can explicitly
-       raise <code>com::sun::star::beans::PropertyVetoException</code>), this
+       raise <code>css::beans::PropertyVetoException</code>), this
        function notifies any
-       <code>com::sun::star::beans::XVetoableChangeListener</code>s.  For a
+       <code>css::beans::XVetoableChangeListener</code>s.  For a
        bound attribute, this function modifies the passed-in
        <code>boundListeners</code> so that it can afterwards be used to notify
-       any <code>com::sun::star::beans::XPropertyChangeListener</code>s.  This
+       any <code>css::beans::XPropertyChangeListener</code>s.  This
        function should be called before storing the new attribute value, and
        <code>boundListeners->notify()</code> should be called exactly once after
        storing the new attribute value (in case the attribute is bound;
@@ -190,9 +190,9 @@ protected:
        to be called from the same thread.
 
        May throw
-       <code>com::sun::star::beans::PropertyVetoException</code>,
-       <code>com::sun::star::uno::RuntimeException</code> (and
-       <code>com::sun::star::lang::DisposedException</code> in particular), and
+       <code>css::beans::PropertyVetoException</code>,
+       <code>css::uno::RuntimeException</code> (and
+       <code>css::lang::DisposedException</code> in particular), and
        <code>std::bad_alloc</code>.
 
        @param propertyName  the name of the property (which is the same as the
@@ -200,24 +200,24 @@ protected:
 
        @param oldValue the property value corresponding to the old attribute
        value.  This is only used as
-       <code>com::sun::star::beans::PropertyChangeEvent::OldValue</code>, which
+       <code>css::beans::PropertyChangeEvent::OldValue</code>, which
        is rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo;
        in <a href="http://tools.openoffice.org/CodingGuidelines.sxw">
        OpenOffice.org Coding Guidelines</a>).  If the attribute
        that is going to be set is neither bound nor constrained, or if
-       <code>com::sun::star::beans::PropertyChangeEvent::OldValue</code> should
+       <code>css::beans::PropertyChangeEvent::OldValue</code> should
        not be set, a <code>VOID</code> <code>Any</code> can be used instead.
 
        @param newValue the property value corresponding to the new
        attribute value.  This is only used as
-       <code>com::sun::star::beans::PropertyChangeEvent::NewValue</code>, which
+       <code>css::beans::PropertyChangeEvent::NewValue</code>, which
        is rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo;
        in <a href="http://tools.openoffice.org/CodingGuidelines.sxw">
        OpenOffice.org Coding Guidelines</a>), <em>unless</em> the
        attribute that is going to be set is constrained.  If the attribute
        that is going to be set is neither bound nor constrained, or if it is
        only bound but
-       <code>com::sun::star::beans::PropertyChangeEvent::NewValue</code> should
+       <code>css::beans::PropertyChangeEvent::NewValue</code> should
        not be set, a <code>VOID</code> <code>Any</code> can be used instead.
 
        @param boundListeners  a pointer to a fresh
@@ -228,22 +228,22 @@ protected:
     */
     void prepareSet(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Any const & oldValue,
-        com::sun::star::uno::Any const & newValue,
+        css::uno::Any const & oldValue,
+        css::uno::Any const & newValue,
         BoundListeners * boundListeners);
 
     /**
        @short Mark this instance as being disposed.
 
-       See <code>com::sun::star::lang::XComponent</code> for the general
+       See <code>css::lang::XComponent</code> for the general
        concept of disposing UNO objects.  On the first call to this function,
        all registered listeners
-       (<code>com::sun::star::beans::XPropertyChangeListener</code>s and
-       <code>com::sun::star::beans::XVetoableChangeListener</code>s) are
+       (<code>css::beans::XPropertyChangeListener</code>s and
+       <code>css::beans::XVetoableChangeListener</code>s) are
        notified of the disposing source.  Any subsequent calls to this function
        are ignored.
 
-       May throw <code>com::sun::star::uno::RuntimeException</code> and
+       May throw <code>css::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
      */
     void dispose();
@@ -251,146 +251,140 @@ protected:
     /**
        @short A function used by subclasses of
        <code>cppu::PropertySetMixin</code> when implementing
-       <code>com::sun::star::uno::XInterface::queryInterface</code>.
+       <code>css::uno::XInterface::queryInterface</code>.
 
        This function checks for support of any of the UNO interface types
        specified in the call of the <code>cppu::PropertySetMixin</code>
        constructor.  It does not check for any other UNO interface types (not
-       even for <code>com::sun::star::uno::XInterface</code>), and should not
+       even for <code>css::uno::XInterface</code>), and should not
        be used directly as the implementation of
-       <code>com::sun::star::uno::XInterface::queryInterface</code> of this UNO
+       <code>css::uno::XInterface::queryInterface</code> of this UNO
        object.
     */
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-        com::sun::star::uno::Type const & type)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & type)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertySet::getPropertySetInfo
-    virtual
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
-    SAL_CALL getPropertySetInfo()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // @see css::beans::XPropertySet::getPropertySetInfo
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertySet::setPropertyValue
+    // @see css::beans::XPropertySet::setPropertyValue
     virtual void SAL_CALL setPropertyValue(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Any const & value)
+        css::uno::Any const & value)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::beans::PropertyVetoException,
-            com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertySet::getPropertyValue
-    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(
+    // @see css::beans::XPropertySet::getPropertyValue
+    virtual css::uno::Any SAL_CALL getPropertyValue(
         rtl::OUString const & propertyName)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
        @short Adds a
-       <code>com::sun::star::beans::XPropertyChangeListener</code>.
+       <code>css::beans::XPropertyChangeListener</code>.
 
        If a listener is added more than once, it will receive all
        relevant notifications multiple times.
 
-       @see com::sun::star::beans::XPropertySet::addPropertyChangeListener
+       @see css::beans::XPropertySet::addPropertyChangeListener
     */
     virtual void SAL_CALL addPropertyChangeListener(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertyChangeListener > const & listener)
+        css::uno::Reference<
+        css::beans::XPropertyChangeListener > const & listener)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertySet::removePropertyChangeListener
+    // @see css::beans::XPropertySet::removePropertyChangeListener
     virtual void SAL_CALL removePropertyChangeListener(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertyChangeListener > const & listener)
+        css::uno::Reference<
+        css::beans::XPropertyChangeListener > const & listener)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
        @short Adds a
-       <code>com::sun::star::beans::XVetoableChangeListener</code>.
+       <code>css::beans::XVetoableChangeListener</code>.
 
        If a listener is added more than once, it will receive all
        relevant notifications multiple times.
 
-       @see com::sun::star::beans::XPropertySet::addVetoableChangeListener
+       @see css::beans::XPropertySet::addVetoableChangeListener
     */
     virtual void SAL_CALL addVetoableChangeListener(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Reference<
-        com::sun::star::beans::XVetoableChangeListener > const & listener)
+        css::uno::Reference<
+        css::beans::XVetoableChangeListener > const & listener)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertySet::removeVetoableChangeListener
+    // @see css::beans::XPropertySet::removeVetoableChangeListener
     virtual void SAL_CALL removeVetoableChangeListener(
         rtl::OUString const & propertyName,
-        com::sun::star::uno::Reference<
-        com::sun::star::beans::XVetoableChangeListener > const & listener)
+        css::uno::Reference<
+        css::beans::XVetoableChangeListener > const & listener)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XFastPropertySet::setFastPropertyValue
+    // @see css::beans::XFastPropertySet::setFastPropertyValue
     virtual void SAL_CALL setFastPropertyValue(
-        sal_Int32 handle, com::sun::star::uno::Any const & value)
+        sal_Int32 handle, css::uno::Any const & value)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::beans::PropertyVetoException,
-            com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XFastPropertySet::getFastPropertyValue
-    virtual com::sun::star::uno::Any SAL_CALL getFastPropertyValue(
+    // @see css::beans::XFastPropertySet::getFastPropertyValue
+    virtual css::uno::Any SAL_CALL getFastPropertyValue(
         sal_Int32 handle)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertyAccess::getPropertyValues
-    virtual
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-    SAL_CALL getPropertyValues()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // @see css::beans::XPropertyAccess::getPropertyValues
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see com::sun::star::beans::XPropertyAccess::setPropertyValues
+    // @see css::beans::XPropertyAccess::setPropertyValues
     virtual void SAL_CALL setPropertyValues(
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        const & props)
+        css::uno::Sequence< css::beans::PropertyValue > const & props)
         throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::beans::PropertyVetoException,
-            com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     PropertySetMixinImpl( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
     void operator=( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
 
     PropertySetMixinImpl(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const & context,
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements implements,
-        com::sun::star::uno::Sequence< rtl::OUString > const & absentOptional,
-        com::sun::star::uno::Type const & type);
+        css::uno::Sequence< rtl::OUString > const & absentOptional,
+        css::uno::Type const & type);
 
     class Impl;
     Impl * m_impl;
@@ -420,7 +414,7 @@ protected:
     /**
        @short The constructor.
 
-       May throw <code>com::sun::star::uno::RuntimeException</code> and
+       May throw <code>css::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
 
        @param context  the component context used by this class template; must
@@ -433,35 +427,34 @@ protected:
 
        @param absentOptional  a list of optional properties that are not
        present, and should thus not be visible via
-       <code>com::sun::star::beans::XPropertySet::getPropertySetInfo</code>,
-       <code>com::sun::star::beans::XPropertySet::addPropertyChangeListener<!--
-       --></code>, <code>com::sun::star::beans::XPropertySet::<!--
+       <code>css::beans::XPropertySet::getPropertySetInfo</code>,
+       <code>css::beans::XPropertySet::addPropertyChangeListener<!--
+       --></code>, <code>css::beans::XPropertySet::<!--
        -->removePropertyChangeListener</code>,
-       <code>com::sun::star::beans::XPropertySet::addVetoableChangeListener<!--
-       --></code>, and <code>com::sun::star::beans::XPropertySet::<!--
+       <code>css::beans::XPropertySet::addVetoableChangeListener<!--
+       --></code>, and <code>css::beans::XPropertySet::<!--
        -->removeVetoableChangeListener</code>.  For consistency reasons, the
        given <code>absentOptional</code> should only contain the names of
        attributes that represent optional properties that are not present (that
        is, the attribute getters and setters always throw a
-       <code>com::sun::star::beans::UnknownPropertyException</code>), and should
+       <code>css::beans::UnknownPropertyException</code>), and should
        contain each such name only once.  If an optional property is not present
        (that is, the corresponding attribute getter and setter always throw a
-       <code>com::sun::star::beans::UnknownPropertyException</code>) but is not
+       <code>css::beans::UnknownPropertyException</code>) but is not
        contained in the given <code>absentOptional</code>, then it will be
        visible via
-       <code>com::sun::star::beans::XPropertySet::getPropertySetInfo</code> as a
-       <code>com::sun::star::beans::Property</code> with a set
-       <code>com::sun::star::beans::PropertyAttribute::OPTIONAL</code>.  If the
+       <code>css::beans::XPropertySet::getPropertySetInfo</code> as a
+       <code>css::beans::Property</code> with a set
+       <code>css::beans::PropertyAttribute::OPTIONAL</code>.  If the
        given <code>implements</code> specifies that
-       <code>com::sun::star::beans::XPropertySet</code> is not supported, then
+       <code>css::beans::XPropertySet</code> is not supported, then
        the given <code>absentOptional</code> is effectively ignored and can be
        empty.
     */
     PropertySetMixin(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const & context,
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements implements,
-        com::sun::star::uno::Sequence< rtl::OUString > const & absentOptional):
+        css::uno::Sequence< rtl::OUString > const & absentOptional):
         PropertySetMixinImpl(
             context, implements, absentOptional, T::static_type())
     {}

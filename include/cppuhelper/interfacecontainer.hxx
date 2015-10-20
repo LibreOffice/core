@@ -50,13 +50,13 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
 
 
 template< class key , class hashImpl , class equalImpl >
-inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
+inline css::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::size_type nSize = m_pMap->size();
     if( nSize != 0 )
     {
-        ::com::sun::star::uno::Sequence< key > aInterfaceTypes( nSize );
+        css::uno::Sequence< key > aInterfaceTypes( nSize );
         key * pArray = aInterfaceTypes.getArray();
 
         typename InterfaceMap::iterator iter = m_pMap->begin();
@@ -73,11 +73,11 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
         }
         if( i != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = ::com::sun::star::uno::Sequence<key>( pArray, i );
+            aInterfaceTypes = css::uno::Sequence<key>( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return ::com::sun::star::uno::Sequence<key>();
+    return css::uno::Sequence<key>();
 }
 
 
@@ -97,7 +97,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 template< class key , class hashImpl , class equalImpl >
 sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::addInterface(
     const key & rKey,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
+    const css::uno::Reference< css::uno::XInterface > & rListener )
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::iterator iter = find( rKey );
@@ -115,7 +115,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::a
 template< class key , class hashImpl , class equalImpl >
 inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::removeInterface(
     const key & rKey,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener )
+    const css::uno::Reference< css::uno::XInterface > & rListener )
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -132,7 +132,7 @@ inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalIm
 
 template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::disposeAndClear(
-    const ::com::sun::star::lang::EventObject & rEvt )
+    const css::lang::EventObject & rEvt )
 {
     typename InterfaceMap::size_type nSize = 0;
     OInterfaceContainerHelper ** ppListenerContainers = NULL;

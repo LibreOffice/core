@@ -32,14 +32,14 @@ namespace cppu
 class OWeakConnectionPoint;
 
 /** Base class to implement an UNO object supporting weak references, i.e. the object can be held
-    weakly (by a ::com::sun::star::uno::WeakReference).
+    weakly (by a css::uno::WeakReference).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
 
     @derive
     Inherit from this class and delegate acquire()/ release() calls.
 */
-class CPPUHELPER_DLLPUBLIC OWeakObject : public ::com::sun::star::uno::XWeak
+class CPPUHELPER_DLLPUBLIC OWeakObject : public css::uno::XWeak
 {
     friend class OWeakConnectionPoint;
 
@@ -109,7 +109,7 @@ public:
         @param rObj dummy param
     */
     inline OWeakObject( const OWeakObject & rObj )
-        : com::sun::star::uno::XWeak()
+        : css::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         , m_pReserved(0)
@@ -123,15 +123,15 @@ public:
     inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
         { return *this; }
 
-    /** Basic queryInterface() implementation supporting \::com::sun::star::uno::XWeak and
-        \::com::sun::star::uno::XInterface.
+    /** Basic queryInterface() implementation supporting \css::uno::XWeak and
+        \css::uno::XInterface.
 
         @param rType demanded type
         @return demanded type or empty any
     */
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        const ::com::sun::star::uno::Type & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        const css::uno::Type & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
@@ -143,16 +143,16 @@ public:
 
     /** XWeak::queryAdapter() implementation
 
-        @return a \::com::sun::star::uno::XAdapter reference
+        @return a \css::uno::XAdapter reference
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 
         @return XInterface reference
     */
-    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ()
+    inline SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
 };
 
@@ -168,7 +168,7 @@ public:
     @param instance
     Newly created instance that should be acquired.
 */
-static inline ::com::sun::star::uno::XInterface * acquire(OWeakObject * instance)
+static inline css::uno::XInterface * acquire(OWeakObject * instance)
 {
     assert(instance != 0);
     instance->acquire();

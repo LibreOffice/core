@@ -33,9 +33,9 @@ namespace osl { class Mutex; }
 namespace cppu
 {
 
-/** Deprecated.  Helper for implementing com::sun::star::lang::XComponent.
+/** Deprecated.  Helper for implementing css::lang::XComponent.
     Upon disposing objects of this class, sub-classes receive a disposing() call.  Objects of
-    this class can be held weakly, i.e. by a com::sun::star::uno::WeakReference.  Object of
+    this class can be held weakly, i.e. by a css::uno::WeakReference.  Object of
     this class can be aggregated, i.e. incoming queryInterface() calls are delegated.
 
     @attention
@@ -44,8 +44,8 @@ namespace cppu
 */
 class CPPUHELPER_DLLPUBLIC OComponentHelper
     : public ::cppu::OWeakAggObject
-    , public ::com::sun::star::lang::XTypeProvider
-    , public ::com::sun::star::lang::XComponent
+    , public css::lang::XTypeProvider
+    , public css::lang::XComponent
 {
 public:
     /** Constructor.
@@ -60,12 +60,12 @@ public:
     virtual ~OComponentHelper();
 
     // XAggregation
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
@@ -74,23 +74,23 @@ public:
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL dispose()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /** Called in dispose method after the listeners were notified.
