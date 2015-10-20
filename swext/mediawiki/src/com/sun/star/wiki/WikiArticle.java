@@ -204,7 +204,7 @@ public class WikiArticle
             connPost.setDoOutput(true);
             connPost.connect();
 
-            OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream());
+            OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream(), "UTF-8");
             post.write("wpTextbox1=");
             post.write(URLEncoder.encode(sWikiCode, "UTF-8"));
             post.write("&wpSummary=");
