@@ -1009,7 +1009,7 @@ void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
 void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
 {
 
-    rText += "intd ";
+    rText += "int ";
     SmNode *pBody = GetSubNode(1);
 
     if (pBody->GetNumSubNodes() > 1)
