@@ -259,8 +259,8 @@ public:
             The interaction handler that will be used to request a password
             from the user, e.g. by showing a password input dialog.
 
-        @param rDocumentName
-            The name of the related document that will be shown in the password
+        @param rDocumentUrl
+            The URL of the related document that will be shown in the password
             input dialog.
 
         @param eRequestType
@@ -288,7 +288,7 @@ public:
                             const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
                             const OUString& rMediaPassword,
                             const css::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
-                            const OUString& rDocumentName,
+                            const OUString& rDocumentUrl,
                             DocPasswordRequestType eRequestType,
                             const ::std::vector< OUString >* pDefaultPasswords = 0,
                             bool* pbIsDefaultPassword = 0 );

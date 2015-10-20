@@ -355,7 +355,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
         const OUString& rMediaPassword,
         const Reference< XInteractionHandler >& rxInteractHandler,
-        const OUString& rDocumentName,
+        const OUString& rDocumentUrl,
         DocPasswordRequestType eRequestType,
         const ::std::vector< OUString >* pDefaultPasswords,
         bool* pbIsDefaultPassword )
@@ -404,7 +404,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         PasswordRequestMode eRequestMode = PasswordRequestMode_PASSWORD_ENTER;
         while( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
         {
-            DocPasswordRequest* pRequest = new DocPasswordRequest( eRequestType, eRequestMode, rDocumentName );
+            DocPasswordRequest* pRequest = new DocPasswordRequest( eRequestType, eRequestMode, rDocumentUrl );
             Reference< XInteractionRequest > xRequest( pRequest );
             rxInteractHandler->handle( xRequest );
             if( pRequest->isPassword() )

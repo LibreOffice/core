@@ -75,7 +75,7 @@ public:
     explicit            DocPasswordRequest(
                             DocPasswordRequestType eType,
                             css::task::PasswordRequestMode eMode,
-                            const OUString& rDocumentName,
+                            const OUString& rDocumentUrl,
                             bool bPasswordToModify = false );
     virtual             ~DocPasswordRequest();
 

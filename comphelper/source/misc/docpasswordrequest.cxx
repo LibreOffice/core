@@ -120,21 +120,21 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest
 
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
-        PasswordRequestMode eMode, const OUString& rDocumentName, bool bPasswordToModify )
+        PasswordRequestMode eMode, const OUString& rDocumentUrl, bool bPasswordToModify )
 {
     switch( eType )
     {
         case DocPasswordRequestType_STANDARD:
         {
             DocumentPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
-                InteractionClassification_QUERY, eMode, rDocumentName, bPasswordToModify );
+                InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );
             maRequest <<= aRequest;
         }
         break;
         case DocPasswordRequestType_MS:
         {
             DocumentMSPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
-                InteractionClassification_QUERY, eMode, rDocumentName, bPasswordToModify );
+                InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );
             maRequest <<= aRequest;
         }
         break;
