@@ -4285,47 +4285,47 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_PAPERH: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
     case RTF_PGHSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
         break;
     case RTF_PAPERW: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
     case RTF_PGWSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
         break;
     case RTF_MARGL: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue);
     case RTF_MARGLSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue);
         break;
     case RTF_MARGR: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue);
     case RTF_MARGRSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, RTFOverwrite::YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue);
         break;
     case RTF_MARGT: // fall through: set the default + current value
-        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue);
     case RTF_MARGTSXN:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue);
         break;
     case RTF_MARGB: // fall through: set the default + current value
-        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
     case RTF_MARGBSXN:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
         break;
     case RTF_HEADERY:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue);
         break;
     case RTF_FOOTERY:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue);
         break;
     case RTF_DEFTAB:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_defaultTabStop, pIntValue);
@@ -4487,10 +4487,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         m_aStates.top().aPicture.eWMetafile = nParam;
         break;
     case RTF_SB:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue);
         break;
     case RTF_SA:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue);
         break;
     case RTF_DPX:
         m_aStates.top().aDrawingObject.nLeft = convertTwipToMm100(nParam);
@@ -4895,10 +4895,10 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     }
     break;
     case RTF_SBAUTO:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue);
         break;
     case RTF_SAAUTO:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue, RTFOverwrite::YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue);
         break;
     case RTF_FACINGP:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, pBoolValue);
