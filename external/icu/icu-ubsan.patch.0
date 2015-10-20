@@ -162,14 +162,3 @@
     }
     virtual UBool operator == (const CacheKeyBase &other) const {
         // reflexive
---- source/common/uresbund.cpp
-+++ source/common/uresbund.cpp
-@@ -53,7 +53,7 @@
-     UHashTok namekey, pathkey;
-     namekey.pointer = b->fName;
-     pathkey.pointer = b->fPath;
--    return uhash_hashChars(namekey)+37*uhash_hashChars(pathkey);
-+    return uhash_hashChars(namekey)+37U*uhash_hashChars(pathkey);
- }
- 
- /* INTERNAL: compares two entries */

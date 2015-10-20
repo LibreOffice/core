@@ -1582,6 +1582,32 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x118A0, 0x118FF, RID_SUBSETSTR_WARANG_CITI ) );
                     break;
 #endif
+#if U_ICU_VERSION_MAJOR_NUM >= 56
+                    /* FIXME: add RID_... to include/svx/ucsubset.hrc and
+                     * strings to svx/source/dialog/ucsubset.src and Unicode
+                     * block ranges to aAllSubsets, for now this only
+                     * compiles.. */
+                case UBLOCK_AHOM:
+                    break;
+                case UBLOCK_ANATOLIAN_HIEROGLYPHS:
+                    break;
+                case UBLOCK_CHEROKEE_SUPPLEMENT:
+                    break;
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E:
+                    break;
+                case UBLOCK_EARLY_DYNASTIC_CUNEIFORM:
+                    break;
+                case UBLOCK_HATRAN:
+                    break;
+                case UBLOCK_MULTANI:
+                    break;
+                case UBLOCK_OLD_HUNGARIAN:
+                    break;
+                case UBLOCK_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS:
+                    break;
+                case UBLOCK_SUTTON_SIGNWRITING:
+                    break;
+#endif
 
             }
 
