@@ -273,7 +273,7 @@ namespace svgio
                     bBiDiStrong);
 
                 // prepare FontSize
-                double fFontWidth(rSvgStyleAttributes.getFontSize().solve(*this, length));
+                double fFontWidth(rSvgStyleAttributes.getFontSize().solve(*this));
                 double fFontHeight(fFontWidth);
 
                 // prepare locale
@@ -418,7 +418,7 @@ namespace svgio
                     case BaselineShift_Length:
                     {
                         const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
-                        const double mfBaselineShift(aNumber.solve(*this, length));
+                        const double mfBaselineShift(aNumber.solve(*this));
 
                         aPosition.setY(aPosition.getY() + mfBaselineShift);
                         break;
@@ -526,7 +526,7 @@ namespace svgio
                     {
                         const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
                         const drawinglayer::primitive2d::Primitive2DSequence aResult(
-                            alocalTextBreakupHelper.getResult(drawinglayer::primitive2d::BreakupUnit_character));
+                            alocalTextBreakupHelper.getResult());
 
                         if(aResult.hasElements())
                         {
@@ -595,7 +595,7 @@ namespace svgio
         :   mpParent(pParent),
             maX(), // computed below
             maY(), // computed below
-            maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider, length)),
+            maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider)),
             mfTextLength(0.0),
             maPosition(), // computed below
             mnRotationIndex(0),
@@ -605,7 +605,7 @@ namespace svgio
             // get TextLength if provided
             if(rSvgTextPositions.getTextLength().isSet())
             {
-                mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider, length);
+                mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider);
             }
 
             // SVG does not really define in which units a \91rotate\92 for Text/TSpan is given,

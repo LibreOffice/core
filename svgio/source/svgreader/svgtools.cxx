@@ -422,7 +422,7 @@ namespace svgio
 
                     fNum = rtl::math::stringToDouble(
                         aNum.makeStringAndClear(), '.', ',',
-                        &eStatus, 0);
+                        &eStatus);
 
                     return eStatus == rtl_math_ConversionStatus_Ok;
                 }

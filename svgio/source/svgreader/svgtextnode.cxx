@@ -201,7 +201,7 @@ namespace svgio
                                 const_cast< SvgNode& >(rChildCandidate).setAlternativeParent(this);
 
                                 DecomposeChild(rChildCandidate, aNewTarget, rSvgTextPosition);
-                                const_cast< SvgNode& >(rChildCandidate).setAlternativeParent(0);
+                                const_cast< SvgNode& >(rChildCandidate).setAlternativeParent();
                             }
 
                             if(aNewTarget.hasElements())

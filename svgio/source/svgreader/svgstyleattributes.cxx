@@ -413,7 +413,7 @@ namespace svgio
                         // all possible units
                         aStart.setX(rFillGradient.getCx().solve(mrOwner, xcoordinate));
                         aStart.setY(rFillGradient.getCy().solve(mrOwner, ycoordinate));
-                        fRadius = rFillGradient.getR().solve(mrOwner, length);
+                        fRadius = rFillGradient.getR().solve(mrOwner);
 
                         if(bFocal)
                         {
@@ -602,7 +602,7 @@ namespace svgio
 
             if(pFill || pFillGradient || pFillPattern)
             {
-                const double fFillOpacity(getFillOpacity().solve(mrOwner, length));
+                const double fFillOpacity(getFillOpacity().solve(mrOwner));
 
                 if(basegfx::fTools::more(fFillOpacity, 0.0))
                 {
@@ -660,12 +660,12 @@ namespace svgio
             if(pStroke || pStrokeGradient || pStrokePattern)
             {
                 drawinglayer::primitive2d::Primitive2DSequence aNewStroke;
-                const double fStrokeOpacity(getStrokeOpacity().solve(mrOwner, length));
+                const double fStrokeOpacity(getStrokeOpacity().solve(mrOwner));
 
                 if(basegfx::fTools::more(fStrokeOpacity, 0.0))
                 {
                     // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
-                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner, length) : 1.0);
+                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
                     if(basegfx::fTools::more(fStrokeWidth, 0.0))
                     {
@@ -676,7 +676,7 @@ namespace svgio
 
                         if(!getStrokeDasharray().empty())
                         {
-                            aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner, length);
+                            aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
                         }
 
                         // todo: Handle getStrokeDashOffset()
@@ -798,7 +798,7 @@ namespace svgio
                     double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, xcoordinate) : 3.0);
                     double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, xcoordinate) : 3.0);
                     const bool bStrokeWidth(SvgMarkerNode::strokeWidth == rMarker.getMarkerUnits());
-                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner, length) : 1.0);
+                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
                     if(bStrokeWidth)
                     {
@@ -1865,7 +1865,7 @@ namespace svgio
                         else
                         {
                             // no BaselineShift or inherit (which is automatically)
-                            setBaselineShift(BaselineShift_Baseline);
+                            setBaselineShift();
                         }
                     }
                     break;

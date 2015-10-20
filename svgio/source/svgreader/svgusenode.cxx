@@ -153,7 +153,7 @@ namespace svgio
                 // to be valid for the subtree.
                 const_cast< SvgNode* >(mpXLink)->setAlternativeParent(this);
                 mpXLink->decomposeSvgNode(aNewTarget, true);
-                const_cast< SvgNode* >(mpXLink)->setAlternativeParent(0);
+                const_cast< SvgNode* >(mpXLink)->setAlternativeParent();
 
                 if(aNewTarget.hasElements())
                 {

@@ -119,7 +119,7 @@ namespace svgio
 
             if(pStyle && getR().isSet())
             {
-                const double fR(getR().solve(*this, length));
+                const double fR(getR().solve(*this));
 
                 if(fR > 0.0)
                 {

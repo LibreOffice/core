@@ -406,7 +406,7 @@ namespace svgio
 
                             if(pSvgPathNode->getPathLength().isSet())
                             {
-                                const double fUserLength(pSvgPathNode->getPathLength().solve(*this, length));
+                                const double fUserLength(pSvgPathNode->getPathLength().solve(*this));
 
                                 if(fUserLength > 0.0 && !basegfx::fTools::equal(fUserLength, fBasegfxPathLength))
                                 {
@@ -425,7 +425,7 @@ namespace svgio
                                 }
                                 else
                                 {
-                                    fPosition = getStartOffset().solve(*this, length) * fUserToBasegfx;
+                                    fPosition = getStartOffset().solve(*this) * fUserToBasegfx;
                                 }
                             }
 
@@ -454,7 +454,7 @@ namespace svgio
                                             rTextStart);
 
                                         const drawinglayer::primitive2d::Primitive2DSequence aResult(
-                                            aPathTextBreakupHelper.getResult(drawinglayer::primitive2d::BreakupUnit_character));
+                                            aPathTextBreakupHelper.getResult());
 
                                         if(aResult.hasElements())
                                         {
