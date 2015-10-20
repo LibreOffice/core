@@ -95,13 +95,10 @@ public class JoinViewAccessibility extends TestCase {
     {
         XInterface oObj = null;
 
-        Object newQuery = null;
-        XStorable store = null;
-
         Param.getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
         Object oDBSource = Param.getMSF()
                 .createInstance("com.sun.star.sdb.DataSource");
-        newQuery = Param.getMSF().createInstance(
+        Object newQuery = Param.getMSF().createInstance(
                 "com.sun.star.sdb.QueryDefinition");
         Param.getMSF().createInstance("com.sun.star.awt.Toolkit");
 
@@ -138,12 +135,11 @@ public class JoinViewAccessibility extends TestCase {
 
         log.println ("writing database file ...");
         XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
-        store = UnoRuntime.queryInterface(XStorable.class,
+        XStorable store = UnoRuntime.queryInterface(XStorable.class,
                 xDDS.getDatabaseDocument());
         aFile = utils.getOfficeTemp (Param.getMSF ())+"JoinView.odb";
         log.println ("... filename will be "+aFile);
-        store.storeAsURL (aFile,new PropertyValue[]
-        {});
+        store.storeAsURL (aFile,new PropertyValue[]{});
         log.println ("... done");
 
         isolConnection = UnoRuntime.queryInterface (

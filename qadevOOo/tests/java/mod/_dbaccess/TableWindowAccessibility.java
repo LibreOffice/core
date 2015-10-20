@@ -98,13 +98,10 @@ public class TableWindowAccessibility extends TestCase {
             PrintWriter log) throws Exception {
         XInterface oObj = null;
 
-        Object newQuery = null;
-        XStorable store = null;
-
         Param.getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
         Object oDBSource = Param.getMSF()
                 .createInstance("com.sun.star.sdb.DataSource");
-        newQuery = Param.getMSF().createInstance(
+        Object newQuery = Param.getMSF().createInstance(
                 "com.sun.star.sdb.QueryDefinition");
         Param.getMSF().createInstance("com.sun.star.awt.Toolkit");
 
@@ -140,7 +137,7 @@ public class TableWindowAccessibility extends TestCase {
         log.println("writing database file ...");
         XDocumentDataSource xDDS = UnoRuntime.queryInterface(
                 XDocumentDataSource.class, oDBSource);
-        store = UnoRuntime.queryInterface(XStorable.class,
+        XStorable store = UnoRuntime.queryInterface(XStorable.class,
                 xDDS.getDatabaseDocument());
         aFile = utils.getOfficeTemp(Param.getMSF()) + "TableWindow.odb";
         log.println("... filename will be " + aFile);
