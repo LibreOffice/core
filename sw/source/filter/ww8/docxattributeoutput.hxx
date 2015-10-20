@@ -291,7 +291,7 @@ public:
     virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) override;
 
     // preserve DOCX page vertical alignment
-    virtual void TextVerticalAdjustment( const drawing::TextVerticalAdjust ) SAL_OVERRIDE;
+    virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust ) SAL_OVERRIDE;
 
     /// Start of the section properties.
     virtual void StartSection() override;

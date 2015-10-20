@@ -56,8 +56,6 @@
 
 #include <boost/noncopyable.hpp>
 
-using namespace ::com::sun::star;
-
 class SwDoc;
 class SwPaM;
 class SfxPoolItem;
@@ -813,7 +811,7 @@ public:
     sal_uInt32 nPgLeft;
     sal_uInt32 nPgRight;
 
-    drawing::TextVerticalAdjust mnVerticalAdjustment;
+    css::drawing::TextVerticalAdjust mnVerticalAdjustment;
     sal_uInt8 mnBorders;
     bool mbHasFootnote;
     void SetDirection();
@@ -900,7 +898,7 @@ public:
     explicit wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader), mnDesc(0)
         {}
     void SetCurrentSectionHasFootnote();
-    void SetCurrentSectionVerticalAdjustment(const drawing::TextVerticalAdjust nVA);
+    void SetCurrentSectionVerticalAdjustment(const css::drawing::TextVerticalAdjust nVA);
     bool CurrentSectionIsVertical() const;
     bool CurrentSectionIsProtected() const;
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);

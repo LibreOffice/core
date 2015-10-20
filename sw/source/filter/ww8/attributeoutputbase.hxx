@@ -37,8 +37,6 @@
 
 #include <vector>
 
-using namespace ::com::sun::star;
-
 class Point;
 class SvxCaseMapItem;
 class SvxColorItem;
@@ -297,7 +295,7 @@ public:
     virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) = 0;
 
     // preserve page vertical alignment
-    virtual void TextVerticalAdjustment( const drawing::TextVerticalAdjust) {};
+    virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust) {};
 
     /// Start of the section properties.
     virtual void StartSection() = 0;
