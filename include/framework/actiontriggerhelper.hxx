@@ -37,9 +37,9 @@ namespace framework
             static void
                 CreateMenuFromActionTriggerContainer(
                     Menu* pNewMenu,
-                    const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rActionTriggerContainer );
+                    const css::uno::Reference< css::container::XIndexContainer >& rActionTriggerContainer );
 
-            // Creates a "com::sun::star::ui::ActionTriggerContainer" with the structure of the menu
+            // Creates a "css::ui::ActionTriggerContainer" with the structure of the menu
             // provided as a parameter. The implementation class stores the menu pointer
             // to optimize the time of creation of a menu from a actiontrigger structure.
             // IMPORTANT: The caller must ensure that the menu pointer is valid through the
@@ -47,7 +47,7 @@ namespace framework
             // @param pNewMenu = Must be a valid menu. Please be aware that this implementation is based on
             //                   the above mentioned restriction!!!
 
-            static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
+            static css::uno::Reference< css::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
                 const Menu* pMenu, const OUString* pMenuIdentifier );
 
             // Fills the submitted rActionTriggerContainer with the structure of the menu
@@ -56,7 +56,7 @@ namespace framework
             // @param pNewMenu = must be a valid menu
             static void
                 FillActionTriggerContainerFromMenu(
-                    com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rActionTriggerContainer,
+                    css::uno::Reference< css::container::XIndexContainer >& rActionTriggerContainer,
                     const Menu* pMenu );
 
     };

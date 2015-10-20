@@ -44,9 +44,7 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
             BMK_WIZARDMENU
         };
 
-        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                 BmkMenuType nType
-        );
+        BmkMenu( css::uno::Reference< css::frame::XFrame >& rFrame, BmkMenuType nType );
 
         virtual ~BmkMenu();
 
