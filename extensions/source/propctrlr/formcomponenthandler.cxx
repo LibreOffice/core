@@ -567,7 +567,7 @@ namespace pcr
             else
             {
                 INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
-                aPropertyValue <<= URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link<OUString *, bool>(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+                aPropertyValue <<= URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link<OUString *, bool>(), false, true );
             }
         }
         break;

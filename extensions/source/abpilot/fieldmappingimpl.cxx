@@ -216,7 +216,7 @@ namespace abp
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
-                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+                _rxContext, sAddressBookNodeName);
 
             OConfigurationNode aFields = aAddressBookSettings.openNode( OUString( "Fields" ) );
 
@@ -292,7 +292,7 @@ namespace abp
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
-                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+                _rxContext, sAddressBookNodeName);
 
             aAddressBookSettings.setNodeValue( OUString( "DataSourceName" ), makeAny( _rDataSourceName ) );
             aAddressBookSettings.setNodeValue( OUString( "Command" ), makeAny( _rTableName ) );
@@ -309,7 +309,7 @@ namespace abp
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
-                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+                _rxContext, sAddressBookNodeName);
 
             // set the flag
             aAddressBookSettings.setNodeValue( OUString( "AutoPilotCompleted" ), makeAny( true ) );

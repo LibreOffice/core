@@ -570,7 +570,7 @@ void BibToolBar::RebuildToolbar()
 {
     ApplyImageList();
     // We have to call parent asynchronously as SetSize works also asynchronously!
-    Application::PostUserEvent( aLayoutManager, 0 );
+    Application::PostUserEvent( aLayoutManager );
 }
 
 
