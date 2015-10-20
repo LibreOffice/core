@@ -275,7 +275,7 @@ GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
     if (mbCheckedGraphite)
         return mpGraphiteFace;
     // test for graphite here so that it is cached most efficiently
-    if (GetTable("Silf", 0))
+    if (GetTable("Silf"))
     {
         static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
         int graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;

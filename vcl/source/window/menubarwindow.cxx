@@ -148,7 +148,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn->SetPaintTransparent(true);
         aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);
 
-        aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage, ToolBoxItemBits::NONE);
+        aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage);
         aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
         aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
         aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());

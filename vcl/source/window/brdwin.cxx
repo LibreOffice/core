@@ -56,7 +56,7 @@ static void ImplGetPinImage( DrawButtonFlags nStyle, bool bPinIn, Image& rImage 
             Color aMaskColor( 0x00, 0x00, 0xFF );
             pSVData->maCtrlData.mpPinImgList->InsertFromHorizontalBitmap
                 ( ResId( SV_RESID_BITMAP_PIN, *pResMgr ), 4,
-                  &aMaskColor, NULL, NULL );
+                  &aMaskColor );
         }
     }
 
@@ -1937,8 +1937,7 @@ void ImplBorderWindow::Resize()
             }
             mpMenuBarWindow->setPosSizePixel(
                     nLeftBorder, nTopBorder,
-                    aSize.Width()-nLeftBorder-nRightBorder, nMenuHeight,
-                    PosSizeFlags::Pos | PosSizeFlags::Width | PosSizeFlags::Height);
+                    aSize.Width()-nLeftBorder-nRightBorder, nMenuHeight);
 
             // shift the notebookbar down accordingly
             nTopBorder += nMenuHeight;
@@ -1949,8 +1948,7 @@ void ImplBorderWindow::Resize()
             long nNotebookBarHeight = mpNotebookBarWindow->GetSizePixel().Height();
             mpNotebookBarWindow->setPosSizePixel(
                     nLeftBorder, nTopBorder,
-                    aSize.Width() - nLeftBorder - nRightBorder, nNotebookBarHeight,
-                    PosSizeFlags::Pos | PosSizeFlags::Width | PosSizeFlags::Height);
+                    aSize.Width() - nLeftBorder - nRightBorder, nNotebookBarHeight);
         }
 
         GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,

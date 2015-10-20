@@ -501,7 +501,7 @@ bool PrinterGfx::drawVerticalizedText(
                     aPos.Y() += (sal_Int32)(-(nTextScale*fStretch - nD) * fCos);
                     break;
             }
-            drawText( aPos, pStr+i, 1, NULL );
+            drawText( aPos, pStr+i, 1 );
             if( i < nLen-1 && pDeltaArray )
             {
                 aPoint.X() = (sal_Int32)(rPoint.X() + ((double)pDeltaArray[i] * fCos));

@@ -270,9 +270,9 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case( BMP_CONVERSION_4BIT_COLORS ):
         {
             if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4, NULL );
+                bRet = ImplConvertUp( 4 );
             else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4, NULL );
+                bRet = ImplConvertDown( 4 );
             else
                 bRet = true;
         }
@@ -318,7 +318,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case( BMP_CONVERSION_24BIT ):
         {
             if( nBitCount < 24 )
-                bRet = ImplConvertUp( 24, NULL );
+                bRet = ImplConvertUp( 24 );
             else
                 bRet = true;
         }

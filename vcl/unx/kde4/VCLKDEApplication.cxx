@@ -81,7 +81,7 @@ void VCLKDEApplication::postDialogCleanup()
     if( clipboard->ownsSelection())
         clipboard->clear( QClipboard::Selection );
     if( clipboard->ownsClipboard())
-        clipboard->clear( QClipboard::Clipboard );
+        clipboard->clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

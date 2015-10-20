@@ -1567,7 +1567,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
             Rectangle aRect;
             // hdu said base = index
             aMapVDev->GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
-                                       pAct->GetWidth(), NULL );
+                                       pAct->GetWidth() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
@@ -1582,7 +1582,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
             OUString aStr( pStr );
 
             Rectangle aRect;
-            aMapVDev->GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength(), 0, NULL );
+            aMapVDev->GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength() );
             Point aPt( pAct->GetStartPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             aRect.Right() = aRect.Left() + pAct->GetWidth();

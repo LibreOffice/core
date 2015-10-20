@@ -467,7 +467,7 @@ PDFWriter::InitEncryption( const OUString& i_rOwnerPassword,
 
 void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
 {
-    xImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
+    xImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

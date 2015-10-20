@@ -914,7 +914,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, NULL);
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -1184,7 +1184,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth, NULL);
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -1428,7 +1428,7 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         return nullptr;
     OUString copyBecausePrepareModifiesIt(rString);
     ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs(copyBecausePrepareModifiesIt,
-            0, rString.getLength(), 0, nullptr, SalLayoutFlags::NONE, nullptr);
+            0, rString.getLength(), 0, nullptr);
 
     SalLayout *const pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
     if (!pSalLayout)

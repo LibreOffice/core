@@ -79,7 +79,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::su
         ImplInit( pParent, 0, pData );
     }
     else
-        ImplInit( pParent, nStyle, NULL );
+        ImplInit( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( WindowType nType ) :
@@ -92,7 +92,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
     ImplInitWorkWindowData();
-    ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :

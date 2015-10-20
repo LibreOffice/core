@@ -51,7 +51,7 @@ void VclComplexTextTest::testArabic()
     vcl::Font aFont = OutputDevice::GetDefaultFont(
                         DefaultFontType::CTL_SPREADSHEET,
                         LANGUAGE_ARABIC_SAUDI_ARABIA,
-                        GetDefaultFontFlags::OnlyOne, 0 );
+                        GetDefaultFontFlags::OnlyOne );
     pOutDev->SetFont( aFont );
 
     // normal orientation

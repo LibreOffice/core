@@ -2589,7 +2589,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, bool bIdleFormatAndUpdate )
             if ( bIdleFormatAndUpdate )
                 IdleFormatAndUpdate( NULL, 0xFFFF );
             else
-                FormatAndUpdate( NULL );
+                FormatAndUpdate();
         }
     }
 }
@@ -2613,7 +2613,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich, bool bIdleF
             if(bIdleFormatAndUpdate)
                 IdleFormatAndUpdate( NULL, 0xFFFF );
             else
-                FormatAndUpdate( NULL );
+                FormatAndUpdate();
         }
     }
 }
@@ -2637,7 +2637,7 @@ void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
             mbFormatted = false;
-            FormatAndUpdate( NULL );
+            FormatAndUpdate();
         }
     }
 }
@@ -2668,7 +2668,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
         if ( bIdleFormatAndUpdate )
             IdleFormatAndUpdate( NULL, 0xFFFF );
         else
-            FormatAndUpdate( NULL );
+            FormatAndUpdate();
     }
 }
 

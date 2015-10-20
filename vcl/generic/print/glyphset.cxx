@@ -724,7 +724,7 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     aInfo.LoadFont( pSrcFont );
 
     aInfo.CreateFontSubset( nTargetMask, pTmpFile, pGlyphSetName,
-        &aRequestedGlyphs[0], &aEncoding[0], nGlyphCount, NULL );
+        &aRequestedGlyphs[0], &aEncoding[0], nGlyphCount );
 }
 
 bool

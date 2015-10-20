@@ -2034,7 +2034,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
             }
 
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
-                                  nDrawFlags, nTextStyle, NULL );
+                                  nDrawFlags, nTextStyle );
 
             rMouseRect          = Rectangle( aPos, aSize );
             rMouseRect.Left()   = rPos.X();
@@ -3109,7 +3109,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         }
 
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
-                              nDrawFlags, nTextStyle, NULL );
+                              nDrawFlags, nTextStyle );
         nLineY = aPos.Y() + aSize.Height()/2;
 
         rMouseRect          = Rectangle( aPos, aSize );
