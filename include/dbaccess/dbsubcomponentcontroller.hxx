@@ -48,8 +48,8 @@ namespace dbaui
     class DBSubComponentController;
 
     typedef ::cppu::ImplInheritanceHelper<   OGenericUnoController
-                                         ,   ::com::sun::star::document::XScriptInvocationContext
-                                         ,   ::com::sun::star::util::XModifiable
+                                         ,   css::document::XScriptInvocationContext
+                                         ,   css::util::XModifiable
                                          >   DBSubComponentController_Base;
 
     struct DBSubComponentController_Impl;
@@ -62,16 +62,16 @@ namespace dbaui
         /** forces usage of a connection which we do not own
             <p>To be used from within XInitialization::initialize, resp. impl_initialize, only.</p>
         */
-        void        initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+        void        initializeConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxForeignConn );
 
     protected:
         // OGenericUnoController - initialization
         virtual void impl_initialize() override;
 
         // OGenericUnoController
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) override;
+        virtual void      Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const override;
+        virtual css::uno::Reference< css::frame::XModel > getPrivateModel() const override;
 
                 bool     impl_isModified() const;
         virtual void     impl_onModifyChanged();
@@ -87,17 +87,17 @@ namespace dbaui
 
         bool            isConnected() const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
-                    getMetaData( ) const;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >
+                        getMetaData( ) const;
 
 
         // access to the data source / document
         OUString getDataSourceName() const;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
+        const css::uno::Reference< css::beans::XPropertySet >&
                     getDataSource() const;
         bool        haveDataSource() const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                     getDatabaseDocument() const;
 
         /** provides access to the SDB-level database meta data of the current connection
@@ -137,33 +137,33 @@ namespace dbaui
             @return
                 the currently used connection.
         */
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+        const css::uno::Reference< css::sdbc::XConnection >&
                     getConnection() const;
 
         /** returns the number formatter
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const;
+        css::uno::Reference< css::util::XNumberFormatter >    getNumberFormatter() const;
 
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::frame::XController
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XScriptInvocationContext
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (css::uno::RuntimeException, std::exception) override;
 
         // XModifiable
-        virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setModified( sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setModified( sal_Bool bModified ) throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTitle
-        virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB);
+        DBSubComponentController(const css::uno::Reference< css::uno::XComponentContext>& _rxORB);
         virtual ~DBSubComponentController();
 
         void                disconnect();
@@ -177,16 +177,16 @@ namespace dbaui
 
     protected:
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
 
         // XInterface
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         sal_Int32 getCurrentStartNumber() const;

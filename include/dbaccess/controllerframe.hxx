@@ -46,13 +46,13 @@ namespace dbaui
         ~ControllerFrame();
 
         /// attaches a new frame
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+        const css::uno::Reference< css::frame::XFrame >&
                 attachFrame(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+                    const css::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 
         // retrieves the current frame
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+        const css::uno::Reference< css::frame::XFrame >&
                 getFrame() const;
 
         /** determines whether the frame is currently active
@@ -61,7 +61,7 @@ namespace dbaui
 
         /** notifies the instance that a certain frame action happened with our frame
         */
-        void    frameAction( ::com::sun::star::frame::FrameAction _eAction );
+        void    frameAction( css::frame::FrameAction _eAction );
 
     private:
         ::std::unique_ptr< ControllerFrame_Data > m_pData;
