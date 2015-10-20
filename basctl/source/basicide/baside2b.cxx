@@ -1870,7 +1870,7 @@ StackWindow::StackWindow (Layout* pParent) :
     aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox->SetHighlightRange();
     aTreeListBox->SetSelectionMode( NO_SELECTION );
-    aTreeListBox->InsertEntry( OUString(), 0 );
+    aTreeListBox->InsertEntry( OUString() );
     aTreeListBox->Show();
 
     SetText(IDEResId(RID_STR_STACKNAME).toString());
@@ -1974,7 +1974,7 @@ void StackWindow::UpdateCalls()
                 }
                 aEntry += ")";
             }
-            aTreeListBox->InsertEntry( aEntry, 0 );
+            aTreeListBox->InsertEntry( aEntry );
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -1986,7 +1986,7 @@ void StackWindow::UpdateCalls()
     else
     {
         aTreeListBox->SetSelectionMode( NO_SELECTION );
-        aTreeListBox->InsertEntry( OUString(), 0 );
+        aTreeListBox->InsertEntry( OUString() );
     }
 
     aTreeListBox->SetUpdateMode(true);
