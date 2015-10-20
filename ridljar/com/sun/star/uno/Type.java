@@ -399,6 +399,7 @@ public class Type {
             {
                 return _typeName.equals(type._typeName);
             }
+            // fall-through
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
             Class<?> c1 = getZClass();
