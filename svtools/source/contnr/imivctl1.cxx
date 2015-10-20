@@ -1743,7 +1743,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
                 // output size. The virtual size has to be adapted, because
                 // AdjustEntryAtGrid depends on it.
                 const Rectangle& rBoundRect = GetEntryBoundRect( pEntry );
-                Rectangle aCenterRect( CalcBmpRect( pEntry, 0 ));
+                Rectangle aCenterRect( CalcBmpRect( pEntry ));
                 Point aNewPos( AdjustAtGrid( aCenterRect, rBoundRect ) );
                 Rectangle aNewBoundRect( aNewPos, pEntry->aRect.GetSize());
                 AdjustVirtSize( aNewBoundRect );
@@ -2817,7 +2817,7 @@ void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& r
         // Decisive (for our eye) is the bitmap, else, the entry might jump too
         // much within long texts.
         const Rectangle& rBoundRect = GetEntryBoundRect( pCur );
-        Rectangle aCenterRect( CalcBmpRect( pCur, 0 ));
+        Rectangle aCenterRect( CalcBmpRect( pCur ));
         if( bGo && !pCur->IsPosLocked() )
         {
             long nWidth = aCenterRect.GetSize().Width();
@@ -3353,7 +3353,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
     }
     else if( ePositionMode == IcnViewPositionModeAutoAdjust )
     {
-        AdjustEntryAtGrid( 0 );
+        AdjustEntryAtGrid();
     }
 }
 

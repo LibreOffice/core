@@ -563,12 +563,12 @@ namespace svt
     {
         INetURLObject aParser;
         aParser.SetSmartProtocol( INetProtocol::File );
-        aParser.SetURL( _rPath, INetURLObject::WAS_ENCODED );
+        aParser.SetURL( _rPath );
         if ( INetProtocol::NotValid == aParser.GetProtocol() )
         {
             OUString sURL;
             osl::FileBase::getFileURLFromSystemPath( _rPath, sURL );
-            aParser.SetURL( sURL, INetURLObject::WAS_ENCODED );
+            aParser.SetURL( sURL );
         }
         return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }

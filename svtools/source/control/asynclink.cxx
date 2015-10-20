@@ -60,7 +60,7 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles, bool bUseTimer )
         else
         {
             if( _pMutex ) _pMutex->acquire();
-            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent), 0 );
+            _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
             if( _pMutex ) _pMutex->release();
         }
     }

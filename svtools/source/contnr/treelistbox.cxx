@@ -2621,7 +2621,7 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
         SvLBoxItem& rItem = pEntry->GetItem( nIdx );
-        rItem.InitViewData( this, pEntry, 0 );
+        rItem.InitViewData( this, pEntry );
     }
 
     // repaint

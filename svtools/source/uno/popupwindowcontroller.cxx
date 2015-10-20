@@ -92,7 +92,7 @@ IMPL_LINK_TYPED( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&
         {
             if( mpToolBox )
                 mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, static_cast<void*>(mpPopupWindow) );
-            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
+            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
 
             svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow.get() );
             if( pToolbarMenu )
@@ -105,7 +105,7 @@ IMPL_LINK_TYPED( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&
     {
         if( mpPopupWindow )
         {
-            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS, 0 );
+            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
             if( mpToolBox )
                 mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE, static_cast<void*>(mpPopupWindow) );
         }

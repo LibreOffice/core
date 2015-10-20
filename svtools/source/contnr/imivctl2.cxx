@@ -74,7 +74,7 @@ void IcnCursor_Impl::ImplCreate()
     {
         SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
         // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-        Rectangle rRect( pView->CalcBmpRect( pEntry,0 ) );
+        Rectangle rRect( pView->CalcBmpRect( pEntry ) );
         short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
         short nX = (short)( ((rRect.Left()+rRect.Right())/2) / nDeltaWidth );
 

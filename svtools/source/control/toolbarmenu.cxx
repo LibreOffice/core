@@ -1442,7 +1442,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                     aTmpPos.Y() += nTextOffsetY;
                     DrawTextFlags nStyle = nTextStyle|DrawTextFlags::Mnemonic;
 
-                    rRenderContext.DrawCtrlText(aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle, NULL, NULL);
+                    rRenderContext.DrawCtrlText(aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle);
                 }
 
                 if (pThisOnly && bHighlighted)

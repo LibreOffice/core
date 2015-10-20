@@ -293,7 +293,7 @@ void SvImpLBox::Clear()
 
     aContextBmpWidthVector.clear();
 
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, NULL );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED );
 }
 
 // *********************************************************************
@@ -3324,7 +3324,7 @@ void SvImpLBox::NotifyTabsChanged()
     if( GetUpdateMode() && !(nFlags & F_IGNORE_CHANGED_TABS ) &&
         nCurUserEvent == 0 )
     {
-        nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),nullptr);
+        nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent));
     }
 }
 
