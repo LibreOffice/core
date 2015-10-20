@@ -200,8 +200,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SfxItemPool* pAttrPool;
     Color*  pDfltColor;
     vcl::Font*   pDfltFont;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentProperties> m_xDocProps;
+    css::uno::Reference< css::document::XDocumentProperties> m_xDocProps;
     SfxItemSet *pRTFDefaults;
 
     long    nVersionNo;
@@ -268,7 +267,7 @@ protected:
     void ReadTabAttr( int nToken, SfxItemSet& rSet );
 
     // Read Document-Info
-    ::com::sun::star::util::DateTime GetDateTimeStamp( );
+    css::util::DateTime GetDateTimeStamp( );
     OUString& GetTextToEndGroup( OUString& rStr );
     void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
@@ -292,8 +291,7 @@ protected:
 
     SvxRTFParser( SfxItemPool& rAttrPool,
                     SvStream& rIn,
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::document::XDocumentProperties> i_xDocProps,
+                    css::uno::Reference< css::document::XDocumentProperties> i_xDocProps,
                     bool bReadNewDoc = true );
     virtual ~SvxRTFParser();
 

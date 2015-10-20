@@ -40,7 +40,7 @@
 
 namespace editeng {
 
-    // values from ::com::sun::star::table::BorderLineStyle
+    // values from css::table::BorderLineStyle
     typedef sal_Int16 SvxBorderStyle;
 
     // convert border style between Word formats and LO
@@ -70,8 +70,8 @@ namespace editeng {
 
     public:
         SvxBorderLine( const Color *pCol = 0,
-                long nWidth = 0, SvxBorderStyle nStyle =
-                    ::com::sun::star::table::BorderLineStyle::SOLID,
+                long nWidth = 0,
+                SvxBorderStyle nStyle = css::table::BorderLineStyle::SOLID,
                 bool bUseLeftTop = false,
                 Color (*pColorOutFn)( Color ) = &darkColor,
                 Color (*pColorInFn)( Color ) = &darkColor,
@@ -137,7 +137,7 @@ namespace editeng {
 
         bool isEmpty() const {
             return m_aWidthImpl.IsEmpty()
-                || m_nStyle == ::com::sun::star::table::BorderLineStyle::NONE
+                || m_nStyle == css::table::BorderLineStyle::NONE
                 || m_nWidth == 0;
         }
         bool isDouble() const { return m_aWidthImpl.IsDouble(); }

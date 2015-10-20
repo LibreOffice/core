@@ -43,69 +43,44 @@ class EDITENG_DLLPUBLIC LinguMgr
 {
     friend class LinguMgrExitLstnr;
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceManager2 > xLngSvcMgr;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyph;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     xThes;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >          xProp;
+    static css::uno::Reference< css::linguistic2::XLinguServiceManager2 >     xLngSvcMgr;
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            xSpell;
+    static css::uno::Reference< css::linguistic2::XHyphenator >               xHyph;
+    static css::uno::Reference< css::linguistic2::XThesaurus >                xThes;
+    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
+    static css::uno::Reference< css::linguistic2::XLinguProperties >          xProp;
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    xIgnoreAll;
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    xChangeAll;
+    static css::uno::Reference< css::linguistic2::XDictionary >               xIgnoreAll;
+    static css::uno::Reference< css::linguistic2::XDictionary >               xChangeAll;
 
     static LinguMgrExitLstnr                           *pExitLstnr;
     static bool                                        bExiting;
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > GetSpell();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    GetHyph();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     GetThes();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDicList();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >          GetProp();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetStandard();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAll();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetChangeAll();
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            GetSpell();
+    static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyph();
+    static css::uno::Reference< css::linguistic2::XThesaurus >                GetThes();
+    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDicList();
+    static css::uno::Reference< css::linguistic2::XLinguProperties >          GetProp();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetStandard();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAll();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetChangeAll();
 
     LinguMgr(const LinguMgr &) = delete;
     LinguMgr & operator = (const LinguMgr &) = delete;
 
 public:
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >          GetLinguPropertySet();
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            GetSpellChecker();
+    static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyphenator();
+    static css::uno::Reference< css::linguistic2::XThesaurus >                GetThesaurus();
+    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();
+    static css::uno::Reference< css::linguistic2::XLinguProperties >          GetLinguPropertySet();
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceManager2 > GetLngSvcMgr();
+    static css::uno::Reference< css::linguistic2::XLinguServiceManager2 >     GetLngSvcMgr();
 
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetStandardDic();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAllList();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetChangeAllList();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetStandardDic();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAllList();
+    static css::uno::Reference< css::linguistic2::XDictionary >               GetChangeAllList();
 };
 
 
@@ -134,8 +109,7 @@ inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
 
 
 EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XHyphenatedWord > & rHyphWord );
+        const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
 
 
 
@@ -143,40 +117,39 @@ EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
 class EDITENG_DLLPUBLIC SvxDicListChgClamp
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
+    css::uno::Reference<
+        css::linguistic2::XSearchableDictionaryList >    xDicList;
 
     SvxDicListChgClamp(const SvxDicListChgClamp &) = delete;
     SvxDicListChgClamp & operator = (const SvxDicListChgClamp &) = delete;
 
 public:
-    SvxDicListChgClamp( ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >  &rxDicList );
+    SvxDicListChgClamp( css::uno::Reference<
+        css::linguistic2::XSearchableDictionaryList >  &rxDicList );
     ~SvxDicListChgClamp();
 };
 
 
 
 //TODO: remove those functions or make them inline
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XHyphenator >    SvxGetHyphenator();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSearchableDictionaryList > SvxGetDictionaryList();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguProperties >          SvxGetLinguPropertySet();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XHyphenator >    SvxGetHyphenator();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XThesaurus >     SvxGetThesaurus();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XSearchableDictionaryList > SvxGetDictionaryList();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XLinguProperties >          SvxGetLinguPropertySet();
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList );
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetIgnoreAllList();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetChangeAllList();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
+            css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  xDicList );
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XDictionary >    SvxGetIgnoreAllList();
+EDITENG_DLLPUBLIC css::uno::Reference<
+    css::linguistic2::XDictionary >    SvxGetChangeAllList();
 
 
 // misc functions

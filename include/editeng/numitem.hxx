@@ -52,18 +52,18 @@ namespace com{namespace sun{ namespace star{
 class EDITENG_DLLPUBLIC SvxNumberType
 {
     static sal_Int32 nRefCount;
-    static com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
+    static css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
 
     sal_Int16       nNumType;
     bool            bShowSymbol;        // Also show Symbol ?
 
 public:
-    explicit SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
+    explicit SvxNumberType(sal_Int16 nType = css::style::NumberingType::ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
     OUString        GetNumStr( sal_uLong nNo ) const;
-    OUString        GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
@@ -73,9 +73,9 @@ public:
 
     bool            IsTextFormat() const
                     {
-                        return com::sun::star::style::NumberingType::NUMBER_NONE != nNumType &&
-                               com::sun::star::style::NumberingType::CHAR_SPECIAL != nNumType &&
-                               com::sun::star::style::NumberingType::BITMAP != nNumType;
+                        return css::style::NumberingType::NUMBER_NONE != nNumType &&
+                               css::style::NumberingType::CHAR_SPECIAL != nNumType &&
+                               css::style::NumberingType::BITMAP != nNumType;
                     }
 };
 
@@ -247,7 +247,7 @@ class EDITENG_DLLPUBLIC SvxNumRule
     bool                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
-    com::sun::star::lang::Locale aLocale;
+    css::lang::Locale aLocale;
 public:
     SvxNumRule( SvxNumRuleFlags nFeatures,
                 sal_uInt16 nLevels,
@@ -306,8 +306,8 @@ public:
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SvxNodeNum

@@ -125,7 +125,7 @@ public:
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
     const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const;
-    bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
+    bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const;
 
     const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
 

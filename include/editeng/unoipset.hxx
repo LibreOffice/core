@@ -36,7 +36,7 @@ struct SvxIDPropertyCombine;
 class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
-    mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
+    mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
     ::std::vector< SvxIDPropertyCombine* > aCombineList;
     SfxItemPool&                    mrItemPool;
 
@@ -45,28 +45,28 @@ public:
     ~SvxItemPropertySet();
 
     // Methods, which work directly with the ItemSet
-    static ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
-    static void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
+    static css::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
+    static void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
 
     // Methods that use Any instead
-    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
-    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal ) const;
+    css::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
+    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rVal ) const;
 
     bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
-    ::com::sun::star::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
-    void AddUsrAnyForID(const ::com::sun::star::uno::Any& rAny, sal_uInt16 nWID);
+    css::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
+    void AddUsrAnyForID(const css::uno::Any& rAny, sal_uInt16 nWID);
     void ClearAllUsrAny();
 
-    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertySimpleEntry* getPropertyMapEntry(const OUString &rName) const;
 };
 
 /** converts the given any with a metric to 100th/mm if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
+EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, css::uno::Any & rMetric ) throw();
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
+EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, css::uno::Any & rMetric ) throw();
 
 #endif // INCLUDED_EDITENG_UNOIPSET_HXX
 

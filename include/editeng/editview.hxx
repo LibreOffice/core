@@ -121,7 +121,7 @@ public:
     bool            HasSelection() const;
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
-    bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    bool            SelectCurrentWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     /// Returns the rectangles of the current selection in TWIPs.
     void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
 
@@ -192,9 +192,9 @@ public:
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
-    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial );
+    void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
+    css::uno::Reference< css::datatransfer::XTransferable > GetTransferable();
 
     // An EditView, so that when TRUE the update will be free from flickering:
     void            SetEditEngineUpdateMode( bool bUpdate );
@@ -255,8 +255,8 @@ public:
     */
     static LanguageType CheckLanguage(
                             const OUString &rText,
-                            com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell,
-                            com::sun::star::uno::Reference< com::sun::star::linguistic2::XLanguageGuessing > xLangGuess,
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell,
+                            css::uno::Reference< css::linguistic2::XLanguageGuessing > xLangGuess,
                             bool bIsParaText );
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);

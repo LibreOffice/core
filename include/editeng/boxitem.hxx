@@ -71,8 +71,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -106,9 +106,9 @@ public:
     // Line width plus Space plus inward distance
     // bIgnoreLine = TRUE -> Also return distance, when no Line is set
     sal_uInt16  CalcLineSpace( SvxBoxItemLine nLine, bool bIgnoreLine = false ) const;
-    static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
-    static bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
-    static bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
+    static css::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
+    static bool LineToSvxLine(const css::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
+    static bool LineToSvxLine(const css::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
 };
 
 inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
@@ -187,8 +187,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const override;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
