@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_d7105eab",
+        "filename": "unoxml/source/dom/node.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-20T20:47:42Z",
+      "side": 1,
+      "message": "`prefix` is the only local variable that is used in the lambda expression perhaps it would be more readable if you explicitly captured prefix in the capture list.",
+      "revId": "201527f9afb49d25f5dbce49d7e888953f14b55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
