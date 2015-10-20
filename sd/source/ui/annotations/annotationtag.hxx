@@ -82,7 +82,7 @@ private:
     VclPtr<AnnotationWindow>                        mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
-    const vcl::Font&                              mrFont;
+    const vcl::Font&                                mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;
     VclPtr<vcl::Window>                             mpListenWindow;
