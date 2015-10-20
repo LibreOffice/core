@@ -22,6 +22,10 @@
 #define FDO_DBUS_PATH           "/org/freedesktop/ScreenSaver"
 #define FDO_DBUS_INTERFACE      "org.freedesktop.ScreenSaver"
 
+#define FDOPM_DBUS_SERVICE      "org.freedesktop.PowerManagement.Inhibit"
+#define FDOPM_DBUS_PATH         "/org/freedesktop/PowerManagement/Inhibit"
+#define FDOPM_DBUS_INTERFACE    "org.freedesktop.PowerManagement.Inhibit"
+
 #define GSM_DBUS_SERVICE        "org.gnome.SessionManager"
 #define GSM_DBUS_PATH           "/org/gnome/SessionManager"
 #define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
@@ -36,6 +40,7 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
     inhibitFDO( bInhibit, appname, aReason.getStr() );
+    inhibitFDOPM( bInhibit, appname, aReason.getStr() );
 
     if ( bIsX11 )
     {
@@ -143,6 +148,29 @@ void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnFDOCookie );
+}
+
+void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const gchar* appname, const gchar* reason )
+{
+    dbusInhibit( bInhibit,
+                 FDOPM_DBUS_SERVICE, FDOPM_DBUS_PATH, FDOPM_DBUS_INTERFACE,
+                 [appname, reason] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
+                     return dbus_g_proxy_call( proxy,
+                                               "Inhibit", &error,
+                                               G_TYPE_STRING, appname,
+                                               G_TYPE_STRING, reason,
+                                               G_TYPE_INVALID,
+                                               G_TYPE_UINT, &nCookie,
+                                               G_TYPE_INVALID );
+                 },
+                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
+                     return dbus_g_proxy_call( proxy,
+                                               "UnInhibit", &error,
+                                               G_TYPE_UINT, nCookie,
+                                               G_TYPE_INVALID,
+                                               G_TYPE_INVALID );
+                 },
+                 mnFDOPMCookie );
 }
 
 void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid )

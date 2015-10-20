@@ -30,7 +30,8 @@ public:
                   bool bIsX11, const boost::optional<guint> xid, boost::optional<Display*> pDisplay );
 
 private:
-    boost::optional<guint> mnFDOCookie;
+    boost::optional<guint> mnFDOCookie; // FDO ScreenSaver Inhibit
+    boost::optional<guint> mnFDOPMCookie; // FDO PowerManagement Inhibit
     boost::optional<guint> mnGSMCookie;
 
     boost::optional<int> mnXScreenSaverTimeout;
@@ -42,8 +43,20 @@ private:
     CARD16 mnDPMSOffTimeout;
 #endif
 
+    // There are a bunch of different dbus based inhibition APIs. Some call
+    // themselves ScreenSaver inhibition, some are PowerManagement inhibition,
+    // but they appear to have the same effect. There doesn't appear to be one
+    // all encompassing standard, hence we should just try all of tem.
+    //
+    // The current APIs we have: (note: the list of supported environments is incomplete)
+    // FDO: org.freedesktop.ScreenSaver::Inhibit - appears to be supported only by KDE?
+    // FDOPM: org.freedesktop.PowerManagement.Inhibit::Inhibit - XFCE, (KDE) ?
+    //        (KDE: doesn't inhibit screensaver, but does inhibit PowerManagement)
+    // GSM: org.gnome.SessionManager::Inhibit - gnome 3
+    //
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
     void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
+    void inhibitFDOPM( bool bInhibit, const gchar* appname, const gchar* reason );
     void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
 
     void inhibitXScreenSaver( bool bInhibit, Display* pDisplay );
