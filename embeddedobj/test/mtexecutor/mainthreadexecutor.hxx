@@ -59,7 +59,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
-    DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest* );
+    DECL_STATIC_LINK_TYPED( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );
 
     // XJob
        virtual css::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);

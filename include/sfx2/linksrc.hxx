@@ -84,7 +84,6 @@ public:
                         // sal_True => data complete loaded
     virtual bool        IsDataComplete() const;
 
-    // Link impl: DECL_LINK( MyEndEditHdl, sfx2::FileDialogHelper* ); <= param is the dialog
     virtual void        Edit( vcl::Window *, SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl );
 
 

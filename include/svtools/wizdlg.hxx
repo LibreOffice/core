@@ -166,20 +166,18 @@ void MyWizardDlg::ActivatePage()
 MyWizardDlg-Prev/Next-Handler
 -----------------------------
 
-IMPL_LINK( MyWizardDlg, ImplPrevHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( MyWizardDlg, ImplPrevHdl, PushButton*, pBtn, void )
 {
     ShowPrevPage();
     if ( !GetCurLevel() )
         pBtn->Disable();
-    return 0;
 }
 
-IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
 {
     ShowNextPage();
     if ( GetCurLevel() < 3 )
         pBtn->Disable();
-    return 0;
 }
 
 *************************************************************************/

@@ -384,7 +384,7 @@ sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc )
     return (*o_ppFunc != NULL);
 }
 
-IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
+IMPL_LINK_NOARG_TYPED(MacPluginComm, NullTimerHdl, Timer*, void)
 {
     // note: this is a Timer handler, we are already protected by the SolarMutex
 
@@ -399,8 +399,6 @@ IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
         if( rPlugData.m_pPlugView ) // for safety do not dispatch null events before first NPP_SetWindow
             (*m_aNPPfuncs.event)( &(*it)->getNPPInstance(), &aRec );
     }
-
-    return 0;
 }
 
 
