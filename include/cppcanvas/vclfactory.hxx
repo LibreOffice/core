@@ -64,14 +64,11 @@ namespace cppcanvas
     class CPPCANVAS_DLLPUBLIC VCLFactory
     {
     public:
-        static CanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
-                                                          ::com::sun::star::rendering::XCanvas >& xCanvas );
-        static BitmapCanvasSharedPtr   createBitmapCanvas( const ::com::sun::star::uno::Reference<
-                                                          ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
+        static CanvasSharedPtr   createCanvas( const css::uno::Reference< css::rendering::XCanvas >& xCanvas );
+        static BitmapCanvasSharedPtr   createBitmapCanvas( const css::uno::Reference< css::rendering::XBitmapCanvas >& xCanvas );
 
         static SpriteCanvasSharedPtr   createSpriteCanvas( const vcl::Window& rVCLWindow );
-        static SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
-                                                               ::com::sun::star::rendering::XSpriteCanvas >& xCanvas );
+        static SpriteCanvasSharedPtr   createSpriteCanvas( const css::uno::Reference< css::rendering::XSpriteCanvas >& xCanvas );
 
         /** Create a bitmap from a VCL Bitmap
          */

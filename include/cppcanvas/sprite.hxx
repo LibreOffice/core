@@ -97,8 +97,8 @@ namespace cppcanvas
          */
         virtual void setPriority( double fPriority ) = 0;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XSprite > getUNOSprite() const = 0;
+        virtual css::uno::Reference<
+            css::rendering::XSprite > getUNOSprite() const = 0;
     };
 
     typedef std::shared_ptr< ::cppcanvas::Sprite > SpriteSharedPtr;
