@@ -33,14 +33,14 @@ namespace formula
 {
 
 class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
-                            ::com::sun::star::sheet::XFormulaOpCodeMapper,
-                            ::com::sun::star::lang::XServiceInfo >
+                            css::sheet::XFormulaOpCodeMapper,
+                            css::lang::XServiceInfo >
 {
     ::std::unique_ptr<FormulaCompiler> m_pCompiler;
 public:
     static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_Static();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
+    static css::uno::Sequence< OUString> getSupportedServiceNames_Static();
+    static css::uno::Reference< css::uno::XInterface > create(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
 
 protected:
                             FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler);
@@ -49,26 +49,26 @@ protected:
 private:
                             // XFormulaOpCodeMapper
                             // Attributes
-    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() throw (css::uno::RuntimeException, std::exception) override;
                             // Methods
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getMappings(
-                                    const ::com::sun::star::uno::Sequence< OUString >& rNames,
+    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getMappings(
+                                    const css::uno::Sequence< OUString >& rNames,
                                     sal_Int32 nLanguage )
-                                throw ( ::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
+                                throw ( css::lang::IllegalArgumentException,
+                                        css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
                                     sal_Int32 nLanguage, sal_Int32 nGroups )
-                                throw ( ::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw ( css::lang::IllegalArgumentException,
+                                        css::uno::RuntimeException, std::exception) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                                throw(css::uno::RuntimeException, std::exception) override;
 
 };
 

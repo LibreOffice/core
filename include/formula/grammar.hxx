@@ -68,77 +68,77 @@ public:
         /// Used only in ScCompiler ctor and in some XML import API context.
         GRAM_UNSPECIFIED    = -1,
         /// ODFF with default ODF A1 bracketed references.
-        GRAM_ODFF           = ::com::sun::star::sheet::FormulaLanguage::ODFF    |
+        GRAM_ODFF           = css::sheet::FormulaLanguage::ODFF                 |
                                 ((CONV_ODF           +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// ODF 1.1 with default ODF A1 bracketed references.
-        GRAM_PODF           = ::com::sun::star::sheet::FormulaLanguage::ODF_11  |
+        GRAM_PODF           = css::sheet::FormulaLanguage::ODF_11               |
                                 ((CONV_ODF           +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// English with default A1 reference style.
-        GRAM_ENGLISH        = ::com::sun::star::sheet::FormulaLanguage::ENGLISH |
+        GRAM_ENGLISH        = css::sheet::FormulaLanguage::ENGLISH              |
                                 ((CONV_OOO           +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// Native with default A1 reference style.
-        GRAM_NATIVE         = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
+        GRAM_NATIVE         = css::sheet::FormulaLanguage::NATIVE               |
                                 ((CONV_OOO           +
                                   kConventionOffset) << kConventionShift),
         /// ODFF with reference style as set in UI, may be A1 or R1C1.
-        GRAM_ODFF_UI        = ::com::sun::star::sheet::FormulaLanguage::ODFF    |
+        GRAM_ODFF_UI        = css::sheet::FormulaLanguage::ODFF                 |
                                 ((CONV_UNSPECIFIED   +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// ODFF with A1 reference style, unbracketed.
-        GRAM_ODFF_A1        = ::com::sun::star::sheet::FormulaLanguage::ODFF    |
+        GRAM_ODFF_A1        = css::sheet::FormulaLanguage::ODFF                 |
                                 ((CONV_OOO           +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// ODF 1.1 with reference style as set in UI, may be A1 or R1C1.
-        GRAM_PODF_UI        = ::com::sun::star::sheet::FormulaLanguage::ODF_11  |
+        GRAM_PODF_UI        = css::sheet::FormulaLanguage::ODF_11               |
                                 ((CONV_UNSPECIFIED   +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// ODF 1.1 with A1 reference style, unbracketed.
-        GRAM_PODF_A1        = ::com::sun::star::sheet::FormulaLanguage::ODF_11  |
+        GRAM_PODF_A1        = css::sheet::FormulaLanguage::ODF_11               |
                                 ((CONV_OOO           +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
         /// Native with reference style as set in UI, may be A1 or R1C1.
-        GRAM_NATIVE_UI      = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
+        GRAM_NATIVE_UI      = css::sheet::FormulaLanguage::NATIVE               |
                                 ((CONV_UNSPECIFIED   +
                                   kConventionOffset) << kConventionShift),
         /// Native with ODF A1 bracketed references. Not very useful but supported.
-        GRAM_NATIVE_ODF     = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
+        GRAM_NATIVE_ODF     = css::sheet::FormulaLanguage::NATIVE               |
                                 ((CONV_ODF           +
                                   kConventionOffset) << kConventionShift),
         /// Native with Excel A1 reference style.
-        GRAM_NATIVE_XL_A1   = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
+        GRAM_NATIVE_XL_A1   = css::sheet::FormulaLanguage::NATIVE               |
                                 ((CONV_XL_A1         +
                                   kConventionOffset) << kConventionShift),
         /// Native with Excel R1C1 reference style.
-        GRAM_NATIVE_XL_R1C1 = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
+        GRAM_NATIVE_XL_R1C1 = css::sheet::FormulaLanguage::NATIVE               |
                                 ((CONV_XL_R1C1       +
                                   kConventionOffset) << kConventionShift),
         /// English with Excel A1 reference style.
-        GRAM_ENGLISH_XL_A1   = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+        GRAM_ENGLISH_XL_A1   = css::sheet::FormulaLanguage::XL_ENGLISH               |
                                 ((CONV_XL_A1         +
                                   kConventionOffset) << kConventionShift)            |
                                 kEnglishBit,
         /// English with Excel R1C1 reference style.
-        GRAM_ENGLISH_XL_R1C1 = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+        GRAM_ENGLISH_XL_R1C1 = css::sheet::FormulaLanguage::XL_ENGLISH               |
                                 ((CONV_XL_R1C1       +
                                   kConventionOffset) << kConventionShift)            |
                                 kEnglishBit,
         /// English with Excel OOXML reference style.
-        GRAM_ENGLISH_XL_OOX  = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+        GRAM_ENGLISH_XL_OOX  = css::sheet::FormulaLanguage::XL_ENGLISH               |
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)            |
                                 kEnglishBit,
         /// Excel OOXML with Excel OOXML reference style.
-        GRAM_OOXML           = ::com::sun::star::sheet::FormulaLanguage::OOXML  |
+        GRAM_OOXML           = css::sheet::FormulaLanguage::OOXML               |
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
@@ -186,21 +186,21 @@ public:
     static inline bool isPODF( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
-            ::com::sun::star::sheet::FormulaLanguage::ODF_11;
+            css::sheet::FormulaLanguage::ODF_11;
     }
 
     /// If grammar is of ODFF
     static inline bool isODFF( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
-            ::com::sun::star::sheet::FormulaLanguage::ODFF;
+            css::sheet::FormulaLanguage::ODFF;
     }
 
     /// If grammar is of OOXML
     static inline bool isOOXML( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
-            ::com::sun::star::sheet::FormulaLanguage::OOXML;
+            css::sheet::FormulaLanguage::OOXML;
     }
 
 };

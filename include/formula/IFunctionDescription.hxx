@@ -132,11 +132,11 @@ namespace formula
         virtual void setReferenceInput(const FormEditData* _pData) = 0;
 
         virtual IFunctionManager*   getFunctionManager() = 0;
-        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) = 0;
+        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
-        virtual ::com::sun::star::table::CellAddress getReferencePosition() const = 0;
+        virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const = 0;
+        virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
+        virtual css::table::CellAddress getReferencePosition() const = 0;
 
         virtual void setDispatcherLock( bool bLock ) = 0;
         virtual void dispatch(bool _bOK, bool _bMatrixChecked) = 0;
