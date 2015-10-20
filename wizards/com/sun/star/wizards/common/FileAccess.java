@@ -213,7 +213,6 @@ public class FileAccess
             Locale aLocale = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
             if (aLocale == null)
             {
-                java.util.Locale.getDefault();
                 aLocale = new com.sun.star.lang.Locale();
                 aLocale.Country = java.util.Locale.getDefault().getCountry();
                 aLocale.Language = java.util.Locale.getDefault().getLanguage();

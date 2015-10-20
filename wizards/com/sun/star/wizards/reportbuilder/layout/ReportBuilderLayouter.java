@@ -803,7 +803,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         XNumberFormatsSupplier x = xFormattedField.getFormatsSupplier();
                         XNumberFormats xFormats = x.getNumberFormats();
                         XNumberFormatTypes x3 = UnoRuntime.queryInterface(XNumberFormatTypes.class, xFormats);
-                        Locale.getDefault();
                         com.sun.star.lang.Locale aLocale = new com.sun.star.lang.Locale();
                         aLocale.Country = Locale.getDefault().getCountry();
                         aLocale.Language = Locale.getDefault().getLanguage();
