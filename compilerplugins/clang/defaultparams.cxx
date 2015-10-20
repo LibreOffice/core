@@ -57,16 +57,17 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
             break;
         }
         const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
-        if (!(defaultArgExpr &&
-              defaultArgExpr->getType()->isIntegralType(
-                  compiler.getASTContext())))
-        {
+        if (!defaultArgExpr) {
             break;
         }
         APSInt x1, x2;
-        if (!(arg->EvaluateAsInt(x1, compiler.getASTContext()) &&
-              defaultArgExpr->EvaluateAsInt(x2, compiler.getASTContext()) &&
-              x1 == x2))
+        if (!((defaultArgExpr->isNullPointerConstant(
+                   compiler.getASTContext(), Expr::NPC_NeverValueDependent)
+               && arg->isNullPointerConstant(
+                   compiler.getASTContext(), Expr::NPC_NeverValueDependent))
+              || (defaultArgExpr->EvaluateAsInt(x1, compiler.getASTContext())
+                  && arg->EvaluateAsInt(x2, compiler.getASTContext())
+                  && x1 == x2)))
         {
             break;
         }
