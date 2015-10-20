@@ -566,9 +566,9 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
     if( !mpAnnotationWindow.get() )
     {
-           vcl::Window* pWindow = dynamic_cast< vcl::Window* >( getView().GetFirstOutputDevice() );
-           if( pWindow )
-           {
+        vcl::Window* pWindow = dynamic_cast< vcl::Window* >( getView().GetFirstOutputDevice() );
+        if( pWindow )
+        {
             RealPoint2D aPosition( mxAnnotation->getPosition() );
             Point aPos( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( Point( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) ) ) ) );
 
@@ -604,7 +604,7 @@ void AnnotationTag::ClosePopup()
     {
         mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
         mpAnnotationWindow->Deactivate();
-        mpAnnotationWindow.reset();
+        mpAnnotationWindow.disposeAndClear();
     }
 }
 
