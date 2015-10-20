@@ -144,7 +144,7 @@ namespace dbaccess
         ,m_aRegistrationListeners( m_aMutex )
     {
         m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-            m_aContext, getConfigurationRootPath(), -1, ::utl::OConfigurationTreeRoot::CM_UPDATABLE );
+            m_aContext, getConfigurationRootPath() );
     }
 
     DatabaseRegistrations::~DatabaseRegistrations()

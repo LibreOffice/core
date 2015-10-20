@@ -572,7 +572,7 @@ OApplicationDetailView::~OApplicationDetailView()
 
 void OApplicationDetailView::dispose()
 {
-    set(NULL,NULL);
+    set(NULL);
     setSplitter(NULL);
     m_aHorzSplitter.disposeAndClear();
     m_aTasks.disposeAndClear();

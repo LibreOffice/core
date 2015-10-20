@@ -1261,7 +1261,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
     getFields().push_back(pEntry);
 
     EditBrowseBox::RemoveColumn( _nColumnId );
-    InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE);
+    InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE );
 
     // Neuzeichnen
     Rectangle aInvalidRect = GetInvalidRect( _nColumnId );
@@ -1408,7 +1408,7 @@ OTableFieldDescRef OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
         sal_uInt16 nColumnId = sal::static_int_cast< sal_uInt16 >(getFields().size());
         pEmptyEntry->SetColumnId( nColumnId );
 
-        InsertDataColumn( nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE);
+        InsertDataColumn( nColumnId , OUString(), DEFAULT_SIZE );
     }
 
     return getFields()[nCount];

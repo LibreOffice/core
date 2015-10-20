@@ -927,7 +927,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
-            m_aAsyncCaller.Call( NULL );
+            m_aAsyncCaller.Call();
         }
 
         IMPL_LINK_NOARG_TYPED( AsyncLoader, OnOpenDocument, void*, void )

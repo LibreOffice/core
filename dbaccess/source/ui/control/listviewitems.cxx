@@ -31,7 +31,7 @@ namespace dbaui
             return;
         if (!_pViewData)
             _pViewData = pView->GetViewDataItem( pEntry, this );
-        pView->Push(PushFlags::ALL);
+        pView->Push();
         vcl::Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->Control::SetFont( aFont );
@@ -49,7 +49,7 @@ namespace dbaui
     {
         if (m_bEmphasized)
         {
-            rRenderContext.Push(PushFlags::ALL);
+            rRenderContext.Push();
             vcl::Font aFont(rRenderContext.GetFont());
             aFont.SetWeight(WEIGHT_BOLD);
             rRenderContext.SetFont(aFont);

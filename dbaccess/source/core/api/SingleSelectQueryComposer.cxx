@@ -1029,8 +1029,8 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             OUString aValue;
             OUString aColumnName;
 
-            pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
-            pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
+            pCondition->parseNodeToStr( aValue, m_xConnection );
+            pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection );
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());

@@ -217,7 +217,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
     if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be draged
-        && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SotClipboardFormatId::SBA_JOIN) )
+        && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()) )
     {   // don't drop into the window if it's the drag source itself
 
         // remove the selection if the dragging operation is leaving the window
