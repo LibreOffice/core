@@ -594,7 +594,7 @@ namespace svxform
             // default-entry "Forms"
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
-                NULL, false, 0, NULL );
+                NULL, false, 0 );
         }
         else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
         {   // if m_bMarkingObjects is sal_True, I mark objects myself

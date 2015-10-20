@@ -825,7 +825,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             if ( pParseNode != nullptr )
                             {
                                 // don't use a parse context here, we need it unlocalized
-                                pParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
+                                pParseNode->parseNodeToStr( sCriteria, xConnection );
                                 if ( condition != rRow.begin() )
                                     aRowFilter.append( " AND " );
                                 aRowFilter.append( sCriteria );

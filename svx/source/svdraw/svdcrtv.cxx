@@ -360,7 +360,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
     {
         nAktInvent=nInvent;
         nAktIdent=nIdent;
-        SdrObject* pObj = SdrObjFactory::MakeNewObject(nInvent,nIdent,NULL,NULL);
+        SdrObject* pObj = SdrObjFactory::MakeNewObject(nInvent,nIdent,NULL);
 
         if(pObj)
         {
@@ -699,7 +699,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             SdrTextObj* pText=dynamic_cast<SdrTextObj*>( pObjMerk );
             if (pText!=NULL && pText->IsTextFrame())
             {
-                SdrBeginTextEdit(pText, pPVMerk, nullptr, true, nullptr, nullptr);
+                SdrBeginTextEdit(pText, pPVMerk, nullptr, true);
             }
         }
     }

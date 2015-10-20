@@ -623,7 +623,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     ScopedVclPtrInstance< VirtualDevice > aVDev;
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
-    SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
+    SdrOutliner& rOutl=mpDoc->GetDrawOutliner();
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
     rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor() );

@@ -210,7 +210,7 @@ void SvxRectCtl::InitRectBitmap()
     }
 #endif
 
-    pBitmap->Replace( aColorAry1, aColorAry2, 7, NULL );
+    pBitmap->Replace( aColorAry1, aColorAry2, 7 );
 }
 
 

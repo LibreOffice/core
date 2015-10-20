@@ -1726,7 +1726,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
             CellPos aNextCell( pTableObj->getNextCell( aSelectionEnd, true ) );
             if( aSelectionEnd == aNextCell )
             {
-                onInsert( SID_TABLE_INSERT_ROW, 0 );
+                onInsert( SID_TABLE_INSERT_ROW );
                 aNextCell = pTableObj->getNextCell( aSelectionEnd, true );
             }
             gotoCell( aNextCell, false, pWindow, nAction );

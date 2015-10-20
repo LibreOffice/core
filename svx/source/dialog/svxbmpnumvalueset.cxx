@@ -503,7 +503,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 
     Graphic aGraphic;
     if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
-                        &aGraphic, NULL))
+                        &aGraphic))
     {
         bGrfNotFound = true;
     }

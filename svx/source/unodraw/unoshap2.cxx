@@ -1496,7 +1496,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 const SfxFilter*    pSfxFilter = NULL;
                 SfxMedium           aSfxMedium( aURL, referer_, StreamMode::READ | StreamMode::SHARE_DENYNONE );
 
-                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SfxFilterFlags::IMPORT, SFX_FILTER_NOTINSTALLED );
+                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter );
 
                 if( !pSfxFilter )
                 {
@@ -1861,7 +1861,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     if ( bCustomShapeGeometry )
     {
-        static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes(0);
+        static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes();
         Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#

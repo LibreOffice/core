@@ -1166,7 +1166,7 @@ CellControllerRef DbTextField::CreateController() const
 void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
     if ( m_pPainterImplementation )
-        m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter, NULL ) );
+        m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter ) );
 
     DbLimitedLengthField::PaintFieldToCell( _rDev, _rRect, _rxField, _rxFormatter );
 }

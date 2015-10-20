@@ -426,7 +426,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
 
     if( mxDoc.Is() )
     {
-        mxDoc->DoInitNew(0);
+        mxDoc->DoInitNew();
 
         uno::Reference< lang::XUnoTunnel > xTunnel( mxDoc->GetModel(), uno::UNO_QUERY );
         if( xTunnel.is() )

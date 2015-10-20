@@ -360,7 +360,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         {
             aCustomShape2d.ApplyGluePoints( pRenderedShape );
             xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
-                pRenderedShape->GetObjInventor(), pRenderedShape, NULL );
+                pRenderedShape->GetObjInventor(), pRenderedShape );
         }
         SetTemporary( xShape );
     }

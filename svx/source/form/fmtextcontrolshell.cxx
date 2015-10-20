@@ -416,7 +416,7 @@ namespace svx
         {
             OUString sSlotUnoName;
 
-            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
+            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
 
             const sal_Char* pAsciiUnoName = NULL;

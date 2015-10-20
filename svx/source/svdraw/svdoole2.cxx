@@ -930,7 +930,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
         if ( pLinkManager )
         {
             OUString aNewLinkURL;
-            sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+            sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL );
             if ( !aNewLinkURL.equalsIgnoreAsciiCase( mpImpl->maLinkURL ) )
             {
                 GetObjRef_Impl();
@@ -1043,7 +1043,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
                     {
                         mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
                         mpImpl->maLinkURL = aLinkURL;
-                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
+                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
                         mpImpl->mpObjectLink->Connect();
                     }
                 }

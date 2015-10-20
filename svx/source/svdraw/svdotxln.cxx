@@ -267,8 +267,7 @@ void SdrTextObj::ImpLinkAnmeldung()
         pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
-                                      &pData->aFilterName : NULL,
-                                     NULL);
+                                      &pData->aFilterName : NULL);
     }
 }
 

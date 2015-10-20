@@ -194,7 +194,7 @@ namespace drawinglayer
                 // #i101443#  check change of TextBackgroundolor
                 if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                     bNewTextBackgroundColorIsSet = true;
 
@@ -229,7 +229,7 @@ namespace drawinglayer
 
                 if(!bNewTextBackgroundColorIsSet && getSdrText() && getSdrText()->GetModel())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 

@@ -314,7 +314,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
                         aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, NULL );
+                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter );
                 }
             }
         }

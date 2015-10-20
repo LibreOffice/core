@@ -79,7 +79,7 @@ FmFormObjFactory::FmFormObjFactory()
 #endif
 
         // Interface fuer die Formshell registrieren
-        FmFormShell::RegisterInterface(0);
+        FmFormShell::RegisterInterface();
 
         ImplSmartRegisterUnoServices();
         bInit = true;
