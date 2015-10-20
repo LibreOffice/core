@@ -44,25 +44,25 @@ namespace dbaui
         /** executes the given command without checking if it is allowed
             @param  _rCommand   the URL of the command
         */
-        virtual void executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
+        virtual void executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command only when it is allowed
             @param  _rCommand
                 the URL of the command
         */
-        virtual void executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
+        virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command without checking if it is allowed
             @param  _nCommandId
                 the id of the command URL
         */
-        virtual void executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
+        virtual void executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command only when it is allowed
             @param  _nCommandId
                 the id of the command URL
         */
-        virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
+        virtual void executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
 
         /** checks if the given Command is enabled
@@ -114,8 +114,8 @@ namespace dbaui
             This must be the same model as returned by XController::getModel, and might be <NULL/> when
             the controller does not have an own model.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                getXController() throw( ::com::sun::star::uno::RuntimeException ) = 0;
+        virtual css::uno::Reference< css::frame::XController >
+                getXController() throw( css::uno::RuntimeException ) = 0;
 
         /** allows interception of user input, aka mouse clicks and key events
         */

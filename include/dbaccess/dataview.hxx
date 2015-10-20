@@ -34,7 +34,7 @@ namespace dbaui
     class IController;
     class DBACCESS_DLLPUBLIC ODataView :    public vcl::Window
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;  // the service factory to work with
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
         rtl::Reference<IController> m_xController;  // the controller in where we resides in
@@ -44,7 +44,7 @@ namespace dbaui
     public:
         ODataView(  vcl::Window* pParent,
                     IController& _rController,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ,
+                    const css::uno::Reference< css::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView();
         virtual void dispose() override;
@@ -60,12 +60,12 @@ namespace dbaui
 
         inline IController& getCommandController() const { return *m_xController.get(); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
+        css::uno::Reference< css::uno::XComponentContext > getORB() { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
         virtual void Resize() override;
 
-        void attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        void attachFrame(const css::uno::Reference< css::frame::XFrame >& _xFrame);
     protected:
         // window overridables
         virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) override;
