@@ -843,6 +843,15 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics
 	writer_png_Export \
 ))
 
+# fcfg_calcgraphics
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calcgraphics_types.xcu,filter/source/config/fragments/types,\
+	png_Portable_Network_Graphic \
+))
+
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calcgraphics_filters.xcu,filter/source/config/fragments/filters,\
+	calc_png_Export \
+))
+
 # fcfg_internalgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \

@@ -132,6 +132,7 @@ static const ExtensionMap aCalcExtensionMap[] =
     { "xhtml", "XHTML Calc File" },
     { "xls",   "MS Excel 97" },
     { "xlsx",  "Calc MS Excel 2007 XML" },
+    { "png",   "calc_png_Export" },
     { NULL, NULL }
 };
 

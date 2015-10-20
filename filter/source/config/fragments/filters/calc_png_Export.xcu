@@ -1,0 +1,20 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+    <node oor:name="calc_png_Export" oor:op="replace">
+        <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.GraphicExportDialog</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.GraphicExportFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PNG - Portable Network Graphic</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>png_Portable_Network_Graphic</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+    </node>
