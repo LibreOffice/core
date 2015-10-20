@@ -2220,9 +2220,9 @@ void SwUiWriterTest::testTdf75137()
     sal_uLong firstIndex = pShellCrsr->GetNode().GetIndex();
     pShellCrsr->GotoFootnoteAnchor();
     pWrtShell->InsertFootnote(OUString("This is second footnote"));
-    pWrtShell->Up(false, 1);
+    pWrtShell->Up(false);
     sal_uLong secondIndex = pShellCrsr->GetNode().GetIndex();
-    pWrtShell->Down(false, 1);
+    pWrtShell->Down(false);
     sal_uLong thirdIndex = pShellCrsr->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
     CPPUNIT_ASSERT(firstIndex != secondIndex);
