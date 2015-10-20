@@ -72,9 +72,7 @@ import util.utils;
  */
 public class TableWindowAccessibility extends TestCase {
     XWindow xWindow = null;
-    Object oDBSource = null;
     String aFile = "";
-    XConnection connection = null;
     XIsolatedConnection isolConnection = null;
     XComponent QueryComponent = null;
     String user = "";
@@ -100,12 +98,11 @@ public class TableWindowAccessibility extends TestCase {
             PrintWriter log) throws Exception {
         XInterface oObj = null;
 
-        Object oDBSource = null;
         Object newQuery = null;
         XStorable store = null;
 
         Param.getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
-        oDBSource = Param.getMSF()
+        Object oDBSource = Param.getMSF()
                 .createInstance("com.sun.star.sdb.DataSource");
         newQuery = Param.getMSF().createInstance(
                 "com.sun.star.sdb.QueryDefinition");
@@ -153,17 +150,14 @@ public class TableWindowAccessibility extends TestCase {
         isolConnection = UnoRuntime.queryInterface(XIsolatedConnection.class,
                 oDBSource);
 
-        XConnection connection = null;
-        XStatement statement = null;
-
         final String tbl_name1 = "tst_table1";
         final String tbl_name2 = "tst_table2";
         final String col_name1 = "id1";
         final String col_name2 = "id2";
 
         util.utils.waitForEventIdle(Param.getMSF());
-        connection = isolConnection.getIsolatedConnection(user, password);
-        statement = connection.createStatement();
+        XConnection connection = isolConnection.getIsolatedConnection(user, password);
+        XStatement statement = connection.createStatement();
         statement.executeUpdate("drop table if exists " + tbl_name1);
         statement.executeUpdate("drop table if exists " + tbl_name2);
         statement.executeUpdate("create table " + tbl_name1 + " ("
