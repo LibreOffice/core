@@ -87,6 +87,8 @@ postprocess_FILES_graphicfilter := \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_drawgraphics_types.xcu) \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_impressgraphics_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_impressgraphics_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_calcgraphics_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_calcgraphics_types.xcu) \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_writergraphics_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_writergraphics_types.xcu)
 

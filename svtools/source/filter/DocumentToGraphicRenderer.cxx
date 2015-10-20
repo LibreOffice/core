@@ -148,6 +148,8 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
 sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
 {
     Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(mxModel->getCurrentController(), UNO_QUERY);
+    if (!xTextViewCursorSupplier.is())
+        return 1;
     Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
     return xCursor->getPage();
 }

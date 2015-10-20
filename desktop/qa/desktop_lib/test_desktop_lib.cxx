@@ -64,6 +64,7 @@ public:
     void testSearchCalc();
     void testPaintTile();
     void testSaveAs();
+    void testSaveAsCalc();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
+    CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -315,6 +317,14 @@ void DesktopLOKTest::testPaintTile()
 void DesktopLOKTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
+}
+
+void DesktopLOKTest::testSaveAsCalc()
+{
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
