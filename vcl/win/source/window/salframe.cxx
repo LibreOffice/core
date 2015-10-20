@@ -1066,7 +1066,7 @@ bool WinSalFrame::PostEvent(ImplSVEvent* pData)
 
 void WinSalFrame::SetTitle( const OUString& rTitle )
 {
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( sal_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
+    static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
     SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
 }
@@ -2297,7 +2297,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                                 UINT& rCount, UINT nMaxSize,
                                 const sal_Char* pReplace )
 {
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( sal_Unicode ), "WinSalFrame::ImplGetKeyNameTextW(): WCHAR != sal_Unicode" );
+    static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
     static const int nMaxKeyLen = 350;
     WCHAR aKeyBuf[ nMaxKeyLen ];
