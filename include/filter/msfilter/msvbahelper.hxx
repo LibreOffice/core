@@ -46,15 +46,15 @@ MSFILTER_DLLPUBLIC OUString extractMacroName( const OUString& rMacroUrl );
 MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell* pShell );
 MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
-MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
-MSFILTER_DLLPUBLIC ::com::sun::star::awt::KeyEvent parseKeyEvent( const OUString& sKey ) throw (::com::sun::star::uno::RuntimeException);
-MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const ::com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxDoc, const ::com::sun::star::awt::KeyEvent& rKeyEvent, const OUString& sMacro ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< css::uno::Any >& aArgs, css::uno::Any& aRet, const css::uno::Any& aCaller );
+MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( const OUString& sKey ) throw (css::uno::RuntimeException);
+MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const css::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro ) throw (css::uno::RuntimeException, std::exception);
 
 
 typedef ::cppu::WeakImplHelper<
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::script::vba::XVBAMacroResolver > VBAMacroResolverBase;
+    css::lang::XServiceInfo,
+    css::lang::XInitialization,
+    css::script::vba::XVBAMacroResolver > VBAMacroResolverBase;
 
 class VBAMacroResolver : public VBAMacroResolverBase
 {
@@ -65,33 +65,33 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual OUString SAL_CALL
-                        getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                        getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rService )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                        getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+                        getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            const css::uno::Sequence< css::uno::Any >& rArgs )
+                            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // com.sun.star.script.vba.XVBAMacroResolver interface --------------------
 
     virtual OUString SAL_CALL
                         resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
                         resolveScriptURLtoVBAMacro( const OUString& rScriptURL )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    css::uno::Reference< css::frame::XModel > mxModel;
     SfxObjectShell*     mpObjShell;
     OUString            maProjectName;
 };

@@ -61,42 +61,35 @@ class SfxObjectShell;
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {
 public:
-    SvxMSConvertOCXControls( const  ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    SvxMSConvertOCXControls( const  css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~SvxMSConvertOCXControls();
 
     virtual bool InsertControl(
-        const com::sun::star::uno::Reference<
-        com::sun::star::form::XFormComponent >& /*rFComp*/,
-        const com::sun::star::awt::Size& /*rSize*/,
-        com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape >* /*pShape*/,
+        const css::uno::Reference<
+        css::form::XFormComponent >& /*rFComp*/,
+        const css::awt::Size& /*rSize*/,
+        css::uno::Reference<
+        css::drawing::XShape >* /*pShape*/,
         bool /*bFloatingCtrl*/ ) {return false;}
 
     /*begin: Backwards compatibility with office 95 import, modify later*/
-    const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > & GetServiceFactory();
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & GetServiceFactory();
 protected:
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > &
-        GetShapes();
+    const css::uno::Reference< css::drawing::XShapes > &  GetShapes();
 
-    const com::sun::star::uno::Reference<
-        com::sun::star::container::XIndexContainer > &  GetFormComps();
+    const css::uno::Reference< css::container::XIndexContainer > &  GetFormComps();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    css::uno::Reference< css::frame::XModel >               mxModel;
 
     // gecachte Interfaces
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >
-        xDrawPage;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >
-        xShapes;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >        xServiceFactory;
+    css::uno::Reference< css::drawing::XDrawPage >          xDrawPage;
+    css::uno::Reference< css::drawing::XShapes >            xShapes;
+    css::uno::Reference< css::lang::XMultiServiceFactory >  xServiceFactory;
 
     // das einzige Formular
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >
-        xFormComps;
+    css::uno::Reference< css::container::XIndexContainer >  xFormComps;
 
-    virtual const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XDrawPage > & GetDrawPage();
+    virtual const css::uno::Reference< css::drawing::XDrawPage > & GetDrawPage();
 };
 
 #endif

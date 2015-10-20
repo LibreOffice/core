@@ -465,9 +465,9 @@ protected:
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
+    static css::uno::Reference < css::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
-                const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
+                const css::uno::Reference < css::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
                 const Rectangle& rVisArea );
 
@@ -496,9 +496,9 @@ protected:
 
 // the following method needs to be overridden for the import of OLE objects
     virtual bool GetOLEStorageName( long nOLEId,
-                                        OUString& rStorageName,
-                                        tools::SvRef<SotStorage>& rSrcStorage,
-                      com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg
+                                      OUString& rStorageName,
+                                      tools::SvRef<SotStorage>& rSrcStorage,
+                                      css::uno::Reference < css::embed::XStorage >& xDestStg
                                     ) const;
 
     /** Prevent that (rounded) rectangles with wrapped text will always be
@@ -684,7 +684,7 @@ public:
 
     static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
                                                 tools::SvRef<SotStorage>& rSrcStorage,
-                                                const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
+                                                const css::uno::Reference < css::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
                                                 const Rectangle& rBoundRect,
                                                 const Rectangle& rVisArea,
@@ -702,8 +702,8 @@ public:
     static void SolveSolver( const SvxMSDffSolverContainer& rSolver );
 
     static bool SetPropValue(
-        const ::com::sun::star::uno::Any& rAny,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        const css::uno::Any& rAny,
+        const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName,
         bool bTestPropertyAvailability = false
     );

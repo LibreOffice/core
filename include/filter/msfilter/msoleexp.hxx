@@ -41,7 +41,7 @@ public:
     sal_uInt32 GetFlags() const         { return nConvertFlags; }
 
     void ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg );
-    void ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
+    void ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
 };
 
 

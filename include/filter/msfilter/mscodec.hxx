@@ -53,7 +53,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool                InitCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -61,7 +61,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData();
+    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
 
 
     /** Verifies the validity of the password using the passed key and hash.
@@ -127,7 +127,7 @@ private:
 
     sal_uInt16          mnKey;          /// Base key from password.
     sal_uInt16          mnHash;         /// Hash value from password.
-    int         mnRotateDistance;
+    int                 mnRotateDistance;
 };
 
 /** Encodes and decodes data from protected MSO XLS 95- documents.
@@ -193,7 +193,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool                InitCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -201,7 +201,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData();
+    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
 
 
     /** Initializes the algorithm with the specified password and document ID.
