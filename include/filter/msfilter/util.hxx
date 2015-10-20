@@ -25,7 +25,7 @@ namespace util {
 /// Returns the best-fit default 8bit encoding for a given locale
 /// i.e. useful when dealing with legacy formats which use legacy text encodings without recording
 /// what the encoding is, but you know or can guess the language
-MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale);
+MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale);
 
 /// Convert a color in BGR format to RGB.
 MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
@@ -82,7 +82,7 @@ struct MSFILTER_DLLPUBLIC ApiPaperSize
 class MSFILTER_DLLPUBLIC PaperSizeConv
 {
 public:
-    static sal_Int32 getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize );
+    static sal_Int32 getMSPaperSizeIndex( const css::awt::Size& rSize );
     static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
 };
 
