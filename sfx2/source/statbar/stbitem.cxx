@@ -110,7 +110,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
     else
-        pSlotPool = &(SfxSlotPool::GetSlotPool( NULL ));
+        pSlotPool = &(SfxSlotPool::GetSlotPool());
 
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot( aTargetURL.Path );
     if ( pSlot )

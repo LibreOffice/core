@@ -1035,7 +1035,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( !pView )
             {
                 SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
-                pBasicIDE->DoInitNew( 0 );
+                pBasicIDE->DoInitNew();
                 pBasicIDE->SetModified( false );
                 try
                 {

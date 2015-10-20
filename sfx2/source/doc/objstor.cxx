@@ -928,7 +928,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                         pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
 
                                     Sequence< PropertyValue > rProperties;
-                                    TransformItems( SID_OPENDOC, *pSet, rProperties, NULL );
+                                    TransformItems( SID_OPENDOC, *pSet, rProperties );
                                     RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
                                     com::sun::star::uno::Reference< XInteractionRequest > rRequest( pFORequest );
@@ -939,8 +939,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                             SfxAllItemSet aNewParams( pDoc->GetPool() );
                                             TransformParameters( SID_OPENDOC,
                                                             pFORequest->getFilterOptions(),
-                                                            aNewParams,
-                                                            NULL );
+                                                            aNewParams );
 
                                             const SfxStringItem* pFilterOptions = aNewParams.GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
                                             if ( pFilterOptions )
@@ -2551,7 +2550,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         SetError( pMediumTmp->GetError(), OUString( OSL_LOG_PREFIX  ) );
 
         // reconnect to object storage
-        DoSaveCompleted( 0 );
+        DoSaveCompleted();
 
         if( pRetrMedium->GetItemSet() )
         {
@@ -2822,7 +2821,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             bOk = DoSaveCompleted( pNewFile );
         }
         else
-            bOk = DoSaveCompleted(0);
+            bOk = DoSaveCompleted();
 
         if( bOk )
         {
@@ -2857,7 +2856,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         SetError( pNewFile->GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
 
         // reconnect to the old storage
-        DoSaveCompleted( 0 );
+        DoSaveCompleted();
 
         DELETEZ( pNewFile );
     }

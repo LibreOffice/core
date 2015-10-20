@@ -864,7 +864,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
 
 IMPL_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
-    const SfxFilter* pFilter = GetFilter4Extension( *pString, SfxFilterFlags::IMPORT );
+    const SfxFilter* pFilter = GetFilter4Extension( *pString );
     if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
         !pFilter->GetWildcard().Matches(OUString("*.*")) &&
         !pFilter->GetWildcard().Matches(OUString('*'))

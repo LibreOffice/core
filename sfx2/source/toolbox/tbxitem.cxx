@@ -171,7 +171,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
     else
-        pSlotPool = &(SfxSlotPool::GetSlotPool( NULL ));
+        pSlotPool = &(SfxSlotPool::GetSlotPool());
 
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot( aTargetURL.Path );
     if ( pSlot )

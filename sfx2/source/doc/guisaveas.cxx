@@ -1019,8 +1019,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     SfxItemSet* pDialogParams = &aDialogParams;
     TransformParameters( nSlotID,
                          GetMediaDescr().getAsConstPropertyValueList(),
-                         aDialogParams,
-                         NULL );
+                         aDialogParams );
 
     const SfxPoolItem* pItem = NULL;
     if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, true, &pItem ) != SfxItemState::SET )
@@ -1048,7 +1047,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
-    TransformItems( nSlotID, *pDialogParams, aPropsFromDialog, NULL );
+    TransformItems( nSlotID, *pDialogParams, aPropsFromDialog );
     GetMediaDescr() << aPropsFromDialog;
 
     // get the path from the dialog

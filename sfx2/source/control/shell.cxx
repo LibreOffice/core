@@ -408,13 +408,13 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
 void ShellCall_Impl( void* pObj, void* pArg )
 {
-    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg), nullptr );
+    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg) );
 }
 
 const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
 {
     if( !bAsync )
-        return ExecuteSlot( rReq, nullptr );
+        return ExecuteSlot( rReq );
     else
     {
         if( !pImp->pExecuter )

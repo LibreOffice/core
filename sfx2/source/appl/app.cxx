@@ -228,7 +228,7 @@ SfxApplication::~SfxApplication()
 
 #if HAVE_FEATURE_DESKTOP
     delete pSfxHelp;
-    Application::SetHelp( NULL );
+    Application::SetHelp();
 #endif
 
     // delete global options

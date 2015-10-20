@@ -637,8 +637,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( rReq.GetArgs() )
                     TransformItems( nId,
                                     *rReq.GetArgs(),
-                                     aDispatchArgs,
-                                     NULL );
+                                     aDispatchArgs );
 
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( nId );
                 if ( !pSlot )
@@ -667,8 +666,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxAllItemSet aResultParams( GetPool() );
                 TransformParameters( nId,
                                      aDispatchArgs,
-                                     aResultParams,
-                                     NULL );
+                                     aResultParams );
                 rReq.SetArgs( aResultParams );
 
                 // the StoreAsURL/StoreToURL method have called this method with false

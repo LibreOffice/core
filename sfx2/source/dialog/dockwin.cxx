@@ -1707,7 +1707,7 @@ void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     }
 
     DecorationView aView(&rRenderContext);
-    aView.DrawFrame(aRect, DrawFrameStyle::Out);
+    aView.DrawFrame(aRect);
 }
 
 /** With this method, a minimal OutputSize be can set, that is queried in

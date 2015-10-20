@@ -1770,7 +1770,7 @@ void SAL_CALL SfxBaseModel::initNew()
         if( m_pData->m_pObjectShell->GetMedium() )
             throw frame::DoubleInitializationException();
 
-        bool bRes = m_pData->m_pObjectShell->DoInitNew( NULL );
+        bool bRes = m_pData->m_pObjectShell->DoInitNew();
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
                                     m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
         m_pData->m_pObjectShell->ResetError();
@@ -3802,7 +3802,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         {
             // storing without a valid filter will often crash
             bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, true );
-            m_pData->m_pObjectShell->DoSaveCompleted( NULL );
+            m_pData->m_pObjectShell->DoSaveCompleted();
         }
     }
 
