@@ -73,7 +73,9 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
 
     sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
     OUString aMessage(ResId(nStrId, *pResourceMgr).toString());
-    aMessage += INetURLObject(aDocURL).GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+    INetURLObject url(aDocURL);
+    aMessage += url.HasError()
+        ? aDocURL : url.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
     m_pFTPassword->SetText(aMessage);
 
     if (bIsSimplePasswordRequest)
