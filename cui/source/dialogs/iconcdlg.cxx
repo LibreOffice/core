@@ -105,7 +105,7 @@ void IconChoicePage::ImplInitSettings()
     else
     {
         EnableChildTransparentMode( false );
-        SetParentClipMode( ParentClipMode::NONE );
+        SetParentClipMode();
         SetPaintTransparent( false );
 
         if ( IsControlBackground() )
