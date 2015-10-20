@@ -24,9 +24,9 @@ namespace cppu {
 /** A helper for implementations of com.sun.star.lang.XServiceInfo.
 
     This function is supposed to be called from implementations of
-    com::sun::star::lang::XServiceInfo::supportsService (and therefore, for
+    css::lang::XServiceInfo::supportsService (and therefore, for
     easier coding takes the caller's this pointer by pointer rather than by
-    com::sun::star::uno::Reference).
+    css::uno::Reference).
 
     @param implementation points to the service implementation whose
     getSupportedServices method is consulted; must be non-null
@@ -39,7 +39,7 @@ namespace cppu {
     @since LibreOffice 4.0
 */
 bool CPPUHELPER_DLLPUBLIC supportsService(
-    com::sun::star::lang::XServiceInfo * implementation,
+    css::lang::XServiceInfo * implementation,
     rtl::OUString const & name);
 
 }

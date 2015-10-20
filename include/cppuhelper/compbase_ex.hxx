@@ -32,11 +32,11 @@ namespace cppu
 {
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakObject and
-    ::com::sun::star::lang::XComponent.
+    css::lang::XComponent.
 */
 class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakComponentImplHelperBase
     : public ::cppu::OWeakObject
-    , public ::com::sun::star::lang::XComponent
+    , public css::lang::XComponent
 {
 protected:
     /** broadcast helper for disposing events
@@ -67,29 +67,29 @@ public:
     inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
-    ::com::sun::star::lang::XComponent.
+    css::lang::XComponent.
 */
 class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakAggComponentImplHelperBase
     : public ::cppu::OWeakAggObject
-    , public ::com::sun::star::lang::XComponent
+    , public css::lang::XComponent
 {
 protected:
     ::cppu::OBroadcastHelper rBHelper;
@@ -112,48 +112,48 @@ public:
     inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper_query(
-    ::com::sun::star::uno::Type const & rType,
+CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL WeakComponentImplHelper_query(
+    css::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakComponentImplHelperBase * pBase );
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd );
 
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
-    ::com::sun::star::uno::Type const & rType,
+CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
+    css::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakAggComponentImplHelperBase * pBase );
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd );
 
 }

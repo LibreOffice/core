@@ -47,8 +47,8 @@ namespace detail {
     */
     union element_alias
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > *pAsSequence;
-        ::com::sun::star::uno::XInterface * pAsInterface;
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > *pAsSequence;
+        css::uno::XInterface * pAsInterface;
         element_alias() : pAsInterface(0) {}
     };
 
@@ -93,7 +93,7 @@ public:
         hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
-    ::com::sun::star::uno::XInterface * SAL_CALL next();
+    css::uno::XInterface * SAL_CALL next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
@@ -158,7 +158,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const;
+    css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -176,7 +176,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL addInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
+    sal_Int32 SAL_CALL addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -184,12 +184,12 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL removeInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
+    sal_Int32 SAL_CALL removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /**
       Call disposing on all object in the container that
       support XEventListener. Than clear the container.
      */
-    void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
+    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Clears the container without calling disposing().
      */
@@ -198,13 +198,13 @@ public:
     /** Executes a functor for each contained listener of specified type, e.g.
         <code>forEach<awt::XPaintListener>(...</code>.
 
-        If a com::sun::star::lang::DisposedException occurs which relates to
+        If a css::lang::DisposedException occurs which relates to
         the called listener, then that listener is removed from the container.
 
         @tparam ListenerT listener type
         @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
-                    com::sun::star::uno::Reference<ListenerT>
+                    css::uno::Reference<ListenerT>
     */
     template <typename ListenerT, typename FuncT>
     inline void forEach( FuncT const& func );
@@ -214,7 +214,7 @@ public:
         The listener method must take a single argument of type EventT,
         and return <code>void</code>.
 
-        If a com::sun::star::lang::DisposedException occurs which relates to
+        If a css::lang::DisposedException occurs which relates to
         the called listener, then that listener is removed from the container.
 
         @tparam ListenerT UNO event listener type, let your compiler deduce this for you
@@ -268,7 +268,7 @@ private:
     public:
         NotifySingleListener( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 
-        void operator()( const ::com::sun::star::uno::Reference<ListenerT>& listener ) const
+        void operator()( const css::uno::Reference<ListenerT>& listener ) const
         {
             (listener.get()->*m_pMethod)( m_rEvent );
         }
@@ -280,13 +280,12 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
 {
     OInterfaceIteratorHelper iter( *this );
     while (iter.hasMoreElements()) {
-        ::com::sun::star::uno::Reference<ListenerT> const xListener(
-            iter.next(), ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference<ListenerT> const xListener( iter.next(), css::uno::UNO_QUERY );
         if (xListener.is()) {
             try {
                 func( xListener );
             }
-            catch (::com::sun::star::lang::DisposedException const& exc) {
+            catch (css::lang::DisposedException const& exc) {
                 if (exc.Context == xListener)
                     iter.remove();
             }
@@ -337,7 +336,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    inline ::com::sun::star::uno::Sequence< key > SAL_CALL getContainedTypes() const;
+    inline css::uno::Sequence< key > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -367,7 +366,7 @@ public:
     */
     inline sal_Int32 SAL_CALL addInterface(
         const key & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
+        const css::uno::Reference< css::uno::XInterface > & r );
 
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -381,14 +380,14 @@ public:
     */
     inline sal_Int32 SAL_CALL removeInterface(
         const key & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
+        const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all references in the container, that
       support XEventListener. Then clears the container.
       @param rEvt the event object which is passed during disposing() call
      */
-    inline void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
+    inline void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
@@ -459,7 +458,7 @@ struct OBroadcastHelperVar
      **/
     inline void addListener(
         const keyType &key,
-        const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
+        const css::uno::Reference < css::uno::XInterface > &r )
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSURE( !bInDispose, "do not add listeners in the dispose call" );
@@ -473,7 +472,7 @@ struct OBroadcastHelperVar
      **/
     inline void removeListener(
         const keyType &key,
-        const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
+        const css::uno::Reference < css::uno::XInterface > & r )
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSURE( !bDisposed, "object is disposed" );
@@ -501,12 +500,12 @@ struct OBroadcastHelperVar
 // helper function call class
 struct hashType_Impl
 {
-    size_t operator()(const ::com::sun::star::uno::Type & s) const
+    size_t operator()(const css::uno::Type & s) const
     { return (size_t) s.getTypeName().hashCode(); }
 };
 
 
-/** Specialized class for key type com::sun::star::uno::Type,
+/** Specialized class for key type css::uno::Type,
     without explicit usage of STL symbols.
 */
 class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper
@@ -538,14 +537,14 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getContainedTypes() const;
+    css::uno::Sequence< css::uno::Type > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type & rKey ) const;
+    OInterfaceContainerHelper * SAL_CALL getContainer( const css::uno::Type & rKey ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -566,8 +565,8 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 SAL_CALL addInterface(
-        const ::com::sun::star::uno::Type & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
+        const css::uno::Type & rKey,
+        const css::uno::Reference< css::uno::XInterface > & r );
 
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -580,22 +579,22 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 SAL_CALL removeInterface(
-        const ::com::sun::star::uno::Type & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
+        const css::uno::Type & rKey,
+        const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all object in the container that
       support XEventListener. Than clear the container.
      */
-    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
+    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
     void SAL_CALL clear();
 
-    typedef ::com::sun::star::uno::Type keyType;
+    typedef css::uno::Type keyType;
 private:
-    void *m_pMap;
+    void *          m_pMap;
     ::osl::Mutex &  rMutex;
 
     OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & ) SAL_DELETED_FUNCTION;

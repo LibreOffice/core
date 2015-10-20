@@ -121,9 +121,9 @@ namespace cppu
     @param xContext component context to be used
     @return component instance
 */
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
+typedef css::uno::Reference< css::uno::XInterface >(
     SAL_CALL * ComponentFactoryFunc)(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext );
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 /** Creates a single component factory supporting the XSingleComponentFactory interface.
 
@@ -133,11 +133,11 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     @param pModCount a backwards-compatibility remainder of a removed library
            unloading feature; always set to null
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = 0 );
 
 /** Creates a single service factory which holds the instance created only once.
@@ -150,11 +150,11 @@ SAL_CALL createSingleComponentFactory(
 
     @see createSingleComponentFactory
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory > SAL_CALL
 createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = 0 );
 
 /** Deprecated.  The type of the instanciate function used as argument of the create*Factory functions.
@@ -163,8 +163,8 @@ createOneInstanceComponentFactory(
     @see createOneInstanceFactory
     @deprecated
 */
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );
+typedef css::uno::Reference< css::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
 
 /** Deprecated.  Creates a single service factory.
 
@@ -180,12 +180,12 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
     @see createOneInstanceFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
 createSingleFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = 0  );
 
 /** Deprecated.  Creates a factory wrapping another one.
@@ -202,10 +202,10 @@ createSingleFactory(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
 createFactoryProxy(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > & rFactory );
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
+    const css::uno::Reference< css::lang::XSingleServiceFactory > & rFactory );
 
 /** Deprecated.  Creates a single service factory which holds the instance created only once.
 
@@ -221,12 +221,12 @@ createFactoryProxy(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
 createOneInstanceFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = 0  );
 
 /** Deprecated.  Creates a single service factory based on a registry.
@@ -238,11 +238,11 @@ createOneInstanceFactory(
     XSingleServiceFactory and XComponent.
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
 createSingleRegistryFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey );
+    const css::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
 
 /** Deprecated.  Creates a single service factory which holds the instance created only once
     based on a registry.
@@ -256,11 +256,11 @@ createSingleRegistryFactory(
     @see createSingleRegistryFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
 createOneInstanceRegistryFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > & rImplementationKey );
+    const css::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
 
 }
 

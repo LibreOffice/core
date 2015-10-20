@@ -39,7 +39,7 @@ namespace cppu
     @return true, if successfully registered
 */
 CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr );
+    css::uno::Reference< css::container::XHierarchicalNameAccess > const & xTDMgr );
 
 /** Bootstraps an initial component context with service manager upon
     information from bootstrap variables.
@@ -54,7 +54,7 @@ CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
 
     @return component context
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext();
 
 
@@ -72,7 +72,7 @@ defaultBootstrap_InitialComponentContext();
     @param iniFile ini filename to get bootstrap variables
     @return component context
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
 /**
@@ -133,7 +133,7 @@ private:
  *
  * @since UDK 3.2.0
  */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
 SAL_CALL bootstrap();
 
 /// @cond INTERNAL
@@ -149,7 +149,7 @@ SAL_CALL bootstrap();
  * returned; expansion may lead to a string that is not a legal URI. Otherwise,
  * the uri is returned unchanged.
  *
- * @exception com::sun::star::lang::IllegalArgumentException
+ * @exception css::lang::IllegalArgumentException
  * If uri is a vnd.sun.star.expand URL that contains unknown macros.
  *
  * @since UDK 3.2.8

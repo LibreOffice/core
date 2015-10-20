@@ -29,27 +29,27 @@ namespace cppu {
     Any class, except that it throws an IllegalArgumentException in case of
     failures (the value cannot be extracted without data loss )
 
-   @exception com::sun::star::lang::IllegalArgumentException when the type could not be converted.
+   @exception css::lang::IllegalArgumentException when the type could not be converted.
  */
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a);
+inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any & a);
 
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a);
+inline void SAL_CALL convertPropertyValue( target &value ,  css::uno::Any & a);
 
 /**
   conversion of basic types
 */
-inline void SAL_CALL convertPropertyValue( sal_Int64 & target , const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int8 & target  , const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( float & target     , const ::com::sun::star::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( double &target     , const ::com::sun::star::uno::Any &source );
-inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const ::com::sun::star::uno::Any &source );
+inline void SAL_CALL convertPropertyValue( sal_Int64 & target , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int8 & target  , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( float & target     , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( double &target     , const css::uno::Any &source );
+inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const css::uno::Any &source );
 
 } // end namespace cppu
 

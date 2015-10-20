@@ -51,18 +51,18 @@ struct ImplementationEntry
     /** Function that returns all supported servicenames of the implementation
        ( same as XServiceInfo.getSupportedServiceNames() ).
     */
-     com::sun::star::uno::Sequence< rtl::OUString > MY_FN_PTR( getSupportedServiceNames ) ();
+     css::uno::Sequence< rtl::OUString > MY_FN_PTR( getSupportedServiceNames ) ();
 
     /** Function that creates a SingleComponentFactory.
 
         The pModCount parameter is a backwards-compatibility remainder of a
         removed library unloading feature; always set to null.
     */
-     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
+     css::uno::Reference< css::lang::XSingleComponentFactory >
      MY_FN_PTR( createFactory )(
          ComponentFactoryFunc fptr,
          ::rtl::OUString const & rImplementationName,
-         ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+         css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
          rtl_ModuleCount * pModCount );
 
     /** Backwards-compatibility remainder of a removed library unloading

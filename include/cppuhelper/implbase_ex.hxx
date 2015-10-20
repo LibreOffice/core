@@ -42,7 +42,7 @@ namespace cppu
 
 /** function pointer signature for getCppuType
 */
-typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
+typedef css::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
 
 /** single type + object offset
 */
@@ -94,57 +94,57 @@ struct class_data
 
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_query(
-    ::com::sun::star::uno::Type const & rType,
+CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL ImplHelper_query(
+    css::uno::Type const & rType,
     class_data * cd,
     void * that );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
-    ::com::sun::star::uno::Type const & rType,
+CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
+    css::uno::Type const & rType,
     class_data * cd,
     void * that );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
 SAL_CALL ImplHelper_getTypes(
     class_data * cd );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
 SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > const & rAddTypes );
+    css::uno::Sequence< css::uno::Type > const & rAddTypes );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 >
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< sal_Int8 >
 SAL_CALL ImplHelper_getImplementationId(
     class_data * cd );
 
 /** WeakImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakImplHelper_query(
-    ::com::sun::star::uno::Type const & rType,
+CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL WeakImplHelper_query(
+    css::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::OWeakObject * pBase );
 /** WeakImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
 SAL_CALL WeakImplHelper_getTypes(
     class_data * cd );
 
 /** WeakAggImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any
+CPPUHELPER_DLLPUBLIC css::uno::Any
 SAL_CALL WeakAggImplHelper_queryAgg(
-    ::com::sun::star::uno::Type const & rType,
+    css::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::OWeakAggObject * pBase );
 /** WeakAggImplHelper
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
 SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd );
 

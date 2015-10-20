@@ -27,12 +27,12 @@
 namespace cppu
 {
 
-/** Helper class to implement com::sun::star::lang::XTypeProvider.  Construct a static object
+/** Helper class to implement css::lang::XTypeProvider.  Construct a static object
     of this class with your UNO object's supported types.
 */
 class CPPUHELPER_DLLPUBLIC OTypeCollection
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _aTypes;
+    css::uno::Sequence< css::uno::Type > _aTypes;
 
 public:
     /// @cond INTERNAL
@@ -51,113 +51,113 @@ public:
         : _aTypes( rCollection._aTypes )
         {}
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Type & rType8,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Type & rType9,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Type & rType8,
+        const css::uno::Type & rType9,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Type & rType9,
-        const ::com::sun::star::uno::Type & rType10,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Type & rType8,
+        const css::uno::Type & rType9,
+        const css::uno::Type & rType10,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Type & rType9,
-        const ::com::sun::star::uno::Type & rType10,
-        const ::com::sun::star::uno::Type & rType11,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Type & rType8,
+        const css::uno::Type & rType9,
+        const css::uno::Type & rType10,
+        const css::uno::Type & rType11,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
-        const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Type & rType9,
-        const ::com::sun::star::uno::Type & rType10,
-        const ::com::sun::star::uno::Type & rType11,
-        const ::com::sun::star::uno::Type & rType12,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
+        const css::uno::Type & rType1,
+        const css::uno::Type & rType2,
+        const css::uno::Type & rType3,
+        const css::uno::Type & rType4,
+        const css::uno::Type & rType5,
+        const css::uno::Type & rType6,
+        const css::uno::Type & rType7,
+        const css::uno::Type & rType8,
+        const css::uno::Type & rType9,
+        const css::uno::Type & rType10,
+        const css::uno::Type & rType11,
+        const css::uno::Type & rType12,
+        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
 
     /** Called upon XTypeProvider::getTypes().
 
         @return type collection
     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         { return _aTypes; }
 };
 
@@ -166,7 +166,7 @@ public:
 */
 class CPPUHELPER_DLLPUBLIC OImplementationId
 {
-    mutable ::com::sun::star::uno::Sequence< sal_Int8 > * _pSeq;
+    mutable css::uno::Sequence< sal_Int8 > * _pSeq;
     sal_Bool _bUseEthernetAddress;
 
 public:
@@ -198,12 +198,12 @@ public:
 
         @param rSeq implementation id
     */
-    inline OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq )
-        : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rSeq ) )
+    inline OImplementationId( const css::uno::Sequence< sal_Int8 > & rSeq )
+        : _pSeq( new css::uno::Sequence< sal_Int8 >( rSeq ) )
         , _bUseEthernetAddress( false )
         {}
     inline OImplementationId( const OImplementationId & rId )
-        : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
+        : _pSeq( new css::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         , _bUseEthernetAddress( false )
         {}
 
@@ -211,7 +211,7 @@ public:
 
         @return implementation id
     */
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const;
 };
 
 }

@@ -77,15 +77,15 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() = 0;
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() = 0;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.
        @exception UnknownPropertyException  thrown if the property name is unknown.
      */
-    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName(
+    virtual css::beans::Property SAL_CALL getPropertyByName(
         const ::rtl::OUString& rPropertyName )
-        throw (::com::sun::star::beans::UnknownPropertyException) = 0;
+        throw (css::beans::UnknownPropertyException) = 0;
     /**
        Return true if the property with the name rPropertyName exist, otherwise false.
        @param rPropertyName the name of the property.
@@ -103,7 +103,7 @@ public:
        indicates an unknown property name.
      */
     virtual sal_Int32 SAL_CALL fillHandles(
-        /*out*/ sal_Int32 * pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames ) = 0;
+        /*out*/ sal_Int32 * pHandles, const css::uno::Sequence< ::rtl::OUString > & rPropNames ) = 0;
 };
 
 /**
@@ -122,7 +122,7 @@ public:
        @param bSorted   indicates that the elements are sorted.
       *********/
     OPropertyArrayHelper(
-        ::com::sun::star::beans::Property *pProps,
+        css::beans::Property *pProps,
         sal_Int32 nElements ,
         sal_Bool bSorted = sal_True );
 
@@ -133,7 +133,7 @@ public:
        @param bSorted    indicates that the elements are sorted.
      */
     OPropertyArrayHelper(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > & aProps,
+        const css::uno::Sequence< css::beans::Property > & aProps,
         sal_Bool bSorted = sal_True );
 
     /**
@@ -157,15 +157,15 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() SAL_OVERRIDE;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.
        @exception UnknownPropertyException  thrown if the property name is unknown.
      */
-    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName(
+    virtual css::beans::Property SAL_CALL getPropertyByName(
         const ::rtl::OUString& rPropertyName )
-        throw (::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException) SAL_OVERRIDE;
     /**
        Return true if the property with the name rPropertyName exist, otherwise false.
        @param rPropertyName the name of the property.
@@ -183,7 +183,7 @@ public:
        indicates an unknown property name.
      */
     virtual sal_Int32 SAL_CALL fillHandles(
-        /*out*/sal_Int32 * pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames ) SAL_OVERRIDE;
+        /*out*/sal_Int32 * pHandles, const css::uno::Sequence< ::rtl::OUString > & rPropNames ) SAL_OVERRIDE;
 
 protected:
     /** reserved for future use. do not use.
@@ -194,7 +194,7 @@ private:
     void init( sal_Bool bSorted );
 
     /** The sequence generated from the pProperties array. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aInfos;
+    css::uno::Sequence< css::beans::Property > aInfos;
 
     /**
        True, If the values of the handles are sorted in the same way as the names
@@ -250,7 +250,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const;
+    css::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -268,7 +268,7 @@ public:
      */
     sal_Int32 SAL_CALL addInterface(
         const sal_Int32 & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
+        const css::uno::Reference< css::uno::XInterface > & r );
 
     /**
       Remove an element from the container specified with the key.
@@ -279,13 +279,13 @@ public:
      */
     sal_Int32 SAL_CALL removeInterface(
         const sal_Int32 & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
+        const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all objects in the container that
       support XEventListener. Then clear the container.
      */
-    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
+    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
@@ -293,7 +293,7 @@ public:
 
     typedef sal_Int32 keyType;
 private:
-    void *m_pMap;
+    void *          m_pMap;
     ::osl::Mutex &  rMutex;
 
     OMultiTypeInterfaceContainerHelperInt32( const OMultiTypeInterfaceContainerHelperInt32 & ) SAL_DELETED_FUNCTION;
@@ -356,9 +356,9 @@ protected:
 
  */
 class CPPUHELPER_DLLPUBLIC OPropertySetHelper :
-                           public ::com::sun::star::beans::XMultiPropertySet,
-                           public ::com::sun::star::beans::XFastPropertySet,
-                           public ::com::sun::star::beans::XPropertySet
+                           public css::beans::XMultiPropertySet,
+                           public css::beans::XFastPropertySet,
+                           public css::beans::XPropertySet
 {
 public:
     /**
@@ -420,13 +420,13 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getTypes()
-        throw(::com::sun::star::uno::RuntimeException);
+    css::uno::Sequence< css::uno::Type > getTypes()
+        throw(css::uno::RuntimeException);
 
     /**
        Send a disposing notification to the listeners in the conatiners aBoundLC
@@ -441,37 +441,37 @@ public:
        rPropertyName does not exist or is readonly. Otherwise rPropertyName is changed to its handle
        value and setFastPropertyValue is called.
      */
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& rPropertyName, const css::uno::Any& aValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /**
        Throw UnknownPropertyException if the property with the name
        rPropertyName does not exist.
      */
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName)
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener)
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertyChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference < css::beans::XPropertyChangeListener >& aListener)
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener)
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener )
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
@@ -480,44 +480,44 @@ public:
        is changed with the setFastPropertyValue_NoBroadcast method and the bound listeners are
        notified.
       */
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
-       @exception com::sun::star::beans::UnknownPropertyException
+       @exception css::beans::UnknownPropertyException
          if the property with the handle nHandle does not exist.
      */
-    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values )
-        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const css::uno::Sequence< css::uno::Any >& Values )
+        throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues(
+        const css::uno::Sequence< ::rtl::OUString >& PropertyNames )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addPropertiesChangeListener(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removePropertiesChangeListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const css::uno::Reference< css::beans::XPropertiesChangeListener > & Listener )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
        The property sequence is created in the call. The interface isn't used after the call.
      */
-    static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    static css::uno::Reference < css::beans::XPropertySetInfo > SAL_CALL
         createPropertySetInfo( IPropertyArrayHelper & rProperties );
 protected:
     /**
@@ -531,8 +531,8 @@ protected:
      */
     void SAL_CALL fire(
         sal_Int32 * pnHandles,
-        const ::com::sun::star::uno::Any * pNewValues,
-        const ::com::sun::star::uno::Any * pOldValues,
+        const css::uno::Any * pNewValues,
+        const css::uno::Any * pOldValues,
         sal_Int32 nCount,
         sal_Bool bVetoable );
 
@@ -548,7 +548,7 @@ protected:
     void SAL_CALL setFastPropertyValues(
         sal_Int32 nSeqLen,
         sal_Int32 * pHandles,
-        const ::com::sun::star::uno::Any * pValues,
+        const css::uno::Any * pValues,
         sal_Int32 nHitCount );
 
     /**
@@ -570,10 +570,10 @@ protected:
        @return true if the value converted.
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any & rConvertedValue,
-        ::com::sun::star::uno::Any & rOldValue,
+        css::uno::Any & rConvertedValue,
+        css::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
+        const css::uno::Any& rValue )
         throw (css::lang::IllegalArgumentException,
                css::beans::UnknownPropertyException,
                css::uno::RuntimeException, std::exception) = 0;
@@ -585,11 +585,11 @@ protected:
         @attention
         Although you are permitted to throw any UNO exception, only the following
         are valid for usage:
-        -- com::sun::star::beans::UnknownPropertyException
-        -- com::sun::star::beans::PropertyVetoException
-        -- com::sun::star::lang::IllegalArgumentException
-        -- com::sun::star::lang::WrappedTargetException
-        -- com::sun::star::uno::RuntimeException
+        -- css::beans::UnknownPropertyException
+        -- css::beans::PropertyVetoException
+        -- css::lang::IllegalArgumentException
+        -- css::lang::WrappedTargetException
+        -- css::uno::RuntimeException
 
         @param nHandle
                handle
@@ -598,8 +598,8 @@ protected:
     */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-            throw (::com::sun::star::uno::Exception,
+        const css::uno::Any& rValue )
+            throw (css::uno::Exception,
                    std::exception) = 0;
     /**
        The same as getFastProperyValue, but return the value through rValue and nHandle
@@ -607,7 +607,7 @@ protected:
        The method is not implemented in this class.
      */
     virtual void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
+        css::uno::Any& rValue,
         sal_Int32 nHandle ) const = 0;
 
     /** sets an dependent property's value
@@ -630,7 +630,7 @@ protected:
     */
     void    setDependentFastPropertyValue(
                 sal_Int32 i_handle,
-                const ::com::sun::star::uno::Any& i_value
+                const css::uno::Any& i_value
             );
 
     /** The common data of a broadcaster. Use the mutex, disposing state and the listener container. */
@@ -660,8 +660,8 @@ private:
     */
     void    impl_fireAll(
                 sal_Int32* i_handles,
-                const ::com::sun::star::uno::Any * i_newValues,
-                const ::com::sun::star::uno::Any * i_oldValues,
+                const css::uno::Any * i_newValues,
+                const css::uno::Any * i_oldValues,
                 sal_Int32 i_count
             );
 
@@ -692,7 +692,7 @@ protected:
    XPropertySetOption.
 */
 class CPPUHELPER_DLLPUBLIC OPropertySetHelper2 : public OPropertySetHelper,
-                            public ::com::sun::star::beans::XPropertySetOption
+                            public css::beans::XPropertySetOption
 {
 public:
     /** Constructor.
@@ -705,12 +705,12 @@ public:
         bool bIgnoreRuntimeExceptionsWhileFiring = false);
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySetOption
     virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 
