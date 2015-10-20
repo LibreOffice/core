@@ -50,9 +50,9 @@ namespace drawinglayer { namespace geometry {
 
 namespace drawinglayer { namespace primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DSequence and Primitive3DReference
-    typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitive3D > BasePrimitive3DImplBase;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive3D > Primitive3DReference;
-    typedef ::com::sun::star::uno::Sequence< Primitive3DReference > Primitive3DSequence;
+    typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
+    typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
+    typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 }}
 
 
@@ -64,7 +64,7 @@ namespace drawinglayer
     {
         /** BasePrimitive3D class
 
-            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+            Baseclass for all C++ implementations of css::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information.
@@ -117,12 +117,12 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will get the ViewInformation from the ViewParameters for that purpose
              */
-            virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual Primitive3DSequence SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             /** the getRange default implementation will use getDecomposition to create the range information from merging
                 getRange results from the single local decomposition primitives.
              */
-            virtual ::com::sun::star::geometry::RealRectangle3D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual css::geometry::RealRectangle3D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -136,7 +136,7 @@ namespace drawinglayer
     {
         /** BufferedDecompositionPrimitive3D class
 
-            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+            Baseclass for all C++ implementations of css::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information

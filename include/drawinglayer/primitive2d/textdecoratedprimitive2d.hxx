@@ -87,7 +87,7 @@ namespace drawinglayer
                 sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
-                const ::com::sun::star::lang::Locale& rLocale,
+                const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
                 const Color& rFillColor,
 

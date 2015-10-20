@@ -52,7 +52,7 @@ namespace drawinglayer
             together with UNO API definitions and supports holding a sequence of PropertyValues.
             The most used data is for convenience offered directly using basegfx tooling classes.
             It is an implementation to support the sequence of PropertyValues used in a
-            ::com::sun::star::graphic::XPrimitive2D for C++ implementations working with those
+            css::graphic::XPrimitive2D for C++ implementations working with those
         */
         class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
         {
@@ -96,9 +96,9 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rObjectTransformation,
                 const basegfx::B2DHomMatrix& rViewTransformation,
                 const basegfx::B2DRange& rViewport,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
+                const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
+                const css::uno::Sequence< css::beans::PropertyValue >& rExtendedParameters);
 
             /** Constructor: Create a ViewInformation2D
 
@@ -107,7 +107,7 @@ namespace drawinglayer
                 other parameters. This constructor is feeded completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
-            explicit ViewInformation2D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
+            explicit ViewInformation2D(const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters);
 
             /// default (empty) constructor
             ViewInformation2D();
@@ -130,7 +130,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getViewTransformation() const;
             const basegfx::B2DRange& getViewport() const;
             double getViewTime() const;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getVisualizedPage() const;
+            const css::uno::Reference< css::drawing::XDrawPage >& getVisualizedPage() const;
 
             /// On-demand prepared Object to View transformation and its inverse for convenience
             const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;
@@ -153,7 +153,7 @@ namespace drawinglayer
                 as PropertyValues. This set completely describes this ViewInformation2D and
                 can be used for complete information transport over UNO API.
             */
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getViewInformationSequence() const;
+            const css::uno::Sequence< css::beans::PropertyValue >& getViewInformationSequence() const;
 
             /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
                 not offered directly
@@ -163,7 +163,7 @@ namespace drawinglayer
                 incarnations of ViewInformation2D without losing the only with PropertyValues
                 defined data. It does not contain a complete description.
             */
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getExtendedInformationSequence() const;
+            const css::uno::Sequence< css::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
     } // end of namespace geometry
 } // end of namespace drawinglayer

@@ -52,8 +52,8 @@ namespace drawinglayer
             SdrSceneAttribute(
                 double fDistance,
                 double fShadowSlant,
-                ::com::sun::star::drawing::ProjectionMode aProjectionMode,
-                ::com::sun::star::drawing::ShadeMode aShadeMode,
+                css::drawing::ProjectionMode aProjectionMode,
+                css::drawing::ShadeMode aShadeMode,
                 bool bTwoSidedLighting);
             SdrSceneAttribute();
             SdrSceneAttribute(const SdrSceneAttribute& rCandidate);
@@ -68,8 +68,8 @@ namespace drawinglayer
 
             // data read access
             double getShadowSlant() const;
-            ::com::sun::star::drawing::ProjectionMode getProjectionMode() const;
-            ::com::sun::star::drawing::ShadeMode getShadeMode() const;
+            css::drawing::ProjectionMode getProjectionMode() const;
+            css::drawing::ShadeMode getShadeMode() const;
             bool getTwoSidedLighting() const;
         };
     } // end of namespace attribute

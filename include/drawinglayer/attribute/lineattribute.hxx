@@ -57,7 +57,7 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 double fWidth = 0.0,
                 basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLineJoin::Round,
-                com::sun::star::drawing::LineCap aLineCap = com::sun::star::drawing::LineCap_BUTT);
+                css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT);
             LineAttribute();
             LineAttribute(const LineAttribute& rCandidate);
             LineAttribute& operator=(const LineAttribute& rCandidate);
@@ -73,7 +73,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             double getWidth() const;
             basegfx::B2DLineJoin getLineJoin() const;
-            com::sun::star::drawing::LineCap getLineCap() const;
+            css::drawing::LineCap getLineCap() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

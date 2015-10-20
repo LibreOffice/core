@@ -47,7 +47,7 @@ namespace drawinglayer
                 this will not only be used by the renderers to provide the correct decompose
                 graphic attribute context, but also to completely create the page's sub-content.
              */
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxDrawPage;
+            const css::uno::Reference< css::drawing::XDrawPage > mxDrawPage;
 
             /// the PageContent
             Primitive2DSequence                         maPageContent;
@@ -70,7 +70,7 @@ namespace drawinglayer
         public:
             /// constructor
             PagePreviewPrimitive2D(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
+                const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                 const basegfx::B2DHomMatrix& rTransform,
                 double fContentWidth,
                 double fContentHeight,
@@ -78,7 +78,7 @@ namespace drawinglayer
                 bool bKeepAspectRatio);
 
             /// data read access
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
+            const css::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
             const Primitive2DSequence& getPageContent() const { return maPageContent; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getContentWidth() const { return mfContentWidth; }

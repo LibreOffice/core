@@ -50,7 +50,7 @@ namespace drawinglayer
             together with UNO API definitions and supports holding a sequence of PropertyValues.
             The most used data is for convenience offered directly using basegfx tooling classes.
             It is an implementation to support the sequence of PropertyValues used in a
-            ::com::sun::star::graphic::XPrimitive3D for C++ implementations working with those
+            css::graphic::XPrimitive3D for C++ implementations working with those
         */
         class DRAWINGLAYER_DLLPUBLIC ViewInformation3D
         {
@@ -103,7 +103,7 @@ namespace drawinglayer
                 const basegfx::B3DHomMatrix& rProjection,
                 const basegfx::B3DHomMatrix& rDeviceToView,
                 double fViewTime,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
+                const css::uno::Sequence< css::beans::PropertyValue >& rExtendedParameters);
 
             /** Constructor: Create a ViewInformation3D
 
@@ -112,7 +112,7 @@ namespace drawinglayer
                 other parameters. This constructor is feeded completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
-            explicit ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
+            explicit ViewInformation3D(const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters);
 
             /// default (empty) constructor
             ViewInformation3D();
@@ -150,7 +150,7 @@ namespace drawinglayer
                 as PropertyValues. This set completely describes this ViewInformation3D and
                 can be used for complete information transport over UNO API.
             */
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getViewInformationSequence() const;
+            const css::uno::Sequence< css::beans::PropertyValue >& getViewInformationSequence() const;
 
             /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
                 not offered directly
@@ -160,7 +160,7 @@ namespace drawinglayer
                 incarnations of ViewInformation3D without losing the only with PropertyValues
                 defined data. It does not contain a complete description.
             */
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getExtendedInformationSequence() const;
+            const css::uno::Sequence< css::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
     } // end of namespace geometry
 } // end of namespace drawinglayer
