@@ -730,7 +730,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         Repaint();
     }
 
-    FinishedLoading( SfxLoadedFlags::ALL );
+    FinishedLoading();
     return bSuccess;
 }
 
@@ -780,7 +780,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         Repaint();
     }
 
-    FinishedLoading( SfxLoadedFlags::ALL );
+    FinishedLoading();
     return bRet;
 }
 
@@ -816,7 +816,7 @@ bool SmDocShell::ReplaceBadChars()
 
     if (pEditEngine)
     {
-        OUStringBuffer aBuf( pEditEngine->GetText( LINEEND_LF ) );
+        OUStringBuffer aBuf( pEditEngine->GetText() );
 
         for (sal_Int32 i = 0;  i < aBuf.getLength();  ++i)
         {
@@ -839,7 +839,7 @@ void SmDocShell::UpdateText()
 {
     if (pEditEngine && pEditEngine->IsModified())
     {
-        OUString aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
+        OUString aEngTxt( pEditEngine->GetText() );
         if (GetText() != aEngTxt)
             SetText( aEngTxt );
     }

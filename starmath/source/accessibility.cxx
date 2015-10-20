@@ -968,7 +968,7 @@ OUString SmTextForwarder::GetText( const ESelection& rSel ) const
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     OUString aRet;
     if (pEditEngine)
-        aRet = pEditEngine->GetText( rSel, LINEEND_LF );
+        aRet = pEditEngine->GetText( rSel );
     return convertLineEnd(aRet, GetSystemLineEnd());
 }
 

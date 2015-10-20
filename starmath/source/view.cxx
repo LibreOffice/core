@@ -2046,7 +2046,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
         //! synchronize the GraphicWindow display with the text in the
         //! EditEngine.
         SmDocShell *pDoc = GetDoc();
-        pDoc->SetText( pDoc->GetEditEngine().GetText( LINEEND_LF ) );
+        pDoc->SetText( pDoc->GetEditEngine().GetText() );
 
         if ( bIsMDIActivate )
             pEdit->GrabFocus();

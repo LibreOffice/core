@@ -245,7 +245,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
-        OUString aTxt( pEditEngine->GetText( LINEEND_LF ) );
+        OUString aTxt( pEditEngine->GetText() );
         pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
     }
@@ -657,7 +657,7 @@ OUString SmEditWindow::GetText() const
     EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if (pEditEngine)
-        aText = pEditEngine->GetText( LINEEND_LF );
+        aText = pEditEngine->GetText();
     return aText;
 }
 
@@ -739,7 +739,7 @@ bool SmEditWindow::IsAllSelected() const
         sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
-            sal_Int32 nTextLen = pEditEngine->GetText( LINEEND_LF ).getLength();
+            sal_Int32 nTextLen = pEditEngine->GetText().getLength();
             bRes = !eSelection.nStartPos && (eSelection.nEndPos == nTextLen - 1);
         }
         else
