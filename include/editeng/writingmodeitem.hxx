@@ -30,7 +30,7 @@ class EDITENG_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
 public:
     TYPEINFO_OVERRIDE();
 
-    SvxWritingModeItem( ::com::sun::star::text::WritingMode eValue /*= com::sun::star::text::WritingMode_LR_TB*/,
+    SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem();
 
@@ -48,8 +48,8 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * = 0 ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif // INCLUDED_EDITENG_WRITINGMODEITEM_HXX

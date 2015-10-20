@@ -169,22 +169,22 @@ private:
     EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
-    EDITENG_DLLPRIVATE com::sun::star::uno::Reference<
-        com::sun::star::datatransfer::XTransferable>
+    EDITENG_DLLPRIVATE css::uno::Reference<
+        css::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
     EDITENG_DLLPRIVATE EditSelection InsertText(
-        com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable >& rxDataObj,
+        css::uno::Reference<css::datatransfer::XTransferable >& rxDataObj,
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
 
     EDITENG_DLLPRIVATE EditPaM EndOfWord(
-        const EditPaM& rPaM, sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+        const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
     EDITENG_DLLPRIVATE EditPaM GetPaM(const Point& aDocPos, bool bSmart = true);
 
     EDITENG_DLLPRIVATE EditSelection SelectWord(
         const EditSelection& rCurSelection,
-        sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES,
+        sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES,
         bool bAcceptStartOfWord = true);
 
     EDITENG_DLLPRIVATE long GetXPos(
@@ -418,13 +418,13 @@ public:
 
     void            EraseVirtualDevice();
 
-    void            SetSpeller( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XSpellChecker1 > &xSpeller );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >
+    void            SetSpeller( css::uno::Reference<
+                            css::linguistic2::XSpellChecker1 > &xSpeller );
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker1 >
                     GetSpeller();
-    void            SetHyphenator( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XHyphenator >& xHyph );
+    void            SetHyphenator( css::uno::Reference<
+                            css::linguistic2::XHyphenator >& xHyph );
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
@@ -464,7 +464,7 @@ public:
 
     bool            IsRightToLeft( sal_Int32 nPara ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+    css::uno::Reference< css::datatransfer::XTransferable >
                     CreateTransferable( const ESelection& rSelection ) const;
 
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, musst be compatible in SRC638, change later...
@@ -490,7 +490,7 @@ public:
                               bool bEndOfLine,
                               bool bEndOfParagraph,
                               bool bEndOfBullet,
-                              const ::com::sun::star::lang::Locale* pLocale,
+                              const css::lang::Locale* pLocale,
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
@@ -520,7 +520,7 @@ public:
     static vcl::Font CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScriptType nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
-    static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
+    static bool     HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable );
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link<EditView*,void>& rLink );
     Link<EditView*,void> GetBeginDropHdl() const;
@@ -558,9 +558,9 @@ public:
     EditPaM InsertLineBreak(const EditSelection& rEditSelection);
 
     EditPaM CursorLeft(
-        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
+        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL);
     EditPaM CursorRight(
-        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
+        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL);
 
     void SeekCursor(
         ContentNode* pNode, sal_Int32 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);

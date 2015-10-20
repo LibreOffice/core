@@ -31,8 +31,7 @@ namespace com { namespace sun { namespace star {
     class XTransferable;
 } } } }
 
-typedef com::sun::star::uno::Reference<
-            com::sun::star::datatransfer::XTransferable> TranferableText;
+typedef css::uno::Reference< css::datatransfer::XTransferable> TranferableText;
 
 namespace rtl {
     class OUString;

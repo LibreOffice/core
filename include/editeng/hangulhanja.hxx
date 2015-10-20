@@ -108,9 +108,9 @@ namespace editeng
     public:
         HangulHanjaConversion(
             vcl::Window* _pUIParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::lang::Locale& _rSourceLocale,
-            const ::com::sun::star::lang::Locale& _rTargetLocale,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::lang::Locale& _rSourceLocale,
+            const css::lang::Locale& _rTargetLocale,
             const vcl::Font* _pTargetFont,
             sal_Int32 nOptions,
             bool _bIsInteractive
@@ -249,7 +249,7 @@ namespace editeng
                             const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
                             const OUString& _rOrigText,
                             const OUString& _rReplaceWith,
-                            const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
+                            const css::uno::Sequence< sal_Int32 > &_rOffsets,
                             ReplacementAction _eAction,
                             LanguageType *pNewUnitLanguage
                         ) = 0;

@@ -37,8 +37,8 @@ class EDITENG_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 public:
     TYPEINFO_OVERRIDE();
 
-    SfxSpellCheckItem( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
+    SfxSpellCheckItem( css::uno::Reference<
+                            css::linguistic2::XSpellChecker1 >  &xChecker,
                        sal_uInt16 nWhich  );
     SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
 
@@ -50,13 +50,11 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >
             GetXSpellChecker() const { return xSpellCheck; }
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >         xSpellCheck;
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >   xSpellCheck;
 };
 
 
