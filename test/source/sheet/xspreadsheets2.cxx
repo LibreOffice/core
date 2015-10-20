@@ -335,7 +335,7 @@ bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUS
 
     CPPUNIT_ASSERT(aDestContent.startsWith(aStart));
 
-    return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent, NULL) // same cell address
+    return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent) // same cell address
             && aDestContent.indexOf(aSrcFileName)>0); // contains source file name
 }
 
