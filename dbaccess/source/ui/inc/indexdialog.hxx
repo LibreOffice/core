@@ -132,7 +132,7 @@ namespace dbaui
         DECL_LINK_TYPED( OnIndexAction, ToolBox*, void );
         DECL_LINK_TYPED( OnEntryEdited, SvTreeListEntry*, bool );
         DECL_LINK_TYPED( OnModifiedClick, Button*, void );
-        DECL_LINK( OnModified, void* );
+        DECL_LINK_TYPED( OnModified, IndexFieldsControl&, void );
         DECL_LINK_TYPED( OnCloseDialog, Button*, void );
 
         DECL_LINK_TYPED( OnEditIndexAgain, void*, void );

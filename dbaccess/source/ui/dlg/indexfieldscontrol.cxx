@@ -387,7 +387,7 @@ namespace dbaui
     {
         ListBoxControl& rListBox = rController.GetListBox();
         if (!rListBox.IsTravelSelect())
-            m_aModifyHdl.Call(this);
+            m_aModifyHdl.Call(*this);
 
         if (&rListBox == m_pFieldNameCell.get())
         {   // a field has been selected

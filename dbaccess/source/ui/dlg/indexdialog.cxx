@@ -733,17 +733,15 @@ namespace dbaui
 
     IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnModifiedClick, Button*, void )
     {
-        OnModified(NULL);
+        OnModified(*m_pFields);
     }
-    IMPL_LINK_NOARG( DbaIndexDialog, OnModified )
+    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnModified, IndexFieldsControl&, void )
     {
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
         aPosition->setModified(true);
         updateToolbox();
-
-        return 1L;
     }
 
     void DbaIndexDialog::updateControls(const SvTreeListEntry* _pEntry)
