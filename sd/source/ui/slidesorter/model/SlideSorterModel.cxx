@@ -28,7 +28,6 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsSlotManager.hxx"
 #include "view/SlideSorterView.hxx"
-#include "taskpane/SlideSorterCacheDisplay.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

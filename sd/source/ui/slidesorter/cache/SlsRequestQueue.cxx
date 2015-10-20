@@ -127,8 +127,6 @@ void RequestQueue::AddRequest (
         pPage->AddPageUser(*this);
     }
 
-    SSCD_SET_REQUEST_CLASS(aKey,eRequestClass);
-
 #if OSL_DEBUG_LEVEL >=2
     SAL_INFO("sd.sls", OSL_THIS_FUNC << ": " << (bRemoved?"replaced":"added")
         << " request for page " << ((aKey->GetPageNum()-1)/2)
@@ -166,11 +164,6 @@ bool RequestQueue::RemoveRequest (
             mpRequestQueue->erase(aRequestIterator);
 
             bRequestWasRemoved = true;
-
-            if (bRequestWasRemoved)
-            {
-                SSCD_SET_STATUS(aKey,NONE);
-            }
         }
         else
             break;
@@ -195,7 +188,6 @@ void RequestQueue::ChangeClass (
     if (iRequest!=mpRequestQueue->end() && iRequest->meClass!=eNewRequestClass)
     {
         AddRequest(aKey, eNewRequestClass, true);
-        SSCD_SET_REQUEST_CLASS(aKey,eNewRequestClass);
     }
 }
 
@@ -227,8 +219,6 @@ void RequestQueue::PopFront()
 
     if ( ! mpRequestQueue->empty())
     {
-        SSCD_SET_STATUS(maRequestQueue.begin()->mpData->GetPage(),NONE);
-
         Container::const_iterator aIter(mpRequestQueue->begin());
         SdrPage *pPage = const_cast<SdrPage*>(aIter->maKey);
         pPage->RemovePageUser(*this);

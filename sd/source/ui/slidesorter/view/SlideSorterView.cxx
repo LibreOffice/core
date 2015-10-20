@@ -39,7 +39,6 @@
 #include "cache/SlsPageCache.hxx"
 #include "cache/SlsPageCacheManager.hxx"
 #include "cache/SlsCacheContext.hxx"
-#include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "DrawDocShell.hxx"
 #include "PaneDockingWindow.hxx"
 
@@ -519,8 +518,6 @@ void SlideSorterView::UpdatePreciousFlags()
             {
                 pCache->SetPreciousFlag(
                     pDescriptor->GetPage(),
-                    maVisiblePageRange.IsInside(nIndex));
-                SSCD_SET_VISIBILITY(mrModel.GetDocument(), nIndex,
                     maVisiblePageRange.IsInside(nIndex));
             }
             else
