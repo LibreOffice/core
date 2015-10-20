@@ -206,8 +206,7 @@ void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
             IndexedStyleSheets::RETURN_FIRST);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Only one style sheet is returned.", static_cast<size_t>(1), v.size());
 
-    std::vector<unsigned> w = iss.FindPositionsByNameAndPredicate(name, predicate,
-                IndexedStyleSheets::RETURN_ALL);
+    std::vector<unsigned> w = iss.FindPositionsByNameAndPredicate(name, predicate);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("All style sheets are returned.", static_cast<size_t>(3), w.size());
 }
 

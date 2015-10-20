@@ -3714,7 +3714,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 sResString.append(sStrArray[nNums[nAnzNums-1]]);
                 rtl_math_ConversionStatus eStatus;
-                fOutNumber = ::rtl::math::stringToDouble( sResString.makeStringAndClear(), '.', ',', &eStatus, NULL );
+                fOutNumber = ::rtl::math::stringToDouble( sResString.makeStringAndClear(), '.', ',', &eStatus );
                 if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
                 {
                     F_Type = css::util::NumberFormat::TEXT;         // overflow/underflow -> Text
