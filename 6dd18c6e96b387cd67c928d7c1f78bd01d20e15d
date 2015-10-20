@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_f782bac7",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-20T21:10:31Z",
+      "side": 1,
+      "message": "this changes the order of function calls but i think the layouts are independent of each other so it shouldn\u0027t be a problem",
+      "revId": "6dd18c6e96b387cd67c928d7c1f78bd01d20e15d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
