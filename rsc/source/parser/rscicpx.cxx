@@ -350,7 +350,7 @@ RscTop * RscTypCont::InitClassWorkWindow( RscTop * pSuper )
 
         // add variable
         nVarId = aNmTb.Put( "Show", VARNAME );
-        pClassWorkWindow->SetVariable( nVarId, pShow, NULL );
+        pClassWorkWindow->SetVariable( nVarId, pShow );
     }
 
     return pClassWorkWindow;
@@ -713,7 +713,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
         SETCONST( pKeyFunc, "KEYFUNC_FINDBACKWARD",     KeyFuncType::FINDBACKWARD );
         // add variable
         nVarId = aNmTb.Put( "Function", VARNAME );
-        pClassKeyCode->SetVariable( nVarId, pKeyFunc, NULL );
+        pClassKeyCode->SetVariable( nVarId, pKeyFunc );
     }
 
     return pClassKeyCode;
