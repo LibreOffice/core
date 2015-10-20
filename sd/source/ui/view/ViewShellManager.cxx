@@ -1138,7 +1138,7 @@ void ViewShellManager::Implementation::Shutdown()
             }
         }
     }
-    mrBase.RemoveSubShell (NULL);
+    mrBase.RemoveSubShell ();
 
     maShellFactories.clear();
 }

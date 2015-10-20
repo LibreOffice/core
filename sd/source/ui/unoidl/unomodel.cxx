@@ -1962,7 +1962,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : NULL;
                         if( pPage )
                         {
-                            SdrOutliner& rOutl = mpDoc->GetDrawOutliner( NULL );
+                            SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
                             bool bScreenDisplay(true);
 
                             if(bScreenDisplay && pOut && OUTDEV_PRINTER == pOut->GetOutDevType())

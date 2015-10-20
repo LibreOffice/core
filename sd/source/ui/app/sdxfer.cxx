@@ -571,7 +571,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                         true,
                         mpSdDrawDocumentIntern->GetDocumentType());
                     mbOwnDocument = false;
-                    maDocShellRef->DoInitNew( NULL );
+                    maDocShellRef->DoInitNew();
                 }
 
                 maDocShellRef->SetVisArea( maVisArea );

@@ -197,7 +197,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
             if ( SeekToRec( rStCtrl, PPT_PST_PPDrawingGroup, nDocLen, &aPPDGHd ) )
             {
                 sal_uLong nPPDGLen = aPPDGHd.GetRecEndFilePos();
-                if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen, NULL ) )
+                if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen ) )
                     nDggContainerOfs = rStCtrl.Tell();
             }
             rStCtrl.Seek( nPosMerk );
@@ -536,7 +536,7 @@ bool ImplSdPPTImport::Import()
                 DffRecordHeader aHyperE;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE ) )
                     break;
-                if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen, NULL ) )
+                if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen ) )
                     break;
                 rStCtrl.SeekRel( 8 );
                 rStCtrl.ReadUInt32( pPtr->nIndex );
@@ -911,16 +911,16 @@ bool ImplSdPPTImport::Import()
         pHandoutPage->SetPageKind( PK_HANDOUT );
         pSdrModel->InsertPage( pHandoutPage );
 
-        sal_uInt16 nPageAnz = GetPageCount( PPT_SLIDEPAGE );
+        sal_uInt16 nPageAnz = GetPageCount();
         if ( nPageAnz )
         {
             for ( sal_uInt16 nPage = 0; nPage < nPageAnz; nPage++ )
             {
                 mePresChange = PRESCHANGE_SEMIAUTO;
-                SetPageNum( nPage, PPT_SLIDEPAGE );
+                SetPageNum( nPage );
                 SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( false ));
                 PptSlidePersistEntry* pMasterPersist = NULL;
-                if ( HasMasterPage( nPage, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
+                if ( HasMasterPage( nPage ) )     // try to get the LayoutName from the masterpage
                 {
                     sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                     pPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nMasterNum));
@@ -996,7 +996,7 @@ bool ImplSdPPTImport::Import()
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
                 SdPage* pNotesPage = static_cast<SdPage*>(MakeBlancPage( false ));
-                sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage, PPT_SLIDEPAGE ) + 1;
+                sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
                 {
@@ -1083,7 +1083,7 @@ bool ImplSdPPTImport::Import()
         {
 
             // set AutoLayout
-            SetPageNum( i, PPT_SLIDEPAGE );
+            SetPageNum( i );
             SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
@@ -1907,7 +1907,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     if ( OUString::number(nSoundRef) == aRefStr )
                     {
                         rStCtrl.Seek( nPosMerk2 );
-                        if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL ) )
+                        if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen ) )
                         {
                             ReadString( aRetval );
                             bDone = true;
@@ -1987,7 +1987,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 {
     OUString aRetVal;
-    DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING ) );
+    DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList ) );
     if ( pHd )
     {
         pHd->SeekToContent( rStCtrl );
@@ -2653,7 +2653,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             sal_uInt32 nFilePosMerk2 = rSt.Tell();
                             OUString aMacroName;
 
-                            if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL ) )
+                            if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd ) )
                                 ReadString(aMacroName);
 
                             rSt.Seek( nFilePosMerk2 );

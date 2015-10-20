@@ -478,7 +478,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
             SdPage* pPage = static_cast<SdPage*>( pPgView->GetPage() );
             if( pPage )
             {
-                SdrOutliner& rOutl = mrDoc.GetDrawOutliner(NULL);
+                SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
                 bool bScreenDisplay(true);
 
                 if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())

@@ -2183,7 +2183,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             {
                 const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
                 rtl_math_ConversionStatus eStatus;
-                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus );
                 if( eStatus == rtl_math_ConversionStatus_Ok )
                 {
                     aParamValue.Name = "MediaTime";

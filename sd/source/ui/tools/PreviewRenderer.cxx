@@ -275,7 +275,7 @@ bool PreviewRenderer::Initialize (
     }
 
     pPageView->SetApplicationDocumentColor(aApplicationDocumentColor);
-    SdrOutliner& rOutliner(pDocument->GetDrawOutliner(NULL));
+    SdrOutliner& rOutliner(pDocument->GetDrawOutliner());
     rOutliner.SetBackgroundColor(aApplicationDocumentColor);
     rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
     mpPreviewDevice->SetBackground(Wallpaper(aApplicationDocumentColor));

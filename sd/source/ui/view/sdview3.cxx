@@ -666,7 +666,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
             DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL);
-            xShell->DoInitNew(0);
+            xShell->DoInitNew();
 
             SdDrawDocument* pModel = xShell->GetDoc();
             pModel->InsertPage(pModel->AllocPage(false));

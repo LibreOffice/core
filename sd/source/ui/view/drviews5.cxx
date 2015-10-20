@@ -409,7 +409,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
-    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
+    GetDoc()->GetDrawOutliner().SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // Set Application Background color for usage in SdrPaintView(s)
     mpDrawView->SetApplicationBackgroundColor(GetAppBackgroundColor());
@@ -417,7 +417,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
-    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+    GetDoc()->GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
     mpDrawView->CompleteRedraw( pWin, vcl::Region( rRect ) );
 }

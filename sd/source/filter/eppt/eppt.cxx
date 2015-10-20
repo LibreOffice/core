@@ -1288,7 +1288,7 @@ void PPTWriter::ImplWriteOLE( )
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
-                        tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
+                        tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( aPersistStream );
                         xStm->WriteUInt32( 0 )        // no ClipboardId
                                .WriteUInt32( 4 )        // no target device
                                .WriteUInt32( 1 )        // aspect ratio

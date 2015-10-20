@@ -1406,7 +1406,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
 
             DrawDocShell* pNewDocSh;
             xDocShell = pNewDocSh = new DrawDocShell(SfxObjectCreateMode::STANDARD, false);
-            pNewDocSh->DoInitNew(NULL);
+            pNewDocSh->DoInitNew();
             SdDrawDocument* pDoc = pNewDocSh->GetDoc();
             pDoc->CreateFirstPages();
             pDoc->StopWorkStartupDelay();

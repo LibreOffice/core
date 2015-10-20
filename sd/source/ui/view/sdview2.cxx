@@ -370,7 +370,7 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
             rtl::Reference<FuPoor> xFunction( pDrawViewShell->GetCurrentFunction() );
 
             if( xFunction.is() && 0 != dynamic_cast< const FuDraw *>( xFunction.get() ) )
-                static_cast<FuDraw*>(xFunction.get())->ForcePointer( NULL );
+                static_cast<FuDraw*>(xFunction.get())->ForcePointer();
         }
 
         mpDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());

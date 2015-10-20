@@ -143,7 +143,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( (sal_uInt16) m_pNmLayers->GetValue(), BMP_REDUCE_SIMPLE );
+    aNew.ReduceColors( (sal_uInt16) m_pNmLayers->GetValue() );
 
     return aNew;
 }

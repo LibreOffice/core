@@ -262,7 +262,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     SfxMedium*          pMedium = new SfxMedium( aFile, StreamMode::READ | StreamMode::NOCREATE );
     const SfxFilter*    pFilter = NULL;
 
-    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SfxFilterFlags::IMPORT, SFX_FILTER_NOTINSTALLED );
+    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter );
 
     bool                bDrawMode = mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr;
     bool                bInserted = false;
