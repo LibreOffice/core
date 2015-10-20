@@ -31,11 +31,11 @@ class TubeContacts : public ModelessDialog
     ListBox*                mpList;
     Collaboration*          mpCollaboration;
 
-    DECL_LINK( BtnDemoHdl, void * );
-    DECL_LINK( BtnConnectHdl, void * );
-    DECL_LINK( BtnGroupHdl, void * );
-    DECL_LINK( BtnInviteHdl, void * );
-    DECL_LINK( BtnListenHdl, void * );
+    DECL_LINK_TYPED( BtnDemoHdl, Button*, void );
+    DECL_LINK_TYPED( BtnConnectHdl, Button*, void );
+    DECL_LINK_TYPED( BtnGroupHdl, Button*, void );
+    DECL_LINK_TYPED( BtnInviteHdl, Button*, void );
+    DECL_LINK_TYPED( BtnListenHdl, Button*, void );
 
     AccountContactPairV maACs;
 
@@ -175,34 +175,29 @@ public:
     }
 };
 
-IMPL_LINK_NOARG( TubeContacts, BtnDemoHdl )
+IMPL_LINK_NOARG_TYPED( TubeContacts, BtnDemoHdl, Button*, void )
 {
     StartDemoSession();
-    return 0;
 }
 
-IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
+IMPL_LINK_NOARG_TYPED( TubeContacts, BtnConnectHdl, Button*, void )
 {
     StartBuddySession();
-    return 0;
 }
 
-IMPL_LINK_NOARG( TubeContacts, BtnGroupHdl )
+IMPL_LINK_NOARG_TYPED( TubeContacts, BtnGroupHdl, Button*, void )
 {
     StartGroupSession();
-    return 0;
 }
 
-IMPL_LINK_NOARG( TubeContacts, BtnInviteHdl )
+IMPL_LINK_NOARG_TYPED( TubeContacts, BtnInviteHdl, Button*, void )
 {
     Invite();
-    return 0;
 }
 
-IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
+IMPL_LINK_NOARG_TYPED( TubeContacts, BtnListenHdl, Button*, void )
 {
     Listen();
-    return 0;
 }
 
 } // anonymous namespace

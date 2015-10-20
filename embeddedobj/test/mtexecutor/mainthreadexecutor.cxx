@@ -77,12 +77,11 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
 }
 
 
-IMPL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThreadExecutorRequest )
+IMPL_STATIC_LINK_TYPED( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThreadExecutorRequest, void )
 {
     pThreadExecutorRequest->doIt();
 
     delete pThreadExecutorRequest;
-    return 0;
 }
 
 

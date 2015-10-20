@@ -466,7 +466,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_pLMEdit->SaveValue();
     m_pRMEdit->SaveValue();
     m_pCntSharedBox->SaveValue();
-    RangeHdl( 0 );
+    RangeHdl();
 
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
@@ -1046,7 +1046,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         m_pBspWin->SetVert( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
     }
     ResetBackground_Impl( rSet );
-    RangeHdl( 0 );
+    RangeHdl();
 }
 
 SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1056,11 +1056,6 @@ SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
-{
-    RangeHdl();
-    return 0;
-}
 IMPL_LINK_NOARG_TYPED(SvxHFPage, RangeFocusHdl, Control&, void)
 {
     RangeHdl();

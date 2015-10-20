@@ -139,7 +139,7 @@ public:
     void                drawView( XPlugin_Impl* );
 private:
     sal_Bool                retrieveFunction( const char* i_pName, void** i_ppFunc ) const;
-    DECL_LINK( NullTimerHdl, void* );
+    DECL_LINK_TYPED( NullTimerHdl, Timer*, void );
 
 private:
     CFBundleRef         m_xBundle;

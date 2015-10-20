@@ -76,11 +76,11 @@ private:
 public:
             MyWindow( vcl::Window *pParent );
 
-        DECL_LINK(CountHdl, PushButton*);
-        DECL_LINK(TextHdl, PushButton*);
-        DECL_LINK(BlaHdl, PushButton*);
-        DECL_LINK(TabHdl, PushButton*);
-        DECL_LINK(ViewHdl, PushButton*);
+        DECL_LINK_TYPED(CountHdl, PushButton*, void);
+        DECL_LINK_TYPED(TextHdl, PushButton*, void);
+        DECL_LINK_TYPED(BlaHdl, PushButton*, void);
+        DECL_LINK_TYPED(TabHdl, PushButton*, void);
+        DECL_LINK_TYPED(ViewHdl, PushButton*, void);
 };
 
 class ScTestListener : public XSelectionChangeListener, public UsrObject
@@ -1501,7 +1501,7 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
     }
 }
 
-IMPL_LINK_NOARG(MyWindow, CountHdl)
+IMPL_LINK_NOARG_TYPED(MyWindow, CountHdl, PushButton*, void)
 {
 
     long nCount = aCountField.GetValue();
@@ -1606,11 +1606,9 @@ IMPL_LINK_NOARG(MyWindow, CountHdl)
             lcl_Pivot(aTimeText);
             break;
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MyWindow, TextHdl)
+IMPL_LINK_NOARG_TYPED(MyWindow, TextHdl, PushButton*, void)
 {
     sal_uInt16 nCol = (sal_uInt16)aColField.GetValue();
     sal_uInt16 nRow = (sal_uInt16)aRowField.GetValue();
@@ -1653,11 +1651,9 @@ IMPL_LINK_NOARG(MyWindow, TextHdl)
             }
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MyWindow, BlaHdl)
+IMPL_LINK_NOARG_TYPED(MyWindow, BlaHdl, PushButton*, void)
 {
     aTimeText.SetText("...");
 
@@ -1725,10 +1721,9 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
 
         xGlobalCell = xCell;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(MyWindow, TabHdl)
+IMPL_LINK_NOARG_TYPED(MyWindow, TabHdl, PushButton*, void)
 {
     String aResult;
 
@@ -1795,8 +1790,6 @@ IMPL_LINK_NOARG(MyWindow, TabHdl)
     }
 
     aTimeText.SetText(aResult);
-
-    return 0;
 }
 
 void lcl_FillCells(XCellCollectionRef xColl)
@@ -1819,16 +1812,16 @@ void lcl_FillCells(XCellCollectionRef xColl)
     }
 }
 
-IMPL_LINK_NOARG(MyWindow, ViewHdl)
+IMPL_LINK_NOARG_TYPED(MyWindow, ViewHdl, PushButton*, void)
 {
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     XInterfaceRef xInt = lcl_GetView();
-    if (!xInt) return 0;
+    if (!xInt) return;
     XDocumentViewRef xView = (XDocumentView*)xInt->queryInterface(XDocumentView::getSmartUik());
-    if (!xView) return 0;
+    if (!xView) return;
 
     XInterfaceRef xSelInt = xView->getSelection();
-    if (!xSelInt) return 0;
+    if (!xSelInt) return;
 
     XAutoFormattableRef xAuto = (XAutoFormattable*)xSelInt->
                                     queryInterface(XAutoFormattable::getSmartUik());
@@ -1870,12 +1863,12 @@ IMPL_LINK_NOARG(MyWindow, ViewHdl)
 
     XCellRangeSourceRef xSrc = (XCellRangeSource*)
                                     xInt->queryInterface(XCellRangeSource::getSmartUik());
-    if (!xSrc) return 0;
+    if (!xSrc) return;
     XCellRangeRef xRange = xSrc->getReferredCells();
-    if (!xRange) return 0;
+    if (!xRange) return;
     XCellCollectionRef xColl = (XCellCollection*)
                                     xRange->queryInterface(XCellCollection::getSmartUik());
-    if (!xColl) return 0;
+    if (!xColl) return;
 
     XActionLockableRef xLock = (XActionLockable*)
                         xDoc->queryInterface(XActionLockable::getSmartUik());
@@ -1888,9 +1881,7 @@ IMPL_LINK_NOARG(MyWindow, ViewHdl)
         xLock->removeActionLock();                      // don't paint in between
 
     XStarCalcViewRef xCalc = (XStarCalcView*)xInt->queryInterface(XStarCalcView::getSmartUik());
-    if (!xCalc) return 0;
-
-    return 0;
+    if (!xCalc) return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
