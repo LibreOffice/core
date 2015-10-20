@@ -517,19 +517,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         NamedNodeMap cellAtt = node.getAttributes();
 
-        int debug_i=0;
-        Node debug_attrib = null;
         fmt.clearFormatting();
-        if (cellAtt == null || cellAtt.item(0) == null) {
-           Debug.log(Debug.INFO, "No Cell Attributes\n");
-           // return;
-        } else {
-           while ((debug_attrib = cellAtt.item(debug_i++)) != null) {
-              Debug.log(Debug.INFO, "Cell Attribute " + debug_i +
-                 ": " + debug_attrib.getNodeName() + " : " +
-                 debug_attrib.getNodeValue() + "\n");
-           }
-        }
 
         // Get the type of data in the cell
         Node tableValueTypeNode =
