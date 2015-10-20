@@ -89,7 +89,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
   {  ERROR_CANT_ACCESS_FILE,       osl_File_E_ACCES    },  /* 1920 */
   {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  },   /* 59 */
-  {  ERROR_FILE_CHECKED_OUT,       osl_File_E_LOCKED   },   /* 220 The file is locked or checked out by another user. */
+  {  ERROR_FILE_CHECKED_OUT,       osl_File_E_ACCES    },   /* 220 The file is locked or checked out by another user. */
   {  ERROR_INVALID_NAME,           osl_File_E_NOENT    }   /*  123 One or more of the names composing the file path has a wrong syntax. */
 };
 
