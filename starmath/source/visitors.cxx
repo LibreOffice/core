@@ -2383,7 +2383,7 @@ void SmNodeToTextVisitor::Visit( SmRootSymbolNode* )
 void SmNodeToTextVisitor::Visit( SmDynIntegralNode* pNode )
 {
     SmNode *pBody    = pNode->Body();
-    Append( "intd" );
+    Append( "int" );
     LineToText( pBody );
 }
 
