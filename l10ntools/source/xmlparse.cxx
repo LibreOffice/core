@@ -1124,7 +1124,7 @@ OString XMLUtil::QuotHTML( const OString &rString )
     icu::UnicodeString sReturn;
     int32_t nEndPos = 0;
     int32_t nStartPos = 0;
-    while( aRegexMatcher.find(nStartPos, nIcuErr) && nIcuErr == U_ZERO_ERROR )
+    while( aRegexMatcher.find(nStartPos, nIcuErr) && U_SUCCESS(nIcuErr) )
     {
         nStartPos = aRegexMatcher.start(nIcuErr);
         if ( nEndPos < nStartPos )
