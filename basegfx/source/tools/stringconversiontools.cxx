@@ -114,8 +114,7 @@ namespace basegfx
                 o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),
                                                             '.',
                                                             ',',
-                                                            &eStatus,
-                                                            NULL );
+                                                            &eStatus );
                 return ( eStatus == rtl_math_ConversionStatus_Ok );
             }
 
