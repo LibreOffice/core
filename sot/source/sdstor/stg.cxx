@@ -288,7 +288,7 @@ bool StorageStream::Validate( bool bValidate ) const
 
 bool StorageStream::ValidateMode( StreamMode nMode ) const
 {
-    bool bRet = ValidateMode_Impl( nMode, NULL );
+    bool bRet = ValidateMode_Impl( nMode );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
