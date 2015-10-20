@@ -31,8 +31,6 @@ class SvStream;
 
 typedef SfxPoolItem const** SfxItemArray;
 
-#define USHORT_ARG int
-
 class SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
@@ -69,7 +67,7 @@ public:
 
                                 SfxItemSet( SfxItemPool&, bool bTotalPoolRanges = false );
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
-                                SfxItemSet( SfxItemPool&, USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ... );
+                                SfxItemSet( SfxItemPool&, int nWh1, int nWh2, int nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
 

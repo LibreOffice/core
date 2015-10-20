@@ -138,8 +138,7 @@ void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2
     memset(static_cast<void*>(m_pItems), 0, sizeof(SfxPoolItem*) * nSize);
 }
 
-SfxItemSet::SfxItemSet(SfxItemPool& rPool,
-                       USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ...)
+SfxItemSet::SfxItemSet(SfxItemPool& rPool, int nWh1, int nWh2, int nNull, ...)
     : m_pPool( &rPool )
     , m_pParent(nullptr)
     , m_pWhichRanges(nullptr)
