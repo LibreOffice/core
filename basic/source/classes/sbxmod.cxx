@@ -1265,7 +1265,7 @@ void SbModule::Run( SbMethod* pMeth )
             bQuit = true;
         if ( bQuit )
     {
-        Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
+        Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ) );
     }
 }
 

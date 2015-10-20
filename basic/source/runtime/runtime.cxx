@@ -2814,7 +2814,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     {
         aStr = aStr.replaceAt(iComma, 1, OUString("."));
     }
-    double n = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
+    double n = ::rtl::math::stringToDouble( aStr, '.', ',' );
 
     p->PutDouble( n );
     PushVar( p );
