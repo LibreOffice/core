@@ -259,7 +259,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
 
     // init controls
-    m_pLB_ROLE->SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );
+    m_pLB_ROLE->SetTabs( lcl_pRoleListBoxTabs );
     m_pLB_ROLE->Show();
 
     updateControlsFromDialogModel();
@@ -327,7 +327,7 @@ bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReas
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )
     {
-        updateModelFromControl( 0 /*update all*/ );
+        updateModelFromControl();
         return true; //return false if this page should not be left
     }
     else

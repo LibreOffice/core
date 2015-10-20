@@ -238,7 +238,7 @@ void CandleStickChart::createShapes()
 
                         uno::Reference< drawing::XShape > xShape =
                             m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,
-                                    PolyToPointSequence(aPoly), NULL);
+                                    PolyToPointSequence(aPoly));
                         setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
@@ -290,7 +290,7 @@ void CandleStickChart::createShapes()
                         {
                             uno::Reference< drawing::XShape > xShape =
                                 m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,
-                                        PolyToPointSequence(aPoly), NULL );
+                                        PolyToPointSequence(aPoly) );
                             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                             if(xProp.is())
                             {

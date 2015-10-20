@@ -107,7 +107,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public ::std::unary_function<
     double operator() ( const OUString & rStr )
     {
         rtl_math_ConversionStatus eConversionStatus;
-        double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus, NULL );
+        double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus );
 
         if( eConversionStatus != rtl_math_ConversionStatus_Ok )
             ::rtl::math::setNan( & fResult );
