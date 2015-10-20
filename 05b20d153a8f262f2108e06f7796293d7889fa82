@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_57ef2eb0",
+        "filename": "unoxml/source/dom/node.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-20T20:05:27Z",
+      "side": 1,
+      "message": "please use a different variable name, leave out the \"m\" prefix that indicates it is a member variable, which it is not",
+      "revId": "05b20d153a8f262f2108e06f7796293d7889fa82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
