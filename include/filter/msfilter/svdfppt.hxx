@@ -632,7 +632,7 @@ public:
                                 sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer*
                             );
-    virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const = 0;
+    virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
 };
 
 struct PPTTextCharacterStyleAtomInterpreter
@@ -1289,26 +1289,26 @@ public:
 
 class PPTConvertOCXControls : public SvxMSConvertOCXControls
 {
-    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > & GetDrawPage() override;
+    virtual const css::uno::Reference< css::drawing::XDrawPage > & GetDrawPage() override;
     PptPageKind     ePageKind;
     const SdrPowerPointImport* mpPPTImporter;
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > mxInStrm;
+    css::uno::Reference< css::io::XInputStream > mxInStrm;
 public:
 
-    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rxInStrm, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, PptPageKind ePKind ) :
+    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, css::uno::Reference< css::io::XInputStream >& rxInStrm, const css::uno::Reference< css::frame::XModel >& rxModel, PptPageKind ePKind ) :
         SvxMSConvertOCXControls ( rxModel ),
         ePageKind               ( ePKind ),
         mpPPTImporter           ( pPPTImporter ),
         mxInStrm                ( rxInStrm )
     {};
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > *pShapeRef=0,
+        css::uno::Reference<
+        css::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );
     virtual bool InsertControl(
-        const com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > &rFComp,
-        const com::sun::star::awt::Size& rSize,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShape,
+        const css::uno::Reference< css::form::XFormComponent > &rFComp,
+        const css::awt::Size& rSize,
+        css::uno::Reference< css::drawing::XShape > *pShape,
         bool bFloatingCtrl
     ) override;
 };
