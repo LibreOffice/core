@@ -136,7 +136,7 @@ public class ParcelBrowseNode extends PropertySet implements
     }
 
     public boolean hasChildNodes() {
-        if (container != null && container.hasByName(getName()) && parcel != null) {
+        if (container != null && parcel != null && container.hasByName(getName())) {
             return parcel.hasElements();
         }
 
