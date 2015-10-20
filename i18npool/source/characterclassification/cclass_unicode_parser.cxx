@@ -1029,7 +1029,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         // transliterate to ASCII
         aTmp = xNatNumSup->getNativeNumberString( aTmp, aParserLocale,
                 NativeNumberMode::NATNUM0 );
-        r.Value = ::rtl::math::stringToDouble( aTmp, cDecimalSep, cGroupSep, NULL, NULL );
+        r.Value = ::rtl::math::stringToDouble( aTmp, cDecimalSep, cGroupSep );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }
