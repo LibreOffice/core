@@ -135,7 +135,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         aProps.getArray()[ 0 ] = "IsFolder";
         aProps.getArray()[ 1 ] = "IsDocument";
         css::uno::Reference< XResultSet > xResultSet(
-            aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+            aCnt.createCursor( aProps ) );
 
         if( xResultSet.is() )
         {

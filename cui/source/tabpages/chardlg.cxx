@@ -1103,7 +1103,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
             if ( pSizeBox->IsPtRelative() )
                 aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), SFX_MAPUNIT_POINT, eUnit );
             else
-                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize, SFX_MAPUNIT_RELATIVE );
+                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize );
             rSet.Put( aHeight );
         }
         else

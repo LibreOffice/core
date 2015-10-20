@@ -782,7 +782,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     // initialize Entriesbox
     m_pEntriesBox->SetStyle(m_pEntriesBox->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     m_pEntriesBox->SetSelectionMode(SINGLE_SELECTION);
-    m_pEntriesBox->SetTabs(&AccCfgTabs[0], MAP_APPFONT);
+    m_pEntriesBox->SetTabs(&AccCfgTabs[0]);
     m_pEntriesBox->Resize(); // OS: Hack for right selection
     m_pEntriesBox->SetSpaceBetweenEntries(0);
     m_pEntriesBox->SetDragDropMode(DragDropMode::NONE);

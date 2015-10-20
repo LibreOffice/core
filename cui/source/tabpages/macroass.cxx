@@ -383,7 +383,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
     mpImpl->pMacroLB->SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
-    rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
+    rListBox.SetTabs( &nTabs[0] );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     aSize.Width() = 1764;       // don't know what, so 42^2 is best to use...

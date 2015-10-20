@@ -697,7 +697,7 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             long _nWidth = pBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
             nTmpSz += _nWidth;
-            pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+            pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
         }
     }
 }

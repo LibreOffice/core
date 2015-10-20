@@ -472,7 +472,7 @@ void SfxConfigGroupListBox::InitModule()
             catch(const css::container::NoSuchElementException&)
                 { continue; }
 
-            SvTreeListEntry*        pEntry = InsertEntry(sGroupName, NULL);
+            SvTreeListEntry*        pEntry = InsertEntry(sGroupName);
             SfxGroupInfo_Impl* pInfo   = new SfxGroupInfo_Impl(SfxCfgKind::GROUP_FUNCTION, rGroupID);
             pEntry->SetUserData(pInfo);
         }
@@ -588,7 +588,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                     static_cast<void *>(rootNode.get()));
 
             OUString aTitle(pImp->m_sDlgMacros);
-            SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand();
             aArr.push_back( pInfo );
@@ -660,7 +660,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 
                             Image aImage = GetImage( theChild, xCtx, bIsRootNode );
                             SvTreeListEntry* pNewEntry =
-                                InsertEntry( uiName, NULL);
+                                InsertEntry( uiName );
                             SetExpandedEntryBmp(  pNewEntry, aImage );
                             SetCollapsedEntryBmp( pNewEntry, aImage );
 
@@ -695,7 +695,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     if ( m_xContext.is() )
     {
         OUString sStyle( pImp->m_aStrGroupStyles );
-        SvTreeListEntry *pEntry = InsertEntry( sStyle, 0 );
+        SvTreeListEntry *pEntry = InsertEntry( sStyle );
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
@@ -859,7 +859,7 @@ void SfxConfigGroupListBox::GroupSelected()
             {
                 const css::frame::DispatchInformation& rInfo      = lCommands[i];
                 OUString                        sUIName    = MapCommand2UIName(rInfo.Command);
-                SvTreeListEntry*                           pFuncEntry = pFunctionListBox->InsertEntry(sUIName, NULL);
+                SvTreeListEntry*                           pFuncEntry = pFunctionListBox->InsertEntry(sUIName);
                 SfxGroupInfo_Impl*                     pGrpInfo   = new SfxGroupInfo_Impl(SfxCfgKind::FUNCTION_SLOT, 0);
                 pGrpInfo->sCommand = rInfo.Command;
                 pGrpInfo->sLabel   = sUIName;
@@ -903,7 +903,7 @@ void SfxConfigGroupListBox::GroupSelected()
 
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), false );
                                 SvTreeListEntry* pNewEntry =
-                                    pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
+                                    pFunctionListBox->InsertEntry( children[n]->getName() );
                                 pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
                                 pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
 
@@ -936,7 +936,7 @@ void SfxConfigGroupListBox::GroupSelected()
                      ++pIt                   )
                 {
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(*pIt);
-                    SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel, NULL );
+                    SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel );
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, pStyle );
                     pFunctionListBox->aArr.push_back( pGrpInfo );
                     pGrpInfo->sCommand = pStyle->sCommand;

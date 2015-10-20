@@ -893,7 +893,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     pCharClass = new CharClass( aLanguageTag );
 
     static long aTabs[] = { 2 /* Tab-Count */, 1, 61 };
-    m_pReplaceTLB->SetTabs( &aTabs[0], MAP_APPFONT );
+    m_pReplaceTLB->SetTabs( &aTabs[0] );
 
     m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
     m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
@@ -2072,7 +2072,7 @@ IMPL_LINK_TYPED( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
     // start character selection dialog
     ScopedVclPtrInstance< SvxCharacterMap > pMap( this, true );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
-                        LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne, 0 ));
+                        LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();

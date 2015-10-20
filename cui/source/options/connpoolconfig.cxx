@@ -141,7 +141,7 @@ namespace offapp
     {
         // the config node where all pooling relevant info are stored under
         OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName());
 
         if (!aConnectionPoolRoot.isValid())
             // already asserted by the OConfigurationTreeRoot

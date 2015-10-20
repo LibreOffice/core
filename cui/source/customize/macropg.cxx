@@ -108,7 +108,7 @@ IMPL_LINK_TYPED( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
                 long _nWidth = maHeaderBar->GetItemSize( i );
                 aSz.Width() =  _nWidth + nTmpSz;
                 nTmpSz += _nWidth;
-                maListBox->SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );
+                maListBox->SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width() );
             }
         }
     }
@@ -730,7 +730,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     rListBox.SetSelectHdl( LINK( this, _SvxMacroTabPage, SelectEvent_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
-    rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
+    rListBox.SetTabs( &nTabs[0] );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     aSize.Width() = 1764;        // don't know what, so 42^2 is best to use...

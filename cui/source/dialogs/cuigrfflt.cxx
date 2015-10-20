@@ -118,7 +118,7 @@ void GraphicPreviewWindow::ScaleImageToFit()
         {
             BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
 
-            if( aBmpEx.Scale( aGrfSize, BmpScaleFlag::Default ) )
+            if( aBmpEx.Scale( aGrfSize ) )
                 maScaledOrig = aBmpEx;
         }
     }

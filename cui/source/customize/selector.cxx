@@ -497,7 +497,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
                 {
                 }
 
-                SvTreeListEntry *pEntry = InsertEntry( group, NULL );
+                SvTreeListEntry *pEntry = InsertEntry( group );
 
                 SvxGroupInfo_Impl *pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
@@ -530,7 +530,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
             OUString aTitle = CUI_RESSTR(RID_SVXSTR_PRODMACROS);
 
-            SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand();
             aArr.push_back( pInfo );
@@ -721,7 +721,7 @@ void SvxConfigGroupListBox::GroupSelected()
                     else
                     {
                         pFuncEntry = pFunctionListBox->InsertEntry(
-                            aLabel, NULL );
+                            aLabel );
                     }
 
                     SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
@@ -780,7 +780,7 @@ void SvxConfigGroupListBox::GroupSelected()
 
                             Image aImage = GetImage( children[n], Reference< XComponentContext >(), false );
                             SvTreeListEntry* pNewEntry =
-                                pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
+                                pFunctionListBox->InsertEntry( children[n]->getName() );
                             pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
                             pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
 

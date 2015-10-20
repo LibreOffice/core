@@ -1179,7 +1179,7 @@ bool MenuSaveInData::Apply()
         uno::Reference< lang::XSingleComponentFactory > xFactory (
             m_xMenuSettings, uno::UNO_QUERY );
 
-        Apply( pRootEntry, xIndexContainer, xFactory, NULL );
+        Apply( pRootEntry, xIndexContainer, xFactory );
 
         try
         {
@@ -3507,7 +3507,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
         if ( nStyle == 0 )
         {
-            toolbox->SetButtonType( ButtonType::SYMBOLONLY );
+            toolbox->SetButtonType();
         }
         else if ( nStyle == 1 )
         {
