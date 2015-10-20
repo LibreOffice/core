@@ -60,7 +60,7 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
     for ( sal_Int32 n = nStartPara; n <= nEndPara; n++ )
         SetStyleSheet( n, pStyle );
 
-    SetUpdateMode( _bUpdate, 0 );
+    SetUpdateMode( _bUpdate );
 }
 
 void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )

@@ -204,7 +204,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     if ( IsFormatted() )
     {
         FormatFullDoc();
-        UpdateViews( nullptr);
+        UpdateViews();
     }
 }
 
@@ -225,7 +225,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     if ( IsFormatted() )
     {
         FormatFullDoc();
-        UpdateViews( nullptr);
+        UpdateViews();
     }
 }
 
@@ -3144,7 +3144,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                     SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
                     aTmpFont.SetPhysFont( GetRefDevice() );
                     ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
-                    nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen(), NULL ).Width();
+                    nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen() ).Width();
                 }
             }
             break;

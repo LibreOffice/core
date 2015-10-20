@@ -384,7 +384,7 @@ void EditEngine::SetDefTab( sal_uInt16 nDefTab )
     if ( pImpEditEngine->IsFormatted() )
     {
         pImpEditEngine->FormatFullDoc();
-        pImpEditEngine->UpdateViews( nullptr );
+        pImpEditEngine->UpdateViews();
     }
 }
 
@@ -2064,7 +2064,7 @@ void EditEngine::QuickFormatDoc( bool bFull )
         pImpEditEngine->FormatDoc();
 
     // Don't pass active view, maybe selection is not updated yet...
-    pImpEditEngine->UpdateViews( NULL );
+    pImpEditEngine->UpdateViews();
 }
 
 void EditEngine::SetStyleSheet(const EditSelection& aSel, SfxStyleSheet* pStyle)

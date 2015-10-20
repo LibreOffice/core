@@ -190,7 +190,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
 EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
 {
     // Simply abuse a temporary text object ...
-    std::unique_ptr<EditTextObject> xObj(EditTextObject::Create( rInput, NULL ));
+    std::unique_ptr<EditTextObject> xObj(EditTextObject::Create( rInput ));
 
     EditPaM aLastPaM = aSel.Max();
     if (xObj)
@@ -2403,7 +2403,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     if ( pActiveView && pActiveView->HasSelection() )
                     {
                         // Then no output through VDev.
-                        UpdateViews( NULL );
+                        UpdateViews();
                     }
                     else if ( bSimpleRepaint )
                     {
