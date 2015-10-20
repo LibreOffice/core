@@ -89,28 +89,20 @@ public class LocalOfficeWindow
     }
 
     /**
-    * Returns an AWT toolkit.
-        */
-       private XToolkit queryAWTToolkit()
-               throws com.sun.star.uno.Exception
-       {
-            // Create a UNO toolkit.
-            XMultiComponentFactory  compfactory;
-            XComponentContext xContext = mConnection.getComponentContext();
-            if ( xContext != null )
-            {
-                compfactory     = mConnection.getComponentContext().getServiceManager();
-                XMultiServiceFactory    factory;
-                factory = UnoRuntime.queryInterface(
-                        XMultiServiceFactory.class, compfactory);
-                Object          object  = factory.createInstance( "com.sun.star.awt.Toolkit");
-                return UnoRuntime.queryInterface(XToolkit.class, object);
-            }
-            else
-                return null;
-       }
+     * Returns an AWT toolkit.
+     */
+    private XToolkit queryAWTToolkit() throws com.sun.star.uno.Exception
+    {
+         // Create a UNO toolkit.
+         XComponentContext xContext = mConnection.getComponentContext();
+         XMultiComponentFactory compfactory = mConnection.getComponentContext().getServiceManager();
+         XMultiServiceFactory factory = UnoRuntime.queryInterface(
+                 XMultiServiceFactory.class, compfactory);
+         Object object  = factory.createInstance( "com.sun.star.awt.Toolkit");
+         return UnoRuntime.queryInterface(XToolkit.class, object);
+    }
 
-           /// called when system parent is available, reparents the bean window
+    /// called when system parent is available, reparents the bean window
     private synchronized void aquireSystemWindow()
     {
         if ( !bPeer )
