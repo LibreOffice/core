@@ -38,8 +38,8 @@ class FontList;
 class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem
 {
 private:
-    const FontList*                                 pFontList;
-    com::sun::star::uno::Sequence< OUString >  aFontNameSeq;
+    const FontList*                 pFontList;
+    css::uno::Sequence< OUString >  aFontNameSeq;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -51,7 +51,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

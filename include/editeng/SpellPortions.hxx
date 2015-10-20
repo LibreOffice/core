@@ -55,16 +55,16 @@ struct SpellPortion
     /** for wrong words this reference is filled with the error information otherwise
         it's an empty reference
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives> xAlternatives;
+    css::uno::Reference< css::linguistic2::XSpellAlternatives> xAlternatives;
     /** determines whether the error type is a grammar error
     */
     bool bIsGrammarError;
     /** contains the grammar error information
     */
-    com::sun::star::linguistic2::SingleProofreadingError aGrammarError;
+    css::linguistic2::SingleProofreadingError aGrammarError;
     /** provides access to the grammar checker interface
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
+    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
     /** marks portion as to-be-ignored. This is a return parameter.
      */
     /** contains the proposed dialog title if the proof reading component provides one.

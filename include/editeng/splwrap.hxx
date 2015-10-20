@@ -50,12 +50,12 @@ private:
     friend struct SvxHyphenWordDialog_Impl;
 
     VclPtr<vcl::Window>     pWin;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyph;
+    css::uno::Reference<
+        css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker1 > xSpell;
+    css::uno::Reference<
+        css::linguistic2::XHyphenator >    xHyph;
     SdrObject*  mpTextObj;
     bool        bOtherCntnt : 1; // set => Check special sections initially
     bool        bDialog     : 1; // Is pWin the Svx...Dialog?
@@ -74,24 +74,20 @@ private:
 
 public:
     SvxSpellWrapper( vcl::Window* pWn,
-                     ::com::sun::star::uno::Reference<
-                         ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpellChecker,
+                     css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpellChecker,
                      const bool bStart = false, const bool bIsAllRight = false,
                      const bool bOther = false, const bool bRevAllow = true );
     SvxSpellWrapper( vcl::Window* pWn,
-                     ::com::sun::star::uno::Reference<
-                         ::com::sun::star::linguistic2::XHyphenator >  &xHyphenator,
+                     css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphenator,
                      const bool bStart = false, const bool bOther = false );
 
     virtual ~SvxSpellWrapper();
 
     static sal_Int16    CheckSpellLang(
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::linguistic2::XSpellChecker1 >  xSpell,
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 >  xSpell,
                             sal_Int16 nLang );
     static sal_Int16    CheckHyphLang(
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::linguistic2::XHyphenator >  xHyph,
+                            css::uno::Reference< css::linguistic2::XHyphenator >  xHyph,
                             sal_Int16 nLang );
 
     static void         ShowLanguageErrors();
@@ -104,11 +100,9 @@ public:
     inline bool     IsAllRight()        { return bAllRight; }
 
 protected:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                      GetLast()      { return xLast; }
-    void             SetLast(const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::uno::XInterface >  &xNewLast)
+    void             SetLast(const css::uno::Reference< css::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
     virtual bool SpellMore();               // examine further documents?
     virtual bool HasOtherCnt();             // Are there any special areas?
@@ -116,8 +110,7 @@ protected:
     virtual bool SpellContinue();     // Check Areas
                                           // Result available through GetLast
     virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >
+    static css::uno::Reference< css::linguistic2::XDictionary >
                  GetAllRightDic();
     virtual void SpellEnd();                        // Finish area
     virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen

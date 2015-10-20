@@ -29,14 +29,14 @@
 class EDITENG_DLLPUBLIC SvxUnoFontDescriptor
 {
 public:
-    static void ConvertToFont( const ::com::sun::star::awt::FontDescriptor& rDesc, vcl::Font& rFont );
-    static void ConvertFromFont( const vcl::Font& rFont, ::com::sun::star::awt::FontDescriptor& rDesc );
+    static void ConvertToFont( const css::awt::FontDescriptor& rDesc, vcl::Font& rFont );
+    static void ConvertFromFont( const vcl::Font& rFont, css::awt::FontDescriptor& rDesc );
 
-    static void FillItemSet( const ::com::sun::star::awt::FontDescriptor& rDesc, SfxItemSet& rSet );
-    static void FillFromItemSet( const SfxItemSet& rSet, ::com::sun::star::awt::FontDescriptor& rDesc );
+    static void FillItemSet( const css::awt::FontDescriptor& rDesc, SfxItemSet& rSet );
+    static void FillFromItemSet( const SfxItemSet& rSet, css::awt::FontDescriptor& rDesc );
 
     static void setPropertyToDefault( SfxItemSet& rSet );
-    static ::com::sun::star::uno::Any getPropertyDefault( SfxItemPool* pPool );
+    static css::uno::Any getPropertyDefault( SfxItemPool* pPool );
 
 };
 

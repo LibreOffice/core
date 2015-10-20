@@ -30,8 +30,8 @@
 class SvxForbiddenCharactersTable;
 
 class EDITENG_DLLPUBLIC SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper<
-                                        com::sun::star::i18n::XForbiddenCharacters,
-                                        com::sun::star::linguistic2::XSupportedLocales>
+                                        css::i18n::XForbiddenCharacters,
+                                        css::linguistic2::XSupportedLocales>
 {
 protected:
     /** this virtual function is called if the forbidden characters are changed */
@@ -44,14 +44,14 @@ public:
     virtual ~SvxUnoForbiddenCharsTable();
 
     // XForbiddenCharacters
-    virtual com::sun::star::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::container::NoSuchElementException, com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setForbiddenCharacters( const com::sun::star::lang::Locale& rLocale, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setForbiddenCharacters( const css::lang::Locale& rLocale, const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XSupportedLocales
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasLocale( const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_EDITENG_UNOFORBIDDENCHARSTABLE_HXX

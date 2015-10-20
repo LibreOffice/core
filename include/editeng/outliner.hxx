@@ -401,11 +401,11 @@ public:
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
-    const ::com::sun::star::lang::Locale* mpLocale;
-    const Color maOverlineColor;
-    const Color maTextLineColor;
+    const css::lang::Locale* mpLocale;
+    const Color         maOverlineColor;
+    const Color         maTextLineColor;
 
-    sal_uInt8               mnBiDiLevel;
+    sal_uInt8           mnBiDiLevel;
 
     bool                mbFilled;
     long                mnWidthToFill;
@@ -428,7 +428,7 @@ public:
         const long* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
-        const ::com::sun::star::lang::Locale* pLocale,
+        const css::lang::Locale* pLocale,
         const Color& rOverlineColor,
         const Color& rTextLineColor,
         sal_uInt8 nBiDiLevel,
@@ -848,7 +848,7 @@ public:
                               bool bEndOfLine,
                               bool bEndOfParagraph,
                               bool bEndOfBullet,
-                              const ::com::sun::star::lang::Locale* pLocale,
+                              const css::lang::Locale* pLocale,
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
@@ -914,13 +914,10 @@ public:
     void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    void            SetSpeller( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XSpellChecker1 > &xSpeller );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >
+    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > &xSpeller );
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >
                     GetSpeller();
-    void            SetHyphenator( ::com::sun::star::uno::Reference<
-                        ::com::sun::star::linguistic2::XHyphenator >& xHyph );
+    void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >& xHyph );
 
     static void     SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
@@ -935,7 +932,7 @@ public:
     virtual bool    SpellNextDocument();
 
     // for text conversion
-    bool        HasConvertibleTextPortion( LanguageType nLang );
+    bool            HasConvertibleTextPortion( LanguageType nLang );
     virtual bool    ConvertNextDocument();
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );

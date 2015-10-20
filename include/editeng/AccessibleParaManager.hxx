@@ -52,7 +52,7 @@ namespace accessibility
         typedef UnoType UnoInterfaceType;
         typedef CppType InterfaceType;
 
-        HardCppRef( const ::com::sun::star::uno::WeakReference< UnoInterfaceType >& xRef, InterfaceType* rImpl ) :
+        HardCppRef( const css::uno::WeakReference< UnoInterfaceType >& xRef, InterfaceType* rImpl ) :
             mxRef( xRef ),
             mpImpl( rImpl )
         {
@@ -66,8 +66,8 @@ namespace accessibility
         bool is() const { return mxRef.is(); }
         InterfaceType* operator->() const { return mpImpl; }
         InterfaceType& operator*() const { return *mpImpl; }
-        ::com::sun::star::uno::Reference< UnoInterfaceType >& getRef() { return mxRef; }
-        const ::com::sun::star::uno::Reference< UnoInterfaceType >& getRef() const { return mxRef; }
+        css::uno::Reference< UnoInterfaceType >& getRef() { return mxRef; }
+        const css::uno::Reference< UnoInterfaceType >& getRef() const { return mxRef; }
 
         // default copy constructor and assignment will do
         // HardCppRef( const HardCppRef& );
@@ -76,7 +76,7 @@ namespace accessibility
     private:
 
         // the interface, hard reference to prevent object from vanishing
-        ::com::sun::star::uno::Reference< UnoInterfaceType >    mxRef;
+        css::uno::Reference< UnoInterfaceType >                 mxRef;
 
         // the c++ object, for our internal stuff
         InterfaceType*                                          mpImpl;
@@ -100,7 +100,7 @@ namespace accessibility
 
         WeakCppRef() : maWeakRef(), maUnsafeRef( NULL ) {}
         WeakCppRef( InterfaceType& rImpl ) :
-            maWeakRef( ::com::sun::star::uno::Reference< UnoInterfaceType >( rImpl, ::com::sun::star::uno::UNO_QUERY ) ),
+            maWeakRef( css::uno::Reference< UnoInterfaceType >( rImpl, css::uno::UNO_QUERY ) ),
             maUnsafeRef( &rImpl )
         {
         }
@@ -122,10 +122,10 @@ namespace accessibility
     private:
 
         // the interface, hold weakly
-        ::com::sun::star::uno::WeakReference< UnoInterfaceType >    maWeakRef;
+        css::uno::WeakReference< UnoInterfaceType >    maWeakRef;
 
         // hard ref to c++ class, _only_ valid if maWeakRef.is() is true
-        InterfaceType*                                              maUnsafeRef;
+        InterfaceType*                                 maUnsafeRef;
     };
 
 
@@ -137,10 +137,10 @@ namespace accessibility
     class EDITENG_DLLPUBLIC AccessibleParaManager
     {
     public:
-        typedef WeakCppRef < ::com::sun::star::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
-        typedef ::std::pair< WeakPara, ::com::sun::star::awt::Rectangle > WeakChild;
-        typedef ::std::pair< ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > , ::com::sun::star::awt::Rectangle > Child;
+        typedef WeakCppRef < css::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
+        typedef ::std::pair< WeakPara, css::awt::Rectangle > WeakChild;
+        typedef ::std::pair< css::uno::Reference<
+            css::accessibility::XAccessible > , css::awt::Rectangle > Child;
         typedef ::std::vector< WeakChild > VectorOfChildren;
         typedef ::std::vector< sal_Int16 > VectorOfStates;
 
@@ -151,7 +151,7 @@ namespace accessibility
 
             The states are passed to every created child object
             (text paragraph). The state values are defined in
-            com::sun::star::accessibility::AccessibleStateType.
+            css::accessibility::AccessibleStateType.
          */
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
 
@@ -175,15 +175,15 @@ namespace accessibility
 
         void FireEvent( sal_Int32 nPara,
                         const sal_Int16 nEventId,
-                        const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
-                        const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
+                        const css::uno::Any& rNewValue = css::uno::Any(),
+                        const css::uno::Any& rOldValue = css::uno::Any() ) const;
 
         static bool IsReferencable( WeakPara::HardRefType aChild );
         bool IsReferencable( sal_Int32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
         Child CreateChild( sal_Int32                                                                                        nChild,
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xFrontEnd,
+                           const css::uno::Reference< css::accessibility::XAccessible >& xFrontEnd,
                            SvxEditSourceAdapter&                                                                            rEditSource,
                            sal_Int32                                                                                       nParagraphIndex );
 
@@ -228,8 +228,8 @@ namespace accessibility
         void FireEvent( sal_Int32 nStartPara,
                         sal_Int32 nEndPara,
                         const sal_Int16 nEventId,
-                        const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
-                        const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
+                        const css::uno::Any& rNewValue = css::uno::Any(),
+                        const css::uno::Any& rOldValue = css::uno::Any() ) const;
 
         /** Functor adapter for ForEach template
 
