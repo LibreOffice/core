@@ -21,19 +21,20 @@
 
 #include <boost/optional.hpp>
 
-#include <glib.h>
-
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
     void inhibit( bool bInhibit, const rtl::OUString& sReason,
-                  bool bIsX11, const boost::optional<guint> xid, boost::optional<Display*> pDisplay );
+                  bool bIsX11, const boost::optional<unsigned int> xid, boost::optional<Display*> pDisplay );
 
 private:
-    boost::optional<guint> mnFDOCookie; // FDO ScreenSaver Inhibit
-    boost::optional<guint> mnFDOPMCookie; // FDO PowerManagement Inhibit
-    boost::optional<guint> mnGSMCookie;
-    boost::optional<guint> mnMSMCookie;
+    // These are all used as guint, however this header may be included
+    // in kde/tde/etc backends, where we would ideally avoid having
+    // any glib dependencies, hence the direct use of unsigned int.
+    boost::optional<unsigned int> mnFDOCookie; // FDO ScreenSaver Inhibit
+    boost::optional<unsigned int> mnFDOPMCookie; // FDO PowerManagement Inhibit
+    boost::optional<unsigned int> mnGSMCookie;
+    boost::optional<unsigned int> mnMSMCookie;
 
     boost::optional<int> mnXScreenSaverTimeout;
 
@@ -58,10 +59,10 @@ private:
     //       (This is replaced by the GSM interface from Mate 1.12 onwards)
     //
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
-    void inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason );
-    void inhibitFDOPM( bool bInhibit, const gchar* appname, const gchar* reason );
-    void inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
-    void inhibitMSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid );
+    void inhibitFDO( bool bInhibit, const char* appname, const char* reason );
+    void inhibitFDOPM( bool bInhibit, const char* appname, const char* reason );
+    void inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid );
+    void inhibitMSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid );
 
     void inhibitXScreenSaver( bool bInhibit, Display* pDisplay );
     static void inhibitXAutoLock( bool bInhibit, Display* pDisplay );
