@@ -173,7 +173,7 @@ void MyWin::Resize()
 
 
 
-IMPL_LINK( MyWin, Test, PushButton*, pBtn )
+IMPL_LINK_TYPED( MyWin, Test, PushButton*, pBtn, void )
 {
 printf("Test\n");
     if ( pBtn == &aOKBtn )
@@ -182,8 +182,6 @@ printf("Test\n");
         pDlg->Execute();
         printf("ok\n");
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

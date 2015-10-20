@@ -123,13 +123,9 @@ private:
     FixedLine   maHintLine;
     FixedText   maHintText;
 
-    DECL_LINK(  CryptoCheckBoxHdl, CheckBox* );
-    DECL_LINK(  SignButtonHdl, Button* );
-    DECL_LINK(  VerifyButtonHdl, Button* );
-    DECL_LINK(  DigitalSignaturesWithServiceHdl, Button* );
-    DECL_LINK(  VerifyDigitalSignaturesHdl, Button* );
-    DECL_LINK(  DigitalSignaturesWithTokenHdl, Button* );
-    DECL_LINK(  StartVerifySignatureHdl, void* );
+    DECL_LINK_TYPED(  CryptoCheckBoxHdl, CheckBox*, void );
+    DECL_LINK_TYPED(  DigitalSignaturesWithServiceHdl, Button*, void );
+    DECL_LINK_TYPED(  VerifyDigitalSignaturesHdl, Button*, void );
 
 public:
                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
@@ -255,7 +251,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
 
 }
 
-IMPL_LINK_NOARG(MyWin, CryptoCheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(MyWin, CryptoCheckBoxHdl, CheckBox*, void)
 {
     if ( maCryptoCheckBox.IsChecked() )
     {
@@ -267,10 +263,9 @@ IMPL_LINK_NOARG(MyWin, CryptoCheckBoxHdl)
         maEditTokenName.Enable();
         maFixedTextTokenName.Enable();
     }
-    return 1;
 }
 
-IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
+IMPL_LINK_NOARG_TYPED(MyWin, DigitalSignaturesWithServiceHdl, Button*, void)
 {
     OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
@@ -279,11 +274,9 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
     uno::Reference< security::XDocumentDigitalSignatures > xD(
         security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
     xD->signDocumentContent( xStore, NULL );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
+IMPL_LINK_NOARG_TYPED(MyWin, VerifyDigitalSignaturesHdl, Button*, void)
 {
     OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
@@ -303,8 +296,6 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
         aText.append( "valid" );
         ScopedVclPtr<InfoBox>::Create( this, aText )->Execute();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

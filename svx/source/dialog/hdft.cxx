@@ -1056,11 +1056,6 @@ SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
-{
-    RangeHdl();
-    return 0;
-}
 IMPL_LINK_NOARG_TYPED(SvxHFPage, RangeFocusHdl, Control&, void)
 {
     RangeHdl();

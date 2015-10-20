@@ -49,7 +49,7 @@ public:
         field is changed.  The Link result determines whether the OK
         Button is enabled (> 0) or disabled (== 0).
 
-        @param rLink a Callback declared with DECL_LINK and implemented with
+        @param rLink a Callback declared with DECL_LINK_TYPED and implemented with
                IMPL_LINK, that is executed on modification.
 
         @param bCheckImmediately If true, the Link is called directly after

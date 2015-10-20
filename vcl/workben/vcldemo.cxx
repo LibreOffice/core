@@ -169,7 +169,7 @@ public:
     FloatingWindow *mpButtonWin;
     AutoTimer       maBounce;
     int             mnBounceX, mnBounceY;
-    DECL_LINK(BounceTimerCb, void *);
+    DECL_LINK_TYPED(BounceTimerCb, Timer*, void);
 #endif
 
     bool MouseButtonDown(const MouseEvent& rMEvt);
@@ -1164,7 +1164,7 @@ public:
 };
 
 #if FIXME_BOUNCE_BUTTON
-IMPL_LINK_NOARG(DemoRenderer,BounceTimerCb)
+IMPL_LINK_NOARG_TYPED(DemoRenderer,BounceTimerCb,Timer*,void)
 {
     mpButton->Check(mnBounceX>0);
     mpButton->SetPressed(mnBounceY>0);
@@ -1182,7 +1182,6 @@ IMPL_LINK_NOARG(DemoRenderer,BounceTimerCb)
     // All smoke and mirrors to test sub-region invalidation underneath
     Rectangle aRect(aCur, mpButtonWin->GetSizePixel());
     Invalidate(aRect);
-    return 0;
 }
 #endif
 

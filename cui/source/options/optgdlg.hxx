@@ -61,9 +61,6 @@ private:
     DECL_LINK_TYPED( TwoFigureHdl, Edit&, void );
     DECL_LINK_TYPED( TwoFigureConfigHdl, SpinField&, void );
     DECL_LINK_TYPED( TwoFigureConfigFocusHdl, Control&, void );
-#ifdef WNT
-    DECL_LINK( OnFileDlgToggled, void* );
-#endif
 protected:
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
 

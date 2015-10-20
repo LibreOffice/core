@@ -24,49 +24,6 @@
 
 #include <sal/types.h>
 
-#define DECL_LINK(Member, ArgType) \
-    static sal_IntPtr LinkStub##Member(void *, void *); \
-    sal_IntPtr Member(ArgType)
-
-#define DECL_STATIC_LINK(Class, Member, ArgType) \
-    static sal_IntPtr LinkStub##Member(void *, void *); \
-    static sal_IntPtr Member(Class *, ArgType)
-
-#define DECL_DLLPRIVATE_LINK(Member, ArgType) \
-    SAL_DLLPRIVATE static sal_IntPtr LinkStub##Member(void *, void *); \
-    SAL_DLLPRIVATE sal_IntPtr Member(ArgType)
-
-#define DECL_DLLPRIVATE_STATIC_LINK(Class, Member, ArgType) \
-    SAL_DLLPRIVATE static sal_IntPtr LinkStub##Member(void *, void *); \
-    SAL_DLLPRIVATE static sal_IntPtr Member(Class *, ArgType)
-
-#define IMPL_LINK(Class, Member, ArgType, ArgName) \
-    sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
-        return static_cast<Class *>(instance)->Member( \
-            static_cast<ArgType>(data)); \
-    } \
-    sal_IntPtr Class::Member(ArgType ArgName)
-
-#define IMPL_LINK_NOARG(Class, Member) \
-    sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
-        return static_cast<Class *>(instance)->Member(data); \
-    } \
-    sal_IntPtr Class::Member(SAL_UNUSED_PARAMETER void *)
-
-#define IMPL_STATIC_LINK(Class, Member, ArgType, ArgName) \
-    sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
-        return Member( \
-            static_cast<Class *>(instance), static_cast<ArgType>(data)); \
-    } \
-    sal_IntPtr Class::Member(SAL_UNUSED_PARAMETER Class *, ArgType ArgName)
-
-#define IMPL_STATIC_LINK_NOARG(Class, Member) \
-    sal_IntPtr Class::LinkStub##Member(void * instance, void * data) { \
-        return Member(static_cast<Class *>(instance), data); \
-    } \
-    sal_IntPtr Class::Member( \
-        SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER void *)
-
 #define DECL_LINK_TYPED(Member, ArgType, RetType) \
     static RetType LinkStub##Member(void *, ArgType); \
     RetType Member(ArgType)
@@ -113,7 +70,7 @@
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     static_cast<Class *>(Instance), &Class::LinkStub##Member)
 
-template<typename Arg = void *, typename Ret = sal_IntPtr>
+template<typename Arg, typename Ret>
 class SAL_WARN_UNUSED Link {
 public:
     typedef Ret Stub(void *, Arg);

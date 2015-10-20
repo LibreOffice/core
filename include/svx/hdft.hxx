@@ -99,11 +99,9 @@ protected:
     DECL_LINK_TYPED(HeightModify, Edit&, void);
     DECL_LINK_TYPED(BorderModify, Edit&, void);
     DECL_LINK_TYPED(BackgroundHdl, Button*, void);
-
-    void            UpdateExample();
-    DECL_LINK(RangeHdl, void *);
     DECL_LINK_TYPED(RangeFocusHdl, Control&, void);
     void RangeHdl();
+    void            UpdateExample();
 
 private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );

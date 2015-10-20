@@ -119,7 +119,6 @@ short CertificateChooser::Execute()
     return ModalDialog::Execute();
 }
 
-// IMPL_LINK_NOARG(CertificateChooser, Initialize)
 void CertificateChooser::ImplInitialize()
 {
     if ( !mbInitialized )

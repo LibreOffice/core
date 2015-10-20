@@ -425,7 +425,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
                 pFunctionDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
         aImmediateMacro = name;
         if (name == "TYPEINIT_FACTORY" || name == "TYPEINFO" || name == "TYPEINFO_OVERRIDE"
-            || name.startswith("IMPL_LINK") || name == "DECL_LINK")
+            || name.startswith("IMPL_LINK_") )
         {
             return true;
         }
