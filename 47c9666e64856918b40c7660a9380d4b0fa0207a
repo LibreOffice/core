@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_77498ad0",
+        "filename": "vcl/workben/outdevgrind.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-20T20:33:09Z",
+      "side": 1,
+      "message": "polygons (and polypolygons) can be large, so better pass it by reference to avoid wasting time with copying the value.\n\ne.g. [\u0026aPoly]\n\n(actually every lambda in this patch could take references)",
+      "revId": "47c9666e64856918b40c7660a9380d4b0fa0207a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
