@@ -1193,7 +1193,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
 
         Graphic aGraphic;
         GraphicFilter aFilter( false );
-        if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( NULL ), NULL ) != GRFILTER_OK )
+        if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( NULL ) ) != GRFILTER_OK )
         {
             SAL_WARN( "oox.drawingml", OSL_THIS_FUNC
                       << "Unable to import rendered stream into graphic object" );
