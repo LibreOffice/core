@@ -65,6 +65,9 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
         r = "breeze";
     }
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
+        r = "human";
+    }
     else {
         r = FALLBACK_ICON_THEME_ID;
     }
