@@ -770,7 +770,7 @@ public class Helper
                 connPost.setDoOutput(true);
                 connPost.connect();
 
-                OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream());
+                OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream(), "UTF-8");
                 post.write("wpName=");
                 post.write(URLEncoder.encode(sWikiUser, "UTF-8"));
                 post.write("&wpRemember=1");
