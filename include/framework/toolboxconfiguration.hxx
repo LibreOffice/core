@@ -35,14 +35,14 @@ class FWE_DLLPUBLIC ToolBoxConfiguration
 {
     public:
         static bool LoadToolBox(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::io::XInputStream >& rInputStream,
+            const css::uno::Reference< css::container::XIndexContainer >& rToolbarConfiguration );
 
         static bool StoreToolBox(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
+            const css::uno::Reference< css::container::XIndexAccess >& rToolbarConfiguration );
 };
 
 } // namespace framework

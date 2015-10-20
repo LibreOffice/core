@@ -61,10 +61,10 @@ class FWE_DLLPUBLIC FrameListAnalyzer
     public:
 
         /** provides access to the frame container, which should be analyzed. */
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >& m_xSupplier;
+        const css::uno::Reference< css::frame::XFramesSupplier >& m_xSupplier;
 
         /** hold the reference frame, which is used e.g. to detect other frames with the same model. */
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xReferenceFrame;
+        const css::uno::Reference< css::frame::XFrame >& m_xReferenceFrame;
 
         /** enable/disable some special analyzing steps.
             see impl_analyze() for further information. */
@@ -73,19 +73,19 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         /** contains all frames, which uses the same model like the reference frame.
             Will be filled only if m_eDetectMode has set the flag E_MODEL.
             The reference frame is never part of this list! */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lModelFrames;
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lModelFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are visible ones. */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherVisibleFrames;
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lOtherVisibleFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are hidden ones. */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherHiddenFrames;
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > m_lOtherHiddenFrames;
 
         /** points to the help frame.
             Will be set only, if any other frame (means different from the reference frame)
@@ -110,7 +110,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             Analyzing of the help frame ignores the visible state of any frame.
             But note: a hidden help frame indicates a wrong state!
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xHelp;
+        css::uno::Reference< css::frame::XFrame > m_xHelp;
 
         /** points to the frame, which contains the backing component.
             Will be set only, if any other frame (means different from the reference frame)
@@ -136,7 +136,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             Analyzing of the help frame ignores the visible state of any frame.
             But note: a hidden backing mode frame indicates a wrong state!
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBackingComponent;
+        css::uno::Reference< css::frame::XFrame > m_xBackingComponent;
 
         /** is set to true only, if the reference frame is a hidden one.
             This value is undefined if m_eDetectMode doesn't have set the flag E_HIDDEN! */
@@ -173,8 +173,8 @@ class FWE_DLLPUBLIC FrameListAnalyzer
                     analyze steps. Note: Some member values will be undefined, if
                     an analyze step will be disabled.
          */
-                 FrameListAnalyzer( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >& xSupplier       ,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&          xReferenceFrame ,
+                 FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
+                                    const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
                                           sal_uInt32                                          eDetectMode     );
         virtual ~FrameListAnalyzer();
 

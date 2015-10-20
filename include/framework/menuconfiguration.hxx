@@ -102,26 +102,27 @@ public:
 
 class FWE_DLLPUBLIC MenuConfiguration
 {
-    public:
+public:
         MenuConfiguration(
             // use const when giving a uno reference by reference
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         virtual ~MenuConfiguration();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
+        css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
+            css::uno::Reference< css::io::XInputStream >& rInputStream )
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         PopupMenu* CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        void StoreMenuBarConfigurationToXML( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rMenuBarConfiguration,
-                      ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
+        void StoreMenuBarConfigurationToXML(
+                      css::uno::Reference< css::container::XIndexAccess >& rMenuBarConfiguration,
+                      css::uno::Reference< css::io::XOutputStream >& rOutputStream )
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+private:
+        css::uno::Reference< css::uno::XComponentContext> m_xContext;
 };
 
 }

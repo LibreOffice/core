@@ -66,17 +66,17 @@ namespace framework
     public:
         /** returns the IUndoManager interface to the actual Undo stack
 
-            @throws com::sun::star::lang::DisposedException
+            @throws css::lang::DisposedException
                 when the instance is already disposed, and no IUndoManager can be provided
 
-            @throws com::sun::star::lang::NotInitializedException
+            @throws css::lang::NotInitializedException
                 when the instance is not initialized, yet, and no IUndoManager can be provided
         */
         virtual ::svl::IUndoManager&    getImplUndoManager() = 0;
 
         /** provides access to an UNO interface for the XUndoManager implementation. Used when throwing exceptions.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >
+        virtual css::uno::Reference< css::document::XUndoManager >
                                         getThis() = 0;
 
     protected:
@@ -123,22 +123,22 @@ namespace framework
         void            enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock );
         void            enterHiddenUndoContext( IMutexGuard& i_instanceLock );
         void            leaveUndoContext( IMutexGuard& i_instanceLock );
-        void            addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
+        void            addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
         void            undo( IMutexGuard& i_instanceLock );
         void            redo( IMutexGuard& i_instanceLock );
         bool            isUndoPossible() const;
         bool            isRedoPossible() const;
         OUString getCurrentUndoActionTitle() const;
         OUString getCurrentRedoActionTitle() const;
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                         getAllUndoActionTitles() const;
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                         getAllRedoActionTitles() const;
         void            clear( IMutexGuard& i_instanceLock );
         void            clearRedo( IMutexGuard& i_instanceLock );
         void            reset( IMutexGuard& i_instanceLock );
-        void            addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener );
-        void            removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener );
+        void            addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener );
+        void            removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener );
 
         // XLockable, base of XUndoManager, equivalents
         void            lock();
@@ -146,8 +146,8 @@ namespace framework
         bool            isLocked();
 
         // XModifyBroadcaster equivalents
-        void            addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );
-        void            removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );
+        void            addModifyListener( const css::uno::Reference< css::util::XModifyListener >& i_listener );
+        void            removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& i_listener );
 
     private:
         std::unique_ptr< UndoManagerHelper_Impl >   m_xImpl;
