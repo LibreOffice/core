@@ -93,7 +93,7 @@ namespace
     {
         rtl_math_ConversionStatus eStatus;
         double f = rtl::math::stringToDouble(
-            rString, '.', ',', &eStatus, NULL );
+            rString, '.', ',', &eStatus );
         return ( eStatus == rtl_math_ConversionStatus_Ok ) ? makeAny( f ) : Any();
     }
 

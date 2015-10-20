@@ -548,7 +548,7 @@ namespace frm
                 }
                 else
                 {
-                    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
+                    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
                     const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
                     const SfxType* pType = pSlot ? pSlot->GetType() : NULL;
                     if ( pType )
@@ -639,7 +639,7 @@ namespace frm
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {
             OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
-            SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool( NULL ), sUnoSlotName );
+            SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool(), sUnoSlotName );
             if ( nSlotId > 0 )
             {
                 // do we already have a dispatcher for this?
