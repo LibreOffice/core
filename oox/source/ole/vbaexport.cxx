@@ -413,7 +413,7 @@ sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
     sal_uInt32 nProjKey = 0;
         // use sal_uInt32 instead of sal_uInt8 to avoid miscompilation at least
         // under "Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101
-        // for x64" with --enable-64-bit and --enable-dbgutil, causing
+        // for x64" with --enable-64-bit and non-debug, causing
         // CppunitTest_oox_vba_encryption's TestVbaEncryption::testProjKey1 to
         // fail with actual 53 vs. expected 223
     sal_Int32 n = rProjectKey.getLength();
