@@ -32,51 +32,61 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
     if (ignoreLocation(callExpr)) {
         return true;
     }
-    if (callExpr->getNumArgs() == 0) {
-        return true;
-    }
     if (callExpr->getDirectCallee() == nullptr) {
         return true;
     }
     const FunctionDecl* functionDecl = callExpr->getDirectCallee()->getCanonicalDecl();
-    unsigned i = callExpr->getNumArgs() - 1;
-    Expr* arg = callExpr->getArg(i);
-    // variadic functions
-    if (i >= functionDecl->getNumParams()) {
+    auto n = functionDecl->getNumParams();
+    if (n == 0 || !functionDecl->getParamDecl(n - 1)->hasDefaultArg()) {
         return true;
     }
-    if (arg->isDefaultArgument()) {
-        return true;
-    }
-    // ignore this, it seems to trigger an infinite recursion
-    if (isa<UnaryExprOrTypeTraitExpr>(arg))
-        return true;
-    const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
-    if (!parmVarDecl->hasDefaultArg()
-        || parmVarDecl->hasUninstantiatedDefaultArg())
-    {
-        return true;
-    }
-    const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
-    if (defaultArgExpr &&
-        defaultArgExpr->getType()->isIntegralType(compiler.getASTContext()))
-    {
-        APSInt x1, x2;
-        if (arg->EvaluateAsInt(x1, compiler.getASTContext()) &&
-            defaultArgExpr->EvaluateAsInt(x2, compiler.getASTContext()) &&
-            x1 == x2)
-        {
-            report(
-                DiagnosticsEngine::Warning,
-                "not necessary to pass this argument, it defaults to the same value",
-                arg->getSourceRange().getBegin())
-              << arg->getSourceRange();
-            /*report(
-                DiagnosticsEngine::Warning,
-                "default method parameter declaration here",
-                parmVarDecl->getSourceRange().getBegin())
-              << parmVarDecl->getSourceRange();*/
+if(callExpr->getNumArgs()>n){
+    report(
+        DiagnosticsEngine::Warning, "TODO %0 != %1", callExpr->getLocStart())
+        << callExpr->getNumArgs() << n << callExpr->getSourceRange();
+    callExpr->dump();
+    return true;
+}
+    assert(callExpr->getNumArgs() <= n); // can be < in template code
+    for (unsigned i = callExpr->getNumArgs(); i != 0;) {
+        --i;
+        Expr* arg = callExpr->getArg(i);
+        if (arg->isDefaultArgument()) {
+            continue;
         }
+        // ignore this, it seems to trigger an infinite recursion
+        if (isa<UnaryExprOrTypeTraitExpr>(arg))
+            break;
+        const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
+        if (!parmVarDecl->hasDefaultArg()
+            || parmVarDecl->hasUninstantiatedDefaultArg())
+        {
+            break;
+        }
+        const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
+        if (!(defaultArgExpr &&
+              defaultArgExpr->getType()->isIntegralType(
+                  compiler.getASTContext())))
+        {
+            break;
+        }
+        APSInt x1, x2;
+        if (!(arg->EvaluateAsInt(x1, compiler.getASTContext()) &&
+              defaultArgExpr->EvaluateAsInt(x2, compiler.getASTContext()) &&
+              x1 == x2))
+        {
+            break;
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            "not necessary to pass this argument, it defaults to the same value",
+            arg->getSourceRange().getBegin())
+            << arg->getSourceRange();
+        report(
+            DiagnosticsEngine::Note,
+            "default method parameter declaration here",
+            parmVarDecl->getSourceRange().getBegin())
+            << parmVarDecl->getSourceRange();
     }
     return true;
 }
