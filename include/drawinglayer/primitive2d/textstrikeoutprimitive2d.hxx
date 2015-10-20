@@ -74,7 +74,7 @@ namespace drawinglayer
         private:
             sal_Unicode                             maStrikeoutChar;
             attribute::FontAttribute                maFontAttribute;
-            ::com::sun::star::lang::Locale          maLocale;
+            css::lang::Locale                       maLocale;
 
         protected:
             /// local decomposition.
@@ -88,12 +88,12 @@ namespace drawinglayer
                 const basegfx::BColor& rFontColor,
                 sal_Unicode aStrikeoutChar,
                 const attribute::FontAttribute& rFontAttribute,
-                const ::com::sun::star::lang::Locale& rLocale);
+                const css::lang::Locale& rLocale);
 
             /// data read access
             sal_Unicode getStrikeoutChar() const { return maStrikeoutChar; }
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
-            const ::com::sun::star::lang::Locale& getLocale() const { return maLocale; }
+            const css::lang::Locale& getLocale() const { return maLocale; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;

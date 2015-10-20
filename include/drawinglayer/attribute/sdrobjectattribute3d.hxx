@@ -53,11 +53,11 @@ namespace drawinglayer
         public:
             // constructors/destructor
             Sdr3DObjectAttribute(
-                ::com::sun::star::drawing::NormalsKind  aNormalsKind,
-                ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
-                ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
-                ::com::sun::star::drawing::TextureKind2 aTextureKind,
-                ::com::sun::star::drawing::TextureMode aTextureMode,
+                css::drawing::NormalsKind  aNormalsKind,
+                css::drawing::TextureProjectionMode aTextureProjectionX,
+                css::drawing::TextureProjectionMode aTextureProjectionY,
+                css::drawing::TextureKind2 aTextureKind,
+                css::drawing::TextureMode aTextureMode,
                 const MaterialAttribute3D& rMaterial,
                 bool bNormalsInvert,
                 bool bDoubleSided,
@@ -74,11 +74,11 @@ namespace drawinglayer
             bool operator==(const Sdr3DObjectAttribute& rCandidate) const;
 
             // data read access
-            ::com::sun::star::drawing::NormalsKind getNormalsKind() const;
-            ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionX() const;
-            ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionY() const;
-            ::com::sun::star::drawing::TextureKind2 getTextureKind() const;
-            ::com::sun::star::drawing::TextureMode getTextureMode() const;
+            css::drawing::NormalsKind getNormalsKind() const;
+            css::drawing::TextureProjectionMode getTextureProjectionX() const;
+            css::drawing::TextureProjectionMode getTextureProjectionY() const;
+            css::drawing::TextureKind2 getTextureKind() const;
+            css::drawing::TextureMode getTextureMode() const;
             const MaterialAttribute3D& getMaterial() const;
             bool getNormalsInvert() const;
             bool getDoubleSided() const;

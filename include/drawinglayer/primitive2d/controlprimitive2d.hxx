@@ -44,14 +44,14 @@ namespace drawinglayer
         {
         private:
             /// object's base data
-            basegfx::B2DHomMatrix                                                   maTransform;
-            com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >    mxControlModel;
+            basegfx::B2DHomMatrix                             maTransform;
+            css::uno::Reference< css::awt::XControlModel >    mxControlModel;
 
             /// the created an cached awt::XControl
-            com::sun::star::uno::Reference< com::sun::star::awt::XControl >         mxXControl;
+            css::uno::Reference< css::awt::XControl >         mxXControl;
 
             /// the last used scaling, used from getDecomposition for buffering
-            basegfx::B2DVector                                                      maLastViewScaling;
+            basegfx::B2DVector                                maLastViewScaling;
 
             /** used from getXControl() to create a local awt::XControl which is remembered in mxXControl
                 and from thereon always used and returned by getXControl()
@@ -70,7 +70,7 @@ namespace drawinglayer
             /// constructor
             ControlPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
-                const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel);
+                const css::uno::Reference< css::awt::XControlModel >& rxControlModel);
 
             /** constructor with an additional XControl as parameter to allow to hand it over at incarnation time
                 if it exists. This will avoid to create a 2nd one on demand in createXControl()
@@ -78,18 +78,18 @@ namespace drawinglayer
              */
             ControlPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
-                const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel,
-                const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& rxXControl);
+                const css::uno::Reference< css::awt::XControlModel >& rxControlModel,
+                const css::uno::Reference< css::awt::XControl >& rxXControl);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& getControlModel() const { return mxControlModel; }
+            const css::uno::Reference< css::awt::XControlModel >& getControlModel() const { return mxControlModel; }
 
             /** mxControl access. This will on demand create the awt::XControl using createXControl()
                 if it does not exist. It may already have been created or even handed over at
                 incarnation
              */
-            const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& getXControl() const;
+            const css::uno::Reference< css::awt::XControl >& getXControl() const;
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

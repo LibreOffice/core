@@ -60,7 +60,7 @@ namespace drawinglayer
             to the corresponding API implementation (an uno::Sequence< beans::PropertyValue >)
             and recursively calls the method process(..) at the primitive with the decomposition
             derived from that primitive. This is the preparation to handle unknown implementations
-            of the com::sun::star::graphic::XPrimitive2D interface in the future.
+            of the css::graphic::XPrimitive2D interface in the future.
 
             So, to implement a basic processor, it is necessary to override and implement the
             processBasePrimitive2D(..) method. A minimal renderer has to support the

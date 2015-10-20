@@ -58,8 +58,8 @@ namespace drawinglayer
 
         // #i98314#
         void DRAWINGLAYER_DLLPUBLIC applyTextureTo3DGeometry(
-            ::com::sun::star::drawing::TextureProjectionMode eModeX,
-            ::com::sun::star::drawing::TextureProjectionMode eModeY,
+            css::drawing::TextureProjectionMode eModeX,
+            css::drawing::TextureProjectionMode eModeY,
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize);

@@ -58,7 +58,7 @@ namespace drawinglayer
                 double fWidth,
                 double fTransparence,
                 const basegfx::BColor& rColor,
-                com::sun::star::drawing::LineCap eCap,
+                css::drawing::LineCap eCap,
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen);
             SdrLineAttribute();
@@ -79,7 +79,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             const ::std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
-            com::sun::star::drawing::LineCap getCap() const;
+            css::drawing::LineCap getCap() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

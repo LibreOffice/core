@@ -50,9 +50,9 @@ namespace drawinglayer { namespace geometry {
 
 namespace drawinglayer { namespace primitive2d {
     /// typedefs for basePrimitive2DImplBase, Primitive2DSequence and Primitive2DReference
-    typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitive2D > BasePrimitive2DImplBase;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > Primitive2DReference;
-    typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSequence;
+    typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive2D > BasePrimitive2DImplBase;
+    typedef css::uno::Reference< css::graphic::XPrimitive2D > Primitive2DReference;
+    typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 }}
 
 
@@ -64,7 +64,7 @@ namespace drawinglayer
     {
         /** BasePrimitive2D class
 
-            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+            Baseclass for all C++ implementations of css::graphic::XPrimitive2D
 
             This class is strongly virtual due to the lack of getPrimitiveID() implementation.
             This is by purpose, this base class shall not be incarnated and be used directly as
@@ -174,12 +174,12 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual Primitive2DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual Primitive2DSequence SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
 
             /** The getRange implementation for UNO API will use getRange from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual ::com::sun::star::geometry::RealRectangle2D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual css::geometry::RealRectangle2D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -193,7 +193,7 @@ namespace drawinglayer
     {
         /** BufferedDecompositionPrimitive2D class
 
-            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+            Baseclass for all C++ implementations of css::graphic::XPrimitive2D
             which want to buffer the decomoposition result
 
             Buffering the decomposition is the most-used buffering and is thus used my most

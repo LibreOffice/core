@@ -77,7 +77,7 @@ namespace drawinglayer
 
             bool isSolidLine() const
             {
-                return mnStyle == com::sun::star::table::BorderLineStyle::SOLID;
+                return mnStyle == css::table::BorderLineStyle::SOLID;
             }
 
             bool isInsideUsed() const

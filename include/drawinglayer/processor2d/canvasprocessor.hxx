@@ -59,7 +59,7 @@ namespace drawinglayer
     {
         /** canvasProcessor2D class
 
-            A basic implementation of a renderer for com::sun::star::rendering::XCanvas
+            A basic implementation of a renderer for css::rendering::XCanvas
             as a target
          */
         class DRAWINGLAYER_DLLPUBLIC canvasProcessor2D : public BaseProcessor2D
@@ -67,9 +67,9 @@ namespace drawinglayer
         private:
             // the (current) destination OutDev and canvas
             VclPtr<OutputDevice>                                    mpOutputDevice;
-            com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >    mxCanvas;
-            com::sun::star::rendering::ViewState                    maViewState;
-            com::sun::star::rendering::RenderState                  maRenderState;
+            css::uno::Reference< css::rendering::XCanvas >          mxCanvas;
+            css::rendering::ViewState                               maViewState;
+            css::rendering::RenderState                             maRenderState;
 
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                            maBColorModifierStack;
