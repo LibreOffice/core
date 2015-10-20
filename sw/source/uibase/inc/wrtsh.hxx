@@ -191,8 +191,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
     bool Right      ( sal_uInt16 nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
-    bool Up         ( bool bSelect = false, sal_uInt16 nCount = 1, bool bBasicCall = false );
-    bool Down       ( bool bSelect = false, sal_uInt16 nCount = 1, bool bBasicCall = false );
+    bool Up         ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
+    bool Down       ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
     bool NxtWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
     bool PrvWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
