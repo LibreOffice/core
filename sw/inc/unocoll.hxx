@@ -305,7 +305,7 @@ cppu::WeakImplHelper
 class SW_DLLPUBLIC SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
-    const FlyCntType    eType;
+    const FlyCntType    m_eType;
 protected:
     virtual ~SwXFrames();
 public:
