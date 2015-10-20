@@ -701,6 +701,82 @@ UniscribeLayout::~UniscribeLayout()
     delete[] mpGlyphs2Chars;
 }
 
+#if 0 // Don't remove -- useful for temporary SAL_ DEBUG when hacking on this
+
+namespace {
+
+template<typename IntegerType>
+OUString IntegerArrayToString(IntegerType *pWords, int n)
+{
+    OUString result = "{";
+    for (int i = 0; i < n; ++i)
+    {
+        if (i > 0)
+            result += ",";
+        if (i > 0 && i % 10 == 0)
+            result += OUString::number(i) + ":";
+        result += OUString::number(pWords[i]);
+    }
+    result += "}";
+
+    return result;
+}
+
+OUString GoffsetArrayToString(GOFFSET *pGoffsets, int n)
+{
+    OUString result = "{";
+    for (int i = 0; i < n; ++i)
+    {
+        if (i > 0)
+            result += ",";
+        if (i > 0 && i % 10 == 0)
+            result += OUString::number(i) + ":";
+        result += "(" + OUString::number(pGoffsets[i].du) + "," + OUString::number(pGoffsets[i].dv) + ")";
+    }
+    result += "}";
+
+    return result;
+}
+
+OUString VisAttrArrayToString(SCRIPT_VISATTR *pVisAttrs, int n)
+{
+    static const OUString JUSTIFICATION_NAME[] = {
+        "NONE",
+        "ARABIC_BLANK",
+        "CHARACTER",
+        "RESERVED1",
+        "BLANK",
+        "RESERVED2",
+        "RESERVED3",
+        "ARABIC_NORMAL",
+        "ARABIC_KASHIDA",
+        "ARABIC_ALEF",
+        "ARABIC_HA",
+        "ARABIC_RA",
+        "ARABIC_BA",
+        "ARABIC_BARA",
+        "ARABIC_SEEN",
+        "ARABIC_SEEN_M"
+    };
+
+    OUString result = "{";
+    for (int i = 0; i < n; ++i)
+    {
+        if (i > 0)
+            result += ",";
+        if (i > 0 && i % 10 == 0)
+            result += OUString::number(i) + ":";
+        result += OUString("{") + JUSTIFICATION_NAME[pVisAttrs[i].uJustification] + (pVisAttrs[i].fClusterStart ? OUString(",ClusterStart") : OUString()) + (pVisAttrs[i].fDiacritic ? OUString(",Diacritic") : OUString()) + OUString(pVisAttrs[i].fZeroWidth ? OUString(",ZeroWidth") : OUString()) + OUString("}");
+    }
+    result += "}";
+
+    return result;
+}
+
+} // anonymous namespace
+
+#endif // 0
+
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // for a base layout only the context glyphs have to be dropped
@@ -2082,6 +2158,27 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
                     rVisualItem.mnXOffset += nXOffsetAdjust;
                 else
                     mpJustifications[nIdxAdd] += nXOffsetAdjust;
+                mpJustifications[i] -= nXOffsetAdjust;
+            }
+        }
+
+        // tdf#94897: Don't add extra justification to chars with diacritics when the diacritic is a
+        // separate glyph, followed by blank, in LTR
+        if( !rVisualItem.IsRTL() )
+        {
+            for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
+            {
+                const int nXOffsetAdjust = mpJustifications[i] - mpGlyphAdvances[i];
+                if( nXOffsetAdjust == 0 )
+                    continue;
+                int nIdxAdd = i + 1;
+                while( (nIdxAdd < nEndGlyphPos) && mpVisualAttrs[nIdxAdd].fDiacritic )
+                    ++nIdxAdd;
+                if( nIdxAdd == i + 1 )
+                    continue;
+                if( nIdxAdd >= nEndGlyphPos || mpVisualAttrs[nIdxAdd].uJustification != SCRIPT_JUSTIFY_BLANK )
+                    continue;
+                mpJustifications[nIdxAdd] += nXOffsetAdjust;
                 mpJustifications[i] -= nXOffsetAdjust;
             }
         }
