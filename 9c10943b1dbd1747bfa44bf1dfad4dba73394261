@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_77550ac5",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-20T12:59:15Z",
+      "side": 1,
+      "message": "nitpick: I guess this should be errNoValue instead of errDivisionByZero.\n\nMaybe something to follow-up on master.",
+      "revId": "9c10943b1dbd1747bfa44bf1dfad4dba73394261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
