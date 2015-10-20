@@ -332,9 +332,24 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         if( xTextMark.get() )
         {
             if( xLongName->isEmpty() )
-                xTextMark.reset( new OUString( xTextMark->replace( '!', '.' ) ) );
-            xLongName.reset( new OUString( *xLongName + "#" ) );
-            xLongName.reset( new OUString( *xLongName + *xTextMark  ) );
+            {
+                sal_Int32 nSepPos = xTextMark->lastIndexOf( '!' );
+                if( nSepPos > 0 )
+                {
+                    // Do not attempt to blindly convert '#SheetName!A1' to
+                    // '#SheetName.A1', it can be #SheetName!R1C1 as well.
+                    // Hyperlink handler has to handle all, but prefer
+                    // '#SheetName.A1' if possible.
+                    if (nSepPos < xTextMark->getLength() - 1)
+                    {
+                        ScRange aRange;
+                        if ((aRange.ParseAny( xTextMark->copy( nSepPos + 1 ), nullptr,
+                                        formula::FormulaGrammar::CONV_XL_R1C1) & SCA_VALID) != SCA_VALID)
+                            xTextMark.reset( new OUString( xTextMark->replaceAt( nSepPos, 1, OUString( '.' ))));
+                    }
+                }
+            }
+            xLongName.reset( new OUString( *xLongName + "#" + *xTextMark ) );
         }
         return( *xLongName );
     }

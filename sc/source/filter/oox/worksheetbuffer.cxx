@@ -117,14 +117,22 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
 
 void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
 {
-    // convert '#SheetName!A1' to '#SheetName.A1'
     if( sSheetNameRef.startsWith("#") )
     {
         sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
         if( nSepPos > 0 )
         {
-            // replace the exclamation mark with a period
-            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
+            // Do not attempt to blindly convert '#SheetName!A1' to
+            // '#SheetName.A1', it can be #SheetName!R1C1 as well. Hyperlink
+            // handler has to handle all, but prefer '#SheetName.A1' if
+            // possible.
+            if (nSepPos < sSheetNameRef.getLength() - 1)
+            {
+                ScRange aRange;
+                if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), nullptr,
+                                formula::FormulaGrammar::CONV_XL_R1C1) & SCA_VALID) != SCA_VALID)
+                    sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
+            }
             // #i66592# convert sheet names that have been renamed on import
             OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
             OUString aCalcName = getCalcSheetName( aSheetName );

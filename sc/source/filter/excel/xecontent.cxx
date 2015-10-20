@@ -410,10 +410,14 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         OUString aTextMark( rUrl.copy( 1 ) );
 
-        sal_Int32 nSepPos = aTextMark.indexOf( '.' );
+        sal_Int32 nSepPos = aTextMark.lastIndexOf( '.' );
+        if(nSepPos != -1)
+            aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
+        else
+            nSepPos = aTextMark.lastIndexOf( '!' );
+
         if(nSepPos != -1)
         {
-            aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
             OUString aSheetName( aTextMark.copy(0, nSepPos));
 
             if ( aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
