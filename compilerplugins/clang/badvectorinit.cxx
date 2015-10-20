@@ -172,7 +172,10 @@ bool BadVectorInit::VisitCXXConstructExpr(const CXXConstructExpr* expr)
     const CXXConstructorDecl *consDecl = expr->getConstructor();
     consDecl = consDecl->getCanonicalDecl();
 
-    if (consDecl->param_size() == 0)
+    // The default constructor can potentially have a parameter, e.g.
+    // in glibcxx-debug the default constructor is:
+    // explicit vector(const _Allocator& __a = _Allocator())
+    if (consDecl->param_size() == 0 || consDecl->isDefaultConstructor())
         return true;
 
     std::string aParentName = consDecl->getParent()->getQualifiedNameAsString();
