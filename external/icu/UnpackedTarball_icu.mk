@@ -23,13 +23,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu-ubsan.patch.0 \
 	external/icu/icu4c-icu11100.patch.1 \
 	external/icu/icu4c-scriptrun.patch \
-	external/icu/icu4c-icu11451.patch.1 \
 	external/icu/rtti.patch.0 \
-	external/icu/icu.changeset_36724.patch.1 \
-	external/icu/icu.changeset_36727.patch.1 \
-	external/icu/icu.changeset_36801.patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.diff) \
-	external/icu/icu.vc15.patch \
 	$(if $(filter EMSCRIPTEN,$(OS)),external/icu/icu4c-emscripten.patch.1) \
 ))
 
