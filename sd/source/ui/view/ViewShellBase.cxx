@@ -33,6 +33,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "glob.hrc"
+#include "slideshow.hxx"
 #include "unokywds.hxx"
 #include <svx/svxids.hrc>
 #include "DrawDocShell.hxx"
@@ -263,6 +264,11 @@ ViewShellBase::ViewShellBase (
 */
 ViewShellBase::~ViewShellBase()
 {
+    rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(*this));
+    if (xSlideShow.is() && xSlideShow->dependsOn(this))
+        SlideShow::Stop(*this);
+    xSlideShow.clear();
+
     // Tell the controller that the ViewShellBase is not available anymore.
     if (mpImpl->mpController.get() != NULL)
         mpImpl->mpController->ReleaseViewShellBase();
