@@ -187,6 +187,7 @@ public: // TODO: hide members behind accessor methods
     bool                mbDevice;                   // Flag for Device Fonts
     bool                mbScalableFont;
     bool                mbKernableFont;
+    bool                mbFullstopCentered;
 
     // font metrics that are usually derived from the measurements
     long                mnUnderlineSize;            // Lineheight of Underline
