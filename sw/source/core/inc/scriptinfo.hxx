@@ -37,7 +37,7 @@ typedef std::list< sal_Int32 > PositionList;
 class SwScriptInfo
 {
 public:
-    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
+    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE, SPECIAL_MIDDLE};
 
 private:
     //! Records a single change in script type.

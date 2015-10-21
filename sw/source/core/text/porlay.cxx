@@ -874,11 +874,15 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     eState = SPECIAL_LEFT;
                     break;
                 // Right punctuation found
-                case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+                //case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+                case 0x3009: case 0x300B:
                 case 0x300D: case 0x300F: case 0x3011: case 0x3015:
                 case 0x3017: case 0x3019: case 0x301B: case 0x301E:
                 case 0x301F:
                     eState = SPECIAL_RIGHT;
+                    break;
+                case 0x3001: case 0x3002:   // Fullstop or comma
+                    eState = SPECIAL_MIDDLE;
                     break;
                 default:
                     eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE;
@@ -1571,7 +1575,15 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                 long nMove = 0;
                 if( SwScriptInfo::KANA != nType )
                 {
-                    nLast /= 20000;
+                    // TODO: obtain from ratio of bearing to advance from Glyph metric or check if language is Chinese.
+                    bool bCenter = true;
+                    if( bCenter && SwScriptInfo::SPECIAL_MIDDLE == nType )
+                    {
+                        nLast /= 24000;
+                        nMove = nLast / 2;
+                    }
+                    else
+                        nLast /= 20000;
                     if( pPoint && SwScriptInfo::SPECIAL_LEFT == nType )
                     {
                         if( nI )
