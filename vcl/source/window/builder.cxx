@@ -145,7 +145,7 @@ void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUStrin
             OStringBuffer sStr;
             for (;;)
             {
-                sal_Int32 const size = 2048;
+                static sal_Int32 const size = 2048;
                 css::uno::Sequence< sal_Int8 > data(size);
                 sal_Int32 n = xInputStream->readBytes(data, size);
                 sStr.append(reinterpret_cast<const sal_Char *>(data.getConstArray()), n);
@@ -1676,7 +1676,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
             {
-                const sal_uInt16 COMMAND_ITEMID_START = 30000;
+                static const sal_uInt16 COMMAND_ITEMID_START = 30000;
                 nItemId = COMMAND_ITEMID_START + pToolBox->GetItemCount();
                 pToolBox->InsertItem(nItemId,
                     OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);

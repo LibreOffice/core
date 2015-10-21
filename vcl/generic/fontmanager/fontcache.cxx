@@ -365,7 +365,7 @@ void FontCache::read()
                 nLen = aLine.getLength();
 
                 // get up to 20 token positions
-                const int nMaxTokens = 20;
+                static const int nMaxTokens = 20;
                 int nTokenPos[nMaxTokens];
                 nTokenPos[0] = 0;
                 int nTokens = 1;

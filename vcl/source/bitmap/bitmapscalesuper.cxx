@@ -285,7 +285,7 @@ void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    static const long nMax = 1 << 7L;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -410,7 +410,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    static const long nMax = 1 << 7L;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -537,7 +537,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    static const long nMax = 1 << 7L;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -660,7 +660,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    static const long nMax = 1 << 7L;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -781,7 +781,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    static const long nMax = 1 << 7L;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -929,7 +929,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
     const long nDstW = FRound(aSizePix.Width()  * fScaleX);
     const long nDstH = FRound(aSizePix.Height() * fScaleY);
 
-    const double fScaleThresh = 0.6;
+    static const double fScaleThresh = 0.6;
 
     if (nDstW <= 1L || nDstH <= 1L)
         return false;
@@ -939,7 +939,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
     Bitmap aOutBmp(Size(nDstW, nDstH), 24);
     Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
 
-    const long nStartY = 0;
+    static const long nStartY = 0;
     const long nEndY   = nDstH - 1L;
 
     if (pReadAccess && pWriteAccess)

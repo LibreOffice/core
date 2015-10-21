@@ -222,7 +222,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         rightside.push_back( Point( aLastRect.Right()+1, aLastRect.Bottom()+1 ) );
 
         // cool, we can concatenate rectangles
-        const int nDX = -65536, nDY = 65536;
+        static const int nDX = -65536, nDY = 65536;
         int nNewDX = 0, nNewDY = 0;
 
         Point aLastPoint = leftside.front();
@@ -487,7 +487,7 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
 void
 PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
-    const sal_uInt32 nBezString= 1024;
+    static const sal_uInt32 nBezString= 1024;
     sal_Char pString[nBezString];
 
     if ( nPoints > 1 && maLineColor.Is() && pPath )
@@ -538,7 +538,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
 void
 PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
-    const sal_uInt32 nBezString = 1024;
+    static const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
     // premature end of operation
     if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
@@ -594,7 +594,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
 void
 PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const sal_uInt8* const* pFlgAry)
 {
-    const sal_uInt32 nBezString = 1024;
+    static const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
     if ( !nPoly || !pPtAry || !pPoints || !(maFillColor.Is() || maLineColor.Is()))
         return;

@@ -3157,7 +3157,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         ImplSetFocusRect( rStateRect );
     }
 
-    const int nLineSpace = 4;
+    static const int nLineSpace = 4;
     if( (GetStyle() & WB_CBLINESTYLE) != 0 &&
         rMouseRect.Right()-1-nLineSpace < rPos.X()+rSize.Width() )
     {

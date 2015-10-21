@@ -66,7 +66,7 @@ static std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInput
     std::shared_ptr<SvStream> s(std::make_shared<SvMemoryStream>());
     for (;;)
     {
-        sal_Int32 const size = 2048;
+        static sal_Int32 const size = 2048;
         css::uno::Sequence< sal_Int8 > data(size);
         sal_Int32 n = stream->readBytes(data, size);
         s->Write(data.getConstArray(), n);

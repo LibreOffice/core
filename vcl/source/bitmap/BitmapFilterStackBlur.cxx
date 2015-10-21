@@ -437,7 +437,7 @@ void stackBlur24(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
 {
     // Limit radius
     nRadius = std::min<sal_Int32>(254, std::max<sal_Int32>(2, nRadius));
-    const long nColorChannels = 3; // 3 color channel
+    static const long nColorChannels = 3; // 3 color channel
     BlurSharedData aData(nRadius, nComponentWidth, nColorChannels);
 
     {
@@ -459,7 +459,7 @@ void stackBlur8(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
 {
     // Limit radius
     nRadius = std::min<sal_Int32>(254, std::max<sal_Int32>(2, nRadius));
-    const long nColorChannels = 1; // 1 color channel
+    static const long nColorChannels = 1; // 1 color channel
     BlurSharedData aData(nRadius, nComponentWidth, nColorChannels);
 
     {

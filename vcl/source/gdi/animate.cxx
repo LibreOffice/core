@@ -693,7 +693,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 
     if( nCount )
     {
-        const sal_uInt32    nDummy32 = 0UL;
+        static const sal_uInt32    nDummy32 = 0UL;
 
         // If no BitmapEx was set we write the first Bitmap of
         // the Animation

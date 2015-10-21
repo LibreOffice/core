@@ -8850,7 +8850,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     OStringBuffer aLine( 512 );
 
-    const int nMaxGlyphs = 256;
+    static const int nMaxGlyphs = 256;
 
     sal_GlyphId pGlyphs[nMaxGlyphs];
     sal_Int32 pGlyphWidths[nMaxGlyphs];

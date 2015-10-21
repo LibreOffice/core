@@ -610,7 +610,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     Image aImage(VclBuilder::getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
 
     // let's invent an ItemId
-    const sal_uInt16 COMMAND_ITEMID_START = 30000;
+    static const sal_uInt16 COMMAND_ITEMID_START = 30000;
     sal_uInt16 nItemId = COMMAND_ITEMID_START + GetItemCount();
 
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
@@ -803,7 +803,7 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 /*static*/ Size
 ToolBox::GetDefaultImageSize(bool bLarge)
 {
-    const long TB_SMALLIMAGESIZE = 16;
+    static const long TB_SMALLIMAGESIZE = 16;
     if (!bLarge) {
         return Size(TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE);
     }

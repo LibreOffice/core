@@ -694,7 +694,7 @@ void PspServerFontLayout::InitFont() const
 
 static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
-    const int nMaxGlyphs = 200;
+    static const int nMaxGlyphs = 200;
     sal_GlyphId aGlyphAry[ nMaxGlyphs ];
     DeviceCoordinate aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];

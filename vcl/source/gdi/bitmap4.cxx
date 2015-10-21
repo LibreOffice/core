@@ -65,7 +65,7 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 
         case( BMP_FILTER_SHARPEN ):
         {
-            const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
+            static const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
             bRet = ImplConvolute3( &pSharpenMatrix[ 0 ], 8 );
         }
         break;
@@ -404,12 +404,12 @@ bool Bitmap::ImplSobelGrey()
                 BitmapColor aGrey( (sal_uInt8) 0 );
                 const long  nWidth = pWriteAcc->Width();
                 const long  nHeight = pWriteAcc->Height();
-                const long  nMask111 = -1, nMask121 =  0, nMask131 =  1;
-                const long  nMask211 = -2, nMask221 =  0, nMask231 =  2;
-                const long  nMask311 = -1, nMask321 =  0, nMask331 =  1;
-                const long  nMask112 =  1, nMask122 =  2, nMask132 =  1;
-                const long  nMask212 =  0, nMask222 =  0, nMask232 =  0;
-                const long  nMask312 = -1, nMask322 = -2, nMask332 = -1;
+                static const long  nMask111 = -1, nMask121 =  0, nMask131 =  1;
+                static const long  nMask211 = -2, nMask221 =  0, nMask231 =  2;
+                static const long  nMask311 = -1, nMask321 =  0, nMask331 =  1;
+                static const long  nMask112 =  1, nMask122 =  2, nMask132 =  1;
+                static const long  nMask212 =  0, nMask222 =  0, nMask232 =  0;
+                static const long  nMask312 = -1, nMask322 = -2, nMask332 = -1;
                 long        nGrey11, nGrey12, nGrey13;
                 long        nGrey21, nGrey22, nGrey23;
                 long        nGrey31, nGrey32, nGrey33;

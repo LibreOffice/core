@@ -2106,13 +2106,13 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
     if( pRAcc )
     {
-        const sal_uInt32 nValidBits = 4;
-        const sal_uInt32 nRightShiftBits = 8 - nValidBits;
-        const sal_uInt32 nLeftShiftBits1 = nValidBits;
-        const sal_uInt32 nLeftShiftBits2 = nValidBits << 1;
-        const sal_uInt32 nColorsPerComponent = 1 << nValidBits;
-        const sal_uInt32 nColorOffset = 256 / nColorsPerComponent;
-        const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
+        static const sal_uInt32 nValidBits = 4;
+        static const sal_uInt32 nRightShiftBits = 8 - nValidBits;
+        static const sal_uInt32 nLeftShiftBits1 = nValidBits;
+        static const sal_uInt32 nLeftShiftBits2 = nValidBits << 1;
+        static const sal_uInt32 nColorsPerComponent = 1 << nValidBits;
+        static const sal_uInt32 nColorOffset = 256 / nColorsPerComponent;
+        static const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
         const long nWidth = pRAcc->Width();
         const long nHeight = pRAcc->Height();
         std::unique_ptr<PopularColorCount[]> pCountTable(new PopularColorCount[ nTotalColors ]);
@@ -2257,7 +2257,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
         if( pWAcc )
         {
-            const sal_uLong nSize = 32768UL * sizeof( sal_uLong );
+            static const sal_uLong nSize = 32768UL * sizeof( sal_uLong );
             sal_uLong* pColBuf = static_cast<sal_uLong*>(rtl_allocateMemory( nSize ));
             const long nWidth = pWAcc->Width();
             const long nHeight = pWAcc->Height();

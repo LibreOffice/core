@@ -2395,7 +2395,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                     * which leads to the parts outside the control area being left and not
                     * invalidated. Workaround: invalidate an area on the parent, too
                     */
-                    const int workaround_border = 5;
+                    static const int workaround_border = 5;
                     Rectangle aBounds( aInvRegion.GetBoundRect() );
                     aBounds.Left()      -= workaround_border;
                     aBounds.Top()       -= workaround_border;

@@ -944,7 +944,7 @@ static void GetNames(TrueTypeFont *t)
     sal_uInt16 n = GetUInt16(table, 2, 1);
 
     /* simple sanity check for name table entry count */
-    const size_t nMinRecordSize = 12;
+    static const size_t nMinRecordSize = 12;
     const size_t nSpaceAvailable = nTableSize - 6;
     const size_t nMaxRecords = nSpaceAvailable/nMinRecordSize;
     if (n >= nMaxRecords)
@@ -1261,7 +1261,7 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 ThreeSix   = 0;              /* MS Johab             */
 
     const sal_uInt32 remaining_table_size = table_size-4;
-    const sal_uInt32 nMinRecordSize = 8;
+    static const sal_uInt32 nMinRecordSize = 8;
     const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
     if (ncmaps > nMaxRecords)
     {
@@ -1373,7 +1373,7 @@ static void GetKern(TrueTypeFont *ttf)
         ptr = table + 4;
 
         const sal_uInt32 remaining_table_size = nTableSize-4;
-        const sal_uInt32 nMinRecordSize = 2;
+        static const sal_uInt32 nMinRecordSize = 2;
         const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
         if (ttf->nkern > nMaxRecords)
         {
@@ -1405,7 +1405,7 @@ static void GetKern(TrueTypeFont *ttf)
         ptr = table + 8;
 
         const sal_uInt32 remaining_table_size = nTableSize-8;
-        const sal_uInt32 nMinRecordSize = 4;
+        static const sal_uInt32 nMinRecordSize = 4;
         const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
         if (ttf->nkern > nMaxRecords)
         {
@@ -2696,7 +2696,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
     if (n == 0) return 0;
 
     const sal_uInt32 remaining_table_size = nTableSize-6;
-    const sal_uInt32 nMinRecordSize = 12;
+    static const sal_uInt32 nMinRecordSize = 12;
     const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
     if (n > nMaxRecords)
     {

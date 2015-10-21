@@ -436,7 +436,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     // skip in SeekRel if impossibly unavailable
     sal_uInt32 nRemainder = length;
 
-    const size_t nRequiredHeaderSize = 12;
+    static const size_t nRequiredHeaderSize = 12;
     while (nRemainder >= nRequiredHeaderSize)
     {
         sal_uInt16 type(0), flags(0);
