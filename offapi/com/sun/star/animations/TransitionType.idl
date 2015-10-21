@@ -64,8 +64,6 @@ constants TransitionType
     const short PUSHWIPE = 35;
     const short SLIDEWIPE = 36;
     const short FADE = 37;
-
-    // new
     const short RANDOMBARWIPE = 38;
     const short CHECKERBOARDWIPE = 39;
     const short DISSOLVE = 40;
