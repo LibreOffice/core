@@ -16,6 +16,24 @@
       "revId": "9c10943b1dbd1747bfa44bf1dfad4dba73394261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_1a103d4e",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-21T09:52:51Z",
+      "side": 1,
+      "message": "No, #DIV/0! is what the non-OpenCL code produces, too. This is when dividing with an empty cell.",
+      "parentUuid": "3a1531f4_77550ac5",
+      "revId": "9c10943b1dbd1747bfa44bf1dfad4dba73394261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
