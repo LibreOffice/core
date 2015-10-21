@@ -43,13 +43,6 @@ inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any 
 }
 
 
-// This template is needed at least for msci4 compiler
-template < class target >
-inline void SAL_CALL convertPropertyValue( target &value ,  css::uno::Any & a)
-{
-    convertPropertyValue( value ,  (const css::uno::Any & )  a );
-}
-
 /**
   conversion of basic types
 */
@@ -384,13 +377,12 @@ inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
         a >>= i64;
         f = ( float ) i64;
     }
-    // msci 4 does not support this conversion
-/*  else if( css::uno::TypeClass_UNSIGNED_HYPER == tc ) {
-        sal_uInt64 i64;
+    else if( css::uno::TypeClass_UNSIGNED_HYPER == tc ) {
+        sal_uInt64 i64 = 0;
         a >>= i64;
         f = ( float ) i64;
     }
-*/  else if( css::uno::TypeClass_LONG == tc ) {
+    else if( css::uno::TypeClass_LONG == tc ) {
         sal_Int32 i32 = 0;
         a >>= i32;
         f = ( float )i32;
@@ -450,13 +442,12 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
         a >>= i64;
         d = (double) i64;
     }
-    // msci 4 does not support this
-/*  else if( css::uno::TypeClass_UNSIGNED_HYPER == tc ) {
-        sal_uInt64 i64;
+    else if( css::uno::TypeClass_UNSIGNED_HYPER == tc ) {
+        sal_uInt64 i64 = 0;
         a >>= i64;
         d = (double) i64;
     }
-*/  else if( css::uno::TypeClass_LONG == tc ) {
+    else if( css::uno::TypeClass_LONG == tc ) {
         sal_Int32 i32;
         a >>= i32;
         d = (double)i32;
