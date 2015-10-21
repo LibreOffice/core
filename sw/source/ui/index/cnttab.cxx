@@ -79,7 +79,8 @@
 
 #include <unomid.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 #include <numeric>
 
 
@@ -157,7 +158,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     OUString  sYes;
     OUString  sNo;
 
-    boost::ptr_vector<AutoMarkEntry> aEntryArr;
+    std::vector<std::unique_ptr<AutoMarkEntry>> m_Entries;
 
     ::svt::CellControllerRef    xController;
     ::svt::CellControllerRef    xCheckController;
@@ -3964,9 +3965,9 @@ bool SwEntryBrowseBox::SeekRow( long nRow )
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const OUString* pRet = &aEmptyOUStr;
-    if (aEntryArr.size() > static_cast<size_t>(nRow))
+    if (static_cast<size_t>(nRow) < m_Entries.size())
     {
-        const AutoMarkEntry* pEntry = &aEntryArr[ nRow ];
+        const AutoMarkEntry* pEntry = m_Entries[ nRow ].get();
         switch(nColumn)
         {
             case  ITEM_SEARCH       :pRet = &pEntry->sSearch; break;
@@ -4012,8 +4013,8 @@ bool SwEntryBrowseBox::SaveModified()
         pController = xCheckController;
         bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().IsChecked();
     }
-    AutoMarkEntry* pEntry = nRow >= aEntryArr.size() ? new AutoMarkEntry
-                                                      : &aEntryArr[nRow];
+    AutoMarkEntry* pEntry = (nRow >= m_Entries.size()) ? new AutoMarkEntry
+                                                       : m_Entries[nRow].get();
     switch(nCol)
     {
         case  ITEM_SEARCH       : pEntry->sSearch = sNew; break;
@@ -4024,9 +4025,9 @@ bool SwEntryBrowseBox::SaveModified()
         case  ITEM_CASE         : pEntry->bCase = bVal; break;
         case  ITEM_WORDONLY     : pEntry->bWord = bVal; break;
     }
-    if(nRow >= aEntryArr.size())
+    if (nRow >= m_Entries.size())
     {
-        aEntryArr.push_back( pEntry );
+        m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pEntry));
         RowInserted(nRow, 1, true, true);
         if(nCol < ITEM_WORDONLY)
         {
@@ -4090,21 +4091,21 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 sStr = sLine.getToken(0, ';', nSttPos );
                 pToInsert->bWord = !sStr.isEmpty() && sStr != "0";
 
-                aEntryArr.push_back( pToInsert );
+                m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pToInsert));
                 pToInsert = 0;
             }
             else
             {
                 if(pToInsert)
-                    aEntryArr.push_back(pToInsert);
+                    m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pToInsert));
                 pToInsert = new AutoMarkEntry;
                 pToInsert->sComment = sLine.copy(1);
             }
         }
     }
     if( pToInsert )
-        aEntryArr.push_back(pToInsert);
-    RowInserted(0, aEntryArr.size() + 1);
+        m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pToInsert));
+    RowInserted(0, m_Entries.size() + 1);
 }
 
 void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
@@ -4120,9 +4121,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    for(size_t i = 0; i < aEntryArr.size(); i++)
+    for(size_t i = 0; i < m_Entries.size(); i++)
     {
-        AutoMarkEntry* pEntry = &aEntryArr[i];
+        AutoMarkEntry* pEntry = m_Entries[i].get();
         if(!pEntry->sComment.isEmpty())
         {
             rOutStr.WriteByteStringLine( "#" + pEntry->sComment, eTEnc );
