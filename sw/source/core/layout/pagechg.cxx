@@ -155,26 +155,26 @@ void SwBodyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAt
 
 SwPageFrm::SwPageFrm( SwFrameFormat *pFormat, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     SwFootnoteBossFrm( pFormat, pSib ),
-    pSortedObjs( 0 ),
-    pDesc( pPgDsc ),
-    nPhyPageNum( 0 )
+    m_pSortedObjs( 0 ),
+    m_pDesc( pPgDsc ),
+    m_nPhyPageNum( 0 )
 {
     SetDerivedVert( false );
     SetDerivedR2L( false );
-    if( pDesc )
+    if( m_pDesc )
     {
-        bHasGrid = true;
+        m_bHasGrid = true;
         SwTextGridItem const*const pGrid(GetGridItem(this));
         if( !pGrid )
-            bHasGrid = false;
+            m_bHasGrid = false;
     }
     else
-        bHasGrid = false;
+        m_bHasGrid = false;
     SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
                      pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX ),
     mnFrmType = FRM_PAGE;
-    bInvalidLayout = bInvalidContent = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = true;
-    bInvalidFlyLayout = bInvalidFlyContent = bInvalidFlyInCnt = bFootnotePage = bEndNotePage = false;
+    m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
+    m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -192,9 +192,9 @@ SwPageFrm::SwPageFrm( SwFrameFormat *pFormat, SwFrm* pSib, SwPageDesc *pPgDsc ) 
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFormat->GetDoc();
-    if ( !(bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat())) )
+    if ( !(m_bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat())) )
     {
-        bEmptyPage = false;
+        m_bEmptyPage = false;
         Calc(pRenderContext); // so that the PrtArea is correct
         SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrameFormat(), this );
         pBodyFrm->ChgSize( Prt().SSize() );
@@ -232,17 +232,17 @@ void SwPageFrm::DestroyImpl()
     }
 
     // empty FlyContainer, deletion of the Flys is done by the anchor (in base class SwFrm)
-    if ( pSortedObjs )
+    if ( m_pSortedObjs )
     {
         // Objects can be anchored at pages that are before their anchors (why ever...).
         // In such cases, we would access already freed memory.
-        for ( size_t i = 0; i < pSortedObjs->size(); ++i )
+        for ( size_t i = 0; i < m_pSortedObjs->size(); ++i )
         {
-            SwAnchoredObject* pAnchoredObj = (*pSortedObjs)[i];
+            SwAnchoredObject* pAnchoredObj = (*m_pSortedObjs)[i];
             pAnchoredObj->SetPageFrm( 0L );
         }
-        delete pSortedObjs;
-        pSortedObjs = 0; // reset to zero to prevent problems when detaching the Flys
+        delete m_pSortedObjs;
+        m_pSortedObjs = 0; // reset to zero to prevent problems when detaching the Flys
     }
 
     if ( !IsEmptyPage() ) //#59184# unnessesary for empty pages
@@ -276,11 +276,11 @@ SwPageFrm::~SwPageFrm()
 
 void SwPageFrm::CheckGrid( bool bInvalidate )
 {
-    bool bOld = bHasGrid;
-    bHasGrid = true;
+    bool bOld = m_bHasGrid;
+    m_bHasGrid = true;
     SwTextGridItem const*const pGrid(GetGridItem(this));
-    bHasGrid = 0 != pGrid;
-    if( bInvalidate || bOld != bHasGrid )
+    m_bHasGrid = 0 != pGrid;
+    if( bInvalidate || bOld != m_bHasGrid )
     {
         SwLayoutFrm* pBody = FindBodyCont();
         if( pBody )
@@ -538,7 +538,7 @@ void SwPageFrm::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
         // currently the savest way:
         static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
-        SetMaxFootnoteHeight(pDesc->GetFootnoteInfo().GetHeight());
+        SetMaxFootnoteHeight(m_pDesc->GetFootnoteInfo().GetHeight());
         if(!GetMaxFootnoteHeight())
             SetMaxFootnoteHeight(LONG_MAX);
         SetColMaxFootnoteHeight();
@@ -690,7 +690,7 @@ bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
 
 void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrameFormat *pFormat )
 {
-    pDesc = pNew;
+    m_pDesc = pNew;
     if ( pFormat )
         SetFrameFormat( pFormat );
 }

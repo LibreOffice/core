@@ -48,25 +48,25 @@ class SwPageFrm: public SwFootnoteBossFrm
 {
     friend class SwFrm;
 
-    SwSortedObjs *pSortedObjs;
+    SwSortedObjs *m_pSortedObjs;
 
-    SwPageDesc *pDesc; //PageDesc that describes the Page
+    SwPageDesc *m_pDesc; //PageDesc that describes the Page
 
-    sal_uInt16  nPhyPageNum; // Physical page number
+    sal_uInt16  m_nPhyPageNum; // Physical page number
 
-    bool bInvalidContent        :1;
-    bool bInvalidLayout       :1;
-    bool bInvalidFlyContent     :1;
-    bool bInvalidFlyLayout    :1;
-    bool bInvalidFlyInCnt     :1;
-    bool bFootnotePage             :1; // This Page is for document end footnotes
-    bool bEmptyPage           :1; // This Page is an explicitly empty page
-    bool bEndNotePage         :1; // 'Footnote page' for end notes
-    bool bInvalidSpelling     :1; // We need online spelling
-    bool bInvalidSmartTags    :1; // We need checking for smarttags
-    bool bInvalidAutoCmplWrds :1; // Update auto complete word list
-    bool bInvalidWordCount    :1;
-    bool bHasGrid             :1; // Grid for Asian layout
+    bool m_bInvalidContent        :1;
+    bool m_bInvalidLayout       :1;
+    bool m_bInvalidFlyContent     :1;
+    bool m_bInvalidFlyLayout    :1;
+    bool m_bInvalidFlyInCnt     :1;
+    bool m_bFootnotePage             :1; // This Page is for document end footnotes
+    bool m_bEmptyPage           :1; // This Page is an explicitly empty page
+    bool m_bEndNotePage         :1; // 'Footnote page' for end notes
+    bool m_bInvalidSpelling     :1; // We need online spelling
+    bool m_bInvalidSmartTags    :1; // We need checking for smarttags
+    bool m_bInvalidAutoCmplWrds :1; // Update auto complete word list
+    bool m_bInvalidWordCount    :1;
+    bool m_bHasGrid             :1; // Grid for Asian layout
 
     static const sal_Int8 mnShadowPxWidth;
 
@@ -120,8 +120,8 @@ public:
     void PrepareHeader();
     void PrepareFooter();
 
-    const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
-          SwSortedObjs  *GetSortedObjs()          { return pSortedObjs; }
+    const SwSortedObjs  *GetSortedObjs() const  { return m_pSortedObjs; }
+          SwSortedObjs  *GetSortedObjs()          { return m_pSortedObjs; }
 
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
@@ -131,8 +131,8 @@ public:
     void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest ); // Optimized Remove/Append
 
     void  SetPageDesc( SwPageDesc *, SwFrameFormat * );
-          SwPageDesc *GetPageDesc() { return pDesc; }
-    const SwPageDesc *GetPageDesc() const { return pDesc; }
+          SwPageDesc *GetPageDesc() { return m_pDesc; }
+    const SwPageDesc *GetPageDesc() const { return m_pDesc; }
           SwPageDesc *FindPageDesc();
 
                  SwContentFrm  *FindLastBodyContent();
@@ -145,7 +145,7 @@ public:
     // Specialized GetContentPos() for Field in Frames
     void GetContentPosition( const Point &rPt, SwPosition &rPos ) const;
 
-    bool IsEmptyPage() const { return bEmptyPage; } // Explicitly empty page
+    bool IsEmptyPage() const { return m_bEmptyPage; } // Explicitly empty page
 
     void    UpdateFootnoteNum();
 
@@ -174,7 +174,7 @@ public:
     virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
-    bool HasGrid() const { return bHasGrid; }
+    bool HasGrid() const { return m_bHasGrid; }
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
@@ -187,15 +187,15 @@ public:
     void RefreshSubsidiary( const SwRect& ) const;
 
     /// Foot note interface
-    bool IsFootnotePage() const                          { return bFootnotePage; }
-    bool IsEndNotePage() const                      { return bEndNotePage; }
-    void SetFootnotePage( bool b )                       { bFootnotePage = b; }
-    void SetEndNotePage( bool b )                   { bEndNotePage = b; }
+    bool IsFootnotePage() const                          { return m_bFootnotePage; }
+    bool IsEndNotePage() const                      { return m_bEndNotePage; }
+    void SetFootnotePage( bool b )                       { m_bFootnotePage = b; }
+    void SetEndNotePage( bool b )                   { m_bEndNotePage = b; }
 
-    inline  sal_uInt16 GetPhyPageNum() const        { return nPhyPageNum;}
-    inline  void SetPhyPageNum( sal_uInt16 nNum )   { nPhyPageNum = nNum;}
-    inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
-    inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
+    inline  sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
+    inline  void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}
+    inline  void DecrPhyPageNum()               { --m_nPhyPageNum;     }
+    inline  void IncrPhyPageNum()               { ++m_nPhyPageNum;     }
 
     /// Validate, invalidate and query the Page status
     /// Layout/Content and Fly/non-Fly respectively are inspected separately
@@ -221,15 +221,15 @@ public:
     inline bool IsInvalidFly() const;
     bool IsRightShadowNeeded() const;
     bool IsLeftShadowNeeded() const;
-    bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
-    bool IsInvalidFlyContent() const { return bInvalidFlyContent; }
-    bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
-    bool IsInvalidLayout() const { return bInvalidLayout; }
-    bool IsInvalidContent() const { return (bInvalidContent || bInvalidFlyInCnt); }
-    bool IsInvalidSpelling() const { return bInvalidSpelling; }
-    bool IsInvalidSmartTags() const { return bInvalidSmartTags; }
-    bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
-    bool IsInvalidWordCount() const { return bInvalidWordCount; }
+    bool IsInvalidFlyLayout() const { return m_bInvalidFlyLayout; }
+    bool IsInvalidFlyContent() const { return m_bInvalidFlyContent; }
+    bool IsInvalidFlyInCnt() const { return m_bInvalidFlyInCnt; }
+    bool IsInvalidLayout() const { return m_bInvalidLayout; }
+    bool IsInvalidContent() const { return (m_bInvalidContent || m_bInvalidFlyInCnt); }
+    bool IsInvalidSpelling() const { return m_bInvalidSpelling; }
+    bool IsInvalidSmartTags() const { return m_bInvalidSmartTags; }
+    bool IsInvalidAutoCompleteWords() const { return m_bInvalidAutoCmplWrds; }
+    bool IsInvalidWordCount() const { return m_bInvalidWordCount; }
 
     /** SwPageFrm::GetDrawBackgrdColor
 
@@ -349,86 +349,86 @@ inline const SwContentFrm *SwPageFrm::FindLastBodyContent() const
 }
 inline void SwPageFrm::InvalidateFlyLayout() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyLayout = true;
 }
 inline void SwPageFrm::InvalidateFlyContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyContent = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyContent = true;
 }
 inline void SwPageFrm::InvalidateFlyInCnt() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyInCnt = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyInCnt = true;
 }
 inline void SwPageFrm::InvalidateLayout() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidLayout = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidLayout = true;
 }
 inline void SwPageFrm::InvalidateContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidContent = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidContent = true;
 }
 inline void SwPageFrm::InvalidateSpelling() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidSpelling = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidSpelling = true;
 }
 
 inline void SwPageFrm::InvalidateSmartTags() const
 {
-   const_cast<SwPageFrm*>(this)->bInvalidSmartTags = true;
+   const_cast<SwPageFrm*>(this)->m_bInvalidSmartTags = true;
 }
 inline void SwPageFrm::InvalidateAutoCompleteWords() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidAutoCmplWrds = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidAutoCmplWrds = true;
 }
 inline void SwPageFrm::InvalidateWordCount() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidWordCount = true;
+    const_cast<SwPageFrm*>(this)->m_bInvalidWordCount = true;
 }
 inline void SwPageFrm::ValidateFlyLayout() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyLayout = false;
 }
 inline void SwPageFrm::ValidateFlyContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyContent = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyContent = false;
 }
 inline void SwPageFrm::ValidateFlyInCnt() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidFlyInCnt = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidFlyInCnt = false;
 }
 inline void SwPageFrm::ValidateLayout() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidLayout = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidLayout = false;
 }
 inline void SwPageFrm::ValidateContent() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidContent = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidContent = false;
 }
 inline void SwPageFrm::ValidateSpelling() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidSpelling = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidSpelling = false;
 }
 
 inline void SwPageFrm::ValidateSmartTags() const
 {
-   const_cast<SwPageFrm*>(this)->bInvalidSmartTags = false;
+   const_cast<SwPageFrm*>(this)->m_bInvalidSmartTags = false;
 }
 inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidAutoCmplWrds = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidAutoCmplWrds = false;
 }
 inline void SwPageFrm::ValidateWordCount() const
 {
-    const_cast<SwPageFrm*>(this)->bInvalidWordCount = false;
+    const_cast<SwPageFrm*>(this)->m_bInvalidWordCount = false;
 }
 
 inline bool SwPageFrm::IsInvalid() const
 {
-    return (bInvalidContent || bInvalidLayout || bInvalidFlyInCnt);
+    return (m_bInvalidContent || m_bInvalidLayout || m_bInvalidFlyInCnt);
 }
 inline bool SwPageFrm::IsInvalidFly() const
 {
-    return bInvalidFlyLayout || bInvalidFlyContent;
+    return m_bInvalidFlyLayout || m_bInvalidFlyContent;
 }
 
 

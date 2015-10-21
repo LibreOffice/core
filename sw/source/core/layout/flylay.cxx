@@ -587,10 +587,10 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     {
         InvalidateFlyContent();
 
-        if ( !pSortedObjs )
-            pSortedObjs = new SwSortedObjs();
+        if ( !m_pSortedObjs )
+            m_pSortedObjs = new SwSortedObjs();
 
-        const bool bSucessInserted = pSortedObjs->Insert( *pNew );
+        const bool bSucessInserted = m_pSortedObjs->Insert( *pNew );
         OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
         (void) bSucessInserted;
 
@@ -669,13 +669,13 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     // executed.
     // Remove it _before_ disposing accessible frames to avoid accesses to
     // the Frm from event handlers.
-    if (pSortedObjs)
+    if (m_pSortedObjs)
     {
-        pSortedObjs->Remove(*pToRemove);
-        if (!pSortedObjs->size())
+        m_pSortedObjs->Remove(*pToRemove);
+        if (!m_pSortedObjs->size())
         {
-            delete pSortedObjs;
-            pSortedObjs = 0;
+            delete m_pSortedObjs;
+            m_pSortedObjs = 0;
         }
     }
 
@@ -727,18 +727,18 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     }
 
     // The FlyColl might be gone already, because the page's dtor is being executed.
-    if ( pSortedObjs )
+    if ( m_pSortedObjs )
     {
-        pSortedObjs->Remove( *pToMove );
-        if ( !pSortedObjs->size() )
+        m_pSortedObjs->Remove( *pToMove );
+        if ( !m_pSortedObjs->size() )
         {
-            DELETEZ( pSortedObjs );
+            DELETEZ( m_pSortedObjs );
         }
     }
 
     // Register
     if ( !pDest->GetSortedObjs() )
-        pDest->pSortedObjs = new SwSortedObjs();
+        pDest->m_pSortedObjs = new SwSortedObjs();
 
     const bool bSucessInserted = pDest->GetSortedObjs()->Insert( *pToMove );
     OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
@@ -823,13 +823,13 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
         return;
     }
 
-    if ( !pSortedObjs )
+    if ( !m_pSortedObjs )
     {
-        pSortedObjs = new SwSortedObjs();
+        m_pSortedObjs = new SwSortedObjs();
     }
-    if ( !pSortedObjs->Insert( _rNewObj ) )
+    if ( !m_pSortedObjs->Insert( _rNewObj ) )
     {
-        OSL_ENSURE( pSortedObjs->Contains( _rNewObj ),
+        OSL_ENSURE( m_pSortedObjs->Contains( _rNewObj ),
                 "Drawing object not appended into list <pSortedObjs>." );
     }
     // #i87493#
@@ -849,12 +849,12 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
         return;
     }
 
-    if ( pSortedObjs )
+    if ( m_pSortedObjs )
     {
-        pSortedObjs->Remove( _rToRemoveObj );
-        if ( !pSortedObjs->size() )
+        m_pSortedObjs->Remove( _rToRemoveObj );
+        if ( !m_pSortedObjs->size() )
         {
-            DELETEZ( pSortedObjs );
+            DELETEZ( m_pSortedObjs );
         }
         if ( GetUpper() )
         {

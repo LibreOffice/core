@@ -5665,7 +5665,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFormatCol &rFormat
 
 void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
-    if( !bHasGrid || gProp.pSRetoucheFly || gProp.pSRetoucheFly2 )
+    if( !m_bHasGrid || gProp.pSRetoucheFly || gProp.pSRetoucheFly2 )
         return;
     SwTextGridItem const*const pGrid(GetGridItem(this));
     if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
