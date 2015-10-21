@@ -286,6 +286,9 @@ void ChartErrorBarPanel::Initialize()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->addModifyListener(mxListener);
+    mpRBNeg->Check(false);
+    mpRBPos->Check(false);
+    mpRBPosAndNeg->Check(false);
 
     updateData();
 
