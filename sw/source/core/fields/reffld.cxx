@@ -60,8 +60,8 @@
 
 #include <sfx2/childwin.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
+#include <memory>
+#include <vector>
 #include <set>
 #include <map>
 #include <algorithm>
@@ -1096,7 +1096,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
         // need to be converted to have unique IDs for both documents
         _RefIdsMap aFntMap( aEmptyOUStr );
-        boost::ptr_vector<_RefIdsMap> aFieldMap;
+        std::vector<std::unique_ptr<_RefIdsMap>> aFieldMap;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *this );
         for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
@@ -1109,16 +1109,16 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                     _RefIdsMap* pMap = 0;
                     for( auto n = aFieldMap.size(); n; )
                     {
-                        if( aFieldMap[ --n ].GetName()==rRefField.GetSetRefName() )
+                        if (aFieldMap[ --n ]->GetName() == rRefField.GetSetRefName())
                         {
-                            pMap = &aFieldMap[ n ];
+                            pMap = aFieldMap[ n ].get();
                             break;
                         }
                     }
                     if( !pMap )
                     {
                         pMap = new _RefIdsMap( rRefField.GetSetRefName() );
-                        aFieldMap.push_back( pMap );
+                        aFieldMap.push_back(std::unique_ptr<_RefIdsMap>(pMap));
                     }
 
                     pMap->Check( *pDoc, rDestDoc, rRefField, true );
