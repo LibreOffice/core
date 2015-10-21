@@ -161,6 +161,9 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
 
 void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 {
+    if (pDocSh->IsAvoidRecentDocs())
+        return;
+
     SfxMedium *pMed = pDocSh->GetMedium();
     if( !pMed )
         return;
@@ -411,11 +414,6 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
 
             case SFX_EVENT_OPENDOC:
-            {
-                AddDocumentToPickList(pDocSh);
-            }
-            break;
-
             case SFX_EVENT_SAVEDOCDONE:
             case SFX_EVENT_SAVEASDOCDONE:
             case SFX_EVENT_SAVETODOCDONE:
