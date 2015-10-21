@@ -874,12 +874,21 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     eState = SPECIAL_LEFT;
                     break;
                 // Right punctuation found
-                case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+                case 0x3009: case 0x300B:
                 case 0x300D: case 0x300F: case 0x3011: case 0x3015:
                 case 0x3017: case 0x3019: case 0x301B: case 0x301E:
                 case 0x301F:
                     eState = SPECIAL_RIGHT;
                     break;
+                case 0x3001: case 0x3002:   // Fullstop or comma
+                    {
+                        sal_uInt16 nLang = rNode.GetLang(nLastCompression,1,css::i18n::ScriptType::ASIAN);
+                        if ( nLang == LANGUAGE_JAPANESE || nLang == LANGUAGE_KOREAN )
+                                eState = SPECIAL_RIGHT ;
+                        else
+                                eState = SPECIAL_MIDDLE ;
+                        break;
+                    }
                 default:
                     eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE;
                 }
@@ -1571,7 +1580,14 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                 long nMove = 0;
                 if( SwScriptInfo::KANA != nType )
                 {
-                    nLast /= 20000;
+                    bool bCenter = true;
+                    if( bCenter && SwScriptInfo::SPECIAL_MIDDLE == nType )
+                    {
+                        nLast /= 24000;
+                        nMove = nLast / 2;
+                    }
+                    else
+                        nLast /= 24000;
                     if( pPoint && SwScriptInfo::SPECIAL_LEFT == nType )
                     {
                         if( nI )
@@ -1587,7 +1603,7 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                     nLast /= 100000;
                 nSub -= nLast;
                 nLast = pKernArray[ nI ];
-                if( nMove )
+                if( nI && nMove )
                     pKernArray[ nI - 1 ] += nMove;
                 pKernArray[ nI++ ] -= nSub;
                 ++nIdx;
