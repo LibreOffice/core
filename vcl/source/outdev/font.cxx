@@ -216,6 +216,8 @@ FontMetric OutputDevice::GetFontMetric() const
             aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
     if( pMetric->mbScalableFont )
             aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
+    if ( pMetric->mbFullstopCentered)
+            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::FULLSTOP_CENTERED_FLAG;
     aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
     aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnIntLeading  = ImplDevicePixelToLogicHeight( pMetric->mnIntLeading+mnEmphasisAscent );
@@ -1744,6 +1746,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnMinKashida( 0 )
     , meFamilyType(FAMILY_DONTKNOW)
     , mbScalableFont(false)
+    , mbFullstopCentered(false)
     , mnUnderlineSize( 0 )
     , mnUnderlineOffset( 0 )
     , mnBUnderlineSize( 0 )
@@ -1787,6 +1790,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
         mbKernableFont = false;
     }
 }
+
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
@@ -1870,6 +1874,21 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDStrikeoutSize       = n2LineHeight;
     mnDStrikeoutOffset1    = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
     mnDStrikeoutOffset2    = mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
+
+    const vcl::Font& rFont ( pDev->GetFont() );
+    bool bCentered = true;
+    if (MsLangId::isCJK(rFont.GetLanguage()))
+    {
+        const OUString sFullstop( sal_Unicode( 0x3001 ) ); // Fullwidth fullstop
+        Rectangle aRect;
+        pDev->GetTextBoundRect( aRect, sFullstop );
+        const sal_uInt16 nH = rFont.GetSize().Height();
+        const sal_uInt16 nB = aRect.Left();
+        // Use 18.75% as a threshold to define a centered fullwidth fullstop.
+        // In general, nB/nH < 5% for most Japanese fonts.
+        bCentered = (nB > (((nH >> 1)+nH)>>3)) ? true : false;
+    }
+    mbFullstopCentered = bCentered ;
 }
 
 void ImplFontMetricData::ImplInitAboveTextLineSize()

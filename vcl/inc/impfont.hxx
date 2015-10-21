@@ -103,7 +103,7 @@ private:
     sal_uInt16          mnMiscFlags;   // Misc Flags
     sal_uInt32          mnRefCount;    // Reference Counter
 
-    enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16 };
+    enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16, FULLSTOP_CENTERED_FLAG=32 };
 
 public:
                         ImplFontMetric();
@@ -116,6 +116,7 @@ public:
     long                GetExtLeading() const   { return mnExtLeading; }
     long                GetLineHeight() const   { return mnLineHeight; }
     long                GetSlant() const        { return mnSlant; }
+    bool                IsFullstopCentered() const { return  ((mnMiscFlags & FULLSTOP_CENTERED_FLAG ) != 0); }
 
     bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
 

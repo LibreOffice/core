@@ -72,6 +72,7 @@ public:
     long                GetExtLeading() const;
     long                GetLineHeight() const;
     long                GetSlant() const;
+    bool                IsFullstopCentered() const;
 
     FontMetric&         operator=( const FontMetric& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;

@@ -151,6 +151,11 @@ long FontMetric::GetSlant() const
     return mpImplMetric->GetSlant();
 }
 
+bool FontMetric::IsFullstopCentered() const
+{
+    return mpImplMetric->IsFullstopCentered();
+}
+
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 {
     vcl::FontInfo::operator=( rMetric );
