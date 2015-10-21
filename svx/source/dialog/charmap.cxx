@@ -1583,29 +1583,35 @@ void SubsetMap::InitList()
                     break;
 #endif
 #if U_ICU_VERSION_MAJOR_NUM >= 56
-                    /* FIXME: add RID_... to include/svx/ucsubset.hrc and
-                     * strings to svx/source/dialog/ucsubset.src and Unicode
-                     * block ranges to aAllSubsets, for now this only
-                     * compiles.. */
                 case UBLOCK_AHOM:
+                    aAllSubsets.push_back( Subset( 0x11700, 0x1173F, RID_SUBSETSTR_AHOM ) );
                     break;
                 case UBLOCK_ANATOLIAN_HIEROGLYPHS:
+                    aAllSubsets.push_back( Subset( 0x14400, 0x1467F, RID_SUBSETSTR_ANATOLIAN_HIEROGLYPHS ) );
                     break;
                 case UBLOCK_CHEROKEE_SUPPLEMENT:
+                    aAllSubsets.push_back( Subset( 0xAB70, 0xABFF, RID_SUBSETSTR_CHEROKEE_SUPPLEMENT ) );
                     break;
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E:
+                    aAllSubsets.push_back( Subset( 0x2B820, 0x2CEAF, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E ) );
                     break;
                 case UBLOCK_EARLY_DYNASTIC_CUNEIFORM:
+                    aAllSubsets.push_back( Subset( 0x12480, 0x1254F, RID_SUBSETSTR_EARLY_DYNASTIC_CUNEIFORM ) );
                     break;
                 case UBLOCK_HATRAN:
+                    aAllSubsets.push_back( Subset( 0x108E0, 0x108FF, RID_SUBSETSTR_HATRAN ) );
                     break;
                 case UBLOCK_MULTANI:
+                    aAllSubsets.push_back( Subset( 0x11280, 0x112AF, RID_SUBSETSTR_MULTANI ) );
                     break;
                 case UBLOCK_OLD_HUNGARIAN:
+                    aAllSubsets.push_back( Subset( 0x10C80, 0x10CFF, RID_SUBSETSTR_OLD_HUNGARIAN ) );
                     break;
                 case UBLOCK_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS:
+                    aAllSubsets.push_back( Subset( 0x1F900, 0x1F9FF, RID_SUBSETSTR_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS ) );
                     break;
                 case UBLOCK_SUTTON_SIGNWRITING:
+                    aAllSubsets.push_back( Subset( 0x1D800, 0x1DAAF, RID_SUBSETSTR_SUTTON_SIGNWRITING ) );
                     break;
 #endif
 
