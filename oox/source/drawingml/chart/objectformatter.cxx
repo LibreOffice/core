@@ -514,6 +514,7 @@ static const sal_Int32 spnFilledPropIds[] =
     PROP_FillBitmapPositionOffsetX,
     PROP_FillBitmapPositionOffsetY,
     PROP_FillBitmapRectanglePoint,
+    PROP_FillHatch,
     PROP_END_LIST
 };
 
