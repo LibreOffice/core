@@ -41,14 +41,12 @@
 
 #include "externalrefmgr.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class ScDocShell;
 class ScTableLink;
 
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XRefreshListener > XRefreshListenerRef;
-typedef boost::ptr_vector<XRefreshListenerRef> XRefreshListenerArr_Impl;
+typedef std::vector< css::uno::Reference< css::util::XRefreshListener > > XRefreshListenerArr_Impl;
 
 class ScSheetLinkObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XNamed,

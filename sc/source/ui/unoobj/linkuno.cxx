@@ -157,9 +157,7 @@ void SAL_CALL ScSheetLinkObj::addRefreshListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<util::XRefreshListener>* pObj =
-            new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.push_back( pObj );
+    aRefreshListeners.push_back( xListener );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
     if ( aRefreshListeners.size() == 1 )
@@ -706,9 +704,7 @@ void SAL_CALL ScAreaLinkObj::addRefreshListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<util::XRefreshListener>* pObj =
-            new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.push_back( pObj );
+    aRefreshListeners.push_back( xListener );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
     if ( aRefreshListeners.size() == 1 )
@@ -1146,9 +1142,7 @@ void SAL_CALL ScDDELinkObj::addRefreshListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<util::XRefreshListener>* pObj =
-            new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.push_back( pObj );
+    aRefreshListeners.push_back( xListener );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
     if ( aRefreshListeners.size() == 1 )
