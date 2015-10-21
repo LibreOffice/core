@@ -32,8 +32,7 @@ class SwAccessibleHyperTextData
 {
 public:
     typedef const SwTextAttr *                                          key_type;
-    typedef ::com::sun::star::uno::WeakReference<
-        com::sun::star::accessibility::XAccessibleHyperlink >           mapped_type;
+    typedef css::uno::WeakReference< css::accessibility::XAccessibleHyperlink > mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef ::std::less< const SwTextAttr * >                           key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;

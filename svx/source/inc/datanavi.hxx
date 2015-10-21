@@ -86,32 +86,19 @@ namespace svxform
     class DataNavigatorWindow;
     class AddInstanceDialog;
 
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::xforms::XFormsUIHelper1 >         XFormsUIHelper1_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::dom::XNode >                 XNode_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >             XPropertySet_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::xforms::XModel >                  XModel_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XContainer >           XContainer_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XNameContainer >       XNameContainer_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XFrame >                   XFrame_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >                   XFrameModel_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::dom::events::XEventTarget >  XEventTarget_ref;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::xforms::XSubmission >             XSubmission_ref;
-
-    typedef ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >            PropertyValue_seq;
-
-    typedef std::vector< XContainer_ref >                           ContainerList;
-    typedef std::vector< XEventTarget_ref >                         EventTargetList;
+    typedef css::uno::Reference< css::xforms::XFormsUIHelper1 >         XFormsUIHelper1_ref;
+    typedef css::uno::Reference< css::xml::dom::XNode >                 XNode_ref;
+    typedef css::uno::Reference< css::beans::XPropertySet >             XPropertySet_ref;
+    typedef css::uno::Reference< css::xforms::XModel >                  XModel_ref;
+    typedef css::uno::Reference< css::container::XContainer >           XContainer_ref;
+    typedef css::uno::Reference< css::container::XNameContainer >       XNameContainer_ref;
+    typedef css::uno::Reference< css::frame::XFrame >                   XFrame_ref;
+    typedef css::uno::Reference< css::frame::XModel >                   XFrameModel_ref;
+    typedef css::uno::Reference< css::xml::dom::events::XEventTarget >  XEventTarget_ref;
+    typedef css::uno::Reference< css::xforms::XSubmission >             XSubmission_ref;
+    typedef css::uno::Sequence< css::beans::PropertyValue >             PropertyValue_seq;
+    typedef std::vector< XContainer_ref >                               ContainerList;
+    typedef std::vector< XEventTarget_ref >                             EventTargetList;
 
 
     class DataTreeListBox : public SvTreeListBox

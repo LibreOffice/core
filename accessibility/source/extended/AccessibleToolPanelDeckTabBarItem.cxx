@@ -35,9 +35,6 @@
 
 namespace accessibility
 {
-    typedef ::com::sun::star::awt::Rectangle    UnoRectangle;
-    typedef ::com::sun::star::awt::Point        UnoPoint;
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -318,7 +315,7 @@ namespace accessibility
         return pStateSet;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const UnoPoint& i_rLocation ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const css::awt::Point& i_rLocation ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_xImpl );
         // we do not have children ...
@@ -368,15 +365,15 @@ namespace accessibility
         return m_xImpl->getPanelDisplayName();
     }
 
-    UnoRectangle AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
+    css::awt::Rectangle AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_xImpl );
 
         const ::Rectangle aItemScreenRect( m_xImpl->getTabBar()->GetItemScreenRect( m_xImpl->getItemPos() ) );
 
         Reference< XAccessibleComponent > xParentComponent( m_xImpl->getParentAccessibleComponent(), UNO_SET_THROW );
-        const UnoPoint aParentLocation( xParentComponent->getLocationOnScreen() );
-        return UnoRectangle(
+        const css::awt::Point aParentLocation( xParentComponent->getLocationOnScreen() );
+        return css::awt::Rectangle(
             aItemScreenRect.Left() - aParentLocation.X,
             aItemScreenRect.Top() - aParentLocation.Y,
             aItemScreenRect.GetWidth(),

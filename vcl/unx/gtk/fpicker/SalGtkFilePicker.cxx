@@ -327,7 +327,7 @@ protected:
     OUString     m_sTitle;
     OUString     m_sFilter;
 
-    UnoFilterList       m_aSubFilters;
+    css::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
 
 public:
     FilterEntry( const OUString& _rTitle, const OUString& _rFilter )
@@ -346,11 +346,11 @@ public:
     @return
         the number of sub filters
     */
-    sal_Int32       getSubFilters( UnoFilterList& _rSubFilterList );
+    sal_Int32       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
 
     // helpers for iterating the sub filters
-    const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
-    const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
+    const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
+    const css::beans::StringPair*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
 bool FilterEntry::hasSubFilters() const
@@ -358,7 +358,7 @@ bool FilterEntry::hasSubFilters() const
     return( 0 < m_aSubFilters.getLength() );
 }
 
-sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
+sal_Int32 FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
     return m_aSubFilters.getLength();
@@ -477,7 +477,7 @@ namespace {
 
             return bMatch;
         }
-        bool operator () ( const UnoFilterEntry& _rEntry )
+        bool operator () ( const css::beans::StringPair& _rEntry )
         {
             OUString aShrunkName = shrinkFilterName( _rEntry.First );
             return aShrunkName == rTitle;
@@ -500,14 +500,14 @@ bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
     return bRet;
 }
 
-bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
+bool SalGtkFilePicker::FilterNameExists( const css::uno::Sequence< css::beans::StringPair >& _rGroupedFilters )
 {
     bool bRet = false;
 
     if( m_pFilterList )
     {
-        const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
-        const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
+        const css::beans::StringPair* pStart = _rGroupedFilters.getConstArray();
+        const css::beans::StringPair* pEnd = pStart + _rGroupedFilters.getLength();
         for( ; pStart != pEnd; ++pStart )
             if( ::std::any_of(
                         m_pFilterList->begin(),
@@ -1897,7 +1897,7 @@ void SalGtkFilePicker::SetFilters()
             {
                 if( aListIter->hasSubFilters() )
                 {   // it's a filter group
-                    UnoFilterList aSubFilters;
+                    css::uno::Sequence< css::beans::StringPair > aSubFilters;
                     aListIter->getSubFilters( aSubFilters );
                     const StringPair* pSubFilters   = aSubFilters.getConstArray();
                     const StringPair* pSubFiltersEnd = pSubFilters + aSubFilters.getLength();
@@ -1933,7 +1933,7 @@ void SalGtkFilePicker::SetFilters()
             if( aListIter->hasSubFilters() )
             {   // it's a filter group
 
-                UnoFilterList aSubFilters;
+                css::uno::Sequence< css::beans::StringPair > aSubFilters;
                 aListIter->getSubFilters( aSubFilters );
 
                 implAddFilterGroup( aListIter->getTitle(), aSubFilters );

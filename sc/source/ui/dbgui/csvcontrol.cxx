@@ -298,10 +298,10 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
 
 // accessibility --------------------------------------------------------------
 
-ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ScCsvControl::CreateAccessible()
 {
     mxAccessible = ImplCreateAccessible().get();
-    return XAccessibleRef(mxAccessible.get());
+    return css::uno::Reference< css::accessibility::XAccessible >(mxAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,13 +71,6 @@ using namespace css::lang;
 using namespace css::util;
 using namespace css::form::binding;
 
-namespace
-{
-    typedef css::util::Date UNODate;
-    typedef css::util::Time UNOTime;
-    typedef css::util::DateTime UNODateTime;
-}
-
 namespace frm
 {
 class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj, public ::utl::ITerminationListener
@@ -899,21 +892,21 @@ Any OFormattedModel::translateExternalValueToControlValue( const Any& _rExternal
     break;
     default:
     {
-        if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNODate >::get() ) )
+        if ( _rExternalValue.getValueType().equals( cppu::UnoType< css::util::Date >::get() ) )
         {
-            UNODate aDate;
+            css::util::Date aDate;
             _rExternalValue >>= aDate;
             aControlValue <<= DBTypeConversion::toDouble( aDate, m_aNullDate );
         }
-        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNOTime >::get() ) )
+        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< css::util::Time >::get() ) )
         {
-            UNOTime aTime;
+            css::util::Time aTime;
             _rExternalValue >>= aTime;
             aControlValue <<= DBTypeConversion::toDouble( aTime );
         }
-        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNODateTime >::get() ) )
+        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< css::util::DateTime >::get() ) )
         {
-            UNODateTime aDateTime;
+            css::util::DateTime aDateTime;
             _rExternalValue >>= aDateTime;
             aControlValue <<= DBTypeConversion::toDouble( aDateTime, m_aNullDate );
         }
@@ -969,15 +962,15 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
         // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
         // and the control value is a string. This implies some weird misconfiguration
         // of the FormattedModel, so we won't care for it for the moment.
-        if ( aExternalValueType.equals( cppu::UnoType< UNODate >::get() ) )
+        if ( aExternalValueType.equals( cppu::UnoType< css::util::Date >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toDate( fValue, m_aNullDate );
         }
-        else if ( aExternalValueType.equals( cppu::UnoType< UNOTime >::get() ) )
+        else if ( aExternalValueType.equals( cppu::UnoType< css::util::Time >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toTime( fValue );
         }
-        else if ( aExternalValueType.equals( cppu::UnoType< UNODateTime >::get() ) )
+        else if ( aExternalValueType.equals( cppu::UnoType< css::util::DateTime >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toDateTime( fValue, m_aNullDate );
         }
@@ -1011,13 +1004,13 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
     switch ( m_nKeyType & ~NumberFormat::DEFINED )
     {
     case NumberFormat::DATE:
-        aTypes.push_front(cppu::UnoType< UNODate >::get() );
+        aTypes.push_front(cppu::UnoType< css::util::Date >::get() );
         break;
     case NumberFormat::TIME:
-        aTypes.push_front(cppu::UnoType< UNOTime >::get() );
+        aTypes.push_front(cppu::UnoType< css::util::Time >::get() );
         break;
     case NumberFormat::DATETIME:
-        aTypes.push_front(cppu::UnoType< UNODateTime >::get() );
+        aTypes.push_front(cppu::UnoType< css::util::DateTime >::get() );
         break;
     case NumberFormat::TEXT:
         aTypes.push_front(cppu::UnoType< OUString >::get() );

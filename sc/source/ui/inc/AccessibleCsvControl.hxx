@@ -38,24 +38,12 @@ namespace utl { class AccessibleStateSetHelper; }
 /** Accessible base class used for CSV controls. */
 class ScAccessibleCsvControl : public ScAccessibleContextBase
 {
-protected:
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > XAccessibleRef;
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleRelationSet > XAccessibleRelationSetRef;
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet > XAccessibleStateSetRef;
-
-    typedef ::com::sun::star::awt::Point        AwtPoint;
-    typedef ::com::sun::star::awt::Size         AwtSize;
-    typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
-
 private:
     VclPtr<ScCsvControl>               mpControl;          /// Pointer to the VCL control.
 
 public:
     explicit                    ScAccessibleCsvControl(
-                                    const XAccessibleRef& rxParent,
+                                    const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                                     ScCsvControl& rControl,
                                     sal_uInt16 nRole );
     virtual                     ~ScAccessibleCsvControl();
@@ -69,7 +57,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** Returns the child at the specified point (cell returns NULL). */
-    virtual XAccessibleRef SAL_CALL getAccessibleAtPoint( const AwtPoint& rPoint )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Sets the focus to this control. */
@@ -109,7 +97,7 @@ protected:
     ScCsvControl& implGetControl() const;
 
     /** Returns the first child of rxParentObj, which has the role nRole. */
-    static XAccessibleRef implGetChildByRole( const XAccessibleRef& rxParentObj, sal_uInt16 nRole )
+    static css::uno::Reference< css::accessibility::XAccessible > implGetChildByRole( const css::uno::Reference< css::accessibility::XAccessible >& rxParentObj, sal_uInt16 nRole )
         throw( ::com::sun::star::uno::RuntimeException );
     /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
     ::utl::AccessibleStateSetHelper* implCreateStateSet();
@@ -130,10 +118,6 @@ typedef ::cppu::ImplHelper1<
 /** Accessible class representing the CSV ruler control. */
 class ScAccessibleCsvRuler : public ScAccessibleCsvControl, public ScAccessibleCsvRulerImpl
 {
-protected:
-    typedef ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue > PropertyValueSeq;
-
 private:
     OUStringBuffer       maBuffer;   /// Contains the text representation of the ruler.
 
@@ -156,15 +140,15 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Throws an exception (the ruler does not have children). */
-    virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the relation to the grid control. */
-    virtual XAccessibleRelationSetRef SAL_CALL getAccessibleRelationSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the current set of states. */
-    virtual XAccessibleStateSetRef SAL_CALL getAccessibleStateSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XAccessibleText --------------------------------------------------------
@@ -181,18 +165,18 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the attributes of the specified character. */
-    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the screen coordinates of the specified character. */
-    virtual AwtRectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex )
+    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the count of characters. */
     virtual sal_Int32 SAL_CALL getCharacterCount() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the character index at the specified coordinate (object's coordinate system). */
-    virtual sal_Int32 SAL_CALL getIndexAtPoint( const AwtPoint& rPoint )
+    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& rPoint )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the selected text (ruler returns empty string). */
@@ -312,7 +296,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** Returns the cell at the specified point. */
-    virtual XAccessibleRef SAL_CALL getAccessibleAtPoint( const AwtPoint& rPoint )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL getForeground(  )
@@ -328,15 +312,15 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the specified child cell. */
-    virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the relation to the ruler control. */
-    virtual XAccessibleRelationSetRef SAL_CALL getAccessibleRelationSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the current set of states. */
-    virtual XAccessibleStateSetRef SAL_CALL getAccessibleStateSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XAccessibleTable -------------------------------------------------------
@@ -392,15 +376,15 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the accessible cell object at the specified position. */
-    virtual XAccessibleRef SAL_CALL getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the caption object of the table. */
-    virtual XAccessibleRef SAL_CALL getAccessibleCaption()
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleCaption()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the summary description object of the table. */
-    virtual XAccessibleRef SAL_CALL getAccessibleSummary()
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleSummary()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns true, if the cell at a specified position is selected. */
@@ -442,7 +426,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the child with the specified index in all selected children. */
-    virtual XAccessibleRef SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Deselects the child with the specified index in all selected children. */
@@ -537,8 +521,6 @@ private:
 class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
 {
 protected:
-    typedef ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >    PropertyValueSeq;
     typedef ::std::unique_ptr< SvxEditSource >      SvxEditSourcePtr;
 
 private:
@@ -575,7 +557,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the specified child. */
-    virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the index of this cell in the table. */
@@ -583,11 +565,11 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the relation to the ruler control. */
-    virtual XAccessibleRelationSetRef SAL_CALL getAccessibleRelationSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     /** Returns the current set of states. */
-    virtual XAccessibleStateSetRef SAL_CALL getAccessibleStateSet()
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
 
     // XInterface -------------------------------------------------------------

@@ -197,7 +197,7 @@ void OSQLAnalyzer::dispose()
     }
 }
 
-void OSQLAnalyzer::setOrigColumns(const OFileColumns& rCols)
+void OSQLAnalyzer::setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols)
 {
     m_aCompiler->setOrigColumns(rCols);
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)

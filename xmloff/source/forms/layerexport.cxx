@@ -67,8 +67,6 @@ namespace xmloff
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::text;
 
-    typedef ::com::sun::star::xforms::XFormsSupplier XXFormsSupplier;
-
     //= OFormLayerXMLExport_Impl
     const OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
@@ -298,7 +296,7 @@ namespace xmloff
 
     bool OFormLayerXMLExport_Impl::documentContainsXForms() const
     {
-        Reference< XXFormsSupplier > xXFormSupp( m_rContext.GetModel(), UNO_QUERY );
+        Reference< css::xforms::XFormsSupplier > xXFormSupp( m_rContext.GetModel(), UNO_QUERY );
         Reference< XNameContainer > xForms;
         if ( xXFormSupp.is() )
             xForms = xXFormSupp->getXForms();

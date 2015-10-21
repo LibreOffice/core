@@ -42,9 +42,6 @@ namespace connectivity
         class OBoolOperator;
         typedef ::std::map<sal_Int32,sal_Int32> OEvaluateSet;
 
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> OFileColumns;
-
-
         class OOO_DLLPUBLIC_FILE OCode
         {
         public:

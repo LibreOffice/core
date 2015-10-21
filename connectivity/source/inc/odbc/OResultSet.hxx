@@ -66,7 +66,6 @@ namespace connectivity
         typedef ::std::pair<sal_Int64,sal_Int32> TVoidPtr;
         typedef ::std::allocator< TVoidPtr > TVoidAlloc;
         typedef ::std::vector<TVoidPtr> TVoidVector;
-        //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
         /// unary_function Functor object for class ZZ returntype is void
         struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : ::std::binary_function< ::com::sun::star::uno::Sequence<sal_Int8>, ::com::sun::star::uno::Sequence<sal_Int8>, bool >
         {

@@ -2166,14 +2166,14 @@ bool FileDialogHelper_Impl::isShowFilterExtensionEnabled() const
 void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
                                            const OUString& rFilterWithExtension )
 {
-    maFilters.push_back( FilterPair( rFilter, rFilterWithExtension ) );
+    maFilters.push_back( css::beans::StringPair( rFilter, rFilterWithExtension ) );
 
 }
 
 OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtension ) const
 {
     OUString sRet;
-    for( ::std::vector< FilterPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
     {
         if ( (*pIter).Second == rFilterWithExtension )
         {
@@ -2187,7 +2187,7 @@ OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtens
 OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter ) const
 {
     OUString sRet;
-    for( ::std::vector< FilterPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
     {
         if ( (*pIter).First == rFilter )
         {

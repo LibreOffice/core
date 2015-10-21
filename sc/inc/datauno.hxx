@@ -57,9 +57,7 @@ class ScDataPilotDescriptorBase;
 
 struct ScSortParam;
 
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XRefreshListener > XDBRefreshListenerRef;
-typedef std::vector<XDBRefreshListenerRef> XDBRefreshListenerArr_Impl;
+typedef std::vector< css::uno::Reference< css::util::XRefreshListener > > XDBRefreshListenerArr_Impl;
 
 class ScDataUnoConversion
 {

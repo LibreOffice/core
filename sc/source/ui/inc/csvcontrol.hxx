@@ -225,9 +225,6 @@ protected:
     typedef ::std::vector< OUString >   StringVec;
     typedef ::std::vector< StringVec >  StringVecVec;
 
-    typedef ::css::uno::Reference<
-        ::css::accessibility::XAccessible > XAccessibleRef;
-
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
     ScCsvCmd                    maCmd;              /// Data of last command.
@@ -379,7 +376,8 @@ public:
 public:
     /** Creates and returns the accessible object of this control. Do not overwrite in
         derived classes, use ImplCreateAccessible() instead. */
-    virtual XAccessibleRef     CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >
+                                CreateAccessible() override;
 
 protected:
     /** Derived classes create a new accessible object here. */

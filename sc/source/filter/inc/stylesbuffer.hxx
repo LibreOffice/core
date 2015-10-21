@@ -201,17 +201,15 @@ struct ApiScriptFontName
 /** Contains all API font attributes. */
 struct ApiFontData
 {
-    typedef ::com::sun::star::awt::FontDescriptor ApiFontDescriptor;
-
-    ApiScriptFontName   maLatinFont;        /// Font name for latin scripts.
-    ApiScriptFontName   maAsianFont;        /// Font name for east-asian scripts.
-    ApiScriptFontName   maCmplxFont;        /// Font name for complex scripts.
-    ApiFontDescriptor   maDesc;             /// Font descriptor (height in twips, weight in %).
-    sal_Int32           mnColor;            /// Font color.
-    sal_Int16           mnEscapement;       /// Escapement style.
-    sal_Int8            mnEscapeHeight;     /// Escapement font height.
-    bool                mbOutline;          /// True = outlined characters.
-    bool                mbShadow;           /// True = shadowed chgaracters.
+    ApiScriptFontName        maLatinFont;        /// Font name for latin scripts.
+    ApiScriptFontName        maAsianFont;        /// Font name for east-asian scripts.
+    ApiScriptFontName        maCmplxFont;        /// Font name for complex scripts.
+    css::awt::FontDescriptor maDesc;             /// Font descriptor (height in twips, weight in %).
+    sal_Int32                mnColor;            /// Font color.
+    sal_Int16                mnEscapement;       /// Escapement style.
+    sal_Int8                 mnEscapeHeight;     /// Escapement font height.
+    bool                     mbOutline;          /// True = outlined characters.
+    bool                     mbShadow;           /// True = shadowed chgaracters.
 
     explicit            ApiFontData();
 };
@@ -300,19 +298,16 @@ struct AlignmentModel
 /** Contains all API cell alignment attributes. */
 struct ApiAlignmentData
 {
-    typedef ::com::sun::star::table::CellHoriJustify ApiCellHoriJustify;
-    typedef ::com::sun::star::table::CellOrientation ApiCellOrientation;
-
-    ApiCellHoriJustify  meHorJustify;       /// Horizontal alignment.
-    sal_Int32           mnHorJustifyMethod;
-    sal_Int32           mnVerJustify;       /// Vertical alignment.
-    sal_Int32           mnVerJustifyMethod;
-    ApiCellOrientation  meOrientation;      /// Normal or stacked text.
-    sal_Int32           mnRotation;         /// Text rotation angle.
-    sal_Int16           mnWritingMode;      /// CTL text direction.
-    sal_Int16           mnIndent;           /// Indentation.
-    bool                mbWrapText;         /// True = multi-line text.
-    bool                mbShrink;           /// True = shrink to fit cell size.
+    css::table::CellHoriJustify  meHorJustify;       /// Horizontal alignment.
+    sal_Int32                    mnHorJustifyMethod;
+    sal_Int32                    mnVerJustify;       /// Vertical alignment.
+    sal_Int32                    mnVerJustifyMethod;
+    css::table::CellOrientation  meOrientation;      /// Normal or stacked text.
+    sal_Int32                    mnRotation;         /// Text rotation angle.
+    sal_Int16                    mnWritingMode;      /// CTL text direction.
+    sal_Int16                    mnIndent;           /// Indentation.
+    bool                         mbWrapText;         /// True = multi-line text.
+    bool                         mbShrink;           /// True = shrink to fit cell size.
 
     explicit            ApiAlignmentData();
 };

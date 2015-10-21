@@ -46,8 +46,6 @@ namespace connectivity
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
         using ::com::sun::star::uno::Any;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > my_XInputStreamRef;
-        typedef my_XNameAccessRef my_XNameAccessRef;
 
         /*
         **  OResultSet
@@ -179,9 +177,9 @@ namespace connectivity
             ::com::sun::star::util::DateTime SAL_CALL getTimestamp(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            my_XInputStreamRef SAL_CALL getBinaryStream(sal_Int32 column)
+            css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            my_XInputStreamRef SAL_CALL getCharacterStream(sal_Int32 column)
+            css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             Any SAL_CALL getObject(sal_Int32 column, const my_XNameAccessRef& typeMap)
@@ -238,9 +236,9 @@ namespace connectivity
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateTimestamp(sal_Int32 column, const ::com::sun::star::util::DateTime& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateBinaryStream(sal_Int32 column, const my_XInputStreamRef& x, sal_Int32 length)
+            void SAL_CALL updateBinaryStream(sal_Int32 column, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateCharacterStream(sal_Int32 column, const my_XInputStreamRef& x, sal_Int32 length)
+            void SAL_CALL updateCharacterStream(sal_Int32 column, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateObject(sal_Int32 column, const Any& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;

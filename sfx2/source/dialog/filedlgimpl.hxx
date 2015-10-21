@@ -37,8 +37,6 @@ class FileDialogHelper;
 
 namespace sfx2
 {
-    typedef ::com::sun::star::beans::StringPair FilterPair;
-
     class FileDialogHelper_Impl :
         public ::cppu::WeakImplHelper<
             ::com::sun::star::ui::dialogs::XFilePickerListener,
@@ -49,7 +47,7 @@ namespace sfx2
         ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker2 > mxFileDlg;
         ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess >   mxFilterCFG;
 
-        std::vector< FilterPair >   maFilters;
+        std::vector< css::beans::StringPair >   maFilters;
 
         SfxFilterMatcher*           mpMatcher;
         GraphicFilter*              mpGraphicFilter;

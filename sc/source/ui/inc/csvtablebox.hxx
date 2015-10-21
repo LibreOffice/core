@@ -130,7 +130,8 @@ private:
     // accessibility ----------------------------------------------------------
 public:
     /** Creates and returns the accessible object of this control. */
-    virtual XAccessibleRef      CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >
+                                CreateAccessible() override;
 
 protected:
     /** Creates a new accessible object. */

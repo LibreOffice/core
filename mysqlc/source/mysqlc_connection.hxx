@@ -59,10 +59,7 @@ namespace connectivity
         using ::com::sun::star::sdbc::SQLWarning;
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > my_XStatementRef;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > my_XPreparedStatementRef;
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > my_XNameAccessRef;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > my_XDatabaseMetaDataRef;
 
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XConnection,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
@@ -152,13 +149,13 @@ namespace connectivity
                 SAL_OVERRIDE;
 
             // XConnection
-            my_XStatementRef SAL_CALL createStatement()
+            css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement()
                                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            my_XPreparedStatementRef SAL_CALL prepareStatement(const rtl::OUString& sql)
+            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const rtl::OUString& sql)
                                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            my_XPreparedStatementRef SAL_CALL prepareCall(const rtl::OUString& sql)
+            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const rtl::OUString& sql)
                                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql)
@@ -179,7 +176,7 @@ namespace connectivity
             sal_Bool SAL_CALL isClosed()
                                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            my_XDatabaseMetaDataRef SAL_CALL getMetaData()
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData()
                                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL setReadOnly(sal_Bool readOnly)

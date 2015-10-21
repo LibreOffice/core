@@ -23,7 +23,7 @@
 
 using namespace com::sun::star;
 
-SV_IMPL_PTRARR( XResultListenerArr_Impl, XResultListenerPtr );
+SV_IMPL_PTRARR( XResultListenerArr_Impl, css::uno::Reference< css::sheet::XResultListener >* );
 
 ScAddInResult::ScAddInResult(const String& rStr) :
     aArg( rStr ),

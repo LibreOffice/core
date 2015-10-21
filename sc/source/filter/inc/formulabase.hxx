@@ -255,12 +255,12 @@ struct BinComplexRef2d
 
 // Token vector, token sequence ===============================================
 
-typedef ::com::sun::star::sheet::FormulaToken       ApiToken;
-typedef ::com::sun::star::uno::Sequence< ApiToken > ApiTokenSequence;
+typedef css::sheet::FormulaToken       ApiToken;
+typedef css::uno::Sequence< ApiToken > ApiTokenSequence;
 
 /** Contains the base address and type of a special token representing an array
     formula or a shared formula (sal_False), or a table operation (sal_True). */
-typedef ::com::sun::star::beans::Pair< ::com::sun::star::table::CellAddress, sal_Bool > ApiSpecialTokenInfo;
+typedef css::beans::Pair< css::table::CellAddress, sal_Bool > ApiSpecialTokenInfo;
 
 /** A vector of formula tokens with additional convenience functions. */
 class ApiTokenVector

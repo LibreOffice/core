@@ -39,8 +39,6 @@ class OSXTransferable : public ::cppu::WeakImplHelper<com::sun::star::datatransf
                         private ::boost::noncopyable
 {
 public:
-  typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
-
   explicit OSXTransferable(com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
                            DataFlavorMapperPtr_t pDataFlavorMapper,
                            NSPasteboard* pasteboard);

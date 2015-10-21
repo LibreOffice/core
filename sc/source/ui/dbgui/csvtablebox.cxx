@@ -413,7 +413,7 @@ IMPL_LINK_TYPED( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar, void )
 
 // accessibility --------------------------------------------------------------
 
-ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ScCsvTableBox::CreateAccessible()
 {
     // do not use the ScCsvControl mechanism, return default accessible object
     return Control::CreateAccessible();

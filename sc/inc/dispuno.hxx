@@ -32,9 +32,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class ScTabViewShell;
 
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XStatusListener > XStatusListenerRef;
-typedef std::vector<XStatusListenerRef> XStatusListenerArr_Impl;
+typedef std::vector< css::uno::Reference< css::frame::XStatusListener > > XStatusListenerArr_Impl;
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
                                         com::sun::star::frame::XDispatchProviderInterceptor,

@@ -596,7 +596,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
     {
         xGroup = new SwXAutoTextGroup( sCompleteGroupName, this );
         // cache it
-        m_aGlossaryGroups.push_back( AutoTextGroupRef( xGroup ) );
+        m_aGlossaryGroups.push_back( css::uno::WeakReference< css::text::XAutoTextGroup >( xGroup ) );
     }
 
     return xGroup;
@@ -654,7 +654,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     {
         xReturn = new SwXAutoTextEntry( this, rGroupName, rEntryName );
         // cache it
-        m_aGlossaryEntries.push_back( AutoTextEntryRef( xReturn ) );
+        m_aGlossaryEntries.push_back( css::uno::WeakReference< css::text::XAutoTextEntry >( xReturn ) );
     }
 
     return xReturn;

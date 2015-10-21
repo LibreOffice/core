@@ -39,8 +39,6 @@ namespace connectivity
                                                ::com::sun::star::lang::XUnoTunnel
                                            > OMetaConnection_BASE;
 
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
-
     class OOO_DLLPUBLIC_DBTOOLS OMetaConnection : public OMetaConnection_BASE
     {
     protected:

@@ -42,10 +42,6 @@ using namespace std;
 using namespace o3tl;
 using namespace utl;
 
-typedef com::sun::star::util::Date UNODate;
-typedef com::sun::star::util::Time UNOTime;
-typedef com::sun::star::util::DateTime UNODateTime;
-
 Convert::Convert()
     : maMap()
 {
@@ -110,7 +106,7 @@ namespace
     }
 
 
-    OUString lcl_toXSD_UNODate_typed( const UNODate& rDate )
+    OUString lcl_toXSD_UNODate_typed( const css::util::Date& rDate )
     {
 
         OUStringBuffer sInfo;
@@ -126,15 +122,15 @@ namespace
 
     OUString lcl_toXSD_UNODate( const Any& rAny )
     {
-        UNODate aDate;
+        css::util::Date aDate;
         OSL_VERIFY( rAny >>= aDate );
         return lcl_toXSD_UNODate_typed( aDate );
     }
 
 
-    UNODate lcl_toUNODate( const OUString& rString )
+    css::util::Date lcl_toUNODate( const OUString& rString )
     {
-        UNODate aDate( 1, 1, 1900 );
+        css::util::Date aDate( 1, 1, 1900 );
 
         bool bWellformed = ISO8601parseDate(rString, aDate);
 
@@ -150,7 +146,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            return UNODate( 1, 1, 1900 );
+            return css::util::Date( 1, 1, 1900 );
 
         return aDate;
     }
@@ -162,7 +158,7 @@ namespace
     }
 
 
-    OUString lcl_toXSD_UNOTime_typed( const UNOTime& rTime )
+    OUString lcl_toXSD_UNOTime_typed( const css::util::Time& rTime )
     {
 
         OUStringBuffer sInfo;
@@ -188,15 +184,15 @@ namespace
 
     OUString lcl_toXSD_UNOTime( const Any& rAny )
     {
-        UNOTime aTime;
+        css::util::Time aTime;
         OSL_VERIFY( rAny >>= aTime );
         return lcl_toXSD_UNOTime_typed( aTime );
     }
 
 
-    UNOTime lcl_toUNOTime( const OUString& rString )
+    css::util::Time lcl_toUNOTime( const OUString& rString )
     {
-        UNOTime aTime;
+        css::util::Time aTime;
 
         bool bWellformed = ISO8601parseTime(rString, aTime);
 
@@ -220,7 +216,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            return UNOTime();
+            return css::util::Time();
 
         return aTime;
     }
@@ -234,13 +230,13 @@ namespace
 
     OUString lcl_toXSD_UNODateTime( const Any& rAny )
     {
-        UNODateTime aDateTime;
+        css::util::DateTime aDateTime;
         OSL_VERIFY( rAny >>= aDateTime );
 
-        UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+        css::util::Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         OUString sDate = lcl_toXSD_UNODate_typed( aDate );
 
-        UNOTime const aTime( aDateTime.NanoSeconds, aDateTime.Seconds,
+        css::util::Time const aTime( aDateTime.NanoSeconds, aDateTime.Seconds,
                     aDateTime.Minutes, aDateTime.Hours, aDateTime.IsUTC);
         OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
@@ -256,8 +252,8 @@ namespace
         if ( nDateTimeSep == -1 )
             nDateTimeSep = rString.indexOf( 't' );
 
-        UNODate aDate;
-        UNOTime aTime;
+        css::util::Date aDate;
+        css::util::Time aTime;
         if ( nDateTimeSep == -1 )
         {   // no time part
             aDate = lcl_toUNODate( rString );
@@ -267,7 +263,7 @@ namespace
             aDate = lcl_toUNODate( rString.copy( 0, nDateTimeSep ) );
             aTime = lcl_toUNOTime( rString.copy( nDateTimeSep + 1 ) );
         }
-        UNODateTime aDateTime(
+        css::util::DateTime aDateTime(
             aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
             aDate.Day, aDate.Month, aDate.Year, aTime.IsUTC
         );
@@ -281,9 +277,9 @@ void Convert::init()
     ADD_ENTRY( this, OUString );
     ADD_ENTRY( this, bool );
     ADD_ENTRY( this, double );
-    ADD_ENTRY( this, UNODate );
-    ADD_ENTRY( this, UNOTime );
-    ADD_ENTRY( this, UNODateTime );
+    maMap[ cppu::UnoType<css::util::Date>::get() ] = Convert_t( &lcl_toXSD_UNODate, &lcl_toAny_UNODate );
+    maMap[ cppu::UnoType<css::util::Time>::get() ] = Convert_t( &lcl_toXSD_UNOTime, &lcl_toAny_UNOTime );
+    maMap[ cppu::UnoType<css::util::DateTime>::get() ] = Convert_t( &lcl_toXSD_UNODateTime, &lcl_toAny_UNODateTime );
 }
 
 

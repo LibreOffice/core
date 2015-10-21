@@ -313,15 +313,13 @@ private:
     sal_Int32 getColor( eColorType eColType );
 
 private:
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > tAccessible;
     /** type of the vector containing the accessible children
      */
-    typedef ::std::vector< tAccessible > ChildListVectorType;
+    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > ChildListVectorType;
     /** type of the hash containing a vector index for every AccessibleUniqueId
         of the object in the child list
      */
-    typedef ::std::map< ObjectIdentifier, tAccessible > ChildOIDMap;
+    typedef ::std::map< ObjectIdentifier, css::uno::Reference< css::accessibility::XAccessible > > ChildOIDMap;
 
     bool                                  m_bIsDisposed;
     const bool                            m_bMayHaveChildren;

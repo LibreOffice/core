@@ -73,8 +73,6 @@ namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleState
 
 using namespace ::svt::table;
 
-typedef ::com::sun::star::util::Color   UnoColor;
-
 
 SVTXGridControl::SVTXGridControl()
     :m_xTableModel( new UnoControlTableModel() )
@@ -547,7 +545,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
             aPropertyValue.clear();
         else
         {
-            Sequence< UnoColor > aAPIColors( aColors->size() );
+            Sequence< css::util::Color > aAPIColors( aColors->size() );
             for ( size_t i=0; i<aColors->size(); ++i )
             {
                 aAPIColors[i] = aColors->at(i).GetColor();

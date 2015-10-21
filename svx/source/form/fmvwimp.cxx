@@ -1447,8 +1447,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
         if(OUString(_rDesc.szServiceName) == FM_COMPONENT_COMMANDBUTTON)
             nOBJID = OBJ_FM_BUTTON;
 
-        typedef ::com::sun::star::form::submission::XSubmission XSubmission_t;
-        Reference< XSubmission_t > xSubmission(_rDesc.xPropSet, UNO_QUERY);
+        Reference< css::form::submission::XSubmission > xSubmission(_rDesc.xPropSet, UNO_QUERY);
 
         // xform control or submission button?
         if ( !xSubmission.is() )
@@ -1506,8 +1505,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             // connect the submission with the submission supplier (aka the button)
             xControlSet->setPropertyValue( FM_PROP_BUTTON_TYPE,
                                            makeAny( FormButtonType_SUBMIT ) );
-            typedef ::com::sun::star::form::submission::XSubmissionSupplier XSubmissionSupplier_t;
-            Reference< XSubmissionSupplier_t > xSubmissionSupplier(pControl->GetUnoControlModel(), UNO_QUERY);
+            Reference< css::form::submission::XSubmissionSupplier > xSubmissionSupplier(pControl->GetUnoControlModel(), UNO_QUERY);
             xSubmissionSupplier->setSubmission(xSubmission);
 
             return pControl;

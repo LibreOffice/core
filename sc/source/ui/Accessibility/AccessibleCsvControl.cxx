@@ -103,7 +103,7 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& /* rPoint */ )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const css::awt::Point& /* rPoint */ )
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
@@ -445,7 +445,7 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     return aSeq;
 }
 
-ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBounds( sal_Int32 nIndex )
+css::awt::Rectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBounds( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -453,7 +453,7 @@ ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBo
     ensureValidIndexWithEnd( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
-    AwtRectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
+    css::awt::Rectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
     // do not return rectangle out of window
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
@@ -470,7 +470,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCharacterCount() throw( RuntimeExcep
     return implGetTextLength();
 }
 
-sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint )
+sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const css::awt::Point& rPoint )
         throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -867,7 +867,7 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( const AwtPoint& rPoint )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( const css::awt::Point& rPoint )
         throw( RuntimeException, std::exception )
 {
     Reference< XAccessible > xRet;

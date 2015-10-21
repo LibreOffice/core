@@ -40,8 +40,6 @@ struct ElementEntry_Impl;
 
 typedef ::std::list < FilterEntry >     FilterList;
 typedef ::std::list < ElementEntry_Impl >   ElementList;
-typedef ::com::sun::star::beans::StringPair UnoFilterEntry;
-typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 
 // class declaration
 
@@ -170,7 +168,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         SalGtkFilePicker& operator=( const SalGtkFilePicker& ) = delete;
 
         bool FilterNameExists( const OUString& rTitle );
-        bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
+        bool FilterNameExists( const css::uno::Sequence< css::beans::StringPair >& _rGroupedFilters );
 
         void ensureFilterList( const OUString& _rInitialCurrentFilter );
 

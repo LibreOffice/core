@@ -116,9 +116,7 @@ public:
     virtual void Notify( const SfxHint& rHint ) override;
 };
 
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XModifyListener > XModifyListenerRef;
-typedef std::vector<XModifyListenerRef> XModifyListenerArr_Impl;
+typedef std::vector< css::uno::Reference< css::util::XModifyListener > > XModifyListenerArr_Impl;
 
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
 //                                and ScCellRangeObj  (without access by index)

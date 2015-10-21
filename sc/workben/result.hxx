@@ -28,8 +28,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
-typedef boost::ptr_vector<XResultListenerPtr> XResultListenerArr_Impl;
+typedef boost::ptr_vector<css::uno::Reference< css::sheet::XResultListener >*> XResultListenerArr_Impl;
 
 class ScAddInResult : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XVolatileResult>

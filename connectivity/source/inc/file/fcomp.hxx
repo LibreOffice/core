@@ -39,7 +39,7 @@ namespace connectivity
             friend class OSQLAnalyzer;
 
             OCodeList                               m_aCodeList;
-            OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
+            css::uno::Reference< css::container::XNameAccess>                           m_orgColumns; // in filecurs this are the filecolumns
             OSQLAnalyzer*                           m_pAnalyzer;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
@@ -65,8 +65,8 @@ namespace connectivity
             void Clean();
             bool isClean() const {return m_aCodeList.empty();}
             bool hasCode() const {return !isClean();}
-            void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
-            const OFileColumns getOrigColumns() const { return m_orgColumns; }
+            void  setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols) { m_orgColumns = rCols; }
+            const css::uno::Reference< css::container::XNameAccess> getOrigColumns() const { return m_orgColumns; }
         protected:
             OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

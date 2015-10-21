@@ -30,7 +30,6 @@
 
 namespace connectivity
 {
-        typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
         class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
                                         public  comphelper::OBaseMutex,
                                         public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDatabaseMetaData2,

@@ -75,7 +75,7 @@ namespace connectivity
             bool hasFunctions() const;
             inline bool evaluateRestriction()   { return m_aInterpreter->start(); }
             void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
-            void setOrigColumns(const OFileColumns& rCols);
+            void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);

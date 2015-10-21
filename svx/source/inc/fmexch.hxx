@@ -125,14 +125,12 @@ namespace svxform
     class OControlTransferData
     {
     private:
-        typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_uInt32 > > ControlPaths;
-
-    private:
         DataFlavorExVector  m_aCurrentFormats;
 
     protected:
         ListBoxEntrySet     m_aSelectedEntries;
-        ControlPaths        m_aControlPaths;
+        css::uno::Sequence< css::uno::Sequence< sal_uInt32 > >
+                            m_aControlPaths;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                             m_aHiddenControlModels;
 

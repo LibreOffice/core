@@ -27,8 +27,7 @@ namespace svt
 
     namespace
     {
-        typedef ::com::sun::star::uno::WeakReference< XInterface >  InterfaceAdapter;
-        typedef ::std::vector< InterfaceAdapter  >                  InterfaceArray;
+        typedef ::std::vector< css::uno::WeakReference< XInterface >  >  InterfaceArray;
 
 
         InterfaceArray& getFolderPickerHistory()
@@ -64,14 +63,14 @@ namespace svt
                         if ( aCleanedHistory.empty() )
                             // make some room, assume that all interfaces (from here on) are valid
                             aCleanedHistory.reserve( _rHistory.size() - ( aLoop - _rHistory.begin() ) );
-                        aCleanedHistory.push_back( InterfaceAdapter( xCurrent ) );
+                        aCleanedHistory.push_back( css::uno::WeakReference< XInterface >( xCurrent ) );
                     }
                 }
                 _rHistory.swap( aCleanedHistory );
             }
 
             // then push_back the picker
-            _rHistory.push_back( InterfaceAdapter( _rxPicker ) );
+            _rHistory.push_back( css::uno::WeakReference< XInterface >( _rxPicker ) );
         }
     }
 
