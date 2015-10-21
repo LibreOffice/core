@@ -44,16 +44,12 @@ public class _XButton extends MultiMethodTest {
     */
     protected static class TestActionListener implements com.sun.star.awt.XActionListener {
         public boolean disposingCalled = false ;
-        public boolean actionPerformedCalled = false ;
 
         public void disposing(com.sun.star.lang.EventObject e) {
             disposingCalled = true ;
         }
 
-        public void actionPerformed(com.sun.star.awt.ActionEvent e) {
-            actionPerformedCalled = true ;
-        }
-
+        public void actionPerformed(com.sun.star.awt.ActionEvent e) {}
     }
 
     TestActionListener listener = new TestActionListener() ;
