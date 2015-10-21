@@ -35,6 +35,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "eventhandler.hxx"
 #include <memory>
@@ -393,6 +394,8 @@ namespace sdr
         // check if text animation is allowed.
         bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
+            if (utl::ConfigManager::IsAvoidConfig())
+                return true;
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedText();
@@ -401,6 +404,8 @@ namespace sdr
         // check if graphic animation is allowed.
         bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
+            if (utl::ConfigManager::IsAvoidConfig())
+                return true;
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedGraphics();
