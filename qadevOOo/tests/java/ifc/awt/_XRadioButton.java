@@ -46,8 +46,6 @@ public class _XRadioButton extends MultiMethodTest {
     * Listener implementation which sets flags on appropriate method calls
     */
     protected static class TestItemListener implements com.sun.star.awt.XItemListener {
-        public boolean disposingCalled = false ;
-        public boolean itemStateChangedCalled = false ;
         private final java.io.PrintWriter log;
 
         public TestItemListener(java.io.PrintWriter log) {
@@ -55,12 +53,10 @@ public class _XRadioButton extends MultiMethodTest {
         }
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
             log.println(" disposing was called.") ;
         }
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent e) {
-            itemStateChangedCalled = true ;
             log.println(" itemStateChanged was called.") ;
         }
 
