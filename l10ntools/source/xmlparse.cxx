@@ -1139,7 +1139,7 @@ OString XMLUtil::QuotHTML( const OString &rString )
         }
         else
             sReturn.append(lcl_QuotRange(sSource, nStartPos, nEndPos));
-        ++nStartPos;
+        nStartPos = nEndPos;
     }
     if( nEndPos < sSource.length() )
         sReturn.append(lcl_QuotRange(sSource, nEndPos, sSource.length()));
