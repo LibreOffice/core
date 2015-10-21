@@ -876,7 +876,16 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
         const SwRect aPageRect = pNd->FindPageFrmRect();
-        return aPageRect.SVRect();
+        Rectangle aRect(aPageRect.SVRect());
+
+        // tdf#81219 sanitize - nobody is interested in a thumbnail where's
+        // nothing visible
+        if (aRect.GetHeight() > 2*aRect.GetWidth())
+            aRect.SetSize(Size(aRect.GetWidth(), 2*aRect.GetWidth()));
+        else if (aRect.GetWidth() > 2*aRect.GetHeight())
+            aRect.SetSize(Size(2*aRect.GetHeight(), aRect.GetHeight()));
+
+        return aRect;
     }
     return SfxObjectShell::GetVisArea( nAspect );
 }
