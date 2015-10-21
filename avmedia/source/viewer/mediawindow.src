@@ -26,7 +26,7 @@ String AVMEDIA_STR_INSERTMEDIA_DLG
 
 String AVMEDIA_STR_OPENMEDIA_DLG
 {
-    Text[en-US] = "Open Audio and Video Dialog";
+    Text[en-US] = "Open Audio or Video";
 };
 
 String AVMEDIA_STR_ALL_MEDIAFILES
