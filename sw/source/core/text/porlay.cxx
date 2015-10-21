@@ -881,7 +881,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     eState = SPECIAL_RIGHT;
                     break;
                 default:
-                    eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE;
+                    eState = ( 0x3040 <= cChar || 0x3100 > cChar ) ? NONE:KANA;
                 }
 
                 // insert range of compressable characters
@@ -1571,7 +1571,7 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                 long nMove = 0;
                 if( SwScriptInfo::KANA != nType )
                 {
-                    nLast /= 20000;
+                    nLast /= 22000;
                     if( pPoint && SwScriptInfo::SPECIAL_LEFT == nType )
                     {
                         if( nI )
