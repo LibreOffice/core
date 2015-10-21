@@ -30,7 +30,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class BibDataManager;
 class BibToolBar;
@@ -102,7 +102,7 @@ public:
 
 
 typedef css::uno::Reference< css::frame::XStatusListener> BibToolBarListenerRef;
-typedef boost::ptr_vector<BibToolBarListenerRef> BibToolBarListenerArr;
+typedef std::vector<BibToolBarListenerRef> BibToolBarListenerArr;
 
 class BibToolBar:   public ToolBox
 {

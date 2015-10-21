@@ -277,24 +277,22 @@ void BibToolBar::InitListener()
 
             xTrans->parseStrict( aURL );
 
-            BibToolBarListener* pListener=NULL;
+            BibToolBarListenerRef xListener;
             if(nId==TBC_LB_SOURCE)
             {
-                pListener=new BibTBListBoxListener(this,aURL.Complete,nId);
+                xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
             }
             else if(nId==TBC_ED_QUERY)
             {
-                pListener=new BibTBEditListener(this,aURL.Complete,nId);
+                xListener=new BibTBEditListener(this,aURL.Complete,nId);
             }
             else
             {
-                pListener=new BibToolBarListener(this,aURL.Complete,nId);
+                xListener=new BibToolBarListener(this,aURL.Complete,nId);
             }
 
-            BibToolBarListenerRef* pxInsert = new uno::Reference<frame::XStatusListener>;
-            (*pxInsert) = pListener;
-            aListenerArr.push_back( pxInsert );
-            xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pListener),aURL);
+            aListenerArr.push_back( xListener );
+            xDisp->addStatusListener(xListener,aURL);
         }
     }
 }
