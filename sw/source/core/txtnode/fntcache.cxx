@@ -629,6 +629,15 @@ static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
     return nWidth1 == nWidth2;
 }
 
+
+static sal_uInt16 lcl_GetFullstopBearing( const vcl::RenderContext& rOut )
+{
+    const OUString sFullstop( sal_Unicode( 0x3001 ) );
+    Rectangle aRect;
+    rOut.GetTextBoundRect( aRect, sFullstop );
+    return aRect.Left();
+}
+
 /* This helper structure (SwForbidden) contains the already marked parts of the string
     to avoid double lines (e.g grammar + spell check error) */
 
@@ -1053,7 +1062,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
                         pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), lcl_GetFullstopBearing( *(rInf.GetpOut())), &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1224,7 +1233,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                                   (sal_uInt16)aFont.GetSize().Height(), lcl_GetFullstopBearing( rInf.GetOut() ), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1434,10 +1443,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), &aTmpPos );
+                               (sal_uInt16)aFont.GetSize().Height(), lcl_GetFullstopBearing( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                               (sal_uInt16)aFont.GetSize().Height(), lcl_GetFullstopBearing( rInf.GetOut() ), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -1904,7 +1913,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( bCompress )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16)aFont.GetSize().Height() ) );
+                (sal_uInt16)aFont.GetSize().Height() ,lcl_GetFullstopBearing( rInf.GetOut())) );
         else
             rInf.SetKanaDiff( 0 );
 
@@ -1967,7 +1976,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16) aFont.GetSize().Height() ) );
+                (sal_uInt16) aFont.GetSize().Height() ,lcl_GetFullstopBearing( rInf.GetOut() )));
             aTextSize.Width() = pKernArray[ nLn - 1 ];
             delete[] pKernArray;
         }
@@ -2027,7 +2036,8 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
-                           (sal_uInt16) aFont.GetSize().Height() );
+                           (sal_uInt16) aFont.GetSize().Height(),
+                           lcl_GetFullstopBearing( rInf.GetOut() ) );
         }
 
         // Asian Justification
@@ -2466,7 +2476,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,
-                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( m_nActual ) ) )
+                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( m_nActual ),
+                            lcl_GetFullstopBearing( rInf.GetOut() ) ) )
         {
             long nKernAdd = nKern;
             sal_Int32 nTmpBreak = nTextBreak2;
