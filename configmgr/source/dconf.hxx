@@ -19,7 +19,7 @@ namespace configmgr {
 
 namespace configmgr { namespace dconf {
 
-void readLayer(Data & data, int layer, bool system);
+void readLayer(Data & data, int layer);
 
 void writeModifications(Components & components, Data & data);
 

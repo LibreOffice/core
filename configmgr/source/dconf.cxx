@@ -39,8 +39,7 @@ extern "C" {
 //
 // * The node hierarchy (starting at component nodes with names like
 //   "org.openoffice.Setup") maps to dconf paths underneath
-//   "/org/libreoffice/registry/system/" resp.
-//   "/org/libreoffice/registry/user/".
+//   "/org/libreoffice/registry/".
 //
 // * Component, group, set, and localized property nodes map to dconf dirs,
 //   while property and localized value nodes map to dconf keys.
@@ -217,9 +216,8 @@ private:
     DConfChangeset * changeset_;
 };
 
-OString getRoot(bool system) {
-    return "/org/libreoffice/registry/"
-        + (system ? OStringLiteral("system") : OStringLiteral("user"));
+OString getRoot() {
+    return "/org/libreoffice/registry";
 }
 
 bool decode(OUString * string, bool slash) {
@@ -1550,7 +1548,7 @@ bool addModifications(
 
 }
 
-void readLayer(Data & data, int layer, bool system) {
+void readLayer(Data & data, int layer) {
     GObjectHolder<DConfClient> client(dconf_client_new());
     if (client.get() == nullptr) {
         SAL_WARN("configmgr.dconf", "dconf_client_new failed");
@@ -1558,7 +1556,7 @@ void readLayer(Data & data, int layer, bool system) {
     }
     readDir(
         data, layer, rtl::Reference<Node>(), data.getComponents(), client,
-        getRoot(system) + "/");
+        getRoot() + "/");
 }
 
 void writeModifications(Components & components, Data & data) {
@@ -1573,7 +1571,7 @@ void writeModifications(Components & components, Data & data) {
     }
     for (auto const & i: data.modifications.getRoot().children) {
         if (!addModifications(
-                components, cs, getRoot(false), rtl::Reference<Node>(), i.first,
+                components, cs, getRoot(), rtl::Reference<Node>(), i.first,
                 data.getComponents().findNode(Data::NO_LAYER, i.first),
                 i.second))
         {

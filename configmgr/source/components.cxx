@@ -537,9 +537,9 @@ Components::Components(
         } else if (type == "dconf") {
             if (url == "!") {
                 modificationTarget_ = ModificationTarget::Dconf;
-                dconf::readLayer(data_, Data::NO_LAYER, false);
+                dconf::readLayer(data_, Data::NO_LAYER);
             } else if (url == "*") {
-                dconf::readLayer(data_, layer, true);
+                dconf::readLayer(data_, layer);
             } else {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
@@ -579,11 +579,30 @@ Components::Components(
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: empty \"user\" URL");
             }
+            bool ignore = false;
+#if ENABLE_DCONF
             if (write) {
-                modificationTarget_ = ModificationTarget::File;
-                modificationFileUrl_ = url;
+                OUString token(
+                    expand("${SYSUSERCONFIG}/libreoffice/dconfwrite"));
+                osl::DirectoryItem it;
+                osl::FileBase::RC e = osl::DirectoryItem::get(token, it);
+                ignore = e == osl::FileBase::E_None;
+                SAL_INFO(
+                    "configmgr",
+                    "dconf write (<" << token << "> " << +e << "): "
+                        << int(ignore));
+                if (ignore) {
+                    modificationTarget_ = ModificationTarget::Dconf;
+                }
             }
-            parseModificationLayer(write ? Data::NO_LAYER : layer, url);
+#endif
+            if (!ignore) {
+                if (write) {
+                    modificationTarget_ = ModificationTarget::File;
+                    modificationFileUrl_ = url;
+                }
+                parseModificationLayer(write ? Data::NO_LAYER : layer, url);
+            }
             ++layer; //TODO: overflow
         } else {
             throw css::uno::RuntimeException(
