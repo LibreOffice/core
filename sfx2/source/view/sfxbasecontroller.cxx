@@ -1353,8 +1353,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             ::comphelper::NamedValueCollection aViewArgs(getCreationArguments());
 
             // sometimes we want to avoid adding to the recent documents
-            bool bAvoidRecentDocs = aViewArgs.getOrDefault("AvoidRecentDocs", false);
-            m_pData->m_pViewShell->GetObjectShell()->AvoidRecentDocs(bAvoidRecentDocs);
+            bool bAllowPickListEntry = aViewArgs.getOrDefault("PickListEntry", true);
+            m_pData->m_pViewShell->GetObjectShell()->AvoidRecentDocs(!bAllowPickListEntry);
 
             // if there's a JumpMark given, then, well, jump to it
             const OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", OUString() );
