@@ -74,7 +74,6 @@
 #include <editeng/formatbreakitem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star::i18n;
 
@@ -620,9 +619,9 @@ namespace
         }
     };
 
-    typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
+    typedef std::vector< _SaveRedline > SaveRedlines_t;
 
-    static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
+    static void lcl_SaveRedlines(const SwPaM& aPam, SaveRedlines_t& rArr)
     {
         SwDoc* pDoc = aPam.GetNode().GetDoc();
 
@@ -680,8 +679,7 @@ namespace
                 }
 
                 // save the current redline
-                _SaveRedline* pSave = new _SaveRedline( pCurrent, *pStart );
-                rArr.push_back( pSave );
+                rArr.push_back(_SaveRedline( pCurrent, *pStart ));
             }
         }
 
@@ -689,7 +687,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
+    static void lcl_RestoreRedlines(SwDoc* pDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
     {
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -703,7 +701,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
+    static void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
     {
         SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
         sal_uInt16 nRedlPos;
@@ -737,8 +735,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-                    rArr.push_back( pSave );
+                    rArr.push_back(_SaveRedline(pNewRedl, rRg.aStart));
 
                     pTmpPos = pTmp->End();
                     pTmpPos->nNode = rRg.aEnd;
@@ -760,8 +757,7 @@ namespace
                     ( pREnd->nNode == rRg.aEnd && !pREnd->nContent.GetIndex()) )
                 {
                     // move everything
-                    _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
-                    rArr.push_back( pSave );
+                    rArr.push_back(_SaveRedline( pTmp, rRg.aStart ));
                 }
                 else
                 {
@@ -772,8 +768,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-                    rArr.push_back( pSave );
+                    rArr.push_back(_SaveRedline( pNewRedl, rRg.aStart ));
 
                     pTmpPos = pTmp->Start();
                     pTmpPos->nNode = rRg.aEnd;
@@ -789,7 +784,7 @@ namespace
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    static void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
+    static void lcl_RestoreRedlines(SwDoc *const pDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
     {
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -1904,7 +1899,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, bool( SwMoveFlags::ALLFLYS & eMvFlags ) );
 
     // save redlines (if DOC_MOVEREDLINES is used)
-    _SaveRedlines aSaveRedl;
+    SaveRedlines_t aSaveRedl;
     if( SwMoveFlags::REDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         lcl_SaveRedlines( rPaM, aSaveRedl );
@@ -2179,7 +2174,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
                                     m_rDoc.GetFootnoteIdxs(), aTmpFntIdx );
     }
 
-    _SaveRedlines aSaveRedl;
+    SaveRedlines_t aSaveRedl;
     std::vector<SwRangeRedline*> aSavRedlInsPosArr;
     if( SwMoveFlags::REDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
