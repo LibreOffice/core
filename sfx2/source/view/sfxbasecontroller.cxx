@@ -1350,8 +1350,13 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !rFrame.IsInPlace() )
                 pViewFrame->Resize( true );
 
+            ::comphelper::NamedValueCollection aViewArgs(getCreationArguments());
+
+            // sometimes we want to avoid adding to the recent documents
+            bool bAvoidRecentDocs = aViewArgs.getOrDefault("AvoidRecentDocs", false);
+            m_pData->m_pViewShell->GetObjectShell()->AvoidRecentDocs(bAvoidRecentDocs);
+
             // if there's a JumpMark given, then, well, jump to it
-            ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
             const OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", OUString() );
             const bool bHasJumpMark = !sJumpMark.isEmpty();
             OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )

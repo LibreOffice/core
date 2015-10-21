@@ -282,12 +282,13 @@ SfxObjectShell_Impl::~SfxObjectShell_Impl()
 
 
 SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
-    :   pImp( new SfxObjectShell_Impl( *this ) )
-    ,   pMedium(0)
-    ,   pStyleSheetPool(0)
-    ,   eCreateMode(SfxObjectCreateMode::STANDARD)
-    ,   bHasName( false )
-    ,   bIsInGenerateThumbnail ( false )
+    : pImp(new SfxObjectShell_Impl(*this))
+    , pMedium(0)
+    , pStyleSheetPool(0)
+    , eCreateMode(SfxObjectCreateMode::STANDARD)
+    , bHasName(false)
+    , bIsInGenerateThumbnail (false)
+    , mbAvoidRecentDocs(false)
 {
     if (i_nCreationFlags & SfxModelFlags::EMBEDDED_OBJECT)
         eCreateMode = SfxObjectCreateMode::EMBEDDED;
@@ -303,48 +304,24 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
         pImp->m_bDocRecoverySupport = false;
 }
 
+/** Constructor of the class SfxObjectShell.
 
-
-// initializes a document from a file-description
-
-SfxObjectShell::SfxObjectShell
-(
-    SfxObjectCreateMode eMode   /*  Purpose, io which the SfxObjectShell
-                                    is created:
-
-                                    SfxObjectCreateMode::EMBEDDED (default)
-                                        as SO-Server from within another
-                                        Document
-
-                                    SfxObjectCreateMode::STANDARD,
-                                        as a normal Document open stand-alone
-
-                                    SfxObjectCreateMode::PREVIEW
-                                        to enable a Preview, if possible are
-                                        only little information is needed
-
-                                    SfxObjectCreateMode::ORGANIZER
-                                        to be displayed in the Organizer, here
-                                        nothing of the contents is used  */
-)
-
-/*  [Description]
-
-    Constructor of the class SfxObjectShell.
+    @param eMode Purpose, to which the SfxObjectShell is created:
+                 SfxObjectCreateMode::EMBEDDED (default) as SO-Server from within another Document
+                 SfxObjectCreateMode::STANDARD, as a normal Document open stand-alone
+                 SfxObjectCreateMode::PREVIEW to enable a Preview, if possible are only little information is needed
+                 SfxObjectCreateMode::ORGANIZER to be displayed in the Organizer, here nothing of the contents is used
 */
-
-:   pImp( new SfxObjectShell_Impl( *this ) ),
-    pMedium(0),
-    pStyleSheetPool(0),
-    eCreateMode(eMode),
-    bHasName( false ),
-    bIsInGenerateThumbnail ( false )
+SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
+    : pImp(new SfxObjectShell_Impl(*this))
+    , pMedium(0)
+    , pStyleSheetPool(0)
+    , eCreateMode(eMode)
+    , bHasName(false)
+    , bIsInGenerateThumbnail(false)
+    , mbAvoidRecentDocs(false)
 {
 }
-
-
-
-// virtual destructor of typical base-class SfxObjectShell
 
 SfxObjectShell::~SfxObjectShell()
 {

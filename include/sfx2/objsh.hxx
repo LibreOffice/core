@@ -216,6 +216,7 @@ private:
     bool                        bHasName :1;      // sal_True  := existing object,
                                                   // sal_False := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
 
     bool                        CloseInternal();
 private:
@@ -462,6 +463,12 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
     bool                        IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+
+    /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
+    bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
+
+    /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
+    void                        AvoidRecentDocs(bool bAvoid = true) { mbAvoidRecentDocs = bAvoid; }
 
     // Transfer IFace
     void                        AbortImport();

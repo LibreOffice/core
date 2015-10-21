@@ -529,7 +529,8 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 ::comphelper::NamedValueCollection SfxFrameLoader_Impl::impl_extractViewCreationArgs( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
     const sal_Char* pKnownViewArgs[] = {
-        "JumpMark"
+        "JumpMark",
+        "AvoidRecentDocs"
     };
 
     ::comphelper::NamedValueCollection aViewArgs;
