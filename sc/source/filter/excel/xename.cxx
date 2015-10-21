@@ -296,25 +296,28 @@ void XclExpName::Save( XclExpStream& rStrm )
 void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
-    rWorkbook->startElement( XML_definedName,
-            // OOXTODO: XML_comment, "",
-            // OOXTODO: XML_customMenu, "",
-            // OOXTODO: XML_description, "",
-            XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
-            // OOXTODO: XML_functionGroupId, "",
-            // OOXTODO: XML_help, "",
-            XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
-            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
-            XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
-            // OOXTODO: XML_publishToServer, "",
-            // OOXTODO: XML_shortcutKey, "",
-            // OOXTODO: XML_statusBar, "",
-            XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
-            // OOXTODO: XML_workbookParameter, "",
-            // OOXTODO: XML_xlm, "",
-            FSEND );
-    rWorkbook->writeEscaped( msSymbol );
-    rWorkbook->endElement( XML_definedName );
+    if(XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB )) == false)
+    {
+        rWorkbook->startElement( XML_definedName,
+                // OOXTODO: XML_comment, "",
+                // OOXTODO: XML_customMenu, "",
+                // OOXTODO: XML_description, "",
+                XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+                // OOXTODO: XML_functionGroupId, "",
+                // OOXTODO: XML_help, "",
+                XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
+                XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
+                XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
+                // OOXTODO: XML_publishToServer, "",
+                // OOXTODO: XML_shortcutKey, "",
+                // OOXTODO: XML_statusBar, "",
+                XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+                // OOXTODO: XML_workbookParameter, "",
+                // OOXTODO: XML_xlm, "",
+                FSEND );
+        rWorkbook->writeEscaped( msSymbol );
+        rWorkbook->endElement( XML_definedName );
+    }
 }
 
 void XclExpName::WriteBody( XclExpStream& rStrm )
