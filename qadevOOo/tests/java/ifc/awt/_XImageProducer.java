@@ -48,10 +48,6 @@ public class _XImageProducer extends MultiMethodTest {
     protected static class TestImageConsumer implements XImageConsumer {
         PrintWriter log = null ;
         public boolean initCalled = false ;
-        public boolean setColorModelCalled = false ;
-        public boolean setPixelsByBytesCalled = false ;
-        public boolean setPixelsByLongsCalled = false ;
-        public boolean completeCalled = false ;
 
         TestImageConsumer(PrintWriter log) {
             log.println("### Consumer initialized" ) ;
@@ -65,28 +61,21 @@ public class _XImageProducer extends MultiMethodTest {
 
         public void setColorModel(short bitCount, int[] RGBAPal,
             int redMask, int greenMask, int blueMask, int alphaMask) {
-
             log.println("### setColorModel() called") ;
-            setColorModelCalled = true ;
         }
 
         public void setPixelsByBytes(int x, int y, int width, int height,
             byte[] data, int offset, int scanSize) {
-
             log.println("### setPixelByBytes() called") ;
-            setPixelsByBytesCalled = true ;
         }
 
         public void setPixelsByLongs(int x, int y, int width, int height,
             int[] data, int offset, int scanSize) {
-
             log.println("### setPixelByLongs() called") ;
-            setPixelsByLongsCalled = true ;
         }
 
         public void complete(int status, XImageProducer prod) {
             log.println("### complete() called") ;
-            completeCalled = true ;
         }
     }
 
