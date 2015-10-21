@@ -55,11 +55,9 @@ public class _XClipboardNotifier extends MultiMethodTest {
      */
     static class MyOwner implements XClipboardOwner {
         XClipboard board;
-        XTransferable contents;
 
         public void lostOwnership(XClipboard board, XTransferable contents) {
             this.board = board;
-            this.contents = contents;
         }
     }
 
