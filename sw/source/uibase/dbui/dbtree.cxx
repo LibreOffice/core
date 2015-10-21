@@ -50,7 +50,6 @@
 
 #include <unomid.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -68,12 +67,9 @@ struct SwConnectionData
     Reference<XConnection>  xConnection;
 };
 
-typedef boost::ptr_vector<SwConnectionData> SwConnectionArr;
-
 class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
 {
     Reference< XDatabaseContext > m_xDatabaseContext;
-    SwConnectionArr m_aConnections;
     SwWrtShell* m_pWrtShell;
 
     public:
@@ -119,14 +115,6 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
     SolarMutexGuard aGuard;
     OUString sSource;
     rEvent.Accessor >>= sSource;
-    for(SwConnectionArr::iterator i = m_aConnections.begin(); i != m_aConnections.end(); ++i)
-    {
-        if(i->sSourceName == sSource)
-        {
-            m_aConnections.erase(i);
-            break;
-        }
-    }
 }
 
 void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
@@ -153,20 +141,9 @@ bool SwDBTreeList_Impl::HasContext()
 Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSourceName)
 {
     Reference<XConnection> xRet;
-    for(SwConnectionArr::const_iterator i = m_aConnections.begin(); i != m_aConnections.end(); ++i)
+    if (m_xDatabaseContext.is() && m_pWrtShell)
     {
-        if(i->sSourceName == rSourceName)
-        {
-            xRet = i->xConnection;
-            break;
-        }
-    }
-    if(!xRet.is() && m_xDatabaseContext.is() && m_pWrtShell)
-    {
-        SwConnectionData* pPtr = new SwConnectionData();
-        pPtr->sSourceName = rSourceName;
-        xRet = m_pWrtShell->GetDBManager()->RegisterConnection(pPtr->sSourceName);
-        m_aConnections.push_back(pPtr);
+        xRet = m_pWrtShell->GetDBManager()->RegisterConnection(rSourceName);
     }
     return xRet;
 }

@@ -310,7 +310,7 @@ public:
     /** create and store or find an already stored connection to a data source for use
     in SwFieldMgr and SwDBTreeList */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
-                    RegisterConnection(OUString& rSource);
+                    RegisterConnection(OUString const& rSource);
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
                         {return FindDSData(rData, true);}
