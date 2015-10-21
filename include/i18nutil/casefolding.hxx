@@ -70,9 +70,9 @@ struct MappingElement
 class I18NUTIL_DLLPUBLIC casefolding
 {
 public:
-    static Mapping& getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, com::sun::star::lang::Locale& aLocale, sal_uInt8 nMappingType) throw (com::sun::star::uno::RuntimeException);
-    static Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, com::sun::star::lang::Locale& aLocale, sal_uInt8 nMappingType) throw (com::sun::star::uno::RuntimeException);
-    static sal_Unicode getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, com::sun::star::lang::Locale& aLocale,sal_uInt8 nMappingtype, TransliterationModules moduleLoaded) throw (com::sun::star::uno::RuntimeException);
+    static Mapping& getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale& aLocale, sal_uInt8 nMappingType) throw (css::uno::RuntimeException);
+    static Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, css::lang::Locale& aLocale, sal_uInt8 nMappingType) throw (css::uno::RuntimeException);
+    static sal_Unicode getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, css::lang::Locale& aLocale,sal_uInt8 nMappingtype, TransliterationModules moduleLoaded) throw (css::uno::RuntimeException);
 
 };
 

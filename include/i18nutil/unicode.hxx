@@ -39,8 +39,8 @@ public:
 
     static sal_Int16 SAL_CALL getUnicodeType( const sal_Unicode ch );
     static sal_Int16 SAL_CALL getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList *typeList = NULL, sal_Int16 unknownType = 0 );
-    static sal_Unicode SAL_CALL getUnicodeScriptStart(com::sun::star::i18n::UnicodeScript type);
-    static sal_Unicode SAL_CALL getUnicodeScriptEnd(com::sun::star::i18n::UnicodeScript type);
+    static sal_Unicode SAL_CALL getUnicodeScriptStart(css::i18n::UnicodeScript type);
+    static sal_Unicode SAL_CALL getUnicodeScriptEnd(css::i18n::UnicodeScript type);
     static sal_uInt8 SAL_CALL getUnicodeDirection( const sal_Unicode ch );
     static bool SAL_CALL isControl( const sal_Unicode ch);
     static bool SAL_CALL isAlpha( const sal_Unicode ch);

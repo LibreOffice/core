@@ -23,7 +23,7 @@ typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
 
 
 /** The ISO 639-2 code reserved for local use used to indicate that a
-    com::sun::star::Locale contains a BCP 47 string in its Variant field. The
+    css::Locale contains a BCP 47 string in its Variant field. The
     Locale's Language field then will contain this language code.
 
     @see LanguageTag::getLocale()
@@ -71,7 +71,7 @@ public:
     explicit LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
 
     /** Init LanguageTag with Locale. */
-    explicit LanguageTag( const com::sun::star::lang::Locale & rLocale );
+    explicit LanguageTag( const css::lang::Locale & rLocale );
 
     /** Init LanguageTag with LanguageType MS-LangID. */
     explicit LanguageTag( LanguageType nLanguage );
@@ -107,7 +107,7 @@ public:
     /** Obtain language tag as Locale.
 
         As a convention, language tags that can not be expressed as "pure"
-        com::sun::star::lang::Locale content using Language and Country fields
+        css::lang::Locale content using Language and Country fields
         store "qlt" (ISO 639 reserved for local use) in the Language field and
         the entire BCP 47 language tag in the Variant field. The Country field
         contains the corresponding ISO 3166 country code _if_ there is one, or
@@ -118,7 +118,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty Locale for such a tag.
      */
-    const com::sun::star::lang::Locale &    getLocale( bool bResolveSystem = true ) const;
+    const css::lang::Locale &    getLocale( bool bResolveSystem = true ) const;
 
     /** Obtain mapping to MS-LangID.
 
@@ -242,7 +242,7 @@ public:
     LanguageTag &                   reset( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
 
     /** Reset with Locale. */
-    LanguageTag &                   reset( const com::sun::star::lang::Locale & rLocale );
+    LanguageTag &                   reset( const css::lang::Locale & rLocale );
 
     /** Reset with LanguageType MS-LangID. */
     LanguageTag &                   reset( LanguageType nLanguage );
@@ -354,9 +354,9 @@ public:
                 locale list. If no matching locale could be found it points to
                 the end of the list.
      */
-    static ::std::vector< com::sun::star::lang::Locale >::const_iterator getMatchingFallback(
-            const ::std::vector< com::sun::star::lang::Locale > & rList,
-            const com::sun::star::lang::Locale & rReference );
+    static ::std::vector< css::lang::Locale >::const_iterator getMatchingFallback(
+            const ::std::vector< css::lang::Locale > & rList,
+            const css::lang::Locale & rReference );
 
 
     /** Test equality of two LanguageTag, possibly resolving system locale.
@@ -398,7 +398,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty Locale for such a tag.
      */
-    static com::sun::star::lang::Locale convertToLocale( LanguageType nLangID, bool bResolveSystem = true );
+    static css::lang::Locale convertToLocale( LanguageType nLangID, bool bResolveSystem = true );
 
     /** Convert Locale to MS-LangID.
 
@@ -407,7 +407,7 @@ public:
                locale to the real locale used.
                If FALSE, return LANGUAGE_SYSTEM for such a tag.
      */
-    static LanguageType convertToLanguageType( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem = true );
+    static LanguageType convertToLanguageType( const css::lang::Locale& rLocale, bool bResolveSystem = true );
 
     /** Convert MS-LangID to BCP 47 string.
 
@@ -425,7 +425,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty OUString for such a tag.
      */
-    static OUString convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem = true );
+    static OUString convertToBcp47( const css::lang::Locale& rLocale, bool bResolveSystem = true );
 
     /** Convert BCP 47 string to Locale, convenience method.
 
@@ -439,7 +439,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty Locale for such a tag.
      */
-    static com::sun::star::lang::Locale convertToLocale( const OUString& rBcp47, bool bResolveSystem = true );
+    static css::lang::Locale convertToLocale( const OUString& rBcp47, bool bResolveSystem = true );
 
     /** Convert BCP 47 string to MS-LangID, convenience method.
 
@@ -479,7 +479,7 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    static com::sun::star::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
+    static css::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
 
     /** If rString represents a valid BCP 47 language tag.
 
@@ -511,7 +511,7 @@ public:
 
 private:
 
-    mutable com::sun::star::lang::Locale    maLocale;
+    mutable css::lang::Locale               maLocale;
     mutable OUString                        maBcp47;
     mutable LanguageType                    mnLangID;
     mutable ImplPtr                         mpImpl;

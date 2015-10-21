@@ -40,9 +40,9 @@ public:
     static oneToOneMapping& getfullKana2halfKanaTable();
     static oneToOneMapping& gethalfKana2fullKanaTable();
 
-    static OUString decompose_ja_voiced_sound_marks(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, bool useOffset);
+    static OUString decompose_ja_voiced_sound_marks(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset);
     static sal_Unicode decompose_ja_voiced_sound_marksChar2Char (sal_Unicode inChar);
-    static OUString compose_ja_voiced_sound_marks(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 nFlags = 0 );
+    static OUString compose_ja_voiced_sound_marks(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 nFlags = 0 );
     static sal_Unicode getCompositionChar(sal_Unicode c1, sal_Unicode c2);
 };
 

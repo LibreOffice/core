@@ -135,7 +135,7 @@ public:
     bool doSloppyFit();
 
     static PaperInfo getSystemDefaultPaper();
-    static PaperInfo getDefaultPaperForLocale(const ::com::sun::star::lang::Locale & rLocale);
+    static PaperInfo getDefaultPaperForLocale(const css::lang::Locale & rLocale);
 
     static Paper fromPSName(const OString &rName);
     static OString toPSName(Paper eType);
