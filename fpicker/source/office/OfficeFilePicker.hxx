@@ -46,7 +46,6 @@ typedef ::std::list < ElementEntry_Impl >      ElementList;
 
 typedef css::beans::StringPair                 UnoFilterEntry;
 typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
-typedef css::uno::Sequence< OUString >         OUStringList;   // can be transported more effectively
 
 // class SvtFilePicker ---------------------------------------------------
 
@@ -74,7 +73,8 @@ protected:
     OUString            m_aOldHideDirectory;
 
     OUString            m_aStandardDir;
-    OUStringList        m_aBlackList;
+    css::uno::Sequence< OUString >
+                        m_aBlackList;
 
     css::uno::Reference< css::ui::dialogs::XFilePickerListener >
                         m_xListener;

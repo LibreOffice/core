@@ -101,8 +101,7 @@ public:
 };
 
 
-typedef css::uno::Reference< css::frame::XStatusListener> BibToolBarListenerRef;
-typedef std::vector<BibToolBarListenerRef> BibToolBarListenerArr;
+typedef std::vector< css::uno::Reference< css::frame::XStatusListener> > BibToolBarListenerArr;
 
 class BibToolBar:   public ToolBox
 {

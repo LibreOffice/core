@@ -277,7 +277,7 @@ void BibToolBar::InitListener()
 
             xTrans->parseStrict( aURL );
 
-            BibToolBarListenerRef xListener;
+            css::uno::Reference< css::frame::XStatusListener> xListener;
             if(nId==TBC_LB_SOURCE)
             {
                 xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
@@ -517,8 +517,8 @@ void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
 {
     for(size_t i = 0; i < aListenerArr.size(); i++)
     {
-        BibToolBarListenerRef* pListener = &aListenerArr[i];
-        (*pListener)->statusChanged(rEvent);
+        css::uno::Reference< css::frame::XStatusListener>& rListener = aListenerArr[i];
+        rListener->statusChanged(rEvent);
     }
 }
 

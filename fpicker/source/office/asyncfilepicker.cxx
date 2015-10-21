@@ -60,7 +60,7 @@ namespace svt
         const OUString& _rFilter,
         sal_Int32 _nMinTimeout,
         sal_Int32 _nMaxTimeout,
-        const OUStringList& rBlackList )
+        const css::uno::Sequence< OUString >& rBlackList )
     {
         DBG_TESTSOLARMUTEX();
             // if this asserts, we'd need to have an own mutex per instance

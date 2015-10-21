@@ -63,8 +63,6 @@ namespace accessibility
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-    typedef css::awt::Point        UnoPoint;
-
     // AccessibleWrapper
     typedef ::cppu::WeakImplHelper< XAccessible > AccessibleWrapper_Base;
     class AccessibleWrapper : public AccessibleWrapper_Base
@@ -340,12 +338,12 @@ namespace accessibility
         }
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const css::awt::Point& i_rPoint ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_xImpl );
 
         // check the tab items
-        const UnoPoint aOwnScreenPos( getLocationOnScreen() );
+        const css::awt::Point aOwnScreenPos( getLocationOnScreen() );
         const ::Point aRequestedScreenPoint( i_rPoint.X + aOwnScreenPos.X, i_rPoint.Y + aOwnScreenPos.Y );
 
         for ( size_t i=0; i<m_xImpl->getPanelDeck()->GetPanelCount(); ++i )

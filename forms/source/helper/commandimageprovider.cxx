@@ -69,7 +69,7 @@ namespace frm
         }
 
         // ICommandImageProvider
-        virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const override;
+        virtual CommandImages getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const override;
 
     private:
         void    impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument );
@@ -117,7 +117,7 @@ namespace frm
     }
 
 
-    CommandImages DocumentCommandImageProvider::getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const
+    CommandImages DocumentCommandImageProvider::getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
         CommandImages aImages( nCommandCount );

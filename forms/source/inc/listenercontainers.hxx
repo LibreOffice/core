@@ -32,9 +32,7 @@ namespace frm
     class EventListeners : public ::comphelper::OListenerContainerBase< LISTENER, css::lang::EventObject >
     {
     public:
-        typedef LISTENER                            ListenerClass;
-        typedef css::lang::EventObject              EventClass;
-        typedef ::comphelper::OListenerContainerBase< ListenerClass, EventClass >
+        typedef ::comphelper::OListenerContainerBase< LISTENER, css::lang::EventObject >
                                                     EventListeners_Base;
 
     private:

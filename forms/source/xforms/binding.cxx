@@ -727,9 +727,8 @@ void Binding::valueModified()
 
 void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
-    typedef css::xforms::XFormsEventConcrete XFormsEvent_t;
     OUString sEventName("xforms-generic");
-    XFormsEvent_t *pEvent = new XFormsEvent_t;
+    css::xforms::XFormsEventConcrete *pEvent = new css::xforms::XFormsEventConcrete;
     pEvent->initXFormsEvent(sEventName, sal_True, sal_False);
     Reference<XEvent> xEvent(pEvent);
 

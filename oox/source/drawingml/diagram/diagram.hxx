@@ -151,7 +151,6 @@ class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
-typedef css::uno::Sequence< css::uno::Sequence< css::uno::Any > > DiagramRelsMap;
 
 class DiagramData
 {
@@ -274,7 +273,7 @@ public:
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
     DiagramDomMap & getDomMap() { return maMainDomMap; }
-    DiagramRelsMap & getDataRelsMap() { return maDataRelsMap; }
+    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > & getDataRelsMap() { return maDataRelsMap; }
     void addTo( const ShapePtr & pShape );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
@@ -286,7 +285,7 @@ private:
     DiagramColorMap                maColors;
     std::map< OUString, ShapePtr > maShapeMap;
     DiagramDomMap                  maMainDomMap;
-    DiagramRelsMap                 maDataRelsMap;
+    css::uno::Sequence< css::uno::Sequence< css::uno::Any > > maDataRelsMap;
 };
 
 typedef std::shared_ptr< Diagram > DiagramPtr;

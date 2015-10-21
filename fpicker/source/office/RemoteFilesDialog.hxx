@@ -64,7 +64,6 @@ enum SvtRemoteDlgType
 };
 
 typedef std::shared_ptr< Place > ServicePtr;
-typedef css::uno::Sequence< OUString >  OUStringList;
 
 class FileViewContainer;
 

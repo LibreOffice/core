@@ -44,7 +44,6 @@ namespace com { namespace sun { namespace star {
     namespace beans
     {
         struct PropertyValue;
-        typedef css::uno::Sequence< css::beans::PropertyValue > PropertyValues;
     }
 }}}
 

@@ -66,13 +66,13 @@ namespace frm
     }
 
 
-    void TypeBag::addType( const Type& i_rType )
+    void TypeBag::addType( const css::uno::Type& i_rType )
     {
         m_aTypes.insert( i_rType );
     }
 
 
-    void TypeBag::removeType( const TypeBag::Type& i_rType )
+    void TypeBag::removeType( const css::uno::Type& i_rType )
     {
         m_aTypes.erase( i_rType );
     }

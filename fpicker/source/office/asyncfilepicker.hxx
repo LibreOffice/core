@@ -30,9 +30,6 @@
 class SvtFileView;
 class SvtFileDialog_Base;
 
-typedef css::uno::Sequence< OUString >  OUStringList;
-
-
 namespace svt
 {
 
@@ -79,7 +76,7 @@ namespace svt
             const OUString& _rFilter,
             sal_Int32 _nMinTimeout,
             sal_Int32 _nMaxTimeout,
-            const OUStringList& rBlackList = OUStringList() );
+            const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >() );
 
         /// cancels the running action
         void cancel();

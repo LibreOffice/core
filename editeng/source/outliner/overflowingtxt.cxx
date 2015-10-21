@@ -33,7 +33,7 @@
 
 
 OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
-        TranferableText xOverflowingContent,
+        css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -69,7 +69,7 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
 }
 
 OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
-        TranferableText xOverflowingContent,
+        css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -94,7 +94,7 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
     return pOutl->CreateParaObject();
 }
 
-TranferableText TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
+css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
 {
     const EditEngine &rEditEngine = pOutl->GetEditEngine();
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
@@ -120,7 +120,7 @@ ESelection getLastPositionSel(const EditTextObject *pTObj)
 
 // class OverflowingText
 
-OverflowingText::OverflowingText(TranferableText xOverflowingContent) :
+OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
         mxOverflowingContent(xOverflowingContent)
 {
 

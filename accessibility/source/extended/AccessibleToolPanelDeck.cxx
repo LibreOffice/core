@@ -62,8 +62,6 @@ namespace accessibility
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-    typedef css::awt::Point        UnoPoint;
-
     // AccessibleToolPanelDeck_Impl - declaration
     class AccessibleToolPanelDeck_Impl  :public ::boost::noncopyable
                                         ,public ::svt::IToolPanelDeckListener
@@ -285,7 +283,7 @@ namespace accessibility
         return AccessibleRole::PANEL;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const css::awt::Point& i_rPoint ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_xImpl );
 

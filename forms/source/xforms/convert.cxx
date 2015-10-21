@@ -294,30 +294,30 @@ Convert& Convert::get()
     return *pConvert;
 }
 
-bool Convert::hasType( const Type_t& rType )
+bool Convert::hasType( const css::uno::Type& rType )
 {
     return maMap.find( rType ) != maMap.end();
 }
 
-Convert::Types_t Convert::getTypes()
+css::uno::Sequence<css::uno::Type> Convert::getTypes()
 {
-    Types_t aTypes( maMap.size() );
+    css::uno::Sequence<css::uno::Type> aTypes( maMap.size() );
     transform( maMap.begin(), maMap.end(), aTypes.getArray(),
             o3tl::select1st<Map_t::value_type>() );
     return aTypes;
 }
 
-OUString Convert::toXSD( const Any_t& rAny )
+OUString Convert::toXSD( const css::uno::Any& rAny )
 {
     Map_t::iterator aIter = maMap.find( rAny.getValueType() );
     return aIter != maMap.end() ? aIter->second.first( rAny ) : OUString();
 }
 
-Convert::Any_t Convert::toAny( const OUString& rValue,
-                               const Type_t& rType )
+css::uno::Any Convert::toAny( const OUString& rValue,
+                              const css::uno::Type& rType )
 {
     Map_t::iterator aIter = maMap.find( rType );
-    return aIter != maMap.end() ? aIter->second.second( rValue ) : Any_t();
+    return aIter != maMap.end() ? aIter->second.second( rValue ) : css::uno::Any();
 }
 
 

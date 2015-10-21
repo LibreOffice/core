@@ -1188,7 +1188,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
         Reference< XComponent> xComp(xConn,UNO_QUERY);
         if ( xComp.is() )
             xComp->addEventListener( static_cast< XContainerListener* >( this ) );
-        m_pImpl->m_aConnections.push_back(OWeakConnection(xConn));
+        m_pImpl->m_aConnections.push_back(css::uno::WeakReference< css::sdbc::XConnection >(xConn));
     }
 
     return xConn;

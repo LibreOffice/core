@@ -634,7 +634,7 @@ void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Sourc
         {
             if ( xCon == i->get() )
             {
-                *i = OWeakConnection();
+                *i = css::uno::WeakReference< css::sdbc::XConnection >();
                 bStore = true;
                 break;
             }

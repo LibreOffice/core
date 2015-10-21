@@ -32,8 +32,7 @@ void lcl_DumpTableColumnSeparators(const css::uno::Any & rTableColumnSeparators)
 #ifdef DEBUG_WRITERFILTER
 void lcl_DumpPropertyValues(css::beans::PropertyValues & rValues);
 
-typedef css::uno::Sequence<css::beans::PropertyValues> PropertyValueSeq_t;
-void lcl_DumpPropertyValueSeq(PropertyValueSeq_t & rPropValSeq);
+void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> & rPropValSeq);
 #endif // DEBUG_WRITERFILTER
 }
 }

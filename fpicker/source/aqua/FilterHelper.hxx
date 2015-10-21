@@ -42,7 +42,7 @@ typedef ::std::list<OUString> OUStringList;
 struct FilterEntry
 {
 protected:
-    OUString       m_sTitle;
+    OUString            m_sTitle;
     OUStringList        m_sFilterSuffixList;
     UnoFilterList       m_aSubFilters;
 

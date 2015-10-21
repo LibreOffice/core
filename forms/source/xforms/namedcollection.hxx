@@ -50,8 +50,7 @@ public:
         return findItem( rName ) != maItems.end();
     }
 
-    typedef css::uno::Sequence<OUString> Names_t;
-    Names_t getNames() const
+    css::uno::Sequence<OUString> getNames() const
     {
         // iterate over members, and collect all those that have names
         std::vector<OUString> aNames;
@@ -66,7 +65,7 @@ public:
         }
 
         // copy names to Sequence and return
-        Names_t aResult( aNames.size() );
+        css::uno::Sequence<OUString> aResult( aNames.size() );
         OUString* pStrings = aResult.getArray();
         std::copy( aNames.begin(), aNames.end(), pStrings );
 
@@ -117,7 +116,7 @@ public:
 
     }
 
-    virtual Names_t SAL_CALL getElementNames()
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames()
         throw( css::uno::RuntimeException ) override
     {
         return getNames();

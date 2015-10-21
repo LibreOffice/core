@@ -85,7 +85,7 @@ void lcl_DumpPropertyValues(beans::PropertyValues & rValues)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_DumpPropertyValueSeq(PropertyValueSeq_t & rPropValSeq)
+void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> & rPropValSeq)
 {
     TagLogger::getInstance().startElement("PropertyValueSeq");
 

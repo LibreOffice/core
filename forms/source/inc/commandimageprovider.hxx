@@ -35,15 +35,13 @@ namespace frm
 
     //= ICommandImageProvider
 
-    typedef OUString                                 CommandURL;
-    typedef css::uno::Sequence< CommandURL >         CommandURLs;
-    typedef ::std::vector< Image >                   CommandImages;
+    typedef ::std::vector< Image >                 CommandImages;
 
     class SAL_NO_VTABLE ICommandImageProvider
     {
     public:
         virtual CommandImages   getCommandImages(
-                                    const CommandURLs& _rCommandURLs,
+                                    const css::uno::Sequence< OUString >& _rCommandURLs,
                                     const bool _bLarge
                                 ) const = 0;
 

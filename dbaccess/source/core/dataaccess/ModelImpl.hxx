@@ -79,8 +79,7 @@ namespace comphelper
 namespace dbaccess
 {
 
-typedef css::uno::WeakReference< css::sdbc::XConnection > OWeakConnection;
-typedef std::vector< OWeakConnection > OWeakConnectionArray;
+typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 
 struct AsciiPropertyValue
 {
