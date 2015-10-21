@@ -83,8 +83,7 @@ class SVT_DLLPRIVATE AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEv
 
 
 AcceleratorExecute::AcceleratorExecute()
-    : TMutexInit      (                                                     )
-    , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
+    : TMutexInit()
 {
 }
 
@@ -430,13 +429,6 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 
     return xParser;
 }
-
-
-IMPL_LINK_NOARG_TYPED(AcceleratorExecute, impl_ts_asyncCallback, LinkParamNone*, void)
-{
-    // replaced by AsyncAccelExec!
-}
-
 
 AsyncAccelExec::AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>& xFrame,
                                const css::uno::Reference<css::frame::XDispatch>& xDispatch,

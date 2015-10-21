@@ -71,16 +71,6 @@ struct TMutexInit
  */
 class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 {
-
-    // const, types
-    private:
-
-        /** @deprecated
-                replaced by internal class AsyncAccelExec ...
-                remove this resource here if we go forwards to next major */
-        typedef ::std::vector< ::std::pair< css::util::URL, css::uno::Reference< css::frame::XDispatch > > > TCommandQueue;
-
-
     // member
     private:
 
@@ -97,18 +87,6 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalCfg;
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleCfg;
         css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocCfg;
-
-        /** @deprecated
-                replaced by internal class AsyncAccelExec ...
-                remove this resource here if we go forwards to next major */
-        TCommandQueue m_lCommandQueue;
-
-        /** @deprecated
-                replaced by internal class AsyncAccelExec ...
-                remove this resource here if we go forwards to next major */
-        vcl::EventPoster m_aAsyncCallback;
-
-
     // interface
     public:
 
@@ -227,12 +205,6 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 
         /** TODO document me */
         SVT_DLLPRIVATE css::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
-
-
-        /** @deprecated
-                replaced by internal class AsyncAccelExec ...
-                remove this resource here if we go forwards to next major */
-        DECL_DLLPRIVATE_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
 };
 
 } // namespace svt
