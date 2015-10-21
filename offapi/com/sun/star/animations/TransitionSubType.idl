@@ -128,7 +128,6 @@ constants TransitionSubType
     const short FADETOCOLOR = 102;
     const short FADEFROMCOLOR = 103;
     const short FADEOVERCOLOR = 104;
-    // new
     const short THREEBLADE = 105;
     const short EIGHTBLADE = 106;
     const short ONEBLADE = 107;
