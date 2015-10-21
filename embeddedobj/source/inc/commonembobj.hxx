@@ -383,16 +383,9 @@ public:
 // XLinkageSupport
 
     virtual void SAL_CALL breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                     const OUString& sEntName )
-        throw ( css::lang::IllegalArgumentException,
-                css::embed::WrongStateException,
-                css::io::IOException,
-                css::uno::Exception,
-                css::uno::RuntimeException, std::exception ) override;
+                                     const OUString& sEntName ) override;
 
-    virtual sal_Bool SAL_CALL isLink()
-        throw ( css::embed::WrongStateException,
-                css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isLink() override;
 
     virtual OUString SAL_CALL getLinkURL()
         throw ( css::embed::WrongStateException,

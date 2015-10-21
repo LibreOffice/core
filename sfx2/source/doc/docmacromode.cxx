@@ -56,7 +56,7 @@ namespace sfx2
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_QUERY;
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
@@ -336,10 +336,8 @@ namespace sfx2
                 }
             }
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        catch( ... )
+        { DBG_UNHANDLED_EXCEPTION(); }
         return bHasMacroLib;
     }
 
@@ -353,14 +351,12 @@ namespace sfx2
             Reference< XEmbeddedScripts > xScripts( m_xData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
             Reference< XLibraryContainer > xContainer;
             if ( xScripts.is() )
-                xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
+                xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY );
             bHasMacroLib = containerHasBasicMacros( xContainer );
 
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        catch( ... )
+        { DBG_UNHANDLED_EXCEPTION(); }
 #endif
         return bHasMacroLib;
     }
@@ -384,10 +380,8 @@ namespace sfx2
                                 )
                             );
             }
-            catch ( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
+            catch ( ... )
+            { DBG_UNHANDLED_EXCEPTION(); }
         }
         return bHasMacros;
     }

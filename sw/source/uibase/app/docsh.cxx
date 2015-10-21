@@ -307,7 +307,7 @@ bool SwDocShell::Save()
         m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    sal_uLong nErr = ERR_SWG_WRITE_ERROR; //, nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
     {
         switch( GetCreateMode() )
@@ -339,7 +339,7 @@ bool SwDocShell::Save()
                 if (m_pDoc->ContainsMSVBasic())
                 {
                     if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
-                        nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
+                        /* nVBWarning = */ GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     m_pDoc->SetContainsMSVBasic( false );
                 }
 
@@ -367,7 +367,7 @@ bool SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( false );
     }
-    SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
+    /* SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX ); */
 
     SfxViewFrame *const pFrame =
         (m_pWrtShell) ? m_pWrtShell->GetView().GetViewFrame() : nullptr;
@@ -447,7 +447,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    sal_uLong nErr = ERR_SWG_WRITE_ERROR; //, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
@@ -470,7 +470,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if (m_pDoc->ContainsMSVBasic())
         {
             if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
-                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
+                /* nVBWarning = */ GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             m_pDoc->SetContainsMSVBasic( false );
         }
 
@@ -519,7 +519,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         m_pDoc->cleanupUnoCursorTable();
     }
-    SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
+    /* SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX ); */
 
     return !IsError( nErr );
 }

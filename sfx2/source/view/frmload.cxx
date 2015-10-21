@@ -404,7 +404,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
         }
     }
 
-    SAL_WARN( "sfx.view", "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    SAL_WARN( "sfx.view", OSL_THIS_FUNC << ": model is not based on SfxObjectShell" );
     return nullptr;
 }
 

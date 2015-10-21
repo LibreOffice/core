@@ -136,8 +136,7 @@ public:
 
     // the following method supports only storages of OOo formats
     static sal_Int32 GetXStorageFormat(
-            const css::uno::Reference< css::embed::XStorage >& xStorage )
-        throw ( css::uno::Exception, std::exception );
+            const css::uno::Reference< css::embed::XStorage >& xStorage ) ;
 
     static css::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromURL(

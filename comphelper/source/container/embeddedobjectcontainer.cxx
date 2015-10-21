@@ -476,14 +476,17 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
     const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, bool bCopy,
     const OUString& rSrcShellID, const OUString& rDestShellID )
 {
-    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+    SAL_INFO( "comphelper.container", "entering " << OSL_THIS_FUNC );
+
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
+    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
-    OSL_ENSURE( !xPersist.is() || !xAccess->hasByName(rName), "Inserting element already present in storage!" );
-    OSL_ENSURE( xPersist.is() || xObj->getCurrentState() == embed::EmbedStates::RUNNING, "Non persistent object inserted!");
+    OSL_ENSURE( !xPersist.is() || !xAccess->hasByName(rName), "Inserting element already present in storage" );
+    OSL_ENSURE( xPersist.is() || xObj->getCurrentState() == embed::EmbedStates::RUNNING, "Non persistent object inserted");
 #endif
 
     // insert objects' storage into the container storage (if object has one)
@@ -509,9 +512,9 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
             }
         }
     }
-    catch (uno::Exception const& e)
+    catch ( uno::Exception const& ex )
     {
-        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::StoreEmbeddedObject: exception caught: " << e.Message);
+        SAL_WARN( "comphelper.container", OSL_THIS_FUNC << ": exception caught: " << ex.Message );
         // TODO/LATER: better error recovery should keep storage intact
         return false;
     }
@@ -521,6 +524,8 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
 
 bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
+    SAL_INFO( "comphelper.container", "entering " << OSL_THIS_FUNC );
+
     // store it into the container storage
     if (StoreEmbeddedObject(xObj, rName, false, OUString(), OUString()))
     {
@@ -528,12 +533,14 @@ bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed
         AddEmbeddedObject( xObj, rName );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < io::XInputStream >& xStm, OUString& rNewName )
 {
+    SAL_INFO( "comphelper.container", "entering " << OSL_THIS_FUNC );
+
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -564,15 +571,14 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
             // No mediatype is provided so the default for OLE objects value is used
             // it is correct so for now, but what if somebody introduces a new stream based embedded object?
-            // Probably introducing of such an object must be restricted ( a storage must be used! ).
-            uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue("MediaType",
+            uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY );
+            if ( xProps.is() )
+                xProps->setPropertyValue("MediaType",
                     uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
         }
-        catch (uno::Exception const& e)
+        catch ( uno::Exception const& e )
         {
-            // complete disaster!
-            SAL_WARN("comphelper.container", "EmbeddedObjectContainer::InsertEmbeddedObject: exception caught: " << e.Message);
+            SAL_WARN("comphelper.container", OSL_THIS_FUNC << ": exception caught: " << e.Message);
             return uno::Reference < embed::XEmbeddedObject >();
         }
     }
@@ -582,18 +588,20 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     try
     {
         if ( !xRet.is() )
+        {
             // no object could be created, so withdraw insertion
             pImpl->mxStorage->removeElement( rNewName );
+        }
     }
-    catch (const uno::Exception&)
-    {
-    }
+    catch ( const uno::Exception& ) { }
 
     return xRet;
 }
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName, OUString const* pBaseURL )
 {
+    SAL_INFO( "comphelper.container", "entering " << OSL_THIS_FUNC );
+
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -691,12 +699,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     OUString aOrigName;
     try
     {
-        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY_THROW );
-        aOrigName = xPersist->getEntryName();
+        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+        if ( xPersist.is() )
+            aOrigName = xPersist->getEntryName();
     }
-    catch (const uno::Exception&)
-    {
-    }
+    catch ( ... ) { }
 
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();

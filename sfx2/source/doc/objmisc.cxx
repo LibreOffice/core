@@ -213,9 +213,10 @@ void SfxObjectShell::FlushDocInfo()
 
 void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
 {
-    if(pImpl->lErr==ERRCODE_NONE)
+    ///raise( SIGTRAP ); /* #include <signal.h> */
+    if( pImpl->lErr == ERRCODE_NONE )
     {
-        pImpl->lErr=lErr;
+        pImpl->lErr = lErr;
 
         if( lErr != ERRCODE_NONE && !aLogMessage.isEmpty() )
             AddLog( aLogMessage );
@@ -252,7 +253,10 @@ void SfxObjectShell::ResetError()
 
 void SfxObjectShell::EnableSetModified( bool bEnable )
 {
-    SAL_INFO_IF( bEnable == pImpl->m_bEnableSetModified, "sfx", "SFX_PERSIST: EnableSetModified 2x called with the same value" );
+#ifdef DBG_UTIL
+    if ( bEnable == pImpl->m_bEnableSetModified )
+        SAL_WARN( "sfx", "SFX_PERSIST: EnableSetModified 2x called with the same value" );
+#endif
     pImpl->m_bEnableSetModified = bEnable;
 }
 
@@ -307,8 +311,8 @@ bool SfxObjectShell::IsModified()
 
 void SfxObjectShell::SetModified( bool bModifiedP )
 {
-    SAL_INFO_IF( !bModifiedP && !IsEnableSetModified(), "sfx",
-        "SFX_PERSIST: SetModified( sal_False ), although IsEnableSetModified() == sal_False" );
+    SAL_WARN_IF( !bModifiedP && !IsEnableSetModified(), "sfx",
+        "SFX_PERSIST: SetModified( sal_False ) although IsEnableSetModified() is sal_False" );
 
     if( !IsEnableSetModified() )
         return;
