@@ -37,7 +37,7 @@ typedef std::list< sal_Int32 > PositionList;
 class SwScriptInfo
 {
 public:
-    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
+    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE, SPECIAL_MIDDLE};
 
 private:
     //! Records a single change in script type.
@@ -255,6 +255,7 @@ public:
     // modifies the kerning array according to a given compress value
     long Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
+                   const bool bCentered,
                    Point* pPoint = NULL ) const;
 
 /** Performs a kashida justification on the kerning array
