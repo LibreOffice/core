@@ -353,11 +353,11 @@ void ScInterpreter::ScIfError( bool bNAonly )
                     SCSIZE nC = 0, nR = 0;
                     for ( ; nC < nCols && (nC != nErrorCol || nR != nErrorRow); /*nop*/ )
                     {
-                        for ( ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
+                        for (nR = 0 ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
                         {
                             lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
                         }
-                        if (nC != nErrorCol || nR != nErrorRow)
+                        if (nC != nErrorCol && nR != nErrorRow)
                             ++nC;
                     }
                     // Now the mixed cases.
@@ -375,6 +375,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                                 lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
                             }
                         }
+                        nR = 0;
                     }
                     xNew = new ScJumpMatrixToken( pJumpMat );
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
