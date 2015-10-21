@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_1a931da5",
+        "filename": "starmath/Library_sm.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-21T13:37:09Z",
+      "side": 1,
+      "message": "but this does not actually do anything:\nthe gb_Library_use_external function forwards to gb_LinkTarget_use_external, and if you look at the definition it only uses parameters $(1) i.e. \"sm\" and $(2) i.e. boost_headers, but not $(3) i.e. icu_headers.\n\nthe right way to write what you want is $(call gb_LinkTarget_use_externals,sm,boost_headers icu_headers)\n\ni.e. use *externals* instead of *external*, and give a list separated by whitespace in the parameter $(2).\n\nsince this patch doesn\u0027t do anything, i wonder if it can just be reverted?",
+      "revId": "d8f46f854ee64ad9fe6356a8d4b30f98f3b20135",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
