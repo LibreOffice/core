@@ -1317,17 +1317,18 @@ void OQueryController::executeQuery()
             }
             if (xDisp.is())
             {
-	      auto aProps(::comphelper::InitPropertySequence({
-		{ PROPERTY_DATASOURCENAME, makeAny(sDataSourceName) },
-                { PROPERTY_COMMAND_TYPE, makeAny(CommandType::COMMAND) },
-		{ PROPERTY_COMMAND, makeAny(sTranslatedStmt) },
-		{ PROPERTY_ENABLE_BROWSER, makeAny(false) },
-		{ PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
-		{ PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
-		{ PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
-		{ PROPERTY_UPDATE_TABLENAME, makeAny(m_sUpdateTableName) },
-		{ PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
-	      }));
+                auto aProps(::comphelper::InitPropertySequence(
+                    {
+                        { PROPERTY_DATASOURCENAME, makeAny(sDataSourceName) },
+                        { PROPERTY_COMMAND_TYPE, makeAny(CommandType::COMMAND) },
+                        { PROPERTY_COMMAND, makeAny(sTranslatedStmt) },
+                        { PROPERTY_ENABLE_BROWSER, makeAny(false) },
+                        { PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
+                        { PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
+                        { PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
+                        { PROPERTY_UPDATE_TABLENAME, makeAny(m_sUpdateTableName) },
+                        { PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
+                    }));
 
                 xDisp->dispatch(aWantToDispatch, aProps);
                 // check the state of the beamer
