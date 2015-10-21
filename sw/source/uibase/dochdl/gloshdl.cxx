@@ -59,8 +59,6 @@
 
 #include <IDocumentFieldsAccess.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -72,6 +70,8 @@ struct TextBlockInfo_Impl
     OUString sTitle;
     OUString sLongName;
     OUString sGroupName;
+    TextBlockInfo_Impl(OUString const& rTitle, OUString const& rLongName, OUString const& rGroupName)
+        : sTitle(rTitle), sLongName(rLongName), sGroupName(rGroupName) {}
 };
 
 // Dialog for edit templates
@@ -395,7 +395,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                             SwGlossaries *pGlossaries,
                             SwTextBlocks *pGlossary  )
 {
-    boost::ptr_vector<TextBlockInfo_Impl> aFoundArr;
+    std::vector<TextBlockInfo_Impl> aFoundArr;
     OUString aShortName( rShortName );
     bool bCancel = false;
     // search for text block
@@ -424,11 +424,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                     const OUString sShortName(pGlossaryList->GetBlockShortName(i, j));
                     if( rSCmp.isEqual( rShortName, sShortName ))
                     {
-                        TextBlockInfo_Impl* pData = new TextBlockInfo_Impl;
-                        pData->sTitle = sTitle;
-                        pData->sLongName = sLongName;
-                        pData->sGroupName = sGroupName;
-                        aFoundArr.push_back(pData);
+                        aFoundArr.push_back(TextBlockInfo_Impl(sTitle, sLongName, sGroupName));
                     }
                 }
             }
