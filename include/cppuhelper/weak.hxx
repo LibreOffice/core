@@ -123,8 +123,8 @@ public:
     inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
         { return *this; }
 
-    /** Basic queryInterface() implementation supporting \css::uno::XWeak and
-        \css::uno::XInterface.
+    /** Basic queryInterface() implementation supporting \com::sun::star::uno::XWeak and
+        \com::sun::star::uno::XInterface.
 
         @param rType demanded type
         @return demanded type or empty any
@@ -143,7 +143,7 @@ public:
 
     /** XWeak::queryAdapter() implementation
 
-        @return a \css::uno::XAdapter reference
+        @return a \com::sun::star::uno::XAdapter reference
     */
     virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
