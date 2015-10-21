@@ -316,32 +316,4 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSe
     pDocument->pClass->resetSelection(pDocument);
 }
 
-/* DirectBufferAllocator */
-
-extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_allocateDirectBufferNative
-    (JNIEnv* pEnv, jclass /*aClass*/, jint nSize)
-{
-    jobject aBuffer = NULL;
-
-    if (nSize > 0)
-    {
-        void* pMemory = malloc(nSize);
-        if (pMemory != NULL)
-        {
-            aBuffer = pEnv->NewDirectByteBuffer(pMemory, nSize);
-            if (aBuffer == NULL)
-            {
-                free(pMemory);
-            }
-        }
-    }
-    return aBuffer;
-}
-
-extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_freeDirectBufferNative
-    (JNIEnv* pEnv, jclass, jobject aBuffer)
-{
-    free(pEnv->GetDirectBufferAddress(aBuffer));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
