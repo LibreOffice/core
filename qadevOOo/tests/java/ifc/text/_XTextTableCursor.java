@@ -56,8 +56,6 @@ public class _XTextTableCursor extends MultiMethodTest {
 
     public XTextTableCursor oObj = null;    // oObj filled by MultiMethodTest
 
-    XCell oCell = null;
-
     /**
      * Moves the cursor to upper-left cell and checks
      * its range name. <p>
