@@ -52,17 +52,10 @@ public class _XComboBox extends MultiMethodTest {
     */
     protected static class TestActionListener
         implements com.sun.star.awt.XActionListener {
-        public boolean disposingCalled = false;
-        public boolean actionPerformedCalled = false;
 
-        public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true;
-        }
+        public void disposing(com.sun.star.lang.EventObject e) {}
 
-        public void actionPerformed(com.sun.star.awt.ActionEvent e) {
-            actionPerformedCalled = true;
-        }
-
+        public void actionPerformed(com.sun.star.awt.ActionEvent e) {}
     }
 
     /**
@@ -70,17 +63,10 @@ public class _XComboBox extends MultiMethodTest {
     */
     protected static class TestItemListener
         implements com.sun.star.awt.XItemListener {
-        public boolean disposingCalled = false;
-        public boolean itemStateChangedCalled = false;
 
-        public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true;
-        }
+        public void disposing(com.sun.star.lang.EventObject e) {}
 
-        public void itemStateChanged(com.sun.star.awt.ItemEvent e) {
-            itemStateChangedCalled = true;
-        }
-
+        public void itemStateChanged(com.sun.star.awt.ItemEvent e) {}
     }
     private final TestActionListener actionListener = new TestActionListener();
     private final TestItemListener itemListener = new TestItemListener();
