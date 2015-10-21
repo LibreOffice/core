@@ -167,7 +167,7 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 #endif
 
 /** This is the Transitioner class for OpenGL 3D transitions in
- * slideshow. At the moment, it's Linux only. This class is implicitly
+ * slideshow. This class is implicitly
  * constructed from XTransitionFactory.
 */
 class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable, public OGLTransitionerImplBase
