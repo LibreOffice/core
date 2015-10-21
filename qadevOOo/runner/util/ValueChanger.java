@@ -960,7 +960,7 @@ public class ValueChanger {
                 newValue = clazz.newInstance();
                 Field[] fields = clazz.getFields();
                 for (int i = 0; i < fields.length; i++) {
-                    if ((fields[i].getModifiers() & Modifier.PUBLIC) != 0) {
+                    if ((fields[i].getModifiers() & Modifier.STATIC) == 0) {
                         Class<?> fType = fields[i].getType();
                         Field field = fields[i];
                         if (!fType.isPrimitive()) {
@@ -1036,6 +1036,11 @@ public class ValueChanger {
         Field[] fields = clazz.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             int mod = fields[i].getModifiers();
+            if (mod == (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL)
+                && fields[i].getName().equals("UNOTYPEINFO"))
+            {
+                continue;
+            }
             // If the field is PUBLIC it must not be STATIC or FINAL
             result &= ((mod & Modifier.PUBLIC) == 0)
                     || (((mod & Modifier.STATIC) == 0) && ((mod & Modifier.FINAL) == 0));
