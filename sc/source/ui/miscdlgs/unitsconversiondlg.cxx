@@ -75,7 +75,7 @@ void ScUnitsConversionDialog::dispose()
 
 void ScUnitsConversionDialog::Init()
 {
-    Link<> aLink = LINK( this, ScUnitsConversionDialog, GetFocusHandler );
+    Link<Control&, void> aLink = LINK( this, ScUnitsConversionDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
 
@@ -206,38 +206,34 @@ IMPL_LINK_TYPED( ScUnitsConversionDialog, OkClicked, Button*, /*pButton*/, void 
     Close();
 }
 
-IMPL_LINK( ScUnitsConversionDialog, GetFocusHandler, Control*, pCtrl )
+IMPL_LINK_TYPED( ScUnitsConversionDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     Edit* pEdit = NULL;
 
-    if( (pCtrl == mpInputRangeEdit.get()) || (pCtrl == mpInputRangeButton.get()) ) {
+    if ( ( &rCtrl == static_cast<Control*>( mpInputRangeEdit ) ) ||
+         ( &rCtrl == static_cast<Control*>( mpInputRangeButton ) ) ) {
         pEdit = mpInputRangeEdit;
     }
 
-    if( pEdit ) {
+    if ( pEdit ) {
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScUnitsConversionDialog, LoseFocusHandler )
+IMPL_LINK_NOARG_TYPED( ScUnitsConversionDialog, LoseFocusHandler, Control&, void )
 {
     mbDialogLostFocus = !IsActive();
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScUnitsConversionDialog, OutputUnitsGetFocusHandler )
+IMPL_LINK_NOARG_TYPED( ScUnitsConversionDialog, OutputUnitsGetFocusHandler, Control&, void )
 {
     // The warning box may have been enabled because of an incompatible unit,
     // however we should disable it during editing (it will then be reenabled
     // if needed once the user completes editing their desired output unit).
     mpIncompatibleOutputBox->Show( false );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScUnitsConversionDialog, OutputUnitsModified )
+IMPL_LINK_NOARG_TYPED( ScUnitsConversionDialog, OutputUnitsModified, Edit&, void )
 {
     OUString sOutputUnit = mpOutputUnitsEdit->GetText();
 
@@ -251,15 +247,11 @@ IMPL_LINK_NOARG( ScUnitsConversionDialog, OutputUnitsModified )
         mpOutputUnitsEdit->SetControlForeground( Color( COL_BLACK ) );
         mpOutputUnitsEdit->set_font_attribute( "underline", "false" );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScUnitsConversionDialog, OutputUnitsLoseFocusHandler )
+IMPL_LINK_NOARG_TYPED( ScUnitsConversionDialog, OutputUnitsLoseFocusHandler, Control&, void )
 {
     mpIncompatibleOutputBox->Show( !CheckUnitsAreConvertible() );
-
-    return 0;
 }
 
 void ScUnitsConversionDialog::PerformConversion()

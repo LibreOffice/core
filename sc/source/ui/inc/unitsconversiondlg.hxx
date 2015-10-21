@@ -85,11 +85,11 @@ private:
     void PerformConversion();
 
     DECL_LINK_TYPED( OkClicked,             Button*, void );
-    DECL_LINK( GetFocusHandler,             Control* );
-    DECL_LINK( LoseFocusHandler,            void* );
-    DECL_LINK( OutputUnitsModified,         void* );
-    DECL_LINK( OutputUnitsGetFocusHandler,  void* );
-    DECL_LINK( OutputUnitsLoseFocusHandler, void* );
+    DECL_LINK_TYPED( GetFocusHandler,       Control&, void );
+    DECL_LINK_TYPED( LoseFocusHandler,      Control&, void );
+    DECL_LINK_TYPED( OutputUnitsModified,   Edit&, void );
+    DECL_LINK_TYPED( OutputUnitsGetFocusHandler,  Control&, void );
+    DECL_LINK_TYPED( OutputUnitsLoseFocusHandler, Control&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_UNITSCONVERSIONDLG_HXX
