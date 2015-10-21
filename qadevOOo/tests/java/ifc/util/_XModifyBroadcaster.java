@@ -42,13 +42,9 @@ import com.sun.star.util.XModifyListener;
 public class _XModifyBroadcaster extends MultiMethodTest {
     public XModifyBroadcaster oObj = null;
 
-    boolean modified = false;
-
     protected class TestModifyListener implements XModifyListener {
         public void disposing ( EventObject oEvent ) {}
-        public void modified (EventObject aEvent ) {
-            modified = true;
-        }
+        public void modified (EventObject aEvent ) {}
     }
 
     private final TestModifyListener listener = new TestModifyListener();
