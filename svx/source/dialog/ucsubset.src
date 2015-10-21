@@ -1039,6 +1039,46 @@ Resource RID_SUBSETMAP
     {
         Text [ en-US ] = "Warang Citi";
     };
+    String RID_SUBSETSTR_AHOM
+    {
+        Text [ en-US ] = "Ahom";
+    };
+    String RID_SUBSETSTR_ANATOLIAN_HIEROGLYPHS
+    {
+        Text [ en-US ] = "Anatolian Hieroglyphs";
+    };
+    String RID_SUBSETSTR_CHEROKEE_SUPPLEMENT
+    {
+        Text [ en-US ] = "Cherokee Supplement";
+    };
+    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E
+    {
+        Text [ en-US ] = "CJK Unified Ideographs Extension E";
+    };
+    String RID_SUBSETSTR_EARLY_DYNASTIC_CUNEIFORM
+    {
+        Text [ en-US ] = "Early Dynastic Cuneiform";
+    };
+    String RID_SUBSETSTR_HATRAN
+    {
+        Text [ en-US ] = "Hatran";
+    };
+    String RID_SUBSETSTR_MULTANI
+    {
+        Text [ en-US ] = "Multani";
+    };
+    String RID_SUBSETSTR_OLD_HUNGARIAN
+    {
+        Text [ en-US ] = "Old Hungarian";
+    };
+    String RID_SUBSETSTR_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS
+    {
+        Text [ en-US ] = "Supplemental Symbols And Pictographs";
+    };
+    String RID_SUBSETSTR_SUTTON_SIGNWRITING
+    {
+        Text [ en-US ] = "Sutton Signwriting";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
