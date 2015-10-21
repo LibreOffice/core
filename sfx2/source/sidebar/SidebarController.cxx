@@ -174,7 +174,7 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
 {
-    pController->disposeDecks(xController);
+    pController->disposeDecks();
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
@@ -184,34 +184,11 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
             xController);
 }
 
-void SidebarController::disposeDecks(css::uno::Reference<css::frame::XController> xController)
+void SidebarController::disposeDecks()
 {
-    // clear decks
-    ResourceManager::DeckContextDescriptorContainer aDecks;
-
-    mpResourceManager->GetMatchingDecks (
-            aDecks,
-            GetCurrentContext(),
-            IsDocumentReadOnly(),
-            xController);
-
-    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-            iDeck(aDecks.begin()), iEnd(aDecks.end());
-            iDeck!=iEnd; ++iDeck)
-    {
-        const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
-        VclPtr<Deck> aDeck = deckDesc->mpDeck;
-        if (aDeck == mpCurrentDeck)
-        {
-            mpCurrentDeck.clear();
-            maFocusManager.Clear();
-        }
-        if (aDeck)
-        {
-            aDeck.disposeAndClear();
-            mpResourceManager->SetDeckToDescriptor(iDeck->msId, VclPtr<Deck>());
-        }
-    }
+    mpCurrentDeck.clear();
+    maFocusManager.Clear();
+    mpResourceManager->disposeDecks();
 }
 
 void SAL_CALL SidebarController::disposing()

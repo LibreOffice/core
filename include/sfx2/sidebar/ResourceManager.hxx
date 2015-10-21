@@ -67,6 +67,7 @@ public:
 
     void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
+    void disposeDecks();
 
     class DeckContextDescriptor
     {

@@ -649,7 +649,8 @@ bool ResourceManager::IsDeckEnabled (
 
 void ResourceManager::UpdateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr) {
+    for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr)
+    {
         if (!itr->mpDeck)
             continue;
 
@@ -661,8 +662,12 @@ void ResourceManager::UpdateModel(css::uno::Reference<css::frame::XModel> xModel
         }
 
     }
+}
 
-
+void ResourceManager::disposeDecks()
+{
+    for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr)
+        itr->mpDeck.disposeAndClear();
 }
 
 } } // end of namespace sfx2::sidebar
