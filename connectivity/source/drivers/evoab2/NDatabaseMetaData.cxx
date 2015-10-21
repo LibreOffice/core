@@ -1153,15 +1153,17 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             if (!can)
                 continue;
 
-            ODatabaseMetaDataResultSet::ORow aRow(3);
-            aRow.reserve(6);
             OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
                                                           RTL_TEXTENCODING_UTF8 );
-            aRow.push_back(new ORowSetValueDecorator(aHumanName)); //tablename
-            aRow.push_back(new ORowSetValueDecorator(aTable));
             OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
                                                           RTL_TEXTENCODING_UTF8 );
-            aRow.push_back(new ORowSetValueDecorator(aUID)); //comment
+            ODatabaseMetaDataResultSet::ORow aRow{
+                ORowSetValueDecoratorRef(),
+                ORowSetValueDecoratorRef(),
+                ORowSetValueDecoratorRef(),
+                new ORowSetValueDecorator(aHumanName), //tablename
+                new ORowSetValueDecorator(aTable),
+                new ORowSetValueDecorator(aUID)}; //comment
             //I'd prefer to swap the comment and the human name and
             //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
             //in open book rather than search for the name again
@@ -1210,11 +1212,13 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                 OUString aName = OStringToOUString( e_source_peek_name( pSource ),
                                                               RTL_TEXTENCODING_UTF8 );
 
-                ODatabaseMetaDataResultSet::ORow aRow(3);
-                aRow.reserve(6);
-                aRow.push_back(new ORowSetValueDecorator(aName));
-                aRow.push_back(new ORowSetValueDecorator(aTable));
-                aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+                ODatabaseMetaDataResultSet::ORow aRow{
+                    ORowSetValueDecoratorRef(),
+                    ORowSetValueDecoratorRef(),
+                    ORowSetValueDecoratorRef(),
+                    new ORowSetValueDecorator(aName),
+                    new ORowSetValueDecorator(aTable),
+                    ODatabaseMetaDataResultSet::getEmptyValue()};
                 aRows.push_back(aRow);
             }
         }
