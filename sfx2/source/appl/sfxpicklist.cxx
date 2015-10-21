@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <comphelper/lok.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
@@ -161,7 +162,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
 
 void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 {
-    if (pDocSh->IsAvoidRecentDocs())
+    if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
         return;
 
     SfxMedium *pMed = pDocSh->GetMedium();
@@ -196,10 +197,9 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    // generate a thumbnail
     boost::optional<OUString> aThumbnail;
-    // don't generate thumbnail when in headless mode, or on non-desktop (?)
-#if HAVE_FEATURE_DESKTOP
+
+    // generate the thumbnail
     if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
@@ -227,7 +227,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             }
         }
     }
-#endif
+
     // add to svtool history options
     SvtHistoryOptions().AppendItem( ePICKLIST,
             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
