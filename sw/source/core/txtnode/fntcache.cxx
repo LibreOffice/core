@@ -629,6 +629,12 @@ static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
     return nWidth1 == nWidth2;
 }
 
+static bool lcl_IsFullstopCentered( const vcl::RenderContext& rOut )
+{
+    const FontMetric aMetric( rOut.GetFontMetric() );
+    return aMetric.IsFullstopCentered() ;
+}
+
 /* This helper structure (SwForbidden) contains the already marked parts of the string
     to avoid double lines (e.g grammar + spell check error) */
 
@@ -1053,7 +1059,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
                         pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1224,7 +1230,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                                   (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1434,10 +1440,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), &aTmpPos );
+                               (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
+                               (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -1904,7 +1910,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( bCompress )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16)aFont.GetSize().Height() ) );
+                (sal_uInt16)aFont.GetSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
         else
             rInf.SetKanaDiff( 0 );
 
@@ -1967,7 +1973,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16) aFont.GetSize().Height() ) );
+                (sal_uInt16) aFont.GetSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
             aTextSize.Width() = pKernArray[ nLn - 1 ];
             delete[] pKernArray;
         }
@@ -2027,7 +2033,8 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
-                           (sal_uInt16) aFont.GetSize().Height() );
+                           (sal_uInt16) aFont.GetSize().Height(),
+                           lcl_IsFullstopCentered( rInf.GetOut() ) );
         }
 
         // Asian Justification
@@ -2466,7 +2473,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,
-                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ) )
+                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ,
+                            lcl_IsFullstopCentered( rInf.GetOut() ) ) )
         {
             long nKernAdd = nKern;
             sal_Int32 nTmpBreak = nTextBreak2;
