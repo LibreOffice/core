@@ -94,8 +94,7 @@ public:
         designating the SYSTEM language. Returns the same Locale if an exact
         match was found.
       */
-    static ::com::sun::star::lang::Locale getFallbackLocale(
-            const ::com::sun::star::lang::Locale & rLocale );
+    static css::lang::Locale getFallbackLocale( const css::lang::Locale & rLocale );
 
 
     // TODO: refactor to LanguageTag, used only in
@@ -129,10 +128,10 @@ public:
     static bool isKorean( LanguageType nLang );
 
     /** Whether locale is a simplified chinese locale */
-    static bool isSimplifiedChinese( const ::com::sun::star::lang::Locale & rLocale );
+    static bool isSimplifiedChinese( const css::lang::Locale & rLocale );
 
     /** Whether locale is a traditional chinese locale */
-    static bool isTraditionalChinese( const ::com::sun::star::lang::Locale & rLocale );
+    static bool isTraditionalChinese( const css::lang::Locale & rLocale );
 
     /** Whether locale is one where family name comes first, e.g. Japan, Hungary, Samoa */
     static bool isFamilyNameFirst( LanguageType nLang );
@@ -149,7 +148,7 @@ public:
     static bool needsSequenceChecking( LanguageType nLang );
 
 
-    /** Get ::com::sun::star::i18n::ScriptType of locale. */
+    /** Get css::i18n::ScriptType of locale. */
     static sal_Int16 getScriptType( LanguageType nLang );
 
     /** Whether locale is "Western" but not Latin script, e.g. Cyrillic or Greek. */
@@ -228,8 +227,8 @@ public:
         friend class LanguageTag;
         friend class LanguageTagImpl;
 
-        friend ::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
-                const ::com::sun::star::lang::Locale & rLocale );
+        friend css::lang::Locale MsLangId::getFallbackLocale(
+                const css::lang::Locale & rLocale );
 
         friend LanguageType MsLangId::convertUnxByteStringToLanguage(
                 const OString& rString );
@@ -239,19 +238,19 @@ public:
             language name designating LANGUAGE_SYSTEM.
           */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertLocaleToLanguage(
-                const ::com::sun::star::lang::Locale & rLocale );
+                const css::lang::Locale & rLocale );
 
         /** Used by convertLocaleToLanguage(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertLocaleToLanguageImpl(
-                const ::com::sun::star::lang::Locale & rLocale );
+                const css::lang::Locale & rLocale );
 
         /** Convert x-... privateuse, used by convertLocaleToLanguageImpl(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
                 const OUString& rPriv );
 
         /** Used by LanguageTag::canonicalize() */
-        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale getOverride(
-                const ::com::sun::star::lang::Locale & rLocale );
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale getOverride(
+                const css::lang::Locale & rLocale );
 
         /** Used by convertLocaleToLanguage(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
@@ -264,11 +263,11 @@ public:
 
 
         /** Used by lookupFallbackLocale(Locale) */
-        I18NLANGTAG_DLLPRIVATE static com::sun::star::lang::Locale getLocale(
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale getLocale(
                 const IsoLanguageCountryEntry * pEntry );
 
         /** Used by lookupFallbackLocale(Locale) */
-        I18NLANGTAG_DLLPRIVATE static com::sun::star::lang::Locale getLocale(
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale getLocale(
                 const IsoLanguageScriptCountryEntry * pEntry );
 
 
@@ -279,7 +278,7 @@ public:
                    If bResolveSystem==false, a LANGUAGE_SYSTEM results in an
                    empty Locale.
           */
-        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale convertLanguageToLocale(
                 LanguageType nLang, bool bResolveSystem );
 
         /** Used by convertLanguageToLocale(LanguageType,bool) and
@@ -297,11 +296,11 @@ public:
                     for that case.
          */
         I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocaleImpl(
-                LanguageType nLang, ::com::sun::star::lang::Locale & rLocale, bool bIgnoreOverride );
+                LanguageType nLang, css::lang::Locale & rLocale, bool bIgnoreOverride );
 
 
-        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
-                const ::com::sun::star::lang::Locale & rLocale );
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale lookupFallbackLocale(
+                const css::lang::Locale & rLocale );
     };
 
 private:
