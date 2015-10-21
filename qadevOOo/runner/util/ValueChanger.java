@@ -330,7 +330,8 @@ public class ValueChanger {
             if (oldValue.equals(FS5))
                 newValue = FS1;
         } else if (oldValue instanceof com.sun.star.awt.Gradient) {
-            com.sun.star.awt.Gradient _newValue = (com.sun.star.awt.Gradient) oldValue;
+            com.sun.star.awt.Gradient _newValue = copyStruct(
+                (com.sun.star.awt.Gradient) oldValue);
             _newValue.Angle += 10;
             _newValue.Border += 1;
             _newValue.EndColor += 1000;
@@ -343,7 +344,8 @@ public class ValueChanger {
             _newValue.YOffset += 10;
             newValue = _newValue;
         } else if (oldValue instanceof com.sun.star.text.GraphicCrop) {
-            com.sun.star.text.GraphicCrop _newValue = (com.sun.star.text.GraphicCrop) oldValue;
+            com.sun.star.text.GraphicCrop _newValue = copyStruct(
+                (com.sun.star.text.GraphicCrop) oldValue);
             _newValue.Bottom += 10;
             _newValue.Left += 10;
             _newValue.Right += 10;
@@ -445,7 +447,8 @@ public class ValueChanger {
             if (oldValue.equals(LJ5))
                 newValue = LJ1;
         } else if (oldValue instanceof com.sun.star.drawing.LineDash) {
-            com.sun.star.drawing.LineDash _newValue = (com.sun.star.drawing.LineDash) oldValue;
+            com.sun.star.drawing.LineDash _newValue = copyStruct(
+                (com.sun.star.drawing.LineDash) oldValue);
             _newValue.Dashes += 1;
             _newValue.DashLen += 10;
             _newValue.Distance += 20;
@@ -454,7 +457,8 @@ public class ValueChanger {
             _newValue.Style = com.sun.star.drawing.DashStyle.RECT;
             newValue = _newValue;
         } else if (oldValue instanceof com.sun.star.drawing.Hatch) {
-            com.sun.star.drawing.Hatch _newValue = (com.sun.star.drawing.Hatch) oldValue;
+            com.sun.star.drawing.Hatch _newValue = copyStruct(
+                (com.sun.star.drawing.Hatch) oldValue);
             _newValue.Angle += 10;
             _newValue.Color += 1000;
             _newValue.Distance += 10;
@@ -549,7 +553,8 @@ public class ValueChanger {
             if (oldValue.equals(RS2))
                 newValue = RS1;
         } else if (oldValue instanceof com.sun.star.awt.FontDescriptor) {
-            com.sun.star.awt.FontDescriptor _newValue = (com.sun.star.awt.FontDescriptor) oldValue;
+            com.sun.star.awt.FontDescriptor _newValue = copyStruct(
+                (com.sun.star.awt.FontDescriptor) oldValue);
             _newValue.CharacterWidth += 5;
             _newValue.CharSet = com.sun.star.awt.CharSet.ANSI;
             _newValue.Family = com.sun.star.awt.FontFamily.DECORATIVE;
@@ -601,7 +606,8 @@ public class ValueChanger {
             _newValue.FileURL = util.utils.getFullTestURL("SwXTextSection.sdw");
             newValue = _newValue;
         } else if (oldValue instanceof com.sun.star.table.BorderLine) {
-            com.sun.star.table.BorderLine _newValue = (com.sun.star.table.BorderLine) oldValue;
+            com.sun.star.table.BorderLine _newValue = copyStruct(
+                (com.sun.star.table.BorderLine) oldValue);
             _newValue.Color += 2;
             _newValue.InnerLineWidth += 2;
             _newValue.LineDistance += 2;
@@ -703,7 +709,8 @@ public class ValueChanger {
             if (oldValue.equals(GF13))
                 newValue = GF1;
         } else if (oldValue instanceof com.sun.star.table.CellAddress) {
-            com.sun.star.table.CellAddress _newValue = (com.sun.star.table.CellAddress) oldValue;
+            com.sun.star.table.CellAddress _newValue = copyStruct(
+                (com.sun.star.table.CellAddress) oldValue);
             _newValue.Column += 1;
             _newValue.Row += 1;
             newValue = _newValue;
@@ -829,7 +836,13 @@ public class ValueChanger {
                 newValue = oldValue;
 
         } else if (oldValue instanceof com.sun.star.style.TabStop[]) {
-            com.sun.star.style.TabStop[] _newValue = (com.sun.star.style.TabStop[]) oldValue;
+            com.sun.star.style.TabStop[] old = (com.sun.star.style.TabStop[])
+                oldValue;
+            com.sun.star.style.TabStop[] _newValue
+                = new com.sun.star.style.TabStop[old.length];
+            for (int i = 0; i != old.length; ++i) {
+                _newValue[i] = copyStruct(old[i]);
+            }
             if (_newValue.length == 0) {
                 _newValue = new com.sun.star.style.TabStop[1];
             }
@@ -1047,5 +1060,28 @@ public class ValueChanger {
         }
 
         return result;
+    }
+
+    private static <T> T copyStruct(T value) {
+        Class<T> clazz = (Class<T>) value.getClass();
+        T newValue;
+        try {
+            newValue = clazz.newInstance();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("unexpected " + e, e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException("unexpected " + e, e);
+        }
+        Field[] fields = clazz.getFields();
+        for (int i = 0; i != fields.length; ++i) {
+            if ((fields[i].getModifiers() & Modifier.STATIC) == 0) {
+                try {
+                    fields[i].set(newValue, fields[i].get(value));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("unexpected " + e, e);
+                }
+            }
+        }
+        return newValue;
     }
 }
