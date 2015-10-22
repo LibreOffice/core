@@ -409,6 +409,9 @@ public class StyleApplier
                                     for (int i = 0; i < 2; i++)
                                     {
                                         XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
+                                        if (xPropertySet == null) {
+                                            continue;
+                                        }
                                         setDBControlColors(xPropertySet, _iStyleColors);
                                     }
                                 }
