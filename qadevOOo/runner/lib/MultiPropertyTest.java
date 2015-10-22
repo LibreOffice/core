@@ -386,7 +386,7 @@ public class MultiPropertyTest extends MultiMethodTest
                 {
                     // if no exception thrown
                     // check that the new value is set
-                    if ((!compare(resValue, newValue)) || (compare(resValue, oldValue)))
+                    if (!compare(resValue, newValue))
                     {
                         log.println("Value for '" + propName + "' hasn't changed as expected");
                         try
