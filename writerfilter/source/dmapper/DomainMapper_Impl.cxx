@@ -81,6 +81,7 @@
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -175,8 +176,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             uno::Reference<uno::XComponentContext> const& xContext,
             uno::Reference<lang::XComponent> const& xModel,
             SourceDocumentType eDocumentType,
-            uno::Reference<text::XTextRange> const& xInsertTextRange,
-            bool bIsNewDoc) :
+            utl::MediaDescriptor& rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
@@ -227,8 +227,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
         m_aAnnotationPositions(),
-        m_xInsertTextRange(xInsertTextRange),
-        m_bIsNewDoc(bIsNewDoc),
+        m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
+        m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
         m_bHasFtnSep(false),

@@ -66,7 +66,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <filter/msfilter/util.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <TextEffectsHandler.hxx>
 #include <CellColorHandler.hxx>
@@ -99,8 +98,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     LoggedProperties("DomainMapper"),
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>()),
-        !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
+    m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
     mbIsSplitPara(false)
 {
     // #i24363# tab stops relative to indent

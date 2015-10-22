@@ -471,8 +471,7 @@ public:
             css::uno::Reference < css::uno::XComponentContext > const& xContext,
             css::uno::Reference< css::lang::XComponent > const& xModel,
             SourceDocumentType eDocumentType,
-            css::uno::Reference< css::text::XTextRange > const& xInsertTextRange,
-            bool bIsNewDoc );
+            utl::MediaDescriptor& rMediaDesc);
     virtual ~DomainMapper_Impl();
 
     SectionPropertyMap* GetLastSectionContext( )
