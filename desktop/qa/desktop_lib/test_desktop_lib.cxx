@@ -65,6 +65,7 @@ public:
     void testPaintTile();
     void testSaveAs();
     void testSaveAsCalc();
+    void testPasteWriter();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveAsCalc);
+    CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -174,7 +176,6 @@ void DesktopLOKTest::testGetStyles()
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
     }
-    closeDoc();
 }
 
 void DesktopLOKTest::testGetFonts()
@@ -194,7 +195,6 @@ void DesktopLOKTest::testGetFonts()
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( rPair.second.size() > 0);
     }
-    closeDoc();
 }
 
 void DesktopLOKTest::testCreateView()
@@ -213,7 +213,6 @@ void DesktopLOKTest::testCreateView()
 
     pDocument->m_pDocumentClass->destroyView(pDocument, nId);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
-    closeDoc();
 }
 
 void DesktopLOKTest::testGetPartPageRectangles()
@@ -236,7 +235,6 @@ void DesktopLOKTest::testGetPartPageRectangles()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
 
     free(pRectangles);
-    closeDoc();
 }
 
 void DesktopLOKTest::testGetFilterTypes()
@@ -283,7 +281,6 @@ void DesktopLOKTest::testSearchCalc()
     // Result is on the first sheet.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 
-    closeDoc();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -310,8 +307,6 @@ void DesktopLOKTest::testPaintTile()
     nTileHeight = 4000;
     aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    closeDoc();
 }
 
 void DesktopLOKTest::testSaveAs()
@@ -328,6 +323,21 @@ void DesktopLOKTest::testSaveAsCalc()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
+}
+
+void DesktopLOKTest::testPasteWriter()
+{
+    comphelper::LibreOfficeKit::setActive(true);
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    OString aText("hello");
+
+    pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength());
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", 0);
+    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", 0);
+    CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
+    free(pText);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
