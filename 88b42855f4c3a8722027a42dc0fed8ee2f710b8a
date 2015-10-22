@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_5a7475fc",
+        "filename": "include/sfx2/msg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-22T19:24:41Z",
+      "side": 1,
+      "message": "The value 21 looks odd, given that include/svl/memberid.hrc defines 22 MID_... values. Seems that 26d5cf1ecadc17e5c6aff071b8750b9fadaa1d28 already forgot to adapt the count here before.\n\nI\u0027ll fix that first and then resolve the merge conflicts on this change.",
+      "range": {
+        "startLine": 156,
+        "startChar": 14,
+        "endLine": 156,
+        "endChar": 16
+      },
+      "revId": "88b42855f4c3a8722027a42dc0fed8ee2f710b8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
