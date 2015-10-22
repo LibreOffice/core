@@ -643,9 +643,11 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             F16Dot16 t;
             ControlPoint cp;
             cp.flags = nextComponent[i].flags;
-            t = fixedMulDiv(a, nextComponent[i].x << 16, m) + fixedMulDiv(c, nextComponent[i].y << 16, m) + (e << 16);
+            const sal_uInt16 x = nextComponent[i].x;
+            const sal_uInt16 y = nextComponent[i].y;
+            t = fixedMulDiv(a, x << 16, m) + fixedMulDiv(c, y << 16, m) + (e << 16);
             cp.x = (sal_Int16)(fixedMul(t, m) >> 16);
-            t = fixedMulDiv(b, nextComponent[i].x << 16, n) + fixedMulDiv(d, nextComponent[i].y << 16, n) + (f << 16);
+            t = fixedMulDiv(b, x << 16, n) + fixedMulDiv(d, y << 16, n) + (f << 16);
             cp.y = (sal_Int16)(fixedMul(t, n) >> 16);
 
             myPoints.push_back( cp );
