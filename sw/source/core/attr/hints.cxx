@@ -145,7 +145,7 @@ SwCondCollCondChg::SwCondCollCondChg( SwFormat *pFormat )
 }
 
 SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
-    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), pPage( 0 ), pOrigPage( pPg ), pFrm( 0 )
+    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), m_pPage( 0 ), m_pOrigPage( pPg ), m_pFrm( 0 )
 {
 }
 

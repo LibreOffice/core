@@ -225,19 +225,19 @@ public:
 
 class SwVirtPageNumInfo: public SwMsgPoolItem
 {
-    const SwPageFrm *pPage;
-    const SwPageFrm *pOrigPage;
-    const SwFrm     *pFrm;
+    const SwPageFrm *m_pPage;
+    const SwPageFrm *m_pOrigPage;
+    const SwFrm     *m_pFrm;
     /** Multiple attributes can be attached to a single paragraph / table
      The frame, in the end, has to decide which attribute takes effect and which physical page it involves */
 public:
     SwVirtPageNumInfo( const SwPageFrm *pPg );
 
-    const SwPageFrm *GetPage()          { return pPage;    }
-    const SwPageFrm *GetOrigPage()      { return pOrigPage;}
-    const SwFrm *GetFrm()               { return pFrm; }
+    const SwPageFrm *GetPage()          { return m_pPage;    }
+    const SwPageFrm *GetOrigPage()      { return m_pOrigPage;}
+    const SwFrm *GetFrm()               { return m_pFrm; }
     void  SetInfo( const SwPageFrm *pPg,
-                   const SwFrm *pF )    { pFrm = pF, pPage = pPg; }
+                   const SwFrm *pF )    { m_pFrm = pF, m_pPage = pPg; }
 };
 
 class SwFindNearestNode : public SwMsgPoolItem
