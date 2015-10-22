@@ -128,83 +128,83 @@ enum CrsrMoveState
 // struct for later extensions
 struct SwCrsrMoveState
 {
-    SwFillCrsrPos   *pFill;     ///< for automatic filling with tabs etc
-    Sw2LinesPos     *p2Lines;   ///< for selections inside/around 2line portions
-    SwSpecialPos*   pSpecialPos; ///< for positions inside fields
-    Point aRealHeight;          ///< contains then the position/height of the cursor
-    CrsrMoveState eState;
-    sal_uInt8            nCursorBidiLevel;
-    bool bStop;
-    bool bRealHeight;           ///< should the real height be calculated?
-    bool bFieldInfo;            ///< should be fields recognized?
-    bool bPosCorr;              ///< Point had to be corrected
-    bool bFootnoteNoInfo;            ///< recognized footnote numbering
-    bool bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
+    SwFillCrsrPos   *m_pFill;     ///< for automatic filling with tabs etc
+    Sw2LinesPos     *m_p2Lines;   ///< for selections inside/around 2line portions
+    SwSpecialPos*   m_pSpecialPos; ///< for positions inside fields
+    Point m_aRealHeight;          ///< contains then the position/height of the cursor
+    CrsrMoveState m_eState;
+    sal_uInt8            m_nCursorBidiLevel;
+    bool m_bStop;
+    bool m_bRealHeight;           ///< should the real height be calculated?
+    bool m_bFieldInfo;            ///< should be fields recognized?
+    bool m_bPosCorr;              ///< Point had to be corrected
+    bool m_bFootnoteNoInfo;            ///< recognized footnote numbering
+    bool m_bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
                                          i.e. never let it run into GetContentPos */
-    bool bFillRet;              ///< only used temporary in FillMode
-    bool bSetInReadOnly;        ///< ReadOnly areas may be entered
-    bool bRealWidth;            ///< Calculation of the width required
-    bool b2Lines;               ///< Check 2line portions and fill p2Lines
-    bool bNoScroll;             ///< No scrolling of undersized textframes
-    bool bPosMatchesBounds;         /**< GetCrsrOfst should not return the next
+    bool m_bFillRet;              ///< only used temporary in FillMode
+    bool m_bSetInReadOnly;        ///< ReadOnly areas may be entered
+    bool m_bRealWidth;            ///< Calculation of the width required
+    bool m_b2Lines;               ///< Check 2line portions and fill p2Lines
+    bool m_bNoScroll;             ///< No scrolling of undersized textframes
+    bool m_bPosMatchesBounds;         /**< GetCrsrOfst should not return the next
                                        position if screen position is inside second
                                        have of bound rect */
 
-    bool bContentCheck;           // #i43742# Cursor position over content?
+    bool m_bContentCheck;           // #i43742# Cursor position over content?
 
     // #i27615#
     /**
        cursor in front of label
      */
-    bool bInFrontOfLabel;
-    bool bInNumPortion;         ///< point is in number portion #i23726#
-    int nInNumPostionOffset;        ///< distance from number portion's start
+    bool m_bInFrontOfLabel;
+    bool m_bInNumPortion;         ///< point is in number portion #i23726#
+    int m_nInNumPostionOffset;        ///< distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
-        pFill( NULL ),
-        p2Lines( NULL ),
-        pSpecialPos( NULL ),
-        eState( eSt ),
-        nCursorBidiLevel( 0 ),
-        bStop( false ),
-        bRealHeight( false ),
-        bFieldInfo( false ),
-        bPosCorr( false ),
-        bFootnoteNoInfo( false ),
-        bExactOnly( false ),
-        bFillRet( false ),
-        bSetInReadOnly( false ),
-        bRealWidth( false ),
-        b2Lines( false ),
-        bNoScroll( false ),
-        bPosMatchesBounds( false ),
-        bContentCheck( false ), // #i43742#
-        bInFrontOfLabel( false ), // #i27615#
-        bInNumPortion(false), // #i26726#
-        nInNumPostionOffset(0) // #i26726#
+        m_pFill( NULL ),
+        m_p2Lines( NULL ),
+        m_pSpecialPos( NULL ),
+        m_eState( eSt ),
+        m_nCursorBidiLevel( 0 ),
+        m_bStop( false ),
+        m_bRealHeight( false ),
+        m_bFieldInfo( false ),
+        m_bPosCorr( false ),
+        m_bFootnoteNoInfo( false ),
+        m_bExactOnly( false ),
+        m_bFillRet( false ),
+        m_bSetInReadOnly( false ),
+        m_bRealWidth( false ),
+        m_b2Lines( false ),
+        m_bNoScroll( false ),
+        m_bPosMatchesBounds( false ),
+        m_bContentCheck( false ), // #i43742#
+        m_bInFrontOfLabel( false ), // #i27615#
+        m_bInNumPortion(false), // #i26726#
+        m_nInNumPostionOffset(0) // #i26726#
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
-        pFill( pInitFill ),
-        p2Lines( NULL ),
-        pSpecialPos( NULL ),
-        eState( MV_SETONLYTEXT ),
-        nCursorBidiLevel( 0 ),
-        bStop( false ),
-        bRealHeight( false ),
-        bFieldInfo( false ),
-        bPosCorr( false ),
-        bFootnoteNoInfo( false ),
-        bExactOnly( false ),
-        bFillRet( false ),
-        bSetInReadOnly( false ),
-        bRealWidth( false ),
-        b2Lines( false ),
-        bNoScroll( false ),
-        bPosMatchesBounds( false ),
-        bContentCheck( false ), // #i43742#
-        bInFrontOfLabel( false ), // #i27615#
-        bInNumPortion(false), // #i23726#
-        nInNumPostionOffset(0) // #i23726#
+        m_pFill( pInitFill ),
+        m_p2Lines( NULL ),
+        m_pSpecialPos( NULL ),
+        m_eState( MV_SETONLYTEXT ),
+        m_nCursorBidiLevel( 0 ),
+        m_bStop( false ),
+        m_bRealHeight( false ),
+        m_bFieldInfo( false ),
+        m_bPosCorr( false ),
+        m_bFootnoteNoInfo( false ),
+        m_bExactOnly( false ),
+        m_bFillRet( false ),
+        m_bSetInReadOnly( false ),
+        m_bRealWidth( false ),
+        m_b2Lines( false ),
+        m_bNoScroll( false ),
+        m_bPosMatchesBounds( false ),
+        m_bContentCheck( false ), // #i43742#
+        m_bInFrontOfLabel( false ), // #i27615#
+        m_bInNumPortion(false), // #i23726#
+        m_nInNumPostionOffset(0) // #i23726#
     {}
 };
 

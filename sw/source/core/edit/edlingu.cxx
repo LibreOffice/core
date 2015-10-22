@@ -912,7 +912,7 @@ uno::Reference< XSpellAlternatives >
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = true;
+                aState.m_bRealWidth = true;
                 SwContentNode* pContentNode = pCrsr->GetContentNode();
                 SwContentFrm *pContentFrame = pContentNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 
@@ -1036,7 +1036,7 @@ bool SwEditShell::GetGrammarCorrection(
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = true;
+                aState.m_bRealWidth = true;
                 SwContentNode* pContentNode = pCrsr->GetContentNode();
                 SwContentFrm *pContentFrame = pContentNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 

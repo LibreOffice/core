@@ -1370,8 +1370,8 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = true;
-    aMoveState.bRealWidth = true;
+    aMoveState.m_bRealHeight = true;
+    aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
     SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
 
@@ -1382,7 +1382,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
          paragraph. */
     const sal_Int32 nPos = bBehindText
         ? pNode->GetText().getLength()
-        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.pSpecialPos );
+        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.m_pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
@@ -2413,8 +2413,8 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = true;
-    aMoveState.bRealWidth = true;
+    aMoveState.m_bRealHeight = true;
+    aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
     SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
 
@@ -2425,7 +2425,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
          paragraph. */
     const sal_Int32 nPos = bBehindText
         ? pNode->GetText().getLength()
-        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.pSpecialPos );
+        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.m_pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
@@ -2503,7 +2503,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     OSL_ENSURE( GetFrm()->IsTextFrm(), "The text frame has mutated!" );
     const SwTextFrm* pFrm = static_cast<const SwTextFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
-    aMoveState.bPosMatchesBounds = true;
+    aMoveState.m_bPosMatchesBounds = true;
     const bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aContentIdx = aPos.nContent;

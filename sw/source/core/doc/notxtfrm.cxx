@@ -526,10 +526,10 @@ bool SwNoTextFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 
     if ( pCMS )
     {
-        if ( pCMS->bRealHeight )
+        if ( pCMS->m_bRealHeight )
         {
-            pCMS->aRealHeight.setY(rRect.Height());
-            pCMS->aRealHeight.setX(0);
+            pCMS->m_aRealHeight.setY(rRect.Height());
+            pCMS->m_aRealHeight.setX(0);
         }
     }
 

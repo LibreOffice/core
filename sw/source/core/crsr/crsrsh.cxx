@@ -741,7 +741,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
     Point & rAktCrsrPt = pCrsr->GetPtPos();
     SwCrsrMoveState aTmpState( IsTableMode() ? MV_TBLSEL :
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
-    aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
 
     SwTextNode * pTextNd = pCrsr->GetNode().GetTextNode();
 
@@ -750,11 +750,11 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
         !pCrsr->HasMark() &&
         pTextNd->HasVisibleNumberingOrBullet() )
     {
-        aTmpState.bInFrontOfLabel = true; // #i27615#
+        aTmpState.m_bInFrontOfLabel = true; // #i27615#
     }
     else
     {
-        aTmpState.bInFrontOfLabel = false;
+        aTmpState.m_bInFrontOfLabel = false;
     }
 
     int bRet = CRSR_POSOLD |
@@ -762,11 +762,11 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
                     ? 0 : CRSR_POSCHG );
 
     const bool bOldInFrontOfLabel = IsInFrontOfLabel();
-    const bool bNewInFrontOfLabel = aTmpState.bInFrontOfLabel;
+    const bool bNewInFrontOfLabel = aTmpState.m_bInFrontOfLabel;
 
-    pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
+    pCrsr->SetCrsrBidiLevel( aTmpState.m_nCursorBidiLevel );
 
-    if( MV_RIGHTMARGIN == aTmpState.eState )
+    if( MV_RIGHTMARGIN == aTmpState.m_eState )
         m_eMvState = MV_RIGHTMARGIN;
     // is the new position in header or footer?
     SwFrm* pFrm = lcl_IsInHeaderFooter( aPos.nNode, aPt );
@@ -976,7 +976,7 @@ bool SwCrsrShell::ChgCurrPam(
     Point aPt( rPt );
 
     SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
     if ( !GetLayout()->GetCrsrOfst( &aPtPos, aPt, &aTmpState ) && bTstHit )
         return false;
 
@@ -1338,7 +1338,7 @@ void SwCrsrShell::UpdateCrsrPos()
     if( isInHiddenTextFrm(pShellCrsr) )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
-        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+        aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
         GetLayout()->GetCrsrOfst( pShellCrsr->GetPoint(), pShellCrsr->GetPtPos(),
                                      &aTmpState );
         pShellCrsr->DeleteMark();
@@ -1537,11 +1537,11 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
             }
 
             SwCrsrMoveState aTmpState( MV_NONE );
-            aTmpState.bRealHeight = true;
+            aTmpState.m_bRealHeight = true;
             if( !pTableFrm->GetCharRect( m_aCharRect, *m_pTableCrsr->GetPoint(), &aTmpState ) )
             {
                 Point aCentrPt( m_aCharRect.Center() );
-                aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+                aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
                 pTableFrm->GetCrsrOfst( m_pTableCrsr->GetPoint(), aCentrPt, &aTmpState );
                 bool const bResult =
                     pTableFrm->GetCharRect( m_aCharRect, *m_pTableCrsr->GetPoint() );
@@ -1577,7 +1577,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
             if( m_bSVCrsrVis )
             {
                 m_aCrsrHeight.setX(0);
-                m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
+                m_aCrsrHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
                                   -m_aCharRect.Width() : m_aCharRect.Height());
                 m_pVisCrsr->Show(); // show again
             }
@@ -1747,17 +1747,17 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
         } while( bAgainst );
 
         SwCrsrMoveState aTmpState( m_eMvState );
-        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-        aTmpState.bRealHeight = true;
-        aTmpState.bRealWidth = IsOverwriteCrsr();
-        aTmpState.nCursorBidiLevel = pShellCrsr->GetCrsrBidiLevel();
+        aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+        aTmpState.m_bRealHeight = true;
+        aTmpState.m_bRealWidth = IsOverwriteCrsr();
+        aTmpState.m_nCursorBidiLevel = pShellCrsr->GetCrsrBidiLevel();
 
         // #i27615#,#i30453#
         SwSpecialPos aSpecialPos;
         aSpecialPos.nExtendRange = SwSPExtendRange::BEFORE;
         if (pShellCrsr->IsInFrontOfLabel())
         {
-            aTmpState.pSpecialPos = &aSpecialPos;
+            aTmpState.m_pSpecialPos = &aSpecialPos;
         }
 
         ++mnStartAction; // tdf#91602 prevent recursive Action!
@@ -1770,11 +1770,11 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
         --mnStartAction;
 
         if( !pShellCrsr->HasMark() )
-            m_aCrsrHeight = aTmpState.aRealHeight;
+            m_aCrsrHeight = aTmpState.m_aRealHeight;
         else
         {
             m_aCrsrHeight.setX(0);
-            m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
+            m_aCrsrHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
                               -m_aCharRect.Width() : m_aCharRect.Height());
         }
 
@@ -2364,8 +2364,8 @@ bool SwCrsrShell::SetVisCrsr( const Point &rPt )
     Point aPt( rPt );
     SwPosition aPos( *m_pCurCrsr->GetPoint() );
     SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
-    aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-    aTmpState.bRealHeight = true;
+    aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.m_bRealHeight = true;
 
     const bool bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
 
@@ -2401,8 +2401,8 @@ bool SwCrsrShell::SetVisCrsr( const Point &rPt )
     }
 
     {
-        if( aTmpState.bRealHeight )
-            m_aCrsrHeight = aTmpState.aRealHeight;
+        if( aTmpState.m_bRealHeight )
+            m_aCrsrHeight = aTmpState.m_aRealHeight;
         else
         {
             m_aCrsrHeight.setX(0);
@@ -2985,7 +2985,7 @@ bool SwCrsrShell::FindValidContentNode( bool bOnlyText )
         if( !pCNd || !pCNd->getLayoutFrm( GetLayout(), 0, 0, false) )
         {
             SwCrsrMoveState aTmpState( MV_NONE );
-            aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+            aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
             GetLayout()->GetCrsrOfst( m_pCurCrsr->GetPoint(), m_pCurCrsr->GetPtPos(),
                                         &aTmpState );
         }
@@ -3100,7 +3100,7 @@ short SwCrsrShell::GetTextDirection( const Point* pPt ) const
     if( pPt )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
-        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+        aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
 
         GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
     }
@@ -3464,7 +3464,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
     Point aPt( rPt );
     SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
     SwSpecialPos aSpecialPos;
-    eTmpState.pSpecialPos = &aSpecialPos;
+    eTmpState.m_pSpecialPos = &aSpecialPos;
     SwTextNode *pNode;
     const SwWrongList *pSmartTagList;
 
@@ -3484,7 +3484,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             if ( pSubList )
             {
                 pSmartTagList = pSubList;
-                nCurrent = eTmpState.pSpecialPos->nCharOfst;
+                nCurrent = eTmpState.m_pSpecialPos->nCharOfst;
             }
 
             lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
@@ -3530,7 +3530,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             rContent = nWordStart;
             SwRect aStartRect;
             SwCrsrMoveState aState;
-            aState.bRealWidth = true;
+            aState.m_bRealWidth = true;
             SwContentNode* pContentNode = pCrsr->GetContentNode();
             SwContentFrm *pContentFrame = pContentNode->getLayoutFrm( GetLayout(), &rPt, pCrsr->GetPoint(), false);
 

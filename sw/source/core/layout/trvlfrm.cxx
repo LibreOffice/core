@@ -70,7 +70,7 @@ namespace {
 
             const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
             if ( pFly && bBackgroundMatches &&
-                 ( ( pCMS && pCMS->bSetInReadOnly ) ||
+                 ( ( pCMS && pCMS->m_bSetInReadOnly ) ||
                    !pFly->IsProtected() ) &&
                  pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
             {
@@ -78,7 +78,7 @@ namespace {
                 break;
             }
 
-            if ( pCMS && pCMS->bStop )
+            if ( pCMS && pCMS->m_bStop )
                 return false;
             aIter.Prev();
         }
@@ -150,7 +150,7 @@ bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         pFrm->Calc(pRenderContext);
 
         // #i43742# New function
-        const bool bContentCheck = pFrm->IsTextFrm() && pCMS && pCMS->bContentCheck;
+        const bool bContentCheck = pFrm->IsTextFrm() && pCMS && pCMS->m_bContentCheck;
         const SwRect aPaintRect( bContentCheck ?
                                  pFrm->UnionFrm() :
                                  pFrm->PaintArea() );
@@ -160,7 +160,7 @@ bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             bRet = true;
         else
             pFrm = pFrm->GetNext();
-        if ( pCMS && pCMS->bStop )
+        if ( pCMS && pCMS->m_bStop )
             return false;
     }
     return bRet;
@@ -208,17 +208,17 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         }
         else
         {
-            if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
+            if ( pCMS && (pCMS->m_bStop || pCMS->m_bExactOnly) )
             {
-                static_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
+                static_cast<SwCrsrMoveState*>(pCMS)->m_bStop = true;
                 return false;
             }
             const SwContentFrm *pCnt = GetContentPos( aPoint, false, false, false, pCMS, false );
-            if ( pCMS && pCMS->bStop )
+            if ( pCMS && pCMS->m_bStop )
                 return false;
 
             OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
-            if( pCMS && pCMS->pFill && pCnt->IsTextFrm() )
+            if( pCMS && pCMS->m_pFill && pCnt->IsTextFrm() )
                 bTextRet = pCnt->GetCrsrOfst( &aTextPos, rPoint, pCMS );
             else
                 bTextRet = pCnt->GetCrsrOfst( &aTextPos, aPoint, pCMS );
@@ -279,7 +279,7 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 SwCrsrMoveState aMoveState;
                 SwCrsrMoveState *const pState((pCMS) ? pCMS : &aMoveState);
                 comphelper::FlagRestorationGuard g(
-                        pState->bPosMatchesBounds, true);
+                        pState->m_bPosMatchesBounds, true);
                 SwPosition prevTextPos(*pPos);
                 SwLayoutFrm::GetCrsrOfst(&prevTextPos, aPoint, pState);
 
@@ -421,8 +421,8 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     const bool bOldAction = IsCallbackActionEnabled();
     const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( false );
     OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "No PageFrm found." );
-    if( pCMS && pCMS->pFill )
-        static_cast<SwCrsrMoveState*>(pCMS)->bFillRet = false;
+    if( pCMS && pCMS->m_pFill )
+        static_cast<SwCrsrMoveState*>(pCMS)->m_bFillRet = false;
     Point aOldPoint = rPoint;
 
     // search for page containing rPoint. The borders around the pages are considered
@@ -448,10 +448,10 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( bOldAction );
     if( pCMS )
     {
-        if( pCMS->bStop )
+        if( pCMS->m_bStop )
             return false;
-        if( pCMS->pFill )
-            return pCMS->bFillRet;
+        if( pCMS->m_pFill )
+            return pCMS->m_bFillRet;
     }
     return aOldPoint == rPoint;
 }
@@ -470,16 +470,16 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     if ( !Lower() )
         return false;
 
-    if ( !(pCMS && pCMS->bSetInReadOnly) &&
+    if ( !(pCMS && pCMS->m_bSetInReadOnly) &&
          GetFormat()->GetProtect().IsContentProtected() )
         return false;
 
-    if ( pCMS && pCMS->eState == MV_TBLSEL )
+    if ( pCMS && pCMS->m_eState == MV_TBLSEL )
     {
         const SwTabFrm *pTab = FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
         {
-            static_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
+            static_cast<SwCrsrMoveState*>(pCMS)->m_bStop = true;
             return false;
         }
     }
@@ -500,14 +500,14 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 if ( pFrm->Frm().IsInside( rPoint ) )
                 {
                     bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
-                    if ( pCMS && pCMS->bStop )
+                    if ( pCMS && pCMS->m_bStop )
                         return false;
                 }
                 pFrm = pFrm->GetNext();
             }
             if ( !bRet )
             {
-                const bool bFill = pCMS && pCMS->pFill;
+                const bool bFill = pCMS && pCMS->m_pFill;
                 Point aPoint( rPoint );
                 const SwContentFrm *pCnt = GetContentPos( rPoint, true );
                 if( bFill && pCnt->IsTextFrm() )
@@ -545,7 +545,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
     //If an Frm contains a graphic, but only text was requested, it basically
     //won't accept the Crsr.
-    if ( bInside && pCMS && pCMS->eState == MV_SETONLYTEXT &&
+    if ( bInside && pCMS && pCMS->m_eState == MV_SETONLYTEXT &&
          (!Lower() || Lower()->IsNoTextFrm()) )
         bInside = false;
 
@@ -566,7 +566,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 bRet = pFly->GetCrsrOfst( pPos, rPoint, pCMS );
                 if ( bRet )
                     break;
-                if ( pCMS && pCMS->bStop )
+                if ( pCMS && pCMS->m_bStop )
                     return false;
             }
             aIter.Next();
@@ -582,17 +582,17 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pFrm->Frm().IsInside( rPoint ) )
             {
                 bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
-                if ( pCMS && pCMS->bStop )
+                if ( pCMS && pCMS->m_bStop )
                     return false;
             }
             pFrm = pFrm->GetNext();
         }
         if ( !bRet )
         {
-            const bool bFill = pCMS && pCMS->pFill;
+            const bool bFill = pCMS && pCMS->m_pFill;
             Point aPoint( rPoint );
             const SwContentFrm *pCnt = GetContentPos( rPoint, true, false, false, pCMS );
-            if ( pCMS && pCMS->bStop )
+            if ( pCMS && pCMS->m_bStop )
                 return false;
             if( bFill && pCnt->IsTextFrm() )
             {
@@ -1213,7 +1213,7 @@ const SwContentFrm *SwLayoutFrm::GetContentPos( Point& rPoint,
                 //we search the next Content which is not protected.
                 const SwContentFrm *pComp = pContent;
                 pContent = ::lcl_MissProtectedFrames( pContent, lcl_GetNxtCnt, false,
-                                        pCMS && pCMS->bSetInReadOnly, false );
+                                        pCMS && pCMS->m_bSetInReadOnly, false );
                 if ( pComp != pContent )
                     continue;
 
@@ -1322,12 +1322,12 @@ const SwContentFrm *SwLayoutFrm::GetContentPos( Point& rPoint,
     OSL_ENSURE( !bBodyOnly || pActual->IsInDocBody(), "Content not in Body." );
 
     //Special case for selecting tables not in repeated TableHeadlines.
-    if ( pActual->IsInTab() && pCMS && pCMS->eState == MV_TBLSEL )
+    if ( pActual->IsInTab() && pCMS && pCMS->m_eState == MV_TBLSEL )
     {
         const SwTabFrm *pTab = pActual->FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
-            const_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
+            const_cast<SwCrsrMoveState*>(pCMS)->m_bStop = true;
             return 0;
         }
     }
@@ -2116,19 +2116,19 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
     } while( false );
 
     SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.b2Lines = true;
-    aTmpState.bNoScroll = true;
-    aTmpState.nCursorBidiLevel = pStartFrm->IsRightToLeft() ? 1 : 0;
+    aTmpState.m_b2Lines = true;
+    aTmpState.m_bNoScroll = true;
+    aTmpState.m_nCursorBidiLevel = pStartFrm->IsRightToLeft() ? 1 : 0;
 
     //ContentRects to Start- and EndFrms.
     SwRect aStRect, aEndRect;
     pStartFrm->GetCharRect( aStRect, *pStartPos, &aTmpState );
-    Sw2LinesPos *pSt2Pos = aTmpState.p2Lines;
-    aTmpState.p2Lines = NULL;
-    aTmpState.nCursorBidiLevel = pEndFrm->IsRightToLeft() ? 1 : 0;
+    Sw2LinesPos *pSt2Pos = aTmpState.m_p2Lines;
+    aTmpState.m_p2Lines = NULL;
+    aTmpState.m_nCursorBidiLevel = pEndFrm->IsRightToLeft() ? 1 : 0;
 
     pEndFrm->GetCharRect( aEndRect, *pEndPos, &aTmpState );
-    Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
+    Sw2LinesPos *pEnd2Pos = aTmpState.m_p2Lines;
 
     SwRect aStFrm ( pStartFrm->UnionFrm( true ) );
     aStFrm.Intersection( pStartFrm->PaintArea() );

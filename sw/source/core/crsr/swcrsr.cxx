@@ -1851,7 +1851,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 // try to position the cursor at half of the char-rect's height
                 pFrm = GetContentNode()->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
                 SwCrsrMoveState eTmpState( MV_UPDOWN );
-                eTmpState.bSetInReadOnly = bInReadOnly;
+                eTmpState.m_bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
                 pFrm->GetCharRect( aTmpRect, *GetPoint(), &eTmpState );
                 if ( pFrm->IsVertical() )

@@ -186,10 +186,10 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
     SwNodeIndex aNdIdx( *pNode );
     SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
     SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.b2Lines = true;
+    aTmpState.m_b2Lines = true;
     rTextFrm.GetCharRect( aRect, aPos, &aTmpState );
     // information about end of repaint area
-    Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
+    Sw2LinesPos* pEnd2Pos = aTmpState.m_p2Lines;
 
     const SwTextFrm *pEndFrm = &rTextFrm;
 
@@ -211,7 +211,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
         delete pEnd2Pos;
     }
 
-    aTmpState.p2Lines = NULL;
+    aTmpState.m_p2Lines = NULL;
     SwRect aTmp;
     aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
     rTextFrm.GetCharRect( aTmp, aPos, &aTmpState );
@@ -229,7 +229,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
         pEndFrm = pEndFrm->GetFollow();
 
     // information about start of repaint area
-    Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
+    Sw2LinesPos* pSt2Pos = aTmpState.m_p2Lines;
     if ( pSt2Pos )
     {
         // we are inside a special portion, take right border

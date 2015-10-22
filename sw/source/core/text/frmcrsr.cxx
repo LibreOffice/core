@@ -187,8 +187,8 @@ bool SwTextFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     //   needs to be formatted
 
     // Optimisation: reading ahead saves us a GetAdjFrmAtPos
-    const bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
-    const bool bNoScroll = pCMS && pCMS->bNoScroll;
+    const bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->m_eState );
+    const bool bNoScroll = pCMS && pCMS->m_bNoScroll;
     SwTextFrm *pFrm = GetAdjFrmAtPos( const_cast<SwTextFrm*>(this), rPos, bRightMargin,
                                      bNoScroll );
     pFrm->GetFormatted();
@@ -241,8 +241,8 @@ bool SwTextFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
         if ( pCMS )
         {
-            pCMS->aRealHeight.X() = 0;
-            pCMS->aRealHeight.Y() = bVert ? -rOrig.Width() : rOrig.Height();
+            pCMS->m_aRealHeight.X() = 0;
+            pCMS->m_aRealHeight.Y() = bVert ? -rOrig.Width() : rOrig.Height();
         }
 
         if ( pFrm->IsRightToLeft() )
@@ -297,30 +297,30 @@ bool SwTextFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         {
             if ( pFrm->IsRightToLeft() )
             {
-                if( pCMS->b2Lines && pCMS->p2Lines)
+                if( pCMS->m_b2Lines && pCMS->m_p2Lines)
                 {
-                    pFrm->SwitchLTRtoRTL( pCMS->p2Lines->aLine );
-                    pFrm->SwitchLTRtoRTL( pCMS->p2Lines->aPortion );
+                    pFrm->SwitchLTRtoRTL( pCMS->m_p2Lines->aLine );
+                    pFrm->SwitchLTRtoRTL( pCMS->m_p2Lines->aPortion );
                 }
             }
 
             if ( bVert )
             {
-                if ( pCMS->bRealHeight )
+                if ( pCMS->m_bRealHeight )
                 {
-                    pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
-                    if ( pCMS->aRealHeight.Y() < 0 )
+                    pCMS->m_aRealHeight.Y() = -pCMS->m_aRealHeight.Y();
+                    if ( pCMS->m_aRealHeight.Y() < 0 )
                     {
                         // writing direction is from top to bottom
-                        pCMS->aRealHeight.X() =  ( rOrig.Width() -
-                                                    pCMS->aRealHeight.X() +
-                                                    pCMS->aRealHeight.Y() );
+                        pCMS->m_aRealHeight.X() =  ( rOrig.Width() -
+                                                    pCMS->m_aRealHeight.X() +
+                                                    pCMS->m_aRealHeight.Y() );
                     }
                 }
-                if( pCMS->b2Lines && pCMS->p2Lines)
+                if( pCMS->m_b2Lines && pCMS->m_p2Lines)
                 {
-                    pFrm->SwitchHorizontalToVertical( pCMS->p2Lines->aLine );
-                    pFrm->SwitchHorizontalToVertical( pCMS->p2Lines->aPortion );
+                    pFrm->SwitchHorizontalToVertical( pCMS->m_p2Lines->aLine );
+                    pFrm->SwitchHorizontalToVertical( pCMS->m_p2Lines->aPortion );
                 }
             }
 
@@ -416,13 +416,13 @@ bool SwTextFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         SwTextSizeInfo aInf( pFrm );
         SwTextCursor aLine( pFrm, &aInf );
         SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
-        aTmpState.bRealHeight = true;
+        aTmpState.m_bRealHeight = true;
         if( aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY ) )
         {
-            if( aTmpState.aRealHeight.X() >= 0 )
+            if( aTmpState.m_aRealHeight.X() >= 0 )
             {
-                rOrig.Pos().Y() += aTmpState.aRealHeight.X();
-                rOrig.Height( aTmpState.aRealHeight.Y() );
+                rOrig.Pos().Y() += aTmpState.m_aRealHeight.X();
+                rOrig.Height( aTmpState.m_aRealHeight.Y() );
             }
 
             if ( pFrm->IsRightToLeft() )
@@ -526,16 +526,16 @@ struct SwFillData
         const Point& rPt ) : aFrm( rR ), pCMS( pC ), pPos( pP ), rPoint( rPt ),
         nLineWidth( 0 ), bFirstLine( true ), bInner( false ), bColumn( false ),
         bEmpty( true ){}
-    SwFillMode Mode() const { return pCMS->pFill->eMode; }
+    SwFillMode Mode() const { return pCMS->m_pFill->eMode; }
     long X() const { return rPoint.X(); }
     long Y() const { return rPoint.Y(); }
     long Left() const { return aFrm.Left(); }
     long Right() const { return aFrm.Right(); }
     long Bottom() const { return aFrm.Bottom(); }
-    SwFillCrsrPos &Fill() const { return *pCMS->pFill; }
-    void SetTab( sal_uInt16 nNew ) { pCMS->pFill->nTabCnt = nNew; }
-    void SetSpace( sal_uInt16 nNew ) { pCMS->pFill->nSpaceCnt = nNew; }
-    void SetOrient( const sal_Int16 eNew ){ pCMS->pFill->eOrient = eNew; }
+    SwFillCrsrPos &Fill() const { return *pCMS->m_pFill; }
+    void SetTab( sal_uInt16 nNew ) { pCMS->m_pFill->nTabCnt = nNew; }
+    void SetSpace( sal_uInt16 nNew ) { pCMS->m_pFill->nSpaceCnt = nNew; }
+    void SetOrient( const sal_Int16 eNew ){ pCMS->m_pFill->eOrient = eNew; }
 };
 
 bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
@@ -560,7 +560,7 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     if ( IsRightToLeft() )
         SwitchRTLtoLTR( (Point&)rPoint );
 
-    SwFillData *pFillData = ( pCMS && pCMS->pFill ) ?
+    SwFillData *pFillData = ( pCMS && pCMS->m_pFill ) ?
                         new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;
 
     if ( IsEmpty() )
@@ -568,11 +568,11 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         SwTextNode* pTextNd = const_cast<SwTextFrm*>(this)->GetTextNode();
         pPos->nNode = *pTextNd;
         pPos->nContent.Assign( pTextNd, 0 );
-        if( pCMS && pCMS->bFieldInfo )
+        if( pCMS && pCMS->m_bFieldInfo )
         {
             SwTwips nDiff = rPoint.X() - Frm().Left() - Prt().Left();
             if( nDiff > 50 || nDiff < 0 )
-                pCMS->bPosCorr = true;
+                pCMS->m_bPosCorr = true;
         }
     }
     else
@@ -596,8 +596,8 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 
         sal_Int32 nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 
-        if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
-            pCMS->eState = MV_RIGHTMARGIN;
+        if( pCMS && pCMS->m_eState == MV_NONE && aLine.GetEnd() == nOffset )
+            pCMS->m_eState = MV_RIGHTMARGIN;
 
     // pPos is a pure IN parameter and must not be evaluated.
     // pIter->GetCrsrOfst returns from a nesting with COMPLETE_STRING.
@@ -640,7 +640,7 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     if ( IsRightToLeft() && bChgFillData )
     {
             SwitchLTRtoRTL( pFillData->Fill().aCrsr.Pos() );
-            const sal_Int16 eOrient = pFillData->pCMS->pFill->eOrient;
+            const sal_Int16 eOrient = pFillData->pCMS->m_pFill->eOrient;
 
             if ( text::HoriOrientation::LEFT == eOrient )
                 pFillData->SetOrient( text::HoriOrientation::RIGHT );
@@ -657,7 +657,7 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 bool SwTextFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
-    const bool bChgFrm = !(pCMS && MV_UPDOWN == pCMS->eState);
+    const bool bChgFrm = !(pCMS && MV_UPDOWN == pCMS->m_eState);
     return _GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 }
 
@@ -1662,7 +1662,7 @@ void SwTextFrm::FillCrsrPos( SwFillData& rFill ) const
                 rRect.Width( 1 );
         }
     }
-    const_cast<SwCrsrMoveState*>(rFill.pCMS)->bFillRet = bFill;
+    const_cast<SwCrsrMoveState*>(rFill.pCMS)->m_bFillRet = bFill;
     delete pFnt;
 }
 
