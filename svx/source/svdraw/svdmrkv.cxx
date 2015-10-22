@@ -1257,10 +1257,10 @@ void SdrMarkView::CheckMarked()
 {
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetMarkedSdrObj();
-        SdrPageView* pPV=pM->GetPageView();
-        bool bRaus=!pPV->IsObjSelectable(pObj);
+        SdrMark* pM = GetSdrMarkByIndex(nm);
+        SdrObject* pObj = pM->GetMarkedSdrObj();
+        SdrPageView* pPV = pM->GetPageView();
+        bool bRaus = !pObj || !pPV->IsObjSelectable(pObj);
         if (bRaus)
         {
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
