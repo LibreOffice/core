@@ -62,9 +62,9 @@ class FragmentHandler;
 class FastParser;
 
 struct TextField {
-    com::sun::star::uno::Reference< com::sun::star::text::XText > xText;
-    com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > xTextCursor;
-    com::sun::star::uno::Reference< com::sun::star::text::XTextField > xTextField;
+    css::uno::Reference< css::text::XText >       xText;
+    css::uno::Reference< css::text::XTextCursor > xTextCursor;
+    css::uno::Reference< css::text::XTextField >  xTextField;
 };
 typedef std::vector< TextField > TextFieldStack;
 
@@ -74,8 +74,8 @@ class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
     explicit            XmlFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+                            throw( css::uno::RuntimeException );
 
     virtual             ~XmlFilterBase();
 
@@ -115,8 +115,7 @@ public:
         @return a non-empty reference to the XDocument, if the
         fragment could be imported.
      */
-    ::com::sun::star::uno::Reference<
-       ::com::sun::star::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
+    css::uno::Reference< css::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
 
     /** Imports a fragment from an xml::dom::XDocument using the
         passed fragment handler
@@ -130,8 +129,7 @@ public:
         @return true, if the fragment could be imported.
      */
     bool importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler,
-                         const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::xml::sax::XFastSAXSerializable >& rxSerializer );
+                         const css::uno::Reference< css::xml::sax::XFastSAXSerializable >& rxSerializer );
 
     /** Imports the relations fragment associated with the specified fragment.
 
@@ -164,7 +162,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const css::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
 
     /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with the real page name */
     TextFieldStack& getTextFieldStack() const;
@@ -183,7 +181,7 @@ public:
 
         @return The opened output stream.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
                         openFragmentStream(
                             const OUString& rStreamName,
                             const OUString& rMediaType );
@@ -220,7 +218,7 @@ public:
 
         @return *this
      */
-    XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
+    XmlFilterBase& exportDocumentProperties( css::uno::Reference< css::document::XDocumentProperties > xProperties );
 
     OUString getNamespaceURL( const OUString& rPrefix );
 
@@ -235,22 +233,22 @@ public:
     bool isMSO2007Document() const;
 
     void checkDocumentProperties(
-            com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> xDocProps);
+            css::uno::Reference<css::document::XDocumentProperties> xDocProps);
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    virtual css::uno::Reference< css::io::XStream >
         implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const override;
 
     virtual bool implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor ) override;
 
 private:
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const override;
+                            const css::uno::Reference< css::io::XInputStream >& rxInStream ) const override;
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const override;
+                            const css::uno::Reference< css::io::XStream >& rxOutStream ) const override;
 
 private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;

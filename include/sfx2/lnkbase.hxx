@@ -91,8 +91,8 @@ protected:
     ImplBaseLinkData* pImplData;
 
     bool            m_bIsReadOnly;
-    com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
-                        m_xInputStreamToLoadFrom;
+    css::uno::Reference<css::io::XInputStream>
+                    m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
                     SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
@@ -131,7 +131,7 @@ public:
     };
 
     virtual UpdateResult DataChanged(
-        const OUString & rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString & rMimeType, const css::uno::Any & rValue );
 
     void                 SetUpdateMode( SfxLinkUpdateMode );
     SfxLinkUpdateMode    GetUpdateMode() const;
@@ -157,7 +157,7 @@ public:
     void            SetUseCache( bool bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
-                        const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,
+                        const css::uno::Reference<css::io::XInputStream>& xInputStream,
                         bool bIsReadOnly )
                             { m_xInputStreamToLoadFrom = xInputStream;
                               m_bIsReadOnly = bIsReadOnly; }

@@ -84,11 +84,11 @@ public:
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
 
     bool saveTemplateAs (sal_uInt16 nItemId,
-                         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                         css::uno::Reference<css::frame::XModel> &rModel,
                          const OUString &rName);
 
     bool saveTemplateAs (TemplateContainerItem *pDstItem,
-                         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                         css::uno::Reference<css::frame::XModel> &rModel,
                          const OUString &rName);
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;

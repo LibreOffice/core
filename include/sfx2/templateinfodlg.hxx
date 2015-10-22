@@ -44,8 +44,8 @@ private:
     VclPtr<vcl::Window>  mpPreviewView;  // gets released when xWindows get destroyed (don't delete in constructor)
     VclPtr<svtools::ODocumentInfoPreview> mpInfoView;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
+    css::uno::Reference < css::frame::XFrame2 > m_xFrame;
+    css::uno::Reference< css::awt::XWindow >    xWindow;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEINFODLG_HXX

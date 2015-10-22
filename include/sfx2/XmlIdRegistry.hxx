@@ -52,10 +52,9 @@ class SFX2_DLLPUBLIC IXmlIdRegistry
 public:
     virtual ~IXmlIdRegistry() { }
 
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XMetadatable >
+    virtual css::uno::Reference< css::rdf::XMetadatable >
         GetElementByMetadataReference(
-            const ::com::sun::star::beans::StringPair & i_rXmlId) const = 0;
+            const css::beans::StringPair & i_rXmlId) const = 0;
 
 };
 

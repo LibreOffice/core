@@ -55,14 +55,14 @@ class SlidePersist : public std::enable_shared_from_this< SlidePersist >
 
 public:
     SlidePersist( oox::core::XmlFilterBase& rFilter, bool bMaster, bool bNotes,
-                    const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >&,
+                    const css::uno::Reference< css::drawing::XDrawPage >&,
                     oox::drawingml::ShapePtr pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
 
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    getPage() const { return mxPage; };
+    css::uno::Reference< css::drawing::XDrawPage >    getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
-    static com::sun::star::uno::WeakReference< com::sun::star::drawing::XDrawPage > mxDebugPage;
+    static css::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
 #endif
 
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
@@ -109,7 +109,7 @@ public:
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 
-    std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
+    std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
     ::oox::drawingml::ShapePtr getShape( const OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 
@@ -117,10 +117,10 @@ public:
     CommentAuthorList& getCommentAuthors() { return maCommentAuthors; }
 
 private:
-    OUString                                                           maPath;
-    OUString                                                           maLayoutPath;
-    std::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    mxPage;
+    OUString                                                                maPath;
+    OUString                                                                maLayoutPath;
+    std::shared_ptr< oox::vml::Drawing >                                    mpDrawingPtr;
+    css::uno::Reference< css::drawing::XDrawPage >                          mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
     oox::drawingml::ClrSchemePtr                                            mpClrSchemePtr;     // the local color scheme (if any)
     oox::drawingml::ClrMapPtr                                               mpClrMapPtr;        // color mapping (if any)
@@ -129,7 +129,7 @@ private:
     oox::drawingml::ShapePtr                                                maShapesPtr;
     oox::drawingml::Color                                                   maBackgroundColor;
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
-    ::std::list< std::shared_ptr< TimeNode > >                            maTimeNodeList;
+    ::std::list< std::shared_ptr< TimeNode > >                              maTimeNodeList;
 
     oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;
@@ -142,8 +142,8 @@ private:
     oox::drawingml::TextListStylePtr                                        maNotesTextStylePtr;
     oox::drawingml::TextListStylePtr                                        maOtherTextStylePtr;
 
-    std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > > maAnimNodesMap;
-    std::map< OUString, ::oox::drawingml::ShapePtr > maShapeMap;
+    std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > > maAnimNodesMap;
+    std::map< OUString, ::oox::drawingml::ShapePtr >                        maShapeMap;
 
     // slide comments
     CommentList                                                             maCommentsList;

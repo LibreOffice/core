@@ -151,7 +151,7 @@ class SFX2_DLLPUBLIC SfxChildWindow
     VclPtr<vcl::Window>        pParent;        // parent window ( Topwindow )
     sal_uInt16                 nType;          // ChildWindow-Id
     VclPtr<vcl::Window>        pWindow;         // actual contents
-    SfxChildAlignment          eChildAlignment; // Current ::com::sun::star::drawing::Alignment
+    SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
     SfxChildWindow_Impl*       pImp;            // Implementation data
     SfxChildWindowContext*     pContext;        // With context-sensitive ChildWindows:
                                                  // Annother window in pWindow

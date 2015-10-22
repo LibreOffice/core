@@ -51,38 +51,38 @@ namespace vml {
     3)  Line breaks represented by a single <br> element (without matching
         </br> element) are replaced by a literal LF character.
  */
-class InputStream : public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream >
+class InputStream : public ::cppu::WeakImplHelper< css::io::XInputStream >
 {
 public:
     explicit            InputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStrm );
     virtual             ~InputStream();
 
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available()
-                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                        throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput()
-                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                        throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 private:
-    void                updateBuffer() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    OString      readToElementBegin() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    OString      readToElementEnd() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void                updateBuffer() throw (css::io::IOException, css::uno::RuntimeException);
+    OString      readToElementBegin() throw (css::io::IOException, css::uno::RuntimeException);
+    OString      readToElementEnd() throw (css::io::IOException, css::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >
+    css::uno::Reference< css::io::XTextInputStream2 >
                         mxTextStrm;
-    ::com::sun::star::uno::Sequence< sal_Unicode > maOpeningBracket;
-    ::com::sun::star::uno::Sequence< sal_Unicode > maClosingBracket;
-    const OString maOpeningCData;
-    const OString maClosingCData;
-    OString      maBuffer;
+    css::uno::Sequence< sal_Unicode > maOpeningBracket;
+    css::uno::Sequence< sal_Unicode > maClosingBracket;
+    const OString       maOpeningCData;
+    const OString       maClosingCData;
+    OString             maBuffer;
     sal_Int32           mnBufferPos;
 };
 

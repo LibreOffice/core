@@ -43,7 +43,7 @@ struct UnknownAttribute
     UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value );
     UnknownAttribute( const OString& rName, const OString& value );
 
-    void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
+    void FillAttribute( css::xml::Attribute* pAttrib ) const;
 };
 
 typedef std::vector< UnknownAttribute > UnknownAttributeList;
@@ -71,10 +71,10 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
                          const char *pStr, size_t nLength = 0 );
 };
 
-class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< css::xml::sax::XFastAttributeList >
 {
 public:
-    FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler,
+    FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
                        FastTokenHandlerBase *pOptHandlerBase = NULL );
     virtual ~FastAttributeList();
 
@@ -95,13 +95,13 @@ public:
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
 
     // XFastAttributeList
-    virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
@@ -112,7 +112,7 @@ private:
     std::vector< sal_Int32 > maAttributeValues;
     std::vector< sal_Int32 > maAttributeTokens;
     UnknownAttributeList maUnknownAttributes;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxTokenHandler;
+    css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
     FastTokenHandlerBase *mpTokenHandler;
 };
 

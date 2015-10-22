@@ -37,8 +37,8 @@ namespace core {
     that provides access to the tokens generated from the internal token name list.
  */
 class OOX_DLLPUBLIC FastTokenHandler :
-    public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,
-                                    ::com::sun::star::xml::sax::XFastTokenHandler >,
+    public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                   css::xml::sax::XFastTokenHandler >,
     public sax_fastparser::FastTokenHandlerBase
 {
 public:
@@ -46,13 +46,13 @@ public:
     virtual             ~FastTokenHandler();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // XFastTokenHandler
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Much faster direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;

@@ -133,7 +133,7 @@ public:
             of this wrapper or when close() is called.
      */
     explicit            BinaryXOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
+                            const css::uno::Reference< css::io::XOutputStream >& rxOutStrm,
                             bool bAutoClose );
 
     virtual             ~BinaryXOutputStream();
@@ -150,7 +150,7 @@ public:
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in writeMemory() function.
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
                         mxOutStrm;      ///< Reference to the output stream.
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };

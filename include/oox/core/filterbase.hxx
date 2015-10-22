@@ -81,19 +81,19 @@ enum OoxmlVersion
 struct FilterBaseImpl;
 
 typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::document::XImporter,
-        ::com::sun::star::document::XExporter,
-        ::com::sun::star::document::XFilter >
+        css::lang::XServiceInfo,
+        css::lang::XInitialization,
+        css::document::XImporter,
+        css::document::XExporter,
+        css::document::XFilter >
     FilterBase_BASE;
 
 class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+                            throw( css::uno::RuntimeException );
 
     virtual             ~FilterBase();
 
@@ -113,27 +113,27 @@ public:
 
 
     /** Returns the component context passed in the filter constructor (always existing). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+    const css::uno::Reference< css::uno::XComponentContext >&
                         getComponentContext() const;
 
     /** Returns the document model (always existing). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
+    const css::uno::Reference< css::frame::XModel >&
                         getModel() const;
 
     /** Returns the service factory provided by the document model (always existing). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+    const css::uno::Reference< css::lang::XMultiServiceFactory >&
                         getModelFactory() const;
 
     /** Returns the frame that will contain the document model (may be null). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+    const css::uno::Reference< css::frame::XFrame >&
                         getTargetFrame() const;
 
     /// Returns the parent shape to load into (if any)
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&
+    const css::uno::Reference< css::drawing::XShape >&
                         getParentShape() const;
 
     /** Returns the status indicator (may be null). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
+    const css::uno::Reference< css::task::XStatusIndicator >&
                         getStatusIndicator() const;
 
     /** Returns the FilterData */
@@ -159,7 +159,7 @@ public:
             access has been enabled in the storage, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
                         openInputStream( const OUString& rStreamName ) const;
 
     /** Opens and returns the specified output stream from the base storage.
@@ -170,7 +170,7 @@ public:
             access has been enabled in the storage, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
                         openOutputStream( const OUString& rStreamName ) const;
 
     /** Commits changes to base storage (and substorages) */
@@ -199,11 +199,11 @@ public:
 
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rServiceName )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
                         getSupportedServiceNames()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
@@ -218,49 +218,49 @@ public:
             filter implementations may support different arguments.
      */
     virtual void SAL_CALL initialize(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw(  ::com::sun::star::uno::Exception,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Sequence< css::uno::Any >& rArgs )
+                            throw(  css::uno::Exception,
+                                    css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XImporter interface ------------------------------
 
     virtual void SAL_CALL setTargetDocument(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxDocument )
-                            throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Reference< css::lang::XComponent >& rxDocument )
+                            throw(  css::lang::IllegalArgumentException,
+                                    css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XExporter interface ------------------------------
 
     virtual void SAL_CALL setSourceDocument(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxDocument )
-                            throw(  ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Reference< css::lang::XComponent >& rxDocument )
+                            throw(  css::lang::IllegalArgumentException,
+                                    css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.document.XFilter interface --------------------------------
 
     virtual sal_Bool SAL_CALL filter(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq )
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL cancel()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
     bool exportVBA() const;
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
                         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    virtual css::uno::Reference< css::io::XStream >
                         implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const;
 
     virtual bool        implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    css::uno::Reference< css::io::XStream >
                         getMainDocumentStream( ) const;
 
 private:
     void                setMediaDescriptor(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq );
+                            const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq );
 
     /** Derived classes may create a specialized graphic helper, e.g. for
         resolving palette colors. */
@@ -270,9 +270,9 @@ private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
 
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const = 0;
+                            const css::uno::Reference< css::io::XInputStream >& rxInStream ) const = 0;
     virtual StorageRef  implCreateStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
+                            const css::uno::Reference< css::io::XStream >& rxOutStream ) const = 0;
 
 private:
     std::unique_ptr< FilterBaseImpl > mxImpl;

@@ -152,8 +152,8 @@ namespace ConversionHelper
         @param rGraphicHelper  See above.
     */
     OOX_DLLPUBLIC void         decodeVmlPath(
-                            ::std::vector< ::std::vector< ::com::sun::star::awt::Point > >& rPoints,
-                            ::std::vector< ::std::vector< ::com::sun::star::drawing::PolygonFlags > >& rFlags,
+                            ::std::vector< ::std::vector< css::awt::Point > >& rPoints,
+                            ::std::vector< ::std::vector< css::drawing::PolygonFlags > >& rFlags,
                             const OUString& rPath );
 }
 
@@ -244,7 +244,7 @@ struct OOX_DLLPUBLIC TextpathModel
     TextpathModel();
 
     /** Writes the properties to the passed property map. */
-    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, css::uno::Reference<css::drawing::XShape> xShape) const;
 };
 
 } // namespace vml

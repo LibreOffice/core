@@ -56,18 +56,18 @@ class OleObjectHelper
 {
 public:
     explicit            OleObjectHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory );
                         ~OleObjectHelper();
 
     bool                importOleObject(
                             PropertyMap& rPropMap,
                             const OleObjectInfo& rOleObject,
-                            const ::com::sun::star::awt::Size& rObjSize );
+                            const css::awt::Size& rObjSize );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxResolver;
-    const OUString maEmbeddedObjScheme;
-    sal_Int32           mnObjectId;
+    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxResolver;
+    const OUString                                                maEmbeddedObjScheme;
+    sal_Int32                                                     mnObjectId;
 };
 
 

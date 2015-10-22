@@ -56,13 +56,13 @@ friend class SfxInPlaceClient_Impl;
     SAL_DLLPRIVATE virtual void ViewChanged();
 
 public:
-                        SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = com::sun::star::embed::Aspects::MSOLE_CONTENT );
+                        SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
     virtual             ~SfxInPlaceClient();
 
     SfxViewShell*       GetViewShell() const { return m_pViewSh; }
     vcl::Window*             GetEditWin() const { return m_pEditWin; }
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject() const;
-    void                SetObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rObject );
+    css::uno::Reference < css::embed::XEmbeddedObject > GetObject() const;
+    void                SetObject( const css::uno::Reference < css::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );
     bool                IsObjectUIActive() const;
     bool                IsObjectInPlaceActive() const;
@@ -75,7 +75,7 @@ public:
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();
-    static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
+    static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
     sal_Int64           GetObjectMiscStatus() const;
     ErrCode             DoVerb( long nVerb );

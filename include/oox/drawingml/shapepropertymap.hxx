@@ -109,33 +109,33 @@ public:
     bool                hasNamedLineMarkerInTable( const OUString& rMarkerName ) const;
 
     /** Sets the specified shape property to the passed value. */
-    bool                setAnyProperty( ShapePropertyId ePropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setAnyProperty( ShapePropertyId ePropId, const css::uno::Any& rValue );
 
     /** Sets the specified shape property to the passed value. */
     template< typename Type >
     bool         setProperty( ShapePropertyId ePropId, const Type& rValue )
-                            { return setAnyProperty( ePropId, ::com::sun::star::uno::Any( rValue ) ); }
+                            { return setAnyProperty( ePropId, css::uno::Any( rValue ) ); }
 
     using PropertyMap::setAnyProperty;
     using PropertyMap::setProperty;
 
 private:
     /** Sets an explicit line marker, or creates a named line marker. */
-    bool                setLineMarker( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setLineMarker( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit line dash, or creates a named line dash. */
-    bool                setLineDash( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setLineDash( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill gradient, or creates a named fill gradient. */
-    bool                setFillGradient( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setFillGradient( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Creates a named transparency gradient. */
-    bool                setGradientTrans( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setGradientTrans( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
-    bool                setFillBitmapUrl( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setFillBitmapUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL and pushes the name to FillBitmapName */
-    bool                setFillBitmapNameFromUrl( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setFillBitmapNameFromUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
-    ::com::sun::star::uno::Any& operator[]( ShapePropertyId ePropId );
-    const ::com::sun::star::uno::Any& operator[]( ShapePropertyId ePropId ) const;
+    css::uno::Any& operator[]( ShapePropertyId ePropId );
+    const css::uno::Any& operator[]( ShapePropertyId ePropId ) const;
 
 private:
     ModelObjectHelper&  mrModelObjHelper;

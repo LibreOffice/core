@@ -175,8 +175,8 @@ public:
     static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
                                 { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), i_args, i_ret ); }
     static BasicManager*        GetBasicManager();
-    com::sun::star::script::XLibraryContainer * GetDialogContainer();
-    com::sun::star::script::XLibraryContainer * GetBasicContainer();
+    css::script::XLibraryContainer * GetDialogContainer();
+    css::script::XLibraryContainer * GetBasicContainer();
     static StarBASIC*           GetBasic();
     sal_uInt16                  SaveBasicAndDialogContainer() const;
 

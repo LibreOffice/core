@@ -89,14 +89,14 @@ typedef std::shared_ptr< TableProperties > TablePropertiesPtr;
 
 
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
-com::sun::star::awt::Point GetPointPercent( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs );
+css::awt::Point GetPointPercent( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs );
 
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100th mm */
-com::sun::star::awt::Size GetSize2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
+css::awt::Size GetSize2D( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
-com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
+css::geometry::IntegerRectangle2D GetRelativeRect( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue );
@@ -118,7 +118,7 @@ sal_Int32 GetTextSpacingPoint(  const OUString& sValue );
 sal_Int32 GetTextSpacingPoint(  const sal_Int32 nValue );
 
 /** */
-::com::sun::star::style::TabAlign GetTabAlign( ::sal_Int32 aToken );
+css::style::TabAlign GetTabAlign( ::sal_Int32 aToken );
 
 float GetFontHeight( sal_Int32 nHeight );
 
@@ -132,13 +132,13 @@ sal_Int16 GetCaseMap( sal_Int32 nToken );
 sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 
 // Converts vertical adjust tokens to a TextVerticalAdjust item
-::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
+css::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
 // Converts a TextVerticalAdjust item to string value appearing in ooxml
-OOX_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
+OOX_DLLPUBLIC const char* GetTextVerticalAdjust( css::drawing::TextVerticalAdjust eAdjust );
 
 // Converts a Hatch object to an ooxml pattern.
-const char* GetHatchPattern( const ::com::sun::star::drawing::Hatch& rHatch );
+const char* GetHatchPattern( const css::drawing::Hatch& rHatch );
 
 
 
@@ -149,7 +149,7 @@ struct IndexRange {
 };
 
 /** retrieve the content of CT_IndexRange */
-IndexRange GetIndexRange( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
+IndexRange GetIndexRange( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 
 

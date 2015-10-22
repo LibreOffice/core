@@ -73,10 +73,10 @@ class OOX_DLLPUBLIC AttributeList
 {
 public:
     explicit            AttributeList(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Returns the wrapped com.sun.star.xml.sax.XFastAttributeList object. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >
+    css::uno::Reference< css::xml::sax::XFastAttributeList >
                         getFastAttributeList() const { return mxAttribs; }
 
     /** Returns true, if the specified attribute is present. */
@@ -113,7 +113,7 @@ public:
     OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
 
     /** Returns the date/time value of the specified attribute. */
-    OptValue< ::com::sun::star::util::DateTime > getDateTime( sal_Int32 nAttrToken ) const;
+    OptValue< css::util::DateTime > getDateTime( sal_Int32 nAttrToken ) const;
 
     // defaulted return values ------------------------------------------------
 
@@ -160,10 +160,10 @@ public:
 
     /** Returns the date/time value of the specified attribute, or the default
         value if the attribute is missing or not convertible to a date/time value. */
-    ::com::sun::star::util::DateTime getDateTime( sal_Int32 nAttrToken, const ::com::sun::star::util::DateTime& rDefault ) const;
+    css::util::DateTime getDateTime( sal_Int32 nAttrToken, const css::util::DateTime& rDefault ) const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >
+    css::uno::Reference< css::xml::sax::XFastAttributeList >
                         mxAttribs;
     mutable sax_fastparser::FastAttributeList *mpAttribList;
     sax_fastparser::FastAttributeList *getAttribList() const;

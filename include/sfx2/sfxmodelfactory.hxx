@@ -56,12 +56,12 @@ namespace sfx2
         factory evaluates certain creation arguments (passed to createInstanceWithArguments)
         and passes them to the factory function of the derived class.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+    css::uno::Reference< css::lang::XSingleServiceFactory >
         SFX2_DLLPUBLIC createSfxModelFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxServiceFactory,
             const OUString& _rImplementationName,
             const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames
+            const css::uno::Sequence< OUString >& _rServiceNames
         );
 
 

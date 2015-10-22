@@ -40,8 +40,8 @@ class ShapeBase;
 
 struct ShapeParentAnchor
 {
-    ::com::sun::star::awt::Rectangle maShapeRect;
-    ::com::sun::star::awt::Rectangle maCoordSys;
+    css::awt::Rectangle maShapeRect;
+    css::awt::Rectangle maCoordSys;
 };
 
 
@@ -104,7 +104,7 @@ public:
 
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
 private:

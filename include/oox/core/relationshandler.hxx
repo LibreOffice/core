@@ -34,11 +34,11 @@ public:
                             XmlFilterBase& rFilter,
                             RelationsRef xRelations );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
 private:
     RelationsRef        mxRelations;

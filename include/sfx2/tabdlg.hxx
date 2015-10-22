@@ -267,8 +267,8 @@ public:
     virtual void ChangesApplied();
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
 
-    void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();
+    void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
+    css::uno::Reference< css::frame::XFrame > GetFrame();
 };
 
 #endif

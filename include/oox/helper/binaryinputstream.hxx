@@ -254,7 +254,7 @@ public:
             of this wrapper or when close() is called.
      */
     explicit            BinaryXInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             bool bAutoClose );
 
     virtual             ~BinaryXInputStream();
@@ -277,7 +277,7 @@ public:
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
                         mxInStrm;       ///< Reference to the input stream.
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };

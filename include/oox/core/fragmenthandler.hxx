@@ -43,8 +43,8 @@ namespace core {
 struct FragmentBaseData
 {
     XmlFilterBase&      mrFilter;
-    const OUString maFragmentPath;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >
+    const OUString      maFragmentPath;
+    css::uno::Reference< css::xml::sax::XLocator >
                         mxLocator;
     RelationsRef        mxRelations;
 
@@ -74,7 +74,7 @@ struct RecordInfo
 
 
 
-typedef ::cppu::ImplInheritanceHelper< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
+typedef ::cppu::ImplInheritanceHelper< ContextHandler, css::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
 
 class OOX_DLLPUBLIC FragmentHandler : public FragmentHandler_BASE
 {
@@ -83,30 +83,30 @@ public:
     virtual             ~FragmentHandler();
 
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
+    css::uno::Reference< css::xml::sax::XFastContextHandler >
                         getFastContextHandler() { return static_cast< ContextHandler* >( this ); }
 
     // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 
-    virtual void SAL_CALL startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& rxLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& rxLocator ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     // XML stream handling ----------------------------------------------------
 
     /** Opens the fragment stream referred by the own fragment path. Derived
         classes may provide specilized stream implementations. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
                         openFragmentStream() const;
 
     // binary records ---------------------------------------------------------

@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-typedef ::com::sun::star::uno::Sequence< sal_Int8 > StreamDataSequence;
+typedef css::uno::Sequence< sal_Int8 > StreamDataSequence;
 
 
 
@@ -138,10 +138,10 @@ public:
 
 protected:
     explicit            BinaryXSeekableStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >& rxSeekable );
+                            const css::uno::Reference< css::io::XSeekable >& rxSeekable );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >
+    css::uno::Reference< css::io::XSeekable >
                         mxSeekable;     ///< Stream seeking interface.
 };
 

@@ -109,11 +109,11 @@ public:
 
     static OUString GetTypeFromStorage( const SotStorage& rStg );
     static OUString GetTypeFromStorage(
-        const com::sun::star::uno::Reference<com::sun::star::embed::XStorage>& xStorage,
+        const css::uno::Reference<css::embed::XStorage>& xStorage,
         bool bTemplate = false, OUString* pName = NULL )
-            throw ( com::sun::star::beans::UnknownPropertyException,
-                    com::sun::star::lang::WrappedTargetException,
-                    com::sun::star::uno::RuntimeException,
+            throw ( css::beans::UnknownPropertyException,
+                    css::lang::WrappedTargetException,
+                    css::uno::RuntimeException,
                     std::exception );
 };
 

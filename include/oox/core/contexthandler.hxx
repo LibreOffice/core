@@ -48,7 +48,7 @@ typedef ::rtl::Reference< ContextHandler > ContextHandlerRef;
 struct FragmentBaseData;
 typedef std::shared_ptr< FragmentBaseData > FragmentBaseDataRef;
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XFastContextHandler > ContextHandler_BASE;
+typedef ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler > ContextHandler_BASE;
 
 class OOX_DLLPUBLIC ContextHandler : public ContextHandler_BASE
 {
@@ -73,13 +73,13 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     // record context interface -----------------------------------------------
 
@@ -91,7 +91,7 @@ protected:
     /** Helper constructor for the FragmentHandler. */
     explicit            ContextHandler( const FragmentBaseDataRef& rxBaseData );
 
-    void                implSetLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& rxLocator );
+    void                implSetLocator( const css::uno::Reference< css::xml::sax::XLocator >& rxLocator );
 
 #ifdef _MSC_VER
     ContextHandler() {} // workaround

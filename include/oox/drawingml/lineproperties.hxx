@@ -62,9 +62,9 @@ struct OOX_DLLPUBLIC LineProperties
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Calculates the line style attribute from the internal state of the object */
-    ::com::sun::star::drawing::LineStyle  getLineStyle() const;
+    css::drawing::LineStyle  getLineStyle() const;
     /** Calculates the line joint attribute from the internal state of the object */
-    ::com::sun::star::drawing::LineJoint  getLineJoint() const;
+    css::drawing::LineJoint  getLineJoint() const;
     /** Calculates the line width attribute from the internal state of the object */
     sal_Int32           getLineWidth() const;
 };

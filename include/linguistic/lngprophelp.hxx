@@ -51,19 +51,17 @@ namespace linguistic
 
 typedef cppu::WeakImplHelper
 <
-    ::com::sun::star::beans::XPropertyChangeListener,
-    ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster
+    css::beans::XPropertyChangeListener,
+    css::linguistic2::XLinguServiceEventBroadcaster
 > PropertyChgHelperBase;
 
 class PropertyChgHelper :
     public PropertyChgHelperBase
 {
-    ::com::sun::star::uno::Sequence< OUString >  aPropNames;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >             xMyEvtObj;
+    css::uno::Sequence< OUString >                      aPropNames;
+    css::uno::Reference< css::uno::XInterface >         xMyEvtObj;
     ::cppu::OInterfaceContainerHelper                   aLngSvcEvtListeners;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         xPropSet;
+    css::uno::Reference< css::beans::XPropertySet >     xPropSet;
 
     int     nEvtFlags;  // flags for event types allowed to be launched
 
@@ -82,63 +80,55 @@ protected:
     virtual void    SetDefaultValues();
     virtual void    GetCurrentValues();
 
-    ::com::sun::star::uno::Sequence< OUString > &
+    css::uno::Sequence< OUString > &
             GetPropNames()  { return aPropNames; }
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > &
+    css::uno::Reference<
+        css::beans::XPropertySet > &
             GetPropSet()    { return xPropSet; }
 
     void    AddPropNames( const char *pNewNames[], sal_Int32 nCount );
 
-    virtual bool    propertyChange_Impl(
-                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
+    virtual bool    propertyChange_Impl( const css::beans::PropertyChangeEvent& rEvt );
 
 public:
     PropertyChgHelper(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet,
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet,
             int nAllowedEvents );
     virtual ~PropertyChgHelper();
 
-    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
 
     // XEventListener
     virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& rSource )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing( const css::lang::EventObject& rSource )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
-        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        propertyChange( const css::beans::PropertyChangeEvent& rEvt )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XLinguServiceEventBroadcaster
     virtual sal_Bool SAL_CALL
         addLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         removeLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // non-UNO functions
     void    LNG_DLLPUBLIC AddAsPropListener();
     void    LNG_DLLPUBLIC RemoveAsPropListener();
-    void    LaunchEvent(
-                const ::com::sun::star::linguistic2::LinguServiceEvent& rEvt );
+    void    LaunchEvent( const css::linguistic2::LinguServiceEvent& rEvt );
 
-    const ::com::sun::star::uno::Sequence< OUString > &
+    const css::uno::Sequence< OUString > &
             GetPropNames() const    { return aPropNames; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > &
+    const css::uno::Reference< css::beans::XPropertySet > &
             GetPropSet() const      { return xPropSet; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface > &
+    const css::uno::Reference< css::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
 };
 
@@ -151,22 +141,20 @@ class PropertyHelper_Thes :
 
 public:
     PropertyHelper_Thes(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
     virtual ~PropertyHelper_Thes();
 
     // XPropertyChangeListener
     virtual void SAL_CALL
-        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        propertyChange( const css::beans::PropertyChangeEvent& rEvt )
+            throw(css::uno::RuntimeException, std::exception) override;
 };
 
 class LNG_DLLPUBLIC PropertyHelper_Thesaurus
 {
     PropertyHelper_Thes* pInst;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+    css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
     PropertyHelper_Thesaurus( const PropertyHelper_Thes & );
@@ -174,14 +162,12 @@ class LNG_DLLPUBLIC PropertyHelper_Thesaurus
 
 public:
     PropertyHelper_Thesaurus(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
     ~PropertyHelper_Thesaurus();
     void    AddAsPropListener();
     void    RemoveAsPropListener();
-    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    void SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
 };
 
 
@@ -207,22 +193,20 @@ protected:
     virtual void    SetDefaultValues() override;
     virtual void    GetCurrentValues() override;
     virtual bool    propertyChange_Impl(
-                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) override;
+                            const css::beans::PropertyChangeEvent& rEvt ) override;
 
 public:
     PropertyHelper_Spell(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
     virtual ~PropertyHelper_Spell();
 
-    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals ) override;
+    virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
-        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        propertyChange( const css::beans::PropertyChangeEvent& rEvt )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     static sal_Int16 GetDefaultNumberOfSuggestions() { return 16; }
 
@@ -235,7 +219,7 @@ public:
 class LNG_DLLPUBLIC PropertyHelper_Spelling
 {
     PropertyHelper_Spell* pInst;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+    css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
     PropertyHelper_Spelling( const PropertyHelper_Spell & );
@@ -243,26 +227,22 @@ class LNG_DLLPUBLIC PropertyHelper_Spelling
 
 public:
     PropertyHelper_Spelling(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
     ~PropertyHelper_Spelling();
 
     void    AddAsPropListener();
     void    RemoveAsPropListener();
-    void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
     bool    IsSpellUpperCase() const;
     bool    IsSpellWithDigits() const;
     bool    IsSpellCapitalization() const;
     bool addLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException);
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException);
     bool removeLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException);
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException);
 };
 
 
@@ -287,22 +267,20 @@ protected:
     virtual void    SetDefaultValues() override;
     virtual void    GetCurrentValues() override;
     virtual bool    propertyChange_Impl(
-                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) override;
+                            const css::beans::PropertyChangeEvent& rEvt ) override;
 
 public:
     PropertyHelper_Hyphen(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet);
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet);
     virtual ~PropertyHelper_Hyphen();
 
-    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals ) override;
+    virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
-        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        propertyChange( const css::beans::PropertyChangeEvent& rEvt )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
@@ -312,7 +290,7 @@ public:
 class LNG_DLLPUBLIC PropertyHelper_Hyphenation
 {
     PropertyHelper_Hyphen* pInst;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+    css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
     PropertyHelper_Hyphenation( const PropertyHelper_Hyphen & );
@@ -320,26 +298,22 @@ class LNG_DLLPUBLIC PropertyHelper_Hyphenation
 
 public:
     PropertyHelper_Hyphenation(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > &rxSource,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet);
+            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet);
     ~PropertyHelper_Hyphenation();
 
     void    AddAsPropListener();
     void    RemoveAsPropListener();
-    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    void SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetMinWordLength() const;
     bool addLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException);
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException);
     bool removeLinguServiceEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException);
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(css::uno::RuntimeException);
 };
 
 }   // namespace linguistic

@@ -31,7 +31,7 @@ class SfxStatusBarControl;
 class SfxBindings;
 
 svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
     const OUString& aCommandURL );
@@ -66,33 +66,33 @@ class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 protected:
     // new controller API
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void               SAL_CALL acquire() throw() override;
     virtual void               SAL_CALL release() throw() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XStatusbarController
-    virtual sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
+    virtual sal_Bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL command( const css::awt::Point& aPos,
                                     ::sal_Int32 nCommand,
                                     sal_Bool bMouseEvent,
-                                    const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                 const ::com::sun::star::awt::Rectangle& rOutputRectangle,
-                                 ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL click( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL doubleClick( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Any& aData ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+                                 const css::awt::Rectangle& rOutputRectangle,
+                                 ::sal_Int32 nStyle ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
 
     // Old sfx2 interface
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

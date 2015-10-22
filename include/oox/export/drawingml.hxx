@@ -98,28 +98,28 @@ private:
     DMLTextExport* mpTextExport;
 
 protected:
-    ::com::sun::star::uno::Any mAny;
-    ::sax_fastparser::FSHelperPtr mpFS;
-    ::oox::core::XmlFilterBase* mpFB;
+    css::uno::Any                             mAny;
+    ::sax_fastparser::FSHelperPtr             mpFS;
+    ::oox::core::XmlFilterBase*               mpFB;
     /// If set, this is the parent of the currently handled shape.
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xParent;
-    bool mbIsBackgroundDark;
+    css::uno::Reference<css::drawing::XShape> m_xParent;
+    bool                                      mbIsBackgroundDark;
 
-    bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& aName );
-    bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
-                  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
-                  const OUString& aName, ::com::sun::star::beans::PropertyState& eState );
-    OUString GetFieldValue( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsURLField );
+    bool GetProperty( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& aName );
+    bool GetPropertyAndState( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+                  css::uno::Reference< css::beans::XPropertyState > rXPropState,
+                  const OUString& aName, css::beans::PropertyState& eState );
+    OUString GetFieldValue( css::uno::Reference< css::text::XTextRange > rRun, bool& bIsURLField );
 
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const OUString& rURL, bool bRelPathToMedia = false);
-    void WriteStyleProperties( sal_Int32 nTokenId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
+    void WriteStyleProperties( sal_Int32 nTokenId, const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
 
-    static bool EqualGradients( ::com::sun::star::awt::Gradient aGradient1, ::com::sun::star::awt::Gradient aGradient2 );
+    static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
@@ -136,69 +136,69 @@ public:
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
     void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColor( const OUString& sColorSchemeName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
-    void WriteColorTransformations( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
+    void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
+    void WriteColorTransformations( const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
-    void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, bool bLineStart );
+    void WriteLineArrow( css::uno::Reference< css::beans::XPropertySet > rXPropSet, bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( const OUString& sSchemeName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
-    void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
-    void WriteGrabBagGradientFill( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aGradientStops, ::com::sun::star::awt::Gradient rGradient);
+    void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
+    void WriteSolidFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteGradientFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteGradientFill( css::awt::Gradient rGradient );
+    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, css::awt::Gradient rGradient);
 
-    void WriteBlipOrNormalFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    void WriteBlipOrNormalFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
             const OUString& rURLPropName );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
                          const OUString& sBitmapURL, sal_Int32 nXmlNamespace,
                          bool bWriteMode, bool bRelPathToMedia = false );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
             const OUString& sURLPropName );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
                          const OUString& sURLPropName, sal_Int32 nXmlNamespace );
-    void WritePattFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteSrcRect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, const OUString& );
-    void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteStretch( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& rURL );
-    void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
+    void WritePattFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteSrcRect( css::uno::Reference< css::beans::XPropertySet >, const OUString& );
+    void WriteOutline( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteStretch( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL );
+    void WriteLinespacing( css::style::LineSpacing& rLineSpacing );
 
-    OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    OUString WriteBlip( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
             const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=NULL );
-    void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& rURL );
+    void WriteBlipMode( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL );
 
-    void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,
+    void WriteShapeTransformation( css::uno::Reference< css::drawing::XShape > rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false );
     void WriteTransformation( const Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
-    void WriteText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
-    void WriteParagraph( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > rParagraph );
-    void WriteParagraphProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > rParagraph );
-    void WriteParagraphNumbering( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+    void WriteText( css::uno::Reference< css::uno::XInterface > rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
+    void WriteParagraph( css::uno::Reference< css::text::XTextContent > rParagraph );
+    void WriteParagraphProperties( css::uno::Reference< css::text::XTextContent > rParagraph );
+    void WriteParagraphNumbering( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
                                   sal_Int16 nLevel );
-    void WriteRun( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
-    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
+    void WriteRun( css::uno::Reference< css::text::XTextRange > rRun );
+    void WriteRunProperties( css::uno::Reference< css::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
 
     void WritePresetShape( const char* pShape );
-    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
+    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
     void WriteCustomGeometry( css::uno::Reference<css::drawing::XShape> rXShape );
     void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
-    void WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
-    void WriteShapeStyle( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteShapeEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
+    void WriteFill( css::uno::Reference< css::beans::XPropertySet > xPropSet );
+    void WriteShapeStyle( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteShapeEffects( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
-    void WriteShape3DEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteArtisticEffect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    OString WriteWdpPicture( const OUString& rFileId, const ::com::sun::star::uno::Sequence< sal_Int8 >& rPictureData );
-    sal_Int32 getBulletMarginIndentation (::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,sal_Int16 nLevel, const OUString& propName);
+    void WriteShape3DEffects( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteArtisticEffect( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
+    sal_Int32 getBulletMarginIndentation (css::uno::Reference< css::beans::XPropertySet > rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();
 
     static OString GetUUID();
 
-    static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc );
+    static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc );
 
     static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
@@ -207,7 +207,7 @@ public:
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
                                         const OUString& sRelativeStream,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
+                                        const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
                                         OUString* pRelationshipId = NULL );

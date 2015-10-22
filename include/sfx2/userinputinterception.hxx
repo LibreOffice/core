@@ -50,10 +50,10 @@ namespace sfx2
         ~UserInputInterception();
 
         // delegator functions for your XUserInputInterception implementation
-        void    addKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-        void    removeKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-        void    addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-        void    removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+        void    addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
+        void    removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
+        void    addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
+        void    removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
 
         // state
         bool    hasKeyHandlers() const;

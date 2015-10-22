@@ -41,7 +41,7 @@
 class SfxToolBoxControl;
 class SfxModule;
 
-svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL );
+svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL );
 
 typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 
@@ -74,9 +74,9 @@ friend class SfxFrameStatusListener;
     bool                                                                             m_bCascading;
     Link<SfxPopupWindow*,void>                                                       m_aDeleteLink;
     sal_uInt16                                                                       m_nId;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
+    css::uno::Reference< css::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusListener;
+    css::uno::Reference< css::lang::XComponent >           m_xStatusListener;
 
 private:
     SfxFrameStatusListener* GetOrCreateStatusListener();
@@ -91,7 +91,7 @@ protected:
     void                    DeleteFloatingWindow();
 
     sal_uInt16              GetId() const { return m_nId; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& GetFrame() const { return m_xFrame; }
+    const css::uno::Reference< css::frame::XFrame >& GetFrame() const { return m_xFrame; }
 
     void                    BindListener();
     void                    UnbindListener();
@@ -104,7 +104,7 @@ protected:
 
 public:
                             SfxPopupWindow( sal_uInt16 nId,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                            const css::uno::Reference< css::frame::XFrame >& rFrame,
                                             WinBits nBits );
                             SfxPopupWindow(sal_uInt16 nId,
                                            const OString& rID, const OUString& rUIXMLDescription,
@@ -115,7 +115,7 @@ public:
                                            const css::uno::Reference<css::frame::XFrame> &rFrame =
                                                css::uno::Reference<css::frame::XFrame>());
                             SfxPopupWindow( sal_uInt16 nId,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                            const css::uno::Reference< css::frame::XFrame >& rFrame,
                                             vcl::Window* pParentWindow,
                                             WinBits nBits );
                             virtual ~SfxPopupWindow();
@@ -178,33 +178,33 @@ protected:
 public:
     // XEventListener
     using ::cppu::OPropertySetHelper::disposing;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 
     // new controller API
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL click()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL doubleClick()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateImage(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL opensSubToolbar(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubToolbarName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL updateImage(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
@@ -217,10 +217,10 @@ public:
     unsigned short             GetSlotId() const;
 
     void                       Dispatch( const OUString& aCommand,
-                                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
-    static void                Dispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
+                                         css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+    static void                Dispatch( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                          const OUString& rCommand,
-                                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
+                                         css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
     static SfxToolBoxControl*  CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule *pMod );

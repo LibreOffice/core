@@ -174,7 +174,7 @@ public:
     sal_uInt32          GetObjectBarId( sal_uInt16 nPos ) const;
 
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
-    SfxItemState        QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny );
+    SfxItemState        QueryState( sal_uInt16 nSID, css::uno::Any& rAny );
 
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32          GetDisableFlags() const;

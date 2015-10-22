@@ -71,15 +71,15 @@ public:
     void                convertFromModel(
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartSpaceModel& rChartModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxExternalPage,
-                            const ::com::sun::star::awt::Point& rChartPos,
-                            const ::com::sun::star::awt::Size& rChartSize );
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
+                            const css::awt::Point& rChartPos,
+                            const css::awt::Size& rChartSize );
 
     /** Creates an internal data provider. Derived classes may override this
         function to create an external data provider. */
     virtual void        createDataProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc );
 
     /** Creates a data sequence from a formula. Dummy implementation. Derived
         classes have to override this function to actually parse the formula. */

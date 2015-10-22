@@ -47,7 +47,7 @@ class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const OUString& rConfigCompName );
                         ~VbaFilterConfig();
 
@@ -59,7 +59,7 @@ public:
     bool                isExportVba() const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                         mxConfigAccess;
 };
 
@@ -91,7 +91,7 @@ public:
     /** Resolves the internal macro name to the related macro URL, and attaches
         the macro to the object. */
     void                resolveAndAttachMacro(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAMacroResolver >& rxResolver );
+                            const css::uno::Reference< css::script::vba::XVBAMacroResolver >& rxResolver );
 
 private:
     /** Called after the VBA project has been imported. Derived classes will
@@ -110,8 +110,8 @@ class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
 public:
     explicit            VbaProject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const OUString& rConfigCompName );
     virtual             ~VbaProject();
 
@@ -142,7 +142,7 @@ public:
     /** Returns true, if the document contains at least one dialog. */
     bool                hasDialogs() const;
 
-    void                setOleOverridesSink( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
+    void                setOleOverridesSink( css::uno::Reference< css::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
 
 protected:
     /** Registers a dummy module that will be created when the VBA project is
@@ -157,16 +157,16 @@ private:
     VbaProject&         operator=( const VbaProject& ) = delete;
 
     /** Returns the Basic or dialog library container. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+    css::uno::Reference< css::script::XLibraryContainer >
                         getLibraryContainer( sal_Int32 nPropId );
     /** Opens a Basic or dialog library (creates missing if specified). */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         openLibrary( sal_Int32 nPropId, bool bCreateMissing );
     /** Creates and returns the Basic library of the document used for import. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         createBasicLibrary();
     /** Creates and returns the dialog library of the document used for import. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         createDialogLibrary();
 
     /** Imports the VBA code modules and forms. */
@@ -185,22 +185,22 @@ private:
     typedef RefVector< VbaMacroAttacherBase >           MacroAttacherVector;
     typedef ::std::map< OUString, sal_Int32 >    DummyModuleMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         mxBasicLib;         ///< The Basic library of the document used for import.
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         mxDialogLib;        ///< The dialog library of the document used for import.
     MacroAttacherVector maMacroAttachers;   ///< Objects that want to attach a VBA macro to an action.
     DummyModuleMap      maDummyModules;     ///< Additional empty modules created on import.
-    OUString     maPrjName;          ///< Name of the VBA project.
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    OUString            maPrjName;          ///< Name of the VBA project.
+    css::uno::Reference< css::container::XNameContainer >
                         mxOleOverridesSink;
     typedef RefMap< rtl::OUString, VbaModule > VbaModuleMap;
-    VbaModuleMap maModules;
-    VbaModuleMap maModulesByStrm;
+    VbaModuleMap        maModules;
+    VbaModuleMap        maModulesByStrm;
 };
 
 

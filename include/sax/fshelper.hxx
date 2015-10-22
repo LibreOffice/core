@@ -62,7 +62,7 @@ namespace sax_fastparser {
 
 enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2, IGNORE = 3 };
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > XFastAttributeListRef;
+typedef css::uno::Reference< css::xml::sax::XFastAttributeList > XFastAttributeListRef;
 
 class FastSaxSerializer;
 
@@ -70,7 +70,7 @@ class SAX_DLLPUBLIC FastSerializerHelper
 {
 public:
 
-    FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream, bool bWriteHeader = true );
+    FastSerializerHelper( const css::uno::Reference< css::io::XOutputStream >& xOutputStream, bool bWriteHeader = true );
 
     ~FastSerializerHelper();
 
@@ -133,13 +133,13 @@ public:
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
+    css::uno::Reference< css::io::XOutputStream > getOutputStream();
 
     static FastAttributeList *createAttrList();
 
     void mark(sal_Int32 nTag,
-            const ::com::sun::star::uno::Sequence< sal_Int32 >& rOrder =
-            ::com::sun::star::uno::Sequence< sal_Int32 >() );
+            const css::uno::Sequence< sal_Int32 >& rOrder =
+            css::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks(sal_Int32 nTag,
             MergeMarks eMergeType = MergeMarks::APPEND );
 

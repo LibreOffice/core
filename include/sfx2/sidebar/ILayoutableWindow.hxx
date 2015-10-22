@@ -37,7 +37,7 @@ public:
     /** Return the preferred height with the constraint, that the
         window will be set to the given width.
     */
-    virtual ::com::sun::star::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) = 0;
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) = 0;
 };
 
 

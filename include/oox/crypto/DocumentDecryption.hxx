@@ -34,7 +34,7 @@ namespace core {
 class OOX_DLLPUBLIC DocumentDecryption
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     enum CryptoType
     {
@@ -44,22 +44,22 @@ private:
     };
 
     oox::ole::OleStorage&           mrOleStorage;
-    std::unique_ptr<CryptoEngine> mEngine;
+    std::unique_ptr<CryptoEngine>   mEngine;
     CryptoType                      mCryptoType;
 
-    bool readAgileEncryptionInfo( com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rStream );
+    bool readAgileEncryptionInfo( css::uno::Reference< css::io::XInputStream >& rStream );
     bool readStandard2007EncryptionInfo( BinaryInputStream& rStream );
 
 public:
     DocumentDecryption(
         oox::ole::OleStorage& rOleStorage,
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext);
+        css::uno::Reference< css::uno::XComponentContext > xContext);
 
-    bool decrypt(com::sun::star::uno::Reference< com::sun::star::io::XStream > xDocumentStream);
+    bool decrypt(css::uno::Reference< css::io::XStream > xDocumentStream);
     bool readEncryptionInfo();
     bool generateEncryptionKey(const OUString& rPassword);
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > createEncryptionData(const OUString& rPassword);
+    css::uno::Sequence< css::beans::NamedValue > createEncryptionData(const OUString& rPassword);
 
 };
 

@@ -73,9 +73,8 @@ public:
 
     // for MetadatableMixin ----------------------------------------------
 
-    ::com::sun::star::beans::StringPair GetMetadataReference() const;
-    void SetMetadataReference(
-        const ::com::sun::star::beans::StringPair & i_rReference);
+    css::beans::StringPair GetMetadataReference() const;
+    void SetMetadataReference( const css::beans::StringPair & i_rReference);
     void EnsureMetadataReference();
 
     // hooks -------------------------------------------------------------
@@ -116,8 +115,7 @@ public:
         note: if IsInUndo or IsInClipboard return true,
         MakeUnoObject <em>must not</em> be called!
      */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() = 0;
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() = 0;
 
 private:
     Metadatable(const Metadatable&) = delete;
@@ -138,7 +136,7 @@ private:
  */
 class SFX2_DLLPUBLIC MetadatableMixin :
     public ::cppu::WeakImplHelper1<
-        ::com::sun::star::rdf::XMetadatable>
+        css::rdf::XMetadatable>
 {
 
 public:
@@ -146,31 +144,31 @@ public:
 
     virtual ~MetadatableMixin() {}
 
-    // ::com::sun::star::rdf::XNode:
+    // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::rdf::XURI:
+    // css::rdf::XURI:
     virtual OUString SAL_CALL getLocalName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getNamespace()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::rdf::XMetadatable:
-    virtual ::com::sun::star::beans::StringPair SAL_CALL getMetadataReference()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::rdf::XMetadatable:
+    virtual css::beans::StringPair SAL_CALL getMetadataReference()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setMetadataReference(
-        const ::com::sun::star::beans::StringPair & i_rReference)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException, std::exception) override;
+        const css::beans::StringPair & i_rReference)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException, std::exception) override;
     virtual void SAL_CALL ensureMetadataReference()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /// get the core object corresponding to this UNO object.
     virtual Metadatable * GetCoreObject() = 0;
     /// get the XModel for the document
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    virtual css::uno::Reference< css::frame::XModel >
         GetModel() = 0;
 
 };

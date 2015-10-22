@@ -82,7 +82,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool                initCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool                initCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -90,7 +90,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getEncryptionData();
+    css::uno::Sequence< css::beans::NamedValue > getEncryptionData();
 
     /** Verifies the validity of the password using the passed key and hash.
 
@@ -192,7 +192,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool            initCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool            initCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -200,7 +200,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getEncryptionData();
+    css::uno::Sequence< css::beans::NamedValue > getEncryptionData();
 
     /** Initializes the algorithm with the specified password and document ID.
 

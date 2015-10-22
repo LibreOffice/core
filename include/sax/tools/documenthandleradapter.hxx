@@ -24,76 +24,76 @@ namespace sax
      *
      * See filters/source/odfflatxml/FlatXml.cxx for an example.
      */
-    class DocumentHandlerAdapter : public ::com::sun::star::xml::sax::XDocumentHandler
+    class DocumentHandlerAdapter : public css::xml::sax::XDocumentHandler
     {
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->endDocument();
         }
 
         virtual void SAL_CALL
         startElement(const OUString& aName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs)
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->startElement(aName, xAttribs);
         }
 
         virtual void SAL_CALL
-        endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        endElement(const OUString& aName) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
-        characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        characters(const OUString& aChars) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
-        ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        ignorableWhitespace(const OUString& aWhitespaces) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
         processingInstruction(const OUString& aTarget, const OUString& aData)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void SAL_CALL
-        setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->setDocumentLocator(xLocator);
         }
-        DocumentHandlerAdapter(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& delegate);
+        DocumentHandlerAdapter(const css::uno::Reference< css::xml::sax::XDocumentHandler >& delegate);
         DocumentHandlerAdapter() :
-            m_handler(::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > (0, ::com::sun::star::uno::UNO_QUERY))
+            m_handler(css::uno::Reference< css::xml::sax::XDocumentHandler > (0, css::uno::UNO_QUERY))
         {
         }
         ;
 
     protected:
         virtual void SAL_CALL
-        setDelegate(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& delegate)
+        setDelegate(const css::uno::Reference< css::xml::sax::XDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > SAL_CALL
+        virtual css::uno::Reference< css::xml::sax::XDocumentHandler > SAL_CALL
         getDelegate()
         {
             return m_handler;
@@ -105,7 +105,7 @@ namespace sax
         }
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_handler;
+        css::uno::Reference< css::xml::sax::XDocumentHandler > m_handler;
 
     };
 
@@ -114,108 +114,108 @@ namespace sax
      * It forwards all method calls to a delegate. An inheriting class only needs to override the
      * methods it actually wants to modify.
      */
-    class ExtendedDocumentHandlerAdapter : public ::com::sun::star::xml::sax::XExtendedDocumentHandler
+    class ExtendedDocumentHandlerAdapter : public css::xml::sax::XExtendedDocumentHandler
 
     {
 
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->endDocument();
         }
 
         virtual void SAL_CALL
         startElement(const OUString& aName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs)
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->startElement(aName, xAttribs);
         }
 
         virtual void SAL_CALL
-        endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        endElement(const OUString& aName) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
-        characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        characters(const OUString& aChars) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
-        ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        ignorableWhitespace(const OUString& aWhitespaces) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
         processingInstruction(const OUString& aTarget, const OUString& aData)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void SAL_CALL
-        setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
+                throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->setDocumentLocator(xLocator);
         }
         // XExtendedDocumentHandler
         virtual void SAL_CALL
-        startCDATA() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        startCDATA() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->startCDATA();
         }
         virtual void SAL_CALL
-        endCDATA() throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        endCDATA() throw (css::uno::RuntimeException, std::exception) override
         {
             m_handler->endCDATA();
         }
         virtual void SAL_CALL
-        comment(const OUString& sComment) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override
+        comment(const OUString& sComment) throw (css::xml::sax::SAXException,
+                css::uno::RuntimeException, std::exception) override
         {
             m_handler->comment(sComment);
         }
         virtual void SAL_CALL
-        unknown(const OUString& sString) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        unknown(const OUString& sString) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->unknown(sString);
         }
         virtual void SAL_CALL
-        allowLineBreak() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override
+        allowLineBreak() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override
         {
             m_handler->allowLineBreak();
         }
     protected:
         ExtendedDocumentHandlerAdapter() :
-            m_handler(::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > (0, ::com::sun::star::uno::UNO_QUERY))
+            m_handler(css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > (0, css::uno::UNO_QUERY))
         {
         }
         ExtendedDocumentHandlerAdapter(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >& delegate) :
+                const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate) :
             m_handler(delegate)
         {
         }
 
         virtual void SAL_CALL
-        setDelegate(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >& delegate)
+        setDelegate(const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > SAL_CALL
+        virtual css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > SAL_CALL
         getDelegate()
         {
             return m_handler;
@@ -227,7 +227,7 @@ namespace sax
         }
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > m_handler;
+        css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > m_handler;
     };
 }
 #endif // INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX

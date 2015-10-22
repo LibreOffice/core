@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
     class TimeNode
     {
     public:
-        typedef ::std::map< OUString, ::com::sun::star::uno::Any > UserDataMap;
+        typedef ::std::map< OUString, css::uno::Any > UserDataMap;
 
         TimeNode( sal_Int16 nNodeType );
         virtual ~TimeNode();
@@ -58,18 +58,18 @@ namespace oox { namespace ppt {
 
         void addNode(
             const ::oox::core::XmlFilterBase& rFilter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode,
+            const css::uno::Reference< css::animations::XAnimationNode >& rxNode,
             const SlidePersistPtr & slide);
         // data setters
-        void setTo( const ::com::sun::star::uno::Any & aTo );
-        void setFrom( const ::com::sun::star::uno::Any & aFrom );
-        void setBy( const ::com::sun::star::uno::Any & aBy );
+        void setTo( const css::uno::Any & aTo );
+        void setFrom( const css::uno::Any & aFrom );
+        void setBy( const css::uno::Any & aBy );
         void setTransitionFilter( const SlideTransition & aTransition)
             { maTransitionFilter = aTransition; }
 
         void setNode(
             const ::oox::core::XmlFilterBase& rFilter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
+            const css::uno::Reference< css::animations::XAnimationNode >& xNode,
             const SlidePersistPtr & pSlide );
 
         AnimTargetElementPtr getTarget()
@@ -93,11 +93,11 @@ namespace oox { namespace ppt {
 
         static OUString getServiceName( sal_Int16 nNodeType );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
+        static css::uno::Reference< css::animations::XAnimationNode >
         createAndInsert(
             const ::oox::core::XmlFilterBase& rFilter,
             const OUString& rServiceName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode );
+            const css::uno::Reference< css::animations::XAnimationNode >& rxNode );
 
     private:
         const sal_Int16 mnNodeType;

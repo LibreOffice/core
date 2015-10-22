@@ -164,15 +164,15 @@ public:
 
 protected:
     /** Must be called from createFastChildContext() in derived classes. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
+    css::uno::Reference< css::xml::sax::XFastContextHandler >
                         implCreateChildContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from startFastElement() in derived classes. */
     void                implStartElement(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from characters() in derived classes. */
     void                implCharacters( const OUString& rChars );
@@ -219,26 +219,26 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL startFastElement(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL characters( const OUString& rChars )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     // oox.core.ContextHandler interface --------------------------------------
 

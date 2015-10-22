@@ -43,8 +43,8 @@ class FastSaxParserImpl;
 // This class implements the external Parser interface
 class FASTSAX_DLLPUBLIC FastSaxParser
     : public ::cppu::WeakImplHelper2<
-                ::com::sun::star::xml::sax::XFastParser,
-                ::com::sun::star::lang::XServiceInfo >
+                css::xml::sax::XFastParser,
+                css::lang::XServiceInfo >
 {
     FastSaxParserImpl* mpImpl;
 
@@ -53,19 +53,19 @@ public:
     virtual ~FastSaxParser();
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     bool hasNamespaceURL( const OUString& rPrefix ) const;
 };

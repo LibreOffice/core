@@ -44,12 +44,12 @@ class SfxDispatcher;
 
 class SfxUnoControllerItem :    public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
-    ::com::sun::star::util::URL                         aCommand;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >              xDispatch;
+    css::util::URL              aCommand;
+    css::uno::Reference< css::frame::XDispatch >    xDispatch;
     SfxControllerItem*          pCtrlItem;
     SfxBindings*                pBindings;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >              TryGetDispatch( SfxFrame* pFrame );
+    css::uno::Reference< css::frame::XDispatch >    TryGetDispatch( SfxFrame* pFrame );
 
 public:
 
@@ -57,10 +57,10 @@ public:
                                 virtual ~SfxUnoControllerItem();
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       statusChanged(const css::frame::FeatureStateEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
 
     // Something else
-    virtual void    SAL_CALL            disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void    SAL_CALL    disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
     void                        UnBind();
     void                        GetNewDispatch();
     void                        ReleaseDispatch();
@@ -80,12 +80,12 @@ public:
     SfxStatusDispatcher();
 
     // XDispatch
-    virtual void SAL_CALL dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL,
+                const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
 
     // Something else
     void                ReleaseAll();
@@ -103,31 +103,31 @@ public:
                                 SfxOfficeDispatch( SfxBindings& rBind,
                                                    SfxDispatcher* pDispat,
                                                    const SfxSlot* pSlot,
-                                                   const ::com::sun::star::util::URL& rURL );
+                                                   const css::util::URL& rURL );
                                 SfxOfficeDispatch( SfxDispatcher* pDispat,
                                                    const SfxSlot* pSlot,
-                                                   const ::com::sun::star::util::URL& rURL );
+                                                   const css::util::URL& rURL );
                                 virtual ~SfxOfficeDispatch();
 
-    virtual void SAL_CALL       dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
-                                                          const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
-                                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void   SAL_CALL     dispatch( const ::com::sun::star::util::URL& aURL,
-                                          const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
-                                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void   SAL_CALL     addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl,
-                                                   const ::com::sun::star::util::URL& aURL)
-                                throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       dispatchWithNotification( const css::util::URL& aURL,
+                                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
+                                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void   SAL_CALL     dispatch( const css::util::URL& aURL,
+                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+                                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void   SAL_CALL     addStatusListener( const css::uno::Reference< css::frame::XStatusListener > & xControl,
+                                                   const css::util::URL& aURL)
+                                throw( css::uno::RuntimeException, std::exception ) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override ;
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override ;
+    static const css::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
 
-    static bool        IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
-    static OUString    GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
+    static bool             IsMasterUnoCommand( const css::util::URL& aURL );
+    static OUString         GetMasterUnoCommand( const css::util::URL& aURL );
 
-    void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
+    void                    SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     void                    SetMasterUnoCommand( bool bSet );
 
@@ -136,7 +136,7 @@ public:
 
 class SfxDispatchController_Impl : public SfxControllerItem
 {
-    ::com::sun::star::util::URL aDispatchURL;
+    css::util::URL              aDispatchURL;
     SfxDispatcher*              pDispatcher;
     SfxBindings*                pBindings;
     const SfxPoolItem*          pLastState;
@@ -145,10 +145,10 @@ class SfxDispatchController_Impl : public SfxControllerItem
     bool                        bMasterSlave;
     bool                        bVisible;
     const char*                 pUnoName;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xFrame;
+    css::uno::WeakReference< css::frame::XFrame > xFrame;
 
-    static void         addParametersToArgs( const com::sun::star::util::URL& aURL,
-                                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+    static void         addParametersToArgs( const css::util::URL& aURL,
+                                             css::uno::Sequence< css::beans::PropertyValue >& rArgs );
     static SfxMapUnit   GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
 
 public:
@@ -156,24 +156,24 @@ public:
                                                     SfxBindings*                       pBind,
                                                     SfxDispatcher*                     pDispat,
                                                     const SfxSlot*                     pSlot,
-                                                    const ::com::sun::star::util::URL& rURL );
+                                                    const css::util::URL& rURL );
                         virtual ~SfxDispatchController_Impl();
 
-    static OUString getSlaveCommand( const ::com::sun::star::util::URL& rURL );
+    static OUString getSlaveCommand( const css::util::URL& rURL );
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
-    void SAL_CALL       dispatch( const ::com::sun::star::util::URL& aURL,
-                                  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
+    void SAL_CALL       dispatch( const css::util::URL& aURL,
+                                  const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                                  const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
         throw (css::uno::RuntimeException, std::exception);
-    void SAL_CALL       addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException );
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();
-    void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
+    void                SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
-    static void InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const ::com::sun::star::frame::FeatureStateEvent& aEvent);
+    static void InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const css::frame::FeatureStateEvent& aEvent);
 };
 
 #endif

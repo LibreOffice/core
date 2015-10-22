@@ -31,7 +31,7 @@ namespace core {
 class OOX_DLLPUBLIC DocumentEncryption
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::io::XStream > mxDocumentStream;
+    css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
     OUString maPassword;
 
@@ -39,7 +39,7 @@ private:
 
 public:
     DocumentEncryption(
-        com::sun::star::uno::Reference< com::sun::star::io::XStream > xDocumentStream,
+        css::uno::Reference< css::io::XStream > xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
         const OUString& aPassword);
 

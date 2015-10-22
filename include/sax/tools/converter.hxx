@@ -50,7 +50,7 @@ namespace sax {
     their internal representation to the textual form used in xml
     and back.
 
-    All unit types are expressed as com::sun::star::util::MeasureUnit
+    All unit types are expressed as css::util::MeasureUnit
 */
 
 
@@ -60,15 +60,15 @@ public:
     /** convert string to measure using optional min and max values*/
     static bool convertMeasure( sal_Int32& rValue,
                                 const OUString& rString,
-                                sal_Int16 nTargetUnit = ::com::sun::star::util::MeasureUnit::MM_100TH,
+                                sal_Int16 nTargetUnit = css::util::MeasureUnit::MM_100TH,
                                 sal_Int32 nMin = SAL_MIN_INT32,
                                 sal_Int32 nMax = SAL_MAX_INT32 );
 
     /** convert measure to string */
     static void convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int32 nMeasure,
-                                sal_Int16 SourceUnit = ::com::sun::star::util::MeasureUnit::MM_100TH,
-                                sal_Int16 nTargetUnit = ::com::sun::star::util::MeasureUnit::INCH  );
+                                sal_Int16 SourceUnit = css::util::MeasureUnit::MM_100TH,
+                                sal_Int16 nTargetUnit = css::util::MeasureUnit::INCH  );
 
     /** convert string to boolean */
     static bool convertBool( bool& rBool,
@@ -151,47 +151,47 @@ public:
 
     /** convert util::Duration to ISO "duration" string */
     static void convertDuration(OUStringBuffer& rBuffer,
-                        const ::com::sun::star::util::Duration& rDuration);
+                        const css::util::Duration& rDuration);
 
     /** convert ISO "duration" string to double; negative durations allowed */
     static bool convertDuration(double & rfTime,
                                 const OUString& rString);
 
     /** convert ISO "duration" string to util::Duration */
-    static bool convertDuration(::com::sun::star::util::Duration& rDuration,
+    static bool convertDuration(css::util::Duration& rDuration,
                         const OUString& rString);
 
     /** convert util::Date to ISO "date" string */
     static void convertDate( OUStringBuffer& rBuffer,
-                    const com::sun::star::util::Date& rDate,
+                    const css::util::Date& rDate,
                     sal_Int16 const* pTimeZoneOffset);
 
     /** convert util::DateTime to ISO "date" or "dateTime" string */
     static void convertDateTime( OUStringBuffer& rBuffer,
-                                const com::sun::star::util::DateTime& rDateTime,
+                                const css::util::DateTime& rDateTime,
                                  sal_Int16 const* pTimeZoneOffset,
                                    bool bAddTimeIf0AM = false );
 
     /** convert util::DateTime to ISO "time" or "dateTime" string */
     static void convertTimeOrDateTime(OUStringBuffer& rBuffer,
-                            const com::sun::star::util::DateTime& rDateTime,
+                            const css::util::DateTime& rDateTime,
                             sal_Int16 const* pTimeZoneOffset);
 
     /** convert ISO "date" or "dateTime" string to util::DateTime */
-    static bool parseDateTime( com::sun::star::util::DateTime& rDateTime,
+    static bool parseDateTime( css::util::DateTime& rDateTime,
                                  boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString );
 
     /** convert ISO "time" or "dateTime" string to util::DateTime */
-    static bool parseTimeOrDateTime(com::sun::star::util::DateTime& rDateTime,
+    static bool parseTimeOrDateTime(css::util::DateTime& rDateTime,
                                  boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString);
 
     /** convert ISO "date" or "dateTime" string to util::DateTime or
         util::Date */
     static bool parseDateOrDateTime(
-                    com::sun::star::util::Date * pDate,
-                    com::sun::star::util::DateTime & rDateTime,
+                    css::util::Date * pDate,
+                    css::util::DateTime & rDateTime,
                     bool & rbDateTime,
                     boost::optional<sal_Int16> * pTimeZoneOffset,
                     const OUString & rString );
@@ -202,16 +202,16 @@ public:
                                    sal_Int32 nPos );
 
     /** encodes the given byte sequence into Base64 */
-    static void encodeBase64(OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_Int8>& aPass);
+    static void encodeBase64(OUStringBuffer& aStrBuffer, const css::uno::Sequence<sal_Int8>& aPass);
 
     // Decode a base 64 encoded string into a sequence of bytes. The first
     // version can be used for attribute values only, because it does not
     // return any chars left from conversion.
     // For text submitted throgh the SAX characters call, the later method
     // must be used!
-    static void decodeBase64(com::sun::star::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
+    static void decodeBase64(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
 
-    static sal_Int32 decodeBase64SomeChars(com::sun::star::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
+    static sal_Int32 decodeBase64SomeChars(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
 
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit);
@@ -219,7 +219,7 @@ public:
     /** convert an Any to string (typesafe) */
     static bool convertAny(OUStringBuffer&          rsValue,
                            OUStringBuffer&          rsType ,
-                           const ::com::sun::star::uno::Any& rValue);
+                           const css::uno::Any& rValue);
 
 };
 

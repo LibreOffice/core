@@ -76,7 +76,7 @@ public:
     bool mbHover;
     BitmapEx maPreview1;
     OUString maTitle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
+    css::uno::Reference< css::accessibility::XAccessible >* mpxAcc;
 
     ThumbnailViewItem (ThumbnailView &rView, sal_uInt16 nId);
 
@@ -107,7 +107,7 @@ public:
     void updateTitleEditSize ();
     void setTitle (const OUString& rTitle);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 
     void setDrawArea (const Rectangle &area);

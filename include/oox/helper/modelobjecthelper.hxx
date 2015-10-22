@@ -41,30 +41,30 @@ class OOX_DLLPUBLIC ObjectContainer
 {
 public:
     explicit            ObjectContainer(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             const OUString& rServiceName );
                         ~ObjectContainer();
 
     /** Returns true, if the object with the passed name exists in the container. */
     bool                hasObject( const OUString& rObjName ) const;
 
-    ::com::sun::star::uno::Any getObject( const OUString& rObjName ) const;
+    css::uno::Any getObject( const OUString& rObjName ) const;
 
     /** Inserts the passed object into the container, returns its final name. */
     OUString     insertObject(
                             const OUString& rObjName,
-                            const ::com::sun::star::uno::Any& rObj,
+                            const css::uno::Any& rObj,
                             bool bInsertByUnusedName );
 
 private:
     void                createContainer() const;
 
 private:
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+    mutable css::uno::Reference< css::lang::XMultiServiceFactory >
                         mxModelFactory;         ///< Factory to create the container.
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    mutable css::uno::Reference< css::container::XNameContainer >
                         mxContainer;            ///< Container for the objects.
-    OUString     maServiceName;          ///< Service name to create the container.
+    OUString            maServiceName;          ///< Service name to create the container.
     sal_Int32           mnIndex;                ///< Index to create unique identifiers.
 };
 
@@ -81,7 +81,7 @@ class OOX_DLLPUBLIC ModelObjectHelper
 {
 public:
     explicit            ModelObjectHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
     bool                hasLineMarker( const OUString& rMarkerName ) const;
@@ -90,17 +90,17 @@ public:
         with the same name. Returns true, if the marker could be inserted. */
     bool                insertLineMarker(
                             const OUString& rMarkerName,
-                            const ::com::sun::star::drawing::PolyPolygonBezierCoords& rMarker );
+                            const css::drawing::PolyPolygonBezierCoords& rMarker );
 
     /** Inserts a new named line dash, returns the line dash name, based on an
         internal constant name with a new unused index appended. */
-    OUString     insertLineDash( const ::com::sun::star::drawing::LineDash& rDash );
+    OUString     insertLineDash( const css::drawing::LineDash& rDash );
 
     /** Inserts a new named fill gradient, returns the gradient name, based on
         an internal constant name with a new unused index appended. */
-    OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertFillGradient( const css::awt::Gradient& rGradient );
 
-    OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertTransGrandient( const css::awt::Gradient& rGradient );
 
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
@@ -114,10 +114,10 @@ private:
     ObjectContainer     maGradientContainer;    ///< Contains all named fill gradients.
     ObjectContainer     maTransGradContainer;   ///< Contains all named transparency Gradients.
     ObjectContainer     maBitmapUrlContainer;   ///< Contains all named fill bitmap URLs.
-    const OUString maDashNameBase;       ///< Base name for all named line dashes.
-    const OUString maGradientNameBase;   ///< Base name for all named fill gradients.
-    const OUString maTransGradNameBase;   ///< Base name for all named fill gradients.
-    const OUString maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
+    const OUString      maDashNameBase;       ///< Base name for all named line dashes.
+    const OUString      maGradientNameBase;   ///< Base name for all named fill gradients.
+    const OUString      maTransGradNameBase;   ///< Base name for all named fill gradients.
+    const OUString      maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
 };
 
 
