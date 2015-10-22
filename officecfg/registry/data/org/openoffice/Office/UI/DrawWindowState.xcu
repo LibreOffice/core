@@ -246,7 +246,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Circles and Ovals</value>
+          <value xml:lang="en-US">Legacy Circles and Ovals</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
@@ -478,7 +478,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Rectangles</value>
+          <value xml:lang="en-US">Legacy Rectangles</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
