@@ -10,11 +10,12 @@
 #ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
 
-#include <map>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/propertymap.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
+#include <map>
 
 namespace oox {
 namespace drawingml {
@@ -44,7 +45,13 @@ struct EffectProperties
     EffectShadowProperties maShadow;
 
     /** Stores all effect properties, including those not supported by core yet */
-    boost::ptr_vector< Effect > maEffects;
+    std::vector<std::unique_ptr<Effect>> m_Effects;
+
+    EffectProperties() {}
+    EffectProperties(EffectProperties const& rOther)
+    {
+        assignUsed(rOther);
+    }
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const EffectProperties& rSourceProps );
