@@ -845,6 +845,17 @@ void ScModelObj::resetSelection()
     pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
 }
 
+vcl::Window* ScModelObj::getWindow()
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return 0;
+
+    return pViewData->GetActiveWin();
+}
+
 void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;
