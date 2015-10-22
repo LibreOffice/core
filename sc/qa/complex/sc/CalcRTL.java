@@ -416,8 +416,7 @@ public class CalcRTL
             if (exception == null) {
                 // if no exception thrown
                 // check that the new value is set
-                if ((!ValueComparer.equalValue(resValue, newValue)) ||
-                        (ValueComparer.equalValue(resValue, oldValue))) {
+                if (!ValueComparer.equalValue(resValue, newValue)) {
                     System.out.println("Value for '" + propName +
                                 "' hasn't changed as expected");
 
