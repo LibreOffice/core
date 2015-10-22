@@ -196,6 +196,12 @@ namespace basegfx
         {
             return (rfValA > rfValB || equal(rfValA, rfValB));
         }
+
+        static bool betweenOrEqualEither(const double& rfValA, const double& rfValB, const double& rfValC)
+        {
+            return (rfValA > rfValB && rfValA < rfValC) || equal(rfValA, rfValB) || equal(rfValA, rfValC);
+        }
+
     };
 } // end of namespace basegfx
 

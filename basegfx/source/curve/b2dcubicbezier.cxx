@@ -446,7 +446,7 @@ namespace basegfx
                             : aVecA.getY() / aEdge.getY());
 
                         // relative end point of vector in edge range?
-                        if(fTools::moreOrEqual(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
+                        if (fTools::betweenOrEqualEither(fScale, 0.0, 1.0))
                         {
                             bAIsTrivial = true;
                         }
@@ -468,7 +468,7 @@ namespace basegfx
                             : aVecB.getY() / aEdge.getY());
 
                         // end point of vector in edge range? Caution: controlB is directed AGAINST edge
-                        if(fTools::lessOrEqual(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))
+                        if (fTools::betweenOrEqualEither(fScale, -1.0, 0.0))
                         {
                             bBIsTrivial = true;
                         }
