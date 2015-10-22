@@ -214,10 +214,11 @@ template< typename T > inline T shiftRight( T v, int shift )
     static_assert(
         std::is_unsigned<T>::value,
         "must be unsigned for promotedBits and the below ': 0' to be correct");
-    auto const promotedBits = std::numeric_limits<decltype(+T())>::digits;
+    using Promoted = decltype(+T());
+    auto const promotedBits = std::numeric_limits<Promoted>::digits;
     return shift >= 0
-        ? shift < promotedBits ? v >> shift : 0
-        : -shift < promotedBits ? v << (-shift) : 0;
+        ? shift < promotedBits ? Promoted(v) >> shift : 0
+        : -shift < promotedBits ? Promoted(v) << (-shift) : 0;
 }
 
 } // namespace basebmp
