@@ -13,6 +13,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <rtl/ustring.hxx>
+#include <functional>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -192,7 +193,7 @@ struct State
     basegfx::B2DRange           maViewBox;
 
     bool                        mbIsText;
-    OUString               maFontFamily;
+    OUString                    maFontFamily;
     /** Absolute: xx-small=6.94 | x-small=8.33 | small=10 | medium=12 | large=14.4 | x-large=17.28 | xx-large=20.736
 
         Relative(to parent): larger (enlarge by 1.2)
@@ -200,8 +201,8 @@ struct State
 
      */
     double                      mnFontSize;
-    OUString               maFontStyle;
-    OUString               maFontVariant;
+    OUString                    maFontStyle;
+    OUString                    maFontVariant;
     double                      mnFontWeight;
 
     TextAlign                   meTextAnchor; // text-anchor
@@ -277,65 +278,71 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.maViewportFillGradient==rRHS.maViewportFillGradient;
 }
 
-struct StateHash
+} // namespace svgi
+
+namespace std
 {
-    size_t operator()(const State& rState ) const
+    template<> struct hash<svgi::State>
     {
-        return size_t(rState.maCTM.get( 0, 0 ))
-            ^  size_t(rState.maCTM.get( 1, 0 ))
-            ^  size_t(rState.maCTM.get( 0, 1 ))
-            ^  size_t(rState.maCTM.get( 1, 1 ))
-            ^  size_t(rState.maCTM.get( 0, 2 ))
-            ^  size_t(rState.maCTM.get( 1, 2 ))
-            ^  size_t(rState.maViewport.getWidth())
-            ^  size_t(rState.maViewport.getHeight())
-            ^  size_t(rState.maViewBox.getWidth())
-            ^  size_t(rState.maViewBox.getHeight())
-            ^  size_t(rState.mbIsText)
-            ^  size_t(rState.maFontFamily.hashCode())
-            ^  size_t(rState.mnFontSize)
-            ^  size_t(rState.maFontStyle.hashCode())
-            ^  size_t(rState.maFontVariant.hashCode())
-            ^  size_t(rState.mnFontWeight)
-            ^  size_t(rState.meTextAnchor)
-            ^  size_t(rState.meTextDisplayAlign)
-            ^  size_t(rState.mnTextLineIncrement)
-            ^  size_t(rState.mbVisibility)
-            ^  size_t(rState.meFillType)
-            ^  size_t(rState.mnFillOpacity)
-            ^  size_t(rState.mnOpacity)
-            ^  size_t(rState.meStrokeType)
-            ^  size_t(rState.mnStrokeOpacity)
-            ^  size_t(rState.meViewportFillType)
-            ^  size_t(rState.mnViewportFillOpacity)
-            ^  size_t(rState.maFillColor.a)
-            ^  size_t(rState.maFillColor.r)
-            ^  size_t(rState.maFillColor.g)
-            ^  size_t(rState.maFillColor.b)
-            ^  size_t(rState.maFillGradient.maStops.size())
-            ^  size_t(rState.meFillRule)
-            ^  size_t(rState.maStrokeColor.a)
-            ^  size_t(rState.maStrokeColor.r)
-            ^  size_t(rState.maStrokeColor.g)
-            ^  size_t(rState.maStrokeColor.b)
-            ^  size_t(rState.maStrokeGradient.maStops.size())
-            ^  size_t(rState.maDashArray.size())
-            ^  size_t(rState.mnDashOffset)
-            ^  size_t(rState.meLineCap)
-            ^  size_t(rState.meLineJoin)
-            ^  size_t(rState.mnMiterLimit)
-            ^  size_t(rState.mnStrokeWidth)
-            ^  size_t(rState.maViewportFillColor.a)
-            ^  size_t(rState.maViewportFillColor.r)
-            ^  size_t(rState.maViewportFillColor.g)
-            ^  size_t(rState.maViewportFillColor.b)
-            ^  size_t(rState.maViewportFillGradient.maStops.size());
-    }
-};
+        std::size_t operator()(const svgi::State& rState ) const
+        {
+            return std::hash<double>()(rState.maCTM.get( 0, 0 ))
+                ^  std::hash<double>()(rState.maCTM.get( 1, 0 ))
+                ^  std::hash<double>()(rState.maCTM.get( 0, 1 ))
+                ^  std::hash<double>()(rState.maCTM.get( 1, 1 ))
+                ^  std::hash<double>()(rState.maCTM.get( 0, 2 ))
+                ^  std::hash<double>()(rState.maCTM.get( 1, 2 ))
+                ^  std::hash<double>()(rState.maViewport.getWidth())
+                ^  std::hash<double>()(rState.maViewport.getHeight())
+                ^  std::hash<double>()(rState.maViewBox.getWidth())
+                ^  std::hash<double>()(rState.maViewBox.getHeight())
+                ^  size_t(rState.mbIsText)
+                ^  size_t(rState.maFontFamily.hashCode())
+                ^  std::hash<double>()(rState.mnFontSize)
+                ^  size_t(rState.maFontStyle.hashCode())
+                ^  size_t(rState.maFontVariant.hashCode())
+                ^  std::hash<double>()(rState.mnFontWeight)
+                ^  size_t(rState.meTextAnchor)
+                ^  size_t(rState.meTextDisplayAlign)
+                ^  std::hash<double>()(rState.mnTextLineIncrement)
+                ^  size_t(rState.mbVisibility)
+                ^  size_t(rState.meFillType)
+                ^  std::hash<double>()(rState.mnFillOpacity)
+                ^  std::hash<double>()(rState.mnOpacity)
+                ^  size_t(rState.meStrokeType)
+                ^  std::hash<double>()(rState.mnStrokeOpacity)
+                ^  size_t(rState.meViewportFillType)
+                ^  std::hash<double>()(rState.mnViewportFillOpacity)
+                ^  size_t(rState.maFillColor.a)
+                ^  size_t(rState.maFillColor.r)
+                ^  size_t(rState.maFillColor.g)
+                ^  size_t(rState.maFillColor.b)
+                ^  size_t(rState.maFillGradient.maStops.size())
+                ^  size_t(rState.meFillRule)
+                ^  size_t(rState.maStrokeColor.a)
+                ^  size_t(rState.maStrokeColor.r)
+                ^  size_t(rState.maStrokeColor.g)
+                ^  size_t(rState.maStrokeColor.b)
+                ^  size_t(rState.maStrokeGradient.maStops.size())
+                ^  size_t(rState.maDashArray.size())
+                ^  std::hash<double>()(rState.mnDashOffset)
+                ^  size_t(rState.meLineCap)
+                ^  size_t(rState.meLineJoin)
+                ^  std::hash<double>()(rState.mnMiterLimit)
+                ^  std::hash<double>()(rState.mnStrokeWidth)
+                ^  size_t(rState.maViewportFillColor.a)
+                ^  size_t(rState.maViewportFillColor.r)
+                ^  size_t(rState.maViewportFillColor.g)
+                ^  size_t(rState.maViewportFillColor.b)
+                ^  size_t(rState.maViewportFillGradient.maStops.size());
+        }
+    };
+}
 
-typedef std::unordered_set<State, StateHash> StatePool;
+namespace svgi
+{
+typedef std::unordered_set<State> StatePool;
 typedef std::unordered_map<sal_Int32, State> StateMap;
-
 } // namespace svgi
 
 #endif
