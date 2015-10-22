@@ -44,6 +44,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -79,6 +80,7 @@
 #include "../../inc/lib/init.hxx"
 
 #include "lokinteractionhandler.hxx"
+#include <lokclipboard.hxx>
 
 using namespace css;
 using namespace vcl;
@@ -247,6 +249,10 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
+static bool doc_paste(LibreOfficeKitDocument* pThis,
+                      const char* pMimeType,
+                      const char* pData,
+                      size_t nSize);
 static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -287,6 +293,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
@@ -988,6 +995,37 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     }
 
     return pMemory;
+}
+
+static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return false;
+    }
+
+    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(pMimeType, pData, nSize));
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard());
+    xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+    vcl::Window* pWindow = pDoc->getWindow();
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "Document did not provide a window";
+        return false;
+    }
+
+    pWindow->SetClipboard(xClipboard);
+    OUString aCommand(".uno:Paste");
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    if (!comphelper::dispatchCommand(aCommand, aPropertyValues))
+    {
+        gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
+        return false;
+    }
+
+    return true;
 }
 
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
