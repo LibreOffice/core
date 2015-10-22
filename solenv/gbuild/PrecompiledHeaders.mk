@@ -34,9 +34,18 @@ $(call gb_PrecompiledHeader_get_dep_target,%) :
 		mkdir -p $(dir $@) && \
 		echo "$(call gb_PrecompiledHeader_get_target,$*) : $(gb_Helper_PHONY)" > $@)
 
+# despite this being only one .d file, need to run concat-deps on it to
+# re-write external headers from UnpackedTarball
 $(call gb_PrecompiledHeader_get_target,%) :
 	rm -f $@
 	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE))
+ifeq ($(gb_FULLDEPS),$(true))
+	$(call gb_Helper_abbreviate_dirs,\
+		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,$(call gb_PrecompiledHeader_get_dep_target_tmp,$*)) && \
+		$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} \
+			> $(call gb_PrecompiledHeader_get_dep_target,$*) && \
+		rm -f $${RESPONSEFILE} $(call gb_PrecompiledHeader_get_dep_target_tmp,$*))
+endif
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
