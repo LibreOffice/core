@@ -122,13 +122,15 @@ public class JavaTools
     public static int FieldInTable(String[][] SearchList, String SearchString)
     {
         int retvalue = -1;
-        int FieldLen = SearchList.length;
-        if (FieldLen > 0) {
-            for (int i = 0; i < FieldLen; i++) {
-                if (SearchList[i][0] != null) {
-                    if (SearchList[i][0].equals(SearchString)) {
-                        retvalue = i;
-                        break;
+        if (SearchList != null) {
+            int FieldLen = SearchList.length;
+            if (FieldLen > 0) {
+                for (int i = 0; i < FieldLen; i++) {
+                    if (SearchList[i][0] != null) {
+                        if (SearchList[i][0].equals(SearchString)) {
+                            retvalue = i;
+                            break;
+                        }
                     }
                 }
             }
