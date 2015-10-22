@@ -95,7 +95,7 @@ public class LocalOfficeWindow
     {
          // Create a UNO toolkit.
          XComponentContext xContext = mConnection.getComponentContext();
-         XMultiComponentFactory compfactory = mConnection.getComponentContext().getServiceManager();
+         XMultiComponentFactory compfactory = xContext.getServiceManager();
          XMultiServiceFactory factory = UnoRuntime.queryInterface(
                  XMultiServiceFactory.class, compfactory);
          Object object  = factory.createInstance( "com.sun.star.awt.Toolkit");
