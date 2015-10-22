@@ -1417,23 +1417,30 @@ public:
     // XTransitionFactory
     virtual sal_Bool SAL_CALL hasTransition( ::sal_Int16 transitionType, ::sal_Int16 transitionSubType ) throw (uno::RuntimeException, std::exception) override
     {
+        // A set of css::animation::TransitionSubType that don't have any meaning (in the SMIL 2.0
+        // standard) for MISCSHAPEWIPE have been chosen to refer to some of these "fancy" optional
+        // transitions. (The only subtypes of 'miscShapeWipe' defined in the standard are 'heart'
+        // and 'keyhole'.) The set of subtypes used seems to be a bit random; it starts from the
+        // beginning of the list (in the order (numeric) in our TransitionSubType set of constants)
+        // but then jumps a bit randomly. The numeric values as such have no meaning, but still.
+
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
             switch( transitionSubType )
             {
-                case animations::TransitionSubType::ACROSS:
-                case animations::TransitionSubType::CORNERSOUT:
-                case animations::TransitionSubType::CIRCLE:
-                case animations::TransitionSubType::FANOUTHORIZONTAL:
-                case animations::TransitionSubType::CORNERSIN:
-                case animations::TransitionSubType::LEFTTORIGHT:
-                case animations::TransitionSubType::TOPTOBOTTOM:
-                case animations::TransitionSubType::TOPRIGHT:
-                case animations::TransitionSubType::TOPLEFT:
-                case animations::TransitionSubType::BOTTOMRIGHT:
-                case animations::TransitionSubType::BOTTOMLEFT:
-                case animations::TransitionSubType::TOPCENTER:
-                case animations::TransitionSubType::RIGHTCENTER:
-                case animations::TransitionSubType::BOTTOMCENTER:
+                case animations::TransitionSubType::LEFTTORIGHT:        //   1
+                case animations::TransitionSubType::TOPTOBOTTOM:        //   2
+                case animations::TransitionSubType::TOPLEFT:            //   3
+                case animations::TransitionSubType::TOPRIGHT:           //   4
+                case animations::TransitionSubType::BOTTOMRIGHT:        //   5
+                case animations::TransitionSubType::BOTTOMLEFT:         //   6
+                case animations::TransitionSubType::TOPCENTER:          //   7
+                case animations::TransitionSubType::RIGHTCENTER:        //   8
+                case animations::TransitionSubType::BOTTOMCENTER:       //   9
+                case animations::TransitionSubType::CORNERSIN:          //  11
+                case animations::TransitionSubType::CORNERSOUT:         //  12
+                case animations::TransitionSubType::CIRCLE:             //  27
+                case animations::TransitionSubType::FANOUTHORIZONTAL:   //  55
+                case animations::TransitionSubType::ACROSS:             // 108
                     return sal_True;
 
                 default:
