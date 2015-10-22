@@ -612,6 +612,10 @@ public class ValueChanger {
             _newValue.InnerLineWidth += 2;
             _newValue.LineDistance += 2;
             _newValue.OuterLineWidth += 3;
+            if (_newValue instanceof com.sun.star.table.BorderLine2) {
+                ((com.sun.star.table.BorderLine2) _newValue).LineStyle
+                    = com.sun.star.table.BorderLineStyle.DOUBLE;
+            }
             newValue = _newValue;
         } else if (oldValue instanceof com.sun.star.text.XTextColumns) {
             com.sun.star.text.XTextColumns _newValue = (com.sun.star.text.XTextColumns) oldValue;

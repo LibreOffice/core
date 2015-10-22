@@ -408,7 +408,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         }
                         if (resValue != null)
                         {
-                            if ((!compare(resValue, oldValue)) || (!resValue.equals(oldValue)))
+                            if (!compare(resValue, oldValue))
                             {
                                 log.println("But it has changed.");
                                 tRes.tested(propName, true);
