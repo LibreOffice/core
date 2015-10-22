@@ -152,12 +152,14 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
     {
         case SID_ATTR_UNDO_COUNT:
         {
-            const SfxUInt16Item* pCountItem = rReq.GetArg<SfxUInt16Item>(nSID);
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Undo::Steps::set(
-                pCountItem->GetValue(), batch);
-            batch->commit();
+            if (const SfxUInt16Item* pCountItem = rReq.GetArg<SfxUInt16Item>(nSID))
+            {
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::Undo::Steps::set(
+                    pCountItem->GetValue(), batch);
+                batch->commit();
+            }
             break;
         }
 
