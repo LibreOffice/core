@@ -495,6 +495,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
     if (!IsReallyVisible())
         return;
 
+    ApplySettings(rRenderContext);
+
     OUString aText = ImplGetText();
     sal_Int32 nLen = aText.getLength();
 
