@@ -892,8 +892,8 @@ public class ValueChanger {
         } else if (oldValue instanceof com.sun.star.text.TableColumnSeparator) {
             com.sun.star.text.TableColumnSeparator oldTCS = (com.sun.star.text.TableColumnSeparator) oldValue;
             com.sun.star.text.TableColumnSeparator newTCS = new com.sun.star.text.TableColumnSeparator();
-            newTCS.IsVisible = !(oldTCS.IsVisible);
-            newTCS.Position = (short) (oldTCS.Position + (short) 1);
+            newTCS.IsVisible = oldTCS.IsVisible;
+            newTCS.Position = (short) (oldTCS.Position - 1);
             newValue = newTCS;
         } else if (oldValue instanceof com.sun.star.drawing.HomogenMatrix3) {
             com.sun.star.drawing.HomogenMatrix3 oldHM = (com.sun.star.drawing.HomogenMatrix3) oldValue;
