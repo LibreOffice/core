@@ -654,7 +654,7 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
 
 vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
 {
-    vcl::Font aFont = GetPointFont(*const_cast<Window*>(this));
+    vcl::Font aFont = GetPointFont(*pDev);
     Size aFontSize = aFont.GetSize();
     MapMode aPtMapMode(MAP_POINT);
     aFontSize = pDev->LogicToPixel( aFontSize, aPtMapMode );
