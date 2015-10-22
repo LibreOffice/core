@@ -78,28 +78,10 @@ public:
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
-    // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-
 };
-
-OUString LotusWordProImportFilter_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
 
 bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
-
-::com::sun::star::uno::Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL LotusWordProImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
 
 #endif
 
