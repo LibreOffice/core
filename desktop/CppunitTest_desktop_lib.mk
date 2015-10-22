@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_vcl,desktop_lib))
 $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    dtrans/util/mcnttype \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
     framework/util/fwk \
