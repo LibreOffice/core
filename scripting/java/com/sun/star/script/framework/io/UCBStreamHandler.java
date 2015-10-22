@@ -207,13 +207,12 @@ public class UCBStreamHandler extends URLStreamHandler {
             InputStream is) throws
         IOException {
 
-        ZipEntry entry;
         ZipInputStream zis = new ZipInputStream(is);
 
         while (zis.available() != 0) {
-            entry = zis.getNextEntry();
+            ZipEntry entry = zis.getNextEntry();
 
-            if (entry.getName().equals(file)) {
+            if (entry != null && entry.getName().equals(file)) {
                 return zis;
             }
         }
