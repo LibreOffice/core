@@ -327,7 +327,7 @@ void DesktopLOKTest::testSaveAsCalc()
 
 void DesktopLOKTest::testPasteWriter()
 {
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello");
 
