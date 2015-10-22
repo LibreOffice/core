@@ -284,6 +284,8 @@ namespace std
 {
     template<> struct hash<svgi::State>
     {
+        using result_type = std::size_t;
+        using argument_type = svgi::State;
         std::size_t operator()(const svgi::State& rState ) const
         {
             return std::hash<double>()(rState.maCTM.get( 0, 0 ))
