@@ -26,7 +26,13 @@
 class SdrTextAniCountItem: public SfxUInt16Item {
 public:
     SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
-    SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn)  {}
+    SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn) {}
+
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
+    { return new SdrTextAniCountItem(rStream); }
+
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    { return new SdrTextAniCountItem(*this); }
 };
 
 #endif
