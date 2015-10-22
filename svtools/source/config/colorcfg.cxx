@@ -418,7 +418,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     static const sal_Int32 aAutoColors[] =
     {
         COL_WHITE, // DOCCOLOR
-        0xc0c0c0, // DOCBOUNDARIES
+        COL_LIGHTGRAY, // DOCBOUNDARIES
         0xDFDFDE, // APPBACKGROUND
         COL_LIGHTGRAY, // OBJECTBOUNDARIES
         COL_LIGHTGRAY, // TABLEBOUNDARIES
@@ -457,9 +457,9 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // BASICKEYWORD   ,
         COL_RED, //BASICERROR
         0x009900, // SQLIDENTIFIER
-        0x000000, // SQLNUMBER
+        COL_BLACK, // SQLNUMBER
         0xCE7B00, // SQLSTRING
-        0x000000, // SQLOPERATOR
+        COL_BLACK, // SQLOPERATOR
         0x0000E6, // SQLKEYWORD
         0x259D9D, // SQLPARAMTER
         0x969696,// SQLCOMMENT
