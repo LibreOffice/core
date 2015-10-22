@@ -38,6 +38,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void checkRectPrimitive(Primitive2DSequence& rPrimitive);
 
     void testStyles();
+    void testTdf87309();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -47,6 +48,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testStyles);
+    CPPUNIT_TEST(testTdf87309);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -116,6 +118,19 @@ void Test::testStyles()
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithParentStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStylesByGroup));
+}
+
+void Test::testTdf87309()
+{
+    Primitive2DSequence aSequenceTdf87309 = parseSvg("/svgio/qa/cppunit/data/tdf87309.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf87309.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(aSequenceTdf87309);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#000000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
