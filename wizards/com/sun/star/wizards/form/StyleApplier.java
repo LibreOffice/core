@@ -272,6 +272,9 @@ public class StyleApplier
                             for (int i = 0; i < 2; i++)
                             {
                                 XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
+                                if (xPropertySet == null) {
+                                    continue;
+                                }
                                 if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                                 {
                                     xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
