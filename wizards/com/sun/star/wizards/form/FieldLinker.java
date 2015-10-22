@@ -282,8 +282,10 @@ public class FieldLinker extends DBLimitedFieldSelection
 
         public void itemStateChanged(ItemEvent EventObject)
         {
-            int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
-            enableNextControlRow(ikey);
+            if (EventObject != null) {
+                int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+                enableNextControlRow(ikey);
+            }
         }
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
