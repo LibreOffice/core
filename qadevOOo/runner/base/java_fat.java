@@ -21,7 +21,8 @@ import helper.APIDescGetter;
 import helper.AppProvider;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import lib.MultiMethodTest;
@@ -392,7 +393,14 @@ public class java_fat implements TestBase {
         BufferedReader exclusion = null;
 
         try {
-            exclusion = new BufferedReader(new FileReader(url));
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(url), "UTF-8");
+            exclusion = new BufferedReader(reader);
+        } catch (java.io.UnsupportedEncodingException uee) {
+            if (debug) {
+                System.out.println("Couldn't decode file " + url);
+            }
+
+            return entryList;
         } catch (java.io.FileNotFoundException fnfe) {
             if (debug) {
                 System.out.println("Couldn't find file " + url);
