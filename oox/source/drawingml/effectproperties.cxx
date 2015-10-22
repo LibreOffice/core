@@ -14,6 +14,7 @@
 #include "oox/token/tokens.hxx"
 
 #include <basegfx/numeric/ftools.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -28,14 +29,21 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
 void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
-    if( rSourceProps.maEffects.size() > 0 )
-        maEffects = rSourceProps.maEffects;
+    if (!rSourceProps.m_Effects.empty())
+    {
+        m_Effects.reserve(rSourceProps.m_Effects.size());
+        for (auto const& it : rSourceProps.m_Effects)
+        {
+            m_Effects.push_back(o3tl::make_unique<Effect>(*it));
+        }
+    }
 }
 
 void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper ) const
 {
-    for( boost::ptr_vector< Effect >::const_iterator it = maEffects.begin(); it != maEffects.end(); ++it )
+    for (auto const& it : m_Effects)
+    {
         if( it->msName == "outerShdw" )
         {
             sal_Int32 nAttrDir = 0, nAttrDist = 0;
@@ -59,6 +67,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
         }
+    }
 }
 
 css::beans::PropertyValue Effect::getEffect()
