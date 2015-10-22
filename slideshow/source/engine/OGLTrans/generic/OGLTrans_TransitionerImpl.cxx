@@ -1478,32 +1478,17 @@ public:
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
             switch( transitionSubType )
                 {
-                case animations::TransitionSubType::ACROSS:
-                    pTransition = makeNByMTileFlip(8,6);
-                    break;
-                case animations::TransitionSubType::CORNERSOUT:
-                    pTransition = makeOutsideCubeFaceToLeft();
-                    break;
-                case animations::TransitionSubType::CIRCLE:
-                    pTransition = makeRevolvingCircles(8,128);
-                    break;
-                case animations::TransitionSubType::FANOUTHORIZONTAL:
-                    pTransition = makeHelix(20);
-                    break;
-                case animations::TransitionSubType::CORNERSIN:
-                    pTransition = makeInsideCubeFaceToLeft();
-                    break;
                 case animations::TransitionSubType::LEFTTORIGHT:
                     pTransition = makeFallLeaving();
                     break;
                 case animations::TransitionSubType::TOPTOBOTTOM:
                     pTransition = makeTurnAround();
                     break;
-                case animations::TransitionSubType::TOPRIGHT:
-                    pTransition = makeTurnDown();
-                    break;
                 case animations::TransitionSubType::TOPLEFT:
                     pTransition = makeIris();
+                    break;
+                case animations::TransitionSubType::TOPRIGHT:
+                    pTransition = makeTurnDown();
                     break;
                 case animations::TransitionSubType::BOTTOMRIGHT:
                     pTransition = makeRochade();
@@ -1519,6 +1504,21 @@ public:
                     break;
                 case animations::TransitionSubType::BOTTOMCENTER:
                     pTransition = makeDissolve();
+                    break;
+                case animations::TransitionSubType::CORNERSIN:
+                    pTransition = makeInsideCubeFaceToLeft();
+                    break;
+                case animations::TransitionSubType::CORNERSOUT:
+                    pTransition = makeOutsideCubeFaceToLeft();
+                    break;
+                case animations::TransitionSubType::CIRCLE:
+                    pTransition = makeRevolvingCircles(8,128);
+                    break;
+                case animations::TransitionSubType::FANOUTHORIZONTAL:
+                    pTransition = makeHelix(20);
+                    break;
+                case animations::TransitionSubType::ACROSS:
+                    pTransition = makeNByMTileFlip(8,6);
                     break;
                 }
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {
