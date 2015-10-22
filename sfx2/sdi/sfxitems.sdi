@@ -75,6 +75,7 @@
         UINT16      CellType        MID_SEARCH_CELLTYPE;
         BOOL        RowDirection    MID_SEARCH_ROWDIRECTION;
         BOOL        AllTables       MID_SEARCH_ALLTABLES;
+        BOOL        SearchFiltered  MID_SEARCH_SEARCHFILTERED;
         BOOL        Backward        MID_SEARCH_BACKWARD;
         BOOL        Pattern         MID_SEARCH_PATTERN;
         BOOL        Content         MID_SEARCH_CONTENT;
