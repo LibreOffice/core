@@ -466,7 +466,7 @@ public class MultiPropertyTest extends MultiMethodTest
          */
         protected boolean compare(Object obj1, Object obj2)
         {
-            return callCompare(obj1, obj2);
+            return MultiPropertyTest.this.compare(obj1, obj2);
         }
 
         /**
@@ -476,7 +476,7 @@ public class MultiPropertyTest extends MultiMethodTest
          */
         protected String toString(Object obj)
         {
-            return callToString(obj);
+            return MultiPropertyTest.this.toString(obj);
         }
     }
 
@@ -557,29 +557,11 @@ public class MultiPropertyTest extends MultiMethodTest
     }
 
     /**
-     * The method just calls compare. This is a workaround to CodeWarrior's
-     * compiler bug.
-     */
-    private boolean callCompare(Object obj1, Object obj2)
-    {
-        return compare(obj1, obj2);
-    }
-
-    /**
      * Compares two object. In the implementation calls obj1.equals(obj2).
      */
     protected boolean compare(Object obj1, Object obj2)
     {
         return ValueComparer.equalValue(obj1, obj2);
-    }
-
-    /**
-     * The method just calls toString. This is a workaround to
-     * CodeWarrior's compiler bug.
-     */
-    private String callToString(Object obj)
-    {
-        return toString(obj);
     }
 
     /**
