@@ -1206,8 +1206,8 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
         // add stopped state if loop is not endless
         if(0L != nRepeat)
         {
-            bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-            drawinglayer::animation::AnimationEntryFixed aStop(ENDLESS_TIME, bVisisbleWhenStopped ? 0.0 : 1.0);
+            bool bVisibleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+            drawinglayer::animation::AnimationEntryFixed aStop(ENDLESS_TIME, bVisibleWhenStopped ? 0.0 : 1.0);
             rAnimList.append(aStop);
         }
     }
@@ -1215,11 +1215,11 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
 
 void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animation::AnimationEntryList& rAnimList, bool bForward, double fTimeFullPath, double fFrequency)
 {
-    bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
+    bool bVisibleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+    bool bVisibleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
     const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
-    if(bVisisbleWhenStarted)
+    if(bVisibleWhenStarted)
     {
         // move from center to outside
         drawinglayer::animation::AnimationEntryLinear aInOut(fTimeFullPath * 0.5, fFrequency, 0.5, bForward ? 1.0 : 0.0);
@@ -1232,7 +1232,7 @@ void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animation::Anim
     aLoop.append(aThrough);
     rAnimList.append(aLoop);
 
-    if(0L != nRepeat && bVisisbleWhenStopped)
+    if(0L != nRepeat && bVisibleWhenStopped)
     {
         // move from outside to center
         drawinglayer::animation::AnimationEntryLinear aOutIn(fTimeFullPath * 0.5, fFrequency, bForward ? 0.0 : 1.0, 0.5);
@@ -1255,10 +1255,10 @@ void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::animation::A
 
     const double fStartPosition(bForward ? fRelativeTextLength : 1.0 - fRelativeTextLength);
     const double fEndPosition(bForward ? 1.0 - fRelativeTextLength : fRelativeTextLength);
-    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
+    bool bVisibleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
     const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
-    if(!bVisisbleWhenStarted)
+    if(!bVisibleWhenStarted)
     {
         // move from outside to center
         drawinglayer::animation::AnimationEntryLinear aOutIn(fTimeFullPath * 0.5, fFrequency, bForward ? 0.0 : 1.0, 0.5);
@@ -1296,8 +1296,8 @@ void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::animation::A
 
     if(0L != nRepeat)
     {
-        bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-        if(bVisisbleWhenStopped)
+        bool bVisibleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+        if(bVisibleWhenStopped)
         {
             // add timing for staying at the end
             drawinglayer::animation::AnimationEntryFixed aEnd(ENDLESS_TIME, 0.5);
