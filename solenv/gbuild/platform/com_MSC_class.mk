@@ -85,7 +85,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2)),$(1),$(3))
 endef
 
 # AsmObject class
