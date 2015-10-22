@@ -406,17 +406,10 @@ public class MultiPropertyTest extends MultiMethodTest
                             log.println("\t The type seems to be an Any with value of NULL.");
                             log.println("\t Maybe the property should get its own test method.");
                         }
-                        if (resValue != null)
+                        if (!compare(resValue, oldValue))
                         {
-                            if (!compare(resValue, oldValue))
-                            {
-                                log.println("But it has changed.");
-                                tRes.tested(propName, true);
-                            }
-                            else
-                            {
-                                tRes.tested(propName, false);
-                            }
+                            log.println("But it has changed.");
+                            tRes.tested(propName, true);
                         }
                         else
                         {
