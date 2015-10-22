@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <stdio.h>
 #ifdef WNT
 #include <prewin.h>
