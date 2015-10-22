@@ -3355,6 +3355,12 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
     }
 }
 
+void Window::SetClipboard(Reference<XClipboard> xClipboard)
+{
+    if (mpWindowImpl->mpFrameData)
+        mpWindowImpl->mpFrameData->mxClipboard = xClipboard;
+}
+
 Reference< XClipboard > Window::GetClipboard()
 {
 
