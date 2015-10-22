@@ -415,6 +415,9 @@ public:
 
     /// @see lok::Document::resetSelection().
     virtual void resetSelection() SAL_OVERRIDE;
+
+    /// @see vcl::ITiledRenderable::getWindow().
+    virtual vcl::Window* getWindow() SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<
