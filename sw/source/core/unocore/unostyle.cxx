@@ -4140,7 +4140,7 @@ sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
 }
 
 SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoStyleFamily nFamily) :
-    pDocShell( pDocSh ), eFamily(nFamily)
+    m_pDocShell( pDocSh ), m_eFamily(nFamily)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -4154,21 +4154,21 @@ void SwXAutoStyleFamily::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        pDocShell = 0;
+        m_pDocShell = 0;
 }
 
 uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     const uno::Sequence< beans::PropertyValue >& Values )
         throw (uno::RuntimeException, std::exception)
 {
-    if (!pDocShell)
+    if (!m_pDocShell)
     {
         throw uno::RuntimeException();
     }
 
     const sal_uInt16* pRange = 0;
     const SfxItemPropertySet* pPropSet = 0;
-    switch( eFamily )
+    switch( m_eFamily )
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
@@ -4194,10 +4194,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     if( !pPropSet)
         throw uno::RuntimeException();
 
-    SwAttrSet aSet( pDocShell->GetDoc()->GetAttrPool(), pRange );
+    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange );
     const beans::PropertyValue* pSeq = Values.getConstArray();
     sal_Int32 nLen = Values.getLength();
-    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == eFamily);
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == m_eFamily);
 
     if(!bTakeCareOfDrawingLayerFillStyle)
     {
@@ -4222,7 +4222,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         //UUUU set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
         // to make cases in RES_BACKGROUND work correct; target *is* a style
         // where this is the case
-        aSet.SetParent(&pDocShell->GetDoc()->GetDfltTextFormatColl()->GetAttrSet());
+        aSet.SetParent(&m_pDocShell->GetDoc()->GetDfltTextFormatColl()->GetAttrSet());
 
         //UUUU here the used DrawingLayer FillStyles are imported when family is
         // equal to IStyleAccess::AUTO_STYLE_PARA, thus we will need to serve the
@@ -4263,7 +4263,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
                 if(bDoIt)
                 {
-                    const SfxItemPool& rPool = pDocShell->GetDoc()->GetAttrPool();
+                    const SfxItemPool& rPool = m_pDocShell->GetDoc()->GetAttrPool();
                     const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
                     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
@@ -4316,7 +4316,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 case RES_BACKGROUND:
                 {
                     //UUUU
-                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, pDocShell->GetDoc()->IsInXMLImport()));
+                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
                     SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
                     aChangedBrushItem.PutValue(aValue, nMemberId);
@@ -4380,11 +4380,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     // currently in principle only needed when bTakeCareOfDrawingLayerFillStyle,
     // but does not hurt and is easily forgotten later eventually, so keep it
     // as common case
-    pDocShell->GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aSet);
+    m_pDocShell->GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aSet);
 
     // AutomaticStyle creation
-    SfxItemSet_Pointer_t pSet = pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, eFamily );
-    uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(pDocShell->GetDoc(), pSet, eFamily);
+    SfxItemSet_Pointer_t pSet = m_pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, m_eFamily );
+    uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(m_pDocShell->GetDoc(), pSet, m_eFamily);
 
     return xRet;
 }
@@ -4392,10 +4392,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(  )
         throw (uno::RuntimeException, std::exception)
 {
-    if( !pDocShell )
+    if( !m_pDocShell )
         throw uno::RuntimeException();
     return uno::Reference< container::XEnumeration >
-        (new SwXAutoStylesEnumerator( pDocShell->GetDoc(), eFamily ));
+        (new SwXAutoStylesEnumerator( m_pDocShell->GetDoc(), m_eFamily ));
 }
 
 uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException, std::exception)

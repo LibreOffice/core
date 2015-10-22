@@ -355,8 +355,8 @@ public:
 class SwXAutoStyleFamily : public cppu::WeakImplHelper< com::sun::star::style::XAutoStyleFamily >,
     public SwClient
 {
-    SwDocShell *pDocShell;
-    IStyleAccess::SwAutoStyleFamily eFamily;
+    SwDocShell *m_pDocShell;
+    IStyleAccess::SwAutoStyleFamily m_eFamily;
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
