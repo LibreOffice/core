@@ -28,7 +28,10 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import util.ValueChanger;
 import util.ValueComparer;
@@ -570,6 +573,39 @@ public class MultiPropertyTest extends MultiMethodTest
      */
     protected String toString(Object obj)
     {
-        return obj == null ? "null" : obj.toString();
+        if (obj == null) {
+            return "null";
+        }
+        StringBuilder s = new StringBuilder(obj.toString());
+        if (obj.getClass().isArray()) {
+            int n = Array.getLength(obj);
+            s.append('[').append(n).append("]{");
+            for (int i = 0; i != n; ++i) {
+                if (i != 0) {
+                    s.append(", ");
+                }
+                s.append(toString(Array.get(obj, i)));
+            }
+            s.append('}');
+        } else if (ValueChanger.isStructure(obj)) {
+            s.append('{');
+            Field[] fields = obj.getClass().getFields();
+            boolean first = true;
+            for (int i = 0; i != fields.length; ++i) {
+                if ((fields[i].getModifiers() & Modifier.STATIC) == 0) {
+                    if (!first) {
+                        s.append(", ");
+                    }
+                    first = false;
+                    try {
+                        s.append(toString(fields[i].get(obj)));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("unexpected " + e, e);
+                    }
+                }
+            }
+            s.append('}');
+        }
+        return s.toString();
     }
 }

@@ -1036,7 +1036,7 @@ public class ValueChanger {
      *            the value to be checked.
      * @return <code>true</code> if the value is assumed to be a structure.
      */
-    private static boolean isStructure(Object val) {
+    public static boolean isStructure(Object val) {
         boolean result = true;
 
         Class<?> clazz = val.getClass();
