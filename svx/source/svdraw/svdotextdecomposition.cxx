@@ -1216,7 +1216,7 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
 void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animation::AnimationEntryList& rAnimList, bool bForward, double fTimeFullPath, double fFrequency)
 {
     bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
+    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
     const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
     if(bVisisbleWhenStarted)
@@ -1255,7 +1255,7 @@ void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::animation::A
 
     const double fStartPosition(bForward ? fRelativeTextLength : 1.0 - fRelativeTextLength);
     const double fEndPosition(bForward ? 1.0 - fRelativeTextLength : fRelativeTextLength);
-    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
+    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTARTINSIDE)).GetValue());
     const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
     if(!bVisisbleWhenStarted)
