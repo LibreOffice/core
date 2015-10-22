@@ -2533,6 +2533,17 @@ void SdXImpressDocument::resetSelection()
     pSdrView->UnmarkAll();
 }
 
+vcl::Window* SdXImpressDocument::getWindow()
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return 0;
+
+    return pViewShell->GetActiveWindow();
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);
