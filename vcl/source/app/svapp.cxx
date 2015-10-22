@@ -407,7 +407,6 @@ namespace
         Application::EndAllPopups();
         Application::EndAllDialogs();
         Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplPrepareExitMsg ) );
-        Application::Quit();
     }
 }
 
