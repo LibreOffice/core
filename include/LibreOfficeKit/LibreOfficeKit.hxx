@@ -247,6 +247,18 @@ public:
     }
 
     /**
+     * Pastes content at the current cursor position.
+     *
+     * @param pMimeType format of pData, for example text/plain;charset=utf-8.
+     * @param pData the actual data to be pasted.
+     * @return if the supplied data was pasted successfully.
+     */
+    inline bool paste(const char* pMimeType, const char* pData, size_t nSize)
+    {
+        return mpDoc->pClass->paste(mpDoc, pMimeType, pData, nSize);
+    }
+
+    /**
      * Adjusts the graphic selection.
      *
      * @param nType @see LibreOfficeKitSetGraphicSelectionType

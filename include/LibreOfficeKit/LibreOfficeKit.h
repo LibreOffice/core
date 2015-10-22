@@ -157,6 +157,12 @@ struct _LibreOfficeKitDocumentClass
                                const char* pMimeType,
                                char** pUsedMimeType);
 
+    /// @see lok::Document::paste().
+    bool (*paste) (LibreOfficeKitDocument* pThis,
+                   const char* pMimeType,
+                   const char* pData,
+                   size_t nSize);
+
     /// @see lok::Document::setGraphicSelection
     void (*setGraphicSelection) (LibreOfficeKitDocument* pThis,
                                  int nType,
