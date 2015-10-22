@@ -62,3 +62,18 @@
      Py_INCREF(v);
  #ifdef COUNT_ALLOCS
      if (ival >= 0)
+--- Modules/_ctypes/_ctypes.c
++++ Modules/_ctypes/_ctypes.c
+@@ -1328,8 +1328,10 @@
+     if (stgdict->shape == NULL)
+         goto error;
+     stgdict->shape[0] = length;
+-    memmove(&stgdict->shape[1], itemdict->shape,
+-        sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    if (itemdict->shape) {
++        memmove(&stgdict->shape[1], itemdict->shape,
++            sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    }
+ 
+     itemsize = itemdict->size;
+     if (length * itemsize < 0) {
