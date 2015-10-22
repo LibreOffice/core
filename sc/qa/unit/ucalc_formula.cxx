@@ -3825,7 +3825,7 @@ void Test::testFuncIFERROR()
     const SCROW nElems2 = SAL_N_ELEMENTS(aCheck2);
     const SCCOL nStartCol = aPos.Col() + nCols;
     const SCROW nStartRow = aPos.Row() + nElems2;
-    m_pDoc->InsertMatrixFormula( nStartCol, nStartRow, nStartCol+nCols, nStartRow+nElems2, aMark,
+    m_pDoc->InsertMatrixFormula( nStartCol, nStartRow, nStartCol+nCols-1, nStartRow+nElems2-1, aMark,
             "=IFERROR(C1:E3;\"Error\")", NULL);
 
     m_pDoc->CalcAll();
