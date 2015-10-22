@@ -147,6 +147,12 @@ public:
     {
         return OUString();
     }
+
+    /// Returns the current vcl::Window of the component.
+    virtual vcl::Window* getWindow()
+    {
+        return 0;
+    }
 };
 
 } // namespace vcl

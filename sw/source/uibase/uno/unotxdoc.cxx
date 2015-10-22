@@ -3182,6 +3182,13 @@ OUString SwXTextDocument::getPartPageRectangles()
     return pWrtShell->getPageRectangles();
 }
 
+vcl::Window* SwXTextDocument::getWindow()
+{
+    SolarMutexGuard aGuard;
+
+    return &pDocShell->GetView()->GetEditWin();
+}
+
 int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;
