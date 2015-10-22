@@ -258,6 +258,8 @@ public:
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see lok::Document::resetSelection().
     virtual void resetSelection() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getWindow().
+    virtual vcl::Window* getWindow() SAL_OVERRIDE;
 
     // XComponent
 
