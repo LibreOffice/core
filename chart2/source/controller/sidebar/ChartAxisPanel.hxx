@@ -25,7 +25,7 @@
 
 class FixedText;
 class ListBox;
-class NumericField;
+class MetricField;
 
 namespace chart {
 
@@ -82,6 +82,8 @@ private:
     VclPtr<ListBox> mpLBLabelPos;
     VclPtr<VclGrid> mpGridLabel;
 
+    VclPtr<MetricField> mpNFRotation;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
     css::uno::Reference<css::frame::XModel> mxModel;
@@ -94,6 +96,7 @@ private:
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
     DECL_LINK_TYPED(ListBoxHdl, ListBox&, void);
+    DECL_LINK_TYPED(TextRotationHdl, Edit&, void);
 };
 
 } } // end of namespace ::chart::sidebar

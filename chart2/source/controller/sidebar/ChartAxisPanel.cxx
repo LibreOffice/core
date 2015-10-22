@@ -181,6 +181,33 @@ OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
     return aCID;
 }
 
+void setAxisRotation(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID, double nVal)
+{
+    css::uno::Reference< css::beans::XPropertySet > xAxis(
+        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xAxis.is())
+        return;
+
+    xAxis->setPropertyValue("TextRotation", css::uno::makeAny(nVal));
+}
+
+double getAxisRotation(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID)
+{
+    css::uno::Reference< css::beans::XPropertySet > xAxis(
+        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xAxis.is())
+        return 0;
+
+    css::uno::Any aAny = xAxis->getPropertyValue("TextRotation");
+    double nVal = 0;
+    aAny >>= nVal;
+    return nVal;
+}
+
 }
 
 ChartAxisPanel::ChartAxisPanel(
@@ -198,7 +225,7 @@ ChartAxisPanel::ChartAxisPanel(
     get(mpCBReverse, "checkbutton_reverse");
 
     get(mpLBLabelPos, "comboboxtext_label_position");
-    //FIXME: add text orientation spinbox + its handler
+    get(mpNFRotation, "spinbutton1");
     get(mpGridLabel, "label_props");
 
     Initialize();
@@ -224,6 +251,8 @@ void ChartAxisPanel::dispose()
     mpLBLabelPos.clear();
     mpGridLabel.clear();
 
+    mpNFRotation.clear();
+
     PanelLayout::dispose();
 }
 
@@ -242,6 +271,9 @@ void ChartAxisPanel::Initialize()
     mpCBShowLabel->SetClickHdl(aLink);
     mpCBReverse->SetClickHdl(aLink);
 
+    Link<Edit&, void> aSpinButtonLink = LINK(this, ChartAxisPanel, TextRotationHdl);
+    mpNFRotation->SetModifyHdl(aSpinButtonLink);
+
     mpLBLabelPos->SetSelectHdl(LINK(this, ChartAxisPanel, ListBoxHdl));
 }
 
@@ -257,6 +289,7 @@ void ChartAxisPanel::updateData()
     mpCBReverse->Check(isReverse(mxModel, aCID));
 
     mpLBLabelPos->SelectEntryPos(getLabelPosition(mxModel, aCID));
+    mpNFRotation->SetValue(getAxisRotation(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartAxisPanel::Create (
@@ -349,6 +382,13 @@ IMPL_LINK_NOARG_TYPED(ChartAxisPanel, ListBoxHdl, ListBox&, void)
     sal_Int32 nPos = mpLBLabelPos->GetSelectEntryPos();
 
     setLabelPosition(mxModel, aCID, nPos);
+}
+
+IMPL_LINK_TYPED(ChartAxisPanel, TextRotationHdl, Edit&, rMetricField, void)
+{
+    OUString aCID = getCID(mxModel);
+    double nVal = static_cast<NumericField&>(rMetricField).GetValue();
+    setAxisRotation(mxModel, aCID, nVal);
 }
 
 }} // end of namespace ::chart::sidebar
