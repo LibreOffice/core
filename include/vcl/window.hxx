@@ -1387,6 +1387,8 @@ public:
 
     // Clipboard/Selection interfaces
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
+    /// Sets a custom clipboard for the window's frame, instead of creating it on-demand using css::datatransfer::clipboard::SystemClipboard.
+    void SetClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
 
     /*
