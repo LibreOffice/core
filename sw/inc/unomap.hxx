@@ -320,8 +320,8 @@
 
 class SwUnoPropertyMapProvider
 {
-    SfxItemPropertyMapEntry const * aMapEntriesArr[PROPERTY_MAP_END];
-    SfxItemPropertySet*             aPropertySetArr[PROPERTY_MAP_END];
+    SfxItemPropertyMapEntry const * m_aMapEntriesArr[PROPERTY_MAP_END];
+    SfxItemPropertySet*             m_aPropertySetArr[PROPERTY_MAP_END];
 
 public:
     SwUnoPropertyMapProvider();

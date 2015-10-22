@@ -104,8 +104,8 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
 {
     for( sal_uInt16 i = 0; i < PROPERTY_MAP_END; i++ )
     {
-        aMapEntriesArr[i] = 0;
-        aPropertySetArr[i] = 0;
+        m_aMapEntriesArr[i] = 0;
+        m_aPropertySetArr[i] = 0;
     }
 }
 
@@ -607,7 +607,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
     OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
-    if( !aMapEntriesArr[ nPropertyId ] )
+    if( !m_aMapEntriesArr[ nPropertyId ] )
     {
         switch(nPropertyId)
         {
@@ -618,7 +618,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMPLETE_TEXT_CURSOR_MAP
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
             }
             break;
             case PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE:
@@ -628,7 +628,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAccessibilityTextAttrMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aAccessibilityTextAttrMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH:
@@ -648,7 +648,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARA_AUTO_STYLE :
@@ -681,7 +681,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAutoParaStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aAutoParaStyleMap;
             }
             break;
             case PROPERTY_MAP_CHAR_STYLE :
@@ -740,7 +740,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAR_SHADOW_FORMAT), RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aCharStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aCharStyleMap;
             }
             break;
             case PROPERTY_MAP_CHAR_AUTO_STYLE :
@@ -800,7 +800,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAR_SHADOW_FORMAT), RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAutoCharStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aAutoCharStyleMap;
             }
             break;
             case PROPERTY_MAP_RUBY_AUTO_STYLE :
@@ -811,7 +811,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID,     MID_RUBY_ABOVE },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAutoRubyStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aAutoRubyStyleMap;
             }
             break;
             case PROPERTY_MAP_PARA_STYLE :
@@ -827,7 +827,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aParaStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aParaStyleMap;
             }
             break;
             case PROPERTY_MAP_CONDITIONAL_PARA_STYLE :
@@ -846,7 +846,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aParaStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aParaStyleMap;
             }
             break;
             case PROPERTY_MAP_FRAME_STYLE:
@@ -940,7 +940,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aFrameStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aFrameStyleMap;
             }
             break;
             case PROPERTY_MAP_PAGE_STYLE :
@@ -1139,7 +1139,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aPageStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aPageStyleMap;
             }
             break;
             case PROPERTY_MAP_NUM_STYLE  :
@@ -1153,7 +1153,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aNumStyleMap;
+                m_aMapEntriesArr[nPropertyId] = aNumStyleMap;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE :
@@ -1203,7 +1203,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
-                aMapEntriesArr[nPropertyId] = aTablePropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTablePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TABLE_CELL :
@@ -1236,7 +1236,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     _REDLINE_NODE_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aCellMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aCellMap_Impl;
             }
             break;
             case PROPERTY_MAP_TABLE_RANGE:
@@ -1256,7 +1256,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHART_COLUMN_AS_LABEL), FN_UNO_RANGE_COL_LABEL, cppu::UnoType<bool>::get()  ,       PropertyAttribute::MAYBEVOID,     0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aRangePropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aRangePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_SECTION:
@@ -1307,7 +1307,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SECT_RIGHT_MARGIN), RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aSectionPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aSectionPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SEARCH:
@@ -1327,7 +1327,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SEARCH_WORDS), WID_WORDS,               cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aSearchPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_FRAME:
@@ -1362,7 +1362,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aFramePropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aFramePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_GRAPHIC:
@@ -1406,7 +1406,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aGraphicPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aGraphicPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_EMBEDDED_OBJECT:
@@ -1437,7 +1437,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
 
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE:
@@ -1500,7 +1500,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAIN_NAME),      RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NAME    },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_MARK:
@@ -1517,7 +1517,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aIdxMarkMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aIdxMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_CNTIDX_MARK:
@@ -1529,7 +1529,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aContentMarkMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aContentMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_USER_MARK:
@@ -1542,7 +1542,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aUserMarkMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aUserMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_IDX:
@@ -1580,7 +1580,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_INDEX_ENTRY_TYPE), WID_INDEX_ENTRY_TYPE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXIndexMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXIndexMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_CNTNT:
@@ -1622,7 +1622,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_DOCUMENT_INDEX_MARKS), WID_INDEX_MARKS, cppu::UnoType< cppu::UnoSequenceType<css::text::XDocumentIndexMark> >::get(),           PropertyAttribute::READONLY ,0       },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXContentMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXContentMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_USER:
@@ -1668,7 +1668,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    cppu::UnoType<OUString>::get()  ,      PROPERTY_NONE,     0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXUserMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXUserMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_TABLES:
@@ -1693,7 +1693,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXTablesMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXTablesMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
@@ -1721,7 +1721,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXObjectsMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXObjectsMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_ILLUSTRATIONS:
@@ -1747,7 +1747,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTOXIllustrationsMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTOXIllustrationsMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_ROW:
@@ -1769,7 +1769,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
-                aMapEntriesArr[nPropertyId] = aTableRowPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTableRowPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_CURSOR:
@@ -1793,7 +1793,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_VERT_ORIENT), RES_VERT_ORIENT,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTableCursorPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTableCursorPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_BOOKMARK:
@@ -1804,7 +1804,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aBookmarkPropertyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aBookmarkPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
@@ -1815,7 +1815,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
-                aMapEntriesArr[nPropertyId] = aParagraphExtensionsMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aParagraphExtensionsMap_Impl;
             }
             break;
             case PROPERTY_MAP_BIBLIOGRAPHY :
@@ -1837,7 +1837,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aBibliographyMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aBibliographyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_DOCUMENT:
@@ -1886,7 +1886,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_DEFAULT_PAGE_MODE),  WID_DOC_DEFAULT_PAGE_MODE,  cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aDocMap_Impl;
             }
             break;
             case PROPERTY_MAP_LINK_TARGET:
@@ -1897,7 +1897,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_LINK_DISPLAY_NAME), 0,   cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xff},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aLinkTargetMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aLinkTargetMap_Impl;
             }
             break;
             case PROPERTY_MAP_AUTO_TEXT_GROUP :
@@ -1908,7 +1908,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_TITLE), WID_GROUP_TITLE, cppu::UnoType<OUString>::get(),   PROPERTY_NONE,   0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAutoTextGroupMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aAutoTextGroupMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXTPORTION_EXTENSIONS:
@@ -1925,7 +1925,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_META), FN_UNO_META, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTextPortionExtensionMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTextPortionExtensionMap_Impl;
             }
             break;
             case PROPERTY_MAP_FOOTNOTE:
@@ -1937,7 +1937,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     _REDLINE_NODE_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aFootnoteMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aFootnoteMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_COLUMS :
@@ -1954,7 +1954,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SEPARATOR_LINE_STYLE), WID_TXTCOL_LINE_STYLE, cppu::UnoType<sal_Int8>::get(),PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTextColumns_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTextColumns_Impl;
             }
             break;
             case PROPERTY_MAP_REDLINE :
@@ -1967,7 +1967,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_REDLINE_END), 0, cppu::UnoType<css::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aRedlineMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aRedlineMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_DEFAULT :
@@ -1987,7 +1987,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
                 for( SfxItemPropertyMapEntry * pMap = aTextDefaultMap_Impl;
                      !pMap->aName.isEmpty(); ++pMap )
                 {
@@ -2010,7 +2010,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aRedlinePortionMap_Impl;
+                m_aMapEntriesArr[nPropertyId] = aRedlinePortionMap_Impl;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_DATETIME:
@@ -2026,7 +2026,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDateTimeFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDateTimeFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_USER     :
@@ -2041,7 +2041,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
-                aMapEntriesArr[nPropertyId] = aUserFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aUserFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_SET_EXP  :
@@ -2066,7 +2066,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aSetExpFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aSetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_GET_EXP  :
@@ -2084,7 +2084,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aGetExpFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aGetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_FILE_NAME:
@@ -2097,7 +2097,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aFileNameFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aFileNameFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_PAGE_NUM :
@@ -2111,7 +2111,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aPageNumFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aPageNumFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_AUTHOR   :
@@ -2125,7 +2125,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAuthorFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aAuthorFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_CHAPTER  :
@@ -2137,7 +2137,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aChapterFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aChapterFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_GET_REFERENCE          :
@@ -2152,7 +2152,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aGetRefFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aGetRefFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT      :
@@ -2167,7 +2167,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aConditionedTextFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aConditionedTextFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT :
@@ -2181,7 +2181,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aHiddenTextFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aHiddenTextFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :
@@ -2198,7 +2198,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_INPUT:
@@ -2212,7 +2212,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aInputFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aInputFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_MACRO                 :
@@ -2226,7 +2226,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aMacroFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aMacroFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DDE                   :
@@ -2236,7 +2236,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDDEFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDDEFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DROPDOWN :
@@ -2251,7 +2251,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDropDownMap;
+                m_aMapEntriesArr[nPropertyId] = aDropDownMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_PARA           :
@@ -2263,7 +2263,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aHiddenParaFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aHiddenParaFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOC_INFO              :
@@ -2276,7 +2276,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TEMPLATE_NAME         :
@@ -2287,7 +2287,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTmplNameFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aTmplNameFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_USER_EXT              :
@@ -2301,7 +2301,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId]= aUsrExtFieldPropMap;
+                m_aMapEntriesArr[nPropertyId]= aUsrExtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_SET          :
@@ -2313,7 +2313,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aRefPgSetFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aRefPgSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_GET          :
@@ -2325,7 +2325,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aRefPgGetFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aRefPgGetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_JUMP_EDIT             :
@@ -2338,7 +2338,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aJumpEdtFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aJumpEdtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_SCRIPT                :
@@ -2351,7 +2351,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aScriptFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aScriptFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET     :
@@ -2370,7 +2370,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBNextSetFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBNextSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET      :
@@ -2390,7 +2390,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBNumSetFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBNumSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM      :
@@ -2411,7 +2411,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBSetNumFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBSetNumFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE              :
@@ -2427,7 +2427,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NAME         :
@@ -2446,7 +2446,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBNameFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBNameFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCSTAT:
@@ -2458,7 +2458,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocstatFieldPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocstatFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR:
@@ -2471,7 +2471,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoAuthorPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoAuthorPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME:
@@ -2486,7 +2486,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoDateTimePropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoDateTimePropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME     :
@@ -2501,7 +2501,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoEditTimePropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoEditTimePropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_MISC:
@@ -2514,7 +2514,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoStringContentPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoStringContentPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM:
@@ -2529,7 +2529,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoCustomPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoCustomPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION          :
@@ -2542,7 +2542,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDocInfoRevisionPropMap;
+                m_aMapEntriesArr[nPropertyId] = aDocInfoRevisionPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS:
@@ -2553,7 +2553,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aCombinedCharactersPropMap;
+                m_aMapEntriesArr[nPropertyId] = aCombinedCharactersPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TABLE_FORMULA:
@@ -2567,7 +2567,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTableFormulaPropMap;
+                m_aMapEntriesArr[nPropertyId] = aTableFormulaPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DUMMY_0:
@@ -2577,7 +2577,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aEmptyPropMap;
+                m_aMapEntriesArr[nPropertyId] = aEmptyPropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_USER :
@@ -2592,7 +2592,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aUserFieldTypePropMap;
+                m_aMapEntriesArr[nPropertyId] = aUserFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DDE       :
@@ -2609,7 +2609,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CONTENT),            FIELD_PROP_PAR5,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDDEFieldTypePropMap;
+                m_aMapEntriesArr[nPropertyId] = aDDEFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_SET_EXP     :
@@ -2624,7 +2624,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aSetExpFieldTypePropMap;
+                m_aMapEntriesArr[nPropertyId] = aSetExpFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DATABASE    :
@@ -2645,7 +2645,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    cppu::UnoType< cppu::UnoSequenceType<css::text::XDependentTextField> >::get(), PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aDBFieldTypePropMap;
+                m_aMapEntriesArr[nPropertyId] = aDBFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DUMMY0      :
@@ -2657,7 +2657,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_INSTANCE_NAME),      0,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aStandardFieldMasterMap;
+                m_aMapEntriesArr[nPropertyId] = aStandardFieldMasterMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY:
@@ -2668,7 +2668,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aBibliographyFieldMap;
+                m_aMapEntriesArr[nPropertyId] = aBibliographyFieldMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY:
@@ -2685,7 +2685,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR4,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aBibliographyFieldMasterMap;
+                m_aMapEntriesArr[nPropertyId] = aBibliographyFieldMasterMap;
             }
             break;
             case PROPERTY_MAP_TEXT :
@@ -2695,7 +2695,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     _REDLINE_NODE_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aTextMap;
+                m_aMapEntriesArr[nPropertyId] = aTextMap;
             }
             break;
             case PROPERTY_MAP_MAILMERGE :
@@ -2735,7 +2735,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_OUT_SERVER_PASSWORD),    WID_OUT_SERVER_PASSWORD,    cppu::UnoType<OUString>::get(),    PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aMailMergeMap;
+                m_aMapEntriesArr[nPropertyId] = aMailMergeMap;
             }
             break;
             case PROPERTY_MAP_TEXT_VIEW :
@@ -2748,7 +2748,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},  // deprecated #i91949
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = pTextViewMap;
+                m_aMapEntriesArr[nPropertyId] = pTextViewMap;
             }
             break;
             case PROPERTY_MAP_CHART2_DATA_SEQUENCE :
@@ -2758,7 +2758,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_ROLE), 0, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0 },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
+                m_aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
             }
             break;
             case PROPERTY_MAP_METAFIELD:
@@ -2771,7 +2771,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                         cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
-                aMapEntriesArr[nPropertyId] = aMetaFieldMap;
+                m_aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
 
@@ -2779,12 +2779,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 OSL_FAIL( "unexpected property map ID" );
         }
     }
-    return aMapEntriesArr[nPropertyId];
+    return m_aMapEntriesArr[nPropertyId];
 }
 
 const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 nPropertyId)
 {
-    if( !aPropertySetArr[nPropertyId] )
+    if( !m_aPropertySetArr[nPropertyId] )
     {
         const SfxItemPropertyMapEntry* pEntries = GetPropertyMapEntries(nPropertyId);
         switch( nPropertyId )
@@ -2792,588 +2792,588 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             case PROPERTY_MAP_TEXT_CURSOR:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_CURSOR(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_CURSOR;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_CURSOR;
             }
             break;
             case PROPERTY_MAP_CHAR_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CHAR_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_STYLE;
             }
             break;
             case PROPERTY_MAP_PARA_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARA_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_STYLE;
             }
             break;
             case PROPERTY_MAP_FRAME_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FRAME_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FRAME_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FRAME_STYLE;
             }
             break;
             case PROPERTY_MAP_PAGE_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PAGE_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PAGE_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PAGE_STYLE;
             }
             break;
             case PROPERTY_MAP_NUM_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_NUM_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_NUM_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_NUM_STYLE;
             }
             break;
             case PROPERTY_MAP_SECTION:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_SECTION(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_SECTION;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_SECTION;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE;
             }
             break;
             case PROPERTY_MAP_TABLE_CELL:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TABLE_CELL(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_CELL;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_CELL;
             }
             break;
             case PROPERTY_MAP_TABLE_RANGE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TABLE_RANGE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_RANGE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_RANGE;
             }
             break;
             case PROPERTY_MAP_TEXT_SEARCH:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_SEARCH(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SEARCH;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SEARCH;
             }
             break;
             case PROPERTY_MAP_TEXT_FRAME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_FRAME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_FRAME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_FRAME;
             }
             break;
             case PROPERTY_MAP_TEXT_GRAPHIC:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_GRAPHIC(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_GRAPHIC;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_GRAPHIC;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_SHAPE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE;
             }
             break;
             case PROPERTY_MAP_INDEX_USER:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_USER(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_USER;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_USER;
             }
             break;
             case PROPERTY_MAP_INDEX_CNTNT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_CNTNT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_CNTNT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_CNTNT;
             }
             break;
             case PROPERTY_MAP_INDEX_IDX:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_IDX(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_IDX;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_IDX;
             }
             break;
             case PROPERTY_MAP_USER_MARK:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_USER_MARK(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_USER_MARK;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_USER_MARK;
             }
             break;
             case PROPERTY_MAP_CNTIDX_MARK:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CNTIDX_MARK(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CNTIDX_MARK;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CNTIDX_MARK;
             }
             break;
             case PROPERTY_MAP_INDEX_MARK:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_MARK(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_MARK;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_MARK;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_ROW:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE_ROW(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_ROW;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_ROW;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_CURSOR:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE_CURSOR(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_CURSOR;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_CURSOR;
             }
             break;
             case PROPERTY_MAP_BOOKMARK:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_BOOKMARK(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BOOKMARK;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BOOKMARK;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH_EXTENSIONS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH_EXTENSIONS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH_EXTENSIONS;
             }
             break;
             case PROPERTY_MAP_INDEX_ILLUSTRATIONS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_ILLUSTRATIONS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_ILLUSTRATIONS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_ILLUSTRATIONS;
             }
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_OBJECTS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_OBJECTS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_OBJECTS;
             }
             break;
             case PROPERTY_MAP_INDEX_TABLES:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_TABLES(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_TABLES;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_TABLES;
             }
             break;
             case PROPERTY_MAP_BIBLIOGRAPHY           :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_BIBLIOGRAPHY(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BIBLIOGRAPHY;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BIBLIOGRAPHY;
             }
             break;
             case PROPERTY_MAP_TEXT_DOCUMENT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_DOCUMENT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DOCUMENT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DOCUMENT;
             }
             break;
             case PROPERTY_MAP_LINK_TARGET            :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_LINK_TARGET(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_LINK_TARGET;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_LINK_TARGET;
             }
             break;
             case PROPERTY_MAP_AUTO_TEXT_GROUP        :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_AUTO_TEXT_GROUP(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_AUTO_TEXT_GROUP;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_AUTO_TEXT_GROUP;
             }
             break;
             case PROPERTY_MAP_TEXTPORTION_EXTENSIONS :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXTPORTION_EXTENSIONS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXTPORTION_EXTENSIONS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXTPORTION_EXTENSIONS;
             }
             break;
             case PROPERTY_MAP_FOOTNOTE               :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FOOTNOTE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FOOTNOTE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FOOTNOTE;
             }
             break;
             case PROPERTY_MAP_TEXT_COLUMS            :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_COLUMS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_COLUMS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_COLUMS;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH              :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH;
             }
             break;
             case PROPERTY_MAP_EMBEDDED_OBJECT        :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_EMBEDDED_OBJECT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_EMBEDDED_OBJECT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_EMBEDDED_OBJECT;
             }
             break;
             case PROPERTY_MAP_REDLINE                :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_REDLINE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE;
             }
             break;
             case PROPERTY_MAP_TEXT_DEFAULT           :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_DEFAULT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DEFAULT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DEFAULT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATETIME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATETIME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATETIME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATETIME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_USER:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_USER(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER;
             }
             break;
             case PROPERTY_MAP_FLDTYP_SET_EXP:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_SET_EXP(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SET_EXP;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SET_EXP;
             }
             break;
             case PROPERTY_MAP_FLDTYP_GET_EXP:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_GET_EXP(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_EXP;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_EXP;
             }
             break;
             case PROPERTY_MAP_FLDTYP_FILE_NAME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_FILE_NAME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_FILE_NAME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_FILE_NAME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_PAGE_NUM:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_PAGE_NUM(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_PAGE_NUM;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_PAGE_NUM;
             }
             break;
             case PROPERTY_MAP_FLDTYP_AUTHOR:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_AUTHOR(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_AUTHOR;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_AUTHOR;
             }
             break;
             case PROPERTY_MAP_FLDTYP_CHAPTER:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_CHAPTER(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CHAPTER;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CHAPTER;
             }
             break;
             case PROPERTY_MAP_FLDTYP_GET_REFERENCE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_GET_REFERENCE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_REFERENCE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_REFERENCE;
             }
             break;
             case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_CONDITIONED_TEXT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CONDITIONED_TEXT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CONDITIONED_TEXT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_HIDDEN_TEXT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_TEXT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_TEXT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_ANNOTATION :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_ANNOTATION(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_ANNOTATION;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_ANNOTATION;
             }
             break;
             case PROPERTY_MAP_FLDTYP_INPUT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_INPUT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_INPUT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_INPUT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_MACRO:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_MACRO(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_MACRO;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_MACRO;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DDE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DDE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DDE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DDE;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_PARA:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_HIDDEN_PARA(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_PARA;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_PARA;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOC_INFO :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOC_INFO(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOC_INFO;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOC_INFO;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TEMPLATE_NAME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_TEMPLATE_NAME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TEMPLATE_NAME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TEMPLATE_NAME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_USER_EXT :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_USER_EXT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER_EXT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER_EXT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_SET:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_REF_PAGE_SET(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_SET;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_SET;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_GET:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_REF_PAGE_GET(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_GET;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_GET;
             }
             break;
             case PROPERTY_MAP_FLDTYP_JUMP_EDIT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_JUMP_EDIT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_JUMP_EDIT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_JUMP_EDIT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_SCRIPT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_SCRIPT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SCRIPT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SCRIPT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NUM_SET(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NUM_SET;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NUM_SET;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_SET_NUM(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_SET_NUM;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_SET_NUM;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NAME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NAME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NAME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NAME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCSTAT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCSTAT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCSTAT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCSTAT;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_MISC :
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_MISC(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_MISC;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_MISC;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_REVISION(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_REVISION;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_REVISION;
             }
             break;
             case PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DUMMY_0:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DUMMY_0(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DUMMY_0;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DUMMY_0;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TABLE_FORMULA:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_TABLE_FORMULA(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TABLE_FORMULA;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TABLE_FORMULA;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_USER:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_USER(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_USER;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_USER;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DDE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DDE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DDE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DDE;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_SET_EXP:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_SET_EXP(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_SET_EXP;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_SET_EXP;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DATABASE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DATABASE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DATABASE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DATABASE;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DUMMY0:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DUMMY0(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DUMMY0;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DUMMY0;
             }
             break;
             case PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_BIBLIOGRAPHY(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_BIBLIOGRAPHY;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_BIBLIOGRAPHY;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;
             }
             break;
             case PROPERTY_MAP_TEXT:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT;
             }
             break;
             case PROPERTY_MAP_REDLINE_PORTION:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_REDLINE_PORTION(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE_PORTION;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE_PORTION;
             }
             break;
             case PROPERTY_MAP_MAILMERGE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_MAILMERGE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_MAILMERGE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_MAILMERGE;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DROPDOWN:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DROPDOWN(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DROPDOWN;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DROPDOWN;
             }
             break;
             case PROPERTY_MAP_CHART2_DATA_SEQUENCE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CHART2_DATA_SEQUENCE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHART2_DATA_SEQUENCE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHART2_DATA_SEQUENCE;
             }
             break;
             case PROPERTY_MAP_TEXT_VIEW:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_TEXT_VIEW(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_VIEW;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_VIEW;
             }
             break;
             case PROPERTY_MAP_CONDITIONAL_PARA_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CONDITIONAL_PARA_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CONDITIONAL_PARA_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CONDITIONAL_PARA_STYLE;
             }
             break;
             case PROPERTY_MAP_CHAR_AUTO_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CHAR_AUTO_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_AUTO_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_AUTO_STYLE;
             }
             break;
             case PROPERTY_MAP_RUBY_AUTO_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_RUBY_AUTO_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_RUBY_AUTO_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_RUBY_AUTO_STYLE;
             }
             break;
             case PROPERTY_MAP_PARA_AUTO_STYLE:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARA_AUTO_STYLE(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_AUTO_STYLE;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_AUTO_STYLE;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM;
             }
             break;
             case PROPERTY_MAP_METAFIELD:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_METAFIELD(pEntries);
-                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
             }
             break;
         }
     }
-    return aPropertySetArr[nPropertyId];
+    return m_aPropertySetArr[nPropertyId];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
