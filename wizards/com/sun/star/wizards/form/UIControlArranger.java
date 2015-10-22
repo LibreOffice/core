@@ -169,6 +169,9 @@ public class UIControlArranger
                 if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
                 {
                     Control[] LabelControls = curControlForm.getLabelControls();
+                    if (LabelControls == null) {
+                        continue;
+                    }
                     for (int n = 0; n < LabelControls.length; n++)
                     {
                         LabelControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf(iAlignValue));
