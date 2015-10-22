@@ -389,16 +389,16 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             aSeq[5].Value <<= m_bRowDirection;
             aSeq[6].Name = SRCH_PARA_ALLTABLES;
             aSeq[6].Value <<= m_bAllTables;
-            aSeq[6].Name = SRCH_PARA_SEARCHFILTERED;
-            aSeq[6].Value <<= m_bSearchFiltered;
-            aSeq[7].Name = SRCH_PARA_BACKWARD;
-            aSeq[7].Value <<= m_bBackward;
-            aSeq[8].Name = SRCH_PARA_PATTERN;
-            aSeq[8].Value <<= m_bPattern;
-            aSeq[9].Name = SRCH_PARA_CONTENT;
-            aSeq[9].Value <<= m_bContent;
-            aSeq[10].Name = SRCH_PARA_ASIANOPT;
-            aSeq[10].Value <<= m_bAsianOptions;
+            aSeq[7].Name = SRCH_PARA_SEARCHFILTERED;
+            aSeq[7].Value <<= m_bSearchFiltered;
+            aSeq[8].Name = SRCH_PARA_BACKWARD;
+            aSeq[8].Value <<= m_bBackward;
+            aSeq[9].Name = SRCH_PARA_PATTERN;
+            aSeq[9].Value <<= m_bPattern;
+            aSeq[10].Name = SRCH_PARA_CONTENT;
+            aSeq[10].Value <<= m_bContent;
+            aSeq[11].Name = SRCH_PARA_ASIANOPT;
+            aSeq[11].Value <<= m_bAsianOptions;
             rVal <<= aSeq;
         }
         break;
