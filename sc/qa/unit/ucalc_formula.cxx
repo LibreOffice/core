@@ -3804,6 +3804,42 @@ void Test::testFuncIFERROR()
             aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }
 
+    const SCCOL nCols = 3;
+    const char* aData2[][nCols] = {
+        { "1", "2",    "3" },
+        { "4", "=1/0", "6" },
+        { "7", "8",    "9" }
+    };
+    const char* aCheck2[][nCols] = {
+        { "1", "2",    "3" },
+        { "4", "Error","6" },
+        { "7", "8",    "9" }
+    };
+
+    // Data in C1:E3
+    ScAddress aPos(2,0,0);
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData2, SAL_N_ELEMENTS(aData2));
+    CPPUNIT_ASSERT(aRange.aStart == aPos);
+
+    // Array formula in F4:H6
+    const SCROW nElems2 = SAL_N_ELEMENTS(aCheck2);
+    const SCCOL nStartCol = aPos.Col() + nCols;
+    const SCROW nStartRow = aPos.Row() + nElems2;
+    m_pDoc->InsertMatrixFormula( nStartCol, nStartRow, nStartCol+nCols, nStartRow+nElems2, aMark,
+            "=IFERROR(C1:E3;\"Error\")", NULL);
+
+    m_pDoc->CalcAll();
+
+    for (SCCOL nCol = nStartCol; nCol < nStartCol + nCols; ++nCol)
+    {
+        for (SCROW nRow = nStartRow; nRow < nStartRow + nElems2; ++nRow)
+        {
+            OUString aResult = m_pDoc->GetString( nCol, nRow, 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "IFERROR array result",
+                    OUString::createFromAscii( aCheck2[nRow-nStartRow][nCol-nStartCol]), aResult);
+        }
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
