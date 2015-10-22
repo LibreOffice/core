@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_5ac1152e",
+        "filename": "vcl/workben/outdevgrind.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-22T15:35:34Z",
+      "side": 1,
+      "message": "i\u0027m very sorry, i did not notice the first time how these functions are actually used - it turns out that \"res\" is a vector that is returned from the function, and all these \"aPt1\" etc. are local variables, so they *have* to be copied, using references is wrong as the function has a longer life-time than the referenced variables.\n\ni\u0027ll try if i can push your first patch somehow :)",
+      "revId": "81b78655f490bdcdbb5c35b4547ab2f68c2ecf0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
