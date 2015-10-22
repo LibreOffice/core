@@ -50,7 +50,7 @@ typedef std::set<SvLinkSource*> SvLinkSources;
 
 class SFX2_DLLPUBLIC LinkManager
 {
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > >
+    typedef ::std::vector< css::uno::Reference< css::lang::XComponent > >
         CompVector;
     CompVector maCachedComps;
 
@@ -79,7 +79,7 @@ public:
      *
      * @param xComp component loaded during link update.
      */
-    void        InsertCachedComp(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp);
+    void        InsertCachedComp(const css::uno::Reference< css::lang::XComponent >& xComp);
 
     void        CloseCachedComps();
 
@@ -156,7 +156,7 @@ public:
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
     static bool GetGraphicFromAny( const OUString& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue,
+                                const css::uno::Any & rValue,
                                 Graphic& rGrf );
 
 private:

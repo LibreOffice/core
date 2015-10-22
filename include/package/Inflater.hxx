@@ -35,16 +35,16 @@ protected:
     bool                    bFinished, bSetParams, bNeedDict;
     sal_Int32               nOffset, nLength, nLastInflateError;
     z_stream*               pStream;
-    com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
-    sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+    css::uno::Sequence < sal_Int8 >  sInBuffer;
+    sal_Int32   doInflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     Inflater(bool bNoWrap = false);
     ~Inflater();
-    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    void SAL_CALL setInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
     bool SAL_CALL needsDictionary(  ) { return bNeedDict;}
     bool SAL_CALL finished(  ) { return bFinished;}
-    sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int32 SAL_CALL doInflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void SAL_CALL end(  );
 
     sal_Int32 getLastInflateError() { return nLastInflateError; }

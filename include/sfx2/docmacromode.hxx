@@ -52,9 +52,9 @@ namespace sfx2
             If no such mode was passed there, document implementations should return
             MacroExecMode::NEVER_EXECUTE.
 
-            @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
-            @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
-            @see ::com::sun::star::frame::XModel::attachResource
+            @see css::document::MediaDescriptor::MacroExecutionMode
+            @see css::frame::XComponentLoader::loadComponentFromURL
+            @see css::frame::XModel::attachResource
 
             @see setCurrentMacroExecMode
 
@@ -77,9 +77,9 @@ namespace sfx2
             Usually, a document implementation will simply put the macro execution mode
             into its media descriptor, as returned by XModel::getArgs.
 
-            @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
-            @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
-            @see ::com::sun::star::frame::XModel::attachResource
+            @see css::document::MediaDescriptor::MacroExecutionMode
+            @see css::frame::XComponentLoader::loadComponentFromURL
+            @see css::frame::XModel::attachResource
 
             see getCurrentMacroExecMode
         */
@@ -121,7 +121,7 @@ namespace sfx2
                 can also be replaced with a call to the (to be introduced) getDocumentModel
                 method, and a queryInterface.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts >
+        virtual css::uno::Reference< css::document::XEmbeddedScripts >
                     getEmbeddedDocumentScripts() const = 0;
 
         /** returns the state of the signatures for the scripts embedded in the document
@@ -165,7 +165,7 @@ namespace sfx2
         */
         virtual void
                     showBrokenSignatureWarning(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
+                        const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
                     ) const = 0;
 
     protected:
@@ -179,7 +179,7 @@ namespace sfx2
 
     /** encapsulates handling the macro mode of a document
 
-        @see com::sun::star::document::MacroExecMode
+        @see css::document::MacroExecMode
     */
     class SFX2_DLLPUBLIC DocumentMacroMode
     {
@@ -232,7 +232,7 @@ namespace sfx2
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
         bool    adjustMacroMode(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
                 );
 
         /** determines whether macro execution is disallowed
@@ -270,10 +270,9 @@ namespace sfx2
             BeanShell-/JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
-        static bool
-                storageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage );
+        static bool storageHasMacros( const css::uno::Reference< css::embed::XStorage >& _rxStorage );
 
-        static bool containerHasBasicMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xContainter );
+        static bool containerHasBasicMacros( const css::uno::Reference< css::script::XLibraryContainer >& xContainter );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action
@@ -298,7 +297,7 @@ namespace sfx2
         */
         bool
                 checkMacrosOnLoading(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
                 );
 
     private:

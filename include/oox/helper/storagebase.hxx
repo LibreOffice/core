@@ -49,11 +49,11 @@ class OOX_DLLPUBLIC StorageBase
 {
 public:
     explicit            StorageBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bBaseStreamAccess );
 
     explicit            StorageBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
+                            const css::uno::Reference< css::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
     virtual             ~StorageBase();
@@ -69,7 +69,7 @@ public:
     bool                isReadOnly() const { return mbReadOnly;}
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
                         getXStorage() const;
 
     /** Returns the element name of this storage. */
@@ -101,7 +101,7 @@ public:
             access has been enabled in the constructor, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
                         openInputStream( const OUString& rStreamName );
 
     /** Opens and returns the specified output stream from the storage.
@@ -112,7 +112,7 @@ public:
             stream access has been enabled in the constructor, the base stream
             can be accessed by passing an empty string as stream name.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
                         openOutputStream( const OUString& rStreamName );
 
     /** Copies the specified element from this storage to the passed
@@ -145,7 +145,7 @@ private:
     virtual bool        implIsStorage() const = 0;
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    virtual css::uno::Reference< css::embed::XStorage >
                         implGetXStorage() const = 0;
 
     /** Returns the names of all elements of this storage. */
@@ -155,11 +155,11 @@ private:
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreate ) = 0;
 
     /** Implementation of opening an input stream element. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
                         implOpenInputStream( const OUString& rElementName ) = 0;
 
     /** Implementation of opening an output stream element. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    virtual css::uno::Reference< css::io::XOutputStream >
                         implOpenOutputStream( const OUString& rElementName ) = 0;
 
     /** Commits the current storage. */
@@ -172,12 +172,12 @@ private:
     typedef RefMap< OUString, StorageBase > SubStorageMap;
 
     SubStorageMap       maSubStorages;      ///< Map of direct sub storages.
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
                         mxInStream;         ///< Cached base input stream (to keep it alive).
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    css::uno::Reference< css::io::XStream >
                         mxOutStream;        ///< Cached base output stream (to keep it alive).
-    OUString     maParentPath;       ///< Full path of parent storage.
-    OUString     maStorageName;      ///< Name of this storage, if it is a substorage.
+    OUString            maParentPath;       ///< Full path of parent storage.
+    OUString            maStorageName;      ///< Name of this storage, if it is a substorage.
     bool                mbBaseStreamAccess; ///< True = access base streams with empty stream name.
     bool                mbReadOnly;         ///< True = storage opened read-only (based on input stream).
 };

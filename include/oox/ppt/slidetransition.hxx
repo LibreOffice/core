@@ -36,7 +36,7 @@ namespace oox { namespace ppt {
         explicit SlideTransition(const OUString & );
 
         void setSlideProperties( PropertyMap& props );
-        void setTransitionFilterProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTransitionFilter > & xFilter );
+        void setTransitionFilterProperties( const css::uno::Reference< css::animations::XTransitionFilter > & xFilter );
 
         void setOoxTransitionSpeed( sal_Int32 nToken );
         void setMode( bool bMode )

@@ -150,24 +150,24 @@ namespace OleHelper
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCtx;
+    css::uno::Reference< css::uno::XComponentContext > mxCtx;
     ::oox::GraphicHelper maGrfHelper;
 
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
-                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                  css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   const OUString& rGuidString );
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
-                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                  css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   const OUString& rGuidString,
                                   sal_Int32 nSize );
 public:
-    MSConvertOCXControls( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+    MSConvertOCXControls( const css::uno::Reference< css::frame::XModel >& rxModel );
     virtual ~MSConvertOCXControls();
-    bool ReadOCXStorage( tools::SvRef<SotStorage>& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
-    bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream>& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+    bool ReadOCXStorage( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
+    bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, tools::SvRef<SotStorage> &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
-    static bool WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, tools::SvRef<SotStorage> &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXExcelKludgeStream( const css::uno::Reference< css::frame::XModel >& rxModel, const css::uno::Reference< css::io::XOutputStream >& xOutStrm, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
 };
 
 

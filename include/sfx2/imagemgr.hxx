@@ -29,7 +29,7 @@
 #include <vcl/image.hxx>
 
 SFX2_DLLPUBLIC Image SAL_CALL GetImage(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& aURL,
     bool bBig
 );

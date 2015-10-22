@@ -127,7 +127,7 @@ public:
     struct OOX_DLLPUBLIC Tag
     {
         Tag( int token = XML_TOKEN_INVALID,
-            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >(),
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >(),
             const OUString& text = OUString());
         Tag( int token,
             const AttributeList& attribs);
@@ -219,7 +219,7 @@ class OOX_DLLPUBLIC XmlStreamBuilder
 {
 public:
     void appendOpeningTag( int token,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >());
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
     void appendOpeningTag( int token,
         const AttributeList& attribs );
     void appendClosingTag( int token );

@@ -137,13 +137,13 @@ public:
 
 protected:
     /** Returns the coordinate system of this shape. */
-    ::com::sun::star::awt::Rectangle getCoordSystem() const;
+    css::awt::Rectangle getCoordSystem() const;
     /** Returns the absolute shape rectangle according to the passed anchor. */
-    ::com::sun::star::awt::Rectangle getRectangle( const ShapeParentAnchor* pParentAnchor ) const;
+    css::awt::Rectangle getRectangle( const ShapeParentAnchor* pParentAnchor ) const;
     /** Returns the absolute shape rectangle. */
-    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const;
+    virtual css::awt::Rectangle getAbsRectangle() const;
     /** Returns the rectangle relative to the parent coordinate system. */
-    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const;
+    virtual css::awt::Rectangle getRelRectangle() const;
 
 protected:
     Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
@@ -192,7 +192,7 @@ struct ClientData
 
 struct ShapeModel
 {
-    typedef ::std::vector< ::com::sun::star::awt::Point >   PointVector;
+    typedef ::std::vector< css::awt::Point >   PointVector;
     typedef ::std::unique_ptr< TextBox >                    TextBoxPtr;
     typedef ::std::unique_ptr< ClientData >                 ClientDataPtr;
 
@@ -246,33 +246,33 @@ public:
     virtual const ShapeBase* getChildById( const OUString& rShapeId ) const;
 
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         convertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
     /** Converts position and formatting into the passed existing XShape. */
     void                convertFormatting(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const css::uno::Reference< css::drawing::XShape >& rxShape,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
 protected:
     explicit            ShapeBase( Drawing& rDrawing );
 
     /** Derived classes create the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const = 0;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const = 0;
 
     /** Calculates the final shape rectangle according to the passed anchor,
         if present, otherwise according to the own anchor settings. */
-    ::com::sun::star::awt::Rectangle calcShapeRectangle(
+    css::awt::Rectangle calcShapeRectangle(
                             const ShapeParentAnchor* pParentAnchor ) const;
 
     /** Converts common shape properties such as formatting attributes. */
     void                convertShapeProperties(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) const;
+                            const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
 
 protected:
     ShapeModel          maShapeModel;       ///< The model structure containing shape data.
@@ -290,14 +290,14 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
     /** Used by both RectangleShape and ComplexShape. */
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape>createPictureObject(
-            const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rxShapes,
-            const com::sun::star::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
+    css::uno::Reference<css::drawing::XShape>createPictureObject(
+            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+            const css::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
 
 private:
     OUString     maService;          ///< Name of the UNO shape service.
@@ -312,10 +312,10 @@ public:
     explicit            RectangleShape( Drawing& rDrawing );
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual com::sun::star::uno::Reference<com::sun::star::drawing::XShape>
+    virtual css::uno::Reference<css::drawing::XShape>
                         implConvertAndInsert(
-                            const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& rxShapes,
-                            const com::sun::star::awt::Rectangle& rShapeRect) const override;
+                            const css::uno::Reference<css::drawing::XShapes>& rxShapes,
+                            const css::awt::Rectangle& rShapeRect) const override;
 };
 
 
@@ -337,10 +337,10 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 };
 
 /** A Line shape object. */
@@ -351,9 +351,9 @@ public:
 
 protected:
     /** Returns the absolute shape rectangle. */
-    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const override;
+    virtual css::awt::Rectangle getAbsRectangle() const override;
     /** Returns the rectangle relative to the parent coordinate system. */
-    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const override;
+    virtual css::awt::Rectangle getRelRectangle() const override;
 };
 
 /** Bezier shape object that supports to, from, control1 and control2
@@ -365,10 +365,10 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -381,10 +381,10 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -398,10 +398,10 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 };
 
 
@@ -428,10 +428,10 @@ public:
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 
 private:
     typedef ::std::unique_ptr< ShapeContainer > ShapeContainerPtr;

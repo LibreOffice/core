@@ -41,8 +41,8 @@ struct GradientFillProperties
     typedef ::std::map< double, Color > GradientStopMap;
 
     GradientStopMap     maGradientStops;        /// Gradient stops (colors/transparence).
-    OptValue< ::com::sun::star::geometry::IntegerRectangle2D > moFillToRect;
-    OptValue< ::com::sun::star::geometry::IntegerRectangle2D > moTileRect;
+    OptValue< css::geometry::IntegerRectangle2D > moFillToRect;
+    OptValue< css::geometry::IntegerRectangle2D > moTileRect;
     OptValue< sal_Int32 > moGradientPath;       /// If set, gradient follows rectangle, circle, or shape.
     OptValue< sal_Int32 > moShadeAngle;         /// Rotation angle of linear gradients.
     OptValue< sal_Int32 > moShadeFlip;          /// Flip mode of gradient, if not stretched to shape.
@@ -88,27 +88,27 @@ struct ArtisticEffectProperties
 
 struct BlipFillProperties
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        mxGraphic;              /// The fill graphic.
+    css::uno::Reference< css::graphic::XGraphic >
+                          mxGraphic;              /// The fill graphic.
     OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
-    OptValue< ::com::sun::star::geometry::IntegerRectangle2D >
-                        moFillRect;             /// Stretch fill offsets.
-    OptValue< ::com::sun::star::geometry::IntegerRectangle2D >
-                        moClipRect;
+    OptValue< css::geometry::IntegerRectangle2D >
+                          moFillRect;             /// Stretch fill offsets.
+    OptValue< css::geometry::IntegerRectangle2D >
+                          moClipRect;
     OptValue< sal_Int32 > moTileOffsetX;        /// Width of bitmap tiles (EMUs).
     OptValue< sal_Int32 > moTileOffsetY;        /// Height of bitmap tiles (EMUs).
     OptValue< sal_Int32 > moTileScaleX;         /// Horizontal scaling of bitmap tiles (1/1000 percent).
     OptValue< sal_Int32 > moTileScaleY;         /// Vertical scaling of bitmap tiles (1/1000 percent).
     OptValue< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
     OptValue< sal_Int32 > moTileFlip;           /// Flip mode of bitmap tiles.
-    OptValue< bool >    moRotateWithShape;      /// True = rotate bitmap with shape.
+    OptValue< bool >      moRotateWithShape;      /// True = rotate bitmap with shape.
     // effects
     OptValue< sal_Int32 > moColorEffect;        /// XML token for a color effect.
     OptValue< sal_Int32 > moBrightness;         /// Brightness in the range [-100000,100000].
     OptValue< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
-    Color               maColorChangeFrom;      /// Start color of color transformation.
-    Color               maColorChangeTo;        /// Destination color of color transformation.
-    Color               maDuotoneColors[2];     /// Duotone Colors
+    Color                 maColorChangeFrom;      /// Start color of color transformation.
+    Color                 maColorChangeTo;        /// Destination color of color transformation.
+    Color                 maDuotoneColors[2];     /// Duotone Colors
 
     ArtisticEffectProperties maEffect;          /// Artistic effect, not supported by core.
 

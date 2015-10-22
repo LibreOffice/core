@@ -54,14 +54,13 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 
 public:
     static void Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
+            const css::uno::Reference< css::document::XDocumentProperties>&,
             const sal_Char *pIndent,
             rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
             OUString *pNonConvertableChars = 0 );
 
     static void Out_FrameDescriptor(
-        SvStream&, const OUString& rBaseURL, const com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet >& xSet,
+        SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet,
         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
         OUString *pNonConvertableChars = 0 );
 };

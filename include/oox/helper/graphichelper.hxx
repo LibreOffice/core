@@ -62,8 +62,8 @@ class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
 
@@ -81,43 +81,43 @@ public:
     // Device info and device dependent unit conversion -----------------------
 
     /** Returns information about the output device. */
-    const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const { return maDeviceInfo;}
+    const css::awt::DeviceInfo& getDeviceInfo() const { return maDeviceInfo;}
 
     /** Converts the passed value from horizontal screen pixels to 1/100 mm. */
     sal_Int32           convertScreenPixelXToHmm( double fPixelX ) const;
     /** Converts the passed value from vertical screen pixels to 1/100 mm. */
     sal_Int32           convertScreenPixelYToHmm( double fPixelY ) const;
     /** Converts the passed size from screen pixels to 1/100 mm. */
-    ::com::sun::star::awt::Size convertScreenPixelToHmm( const ::com::sun::star::awt::Size& rPixel ) const;
+    css::awt::Size convertScreenPixelToHmm( const css::awt::Size& rPixel ) const;
 
     /** Converts the passed value from 1/100 mm to horizontal screen pixels. */
     double              convertHmmToScreenPixelX( sal_Int32 nHmmX ) const;
     /** Converts the passed value from 1/100 mm to vertical screen pixels. */
     double              convertHmmToScreenPixelY( sal_Int32 nHmmY ) const;
     /** Converts the passed point from 1/100 mm to screen pixels. */
-    ::com::sun::star::awt::Point convertHmmToScreenPixel( const ::com::sun::star::awt::Point& rHmm ) const;
+    css::awt::Point convertHmmToScreenPixel( const css::awt::Point& rHmm ) const;
     /** Converts the passed size from 1/100 mm to screen pixels. */
-    ::com::sun::star::awt::Size convertHmmToScreenPixel( const ::com::sun::star::awt::Size& rHmm ) const;
+    css::awt::Size convertHmmToScreenPixel( const css::awt::Size& rHmm ) const;
 
     /** Converts the passed point from 1/100 mm to AppFont units. */
-    ::com::sun::star::awt::Point convertHmmToAppFont( const ::com::sun::star::awt::Point& rHmm ) const;
+    css::awt::Point convertHmmToAppFont( const css::awt::Point& rHmm ) const;
     /** Converts the passed size from 1/100 mm to AppFont units. */
-    ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
+    css::awt::Size convertHmmToAppFont( const css::awt::Size& rHmm ) const;
 
     // Graphics and graphic objects  ------------------------------------------
 
     /** Imports a graphic from the passed input stream. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+    css::uno::Reference< css::graphic::XGraphic >
                         importGraphic(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Imports a graphic from the passed binary memory block. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+    css::uno::Reference< css::graphic::XGraphic >
                         importGraphic( const StreamDataSequence& rGraphicData ) const;
 
     /** Imports a graphic from the storage stream with the passed path and name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+    css::uno::Reference< css::graphic::XGraphic >
                         importEmbeddedGraphic(
                             const OUString& rStreamName,
                             const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
@@ -125,12 +125,12 @@ public:
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
     OUString     createGraphicObject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
+                            const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
 
     /** Creates a persistent graphic object from the passed input stream.
         @return  The URL of the created and internally cached graphic object. */
     OUString     importGraphicObject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
@@ -143,23 +143,23 @@ public:
 
     /** calculates the orignal size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
-    ::com::sun::star::awt::Size getOriginalSize( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
+    css::awt::Size getOriginalSize( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
 
 
 private:
     typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
-    typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
-    typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > EmbeddedGraphicMap;
+    typedef ::std::deque< css::uno::Reference< css::graphic::XGraphicObject > > GraphicObjectDeque;
+    typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
-    ::com::sun::star::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
+    css::uno::Reference< css::awt::XUnitConversion > mxUnitConversion;
+    css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     SystemPalette       maSystemPalette;            ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
     mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
     mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
-    const OUString maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
+    const OUString      maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };

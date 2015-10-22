@@ -56,7 +56,7 @@ private:
     static int mnEmbeddeDocumentCounter;
     struct ShapeCheck
     {
-        bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& s2 ) const
+        bool operator()( const css::uno::Reference< css::drawing::XShape>& s1, const css::uno::Reference< css::drawing::XShape>& s2 ) const
         {
             return s1 == s2;
         }
@@ -64,7 +64,7 @@ private:
 
     struct ShapeHash
     {
-        size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
+        size_t operator()( const css::uno::Reference < css::drawing::XShape > ) const;
     };
 
 public:
@@ -73,7 +73,7 @@ public:
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
 
-    void WriteGraphicObjectShapePart( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, const Graphic *pGraphic=NULL );
+    void WriteGraphicObjectShapePart( css::uno::Reference< css::drawing::XShape > xShape, const Graphic *pGraphic=NULL );
 
 private:
     sal_Int32           mnXmlNamespace;
@@ -81,7 +81,7 @@ private:
     MapMode             maMapModeSrc, maMapModeDest;
     std::shared_ptr<URLTransformer> mpURLTransformer;
 
-    ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
+    css::awt::Size MapSize( const css::awt::Size& ) const;
 
     ShapeHashMap maShapeMap;
     ShapeHashMap* mpShapeMap;
@@ -94,32 +94,32 @@ public:
 
     void SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer);
 
-    static bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );
+    static bool         NonEmptyText( css::uno::Reference< css::uno::XInterface > xIface );
 
     ShapeExport&
-                        WriteBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, bool bClosed );
+                        WriteBezierShape( css::uno::Reference< css::drawing::XShape > xShape, bool bClosed );
     ShapeExport&
-                        WriteClosedBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteClosedBezierShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteConnectorShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteConnectorShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteCustomShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteCustomShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteEllipseShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteEllipseShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteGraphicObjectShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteGraphicObjectShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteGroupShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteGroupShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteLineShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteLineShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteNonVisualDrawingProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, const char* sName );
+                        WriteNonVisualDrawingProperties( css::uno::Reference< css::drawing::XShape > xShape, const char* sName );
     virtual ShapeExport&
-                        WriteNonVisualProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteNonVisualProperties( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteOpenBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteOpenBezierShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteRectangleShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteRectangleShape( css::uno::Reference< css::drawing::XShape > xShape );
 
     /**
      * Write the DrawingML for a particular shape.
@@ -158,29 +158,27 @@ public:
      * @param xShape    The shape to export as DrawingML.
      * @return   <tt>*this</tt>
      */
-    ShapeExport&
-                        WriteShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    ShapeExport&
-        WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
+    ShapeExport&       WriteShape( css::uno::Reference< css::drawing::XShape > xShape );
+    ShapeExport&       WriteTextBox( css::uno::Reference< css::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
     virtual ShapeExport&
-                        WriteTextShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteTextShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteTableShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteTableShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
-                        WriteOLE2Shape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteOLE2Shape( css::uno::Reference< css::drawing::XShape > xShape );
     virtual ShapeExport&
-                        WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                        WriteUnknownShape( css::uno::Reference< css::drawing::XShape > xShape );
 
-    void WriteTable( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape );
+    void WriteTable( css::uno::Reference< css::drawing::XShape > rXShape );
 
-    void WriteTableCellProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
+    void WriteTableCellProperties(css::uno::Reference< css::beans::XPropertySet > rXPropSet);
 
-    void WriteTableCellBorders(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
+    void WriteTableCellBorders(css::uno::Reference< css::beans::XPropertySet > rXPropSet);
 
-    sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
-    sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
-    sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
-    static sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ShapeHashMap* pShapeMap );
+    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape > rShape );
+    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
+    sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape > rShape );
+    static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape > rShape, ShapeHashMap* pShapeMap );
 };
 
 }}

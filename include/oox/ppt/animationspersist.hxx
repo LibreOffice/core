@@ -48,7 +48,7 @@ namespace oox { namespace ppt {
         _NP_SIZE
     };
 
-    typedef boost::array< ::com::sun::star::uno::Any, _NP_SIZE > NodePropertyMap;
+    typedef boost::array< css::uno::Any, _NP_SIZE > NodePropertyMap;
 
 
     /** data for CT_TLShapeTargetElement */
@@ -60,7 +60,7 @@ namespace oox { namespace ppt {
         {
             maRange.start = maRange.end = 0;
         }
-        void convert( ::com::sun::star::uno::Any & aAny, sal_Int16 & rSubType ) const;
+        void convert( css::uno::Any & aAny, sal_Int16 & rSubType ) const;
 
         sal_Int32               mnType;
         sal_Int32               mnRangeType;
@@ -76,12 +76,11 @@ namespace oox { namespace ppt {
             : mnType( 0 )
             {}
         /** convert to a set of properties */
-        ::com::sun::star::uno::Any convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const;
+        css::uno::Any convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const;
 
         sal_Int32                  mnType;
-        OUString            msValue;
-
-      ShapeTargetElement         maShapeTarget;
+        OUString                   msValue;
+        ShapeTargetElement         maShapeTarget;
     };
 
     typedef std::shared_ptr< AnimTargetElement > AnimTargetElementPtr;
@@ -97,12 +96,12 @@ namespace oox { namespace ppt {
             : mnType( 0 )
             {}
 
-        ::com::sun::star::uno::Any convert(const SlidePersistPtr & pSlide) const;
-        static ::com::sun::star::uno::Any convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l);
+        css::uno::Any convert(const SlidePersistPtr & pSlide) const;
+        static css::uno::Any convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l);
 
         AnimTargetElementPtr &     getTarget()
             { if(!mpTarget) mpTarget.reset( new AnimTargetElement ); return mpTarget; }
-        ::com::sun::star::uno::Any maValue;
+        css::uno::Any              maValue;
         sal_Int32                  mnType;
     private:
         AnimTargetElementPtr       mpTarget;
@@ -113,7 +112,7 @@ namespace oox { namespace ppt {
     {
         OUString            msFormula;
         OUString            msTime;
-        ::com::sun::star::uno::Any maValue;
+        css::uno::Any       maValue;
     };
 
     typedef ::std::list< TimeAnimationValue > TimeAnimationValueList;

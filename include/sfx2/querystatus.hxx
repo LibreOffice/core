@@ -35,7 +35,7 @@ class SfxQueryStatus_Impl;
 class SFX2_DLLPUBLIC SfxQueryStatus
 {
     public:
-        SfxQueryStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
+        SfxQueryStatus( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         ~SfxQueryStatus();
 
         // Query method
@@ -45,8 +45,8 @@ class SFX2_DLLPUBLIC SfxQueryStatus
         SfxQueryStatus( const SfxQueryStatus& ) = delete;
         SfxQueryStatus& operator=( const SfxQueryStatus& ) = delete;
 
-        com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >   m_xStatusListener;
-        SfxQueryStatus_Impl*                                                       m_pSfxQueryStatusImpl;
+        css::uno::Reference< css::frame::XStatusListener >   m_xStatusListener;
+        SfxQueryStatus_Impl*                                 m_pSfxQueryStatusImpl;
 };
 
 #endif // INCLUDED_SFX2_QUERYSTATUS_HXX

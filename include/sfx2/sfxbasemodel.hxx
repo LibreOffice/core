@@ -462,7 +462,7 @@ public:
     virtual void SAL_CALL loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                             const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor )
         throw ( css::lang::IllegalArgumentException,
-                com::sun::star::frame::DoubleInitializationException,
+                css::frame::DoubleInitializationException,
                 css::io::IOException,
                 css::uno::Exception,
                 css::uno::RuntimeException, std::exception ) override;
@@ -835,9 +835,9 @@ protected:
     bool hasValidSignatures() const;
 
     /* GrabBagItem for interim interop purposes */
-    void getGrabBagItem(com::sun::star::uno::Any& rVal) const;
+    void getGrabBagItem(css::uno::Any& rVal) const;
 
-    void setGrabBagItem(const com::sun::star::uno::Any& rVal);
+    void setGrabBagItem(const css::uno::Any& rVal);
 
 
 //  private methods

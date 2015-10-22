@@ -37,7 +37,7 @@ class QuickDiagrammingLayout : public oox::core::XmlFilterBase
 {
 public:
 
-    QuickDiagrammingLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    QuickDiagrammingLayout( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // from FilterBase
     virtual bool importDocument() throw (css::uno::RuntimeException) override;

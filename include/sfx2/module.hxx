@@ -99,7 +99,7 @@ public:
 
         Failures in any of those steps are reported as assertion in non-product builds, and then FUNIT_100TH_MM is returned.
      */
-    static FieldUnit            GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & i_frame );
+    static FieldUnit            GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame );
     FieldUnit                   GetFieldUnit() const;
 
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();

@@ -149,7 +149,7 @@ protected:
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -726,7 +726,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -821,7 +821,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -843,7 +843,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -861,7 +861,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;

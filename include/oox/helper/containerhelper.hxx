@@ -165,7 +165,7 @@ public:
             contained, otherwise a numerical index will be appended.
      */
     static OUString getUnusedName(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxNameAccess,
+                            const css::uno::Reference< css::container::XNameAccess >& rxNameAccess,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
                             sal_Int32 nFirstIndexToAppend = 1 );
@@ -182,9 +182,9 @@ public:
         @return  True = object successfully inserted.
      */
     static bool         insertByName(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
+                            const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rName,
-                            const ::com::sun::star::uno::Any& rObject,
+                            const css::uno::Any& rObject,
                             bool bReplaceOldExisting = true );
 
     /** Inserts an object into a name container.
@@ -214,10 +214,10 @@ public:
             true.
      */
     static OUString insertByUnusedName(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
+                            const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
-                            const ::com::sun::star::uno::Any& rObject,
+                            const css::uno::Any& rObject,
                             bool bRenameOldExisting = false );
 
     // std::vector and std::map element access --------------------------------
@@ -280,7 +280,7 @@ public:
             contained in the passed vector.
      */
     template< typename VectorType >
-    static ::com::sun::star::uno::Sequence< typename VectorType::value_type >
+    static css::uno::Sequence< typename VectorType::value_type >
                             vectorToSequence( const VectorType& rVector );
 
     /** Creates a UNO sequence of sequences from a matrix with copies of all elements.
@@ -292,7 +292,7 @@ public:
             contained in the passed matrix.
      */
     template< typename MatrixType >
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< typename MatrixType::value_type > >
+    static css::uno::Sequence< css::uno::Sequence< typename MatrixType::value_type > >
                             matrixToSequenceSequence( const MatrixType& rMatrix );
 };
 
@@ -351,25 +351,25 @@ template< typename MapType >
 }
 
 template< typename VectorType >
-/*static*/ ::com::sun::star::uno::Sequence< typename VectorType::value_type > ContainerHelper::vectorToSequence( const VectorType& rVector )
+/*static*/ css::uno::Sequence< typename VectorType::value_type > ContainerHelper::vectorToSequence( const VectorType& rVector )
 {
     typedef typename VectorType::value_type ValueType;
     if( rVector.empty() )
-        return ::com::sun::star::uno::Sequence< ValueType >();
-    return ::com::sun::star::uno::Sequence< ValueType >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
+        return css::uno::Sequence< ValueType >();
+    return css::uno::Sequence< ValueType >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
 }
 
 template< typename MatrixType >
-/*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< typename MatrixType::value_type > > ContainerHelper::matrixToSequenceSequence( const MatrixType& rMatrix )
+/*static*/ css::uno::Sequence< css::uno::Sequence< typename MatrixType::value_type > > ContainerHelper::matrixToSequenceSequence( const MatrixType& rMatrix )
 {
     typedef typename MatrixType::value_type ValueType;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ValueType > > aSeq;
+    css::uno::Sequence< css::uno::Sequence< ValueType > > aSeq;
     if( !rMatrix.empty() )
     {
         aSeq.realloc( static_cast< sal_Int32 >( rMatrix.height() ) );
         for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
             aSeq[ static_cast< sal_Int32 >( nRow ) ] =
-                ::com::sun::star::uno::Sequence< ValueType >( &rMatrix.row_front( nRow ), static_cast< sal_Int32 >( rMatrix.width() ) );
+                css::uno::Sequence< ValueType >( &rMatrix.row_front( nRow ), static_cast< sal_Int32 >( rMatrix.width() ) );
     }
     return aSeq;
 }

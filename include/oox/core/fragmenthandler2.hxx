@@ -57,36 +57,36 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL startFastElement(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL characters( const OUString& rChars )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement )
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) final override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) final override;
 
     // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 
     virtual void SAL_CALL startDocument()
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL endDocument()
-                            throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw(  css::xml::sax::SAXException,
+                                    css::uno::RuntimeException, std::exception ) override;
 
     // oox.core.ContextHandler interface --------------------------------------
 

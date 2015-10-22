@@ -53,7 +53,7 @@ public:
 
     /** Constructs a property set wrapper with the passed UNO property set. */
     explicit     PropertySet(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxPropSet )
+                            const css::uno::Reference< css::beans::XPropertySet >& rxPropSet )
                                 { set( rxPropSet ); }
 
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
@@ -61,18 +61,18 @@ public:
     explicit     PropertySet( const Type& rObject ) { set( rObject ); }
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
-    void                set( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxPropSet );
+    void                set( const css::uno::Reference< css::beans::XPropertySet >& rxPropSet );
 
     /** Queries the passed object (interface or any) for an XPropertySet and releases the old UNO property set. */
     template< typename Type >
     void         set( const Type& rObject )
-                            { set( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >( rObject, ::com::sun::star::uno::UNO_QUERY ) ); }
+                            { set( css::uno::Reference< css::beans::XPropertySet >( rObject, css::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     bool         is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                         getXPropertySet() const { return mxPropSet; }
 
     /** Returns true, if the specified property is supported by the property set. */
@@ -82,7 +82,7 @@ public:
 
     /** Gets the specified property from the property set.
         @return  the property value, or an empty Any, if the property is missing. */
-    ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
+    css::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
@@ -97,19 +97,19 @@ public:
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed any into the property set. */
-    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setAnyProperty( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
     bool         setProperty( sal_Int32 nPropId, const Type& rValue )
-                            { return setAnyProperty( nPropId, ::com::sun::star::uno::Any( rValue ) ); }
+                            { return setAnyProperty( nPropId, css::uno::Any( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
     void                setProperties(
-                            const ::com::sun::star::uno::Sequence< OUString >& rPropNames,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues );
+                            const css::uno::Sequence< OUString >& rPropNames,
+                            const css::uno::Sequence< css::uno::Any >& rValues );
 
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */
@@ -123,17 +123,17 @@ public:
 private:
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
-    bool                implGetPropertyValue( ::com::sun::star::uno::Any& orValue, const OUString& rPropName ) const;
+    bool                implGetPropertyValue( css::uno::Any& orValue, const OUString& rPropName ) const;
 
     /** Puts the passed any into the property set. */
-    bool                implSetPropertyValue( const OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+    bool                implSetPropertyValue( const OUString& rPropName, const css::uno::Any& rValue );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                         mxPropSet;          ///< The mandatory property set interface.
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
+    css::uno::Reference< css::beans::XMultiPropertySet >
                         mxMultiPropSet;     ///< The optional multi property set interface.
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+    css::uno::Reference< css::beans::XPropertySetInfo >
                         mxPropSetInfo;      ///< Property information.
 };
 

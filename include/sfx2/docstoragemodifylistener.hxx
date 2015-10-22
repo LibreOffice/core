@@ -51,7 +51,7 @@ namespace sfx2
 
     //= DocumentStorageModifyListener
 
-    typedef ::cppu::WeakImplHelper1 < ::com::sun::star::util::XModifyListener > DocumentStorageModifyListener_Base;
+    typedef ::cppu::WeakImplHelper1 < css::util::XModifyListener > DocumentStorageModifyListener_Base;
 
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
@@ -64,10 +64,10 @@ namespace sfx2
         void dispose();
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual ~DocumentStorageModifyListener();

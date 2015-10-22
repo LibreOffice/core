@@ -91,13 +91,13 @@ namespace sfx2
         */
         ModuleTaskPane(
             vcl::Window& i_rParentWindow,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
+            const css::uno::Reference< css::frame::XFrame >& i_rDocumentFrame
         );
         virtual ~ModuleTaskPane();
 
         /** determines whether a given module has any registered tool panels
         */
-        static bool ModuleHasToolPanels( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame );
+        static bool ModuleHasToolPanels( const css::uno::Reference< css::frame::XFrame >& i_rDocumentFrame );
 
         /** provides access to the Window aspect of the PanelDeck
 

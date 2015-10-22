@@ -39,8 +39,8 @@ struct PropertyNameVector;
 
 
 
-typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapType;
-typedef ::std::map< OUString, ::com::sun::star::uno::Any > PropertyNameMap;
+typedef ::std::map< sal_Int32, css::uno::Any > PropertyMapType;
+typedef ::std::map< OUString, css::uno::Any > PropertyNameMap;
 
 /** A helper that maps property identifiers to property values.
 
@@ -62,7 +62,7 @@ public:
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
-    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setAnyProperty( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
@@ -76,7 +76,7 @@ public:
         return true;
     }
 
-    com::sun::star::uno::Any getProperty( sal_Int32 nPropId );
+    css::uno::Any       getProperty( sal_Int32 nPropId );
 
     void                erase( sal_Int32 nPropId );
 
@@ -89,26 +89,26 @@ public:
     void                assignAll( const PropertyMap& rPropMap );
 
     /** Returns a sequence of property values, filled with all contained properties. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
                         makePropertyValueSequence() const;
 
     /** Fills the passed sequences of names and anys with all contained properties. */
     void                fillSequences(
-                            ::com::sun::star::uno::Sequence< OUString >& rNames,
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
+                            css::uno::Sequence< OUString >& rNames,
+                            css::uno::Sequence< css::uno::Any >& rValues ) const;
 
     void                fillPropertyNameMap(PropertyNameMap& rMap) const;
 
     /** Creates a property set supporting the XPropertySet interface and inserts all properties. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                         makePropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 0
 #ifdef DBG_UTIL
-  static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
+  static void dump( css::uno::Reference< css::beans::XPropertySet > rXPropSet);
 #endif
-  static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
-  static void dumpData(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> rXPropSet);
+  static void dumpCode( css::uno::Reference< css::beans::XPropertySet > rXPropSet);
+  static void dumpData(css::uno::Reference<css::beans::XPropertySet> rXPropSet);
 #endif
 private:
     const PropertyNameVector* mpPropNames;

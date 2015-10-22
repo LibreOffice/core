@@ -259,7 +259,7 @@ protected:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
 protected:
 
@@ -286,9 +286,9 @@ protected:
     SFX2_DLLPRIVATE void         ImplDeleteItems();
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
+    SFX2_DLLPRIVATE sal_uInt16   ImplGetVisibleItemCount() const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
-    SFX2_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    SFX2_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
     DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ScrollBar*, void );
 

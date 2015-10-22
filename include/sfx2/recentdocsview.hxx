@@ -20,9 +20,9 @@
 
 struct LoadRecentFile
 {
-    ::com::sun::star::util::URL                                                 aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aArgSeq;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      xDispatch;
+    css::util::URL                                    aTargetURL;
+    css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
+    css::uno::Reference< css::frame::XDispatch >      xDispatch;
 };
 
 enum ApplicationType

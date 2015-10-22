@@ -193,7 +193,7 @@ class OOX_DLLPUBLIC ControlConverter
 {
 public:
     explicit            ControlConverter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
     virtual             ~ControlConverter();
@@ -257,7 +257,7 @@ public:
     /** Binds the passed control model to the passed data sources. The
         implementation will check which source types are supported. */
     void                bindToSources(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const OUString& rCtrlSource,
                             const OUString& rRowSource,
                             sal_Int32 nRefSheet = 0 ) const;
@@ -337,7 +337,7 @@ public:
                             sal_Int32& nOrientation );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
+    css::uno::Reference< css::frame::XModel > mxDocModel;
     const GraphicHelper& mrGraphicHelper;
     mutable PropertySet maAddressConverter;
     mutable PropertySet maRangeConverter;
@@ -905,8 +905,8 @@ public:
 
 class HtmlSelectModel : public AxListBoxModel
 {
-    com::sun::star::uno::Sequence< OUString > msListData;
-    com::sun::star::uno::Sequence< sal_Int16 > msIndices;
+    css::uno::Sequence< OUString > msListData;
+    css::uno::Sequence< sal_Int16 > msIndices;
 public:
     HtmlSelectModel();
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
@@ -953,11 +953,11 @@ public:
 
     /** Converts all control properties and inserts them into the passed model. */
     bool                convertProperties(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv ) const;
 
     bool                convertFromProperties(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv );
 
 private:
@@ -992,30 +992,30 @@ class EmbeddedForm
 {
 public:
     explicit            EmbeddedForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
+                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
+                            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
 
     /** Converts the passed control and inserts the control model into the form.
         @return  The API control model, if conversion was successful. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+    css::uno::Reference< css::awt::XControlModel >
                         convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex );
 
     /** Returns the XIndexContainer interface of the UNO control form, if existing. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+    css::uno::Reference< css::container::XIndexContainer >
                         getXForm() const { return mxFormIC; }
 
 private:
     /** Creates the form that will hold the form controls. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+    css::uno::Reference< css::container::XIndexContainer >
                         createXForm();
 
 private:
-    ControlConverter    maControlConv;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxModelFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormsSupplier > mxFormsSupp;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxFormIC;
+    ControlConverter                                       maControlConv;
+    css::uno::Reference< css::lang::XMultiServiceFactory > mxModelFactory;
+    css::uno::Reference< css::form::XFormsSupplier >       mxFormsSupp;
+    css::uno::Reference< css::container::XIndexContainer > mxFormIC;
 };
 
 

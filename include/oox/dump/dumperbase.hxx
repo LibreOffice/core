@@ -111,27 +111,27 @@ public:
 
     // input streams ----------------------------------------------------------
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    static css::uno::Reference< css::io::XInputStream >
                         openInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
     // output streams ---------------------------------------------------------
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    static css::uno::Reference< css::io::XOutputStream >
                         openOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 >
+    static css::uno::Reference< css::io::XTextOutputStream2 >
                         openTextOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::io::XOutputStream >& rxOutStrm,
                             rtl_TextEncoding eTextEnc );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 >
+    static css::uno::Reference< css::io::XTextOutputStream2 >
                         openTextOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const OUString& rFileName,
                             rtl_TextEncoding eTextEnc );
 };
@@ -146,7 +146,7 @@ public:
     /*implicit*/ BinaryInputStreamRef( BinaryInputStream* pInStrm ) :
                             ::oox::BinaryInputStreamRef( pInStrm ) {}
 
-    /*implicit*/ BinaryInputStreamRef( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) :
+    /*implicit*/ BinaryInputStreamRef( const css::uno::Reference< css::io::XInputStream >& rxInStrm ) :
                             ::oox::BinaryInputStreamRef( new BinaryXInputStream( rxInStrm, true ) ) {}
 
     template< typename StreamType >
@@ -829,18 +829,18 @@ class SharedConfigData : public Base, public ConfigItemBase
 public:
     explicit            SharedConfigData(
                             const OUString& rFileName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
     virtual             ~SharedConfigData();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxContext; }
+    const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxContext; }
     const StorageRef& getRootStorage() const { return mxRootStrg; }
     const OUString& getSysFileName() const { return maSysFileName; }
 
     void                setOption( const OUString& rKey, const OUString& rData );
-    const OUString* getOption( const OUString& rKey ) const;
+    const OUString*      getOption( const OUString& rKey ) const;
 
     template< typename ListType >
     std::shared_ptr< ListType > createNameList( const OUString& rListName );
@@ -869,13 +869,13 @@ private:
     typedef ::std::map< OUString, OUString >  ConfigDataMap;
     typedef ::std::map< OUString, NameListRef >      NameListMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
     StorageRef          mxRootStrg;
-    OUString     maSysFileName;
+    OUString            maSysFileName;
     ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
-    OUString     maConfigPath;
+    OUString            maConfigPath;
     bool                mbLoaded;
     bool                mbPwCancelled;
 };
@@ -913,13 +913,13 @@ public:
                             const ::oox::core::FilterBase& rFilter );
     explicit            Config(
                             const sal_Char* pcEnvVar,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
     virtual             ~Config();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
+    const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
     const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
     const OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
@@ -953,7 +953,7 @@ protected:
                             const ::oox::core::FilterBase& rFilter );
     void                construct(
                             const sal_Char* pcEnvVar,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
@@ -1006,7 +1006,7 @@ class Output : public Base
 {
 public:
     explicit            Output(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
 
@@ -1038,7 +1038,7 @@ public:
     void                writeString( const OUString& rStr );
     void                writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );
-    void                writeDateTime( const ::com::sun::star::util::DateTime& rDateTime );
+    void                writeDateTime( const css::util::DateTime& rDateTime );
 
     template< typename Type >
     void                writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )
@@ -1072,10 +1072,10 @@ private:
 private:
     typedef ::std::vector< sal_Int32 > StringLenVec;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 > mxStrm;
-    OUString     maIndent;
-    OUStringBuffer maLine;
-    OUString     maLastItem;
+    css::uno::Reference< css::io::XTextOutputStream2 > mxStrm;
+    OUString            maIndent;
+    OUStringBuffer      maLine;
+    OUString            maLastItem;
     StringLenVec        maColPos;
     size_t              mnCol;
     size_t              mnItemLevel;
@@ -1184,7 +1184,7 @@ class ObjectBase : public Base
 public:
     virtual             ~ObjectBase();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+    const css::uno::Reference< css::uno::XComponentContext >&
                         getContext() const { return mxConfig->getContext(); }
 
     void                dump();
@@ -1226,7 +1226,7 @@ protected:
     virtual void        implDump() override;
 
     virtual void        implDumpStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
+                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName );
@@ -1307,7 +1307,7 @@ protected:
     void                writeCharItem( const String& rName, sal_Unicode cData );
     void                writeStringItem( const String& rName, const OUString& rData );
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );
+    void                writeDateTimeItem( const String& rName, const css::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const OUString& rGuid );
 
     template< typename Type >
@@ -1487,7 +1487,7 @@ protected:
     OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul = false );
     OUString     dumpUnicodeArray( const String& rName, sal_Int32 nLen, bool bHideTrailingNul = false );
 
-    ::com::sun::star::util::DateTime dumpFileTime( const String& rName = EMPTY_STRING );
+    css::util::DateTime dumpFileTime( const String& rName = EMPTY_STRING );
     OUString     dumpGuid( const String& rName = EMPTY_STRING );
 
     void                dumpItem( const ItemFormat& rItemFmt );

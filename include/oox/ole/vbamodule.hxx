@@ -44,8 +44,8 @@ class VbaModule
 {
 public:
     explicit            VbaModule(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const OUString& rName,
                             rtl_TextEncoding eTextEnc,
                             bool bExecutable );
@@ -66,12 +66,12 @@ public:
     /** Imports the VBA source code into the passed Basic library. */
     void                createAndImportModule(
                             StorageBase& rVbaStrg,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
     /** Creates an empty Basic module in the passed Basic library. */
     void                createEmptyModule(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
     /** Reads and returns the VBA source code from the passed storage. */
@@ -80,17 +80,17 @@ private:
     /** Creates a new Basic module and inserts it into the passed Basic library. */
     void                createModule(
                             const OUString& rVBASourceCode,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.
-    OUString     maName;
-    OUString     maStreamName;
-    OUString     maDocString;
+    OUString            maName;
+    OUString            maStreamName;
+    OUString            maDocString;
     rtl_TextEncoding    meTextEnc;
     sal_Int32           mnType;
     sal_uInt32          mnOffset;

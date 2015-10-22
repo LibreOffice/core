@@ -103,14 +103,14 @@ public:
 
     EffectProperties&               getEffectProperties() { return *mpEffectPropertiesPtr; }
 
-    void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
-    void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
+    void                            setChildPosition( css::awt::Point nPosition ){ maChPosition = nPosition; }
+    void                            setChildSize( css::awt::Size aSize ){ maChSize = aSize; }
 
-    void                              setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
-    const com::sun::star::awt::Point& getPosition() const { return maPosition; }
+    void                            setPosition( css::awt::Point nPosition ){ maPosition = nPosition; }
+    const css::awt::Point&          getPosition() const { return maPosition; }
 
-    void                              setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
-    const com::sun::star::awt::Size&  getSize() const { return maSize; }
+    void                            setSize( css::awt::Size aSize ){ maSize = aSize; }
+    const css::awt::Size&           getSize() const { return maSize; }
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
@@ -149,23 +149,23 @@ public:
     void                addShape(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
+                            const css::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             basegfx::B2DHomMatrix& aTransformation,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
+                            const css::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
-    void                setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
+    void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
+    const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
     virtual void        applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
@@ -180,10 +180,10 @@ public:
     void                setWps(bool bWps);
     bool                getWps() { return mbWps;}
     void                setTextBox(bool bTextBox);
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
+    const css::uno::Sequence<css::beans::PropertyValue> &
                         getDiagramDoms() { return maDiagramDoms; }
-    void                setDiagramDoms(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
-    com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
+    void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
+    css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
@@ -192,13 +192,13 @@ public:
 
 protected:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         createAndInsert(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const OUString& rServiceName,
                             const Theme* pTheme,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle* pShapeRect,
                             bool bClearText,
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
@@ -209,35 +209,35 @@ protected:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
                             const Theme* pTheme,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rClientRect,
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 
     void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase& rFilterBase );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         renderDiagramToGraphic( ::oox::core::XmlFilterBase& rFilterBase );
 
     OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rServiceName,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+                            const css::awt::Rectangle& rShapeRect );
 
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     void                putPropertyToGrabBag(
-                            const OUString& sPropertyName, const ::com::sun::star::uno::Any& aPropertyValue );
+                            const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
     void                putPropertyToGrabBag(
-                            const ::com::sun::star::beans::PropertyValue& pProperty );
+                            const css::beans::PropertyValue& pProperty );
     void                putPropertiesToGrabBag(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
+                            const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
-    com::sun::star::awt::Size   maChSize;                 // only used for group shapes
-    com::sun::star::awt::Point  maChPosition;             // only used for group shapes
+    css::awt::Size   maChSize;                 // only used for group shapes
+    css::awt::Point  maChPosition;             // only used for group shapes
     bool                        mbIsChild;
 
     TextBodyPtr                 mpTextBody;
@@ -254,20 +254,20 @@ protected:
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+    css::uno::Reference< css::drawing::XShape > mxShape;
 
-    OUString       msServiceName;
-    OUString       msName;
-    OUString       msId;
-    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
-    OptValue< sal_Int32 >   moSubTypeIndex;
+    OUString                    msServiceName;
+    OUString                    msName;
+    OUString                    msId;
+    sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
+    OptValue< sal_Int32 >       moSubTypeIndex;
 
-    ShapeStyleRefMap   maShapeStyleRefs;
+    ShapeStyleRefMap            maShapeStyleRefs;
 
-    com::sun::star::awt::Size       maSize;
-    com::sun::star::awt::Point      maPosition;
-    ::std::vector<OUString>    maExtDrawings;
-    Color                           maFontRefColorForNodes;
+    css::awt::Size              maSize;
+    css::awt::Point             maPosition;
+    ::std::vector<OUString>     maExtDrawings;
+    Color                       maFontRefColorForNodes;
 
 private:
     enum FrameType
@@ -299,7 +299,7 @@ private:
     LinkedTxbxAttr                  maLinkedTxbxAttr;
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maDiagramDoms;
+    css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
 };
 
 } }

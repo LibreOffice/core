@@ -55,8 +55,8 @@ private:
     std::vector< OUString > maNotesMasterVector;
     ::oox::drawingml::TextListStylePtr mpTextListStyle;
 
-    ::com::sun::star::awt::Size maSlideSize;
-    ::com::sun::star::awt::Size maNotesSize;
+    css::awt::Size              maSlideSize;
+    css::awt::Size              maNotesSize;
 
     std::vector< CustomShow >   maCustomShowList;
 

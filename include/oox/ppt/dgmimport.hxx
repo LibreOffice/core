@@ -37,7 +37,7 @@ class QuickDiagrammingImport : public oox::core::XmlFilterBase
 {
 public:
 
-    QuickDiagrammingImport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    QuickDiagrammingImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // from FilterBase
     virtual bool importDocument() throw (css::uno::RuntimeException, std::exception) override;

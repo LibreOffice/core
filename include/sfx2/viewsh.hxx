@@ -178,7 +178,7 @@ public:
                                          std::function<bool ( const SfxViewShell* )> isViewShell = nullptr );
     static SfxViewShell*        Current();
 
-    static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
+    static SfxViewShell*        Get( const css::uno::Reference< css::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
                                 TYPEINFO_OVERRIDE();
@@ -195,7 +195,7 @@ public:
 
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;
-    SfxInPlaceClient*           FindIPClient( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
+    SfxInPlaceClient*           FindIPClient( const css::uno::Reference < css::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
 
     virtual ErrCode             DoVerb(long nVerb);
 
@@ -251,8 +251,8 @@ public:
     // Working set
     virtual void                WriteUserData( OUString&, bool bBrowse = false );
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
-    virtual void                WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
-    virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell() override;
@@ -262,7 +262,7 @@ public:
         The default implementation simply returns the XModel of the associated SfxObjectShell. You will rarely
         need to overwrite this behavior.
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    virtual css::uno::Reference< css::frame::XModel >
                                 GetCurrentDocument() const;
 
     /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
@@ -271,7 +271,7 @@ public:
 
     /** get an XRenderable instance that can render this document
     */
-    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+    virtual css::uno::Reference< css::view::XRenderable > GetRenderable();
 
 
     virtual void                MarginChanged();
@@ -282,22 +282,22 @@ public:
     void                        SetNewWindowAllowed( bool bSet )    { bNoNewWindow = !bSet; }
 
     void                        SetController( SfxBaseController* pController );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+    css::uno::Reference< css::frame::XController >
                                 GetController();
 
-    bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
 
-    void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool, bool );
+    void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
-    void                        StartPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool, bool );
+    void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     std::shared_ptr< vcl::PrinterController > GetPrinterController() const;
 
-    void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, bool );
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
+    void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
+    css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
-    SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
-    SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
+    SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
+    SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient );

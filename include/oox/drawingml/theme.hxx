@@ -85,11 +85,10 @@ public:
     Shape&                   getTxDef() { return maTxDef; }
     const Shape&             getTxDef() const { return maTxDef; }
 
-    void                            setFragment( const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
+    void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
 private:
-    OUString     maStyleName;
+    OUString            maStyleName;
     ClrScheme           maClrScheme;
     FillStyleList       maFillStyleList;
     FillStyleList       maBgFillStyleList;
@@ -99,8 +98,7 @@ private:
     Shape               maSpDef;
     Shape               maLnDef;
     Shape               maTxDef;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XDocument> mxFragment;
+    css::uno::Reference< css::xml::dom::XDocument> mxFragment;
 };
 
 

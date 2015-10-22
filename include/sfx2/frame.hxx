@@ -112,8 +112,8 @@ protected:
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow, bool bHidden );
 
 public:
-    static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
+    static css::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();
     static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
@@ -132,7 +132,7 @@ public:
     static SfxFrame*    GetNext( SfxFrame& );
 
     static const SfxPoolItem*
-                        OpenDocumentSynchron( SfxItemSet& aSet, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rTargetFrame );
+                        OpenDocumentSynchron( SfxItemSet& aSet, const css::uno::Reference< css::frame::XFrame >& i_rTargetFrame );
 
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
@@ -144,17 +144,17 @@ public:
     void                GetTargetList( TargetList& ) const;
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    css::uno::Reference< css::frame::XFrame >
                         GetFrameInterface() const;
     void                Appear();
     void                AppearWithUpdate();
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+    css::uno::Reference< css::frame::XController >
                         GetController() const;
 
     bool                IsInPlace() const;
 
     SAL_DLLPRIVATE bool DoClose_Impl();
-    SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    SAL_DLLPRIVATE void SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( bool bSet );
     SAL_DLLPRIVATE void GetViewData_Impl();
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
@@ -224,8 +224,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SfxFrame*               GetFrame() const
                             { return wFrame; }
@@ -233,34 +233,34 @@ public:
 
 class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Any  aValue;
+    css::uno::Any  aValue;
 public:
                                 TYPEINFO_OVERRIDE();
-                                SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny );
-    ::com::sun::star::uno::Any  GetValue() const
+                                SfxUsrAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
+    css::uno::Any  GetValue() const
                                 { return aValue; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    css::uno::Reference< css::frame::XFrame >
                                 m_xFrame;
 
 public:
                                 TYPEINFO_OVERRIDE();
                                 SfxUnoFrameItem();
-                                SfxUnoFrameItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                                SfxUnoFrameItem( sal_uInt16 nWhich, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
+    const css::uno::Reference< css::frame::XFrame >&
                                 GetFrame() const
                                 { return m_xFrame; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 typedef SfxUsrAnyItem SfxUnoAnyItem;

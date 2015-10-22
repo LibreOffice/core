@@ -34,7 +34,7 @@ public:
     RequestPackageReparation( const OUString& aName );
     ~RequestPackageReparation();
     bool    isApproved();
-    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
+    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 
 class NotifyBrokenPackage_Impl;
@@ -44,7 +44,7 @@ class SFX2_DLLPUBLIC NotifyBrokenPackage
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();
-    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
+    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 
 #endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX

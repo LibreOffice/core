@@ -44,51 +44,51 @@ class FastParser
 {
 public:
     explicit            FastParser(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+                            throw( css::uno::RuntimeException );
 
     virtual             ~FastParser();
 
     /** Registers an OOXML namespace at the parser. */
     void                registerNamespace( sal_Int32 nNamespaceId )
-                            throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+                            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     /** Sets the passed document handler that will receive the SAX parser events. */
     void                setDocumentHandler(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& rxDocHandler )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler )
+                            throw( css::uno::RuntimeException );
 
     /** Parses the passed SAX input source.
         @param bCloseStream  True = closes the stream in the input source after parsing. */
-    void                parseStream( const ::com::sun::star::xml::sax::InputSource& rInputSource, bool bCloseStream = false )
-                            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
+    void                parseStream( const css::xml::sax::InputSource& rInputSource, bool bCloseStream = false )
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
     /** Parses the passed input stream.
         @param bCloseStream  True = closes the passed stream after parsing. */
     void                parseStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
+                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
                             const OUString& rStreamName, bool bCloseStream = false )
-                            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
     /** Parses a stream from the passed storage with the specified name.
         @param bCloseStream  True = closes the stream after parsing. */
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName, bool bCloseStream = false )
-                            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
+                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
     OUString getNamespaceURL( const OUString& rPrefix )
-                        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+                        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     bool hasNamespaceURL( const OUString& rPrefix ) const;
 
     sal_Int32 getNamespaceId( const OUString& aUrl );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
+    css::uno::Reference< css::xml::sax::XFastTokenHandler >
                getTokenHandler() const { return mxTokenHandler; }
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastParser >
+    css::uno::Reference< css::xml::sax::XFastParser >
                         mxParser;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
+    css::uno::Reference< css::xml::sax::XFastTokenHandler >
                         mxTokenHandler;
     const NamespaceMap& mrNamespaceMap;
 

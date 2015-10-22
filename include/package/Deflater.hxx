@@ -32,7 +32,7 @@ class DLLPUBLIC_PACKAGE Deflater
     typedef struct z_stream_s z_stream;
 
 protected:
-    com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
+    css::uno::Sequence< sal_Int8 > sInBuffer;
     bool                    bFinish;
     bool                    bFinished;
     sal_Int32               nStrategy;
@@ -40,16 +40,16 @@ protected:
     z_stream*               pStream;
 
     void init (sal_Int32 nLevel, sal_Int32 nStrategy, bool bNowrap);
-    sal_Int32 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+    sal_Int32 doDeflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
-    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    void SAL_CALL setInputSegment( const css::uno::Sequence< sal_Int8 >& rBuffer );
     bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );
     bool SAL_CALL finished(  ) { return bFinished;}
-    sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int32 SAL_CALL doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     sal_Int64 SAL_CALL getTotalIn(  );
     sal_Int64 SAL_CALL getTotalOut(  );
     void SAL_CALL reset(  );

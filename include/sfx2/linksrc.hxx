@@ -70,12 +70,12 @@ public:
                         // notify the sink, the mime type is not
                         // a selection criterion
     void                DataChanged( const rtl::OUString & rMimeType,
-                                    const ::com::sun::star::uno::Any & rVal );
+                                    const css::uno::Any & rVal );
     void                SendDataChanged();
     void                NotifyDataChanged();
 
     virtual bool        Connect( SvBaseLink* );
-    virtual bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool        GetData( css::uno::Any & rData /*out param*/,
                                 const rtl::OUString & rMimeType,
                                 bool bSynchron = false );
 
@@ -96,19 +96,19 @@ public:
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(
-            const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly )
+            const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
             :m_xInputStreamToLoadFrom(xInputStream),
              m_bIsReadOnly(bIsReadOnly)
         {
         }
 
-        com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
+        css::uno::Reference<css::io::XInputStream>
              m_xInputStreamToLoadFrom;
         bool m_bIsReadOnly;
     };
 
     StreamToLoadFrom getStreamToLoadFrom();
-    void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly );
+    void setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly );
     void clearStreamToLoadFrom();
 };
 

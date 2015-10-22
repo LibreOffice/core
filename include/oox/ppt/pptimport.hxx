@@ -37,8 +37,8 @@ class PowerPointImport : public oox::core::XmlFilterBase
 {
 public:
 
-    PowerPointImport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext )
-        throw( ::com::sun::star::uno::RuntimeException );
+    PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+        throw( css::uno::RuntimeException );
     virtual ~PowerPointImport();
 
     // from FilterBase
@@ -57,8 +57,8 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 

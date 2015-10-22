@@ -439,8 +439,8 @@ public:
     void                        PutItem( const SfxPoolItem& rItem );
 
     // TODO/CLEANUP: still needed?!
-    void SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs);
-    const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbs() const;
+    void SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs);
+    const css::uno::Sequence < css::embed::VerbDescriptor >& GetVerbs() const;
     void                        VerbExec (SfxRequest&);
     static void                 VerbState (SfxItemSet&);
     SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;

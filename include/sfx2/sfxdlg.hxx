@@ -85,8 +85,8 @@ public:
 class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 {
 public:
-    virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()=0;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
+    virtual css::uno::Reference < css::embed::XEmbeddedObject > GetObject()=0;
+    virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
     virtual bool IsCreateNew()=0;
 };
 
@@ -118,7 +118,7 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialog
 public:
                                         virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
-    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
+    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
@@ -128,25 +128,25 @@ public:
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
+                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
                                             const rtl::OUString *pUserButtonText=0 ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
+            const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 )=0;
     virtual VclAbstractDialog*          CreateEditObjectDialog( vcl::Window* pParent, const OUString& rCommand,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
-    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( vcl::Window* pParent )=0;
-    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=0 )=0;
+            const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
+    virtual  SfxAbstractPasteDialog*    CreatePasteDialog( vcl::Window* pParent )=0;
+    virtual  SfxAbstractLinksDialog*    CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=0 )=0;
     virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( vcl::Window* pParent,  const rtl::OUString& rLanguage ) = 0;
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             vcl::Window* pParent,
             bool bShowSlots,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+            const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(

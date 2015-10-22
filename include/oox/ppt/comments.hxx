@@ -50,7 +50,7 @@ class Comment
         OUString x;
         OUString y;
         OUString text;
-        ::com::sun::star::util::DateTime aDateTime;
+        css::util::DateTime aDateTime;
 
         void setDateTime (const OUString& datetime);
 
@@ -81,7 +81,7 @@ class Comment
         {
             return text;
         }
-        ::com::sun::star::util::DateTime getDateTime()
+        css::util::DateTime getDateTime()
         {
             return aDateTime;
         }

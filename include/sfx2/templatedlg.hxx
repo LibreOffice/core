@@ -55,7 +55,7 @@ public:
 
     void setSaveMode();
 
-    void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
+    void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 
     DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
 
@@ -161,8 +161,8 @@ private:
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
 
     bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 > mxDesktop;
+    css::uno::Reference< css::frame::XModel > m_xModel;
+    css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
 
     bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
     std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates

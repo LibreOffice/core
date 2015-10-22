@@ -37,7 +37,7 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
+    css::uno::Reference< css::ucb::XCommandEnvironment > m_xCmdEnv;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEREMOTEVIEW_HXX
