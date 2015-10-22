@@ -358,21 +358,7 @@ public class MultiPropertyTest extends MultiMethodTest
                     if (!compare(resValue, oldValue))
                     {
                         log.println("Read only property '" + propName + "' has changed");
-                        try
-                        {
-                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
-                            {
-                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
-                            }
-                            log.println("result = " + toString(resValue));
-                        }
-                        catch (com.sun.star.lang.IllegalArgumentException iae)
-                        {
-                            log.println("NOTIFY: this property needs further investigations.");
-                            log.println("\t The type seems to be an Any with value of NULL.");
-                            log.println("\t Maybe the property should get its own test method.");
-                        }
-
+                        log.println("result = " + toString(resValue));
                         tRes.tested(propName, false);
                     }
                     else
@@ -392,20 +378,7 @@ public class MultiPropertyTest extends MultiMethodTest
                     if (!compare(resValue, newValue))
                     {
                         log.println("Value for '" + propName + "' hasn't changed as expected");
-                        try
-                        {
-                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
-                            {
-                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
-                            }
-                            log.println("result = " + toString(resValue));
-                        }
-                        catch (com.sun.star.lang.IllegalArgumentException iae)
-                        {
-                            log.println("NOTIFY: this property needs further investigations.");
-                            log.println("\t The type seems to be an Any with value of NULL.");
-                            log.println("\t Maybe the property should get its own test method.");
-                        }
+                        log.println("result = " + toString(resValue));
                         if (!compare(resValue, oldValue))
                         {
                             log.println("But it has changed.");
@@ -419,17 +392,7 @@ public class MultiPropertyTest extends MultiMethodTest
                     else
                     {
                         log.println("Property '" + propName + "' OK");
-                        try
-                        {
-                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
-                            {
-                                oldValue = AnyConverter.toObject(new Type(oldValue.getClass()), oldValue);
-                            }
-                            log.println("result = " + toString(resValue));
-                        }
-                        catch (com.sun.star.lang.IllegalArgumentException iae)
-                        {
-                        }
+                        log.println("result = " + toString(resValue));
                         tRes.tested(propName, true);
                     }
                 }
