@@ -6084,6 +6084,111 @@ void Test::testFuncCHITEST()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncTTEST()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "TTest");
+
+    ScAddress aPos(6,0,0);
+    // type 1, mode/tails 1
+    m_pDoc->SetString(aPos, "=TTEST(A1:C3;D1:F3;1;1)");
+    OUString aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TTEST should return #VALUE! for empty matrices",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->SetValue(0, 0, 0, 8.0); // A1
+    m_pDoc->SetValue(1, 0, 0, 2.0); // B1
+    m_pDoc->SetValue(3, 0, 0, 3.0); // D1
+    m_pDoc->SetValue(4, 0, 0, 1.0); // E1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.18717, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 0, 0, 1.0); // C1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.18717, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 0, 0, 6.0); // F1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.45958, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 1, 0, -4.0); // A2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.45958, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(3, 1, 0, 1.0); // D2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.35524, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(1, 1, 0, 5.0); // B2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.35524, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(4, 1, 0, -2.0); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.41043, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 1, 0, -1.0); // C2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.41043, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 1, 0, -3.0); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.34990, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 2, 0, 10.0); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.34990, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(3, 2, 0, 10.0); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.34686, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(1, 2, 0, 3.0); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.34686, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(4, 2, 0, 9.0); // E3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.47198, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 2, 0, -5.0); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.47198, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 2, 0, 6.0); // F3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.25529, m_pDoc->GetValue(aPos), 10e-5);
+
+    m_pDoc->SetString(1, 1, 0, "a"); // B2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.12016, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetString(4, 1, 0, "b"); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.12016, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetString(2, 2, 0, "c"); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.25030, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetString(5, 1, 0, "d"); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.19637, m_pDoc->GetValue(aPos), 10e-5);
+
+    // type 1, mode/tails 2
+    m_pDoc->SetString(aPos, "=TTEST(A1:C3;D1:F3;2;1)");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.39273, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(1, 1, 0, 4.0); // B2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.39273, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(4, 1, 0, 3.0); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.43970, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 2, 0, -2.0); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.22217, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 1, 0, -10.0); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.64668, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 1, 0, 3.0); // A2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.95266, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(3, 2, 0, -1.0); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.62636, m_pDoc->GetValue(aPos), 10e-5);
+
+    // type 2, mode/tails 2
+    m_pDoc->SetString(aPos, "=TTEST(A1:C3;D1:F3;2;2)");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.62549, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 1, 0, -1.0); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.94952, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 2, 0, 5.0); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.58876, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(2, 1, 0, 2.0); // C2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.43205, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(3, 2, 0, -4.0); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.36165, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 1, 0, 1.0); // A2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.44207, m_pDoc->GetValue(aPos), 10e-5);
+
+    // type 3, mode/tails 1
+    m_pDoc->SetString(aPos, "=TTEST(A1:C3;D1:F3;1;3)");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.22132, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 0, 0, 1.0); // A1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.36977, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(0, 2, 0, -30.0); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.16871, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(3, 1, 0, 5.0); // D2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.14396, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 1, 0, 2.0); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.12590, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(4, 2, 0, 2.0); // E3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.16424, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(5, 0, 0, -1.0); // F1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of TTEST failed", 0.21472, m_pDoc->GetValue(aPos), 10e-5);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncSUMX2PY2()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

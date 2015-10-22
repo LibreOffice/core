@@ -187,6 +187,7 @@ public:
     void testFuncFTEST();
     void testFuncFTESTBug();
     void testFuncCHITEST();
+    void testFuncTTEST();
     void testFuncSUMX2PY2();
     void testFuncSUMX2MY2();
     void testFuncGCD();
@@ -527,6 +528,7 @@ public:
     CPPUNIT_TEST(testFuncFTEST);
     CPPUNIT_TEST_FAIL(testFuncFTESTBug);
     CPPUNIT_TEST(testFuncCHITEST);
+    CPPUNIT_TEST(testFuncTTEST);
     CPPUNIT_TEST(testFuncSUMX2PY2);
     CPPUNIT_TEST(testFuncSUMX2MY2);
     CPPUNIT_TEST(testFuncGCD);
