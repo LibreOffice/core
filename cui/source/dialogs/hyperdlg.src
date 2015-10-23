@@ -23,10 +23,6 @@
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-String RID_SVXSTR_HYPDLG_APPLYBUT
-{
-    Text [ en-US ] = "Apply" ;
-};
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
     Text [ en-US ] = "Close" ;
