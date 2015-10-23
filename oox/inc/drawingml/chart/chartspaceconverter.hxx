@@ -42,8 +42,8 @@ public:
 
     /** Converts the contained OOXML chart model to a chart2 document. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxExternalPage,
-                            const ::com::sun::star::awt::Point& rChartPos );
+                            const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
+                            const css::awt::Point& rChartPos );
 };
 
 

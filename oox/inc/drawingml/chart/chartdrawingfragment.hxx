@@ -85,9 +85,9 @@ public:
     explicit            ChartDrawingFragment(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxDrawPage,
-                            const ::com::sun::star::awt::Size& rChartSize,
-                            const ::com::sun::star::awt::Point& rShapesOffset,
+                            const css::uno::Reference< css::drawing::XShapes >& rxDrawPage,
+                            const css::awt::Size& rChartSize,
+                            const css::awt::Point& rShapesOffset,
                             bool bOleSupport );
     virtual             ~ChartDrawingFragment();
 
@@ -96,7 +96,7 @@ public:
     virtual void        onEndElement() override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.

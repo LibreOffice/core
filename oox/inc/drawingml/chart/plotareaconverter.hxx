@@ -43,7 +43,7 @@ public:
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
+                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
                             TypeGroupConverter& rTypeGroup );
 };
 
@@ -59,7 +59,7 @@ public:
 
     /** Converts the OOXML wall/floor model to a chart2 diagram. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
+                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
                             ObjectType eObjType );
 };
 
@@ -75,7 +75,7 @@ public:
 
     /** Converts the OOXML data table model to a chart2 diagram. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram);
+                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram);
 };
 
 
@@ -94,12 +94,12 @@ public:
     void                convertPositionFromModel();
 
     /** Returns the automatic chart title if the chart contains only one series. */
-    const OUString& getAutomaticTitle() const { return maAutoTitle; }
+    const OUString&     getAutomaticTitle() const { return maAutoTitle; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
-    bool         isWall3dChart() const { return mbWall3dChart; }
+    bool                isWall3dChart() const { return mbWall3dChart; }
 
 private:
-    OUString     maAutoTitle;
+    OUString            maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
     bool                mbPieChart;

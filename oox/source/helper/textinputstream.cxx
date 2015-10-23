@@ -185,7 +185,7 @@ Reference< XTextInputStream2 > TextInputStream::createXTextInputStream(
     OSL_ENSURE( pcCharset, "TextInputStream::createXTextInputStream - unsupported text encoding" );
     if( rxContext.is() && rxInStrm.is() && pcCharset ) try
     {
-        xTextStrm = com::sun::star::io::TextInputStream::create( rxContext );
+        xTextStrm = css::io::TextInputStream::create( rxContext );
         xTextStrm->setInputStream( rxInStrm );
         xTextStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }

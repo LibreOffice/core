@@ -21,7 +21,7 @@ class ShapeDrawingFragmentHandler : public oox::core::FragmentHandler2
 public:
     ShapeDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr pGroupShapePtr ) throw();
     virtual ~ShapeDrawingFragmentHandler() throw();
-    virtual void SAL_CALL endDocument() throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const AttributeList& rAttribs ) override;
 
 private:

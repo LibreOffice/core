@@ -431,7 +431,7 @@ void SAL_CALL OStatement::release()
     OCommonStatement::release();
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo()
+Reference< css::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getPropertySetInfo");

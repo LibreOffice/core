@@ -70,7 +70,7 @@ void AxAlignedOutputStream::writeMemory( const void* opMem, sal_Int32 nBytes, si
 void AxAlignedOutputStream::pad( sal_Int32 nBytes, size_t nAtomSize )
 {
    //PRESUMABLY we need to pad with 0's here as appropriate
-   com::sun::star::uno::Sequence< sal_Int8 > aData( nBytes );
+   css::uno::Sequence< sal_Int8 > aData( nBytes );
    // ok we could be padding with rubbish here, but really that shouldn't matter
    // set to 0(s), easier to not get fooled by 0's when looking at
    // binary content......

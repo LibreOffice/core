@@ -397,7 +397,7 @@ Reference< XShape > Shape::createAndInsert(
         ::oox::core::XmlFilterBase& rFilterBase,
         const OUString& rServiceName,
         const Theme* pTheme,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+        const css::uno::Reference< css::drawing::XShapes >& rxShapes,
         const awt::Rectangle* /* pShapeRect */,
         bool bClearText,
         bool bDoNotInsertEmptyTextBody,

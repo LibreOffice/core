@@ -40,7 +40,7 @@ namespace oox { namespace ppt {
     {
     public:
         CommonBehaviorContext( ::oox::core::FragmentHandler2& rParent,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode );
         virtual ~CommonBehaviorContext( )
             throw( );

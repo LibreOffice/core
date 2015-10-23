@@ -44,7 +44,7 @@ protected:
     TextParagraphProperties& mrTextParagraphProperties;
     TextSpacing     maLineSpacing;
     BulletList&     mrBulletList;
-    std::list< ::com::sun::star::style::TabStop >  maTabList;
+    std::list< css::style::TabStop >  maTabList;
     std::shared_ptr< BlipFillProperties > mxBlipProps;
 };
 

@@ -131,7 +131,7 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
         // XStorage::isStorageElement may throw various exceptions...
         if( mxStorage->isStorageElement( rElementName ) )
             xSubXStorage = mxStorage->openStorageElement(
-                rElementName, ::com::sun::star::embed::ElementModes::READ );
+                rElementName, css::embed::ElementModes::READ );
     }
     catch( NoSuchElementException& )
     {
@@ -145,7 +145,7 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
     if( bMissing && bCreateMissing ) try
     {
         xSubXStorage = mxStorage->openStorageElement(
-            rElementName, ::com::sun::star::embed::ElementModes::READWRITE );
+            rElementName, css::embed::ElementModes::READWRITE );
     }
     catch (Exception const& e)
     {
@@ -163,7 +163,7 @@ Reference< XInputStream > ZipStorage::implOpenInputStream( const OUString& rElem
     Reference< XInputStream > xInStream;
     if( mxStorage.is() ) try
     {
-        xInStream.set( mxStorage->openStreamElement( rElementName, ::com::sun::star::embed::ElementModes::READ ), UNO_QUERY );
+        xInStream.set( mxStorage->openStreamElement( rElementName, css::embed::ElementModes::READ ), UNO_QUERY );
     }
     catch (Exception const& e)
     {
@@ -177,7 +177,7 @@ Reference< XOutputStream > ZipStorage::implOpenOutputStream( const OUString& rEl
     Reference< XOutputStream > xOutStream;
     if( mxStorage.is() ) try
     {
-        xOutStream.set( mxStorage->openStreamElement( rElementName, ::com::sun::star::embed::ElementModes::READWRITE ), UNO_QUERY );
+        xOutStream.set( mxStorage->openStreamElement( rElementName, css::embed::ElementModes::READWRITE ), UNO_QUERY );
     }
     catch (Exception const& e)
     {

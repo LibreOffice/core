@@ -1127,7 +1127,7 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
                                             Any & /* rOldValue */,
                                             sal_Int32 nHandle,
                                             const Any& /* rValue */)
-    throw (::com::sun::star::lang::IllegalArgumentException)
+    throw (css::lang::IllegalArgumentException)
 {
     OSL_TRACE("OResultSet::convertFastPropertyValue");
     switch (nHandle) {
@@ -1135,7 +1135,7 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
         default:
@@ -1204,7 +1204,7 @@ void SAL_CALL OResultSet::release()
     OResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getPropertySetInfo");
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

@@ -47,7 +47,7 @@ public:
 
     /** Converts OOXML data label settings for the passed data point. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
 };
 
@@ -61,7 +61,7 @@ public:
 
     /** Converts OOXML data label settings for the passed data series. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
 };
 
@@ -75,10 +75,10 @@ public:
 
     /** Converts an OOXML errorbar and inserts it into the passed data series. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries );
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence( ErrorBarModel::SourceType eSourceType );
 };
 
@@ -104,7 +104,7 @@ public:
 
     /** Converts an OOXML trendline and inserts it into the passed data series. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries );
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
 };
 
 
@@ -117,7 +117,7 @@ public:
 
     /** Converts settings for a data point in the passed series. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup,
                             const SeriesModel& rSeries );
 };
@@ -131,17 +131,17 @@ public:
     virtual             ~SeriesConverter();
 
     /** Creates a labeled data sequence object from category data link. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createCategorySequence( const OUString& rRole );
     /** Creates a labeled data sequence object from value data link. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createValueSequence( const OUString& rRole );
     /** Creates a data series object with initialized source links. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
+    css::uno::Reference< css::chart2::XDataSeries >
                         createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence(
                             SeriesModel::SourceType eSourceType,
                             const OUString& rRole,

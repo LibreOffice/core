@@ -84,7 +84,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 OUString str = rAttribs.getString( MCE_TOKEN( Ignorable ), OUString() );
                 if( !str.isEmpty() )
                 {
-                    // Sequence< ::com::sun::star::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
+                    // Sequence< css::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
                     // printf("MCE: %s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
                     // TODO: Check & Get the namespaces in "Ignorable"
                     // printf("NS: %d : %s\n", attrs.getLength(), OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );

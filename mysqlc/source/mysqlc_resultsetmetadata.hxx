@@ -36,7 +36,7 @@ namespace connectivity
 
         //************ Class: ResultSetMetaData
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper1< css::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
 
         class OResultSetMetaData : public OResultSetMetaData_BASE
         {
@@ -57,7 +57,7 @@ namespace connectivity
             }
 
             /// Avoid ambigous cast error from the compiler.
-            inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
+            inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
             { return this; }
 
             sal_Int32 SAL_CALL getColumnCount()                     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;

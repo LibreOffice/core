@@ -58,7 +58,7 @@ void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Re
     );
 }
 
-void translateAndThrow(const ::sql::SQLException& _error, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _context, const rtl_TextEncoding encoding)
+void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding)
 {
     throw SQLException(
             convert(_error.what(), encoding),
@@ -81,70 +81,70 @@ int mysqlToOOOType(int cppConnType)
 {
     switch (cppConnType) {
         case sql::DataType::BIT:
-            return com::sun::star::sdbc::DataType::VARCHAR;
+            return css::sdbc::DataType::VARCHAR;
 
         case sql::DataType::TINYINT:
-            return com::sun::star::sdbc::DataType::TINYINT;
+            return css::sdbc::DataType::TINYINT;
 
         case sql::DataType::SMALLINT:
-            return com::sun::star::sdbc::DataType::SMALLINT;
+            return css::sdbc::DataType::SMALLINT;
 
         case sql::DataType::INTEGER:
-            return com::sun::star::sdbc::DataType::INTEGER;
+            return css::sdbc::DataType::INTEGER;
 
         case sql::DataType::BIGINT:
-            return com::sun::star::sdbc::DataType::BIGINT;
+            return css::sdbc::DataType::BIGINT;
 
         case sql::DataType::REAL:
-            return com::sun::star::sdbc::DataType::REAL;
+            return css::sdbc::DataType::REAL;
 
         case sql::DataType::DOUBLE:
-            return com::sun::star::sdbc::DataType::DOUBLE;
+            return css::sdbc::DataType::DOUBLE;
 
         case sql::DataType::DECIMAL:
-            return com::sun::star::sdbc::DataType::DECIMAL;
+            return css::sdbc::DataType::DECIMAL;
 
         case sql::DataType::CHAR:
-            return com::sun::star::sdbc::DataType::CHAR;
+            return css::sdbc::DataType::CHAR;
 
         case sql::DataType::BINARY:
-            return com::sun::star::sdbc::DataType::BINARY;
+            return css::sdbc::DataType::BINARY;
 
         case sql::DataType::ENUM:
         case sql::DataType::SET:
         case sql::DataType::VARCHAR:
-            return com::sun::star::sdbc::DataType::VARCHAR;
+            return css::sdbc::DataType::VARCHAR;
 
         case sql::DataType::VARBINARY:
-            return com::sun::star::sdbc::DataType::VARBINARY;
+            return css::sdbc::DataType::VARBINARY;
 
         case sql::DataType::LONGVARCHAR:
-            return com::sun::star::sdbc::DataType::LONGVARCHAR;
+            return css::sdbc::DataType::LONGVARCHAR;
 
         case sql::DataType::LONGVARBINARY:
-            return com::sun::star::sdbc::DataType::LONGVARBINARY;
+            return css::sdbc::DataType::LONGVARBINARY;
 
         case sql::DataType::TIMESTAMP:
-            return com::sun::star::sdbc::DataType::TIMESTAMP;
+            return css::sdbc::DataType::TIMESTAMP;
 
         case sql::DataType::DATE:
-            return com::sun::star::sdbc::DataType::DATE;
+            return css::sdbc::DataType::DATE;
 
         case sql::DataType::TIME:
-            return com::sun::star::sdbc::DataType::TIME;
+            return css::sdbc::DataType::TIME;
 
         case sql::DataType::GEOMETRY:
-            return com::sun::star::sdbc::DataType::VARCHAR;
+            return css::sdbc::DataType::VARCHAR;
 
         case sql::DataType::SQLNULL:
-            return com::sun::star::sdbc::DataType::SQLNULL;
+            return css::sdbc::DataType::SQLNULL;
 
         case sql::DataType::UNKNOWN:
-            return com::sun::star::sdbc::DataType::VARCHAR;
+            return css::sdbc::DataType::VARCHAR;
     }
 
     OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
-    return com::sun::star::sdbc::DataType::VARCHAR;
+    return css::sdbc::DataType::VARCHAR;
 }
 
 rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)

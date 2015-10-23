@@ -45,7 +45,7 @@ public:
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& rxAxis);
+                            const css::uno::Reference< css::chart2::XAxis >& rxAxis);
 };
 
 struct AxisModel;

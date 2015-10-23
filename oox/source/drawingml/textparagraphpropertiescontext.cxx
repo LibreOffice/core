@@ -135,7 +135,7 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     if ( maLineSpacing.bHasValue )
         rPropertyMap.setProperty( PROP_ParaLineSpacing, maLineSpacing.toLineSpacing());
     else
-        rPropertyMap.setProperty( PROP_ParaLineSpacing, ::com::sun::star::style::LineSpacing( ::com::sun::star::style::LineSpacingMode::PROP, 100 ));
+        rPropertyMap.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
 
     ::std::list< TabStop >::size_type nTabCount = maTabList.size();
     if( nTabCount != 0 )

@@ -125,7 +125,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
-        ::com::sun::star::drawing::FillStyle aFillStyle = ::com::sun::star::drawing::FillStyle_SOLID;
+        css::drawing::FillStyle aFillStyle = css::drawing::FillStyle_SOLID;
         return uno::makeAny(aFillStyle);
     }
     return uno::makeAny( m_nColor );

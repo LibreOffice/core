@@ -626,7 +626,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             )
             break;
 
-        Reference< ::com::sun::star::io::XInputStream > xBinStream;
+        Reference< css::io::XInputStream > xBinStream;
         if ( _value >>= xBinStream )
         {
             setBinaryStream( _parameterIndex, xBinStream, xBinStream->available() );

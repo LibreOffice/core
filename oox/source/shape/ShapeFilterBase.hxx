@@ -36,8 +36,8 @@ public:
     typedef std::shared_ptr<ShapeFilterBase> Pointer_t;
 
     explicit            ShapeFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+                            throw( css::uno::RuntimeException );
 
     virtual             ~ShapeFilterBase();
 

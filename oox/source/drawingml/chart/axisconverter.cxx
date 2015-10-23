@@ -75,12 +75,12 @@ sal_Int32 lclGetApiTimeUnit( sal_Int32 nTimeUnit )
 void lclConvertTimeInterval( Any& orInterval, const OptValue< double >& rofUnit, sal_Int32 nTimeUnit )
 {
     if( rofUnit.has() && (1.0 <= rofUnit.get()) && (rofUnit.get() <= SAL_MAX_INT32) )
-        orInterval <<= ::com::sun::star::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.get() ), lclGetApiTimeUnit( nTimeUnit ) );
+        orInterval <<= css::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.get() ), lclGetApiTimeUnit( nTimeUnit ) );
     else
         orInterval.clear();
 }
 
-::com::sun::star::chart::ChartAxisLabelPosition lclGetLabelPosition( sal_Int32 nToken )
+css::chart::ChartAxisLabelPosition lclGetLabelPosition( sal_Int32 nToken )
 {
     using namespace ::com::sun::star::chart;
     switch( nToken )

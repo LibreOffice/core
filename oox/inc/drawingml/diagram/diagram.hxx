@@ -43,14 +43,10 @@ void loadDiagram( ShapePtr& pShape,
 
 void loadDiagram( const ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,
-                  const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::dom::XDocument>& rXDataModelDom,
-                  const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::dom::XDocument>& rXLayoutDom,
-                  const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::dom::XDocument>& rXQStyleDom,
-                  const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::dom::XDocument>& rXColorStyleDom );
+                  const css::uno::Reference< css::xml::dom::XDocument>& rXDataModelDom,
+                  const css::uno::Reference< css::xml::dom::XDocument>& rXLayoutDom,
+                  const css::uno::Reference< css::xml::dom::XDocument>& rXQStyleDom,
+                  const css::uno::Reference< css::xml::dom::XDocument>& rXColorStyleDom );
 } }
 
 #endif

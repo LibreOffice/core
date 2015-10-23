@@ -72,9 +72,12 @@ public:
     void                        setTextBody( const oox::drawingml::TextBodyPtr& pTextBody ){ mpTextBody = pTextBody; };
     oox::drawingml::TextBodyPtr getTextBody(){ return mpTextBody; };
 
-    void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
-        const ::com::sun::star::uno::Reference < ::com::sun::star::table::XCell >& rxCell, const TableProperties& rTableProperties,
-            const TableStyle& rTable, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow );
+    void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase,
+            ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
+            const css::uno::Reference < css::table::XCell >& rxCell,
+            const TableProperties& rTableProperties,
+            const TableStyle& rTable,
+            sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow );
 
 private:
 

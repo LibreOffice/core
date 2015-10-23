@@ -50,18 +50,18 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
-                                                    ::com::sun::star::sdbc::XRow,
-                                                    ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::sdbc::XResultSetUpdate,
-                                                    ::com::sun::star::sdbc::XRowUpdate,
-                                                    ::com::sun::star::sdbcx::XRowLocate,
-                                                    ::com::sun::star::sdbcx::XDeleteRows,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XColumnLocate,
-                                                    ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper12<  css::sdbc::XResultSet,
+                                                    css::sdbc::XRow,
+                                                    css::sdbc::XResultSetMetaDataSupplier,
+                                                    css::util::XCancellable,
+                                                    css::sdbc::XWarningsSupplier,
+                                                    css::sdbc::XResultSetUpdate,
+                                                    css::sdbc::XRowUpdate,
+                                                    css::sdbcx::XRowLocate,
+                                                    css::sdbcx::XDeleteRows,
+                                                    css::sdbc::XCloseable,
+                                                    css::sdbc::XColumnLocate,
+                                                    css::lang::XServiceInfo> OResultSet_BASE;
 
         class OResultSet :  public  OBase_Mutex,
                             public  OResultSet_BASE,
@@ -69,8 +69,8 @@ namespace connectivity
                             public  OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData> m_xMetaData;
+            css::uno::WeakReferenceHelper  m_aStatement;
+            css::uno::Reference< css::sdbc::XResultSetMetaData> m_xMetaData;
             sql::ResultSet      *m_result;
             unsigned int        fieldCount;
             rtl_TextEncoding    m_encoding;
@@ -80,10 +80,10 @@ namespace connectivity
             ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
             sal_Bool SAL_CALL convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue)
-                        throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                        throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
 
             void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
-                        throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
 
@@ -104,27 +104,27 @@ namespace connectivity
 
             OResultSet( OCommonStatement* pStmt, sql::ResultSet *result, rtl_TextEncoding _encoding );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
+            css::uno::Reference< css::uno::XInterface > operator *()
             {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
+                return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
             }
 
             // ::cppu::OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;
 
             // XInterface
-            Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
+            Any SAL_CALL queryInterface(const css::uno::Type & rType)
                                                                         throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL acquire()                                     throw() SAL_OVERRIDE;
             void SAL_CALL release()                                     throw() SAL_OVERRIDE;
 
             //XTypeProvider
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+            css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
                                                                         throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XPropertySet
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+            css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
                                                                         throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XResultSet
@@ -152,7 +152,7 @@ namespace connectivity
             sal_Bool SAL_CALL rowInserted()                             throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Bool SAL_CALL rowDeleted()                              throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement()
+            css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement()
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             // XRow
             sal_Bool SAL_CALL wasNull() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -168,13 +168,13 @@ namespace connectivity
             float SAL_CALL getFloat(sal_Int32 column)                   throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             double SAL_CALL getDouble(sal_Int32 column)                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBytes(sal_Int32 column)
+            css::uno::Sequence< sal_Int8 > SAL_CALL getBytes(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::util::Date SAL_CALL getDate(sal_Int32 column)
+            css::util::Date SAL_CALL getDate(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::util::Time SAL_CALL getTime(sal_Int32 column)
+            css::util::Time SAL_CALL getTime(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::util::DateTime SAL_CALL getTimestamp(sal_Int32 column)
+            css::util::DateTime SAL_CALL getTimestamp(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(sal_Int32 column)
@@ -185,17 +185,17 @@ namespace connectivity
             Any SAL_CALL getObject(sal_Int32 column, const my_XNameAccessRef& typeMap)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef > SAL_CALL getRef(sal_Int32 column)
+            css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob > SAL_CALL getBlob(sal_Int32 column)
+            css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob > SAL_CALL getClob(sal_Int32 column)
+            css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray > SAL_CALL getArray(sal_Int32 column)
+            css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XResultSetMetaDataSupplier
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData()
+            css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData()
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XCancellable
@@ -228,13 +228,13 @@ namespace connectivity
             void SAL_CALL updateDouble(sal_Int32 column, double x)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateString(sal_Int32 column, const rtl::OUString& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateBytes(sal_Int32 column, const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
+            void SAL_CALL updateBytes(sal_Int32 column, const css::uno::Sequence< sal_Int8 >& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateDate(sal_Int32 column, const ::com::sun::star::util::Date& x)
+            void SAL_CALL updateDate(sal_Int32 column, const css::util::Date& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateTime(sal_Int32 column, const ::com::sun::star::util::Time& x)
+            void SAL_CALL updateTime(sal_Int32 column, const css::util::Time& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateTimestamp(sal_Int32 column, const ::com::sun::star::util::DateTime& x)
+            void SAL_CALL updateTimestamp(sal_Int32 column, const css::util::DateTime& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateBinaryStream(sal_Int32 column, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -263,7 +263,7 @@ namespace connectivity
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XDeleteRows
-            ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const ::com::sun::star::uno::Sequence< Any >& rows)
+            css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const css::uno::Sequence< Any >& rows)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void checkColumnIndex(sal_Int32 index) throw(SQLException, RuntimeException);

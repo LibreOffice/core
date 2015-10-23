@@ -37,7 +37,7 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
 
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper1< css::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
@@ -189,7 +189,7 @@ namespace connectivity
             sal_Bool SAL_CALL dataDefinitionIgnoredInTransactions()     throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedures(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& procedureNamePattern) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedureColumns(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& procedureNamePattern, const rtl::OUString& columnNamePattern) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& tableNamePattern, const ::com::sun::star::uno::Sequence< rtl::OUString >& types) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& tableNamePattern, const css::uno::Sequence< rtl::OUString >& types) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getSchemas() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCatalogs() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTableTypes() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -216,8 +216,8 @@ namespace connectivity
             sal_Bool SAL_CALL deletesAreDetected(sal_Int32 setType)     throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Bool SAL_CALL insertsAreDetected(sal_Int32 setType)     throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Bool SAL_CALL supportsBatchUpdates() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs(const Any& catalog, const rtl::OUString& schemaPattern, const rtl::OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
     }
 }

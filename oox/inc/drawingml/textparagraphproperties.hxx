@@ -57,21 +57,21 @@ public:
     void setBulletSize(sal_Int16 nSize);
     void setFontSize(sal_Int16 nSize);
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
-    void setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic );
+    void setGraphic( css::uno::Reference< css::graphic::XGraphic >& rXGraphic );
 
     std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
-    ::com::sun::star::uno::Any  mbBulletColorFollowText;
-    ::com::sun::star::uno::Any  mbBulletFontFollowText;
+    css::uno::Any               mbBulletColorFollowText;
+    css::uno::Any               mbBulletFontFollowText;
     ::oox::drawingml::TextFont  maBulletFont;
-    ::com::sun::star::uno::Any  msBulletChar;
-    ::com::sun::star::uno::Any  mnStartAt;
-    ::com::sun::star::uno::Any  mnNumberingType;
-    ::com::sun::star::uno::Any  msNumberingPrefix;
-    ::com::sun::star::uno::Any  msNumberingSuffix;
-    ::com::sun::star::uno::Any  mnSize;
-    ::com::sun::star::uno::Any  mnFontSize;
-    ::com::sun::star::uno::Any  maStyleName;
-    ::com::sun::star::uno::Any  maGraphic;
+    css::uno::Any               msBulletChar;
+    css::uno::Any               mnStartAt;
+    css::uno::Any               mnNumberingType;
+    css::uno::Any               msNumberingPrefix;
+    css::uno::Any               msNumberingSuffix;
+    css::uno::Any               mnSize;
+    css::uno::Any               mnFontSize;
+    css::uno::Any               maStyleName;
+    css::uno::Any               maGraphic;
     boost::optional< float >    maFollowFontSize;
 };
 
@@ -99,8 +99,12 @@ public:
 
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
-                                            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
-                                                PropertyMap& rioBulletList, const BulletList* pMasterBuList, bool bApplyBulletList, float fFontSize, bool bPushDefaultValues = false ) const;
+                                                const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+                                                PropertyMap& rioBulletList,
+                                                const BulletList* pMasterBuList,
+                                                bool bApplyBulletList,
+                                                float fFontSize,
+                                                bool bPushDefaultValues = false ) const;
 
     /** Returns the largest character size of this paragraph. If possible the
         masterstyle should have been applied before, otherwise the character

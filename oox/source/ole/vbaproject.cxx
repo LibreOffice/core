@@ -151,10 +151,10 @@ VbaProject::~VbaProject()
 bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
 {
    // create GraphicHelper
-   Reference< ::com::sun::star::frame::XFrame > xFrame;
+   Reference< css::frame::XFrame > xFrame;
    if ( mxDocModel.is() )
    {
-       Reference< ::com::sun::star::frame::XController > xController =  mxDocModel->getCurrentController();
+       Reference< css::frame::XController > xController =  mxDocModel->getCurrentController();
        xFrame =  xController.is() ? xController->getFrame() : NULL;
    }
    StorageRef noStorage;

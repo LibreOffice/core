@@ -106,7 +106,7 @@ namespace oox { namespace ppt {
 
 // BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.hxx
 
-    static void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+    static void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {
@@ -149,7 +149,7 @@ namespace oox { namespace ppt {
                                 {
                                     sal_Int16 nNodeType = 0;
                                     p->Value >>= nNodeType;
-                                    if( nNodeType != ::com::sun::star::presentation::EffectNodeType::ON_CLICK )
+                                    if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
                                     {
                                         // first effect does not start on click, so correct
                                         // first click nodes begin to 0s
@@ -171,7 +171,7 @@ namespace oox { namespace ppt {
         }
     }
 
-    static void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+    static void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {

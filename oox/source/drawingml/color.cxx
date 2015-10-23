@@ -304,7 +304,7 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
     sal_Int32 nSize = maInteropTransformations.getLength();
     maInteropTransformations.realloc(nSize + 1);
     maInteropTransformations[nSize].Name = getColorTransformationName( nToken );
-    maInteropTransformations[nSize].Value = ::com::sun::star::uno::Any( nValue );
+    maInteropTransformations[nSize].Value = css::uno::Any( nValue );
 }
 
 void Color::addChartTintTransformation( double fTint )
