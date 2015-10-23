@@ -42,9 +42,6 @@ namespace abp
         get(m_pThunderbird, "thunderbird");
         get(m_pKab, "kde");
         get(m_pMacab, "macosx");
-        get(m_pLDAP, "ldap");
-        get(m_pOutlook, "outlook");
-        get(m_pOE, "windows");
         get(m_pOther, "other");
 
         //TODO:  For now, try to keep offering the same choices like before the
@@ -66,22 +63,14 @@ namespace abp
         // - OTHER
         //
         // On Windows:
-        // - MORK, THUNDERBIRD, LDAP, OUTLOOK, OUTLOOKEXPRESS (via mozab driver,
-        //   if WITH_MOZILLA)
+        // - MORK, THUNDERBIRD
         // - OTHER
 
-        bool bWithMozilla = false;
         bool bHaveEvolution = false;
         bool bHaveKab = false;
         bool bHaveMacab = false;
-        bool bWithMork = false;
 
-#if defined WNT
-#if defined WITH_MOZILLA
-        bWithMozilla = true;
-#endif
-#else
-        bWithMork = true;
+#if !defined WNT
 
         Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
 
@@ -124,13 +113,10 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_pEvolution, AST_EVOLUTION, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_pEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_pEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_pMORK, AST_MORK, bWithMozilla || bWithMork) );
-        m_aAllTypes.push_back( ButtonItem( m_pThunderbird, AST_THUNDERBIRD, bWithMozilla || bWithMork) );
+        m_aAllTypes.push_back( ButtonItem( m_pMORK, AST_MORK, true ) );
+        m_aAllTypes.push_back( ButtonItem( m_pThunderbird, AST_THUNDERBIRD, true ) );
         m_aAllTypes.push_back( ButtonItem( m_pKab, AST_KAB, bHaveKab ) );
         m_aAllTypes.push_back( ButtonItem( m_pMacab, AST_MACAB, bHaveMacab ) );
-        m_aAllTypes.push_back( ButtonItem( m_pLDAP, AST_LDAP, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( m_pOutlook, AST_OUTLOOK, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( m_pOE, AST_OE, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
 
         Link<Button*,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
@@ -168,9 +154,6 @@ namespace abp
         m_pThunderbird.clear();
         m_pKab.clear();
         m_pMacab.clear();
-        m_pLDAP.clear();
-        m_pOutlook.clear();
-        m_pOE.clear();
         m_pOther.clear();
         AddressBookSourcePage::dispose();
     }

@@ -1014,12 +1014,6 @@ AC_ARG_ENABLE(pch,
         [Enables precompiled header support for C++. Forced default on Windows/VC build])
 )
 
-AC_ARG_ENABLE(win-mozab-driver,
-    AS_HELP_STRING([--enable-win-mozab-driver],
-        [LibreOffice includes a driver to connect to Mozilla
-         address books under Windows, to build with this version, use this option.])
-)
-
 AC_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
         [LibreOffice includes self-packaging code, that requires epm, however epm is
@@ -3881,9 +3875,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
         AC_MSG_ERROR([--with-system-libgltf conflicts with --enable-dbgutil])
     else
         with_system_libgltf=no
-    fi
-    if test "$enable_win_mozab_driver" = "yes"; then
-        AC_MSG_ERROR([--enable-win-mozab-driver conflicts with --enable-dbgutil])
     fi
 else
     ENABLE_DBGUTIL=""
@@ -8770,35 +8761,6 @@ else
 fi
 fi
 AC_SUBST(SYSTEM_OPENLDAP)
-
-dnl ===================================================================
-dnl Check for mozilla ab connectivity for windows
-dnl ===================================================================
-
-if test "$_os" = "WINNT"; then
-    AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
-    if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
-        if test "$BITNESS_OVERRIDE" = 64; then
-           AC_MSG_ERROR([--with-win-mozab-driver and --enable-64-bit options are mutually exclusive])
-        fi
-        WITH_MOZAB4WIN=TRUE
-        AC_MSG_RESULT([yes, internal (old windows mozab driver)])
-        BUILD_TYPE="$BUILD_TYPE MOZ"
-        MSVC80_DLLS="msvcp80.dll msvcr80.dll Microsoft.VC80.CRT.manifest"
-        MSVC80_DLL_PATH=`cygpath -u "$TARFILE_LOCATION"`
-        for dll in $MSVC80_DLLS; do
-            if ! test -f "$MSVC80_DLL_PATH/$dll"; then
-                AC_MSG_ERROR([can not find $dll in $MSVC80_DLL_PATH needed for the pre-built Mozilla libraries])
-            fi
-        done
-    else
-        AC_MSG_RESULT([no])
-        WITH_MOZAB4WIN=
-    fi
-fi
-AC_SUBST(WITH_MOZAB4WIN)
-AC_SUBST(MSVC80_DLLS)
-AC_SUBST(MSVC80_DLL_PATH)
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use

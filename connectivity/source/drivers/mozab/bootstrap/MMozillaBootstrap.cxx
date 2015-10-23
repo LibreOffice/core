@@ -18,20 +18,21 @@
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "MMozillaBootstrap.hxx"
+#include "MNSFolders.hxx"
+#include "MNSProfileDiscover.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
 using namespace connectivity::mozab;
-#include "MNSFolders.hxx"
-#include "MNSProfileDiscover.hxx"
-#ifndef MINIMAL_PROFILEDISCOVER
-#  include "MNSProfileManager.hxx"
-#  include "MNSRunnable.hxx"
-#endif
-#include "MNSInit.hxx"
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::lang::XSingleServiceFactory;
+using ::com::sun::star::lang::XMultiServiceFactory;
 
 static MozillaBootstrap *pMozillaBootstrap=NULL;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
@@ -61,14 +62,7 @@ void MozillaBootstrap::Init()
 {
     bool aProfileExists=false;
 
-#ifndef MINIMAL_PROFILEDISCOVER
-    //This must be call before any mozilla code
-    MNS_Init(aProfileExists);
-
-    m_ProfileManager = new ProfileManager();
-#else
     (void)aProfileExists; /* avoid warning about unused parameter */
-#endif
     m_ProfileAccess = new ProfileAccess();
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,OUString());
 }
@@ -143,84 +137,39 @@ sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( ::com::sun::star::mozilla:
 // XProfileManager
 ::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return m_ProfileManager->bootupProfile(product,profileName);
-#else
     (void)product; /* avoid warning about unused parameter */
     (void)profileName; /* avoid warning about unused parameter */
         return -1;
-#endif
 }
 ::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return m_ProfileManager->shutdownProfile();
-#else
     return -1;
-#endif
 }
 ::com::sun::star::mozilla::MozillaProductType SAL_CALL MozillaBootstrap::getCurrentProduct(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return m_ProfileManager->getCurrentProduct();
-#else
     return ::com::sun::star::mozilla::MozillaProductType_Default;
-#endif
 }
 OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return m_ProfileManager->getCurrentProfile();
-#else
     return OUString();
-#endif
 }
 sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return isProfileLocked(getCurrentProduct(),m_ProfileManager->getCurrentProfile());
-#else
     return true;
-#endif
 }
 OUString SAL_CALL MozillaBootstrap::setCurrentProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    return m_ProfileManager->setCurrentProfile(product,profileName);
-#else
     (void)product; /* avoid warning about unused parameter */
     (void)profileName; /* avoid warning about unused parameter */
     return OUString();
-#endif
 }
 
 // XProxyRunner
 ::sal_Int32 SAL_CALL MozillaBootstrap::Run( const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-#ifndef MINIMAL_PROFILEDISCOVER
-    OUString profileName = aCode->getProfileName();
-    OUString currProfileName = getCurrentProfile();
-    ::com::sun::star::mozilla::MozillaProductType currProduct = getCurrentProduct();
-
-     //if client provides a profileName, we will use it
-    if (!profileName.isEmpty()
-             && ( aCode->getProductType() != currProduct  || !profileName.equals(currProfileName)) )
-        setCurrentProfile(aCode->getProductType(),profileName);
-       MNSRunnable xRunnable;
-
-    return xRunnable.StartProxy(aCode);
-#else
     (void)aCode; /* avoid warning about unused parameter */
     return -1;
-#endif
 }
-
-#ifdef MINIMAL_PROFILEDISCOVER
-#include <cppuhelper/factory.hxx>
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::lang::XSingleServiceFactory;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
 {
@@ -258,6 +207,5 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozbootstrap_component_getFactory
         return pRet;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

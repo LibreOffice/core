@@ -46,7 +46,7 @@ namespace abp
             vcl::Window* _pMessageParent
         );
 
-        bool invokeAdministration( bool _bFixedType );
+        bool invokeAdministration();
     };
 }
 

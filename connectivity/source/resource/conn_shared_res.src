@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "resource/mozab_res.hrc"
+#include "resource/mork_res.hrc"
 #include "resource/macab_res.hrc"
 #include "resource/calc_res.hrc"
 #include "resource/ado_res.hrc"
@@ -41,16 +41,6 @@ String STR_THUNDERBIRD_ADDRESSBOOKS
     Text [ en-US ] = "Thunderbird Address Book Directory";
     Text [ x-comment ] = "This must be the term referring to address books in the user's "
         "Thunderbird profile in the system.";
-};
-
-String STR_OE_ADDRESSBOOK
-{
-    Text [ en-US ] = "Outlook Express Address Book";
-};
-
-String STR_OUTLOOK_MAPI_ADDRESSBOOK
-{
-    Text [ en-US ] = "Outlook (MAPI) Address Book";
 };
 
 String STR_NO_TABLE_CREATION_SUPPORT

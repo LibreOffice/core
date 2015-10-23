@@ -36,10 +36,6 @@ namespace abp
         AST_EVOLUTION_LDAP,
         AST_KAB,
         AST_MACAB,
-        AST_LDAP,
-        AST_OUTLOOK,
-        AST_OE,
-
         AST_OTHER,
 
         AST_INVALID
