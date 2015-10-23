@@ -156,8 +156,9 @@ private:
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
 {
     if (!pName)
-        pName = "empty.odt";
-    load(DATA_DIRECTORY, pName);
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
