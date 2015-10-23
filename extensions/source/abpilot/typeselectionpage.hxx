@@ -39,9 +39,6 @@ namespace abp
         VclPtr<RadioButton> m_pThunderbird;
         VclPtr<RadioButton> m_pKab;
         VclPtr<RadioButton> m_pMacab;
-        VclPtr<RadioButton> m_pLDAP;
-        VclPtr<RadioButton> m_pOutlook;
-        VclPtr<RadioButton> m_pOE;
         VclPtr<RadioButton> m_pOther;
 
         struct ButtonItem {

@@ -19,16 +19,6 @@ $(eval $(call gb_Library_set_include,abp,\
 	-I$(SRCDIR)/extensions/source/inc \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(WITH_MOZILLA),NO)
-ifneq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_Library_add_defs,abp,\
-	-DWITH_MOZILLA \
-))
-endif
-endif
-endif
-
 $(eval $(call gb_Library_add_defs,abp,\
 	-DCOMPMOD_NAMESPACE=abp \
 	-DCOMPMOD_RESPREFIX=abp \

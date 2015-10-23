@@ -20,10 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
 
-#ifndef MINIMAL_PROFILEDISCOVER
-#include "mozilla_profile_discover.h"
-#endif
-
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/conditn.hxx>
@@ -52,25 +48,13 @@ namespace connectivity
         {
         public:
             ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
-#ifdef MINIMAL_PROFILEDISCOVER
-                          const OUString &aProfilePath
-#else
-                          nsILocalFile * aProfilePath
-#endif
-                            );
+                          const OUString &aProfilePath);
             OUString getProfileName(){ return profileName;}
             OUString getProfilePath() ;
-#ifndef MINIMAL_PROFILEDISCOVER
-            nsILocalFile    *getProfileLocal(){ return profilePath;}
-#endif
         protected:
             MozillaProductType product;
             OUString profileName;
-#ifdef MINIMAL_PROFILEDISCOVER
             OUString profilePath;
-#else
-            nsCOMPtr<nsILocalFile> profilePath;
-#endif
         };
 
         class ProductStruct
@@ -97,11 +81,6 @@ namespace connectivity
             ProductStruct m_ProductProfileList[4];
             sal_Int32 LoadProductsInfo();
             sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
-#ifndef MINIMAL_PROFILEDISCOVER
-            //used by isProfileLocked
-            nsresult isExistFileOrSymlink(nsILocalFile* aFile,PRBool *bExist);
-            nsresult isLockExist(nsILocalFile* aFile);
-#endif
         };
 
     }

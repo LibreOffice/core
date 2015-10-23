@@ -300,7 +300,6 @@ namespace abp
         {
             case AST_MORK               :
             case AST_THUNDERBIRD        : pGuess = "Personal Address book"; break;
-            case AST_LDAP               : pGuess = "LDAP Directory"; break;
             case AST_EVOLUTION          :
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
@@ -365,18 +364,6 @@ namespace abp
 
             case AST_MACAB:
                 m_aNewDataSource = aContext.createNewMacab( m_aSettings.sDataSourceName );
-                break;
-
-            case AST_LDAP:
-                m_aNewDataSource = aContext.createNewLDAP( m_aSettings.sDataSourceName );
-                break;
-
-            case AST_OUTLOOK:
-                m_aNewDataSource = aContext.createNewOutlook( m_aSettings.sDataSourceName );
-                break;
-
-            case AST_OE:
-                m_aNewDataSource = aContext.createNewOE( m_aSettings.sDataSourceName );
                 break;
 
             case AST_OTHER:

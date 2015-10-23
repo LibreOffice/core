@@ -82,10 +82,11 @@ namespace abp
         return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
 
+    // davido: Do we need it?
     IMPL_LINK_NOARG_TYPED( AdminDialogInvokationPage, OnInvokeAdminDialog, Button*, void )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
-        if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )
+        if ( aInvokation.invokeAdministration() )
         {
             // try to connect to this data source
             implTryConnect();

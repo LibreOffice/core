@@ -80,15 +80,6 @@ namespace abp
         /// creates a new Mac OS X address book data source
         ODataSource createNewMacab( const OUString& _rName );
 
-        /// creates a new LDAP data source
-        ODataSource createNewLDAP( const OUString& _rName );
-
-        /// creates a new Outlook data source
-        ODataSource createNewOutlook( const OUString& _rName );
-
-        /// creates a new Outlook express data source
-        ODataSource createNewOE( const OUString& _rName );
-
         /// creates a new dBase data source
         ODataSource createNewDBase( const OUString& _rName );
     };

@@ -26,8 +26,6 @@
 
 #define STR_MOZILLA_ADDRESSBOOKS            ( STR_MORK_BASE +    0 )
 #define STR_THUNDERBIRD_ADDRESSBOOKS        ( STR_MORK_BASE +    1 )
-#define STR_OE_ADDRESSBOOK                  ( STR_MORK_BASE +    2 )
-#define STR_OUTLOOK_MAPI_ADDRESSBOOK        ( STR_MORK_BASE +    3 )
     // FREE
 #define STR_NO_TABLE_CREATION_SUPPORT       ( STR_MORK_BASE +    5 )
 #define STR_MOZILLA_IS_RUNNING              ( STR_MORK_BASE +    6 )

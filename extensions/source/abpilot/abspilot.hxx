@@ -89,9 +89,7 @@ namespace abp
 
         static inline bool needAdminInvokationPage( AddressSourceType _eType )
         {
-            return  (   ( AST_LDAP == _eType )
-                    ||  ( AST_OTHER == _eType )
-                    );
+            return  ( AST_OTHER == _eType );
         }
         /// check if with the current settings, we would need to invoke he administration dialog for more details about the data source
         inline bool needAdminInvokationPage() const
@@ -114,7 +112,7 @@ namespace abp
         /// determines whether the given address book type does provide one table only
         static inline bool needTableSelection( AddressSourceType _eType )
         {
-            return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType );
+            return  ( AST_KAB != _eType );
         }
 
         void implCleanup();

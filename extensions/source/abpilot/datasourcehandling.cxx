@@ -250,12 +250,6 @@ namespace abp
     }
 
 
-    ODataSource ODataSourceContext::createNewLDAP( const OUString& _rName)
-    {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:ldap:" );
-    }
-
-
     ODataSource ODataSourceContext::createNewMORK( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:mozilla" );
@@ -293,18 +287,6 @@ namespace abp
     ODataSource ODataSourceContext::createNewMacab( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:macab" );
-    }
-
-
-    ODataSource ODataSourceContext::createNewOutlook( const OUString& _rName)
-    {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlook" );
-    }
-
-
-    ODataSource ODataSourceContext::createNewOE( const OUString& _rName)
-    {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlookexp" );
     }
 
 
