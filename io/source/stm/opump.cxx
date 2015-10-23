@@ -80,24 +80,24 @@ namespace io_stm {
         virtual ~Pump();
 
         // XActiveDataSource
-        virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw(std::exception) override;
-        virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw(std::exception) override;
+        virtual void SAL_CALL setOutputStream( const Reference< css::io::XOutputStream >& xOutput ) throw(std::exception) override;
+        virtual Reference< css::io::XOutputStream > SAL_CALL getOutputStream() throw(std::exception) override;
 
         // XActiveDataSink
-        virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw(std::exception) override;
-        virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw(std::exception) override;
+        virtual void SAL_CALL setInputStream( const Reference< css::io::XInputStream >& xStream ) throw(std::exception) override;
+        virtual Reference< css::io::XInputStream > SAL_CALL getInputStream() throw(std::exception) override;
 
         // XActiveDataControl
-        virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception) override;
-        virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception) override;
+        virtual void SAL_CALL addListener( const Reference< css::io::XStreamListener >& xListener ) throw(std::exception) override;
+        virtual void SAL_CALL removeListener( const Reference< css::io::XStreamListener >& xListener ) throw(std::exception) override;
         virtual void SAL_CALL start() throw( RuntimeException, std::exception ) override;
         virtual void SAL_CALL terminate() throw(std::exception) override;
 
         // XConnectable
-        virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw(std::exception) override;
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) override;
-        virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw(std::exception) override;
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) override;
+        virtual void SAL_CALL setPredecessor( const Reference< css::io::XConnectable >& xPred ) throw(std::exception) override;
+        virtual Reference< css::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) override;
+        virtual void SAL_CALL setSuccessor( const Reference< css::io::XConnectable >& xSucc ) throw(std::exception) override;
+        virtual Reference< css::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) override;
 
     public: // XServiceInfo
         virtual OUString    SAL_CALL getImplementationName() throw(std::exception  ) override;
@@ -292,7 +292,7 @@ void Pump::run()
         close();
         fireClose();
     }
-    catch ( const com::sun::star::uno::Exception &e )
+    catch ( const css::uno::Exception &e )
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes

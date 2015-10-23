@@ -241,29 +241,29 @@ public:
                      m_bDisposed( sal_False )
     {}
 
-    virtual void SAL_CALL disposing( const EventObject &obj  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL disposing( const EventObject &obj  ) throw (css::uno::RuntimeException)
     {
         m_bDisposed = sal_True;
 //         printf( "disposing called\n");
     }
 
-    virtual void SAL_CALL started(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL started(  ) throw (css::uno::RuntimeException)
     {
         m_bStarted = sal_True;
 //         printf( "started called\n");
     }
-    virtual void SAL_CALL closed(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL closed(  ) throw (css::uno::RuntimeException)
     {
         m_bClosed = sal_True;
 //         printf( "closed called\n");
     }
-    virtual void SAL_CALL terminated(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL terminated(  ) throw (css::uno::RuntimeException)
     {
         m_bTerminated = sal_True;
 //         printf( "terminated called\n");
     }
-    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& aException )
-        throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL error( const css::uno::Any& aException )
+        throw (css::uno::RuntimeException)
     {
         m_bError = sal_True;
         Exception e;

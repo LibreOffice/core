@@ -964,7 +964,7 @@ public:
                 { ODataOutputStream::writeUTF( Value );}
 
     // XObjectOutputStream
-        virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 public: // XMarkableStream
     virtual sal_Int32 SAL_CALL createMark()                 throw (IOException, RuntimeException, std::exception) override;
@@ -992,7 +992,7 @@ OObjectOutputStream::~OObjectOutputStream()
 {
 }
 
-void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (css::io::IOException, css::uno::RuntimeException, std::exception)
 {
 
     connectToMarkable();
@@ -1239,7 +1239,7 @@ public: // XDataInputStream
                 { return ODataInputStream::readUTF(); }
 
 public: // XObjectInputStream
-        virtual Reference< XPersistObject > SAL_CALL readObject( ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual Reference< XPersistObject > SAL_CALL readObject( ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 public: // XMarkableStream
     virtual sal_Int32 SAL_CALL createMark()
@@ -1270,7 +1270,7 @@ OObjectInputStream::~OObjectInputStream()
 {
 }
 
-Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     // check if chain contains a XMarkableStream
     connectToMarkable();
