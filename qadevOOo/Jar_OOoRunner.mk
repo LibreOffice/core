@@ -1005,7 +1005,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_lnn/SpellChecker \
     qadevOOo/tests/java/mod/_lnn/Thesaurus \
     qadevOOo/tests/java/mod/_mcnttype/MimeContentTypeFactory \
-    qadevOOo/tests/java/mod/_mozab/MozabDriver \
     qadevOOo/tests/java/mod/_namingservice/NamingService \
     qadevOOo/tests/java/mod/_namingservice/uno/NamingService \
     qadevOOo/tests/java/mod/_nestedreg/uno/NestedRegistry \

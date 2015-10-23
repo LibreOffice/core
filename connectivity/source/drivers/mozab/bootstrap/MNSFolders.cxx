@@ -26,12 +26,10 @@
 #endif // End UNIX
 
 #ifdef WNT
-#include "pre_include_windows.h"
 #include <windows.h>
 #include <stdlib.h>
 #include <shlobj.h>
 #include <objidl.h>
-#include "post_include_windows.h"
 #endif // End WNT
 #include <osl/security.hxx>
 #include <osl/file.hxx>
