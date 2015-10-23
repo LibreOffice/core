@@ -47,7 +47,7 @@ using namespace ::com::sun::star::animations;
 namespace oox { namespace ppt {
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxPage,
+    const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
         oox::drawingml::ShapePtr pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
 : mpDrawingPtr( new oox::vml::Drawing( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
@@ -67,7 +67,7 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
 }
 
 #if OSL_DEBUG_LEVEL > 0
-::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
+css::uno::WeakReference< css::drawing::XDrawPage > SlidePersist::mxDebugPage;
 #endif
 
 SlidePersist::~SlidePersist()

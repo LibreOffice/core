@@ -73,7 +73,7 @@ void BulletList::setBulletChar( const OUString & sChar )
     msBulletChar <<= sChar;
 }
 
-void BulletList::setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic )
+void BulletList::setGraphic( css::uno::Reference< css::graphic::XGraphic >& rXGraphic )
 {
     mnNumberingType <<= NumberingType::BITMAP;
     maGraphic <<= rXGraphic;
@@ -344,7 +344,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     }
     if ( maGraphic.hasValue() )
     {
-        Reference< com::sun::star::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
+        Reference< css::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
         if ( xBitmap.is() )
             rPropMap.setProperty( PROP_Graphic, xBitmap);
     }
@@ -411,7 +411,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     {
         fCharacterSize = getCharHeightPoints( fCharacterSize );
 
-        com::sun::star::awt::Size aBulletSize;
+        css::awt::Size aBulletSize;
         aBulletSize.Width = aBulletSize.Height = static_cast< sal_Int32 >( ( fCharacterSize * ( 2540.0 / 72.0 ) * 0.8 ) );
         rioBulletMap.setProperty( PROP_GraphicSize, aBulletSize);
     }
@@ -488,7 +488,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     }
     else
     {
-        aPropSet.setProperty( PROP_ParaAdjust, com::sun::star::style::ParagraphAdjust_LEFT);
+        aPropSet.setProperty( PROP_ParaAdjust, css::style::ParagraphAdjust_LEFT);
     }
 }
 
@@ -502,10 +502,10 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 // debugging pptx import problems.
 void TextParagraphProperties::dump() const
 {
-    Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );
-    Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
+    Reference< css::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );
+    Reference< css::text::XText > xText( xShape, UNO_QUERY );
 
-    Reference< com::sun::star::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
+    Reference< css::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
     if (xDebugPage.is())
         xDebugPage->add( xShape );
 
@@ -513,8 +513,8 @@ void TextParagraphProperties::dump() const
 
     const OUString sText = "debug";
     xText->setString( sText );
-    Reference< ::com::sun::star::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
-    Reference< ::com::sun::star::text::XTextRange > xRange( xStart, UNO_QUERY );
+    Reference< css::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
+    Reference< css::text::XTextRange > xRange( xStart, UNO_QUERY );
     xStart->gotoEnd( sal_True );
     Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
     pushToPropSet( NULL, xPropSet, emptyMap, NULL, false, 0 );

@@ -42,12 +42,12 @@ namespace oox { namespace drawingml {
             {
             }
         TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( true ){};
-        ::com::sun::star::style::LineSpacing toLineSpacing() const
+        css::style::LineSpacing toLineSpacing() const
             {
-                ::com::sun::star::style::LineSpacing aSpacing;
+                css::style::LineSpacing aSpacing;
                 aSpacing.Mode = ( nUnit == PERCENT
-                                                    ? ::com::sun::star::style::LineSpacingMode::PROP
-                                                    :   ::com::sun::star::style::LineSpacingMode::MINIMUM );
+                                  ? css::style::LineSpacingMode::PROP
+                                  :   css::style::LineSpacingMode::MINIMUM );
                 aSpacing.Height = static_cast< sal_Int16 >( nUnit == PERCENT ? nValue / 1000 :  nValue );
                 return aSpacing;
             }

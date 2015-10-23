@@ -31,26 +31,26 @@ namespace docprop {
 
 class DocumentPropertiesImport :
     public ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::document::XOOXMLDocumentPropertiesImporter >
+        css::lang::XServiceInfo,
+        css::document::XOOXMLDocumentPropertiesImporter >
 {
 public:
     explicit            DocumentPropertiesImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // XOOXMLDocumentPropertiesImporter
     virtual void SAL_CALL importProperties(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxSource,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& rxDocumentProperties )
-                        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::Exception, std::exception) override;
+                            const css::uno::Reference< css::embed::XStorage >& rxSource,
+                            const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties )
+                        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::xml::sax::SAXException, css::uno::Exception, std::exception) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
 } // namespace docprop

@@ -188,7 +188,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     const OUString sAdjustmentValues("AdjustmentValues");
                     if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
                     {
-                        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+                        uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
                         {
                             int nIndex=0;

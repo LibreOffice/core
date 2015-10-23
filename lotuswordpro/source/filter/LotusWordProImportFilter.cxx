@@ -60,7 +60,7 @@ using com::sun::star::xml::sax::XParser;
 //                                 W     o     r     d     P     r     o
 static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
 
-bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
 
@@ -97,7 +97,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL
     return ( ReadWordproFile(aFileStream, xHandler) == 0 );
 }
 
-sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
     return importImpl ( aDescriptor );
@@ -108,15 +108,15 @@ void SAL_CALL LotusWordProImportFilter::cancel(  )
 }
 
 // XImporter
-void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+OUString SAL_CALL LotusWordProImportFilter::detect( css::uno::Sequence< PropertyValue >& Descriptor )
+    throw( css::uno::RuntimeException, std::exception )
 {
 
     OUString sTypeName( "writer_LotusWordPro_Document" );
@@ -134,7 +134,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
             pValue[i].Value >>= sURL;
     }
 
-    uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+    uno::Reference< css::ucb::XCommandEnvironment > xEnv;
     if (!xInputStream.is())
     {
         try

@@ -56,7 +56,7 @@ public:
 
     virtual ~ShapeContextHandler();
 
-    // ::com::sun::star::lang::XServiceInfo:
+    // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 
@@ -66,7 +66,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::xml::sax::XFastContextHandler:
+    // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
     (::sal_Int32 Element,
      const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
@@ -102,7 +102,7 @@ public:
     virtual void SAL_CALL characters(const OUString & aChars)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    // ::com::sun::star::xml::sax::XFastShapeContextHandler:
+    // css::xml::sax::XFastShapeContextHandler:
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getShape()
         throw (css::uno::RuntimeException, std::exception) override;
 
@@ -133,8 +133,8 @@ public:
     (const OUString & the_value)
         throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::sal_Int32 SAL_CALL getStartToken() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getStartToken() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::awt::Point SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) throw (css::uno::RuntimeException, std::exception) override;

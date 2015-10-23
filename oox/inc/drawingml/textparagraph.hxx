@@ -50,8 +50,8 @@ public:
 
     void                        insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
-                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
-                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
+                                    const css::uno::Reference < css::text::XText > & xText,
+                                    const css::uno::Reference < css::text::XTextCursor > &xAt,
                                     const TextCharacterProperties& rTextStyleProperties,
                                     const TextListStyle& rTextListStyle,
                                     bool bFirst = false,

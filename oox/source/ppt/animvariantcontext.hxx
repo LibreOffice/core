@@ -32,14 +32,14 @@ namespace oox { namespace ppt {
         : public ::oox::core::FragmentHandler2
     {
     public:
-        AnimVariantContext( ::oox::core::FragmentHandler2& rParent, ::sal_Int32 aElement, ::com::sun::star::uno::Any & aValue );
+        AnimVariantContext( ::oox::core::FragmentHandler2& rParent, ::sal_Int32 aElement, css::uno::Any & aValue );
         virtual ~AnimVariantContext( ) throw( );
         virtual void onEndElement() override;
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
-        ::sal_Int32 mnElement;
-        ::com::sun::star::uno::Any& maValue;
+        ::sal_Int32                 mnElement;
+        css::uno::Any&              maValue;
         ::oox::drawingml::Color     maColor;
     };
 

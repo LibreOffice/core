@@ -105,7 +105,7 @@ public:
 
     /** Converts the OOXML up/down bars. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& rxChartType );
+                            const css::uno::Reference< css::chart2::XChartType >& rxChartType );
 };
 
 struct TypeGroupModel;
@@ -142,16 +142,16 @@ public:
     OUString     getSingleSeriesTitle() const;
 
     /** Creates a coordinate system according to the contained chart type. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >
+    css::uno::Reference< css::chart2::XCoordinateSystem >
                         createCoordinateSystem();
     /** Creates a labeled data sequence object for axis categories. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createCategorySequence();
 
     /** Converts the OOXML type group model into a chart2 coordinate system. */
     void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
+                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
+                            const css::uno::Reference< css::chart2::XCoordinateSystem >& rxCoordSystem,
                             sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint );
 
     /** Sets the passed OOXML marker style at the passed property set. */
@@ -169,8 +169,8 @@ public:
 private:
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
     void                insertDataSeries(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& rxChartType,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxSeries,
+                            const css::uno::Reference< css::chart2::XChartType >& rxChartType,
+                            const css::uno::Reference< css::chart2::XDataSeries >& rxSeries,
                             sal_Int32 nAxesSetIdx );
 
 private:

@@ -57,19 +57,19 @@ struct CustomShapeGuide
 struct AdjustHandle
 {
     bool                                    polar;
-    com::sun::star::drawing::EnhancedCustomShapeParameterPair
+    css::drawing::EnhancedCustomShapeParameterPair
                                             pos;
 
     // depending to the type (polar or not):
     OptValue< OUString >               gdRef1; // gdRefX   or gdRefR
-    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+    OptValue< css::drawing::EnhancedCustomShapeParameter >
                                             min1;   // minX     or minR
-    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+    OptValue< css::drawing::EnhancedCustomShapeParameter >
                                             max1;   // maxX     or maxR
     OptValue< OUString >               gdRef2; // gdRefY   or gdRefAng
-    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+    OptValue< css::drawing::EnhancedCustomShapeParameter >
                                             min2;   // minX     or minAng
-    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+    OptValue< css::drawing::EnhancedCustomShapeParameter >
                                             max2;   // maxY     or maxAng
 
     AdjustHandle( bool bPolar ) : polar( bPolar ) {};
@@ -77,18 +77,18 @@ struct AdjustHandle
 
 struct ConnectionSite
 {
-    com::sun::star::drawing::EnhancedCustomShapeParameterPair
+    css::drawing::EnhancedCustomShapeParameterPair
                                 pos;
-    com::sun::star::drawing::EnhancedCustomShapeParameter
+    css::drawing::EnhancedCustomShapeParameter
                                 ang;
 };
 
 struct GeomRect
 {
-    com::sun::star::drawing::EnhancedCustomShapeParameter   l;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   t;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   r;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   b;
+    css::drawing::EnhancedCustomShapeParameter   l;
+    css::drawing::EnhancedCustomShapeParameter   t;
+    css::drawing::EnhancedCustomShapeParameter   r;
+    css::drawing::EnhancedCustomShapeParameter   b;
 };
 
 struct Path2D
@@ -98,7 +98,7 @@ struct Path2D
     sal_Int32   fill;
     bool        stroke;
     bool        extrusionOk;
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > parameter;
+    std::vector< css::drawing::EnhancedCustomShapeParameterPair > parameter;
 
     Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( true ), extrusionOk( true ) {};
 };
@@ -112,8 +112,9 @@ public:
     virtual ~CustomShapeProperties();
 
     void pushToPropSet( const ::oox::core::FilterBase& rFilterBase,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
-                        const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape, const ::com::sun::star::awt::Size &aSize );
+                        const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+                        const css::uno::Reference < css::drawing::XShape > & xShape,
+                        const css::awt::Size &aSize );
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     css::uno::Sequence< sal_Int8 > getShapePresetTypeName() const;
@@ -127,7 +128,7 @@ public:
     std::vector< ConnectionSite >&      getConnectionSiteList(){ return maConnectionSiteList; };
     OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
+    std::vector< css::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
     void                                setMirroredX( bool bMirroredX ) { mbMirroredX = bMirroredX; };
     void                                setMirroredY( bool bMirroredY ) { mbMirroredY = bMirroredY; };
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
@@ -148,7 +149,7 @@ private:
     OptValue< GeomRect >            maTextRect;
     std::vector< Path2D >           maPath2DList;
 
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
+    std::vector< css::drawing::EnhancedCustomShapeSegment >
                                     maSegments;
     bool                            mbMirroredX;
     bool                            mbMirroredY;

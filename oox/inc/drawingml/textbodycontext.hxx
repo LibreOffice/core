@@ -37,7 +37,7 @@ public:
 
 protected:
     TextBody&           mrTextBody;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxText;
+    css::uno::Reference< css::text::XText > mxText;
 };
 
 // CT_RegularTextRun

@@ -270,7 +270,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getScale");
     checkColumnIndex(column);

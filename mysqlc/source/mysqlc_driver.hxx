@@ -48,17 +48,17 @@ namespace connectivity
         using ::com::sun::star::uno::Exception;
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::Sequence;
-        Reference< ::com::sun::star::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw(Exception);
+        Reference< css::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw(Exception);
 
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
-                                                    ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper2<   css::sdbc::XDriver,
+                                                    css::lang::XServiceInfo > ODriver_BASE;
 
         typedef void* (SAL_CALL * OMysqlCConnection_CreateInstanceFunction)(void* _pDriver);
 
         class MysqlCDriver : public ODriver_BASE
         {
         protected:
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+            Reference< css::lang::XMultiServiceFactory > m_xFactory;
             ::osl::Mutex    m_aMutex;       // mutex is need to control member access
             OWeakRefArray   m_xConnections; // vector containing a list
                                             // of all the Connection objects
@@ -76,7 +76,7 @@ namespace connectivity
 
         public:
 
-            MysqlCDriver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            MysqlCDriver(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;
@@ -90,17 +90,17 @@ namespace connectivity
             Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XDriver
-            Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect(const rtl::OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info)
+            Reference< css::sdbc::XConnection > SAL_CALL connect(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info)
                                                                             throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Bool SAL_CALL acceptsURL(const rtl::OUString& url) throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const rtl::OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info)
+            Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info)
                                                                             throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Int32 SAL_CALL getMajorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Int32 SAL_CALL getMinorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-            inline Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
+            inline Reference< css::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
 
             static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
 

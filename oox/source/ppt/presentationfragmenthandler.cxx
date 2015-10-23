@@ -116,7 +116,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                             xDrawPages->getByIndex( nPageNumber - 1 ) >>= xDrawPage;
                             if ( bNotes )
                             {
-                                Reference< ::com::sun::star::presentation::XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
+                                Reference< css::presentation::XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
                                 xDrawPage = xPresentationPage->getNotesPage();
                             }
                             Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );

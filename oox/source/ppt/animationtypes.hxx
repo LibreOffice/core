@@ -26,9 +26,9 @@
 namespace oox { namespace ppt {
 
 // ST_TLTime
-::com::sun::star::uno::Any GetTime( const OUString & val );
+css::uno::Any GetTime( const OUString & val );
 // ST_TLTimeAnimateValueTime
-::com::sun::star::uno::Any GetTimeAnimateValueTime( const OUString & val );
+css::uno::Any GetTimeAnimateValueTime( const OUString & val );
 
 } }
 

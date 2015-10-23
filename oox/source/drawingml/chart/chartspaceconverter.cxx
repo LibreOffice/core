@@ -197,7 +197,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 
     if(!mrModel.maSheetPath.isEmpty() )
     {
-        Reference< ::com::sun::star::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
+        Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
         PropertySet aProps( xChartDoc->getDiagram() );
         aProps.setProperty( PROP_ExternalData , uno::makeAny(mrModel.maSheetPath) );
     }

@@ -51,7 +51,7 @@ uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance
     return static_cast<cppu::OWeakObject*>(new QuickDiagrammingImport( rxContext ));
 }
 
-QuickDiagrammingImport::QuickDiagrammingImport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+QuickDiagrammingImport::QuickDiagrammingImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : XmlFilterBase( rxContext )
 {}
 

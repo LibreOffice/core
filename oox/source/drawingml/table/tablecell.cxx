@@ -156,7 +156,7 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         aTextCharProps.moItalic = *rTableStylePart.getTextItalicStyle();
 }
 
-void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )
+void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, const TableCell& rTableCell )
 {
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     xPropSet->setPropertyValue( "TextUpperDistance", Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
@@ -178,7 +178,7 @@ void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell 
 }
 
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
-    const ::com::sun::star::uno::Reference < ::com::sun::star::table::XCell >& rxCell, const TableProperties& rTableProperties,
+    const css::uno::Reference < css::table::XCell >& rxCell, const TableProperties& rTableProperties,
         const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
 {
     TableStyle& rTable( const_cast< TableStyle& >( rTableStyle ) );
@@ -415,7 +415,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
 
     if ( getVertToken() == XML_eaVert )
     {
-        xPropSet->setPropertyValue("TextWritingMode", Any(com::sun::star::text::WritingMode_TB_RL));
+        xPropSet->setPropertyValue("TextWritingMode", Any(css::text::WritingMode_TB_RL));
     }
 
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );

@@ -532,18 +532,18 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
-    sal_Int32 nSurround = com::sun::star::text::WrapTextMode_THROUGHT;
+    sal_Int32 nSurround = css::text::WrapTextMode_THROUGHT;
     if ( rTypeModel.moWrapType.get() == "square" || rTypeModel.moWrapType .get()== "tight" ||
          rTypeModel.moWrapType.get() == "through" )
     {
-        nSurround = com::sun::star::text::WrapTextMode_PARALLEL;
+        nSurround = css::text::WrapTextMode_PARALLEL;
         if ( rTypeModel.moWrapSide.get() == "left" )
-            nSurround = com::sun::star::text::WrapTextMode_LEFT;
+            nSurround = css::text::WrapTextMode_LEFT;
         else if ( rTypeModel.moWrapSide.get() == "right" )
-            nSurround = com::sun::star::text::WrapTextMode_RIGHT;
+            nSurround = css::text::WrapTextMode_RIGHT;
     }
     else if ( rTypeModel.moWrapType.get() == "topAndBottom" )
-        nSurround = com::sun::star::text::WrapTextMode_NONE;
+        nSurround = css::text::WrapTextMode_NONE;
 
     rPropSet.setProperty(PROP_Surround, nSurround);
 }
@@ -795,7 +795,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX || bFlipY)
         {
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSequence (2);
+            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (2);
             int nPropertyIndex = 0;
             if (bFlipX)
             {

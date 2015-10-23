@@ -43,7 +43,7 @@ struct IteratorAttr
     IteratorAttr();
 
     // not sure this belong here, but wth
-    void loadFromXAttr( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
+    void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
     sal_Int32 mnAxis;
     sal_Int32 mnCnt;
@@ -58,7 +58,7 @@ struct ConditionAttr
     ConditionAttr();
 
     // not sure this belong here, but wth
-    void loadFromXAttr( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
+    void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
     sal_Int32 mnFunc;
     sal_Int32 mnArg;
@@ -177,7 +177,7 @@ class ForEachAtom
     : public LayoutAtom
 {
 public:
-    explicit ForEachAtom(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ForEachAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
 
     virtual ~ForEachAtom() { }
 
@@ -195,7 +195,7 @@ class ConditionAtom
     : public LayoutAtom
 {
 public:
-    explicit ConditionAtom(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ConditionAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual ~ConditionAtom()
         { }
     virtual void accept( LayoutAtomVisitor& ) override;
@@ -239,7 +239,7 @@ public:
     };
     // we know that the array is of fixed size
     // the use of Any allow having empty values
-    typedef boost::array< ::com::sun::star::uno::Any, 9 > VarMap;
+    typedef boost::array< css::uno::Any, 9 > VarMap;
 
     LayoutNode() : mnChildOrder(0) {}
     virtual ~LayoutNode() { }

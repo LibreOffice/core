@@ -268,7 +268,7 @@ ShapeContextHandler::getContextHandler(sal_Int32 nElement)
     return xResult;
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+// css::xml::sax::XFastContextHandler:
 void SAL_CALL ShapeContextHandler::startFastElement
 (::sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
@@ -416,7 +416,7 @@ void SAL_CALL ShapeContextHandler::characters(const OUString & aChars)
         xContextHandler->characters(aChars);
 }
 
-// ::com::sun::star::xml::sax::XFastShapeContextHandler:
+// css::xml::sax::XFastShapeContextHandler:
 uno::Reference< drawing::XShape > SAL_CALL
 ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
 {
@@ -600,12 +600,12 @@ void SAL_CALL ShapeContextHandler::setRelationFragmentPath(const OUString & the_
     msRelationFragmentPath = the_value;
 }
 
-::sal_Int32 SAL_CALL ShapeContextHandler::getStartToken() throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL ShapeContextHandler::getStartToken() throw (css::uno::RuntimeException, std::exception)
 {
     return mnStartToken;
 }
 
-void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) throw (css::uno::RuntimeException, std::exception)
 {
     mnStartToken = _starttoken;
 }

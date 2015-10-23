@@ -223,7 +223,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 
 static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const OUString& rValue, bool bNoSymbols = true )
 {
-    com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
+    css::drawing::EnhancedCustomShapeParameter aRet;
     if ( !rValue.isEmpty() )
     {
         bool        bConstant = true;
@@ -942,18 +942,18 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
 class Path2DContext : public ContextHandler2
 {
 public:
-    Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
+    Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
     virtual ~Path2DContext();
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
     Path2D& mrPath2D;
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& mrSegments;
+    std::vector< css::drawing::EnhancedCustomShapeSegment >& mrSegments;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
+Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
 : ContextHandler2( rParent )
 , mrPath2D( rPath2D )
 , mrSegments( rSegments )
@@ -1148,7 +1148,7 @@ public:
 protected:
 
     CustomShapeProperties& mrCustomShapeProperties;
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& mrSegments;
+    std::vector< css::drawing::EnhancedCustomShapeSegment >& mrSegments;
     std::vector< Path2D >& mrPath2DList;
 };
 

@@ -976,9 +976,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setT
     OSL_TRACE("ODatabaseMetaData::supportsResultSetConcurrency");
     /* TODO: Check this out */
     try {
-        return meta->supportsResultSetConcurrency(setType, concurrency==com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED?
+        return meta->supportsResultSetConcurrency(setType, concurrency==css::sdbc::TransactionIsolation::READ_COMMITTED?
                                                     sql::TRANSACTION_READ_COMMITTED:
-                                                    (concurrency == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE?
+                                                    (concurrency == css::sdbc::TransactionIsolation::SERIALIZABLE?
                                                         sql::TRANSACTION_SERIALIZABLE:sql::TRANSACTION_SERIALIZABLE));
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsResultSetConcurrency", *this);

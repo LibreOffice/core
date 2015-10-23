@@ -394,7 +394,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     getFormatter().convertFrameFormatting( aSeriesProp, mrModel.mxHiLowLines, OBJECTTYPE_HILOLINE );
                 else
                     // hi/low-lines cannot be switched off via "ShowHighLow" property (?)
-                    aSeriesProp.setProperty( PROP_LineStyle, ::com::sun::star::drawing::LineStyle_NONE );
+                    aSeriesProp.setProperty( PROP_LineStyle, css::drawing::LineStyle_NONE );
 
                 // formatting of up/down bars
                 bool bUpDownBars = mrModel.mxUpDownBars.is();

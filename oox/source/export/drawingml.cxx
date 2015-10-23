@@ -1092,7 +1092,7 @@ void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUStrin
 
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {
-        ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+        css::text::GraphicCrop aGraphicCropStruct;
         mAny >>= aGraphicCropStruct;
 
         if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
@@ -1107,14 +1107,14 @@ void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUStrin
     }
 }
 
-void DrawingML::WriteStretch( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& rURL )
+void DrawingML::WriteStretch( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL )
 {
     mpFS->startElementNS( XML_a, XML_stretch, FSEND );
 
     bool bCrop = false;
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {
-        ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+        css::text::GraphicCrop aGraphicCropStruct;
         mAny >>= aGraphicCropStruct;
 
         if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
@@ -1331,7 +1331,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if( GETA( CharLocale ) )
     {
-        com::sun::star::lang::Locale aLocale;
+        css::lang::Locale aLocale;
         mAny >>= aLocale;
         LanguageTag aLanguageTag( aLocale);
         if (!aLanguageTag.isSystemLocale())
@@ -1462,7 +1462,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     mpFS->endElementNS( XML_a, nElement );
 }
 
-OUString DrawingML::GetFieldValue( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsURLField )
+OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > rRun, bool& bIsURLField )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     OUString aFieldType, aFieldValue;
@@ -2545,7 +2545,7 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
     }
 }
 
-sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc )
+sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc )
 {
     if ( IsStarSymbol(rFontDesc.Name) )
     {

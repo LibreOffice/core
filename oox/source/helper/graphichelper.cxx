@@ -208,7 +208,7 @@ awt::Point GraphicHelper::convertHmmToAppFont( const awt::Point& rHmm ) const
     if( mxUnitConversion.is() ) try
     {
         awt::Point aPixel = convertHmmToScreenPixel( rHmm );
-        return mxUnitConversion->convertPointToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
+        return mxUnitConversion->convertPointToLogic( aPixel, css::util::MeasureUnit::APPFONT );
     }
     catch( Exception& )
     {
@@ -221,7 +221,7 @@ awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
     if( mxUnitConversion.is() ) try
     {
         awt::Size aPixel = convertHmmToScreenPixel( rHmm );
-        return mxUnitConversion->convertSizeToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
+        return mxUnitConversion->convertSizeToLogic( aPixel, css::util::MeasureUnit::APPFONT );
     }
     catch( Exception& )
     {

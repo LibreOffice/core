@@ -62,14 +62,14 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
                             const ChartSpaceModel& rChartModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
-                            const ::com::sun::star::awt::Size& rChartSize );
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const css::awt::Size& rChartSize );
     virtual             ~ConverterRoot();
 
     /** Creates an instance for the passed service name, using the process service factory. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         getComponentContext() const;
 
 protected:
@@ -78,17 +78,17 @@ protected:
     /** Returns the chart converter. */
     ChartConverter&     getChartConverter() const;
     /** Returns the API chart document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument >
                         getChartDocument() const;
     /** Returns the position and size of the chart shape in 1/100 mm. */
-    const ::com::sun::star::awt::Size& getChartSize() const;
+    const css::awt::Size& getChartSize() const;
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
     /** Registers a title object and its layout data, needed for conversion of
         the title position using the old Chart1 API. */
     void                registerTitleLayout(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >& rxTitle,
+                            const css::uno::Reference< css::chart2::XTitle >& rxTitle,
                             const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType,
                             sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
     /** Converts the positions of the main title and all axis titles. */
@@ -130,7 +130,7 @@ public:
 
     /** Tries to calculate the absolute position and size from the contained
         OOXML layout model. Returns true, if returned rectangle is valid. */
-    bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect ) const;
+    bool                calcAbsRectangle( css::awt::Rectangle& orRect ) const;
 
     /** Tries to set the position and size from the contained OOXML layout model.
         Returns true, if a manual position and size could be calculated. */
@@ -139,7 +139,7 @@ public:
     /** Tries to set the position from the contained OOXML layout model.
         Returns true, if a manual position could be calculated. */
     bool                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const css::uno::Reference< css::drawing::XShape >& rxShape,
                             double fRotationAngle );
     bool getAutoLayout(){return mrModel.mbAutoLayout;}
 };

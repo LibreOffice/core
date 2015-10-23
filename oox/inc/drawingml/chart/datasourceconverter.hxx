@@ -41,7 +41,7 @@ public:
     virtual             ~DataSequenceConverter();
 
     /** Creates a data sequence object from the contained formula link. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+    css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole );
 };
 
@@ -56,7 +56,7 @@ public:
     virtual             ~DataSourceConverter();
 
     /** Creates a data sequence object from the contained series data. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+    css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole );
 };
 

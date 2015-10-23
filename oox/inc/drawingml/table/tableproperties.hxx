@@ -52,14 +52,15 @@ public:
     bool&                               isBandCol(){ return mbBandCol; };
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-        const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet, ::oox::drawingml::TextListStylePtr pMasterTextListStyle );
+        const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+        ::oox::drawingml::TextListStylePtr pMasterTextListStyle );
 
 private:
 
     const TableStyle&                   getUsedTableStyle(const ::oox::core::XmlFilterBase& rFilterBase, TableStyle*& rTableStyleToDelete);
 
     OUString                            maStyleId;              // either StyleId is available
-    std::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
+    std::shared_ptr< TableStyle >       mpTableStyle;           // or the complete TableStyle
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;
 

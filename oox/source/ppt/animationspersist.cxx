@@ -35,7 +35,7 @@ using namespace ::com::sun::star::text;
 
 namespace oox { namespace ppt {
 
-    void ShapeTargetElement::convert( ::com::sun::star::uno::Any & rTarget, sal_Int16 & rSubType ) const
+    void ShapeTargetElement::convert( css::uno::Any & rTarget, sal_Int16 & rSubType ) const
     {
         switch(mnType)
         {

@@ -29,23 +29,23 @@
 
 namespace mysqlc_sdbc_driver
 {
-    rtl::OUString getStringFromAny(const ::com::sun::star::uno::Any& _rAny);
+    rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
 
     void throwFeatureNotImplementedException(
             const sal_Char* _pAsciiFeatureName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-            const ::com::sun::star::uno::Any* _pNextException = NULL
+            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+            const css::uno::Any* _pNextException = NULL
         )
-        throw (::com::sun::star::sdbc::SQLException);
+        throw (css::sdbc::SQLException);
 
     void throwInvalidArgumentException(
             const sal_Char* _pAsciiFeatureName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-            const ::com::sun::star::uno::Any* _pNextException = NULL
+            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+            const css::uno::Any* _pNextException = NULL
         )
-        throw (::com::sun::star::sdbc::SQLException);
+        throw (css::sdbc::SQLException);
 
-    void translateAndThrow(const ::sql::SQLException& _error, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _context, const rtl_TextEncoding encoding);
+    void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 
     int mysqlToOOOType(int mysqlType) throw ();
 

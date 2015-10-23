@@ -276,7 +276,7 @@ namespace mysqlc
 {
 
 Reference< XInterface >  SAL_CALL MysqlCDriver_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-    throw(::com::sun::star::uno::Exception)
+    throw(css::uno::Exception)
 {
     return(*(new MysqlCDriver(_rxFactory)));
 }
@@ -284,7 +284,7 @@ Reference< XInterface >  SAL_CALL MysqlCDriver_CreateInstance(const Reference< X
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              Reference< XInterface >& _xInterface,
-             ::com::sun::star::lang::XComponent* _pObject)
+             css::lang::XComponent* _pObject)
 {
     if (osl_atomic_decrement(&_refCount) == 0) {
         osl_atomic_increment(&_refCount);
