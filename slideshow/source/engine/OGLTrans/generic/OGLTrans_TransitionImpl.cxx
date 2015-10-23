@@ -29,16 +29,13 @@
 #include <GL/glew.h>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
+#include <algorithm>
 #include <utility>
 
 #include <comphelper/random.hxx>
 
 #include "OGLTrans_TransitionImpl.hxx"
 #include <math.h>
-
-using std::max;
-using std::min;
-using std::vector;
 
 TransitionScene::TransitionScene(TransitionScene const& rOther)
     : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)
@@ -705,7 +702,7 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles ,
     /// the last will always be the outer shell of the slide with a circle hole
 
     //add the full circle
-    vector<glm::vec2> unScaledTexCoords;
+    std::vector<glm::vec2> unScaledTexCoords;
     float TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
@@ -818,8 +815,8 @@ std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
         Tile.pushTriangle(glm::vec2( 1.0 , iPDn ) , glm::vec2( 1.0 , iDn ) , glm::vec2( 0.0 , iPDn ));
 
         Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , 180 ,
-                                                true,min(max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
-                                                min(max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
+                                                true, std::min(std::max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
+                                                std::min(std::max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
 
         aLeavingSlide.push_back(Tile);
 
@@ -1077,8 +1074,8 @@ void Primitive::swap(Primitive& rOther)
 
 void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& SlideLocation1,const glm::vec2& SlideLocation2)
 {
-    vector<glm::vec3> Verts;
-    vector<glm::vec2> Texs;
+    std::vector<glm::vec3> Verts;
+    std::vector<glm::vec2> Texs;
     Verts.reserve(3);
     Texs.reserve(3);
 
