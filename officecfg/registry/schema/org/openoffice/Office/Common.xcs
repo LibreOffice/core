@@ -6410,7 +6410,7 @@
           </desc>
           <label>Shows previews with shining through checkered background to visualize transparency.</label>
          </info>
-         <value>true</value>
+         <value>false</value>
        </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">

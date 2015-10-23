@@ -116,7 +116,6 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
     sal_uInt32 nModelPos;
     FmFormModel *pModel = NULL;
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     for( nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
     {
@@ -134,19 +133,11 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
             pVDev->SetOutputSizePixel(aSize);
 
-            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
-            {
-                static const sal_uInt32 nLen(8);
-                static const Color aW(COL_WHITE);
-                static const Color aG(0xef, 0xef, 0xef);
+            static const sal_uInt32 nLen(8);
+            static const Color aW(COL_WHITE);
+            static const Color aG(0xef, 0xef, 0xef);
 
-                pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
-            }
-            else
-            {
-                pVDev->SetBackground(rStyleSettings.GetFieldColor());
-                pVDev->Erase();
-            }
+            pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
 
             pVDev->DrawBitmapEx(aNull, aThumb);
             maFavoritesHorizontal.push_back(pVDev->GetBitmap(aNull, aSize));
