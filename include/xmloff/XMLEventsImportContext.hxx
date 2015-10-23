@@ -39,8 +39,7 @@ namespace com { namespace sun { namespace star {
 
 typedef ::std::pair<
             OUString,
-            ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue> > EventNameValuesPair;
+            css::uno::Sequence<css::beans::PropertyValue> > EventNameValuesPair;
 
 typedef ::std::vector< EventNameValuesPair > EventsVector;
 
@@ -56,8 +55,7 @@ class XMLOFF_DLLPUBLIC XMLEventsImportContext : public SvXMLImportContext
 {
 protected:
     // the event XNameReplace; may be empty
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameReplace> xEvents;
+    css::uno::Reference<css::container::XNameReplace> xEvents;
 
     // if no XNameReplace is given, use this vector to collect events
     EventsVector aCollectEvents;
@@ -75,55 +73,47 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
+        const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameReplace> & xNameRepl);
+        const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
     virtual ~XMLEventsImportContext();
 
     void AddEventValues(
         const OUString& rEventName,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues);
+        const css::uno::Sequence<css::beans::PropertyValue> & rValues);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XEventsSupplier
     void SetEvents(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
+        const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XNameReplace
     void SetEvents(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameReplace> & xNameRepl);
+        const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
     /// if the import operates indelayed mode, you can use this method
     /// to obtain the value sequence for a specific event
     bool GetEventSequence(
         const OUString& rName,
-        ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue> & rSequence );
+        css::uno::Sequence<css::beans::PropertyValue> & rSequence );
 
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 #endif

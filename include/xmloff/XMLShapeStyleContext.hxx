@@ -48,7 +48,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID);
     virtual ~XMLShapeStyleContext();
@@ -56,13 +56,12 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 
     virtual void FillPropertySet(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX

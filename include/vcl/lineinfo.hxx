@@ -45,7 +45,7 @@ struct ImplLineInfo
     long                    mnDistance;
 
     basegfx::B2DLineJoin    meLineJoin;
-    com::sun::star::drawing::LineCap meLineCap;
+    css::drawing::LineCap   meLineCap;
 
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
@@ -102,8 +102,8 @@ public:
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
     basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
 
-    void SetLineCap(com::sun::star::drawing::LineCap eLineCap);
-    com::sun::star::drawing::LineCap GetLineCap() const { return mpImplLineInfo->meLineCap; }
+    void SetLineCap(css::drawing::LineCap eLineCap);
+    css::drawing::LineCap GetLineCap() const { return mpImplLineInfo->meLineCap; }
 
     bool            IsDefault() const;
 

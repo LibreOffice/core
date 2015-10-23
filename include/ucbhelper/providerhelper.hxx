@@ -64,9 +64,9 @@ typedef std::list< ContentImplHelperRef > ContentRefList;
   *   XPropertyContainer interface )
   */
 class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
-                                    public com::sun::star::lang::XTypeProvider,
-                                    public com::sun::star::lang::XServiceInfo,
-                                    public com::sun::star::ucb::XContentProvider
+                                    public css::lang::XTypeProvider,
+                                    public css::lang::XServiceInfo,
+                                    public css::ucb::XContentProvider
 {
     friend class ContentImplHelper;
 
@@ -74,13 +74,12 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
 
 protected:
     osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
 private:
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
 
-    UCBHELPER_DLLPRIVATE ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XPropertySetRegistry >
+    UCBHELPER_DLLPRIVATE css::uno::Reference< css::ucb::XPropertySetRegistry >
     getAdditionalPropertySetRegistry();
 
     UCBHELPER_DLLPRIVATE void cleanupRegisteredContents();
@@ -97,8 +96,7 @@ protected:
       *         does not exist.
       */
     rtl::Reference< ContentImplHelper >
-    queryExistingContent( const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::ucb::XContentIdentifier >& Identifier );
+    queryExistingContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     /**
       * This method returns a content with the given URL, if it already exists.
@@ -126,8 +124,7 @@ protected:
       * @param  the content instance that is to be registered.
      */
     void registerNewContent(
-        const com::sun::star::uno::Reference<
-            ::com::sun::star::ucb::XContent > & xContent );
+        const css::uno::Reference< css::ucb::XContent > & xContent );
 
 public:
 
@@ -136,8 +133,7 @@ public:
 
 
     ContentProviderImplHelper(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext >& rxContext );
+                const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProviderImplHelper();
 
 
@@ -152,25 +148,25 @@ public:
     // XTypeProvider
 
 
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
 
 
     virtual OUString SAL_CALL
     getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw( css::uno::RuntimeException, std::exception ) override = 0;
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw( css::uno::RuntimeException, std::exception ) override = 0;
 
 
     // XContentProvider
@@ -187,18 +183,14 @@ public:
       * - Return the possibly existing content.Create and return a new
       *   content, otherwise
       */
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override = 0;
     virtual sal_Int32 SAL_CALL
-    compareContentIds( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::ucb::XContentIdentifier >& Id1,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::ucb::XContentIdentifier >& Id2 )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    compareContentIds( const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
+                       const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // Non-interface methods.
@@ -230,8 +222,7 @@ public:
       *         be created in case it does not exist.
       * @return the propertyset containing the Additional Core Properties.
       */
-    ::com::sun::star::uno::Reference<
-        com::sun::star::ucb::XPersistentPropertySet >
+    css::uno::Reference< css::ucb::XPersistentPropertySet >
     getAdditionalPropertySet( const OUString& rKey, bool bCreate );
 
     /**

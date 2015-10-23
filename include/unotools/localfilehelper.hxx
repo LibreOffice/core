@@ -29,7 +29,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC LocalFileHelper
     {
     public:
-        static          ::com::sun::star::uno::Sequence< OUString >
+        static          css::uno::Sequence< OUString >
                                 GetFolderContents( const OUString& rFolder, bool bFolder );
     };
 

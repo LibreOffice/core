@@ -28,7 +28,7 @@ class UNOTOOLS_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
 private:
     SvtFilterOptions_Impl* pImp;
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void            ImplCommit() override;
 
@@ -36,7 +36,7 @@ public:
                     SvtFilterOptions();
     virtual        ~SvtFilterOptions();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
     void                    Load();
 
     void SetLoadWordBasicCode( bool bFlag );

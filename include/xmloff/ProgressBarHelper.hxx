@@ -32,19 +32,19 @@
 
 class XMLOFF_DLLPUBLIC ProgressBarHelper
 {
-            ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator >   xStatusIndicator;
-            sal_Int32                                                                       nRange;
-            sal_Int32                                                                       nReference;
-            sal_Int32                                                                       nValue;
-            bool                                                                            bStrict;
+            css::uno::Reference < css::task::XStatusIndicator >   xStatusIndicator;
+            sal_Int32                                             nRange;
+            sal_Int32                                             nReference;
+            sal_Int32                                             nValue;
+            bool                                                  bStrict;
             // #96469#; if the value goes over the Range the progressbar starts again
-            bool                                                                            bRepeat;
+            bool                                                  bRepeat;
 
 #ifdef DBG_UTIL
-            bool                                                                            bFailure;
+            bool                                                  bFailure;
 #endif
 public:
-            ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xStatusIndicator,
+            ProgressBarHelper(const css::uno::Reference < css::task::XStatusIndicator>& xStatusIndicator,
                                 const bool bStrict);
             ~ProgressBarHelper();
 

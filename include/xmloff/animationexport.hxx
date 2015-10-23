@@ -39,11 +39,11 @@ class XMLOFF_DLLPUBLIC AnimationsExporter : public salhelper::SimpleReferenceObj
     AnimationsExporterImpl*	mpImpl;
 
 public:
-    AnimationsExporter( SvXMLExport& rExport, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPageProps  );
+    AnimationsExporter( SvXMLExport& rExport, const css::uno::Reference< css::beans::XPropertySet >& xPageProps  );
     virtual ~AnimationsExporter();
 
-    void prepare( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > xRootNode );
-    void exportAnimations( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > xRootNode );
+    void prepare( css::uno::Reference< css::animations::XAnimationNode > xRootNode );
+    void exportAnimations( css::uno::Reference< css::animations::XAnimationNode > xRootNode );
 };
 
 }

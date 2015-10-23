@@ -114,8 +114,7 @@ public:
     /// add a new entry to the list of error messages
     void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence<
-                  OUString> & rParams,  /// parameters for error message
+        const css::uno::Sequence< OUString> & rParams,  /// parameters for error message
         const OUString& rExceptionMessage, /// original exception string
         sal_Int32 nRow,                     /// XLocator: file row number
         sal_Int32 nColumn,                  /// XLocator: file column number
@@ -124,18 +123,16 @@ public:
 
     void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence<
-                  OUString> & rParams,  /// parameters for error message
+        const css::uno::Sequence<OUString> & rParams,  /// parameters for error message
         const OUString& rExceptionMessage, /// original exception string
-        const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::xml::sax::XLocator> & rLocator); /// location
+        const css::uno::Reference<css::xml::sax::XLocator> & rLocator); /// location
 
     /**
      * throw a SAXParseException that describes the first error that matches
      * the given mask
      */
     void ThrowErrorAsSAXException( sal_Int32 nIdMask )
-        throw( ::com::sun::star::xml::sax::SAXParseException );
+        throw( css::xml::sax::SAXParseException );
 };
 
 #endif

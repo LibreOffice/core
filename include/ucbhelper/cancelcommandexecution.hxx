@@ -39,7 +39,7 @@ namespace ucbhelper
     If an Interaction Handler is given with the command environment and the
     handler handles the exception by selecting the supplied continuation,
     then this function will put the original exception supplied into a
-    com::sun::star::ucb::CommandFailedException and throw the
+    css::ucb::CommandFailedException and throw the
     CommandFailedException. If no handler was given or the handler was not
     able to handle the exception, then the given exception will be thrown
     directly.
@@ -51,17 +51,17 @@ namespace ucbhelper
     @param xEnv is the command environment that may contain an Interaction
            Handler to use before throwing the appropriate exception.
  */
-UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::uno::Any & rException,
-                             const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandEnvironment > &
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rException,
+                             const css::uno::Reference<
+                                css::ucb::XCommandEnvironment > &
                                     xEnv )
-    throw( com::sun::star::uno::Exception );
+    throw( css::uno::Exception );
 
 /** Cancel the execution of a command by throwing the appropriate exception.
     If an Interaction Handler is given with the command environment and the
     handler handles the exception by selecting the supplied continuation,
     then this function will put the original exception supplied into a
-    com::sun::star::ucb::CommandFailedException and throw the
+    css::ucb::CommandFailedException and throw the
     CommandFailedException. If no handler was given or the handler was not
     able to handle the exception, then the given exception will be thrown
     directly.
@@ -86,17 +86,12 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::uno::Any 
            Used as debugging aid only. Passed to the member 'Context' of the
            uno::Exception thrown by this function.
  */
-UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
-                             const com::sun::star::uno::Sequence<
-                                com::sun::star::uno::Any > & rArgs,
-                             const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandEnvironment > &
-                                    xEnv,
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eError,
+                             const css::uno::Sequence< css::uno::Any > & rArgs,
+                             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
-                             const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandProcessor > &
-                                    xContext = 0 )
-    throw( com::sun::star::uno::Exception );
+                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = 0 )
+    throw( css::uno::Exception );
 }
 
 #endif // INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX

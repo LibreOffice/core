@@ -30,13 +30,13 @@ namespace com { namespace sun { namespace star {
 
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
+    css::uno::Reference< css::i18n::XNativeNumberSupplier >   xNNS;
                                 NativeNumberWrapper( const NativeNumberWrapper& ) = delete;
             NativeNumberWrapper&    operator=( const NativeNumberWrapper& ) = delete;
 
 public:
                                 NativeNumberWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext
+                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext
                                     );
 
                                 ~NativeNumberWrapper();
@@ -45,15 +45,15 @@ public:
 
     OUString getNativeNumberString(
                         const OUString& rNumberString,
-                        const ::com::sun::star::lang::Locale& rLocale,
+                        const css::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
-    ::com::sun::star::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
-                        const ::com::sun::star::lang::Locale& rLocale,
+    css::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
+                        const css::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
     sal_Int16       convertFromXmlAttributes(
-                        const ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr ) const;
+                        const css::i18n::NativeNumberXmlAttributes& rAttr ) const;
 
 };
 

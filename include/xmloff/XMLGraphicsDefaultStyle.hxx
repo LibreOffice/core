@@ -36,16 +36,15 @@ public:
 
     XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-            SvXMLStylesContext& rStyles);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles);
 
     virtual ~XMLGraphicsDefaultStyle();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     // This method is called for every default style
     virtual void SetDefaults() override;

@@ -104,22 +104,22 @@ namespace o3tl
 
 
 class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
-             ::com::sun::star::xml::sax::XExtendedDocumentHandler,
-             ::com::sun::star::xml::sax::XFastDocumentHandler,
-             ::com::sun::star::lang::XServiceInfo,
-             ::com::sun::star::lang::XInitialization,
-             ::com::sun::star::document::XImporter,
-             ::com::sun::star::document::XFilter,
-             ::com::sun::star::lang::XUnoTunnel>
+             css::xml::sax::XExtendedDocumentHandler,
+             css::xml::sax::XFastDocumentHandler,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization,
+             css::document::XImporter,
+             css::document::XFilter,
+             css::lang::XUnoTunnel>
 {
     friend class SvXMLImportContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > mxLocator;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > mxGraphicResolver;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxImportInfo;
+    css::uno::Reference< css::xml::sax::XLocator > mxLocator;
+    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
+    css::uno::Reference< css::document::XGraphicObjectResolver > mxGraphicResolver;
+    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
+    css::uno::Reference< css::beans::XPropertySet > mxImportInfo;
 
     rtl::Reference< XMLTextImportHelper >             mxTextImport;
     rtl::Reference< XMLShapeImportHelper >            mxShapeImport;
@@ -131,14 +131,14 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     SvXMLImportContextRef mxAutoStyles;
     SvXMLImportContextRef mxMasterStyles;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxGradientHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxHatchHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxBitmapHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxTransGradientHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxMarkerHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxDashHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxNumberStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > mxEventListener;
+    css::uno::Reference< css::container::XNameContainer > mxGradientHelper;
+    css::uno::Reference< css::container::XNameContainer > mxHatchHelper;
+    css::uno::Reference< css::container::XNameContainer > mxBitmapHelper;
+    css::uno::Reference< css::container::XNameContainer > mxTransGradientHelper;
+    css::uno::Reference< css::container::XNameContainer > mxMarkerHelper;
+    css::uno::Reference< css::container::XNameContainer > mxDashHelper;
+    css::uno::Reference< css::container::XNameContainer > mxNumberStyles;
+    css::uno::Reference< css::lang::XEventListener > mxEventListener;
 
     SvXMLImport_Impl            *mpImpl;            // dummy
 
@@ -161,7 +161,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
 
 protected:
 
-    ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
     bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;
@@ -170,7 +170,7 @@ protected:
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
-                                               const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                                               const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
@@ -190,11 +190,11 @@ protected:
 
     bool IsODFVersionConsistent( const OUString& aODFVersion );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
+    const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
+    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
-    void SetGraphicResolver( com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& _xGraphicResolver );
+    const css::uno::Reference< css::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
+    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver );
 
 
     void _CreateNumberFormatsSupplier();
@@ -203,37 +203,37 @@ protected:
 public:
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
     SvXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL ) throw();
 
     virtual ~SvXMLImport() throw();
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    // ::com::sun::star::xml::sax::XDocumentHandler
+    // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument()
-        throw (::com::sun::star::xml::sax::SAXException,
-               ::com::sun::star::uno::RuntimeException,
+        throw (css::xml::sax::SAXException,
+               css::uno::RuntimeException,
                std::exception) override;
     virtual void SAL_CALL endDocument()
-        throw(::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException,
+        throw(css::xml::sax::SAXException,
+              css::uno::RuntimeException,
               std::exception) override;
     virtual void SAL_CALL startElement(const OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs)
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL endElement(const OUString& aName)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL characters(const OUString& aChars)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                 const OUString& aData)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     // ::css::xml::sax::XFastContextHandler
     virtual void SAL_CALL startFastElement(sal_Int32 Element,
@@ -257,42 +257,42 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    // ::com::sun::star::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL endCDATA() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::xml::sax::XExtendedDocumentHandler
+    virtual void SAL_CALL startCDATA() throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL endCDATA() throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL comment(const OUString& sComment)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL allowLineBreak()
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL unknown(const OUString& sString)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancel(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
+        throw(css::uno::RuntimeException, std::exception) final override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
+        throw(css::uno::RuntimeException, std::exception) final override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException, std::exception) final override;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics
     // the base class implementation initializes the progress bar and should
     // be called by overriding methods
-    virtual void SetStatistics(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > & i_rStats);
+    virtual void SetStatistics(const css::uno::Sequence< css::beans::NamedValue > & i_rStats);
 
     // get import helper for text
     inline rtl::Reference< XMLTextImportHelper > GetTextImport();
@@ -309,7 +309,7 @@ public:
     inline rtl::Reference< ::xmloff::OFormLayerXMLImport > GetFormImport();
 
     // get XPropertySet with import information
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getImportInfo() const { return mxImportInfo; }
+    inline css::uno::Reference< css::beans::XPropertySet > getImportInfo() const { return mxImportInfo; }
 
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
@@ -318,18 +318,18 @@ public:
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
     const SvXMLUnitConverter& GetMM100UnitConverter() const { return *mpUnitConv; }
         SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &
+    const css::uno::Reference< css::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
+    const css::uno::Reference< css::frame::XModel > &
         GetModel() const { return mxModel; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetGradientHelper();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetHatchHelper();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetBitmapHelper();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetTransGradientHelper();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetMarkerHelper();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetDashHelper();
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier();
-    inline void SetNumberFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    const css::uno::Reference< css::container::XNameContainer > & GetGradientHelper();
+    const css::uno::Reference< css::container::XNameContainer > & GetHatchHelper();
+    const css::uno::Reference< css::container::XNameContainer > & GetBitmapHelper();
+    const css::uno::Reference< css::container::XNameContainer > & GetTransGradientHelper();
+    const css::uno::Reference< css::container::XNameContainer > & GetMarkerHelper();
+    const css::uno::Reference< css::container::XNameContainer > & GetDashHelper();
+    inline css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier();
+    inline void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
@@ -337,20 +337,20 @@ public:
     // Convert a local packe URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true
     OUString ResolveGraphicObjectURL( const OUString& rURL, bool bLoadOnDemand );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
           GetStreamForGraphicObjectURLFromBase64();
     OUString ResolveGraphicObjectURLFromBase64(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOut );
+        const css::uno::Reference< css::io::XOutputStream >& rOut );
 
     bool IsPackageURL( const OUString& rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
                                        const OUString& rClassId );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
         GetStreamForEmbeddedObjectURLFromBase64();
     OUString ResolveEmbeddedObjectURLFromBase64();
 
     // get source storage we're importing from (if available)
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
           GetSourceStorage();
 
     void AddStyleDisplayName( sal_uInt16 nFamily,
@@ -363,10 +363,10 @@ public:
 
     void AddNumberStyle(sal_Int32 nKey, const OUString& sName);
 
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps);
+    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps);
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
-                    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
+                    const css::uno::Sequence<css::beans::PropertyValue>& _rSettings);
 
     XMLFontStylesContext *GetFontDecls();
     SvXMLStylesContext *GetStyles();
@@ -396,16 +396,15 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const ::com::sun::star::uno::Sequence< OUString > & rMsgParams,
+        const css::uno::Sequence< OUString > & rMsgParams,
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XLocator> & rLocator );
+        const css::uno::Reference< css::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
-        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams);
+        const css::uno::Sequence< OUString> & rMsgParams);
 
     void SetError( sal_Int32 nId );
     void SetError( sal_Int32 nId, const OUString& rMsg1 );
@@ -416,7 +415,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
     GetComponentContext() const;
 
     // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)
@@ -431,12 +430,12 @@ public:
     OUString GetStreamName() const;
 
     /// set the XmlId attribute of given UNO object (for RDF metadata)
-    void SetXmlId(::com::sun::star::uno::Reference<
-                  ::com::sun::star::uno::XInterface> const & i_xIfc,
+    void SetXmlId(css::uno::Reference<
+                  css::uno::XInterface> const & i_xIfc,
                   OUString const & i_rXmlId);
 
     /// Add a RDFa statement; parameters are XML attribute values
-    void AddRDFa( ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable> i_xObject,
+    void AddRDFa( css::uno::Reference< css::rdf::XMetadatable> i_xObject,
                   OUString const & i_rAbout,
                   OUString const & i_rProperty,
                   OUString const & i_rContent,
@@ -551,18 +550,18 @@ inline rtl::Reference< ::xmloff::OFormLayerXMLImport > SvXMLImport::GetFormImpor
 }
 
 inline void SvXMLImport::SetEmbeddedResolver(
-    com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
+    css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLImport::SetGraphicResolver(
-    com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& _xGraphicResolver )
+    css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver )
 {
     mxGraphicResolver = _xGraphicResolver;
 }
 
-inline ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
+inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
 {
     if ( ! mxNumberFormatsSupplier.is() && mxModel.is() )
         _CreateNumberFormatsSupplier();

@@ -89,7 +89,7 @@ namespace utl
                 specifies the number of levels to access under the node given by <arg>_pConfigLocation</arg>
         */
         OConfigurationValueContainer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation,
             const CVCFlags _nAccessFlags = CVCFlags::UPDATE_ACCESS | CVCFlags::LAZY_UPDATE,
@@ -116,7 +116,7 @@ namespace utl
         void    registerExchangeLocation(
             const sal_Char* _pRelativePathAscii,
             void* _pContainer,
-            const ::com::sun::star::uno::Type& _rValueType
+            const css::uno::Type& _rValueType
         );
 
     public:

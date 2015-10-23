@@ -232,10 +232,10 @@ public:
     // helper function
 
     OUString   translateKey( const OUString& i_rKey,
-                                  const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
+                                  const css::lang::Locale& i_rLocale = css::lang::Locale() ) const;
     OUString   translateOption( const OUString& i_rKey,
                                      const OUString& i_rOption,
-                                     const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
+                                     const css::lang::Locale& i_rLocale = css::lang::Locale() ) const;
 };
 
 

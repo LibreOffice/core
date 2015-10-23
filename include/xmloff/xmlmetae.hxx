@@ -47,22 +47,21 @@ class SvXMLExport;
     </p>
  */
 class XMLOFF_DLLPUBLIC SvXMLMetaExport : public ::cppu::WeakImplHelper1<
-                ::com::sun::star::xml::sax::XDocumentHandler >
+                css::xml::sax::XDocumentHandler >
 {
 private:
     SvXMLExport& mrExport;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentProperties> mxDocProps;
+    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
     /// counts levels of the xml document. necessary for special handling.
     int m_level;
     /// preserved namespaces. necessary because we do not write the root node.
-    std::vector< ::com::sun::star::beans::StringPair > m_preservedNSs;
+    std::vector< css::beans::StringPair > m_preservedNSs;
 
     SAL_DLLPRIVATE void SimpleStringElement(
         const OUString& rText, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
     SAL_DLLPRIVATE void SimpleDateTimeElement(
-        const ::com::sun::star::util::DateTime & rDate, sal_uInt16 nNamespace,
+        const css::util::DateTime & rDate, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
 
     /// currently unused; for exporting via the XDocumentProperties interface
@@ -70,8 +69,7 @@ private:
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>& i_rDocProps);
+        const css::uno::Reference< css::document::XDocumentProperties>& i_rDocProps);
 
     virtual ~SvXMLMetaExport();
 
@@ -79,39 +77,39 @@ public:
     void Export();
 
     static OUString GetISODateTimeString(
-                        const ::com::sun::star::util::DateTime& rDateTime );
+                        const css::util::DateTime& rDateTime );
 
-    // ::com::sun::star::xml::sax::XDocumentHandler:
+    // css::xml::sax::XDocumentHandler:
     virtual void SAL_CALL startDocument()
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL endDocument()
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL startElement(const OUString & i_rName,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & i_xAttribs)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference<
+                css::xml::sax::XAttributeList > & i_xAttribs)
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL endElement(const OUString & i_rName)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL characters(const OUString & i_rChars)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace(
         const OUString & i_rWhitespaces)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL processingInstruction(
         const OUString & i_rTarget, const OUString & i_rData)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
     virtual void SAL_CALL setDocumentLocator(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XLocator > & i_xLocator)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference<
+                css::xml::sax::XLocator > & i_xLocator)
+        throw (css::uno::RuntimeException,
+               css::xml::sax::SAXException, std::exception) override;
 
 };
 

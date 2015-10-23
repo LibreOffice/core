@@ -44,7 +44,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution > mxStringSubsitution;
+    css::uno::Reference< css::util::XStringSubstitution > mxStringSubsitution;
 
     const OUString msPrinterIndependentLayout;
     const OUString msColorTableURL;
@@ -54,9 +54,9 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
     const OUString msGradientTableURL;
     const OUString msBitmapTableURL;
 
-    void ManipulateSetting( com::sun::star::uno::Any& rAny, const OUString& rName ) const;
+    void ManipulateSetting( css::uno::Any& rAny, const OUString& rName ) const;
 
-    void CallTypeFunction(const com::sun::star::uno::Any& rAny,
+    void CallTypeFunction(const css::uno::Any& rAny,
                         const OUString& rName) const;
 
     void exportBool(const bool bValue, const OUString& rName) const;
@@ -66,28 +66,28 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
     void exportLong(const sal_Int64 nValue, const OUString& rName) const;
     void exportDouble(const double fValue, const OUString& rName) const;
     void exportString(const OUString& sValue, const OUString& rName) const;
-    void exportDateTime(const com::sun::star::util::DateTime& aValue, const OUString& rName) const;
+    void exportDateTime(const css::util::DateTime& aValue, const OUString& rName) const;
     void exportSequencePropertyValue(
-        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const css::uno::Sequence<css::beans::PropertyValue>& aProps,
         const OUString& rName) const;
     void exportbase64Binary(
-        const com::sun::star::uno::Sequence<sal_Int8>& aProps,
+        const css::uno::Sequence<sal_Int8>& aProps,
         const OUString& rName) const;
-    void exportMapEntry(const com::sun::star::uno::Any& rAny,
+    void exportMapEntry(const css::uno::Any& rAny,
                         const OUString& rName,
                         const bool bNameAccess) const;
     void exportNameAccess(
-        const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& rNamed,
+        const css::uno::Reference<css::container::XNameAccess>& rNamed,
         const OUString& rName) const;
     void exportIndexAccess(
-        const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& rIndexed,
+        const css::uno::Reference<css::container::XIndexAccess>& rIndexed,
         const OUString& rName) const;
 
     void exportSymbolDescriptors(
-                    const com::sun::star::uno::Sequence < com::sun::star::formula::SymbolDescriptor > &rProps,
+                    const css::uno::Sequence < css::formula::SymbolDescriptor > &rProps,
                     const OUString& rName) const;
     void exportForbiddenCharacters(
-                    const com::sun::star::uno::Any &rAny,
+                    const css::uno::Any &rAny,
                     const OUString& rName) const;
 
 public:
@@ -95,7 +95,7 @@ public:
     ~XMLSettingsExportHelper();
 
     void exportAllSettings(
-        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const css::uno::Sequence<css::beans::PropertyValue>& aProps,
         const OUString& rName) const;
 };
 

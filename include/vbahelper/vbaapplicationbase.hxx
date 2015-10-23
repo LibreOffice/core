@@ -49,7 +49,7 @@ public:
     virtual void SAL_CALL setInteractive( sal_Bool bInteractive ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL OnKey( const OUString& Key, const ::com::sun::star::uno::Any& Procedure ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getVersion() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getVBE() throw (css::uno::RuntimeException, std::exception) override;

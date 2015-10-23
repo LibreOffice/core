@@ -45,7 +45,7 @@
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 
-typedef std::map< const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >, OUString > TableStyleMap;
+typedef std::map< const css::uno::Reference< css::uno::XInterface >, OUString > TableStyleMap;
 
 struct XMLTableInfo
 {
@@ -62,10 +62,10 @@ public:
     virtual ~XMLTableExport();
 
     // This method collects all automatic styles for the given table
-    void collectTableAutoStyles(const com::sun::star::uno::Reference < com::sun::star::table::XColumnRowRange >& xColumnRowRange);
+    void collectTableAutoStyles(const css::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
 
     // This method exports the given table
-    void exportTable(const com::sun::star::uno::Reference < com::sun::star::table::XColumnRowRange >& xColumnRowRange);
+    void exportTable(const css::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
 
     // export the styles from the cell style family
     void exportTableStyles();
@@ -89,10 +89,10 @@ protected:
     const SvXMLExport& GetExport() const  { return mrExport; }
 private:
 
-    SAL_DLLPRIVATE void ImpExportText( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell );
+    SAL_DLLPRIVATE void ImpExportText( const css::uno::Reference < css::table::XCell >& xCell );
 
-    void ExportCell( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
-    void ExportTableColumns( const com::sun::star::uno::Reference < com::sun::star::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
+    void ExportCell( const css::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
+    void ExportTableColumns( const css::uno::Reference < css::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
 
 };
 

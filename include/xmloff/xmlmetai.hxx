@@ -36,32 +36,27 @@ class XMLOFF_DLLPUBLIC SvXMLMetaDocumentContext
     : public virtual SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentProperties> mxDocProps;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
+    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
+    css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentProperties>& xDocProps);
+        const css::uno::Reference< css::document::XDocumentProperties>& xDocProps);
 
     virtual ~SvXMLMetaDocumentContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference<
-             ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 
 public:
     static void setBuildId(const OUString & rGenerator,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xImportInfo );
+        const css::uno::Reference< css::beans::XPropertySet>& xImportInfo );
 };
 
 #endif // _ INCLUDED_XMLOFF_XMLMETAI_HXX

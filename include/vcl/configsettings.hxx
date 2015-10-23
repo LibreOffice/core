@@ -39,7 +39,7 @@ namespace vcl
     private:
         std::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
 
-        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
+        virtual void Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
 
         void getValues();
         SettingsConfigItem();

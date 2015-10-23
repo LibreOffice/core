@@ -33,7 +33,7 @@ struct SvtAcceleratorConfigItem
 #include <list>
 typedef ::std::list < SvtAcceleratorConfigItem > SvtAcceleratorItemList;
 
-class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocumentHandler,
+class OReadAccelatorDocumentHandler : public css::xml::sax::XDocumentHandler,
                                       public ::cppu::OWeakObject
 {
     public:
@@ -50,37 +50,37 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() throw() override
             { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryInterface(
+            const css::uno::Type & rType ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL endDocument()
-            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs )
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs )
+            throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL endElement(const OUString& aName) throw
-            ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL characters(const OUString& aChars)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL setDocumentLocator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XLocator > &xLocator)
+            throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     private:
         OUString getErrorLineString();
 
         int                     m_nElementDepth;
-        bool                m_bAcceleratorMode;
-        bool                m_bItemCloseExpected;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        bool                    m_bAcceleratorMode;
+        bool                    m_bItemCloseExpected;
+        css::uno::Reference< css::xml::sax::XLocator >    m_xLocator;
         SvtAcceleratorItemList& m_aReadAcceleratorList;
 };
 

@@ -38,35 +38,35 @@ namespace com { namespace sun { namespace star {
 }}}
 
 const sal_Int32 nCharClassAlphaType =
-    ::com::sun::star::i18n::KCharacterType::UPPER |
-    ::com::sun::star::i18n::KCharacterType::LOWER |
-    ::com::sun::star::i18n::KCharacterType::TITLE_CASE;
+    css::i18n::KCharacterType::UPPER |
+    css::i18n::KCharacterType::LOWER |
+    css::i18n::KCharacterType::TITLE_CASE;
 
 const sal_Int32 nCharClassAlphaTypeMask =
     nCharClassAlphaType |
-    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
-    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
+    css::i18n::KCharacterType::PRINTABLE |
+    css::i18n::KCharacterType::BASE_FORM;
 
 const sal_Int32 nCharClassLetterType =
     nCharClassAlphaType |
-    ::com::sun::star::i18n::KCharacterType::LETTER;
+    css::i18n::KCharacterType::LETTER;
 
 const sal_Int32 nCharClassLetterTypeMask =
     nCharClassAlphaTypeMask |
-    ::com::sun::star::i18n::KCharacterType::LETTER;
+    css::i18n::KCharacterType::LETTER;
 
 const sal_Int32 nCharClassNumericType =
-    ::com::sun::star::i18n::KCharacterType::DIGIT;
+    css::i18n::KCharacterType::DIGIT;
 
 const sal_Int32 nCharClassNumericTypeMask =
     nCharClassNumericType |
-    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
-    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
+    css::i18n::KCharacterType::PRINTABLE |
+    css::i18n::KCharacterType::BASE_FORM;
 
 class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
+    css::uno::Reference< css::i18n::XCharacterClassification >    xCC;
     mutable ::osl::Mutex        aMutex;
 
     CharClass(const CharClass&) = delete;
@@ -75,7 +75,7 @@ class UNOTOOLS_DLLPUBLIC CharClass
 public:
     /// Preferred ctor with service manager specified
     CharClass(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
         const LanguageTag& rLanguageTag );
 
     /// Deprecated ctor, tries to get a process service manager or to load the
@@ -153,7 +153,7 @@ public:
     sal_Int32 getCharacterType( const OUString& rStr, sal_Int32 nPos ) const;
     sal_Int32 getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
 
-    ::com::sun::star::i18n::ParseResult parseAnyToken(
+    css::i18n::ParseResult parseAnyToken(
                                     const OUString& rStr,
                                     sal_Int32 nPos,
                                     sal_Int32 nStartCharFlags,
@@ -161,7 +161,7 @@ public:
                                     sal_Int32 nContCharFlags,
                                     const OUString& userDefinedCharactersCont ) const;
 
-    ::com::sun::star::i18n::ParseResult parsePredefinedToken(
+    css::i18n::ParseResult parsePredefinedToken(
                                     sal_Int32 nTokenType,
                                     const OUString& rStr,
                                     sal_Int32 nPos,
@@ -183,7 +183,7 @@ public:
 
 private:
 
-    const ::com::sun::star::lang::Locale &  getMyLocale() const;
+    const css::lang::Locale &  getMyLocale() const;
 };
 
 #endif // INCLUDED_UNOTOOLS_CHARCLASS_HXX

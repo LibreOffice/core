@@ -36,7 +36,7 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     OUString       sFollow;
     OUString       sPageMasterName;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > xStyle;
+    css::uno::Reference < css::style::XStyle > xStyle;
 
     bool bInsertHeader;
     bool bInsertFooter;
@@ -51,31 +51,28 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     bool bHeaderFirstInserted;
     bool bFooterFirstInserted;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference <
-        ::com::sun::star::style::XStyle > Create();
+    SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
 protected:
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::style::XStyle > GetStyle() { return xStyle; }
+    css::uno::Reference< css::style::XStyle > GetStyle() { return xStyle; }
 public:
 
     TYPEINFO_OVERRIDE();
 
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             bool bOverwrite );
     virtual ~XMLTextMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst );

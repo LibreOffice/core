@@ -40,7 +40,7 @@ namespace ucbhelper{
               only
             - or as base class if interactions must be modified.
  */
-class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionHandler >
+class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
 {
 
     // types
@@ -55,13 +55,13 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
 
             /** @short  contains the interaction request, which should be intercepted. */
-            ::com::sun::star::uno::Any Request;
+            css::uno::Any Request;
 
 
             /** @short  specify the fix continuation, which must be selected, if the
                         interaction could be intercepted successfully.
               */
-            ::com::sun::star::uno::Type Continuation;
+            css::uno::Type Continuation;
 
 
             /** @short  specify, if both interactions must have the same type
@@ -121,9 +121,9 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                         influence the type check of the interception request.
                         Its not used to check the continuation!
              */
-            InterceptedRequest(      sal_Int32                    nHandle      ,
-                               const ::com::sun::star::uno::Any&  aRequest     ,
-                               const ::com::sun::star::uno::Type& aContinuation,
+            InterceptedRequest(      sal_Int32                nHandle      ,
+                               const css::uno::Any&           aRequest     ,
+                               const css::uno::Type&          aContinuation,
                                      bool                     bMatchExact  )
             {
                 Handle       = nHandle;
@@ -163,7 +163,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     expecting th handle() was overwritten by
                     a derived class.
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xInterceptedHandler;
+        css::uno::Reference< css::task::XInteractionHandler > m_xInterceptedHandler;
 
 
         /** @short  these list contains the requests, which should be intercepted.
@@ -189,7 +189,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @param  lInterceptions
                     the list of intercepted requests.
          */
-        InterceptedInteraction(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xInterceptedHandler,
+        InterceptedInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler,
                                const ::std::vector< InterceptedRequest >&                                             lInterceptions     );
 
 
@@ -204,7 +204,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     the outside interaction handler, which should
                     be intercepted here.
          */
-        void setInterceptedHandler(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xInterceptedHandler);
+        void setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler);
 
 
         /** @short  set a new list of intercepted interactions.
@@ -231,9 +231,9 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @return A valid reference to the continuation, if it could be located ...
                     or an empty reference otherwise.
          */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > extractContinuation(
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations,
-                    const ::com::sun::star::uno::Type&                                                                                             aType         );
+        static css::uno::Reference< css::task::XInteractionContinuation > extractContinuation(
+                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
+                    const css::uno::Type&                                                                                             aType         );
 
 
     // useable for derived classes
@@ -269,7 +269,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     will be used automatically for this request!
          */
         virtual EInterceptionState intercepted(const InterceptedRequest&                                                             rRequest   ,
-                                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xOrgRequest);
+                                               const css::uno::Reference< css::task::XInteractionRequest >& xOrgRequest);
 
 
     // uno interface
@@ -293,8 +293,8 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @param  xRequest
                     the interaction request, which should be intercepted.
          */
-        virtual void SAL_CALL handle(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+            throw(css::uno::RuntimeException, std::exception) override;
 
 
     // helper
@@ -304,7 +304,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         /** @short  implements the default handling:
                     - intercept or forward to internal handler.
          */
-        UCBHELPER_DLLPRIVATE void impl_handleDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE void impl_handleDefault(const css::uno::Reference< css::task::XInteractionRequest >& xRequest);
 
 
         /** @short  implements the interception of requests.
@@ -324,7 +324,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @return A identifier, which inidicates if the request was intercepted,
                     the continuation was found and selected ... or not.
          */
-        UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const css::uno::Reference< css::task::XInteractionRequest >& xRequest);
 };
 
 } // namespace ucbhelper

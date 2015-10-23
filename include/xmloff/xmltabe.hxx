@@ -36,7 +36,7 @@ class SvxXMLTabStopExport
 
 protected:
 
-    void exportTabStop( const ::com::sun::star::style::TabStop* pTabStop );
+    void exportTabStop( const css::style::TabStop* pTabStop );
 
 public:
 
@@ -44,7 +44,7 @@ public:
     virtual ~SvxXMLTabStopExport();
 
     // core API
-    void Export( const ::com::sun::star::uno::Any& rAny );
+    void Export( const css::uno::Any& rAny );
 };
 
 

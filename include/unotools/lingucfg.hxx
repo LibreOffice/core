@@ -37,11 +37,11 @@ class SvtLinguConfigItem;
 
 struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 {
-    ::com::sun::star::uno::Sequence< OUString >    aActiveDics;
-    ::com::sun::star::uno::Sequence< OUString >    aActiveConvDics;
+    css::uno::Sequence< OUString >    aActiveDics;
+    css::uno::Sequence< OUString >    aActiveConvDics;
 
-    bool                                                bROActiveDics;
-    bool                                                bROActiveConvDics;
+    bool                              bROActiveDics;
+    bool                              bROActiveConvDics;
 
     // Hyphenator service specific options
     sal_Int16   nHyphMinLeading,
@@ -130,11 +130,11 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
-    com::sun::star::uno::Sequence< OUString >  aLocations;
+    css::uno::Sequence< OUString >  aLocations;
     // the name of the dictionary format implement
     OUString                                   aFormatName;
     // the list of languages (ISO names) the dictionary can be used for
-    com::sun::star::uno::Sequence< OUString >  aLocaleNames;
+    css::uno::Sequence< OUString >  aLocaleNames;
 };
 
 class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
@@ -145,9 +145,9 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
     SvtLinguConfigItem &   GetConfigItem() const    { return const_cast< SvtLinguConfig * >( this )->GetConfigItem(); }
 
     // configuration update access for the 'Linguistic' main node
-    mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xMainUpdateAccess;
+    mutable css::uno::Reference< css::util::XChangesBatch > m_xMainUpdateAccess;
 
-    com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetMainUpdateAccess() const;
+    css::uno::Reference< css::util::XChangesBatch > GetMainUpdateAccess() const;
 
     OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 
@@ -160,27 +160,27 @@ public:
 
     // borrowed from utl::ConfigItem
 
-    com::sun::star::uno::Sequence< OUString >
+    css::uno::Sequence< OUString >
         GetNodeNames( const OUString &rNode );
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
+    css::uno::Sequence< css::uno::Any >
         GetProperties(
-            const com::sun::star::uno::Sequence< OUString > &rNames );
+            const css::uno::Sequence< OUString > &rNames );
 
     bool
         ReplaceSetProperties(
             const OUString &rNode,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues );
+            const css::uno::Sequence< css::beans::PropertyValue >& rValues );
 
-    com::sun::star::uno::Any
+    css::uno::Any
             GetProperty( const OUString &rPropertyName ) const;
-    com::sun::star::uno::Any
+    css::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
     bool    SetProperty( const OUString &rPropertyName,
-                         const com::sun::star::uno::Any &rValue );
+                         const css::uno::Any &rValue );
     bool    SetProperty( sal_Int32 nPropertyHandle,
-                         const com::sun::star::uno::Any &rValue );
+                         const css::uno::Any &rValue );
 
     bool    GetOptions( SvtLinguOptions &rOptions ) const;
 
@@ -190,13 +190,13 @@ public:
     //! the following functions work on the 'ServiceManager' sub node of the
     //! linguistic configuration only
     //!
-    bool GetElementNamesFor( const OUString &rNodeName, com::sun::star::uno::Sequence< OUString > &rElementNames ) const;
+    bool GetElementNamesFor( const OUString &rNodeName, css::uno::Sequence< OUString > &rElementNames ) const;
 
-    bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, com::sun::star::uno::Sequence< OUString > &rFormatList ) const;
+    bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rFormatList ) const;
 
     bool GetDictionaryEntry( const OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
 
-    com::sun::star::uno::Sequence< OUString > GetDisabledDictionaries() const;
+    css::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const OUString &rFormatName );
 

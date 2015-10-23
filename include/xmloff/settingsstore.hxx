@@ -21,16 +21,16 @@
 class DocumentSettingsSerializer {
 public:
   // Import objects and update properties (eliding URLs)
-  virtual com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>
+  virtual css::uno::Sequence<css::beans::PropertyValue>
 	filterStreamsFromStorage(
         OUString const & referer,
-		const com::sun::star::uno::Reference< com::sun::star::embed::XStorage > &xStorage,
-		const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps ) = 0;
+        const css::uno::Reference< css::embed::XStorage > &xStorage,
+        const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
   // Export objects and update properties with relative URLs into this storage
-  virtual com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>
+  virtual css::uno::Sequence<css::beans::PropertyValue>
 	filterStreamsToStorage(
-		const com::sun::star::uno::Reference< com::sun::star::embed::XStorage > &xStorage,
-		const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps ) = 0;
+        const css::uno::Reference< css::embed::XStorage > &xStorage,
+        const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
 
 protected:
     ~DocumentSettingsSerializer() {}

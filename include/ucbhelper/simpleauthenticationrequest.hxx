@@ -43,8 +43,8 @@ namespace ucbhelper {
   * Read-write values: username, password, account
   * All remember-authentication values: RememberAuthentication_NO
   *
-  * @see com::sun::star::ucb::AuthenticationRequest
-  * @see com::sun::star::ucb::RememberAuthentication
+  * @see css::ucb::AuthenticationRequest
+  * @see css::ucb::RememberAuthentication
   * @see InteractionAbort
   * @see InteractionRetry
   * @see InteractionSupplyAuthentication
@@ -55,7 +55,7 @@ class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::Intera
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 private:
-    void initialize( const ::com::sun::star::ucb::URLAuthenticationRequest & rRequest,
+    void initialize( const css::ucb::URLAuthenticationRequest & rRequest,
                      bool bCanSetRealm,
                      bool bCanSetUserName,
                      bool bCanSetPassword,

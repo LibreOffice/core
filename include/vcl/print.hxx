@@ -513,9 +513,9 @@ public:
     virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
     virtual void printPage(int i_nPage) const = 0; /// App must override this
     virtual void jobStarted(); // will be called after a possible dialog has been shown and the real printjob starts
-    virtual void jobFinished( com::sun::star::view::PrintableState );
+    virtual void jobFinished( css::view::PrintableState );
 
-    com::sun::star::view::PrintableState getJobState() const;
+    css::view::PrintableState getJobState() const;
 
     void abortJob();
 
@@ -544,7 +544,7 @@ public:
     VCL_PLUGIN_PUBLIC bool getPrinterModified() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void resetPaperToLastConfigured();
-    VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
+    VCL_PLUGIN_PUBLIC void setJobState( css::view::PrintableState );
     SAL_DLLPRIVATE bool setupPrinter( vcl::Window* i_pDlgParent );
 
     SAL_DLLPRIVATE int getPageCountProtected() const;

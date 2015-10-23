@@ -41,37 +41,37 @@ struct ContentIdentifier_Impl;
   */
 class UCBHELPER_DLLPUBLIC ContentIdentifier :
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                  public com::sun::star::ucb::XContentIdentifier
+                public css::lang::XTypeProvider,
+                public css::ucb::XContentIdentifier
 {
 public:
     ContentIdentifier( const OUString& rURL );
     virtual ~ContentIdentifier();
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     acquire() throw() override;
     virtual void SAL_CALL
     release() throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XContentIdentifier
     virtual OUString SAL_CALL
     getContentIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL
     getContentProviderScheme()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     ContentIdentifier_Impl* m_pImpl;

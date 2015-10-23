@@ -39,7 +39,7 @@ struct FltCallDialogParameter
     OUString    aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
 
     FltCallDialogParameter( vcl::Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
         pWindow         ( pW ),

@@ -84,14 +84,14 @@ private:
         try {
             m_result.reset( m_func() );
         }
-        catch (::com::sun::star::uno::Exception &) {
+        catch (css::uno::Exception &) {
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
         return 0;
     }
 
-    ::com::sun::star::uno::Any m_exc;
+    css::uno::Any m_exc;
     FuncT const m_func;
     // using boost::optional here omits the need that ResultT is default
     // constructable:
@@ -120,14 +120,14 @@ private:
         try {
             m_func();
         }
-        catch (::com::sun::star::uno::Exception &) {
+        catch (css::uno::Exception &) {
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
         return 0;
     }
 
-    ::com::sun::star::uno::Any m_exc;
+    css::uno::Any m_exc;
     FuncT const m_func;
 };
 

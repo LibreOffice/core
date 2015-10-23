@@ -90,7 +90,7 @@ private:
 
     SAL_DLLPRIVATE void WriteRepeatedElement_Impl( sal_Unicode ch );
     SAL_DLLPRIVATE bool WriteTextWithCurrency_Impl( const OUString& rString,
-                            const ::com::sun::star::lang::Locale& rLocale );
+                            const css::lang::Locale& rLocale );
     SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
                                 sal_uInt16 nPart, bool bDefPart );
 
@@ -98,11 +98,9 @@ private:
 
 public:
     SvXMLNumFmtExport( SvXMLExport& rExport,
-                       const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::util::XNumberFormatsSupplier >& rSupp );
+                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
     SvXMLNumFmtExport( SvXMLExport& rExport,
-                       const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
+                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
                        const OUString& rPrefix );
 
     virtual ~SvXMLNumFmtExport();
@@ -116,8 +114,8 @@ public:
     // get the style name that was generated for a key
     OUString GetStyleName( sal_uInt32 nKey );
 
-    void GetWasUsed(com::sun::star::uno::Sequence<sal_Int32>& rWasUsed);
-    void SetWasUsed(const com::sun::star::uno::Sequence<sal_Int32>& rWasUsed);
+    void GetWasUsed(css::uno::Sequence<sal_Int32>& rWasUsed);
+    void SetWasUsed(const css::uno::Sequence<sal_Int32>& rWasUsed);
 
 
 

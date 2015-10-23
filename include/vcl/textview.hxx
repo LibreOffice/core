@@ -84,12 +84,12 @@ protected:
     VirtualDevice*      GetVirtualDevice();
 
     // DragAndDropClient
-    virtual void        dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void        dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void        drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void        dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void        dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void        dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void        drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void        dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void        dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void        dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
 
             using       DragAndDropClient::dragEnter;
             using       DragAndDropClient::dragExit;

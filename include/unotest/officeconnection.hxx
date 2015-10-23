@@ -45,7 +45,7 @@ public:
 
     void tearDown();
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
     getComponentContext() const { return context_;}
 
     // Must not be called before setUp or after tearDown:
@@ -53,7 +53,7 @@ public:
 
 private:
     oslProcess process_;
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         context_;
 };
 

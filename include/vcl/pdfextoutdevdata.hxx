@@ -73,7 +73,7 @@ struct GlobalSyncData;
 class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 {
 
-    const OutputDevice& mrOutDev;
+    const OutputDevice&         mrOutDev;
 
     bool                        mbTaggedPDF;
     bool                        mbExportNotes;
@@ -85,9 +85,9 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     bool                        mbExportBookmarks;
     bool                        mbExportHiddenSlides;
     bool                        mbExportNDests; //i56629
-    sal_Int32                       mnFormsFormat;
-    sal_Int32                       mnPage;
-    com::sun::star::lang::Locale    maDocLocale;
+    sal_Int32                   mnFormsFormat;
+    sal_Int32                   mnPage;
+    css::lang::Locale           maDocLocale;
 
     PageSyncData*               mpPageSyncData;
     GlobalSyncData*             mpGlobalSyncData;
@@ -143,8 +143,8 @@ public:
     bool    GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
-    const com::sun::star::lang::Locale& GetDocumentLocale() const { return maDocLocale;}
-    void        SetDocumentLocale( const com::sun::star::lang::Locale& rLoc );
+    const css::lang::Locale& GetDocumentLocale() const { return maDocLocale;}
+    void        SetDocumentLocale( const css::lang::Locale& rLoc );
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
 

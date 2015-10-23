@@ -76,20 +76,20 @@ class SvXMLNumFmtHelper
 
 public:
     SvXMLNumFmtHelper(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     SvXMLNumFmtHelper(
         SvNumberFormatter* pNumberFormatter,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     ~SvXMLNumFmtHelper();
 
     SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                    SvXMLStylesContext& rStyles);
+                sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                SvXMLStylesContext& rStyles);
 
     SvXMLNumImpData* getData() { return pData; }
 
@@ -129,7 +129,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 //  OUString       sMapName;
     OUString       sCalendar;
     LanguageType   nFormatLang;
-    com::sun::star::lang::Locale    aLocale;
+    css::lang::Locale    aLocale;
     bool            bAutoOrder;
     bool            bFromSystem;
     bool            bTruncate;
@@ -156,31 +156,31 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
 
 public:
-                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport,
+                sal_uInt16 nPrfx,
                                     const OUString& rLName,
-                                    SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                    SvXMLNumImpData* pNewData,
+                                    sal_uInt16 nNewType,
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
-                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport,
+                                    sal_uInt16 nPrfx,
                                     const OUString& rLName,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override;
     virtual void Finish(bool bOverwrite) override;
 
     SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
-    sal_Int32 CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier );
+    sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormatsSupplier );
     sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
 
     bool HasLongDoW() const                     { return bHasLongDoW; }

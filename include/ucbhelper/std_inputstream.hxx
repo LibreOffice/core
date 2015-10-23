@@ -29,8 +29,8 @@ namespace ucbhelper
      */
     class UCBHELPER_DLLPUBLIC StdInputStream
         : public cppu::OWeakObject,
-          public com::sun::star::io::XInputStream,
-          public com::sun::star::io::XSeekable
+          public css::io::XInputStream,
+          public css::io::XSeekable
     {
         public:
 

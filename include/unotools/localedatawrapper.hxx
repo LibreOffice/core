@@ -53,17 +53,17 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >     xLD;
-    LanguageTag                                                                  maLanguageTag;
-    std::shared_ptr< ::com::sun::star::i18n::Calendar2 >                         xDefaultCalendar;
-    ::com::sun::star::i18n::LocaleDataItem                                       aLocaleDataItem;
-    ::com::sun::star::uno::Sequence< OUString >                                  aReservedWordSeq;
-    ::com::sun::star::uno::Sequence< OUString >                                  aDateAcceptancePatterns;
-    ::com::sun::star::uno::Sequence< sal_Int32 >                                 aGrouping;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::i18n::XLocaleData4 >     xLD;
+    LanguageTag                                        maLanguageTag;
+    std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
+    css::i18n::LocaleDataItem                          aLocaleDataItem;
+    css::uno::Sequence< OUString >                     aReservedWordSeq;
+    css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
+    css::uno::Sequence< sal_Int32 >                    aGrouping;
     // cached items
-    OUString               aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
-    OUString               aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
+    OUString               aLocaleItem[css::i18n::LocaleItem::COUNT];
+    OUString               aReservedWord[css::i18n::reservedWords::COUNT];
     OUString               aCurrSymbol;
     OUString               aCurrBankSymbol;
     int                         nDateFormat;
@@ -108,7 +108,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 
 public:
                                 LocaleDataWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext,
                                     const LanguageTag& rLanguageTag
                                     );
                                 LocaleDataWrapper(
@@ -121,8 +121,8 @@ public:
         non-existent if this LocaleDataWrapper was created without one and
         lives "on the grassland". The CalendarWrapper ctor can handle that
         though. */
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & getComponentContext()
+    const css::uno::Reference<
+        css::uno::XComponentContext > & getComponentContext()
         const { return m_xContext; }
 
     /// set a new Locale to request
@@ -136,25 +136,25 @@ public:
 
     // Wrapper implementations of service LocaleData
 
-    ::com::sun::star::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
-    ::com::sun::star::i18n::LocaleDataItem getLocaleItem() const;
+    css::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
+    css::i18n::LocaleDataItem getLocaleItem() const;
     /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 > getAllCalendars() const;
+    css::uno::Sequence< css::i18n::Calendar2 > getAllCalendars() const;
     /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > getAllFormats() const;
-    ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    ::com::sun::star::uno::Sequence< OUString > getReservedWord() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;
-    ::com::sun::star::uno::Sequence< OUString > getDateAcceptancePatterns() const;
+    css::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
+    css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
+    css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
+    css::uno::Sequence< OUString > getReservedWord() const;
+    css::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() const;
+    css::uno::Sequence< OUString > getDateAcceptancePatterns() const;
 
     /** Override locale's date acceptance patterns.
         An empty sequence resets the patterns to the locale's pattern sequence.
      */
-    void setDateAcceptancePatterns( const ::com::sun::star::uno::Sequence< OUString > & rPatterns );
+    void setDateAcceptancePatterns( const css::uno::Sequence< OUString > & rPatterns );
 
     /// same as the wrapper implementation but static
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();
+    static css::uno::Sequence< css::lang::Locale > getInstalledLocaleNames();
 
     /** Get LanguageTypes for all installed locales which are unambiguous
         convertible back and forth between locale ISO strings and MS-LCID
@@ -163,19 +163,19 @@ public:
         matching, excluding already known problems.
         (e.g. used in number formatter dialog init)
      */
-    static ::com::sun::star::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
+    static css::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
     MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
-    const std::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
+    const std::shared_ptr< css::i18n::Calendar2 > getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDefaultCalendarDays() const;
+    const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarDays() const;
 
     /// Convenience method to obtain the month names of the default calendar.
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDefaultCalendarMonths() const;
+    const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarMonths() const;
 
     /** Obtain digit grouping. The usually known grouping by thousands (#,###)
         is actually only one of possible groupings. Another one, for example,
@@ -187,44 +187,44 @@ public:
         Indian grouping. The sal_Int32* getConstArray() can be passed directly
         to the ::rtl::math::doubleToString() methods as argument for the
         pGroups parameter. */
-    const ::com::sun::star::uno::Sequence< sal_Int32 > getDigitGrouping() const;
+    const css::uno::Sequence< sal_Int32 > getDigitGrouping() const;
 
     // Functionality of class International methods, LocaleItem
 
     const OUString&       getDateSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DATE_SEPARATOR ); }
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::DATE_SEPARATOR ); }
     const OUString&       getNumThousandSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
     const OUString&       getNumDecimalSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
     const OUString&       getTimeSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_SEPARATOR ); }
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::TIME_SEPARATOR ); }
     const OUString&       getTime100SecSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_100SEC_SEPARATOR ); }
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::TIME_100SEC_SEPARATOR ); }
     const OUString&       getListSep() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LIST_SEPARATOR ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::LIST_SEPARATOR ); }
     const OUString&       getQuotationMarkStart() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_START ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::SINGLE_QUOTATION_START ); }
     const OUString&       getQuotationMarkEnd() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_END ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::SINGLE_QUOTATION_END ); }
     const OUString&       getDoubleQuotationMarkStart() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
     const OUString&       getDoubleQuotationMarkEnd() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
     MeasurementSystem     getMeasurementSystemEnum() const
-                            { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
+                            { return mapMeasurementStringToEnum( getOneLocaleItem( css::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
     const OUString&       getTimeAM() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::TIME_AM ); }
     const OUString&       getTimePM() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_PM ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::TIME_PM ); }
     const OUString&       getLongDateDayOfWeekSep() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR ); }
     const OUString&       getLongDateDaySep() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_SEPARATOR ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_DAY_SEPARATOR ); }
     const OUString&       getLongDateMonthSep() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
     const OUString&       getLongDateYearSep() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
+                            { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
 
     // currency
     const OUString&    getCurrSymbol() const;
@@ -298,16 +298,16 @@ public:
     // reserved words
 
     const OUString&        getTrueWord() const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
+                                    { return getOneReservedWord( css::i18n::reservedWords::TRUE_WORD ); }
     const OUString&        getFalseWord() const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
+                                    { return getOneReservedWord( css::i18n::reservedWords::FALSE_WORD ); }
     const OUString&        getAboveWord() const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
+                                    { return getOneReservedWord( css::i18n::reservedWords::ABOVE_WORD ); }
     const OUString&        getBelowWord() const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::BELOW_WORD ); }
+                                    { return getOneReservedWord( css::i18n::reservedWords::BELOW_WORD ); }
     /// return a quarter abbreviation string matching nQuarter (0..3) => "Q1" .. "Q2"
     const OUString&        getQuarterAbbreviation( sal_Int16 nQuarter ) const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_ABBREVIATION + nQuarter ); }
+                                    { return getOneReservedWord( css::i18n::reservedWords::QUARTER1_ABBREVIATION + nQuarter ); }
 
     /** Return whether locale data checks are enabled.
         Checks are enabled if the environment variable
@@ -336,7 +336,7 @@ public:
 
 private:
 
-    const ::com::sun::star::lang::Locale &  getMyLocale() const;
+    const css::lang::Locale &  getMyLocale() const;
 
     static  void                evaluateLocaleDataChecking();
 };

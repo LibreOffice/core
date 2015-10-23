@@ -70,20 +70,17 @@ private:
 protected:
 
     bool exportStyle(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::style::XStyle > & rStyle,
+        const css::uno::Reference< css::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xStyles,
+        const css::uno::Reference< css::container::XNameAccess > & xStyles,
         const OUString* pPrefix = 0L );
 
     virtual void exportStyleAttributes(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle );
+        const css::uno::Reference< css::style::XStyle > & rStyle );
 
     virtual void exportStyleContent(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle );
+        const css::uno::Reference< css::style::XStyle > & rStyle );
 public:
     XMLStyleExport(
         SvXMLExport& rExp,
@@ -104,8 +101,7 @@ public:
 //      const OUString* pPrefix = 0L);
 
     bool exportDefaultStyle(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xPropSet,
+        const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper );
 

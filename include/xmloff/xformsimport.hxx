@@ -45,8 +45,8 @@ XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
  *  @param pair<XForms binding ID, reference to control>
  */
 void bindXFormsValueBinding(
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
+    css::uno::Reference<css::frame::XModel>,
+    std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 
 /** perform the actual binding of an XForms-binding as list source with a list control
@@ -54,22 +54,22 @@ void bindXFormsValueBinding(
  *  @param pair<XForms binding ID, reference to control>
  */
 void bindXFormsListBinding(
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
+    css::uno::Reference<css::frame::XModel>,
+    std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 /** perform the actual binding of an XForms submission with the suitable control
  *  @param document which contains the XForms-model(s)
  *  @param pair<XForms submission ID, reference to control>
  */
 void bindXFormsSubmission(
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
+    css::uno::Reference<css::frame::XModel>,
+    std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 /** applies the given settings to the given XForms container
 */
 void XMLOFF_DLLPUBLIC applyXFormsSettings(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rXForms,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rSettings
+        const css::uno::Reference< css::container::XNameAccess >& _rXForms,
+        const css::uno::Sequence< css::beans::PropertyValue >& _rSettings
     );
 
 #endif

@@ -39,8 +39,8 @@ namespace ooo
             T1 mnValue;
             public:
             DefaultReturnHelper( const T1& nValue ) : mnValue( nValue ) {}
-            virtual void  SAL_CALL setValue( T1 nValue ) throw (::com::sun::star::uno::RuntimeException) { mnValue = nValue; }
-            virtual T1  SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException) { return mnValue; }
+            virtual void  SAL_CALL setValue( T1 nValue ) throw (css::uno::RuntimeException) { mnValue = nValue; }
+            virtual T1  SAL_CALL getValue() throw (css::uno::RuntimeException) { return mnValue; }
             OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
         };
 

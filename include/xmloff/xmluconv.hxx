@@ -89,8 +89,7 @@ public:
         default unit for numerical measures, the XML measure unit is
         the default unit for textual measures */
     SvXMLUnitConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
         sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/);
 
@@ -108,8 +107,7 @@ public:
     sal_Int16 GetXMLMeasureUnit() const;
 
     /** gets XNumberingTypeInfo */
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XNumberingTypeInfo >& getNumTypeInfo() const;
+    const css::uno::Reference< css::text::XNumberingTypeInfo >& getNumTypeInfo() const;
 
     /** convert string to measure with meCoreMeasureUnit,
         using optional min and max values*/
@@ -154,7 +152,7 @@ public:
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     bool setNullDate (
-        const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel);
+        const css::uno::Reference <css::frame::XModel>& xModel);
 
     /** convert double to ISO Date Time String */
     void convertDateTime( OUStringBuffer& rBuffer,
@@ -170,12 +168,12 @@ public:
     /** convert double to ISO Date Time String */
     static void convertDateTime( OUStringBuffer& rBuffer,
                                 const double& fDateTime,
-                                const com::sun::star::util::Date& aNullDate,
-                                   bool bAddTimeIf0AM = false);
+                                const css::util::Date& aNullDate,
+                                bool bAddTimeIf0AM = false);
     /** convert ISO Date Time String to double */
     static bool convertDateTime( double& fDateTime,
                                 const OUString& rString,
-                                const com::sun::star::util::Date& aNullDate);
+                                const css::util::Date& aNullDate);
 
 
     /** convert string to ::basegfx::B3DVector */
@@ -187,19 +185,19 @@ public:
         const ::basegfx::B3DVector& rVector );
 
     /** convert string to Position3D */
-    bool convertPosition3D( com::sun::star::drawing::Position3D& rPosition,
+    bool convertPosition3D( css::drawing::Position3D& rPosition,
                               const OUString& rValue );
 
     /** convert Position3D to string */
     void convertPosition3D( OUStringBuffer &rBuffer,
-                              const com::sun::star::drawing::Position3D& rVector );
+                              const css::drawing::Position3D& rVector );
 
 
     /** convert num-forat and num-letter-sync values to NumberingType */
     bool convertNumFormat( sal_Int16& rType,
-                                const OUString& rNumFormat,
-                               const OUString& rNumLetterSync,
-                               bool bNumberNone = false ) const;
+                           const OUString& rNumFormat,
+                           const OUString& rNumLetterSync,
+                           bool bNumberNone = false ) const;
 
     /** convert NumberingType to num-forat and num-letter-sync values */
     void convertNumFormat( OUStringBuffer& rBuffer,
@@ -207,10 +205,10 @@ public:
     static void convertNumLetterSync( OUStringBuffer& rBuffer,
                                   sal_Int16 nType );
 
-    static void convertPropertySet(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps,
-                        const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& aProperties);
-    static void convertPropertySet(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& rProperties,
-                        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    static void convertPropertySet(css::uno::Sequence<css::beans::PropertyValue>& rProps,
+                        const css::uno::Reference<css::beans::XPropertySet>& aProperties);
+    static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet>& rProperties,
+                        const css::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     OUString encodeStyleName( const OUString& rName,
                                      bool *pEncoded=0 ) const;

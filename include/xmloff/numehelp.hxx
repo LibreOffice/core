@@ -65,7 +65,7 @@ typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
 
 class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
+    css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
     const OUString sStandardFormat;
     const OUString sType;
@@ -79,8 +79,8 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
 public:
-    XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
-    XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,
+    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
+    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,
                                             SvXMLExport& rExport );
     ~XMLNumberFormatAttributesExportHelper();
 
@@ -91,9 +91,9 @@ public:
                                 const OUString& rCurrencySymbol,
                                 bool bExportValue = true);
     static bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
+        css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
+        css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const sal_Int32 nNumberFormat,
                                           const double& rValue,

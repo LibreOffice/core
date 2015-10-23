@@ -60,7 +60,7 @@ namespace utl {
 
 class DigitGroupingIterator
 {
-    const ::com::sun::star::uno::Sequence< sal_Int32 > maGroupings;
+    const css::uno::Sequence< sal_Int32 > maGroupings;
 
     sal_Int32   mnGroup;        // current active grouping
     sal_Int32   mnDigits;       // current active digits per group
@@ -121,7 +121,7 @@ class DigitGroupingIterator
 
 public:
 
-    explicit DigitGroupingIterator( const ::com::sun::star::uno::Sequence< sal_Int32 > & rGroupings )
+    explicit DigitGroupingIterator( const css::uno::Sequence< sal_Int32 > & rGroupings )
         : maGroupings( rGroupings)
     {
         initGrouping();
@@ -164,14 +164,14 @@ public:
         digit. For example, for grouping in thousands and nIntegerDigits==7 the
         sequence returned would be {1,0,0,1,0,0,0} so the caller would add a
         separator after the 1st and the 4th digit. */
-    static ::com::sun::star::uno::Sequence< sal_Bool > createForwardSequence(
+    static css::uno::Sequence< sal_Bool > createForwardSequence(
             sal_Int32 nIntegerDigits,
-            const ::com::sun::star::uno::Sequence< sal_Int32 > & rGroupings )
+            const css::uno::Sequence< sal_Int32 > & rGroupings )
     {
         if (nIntegerDigits <= 0)
-            return ::com::sun::star::uno::Sequence< sal_Bool >();
+            return css::uno::Sequence< sal_Bool >();
         DigitGroupingIterator aIterator( rGroupings);
-        ::com::sun::star::uno::Sequence< sal_Bool > aSeq( nIntegerDigits);
+        css::uno::Sequence< sal_Bool > aSeq( nIntegerDigits);
         sal_Bool* pArr = aSeq.getArray();
         for (sal_Int32 j = 0; --nIntegerDigits >= 0; ++j)
         {

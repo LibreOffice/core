@@ -85,7 +85,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             MA_RUN
         };
 
-        typedef ::com::sun::star::uno::Sequence< OUString > Certificate;
+        typedef css::uno::Sequence< OUString > Certificate;
 
         /*
         // MT: Doesn't work for sequence...
@@ -139,8 +139,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const;
-        void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< OUString >& seqURLList );
+        css::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const;
+        void                                                SetSecureURLs( const css::uno::Sequence< OUString >& seqURLList );
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
@@ -188,8 +188,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
         bool isTrustedLocationUriForUpdatingLinks(OUString const & uri) const;
 
-        ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const;
-        void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    );
+        css::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const;
+        void                               SetTrustedAuthors       ( const css::uno::Sequence< Certificate >& rAuthors    );
 
         // for bool options only!
         bool        IsOptionSet     ( EOption eOption                   ) const;

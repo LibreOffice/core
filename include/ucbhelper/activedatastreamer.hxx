@@ -29,7 +29,7 @@ namespace ucbhelper
 
 
 /**
-  * This class implements the interface com::sun::star::io::XActiveDataStreamer.
+  * This class implements the interface css::io::XActiveDataStreamer.
   * Instances of this class can be passed with the parameters of an
   * "open" command.
   */

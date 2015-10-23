@@ -31,28 +31,28 @@ namespace com { namespace sun { namespace star {
 
 class UNOTOOLS_DLLPUBLIC NumberFormatCodeWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
-    ::com::sun::star::lang::Locale          aLocale;
+    css::uno::Reference< css::i18n::XNumberFormatCode >   xNFC;
+    css::lang::Locale          aLocale;
 
                                 NumberFormatCodeWrapper( const NumberFormatCodeWrapper& ) = delete;
             NumberFormatCodeWrapper&    operator=( const NumberFormatCodeWrapper& ) = delete;
 
 public:
                                 NumberFormatCodeWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
-                                    const ::com::sun::star::lang::Locale& rLocale
+                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+                                    const css::lang::Locale& rLocale
                                     );
 
                                 ~NumberFormatCodeWrapper();
 
     /// set a new Locale
-            void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
+            void                setLocale( const css::lang::Locale& rLocale );
 
     // Wrapper implementations of class NumberFormatCodeMapper
 
-    ::com::sun::star::i18n::NumberFormatCode getFormatCode( sal_Int16 nFormatIndex ) const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 nFormatUsage ) const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > getAllFormatCodes() const;
+    css::i18n::NumberFormatCode getFormatCode( sal_Int16 nFormatIndex ) const;
+    css::uno::Sequence< css::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 nFormatUsage ) const;
+    css::uno::Sequence< css::i18n::NumberFormatCode > getAllFormatCodes() const;
 
 };
 

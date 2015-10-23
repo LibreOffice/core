@@ -40,14 +40,11 @@ public:
     ~SinglePropertySetInfoCache() {};
 
     bool hasProperty(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& rPropSet,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySetInfo >& rPropSetInfo );
+            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+            css::uno::Reference< css::beans::XPropertySetInfo >& rPropSetInfo );
 
     inline bool hasProperty(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet>& rPropSet );
+            const css::uno::Reference< css::beans::XPropertySet>& rPropSet );
 };
 
 inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
@@ -57,11 +54,9 @@ inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
 }
 
 inline bool SinglePropertySetInfoCache::hasProperty(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet>& rPropSet )
+        const css::uno::Reference< css::beans::XPropertySet>& rPropSet )
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo > xInfo;
+    css::uno::Reference< css::beans::XPropertySetInfo > xInfo;
     return hasProperty( rPropSet, xInfo );
 }
 

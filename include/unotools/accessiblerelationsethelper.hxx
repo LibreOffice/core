@@ -45,9 +45,7 @@ namespace utl
         <code>AccessibleRelationSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper
-    :   public cppu::WeakImplHelper1<
-        ::com::sun::star::accessibility::XAccessibleRelationSet
-        >
+    :   public cppu::WeakImplHelper1< css::accessibility::XAccessibleRelationSet >
 {
 public:
     //=====  internal  ========================================================
@@ -65,7 +63,7 @@ public:
             Returns the number of relations or zero if there are none.
     */
     virtual sal_Int32 SAL_CALL getRelationCount(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns the relation of this relation set that is specified by
         the given index.
@@ -80,10 +78,10 @@ public:
             has the type INVALID.
 
     */
-    virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+    virtual css::accessibility::AccessibleRelation SAL_CALL
         getRelation( sal_Int32 nIndex )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                    ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::lang::IndexOutOfBoundsException,
+                    css::uno::RuntimeException, std::exception) override;
 
     /** Tests whether the relation set contains a relation matching the
         specified key.
@@ -98,7 +96,7 @@ public:
             given type and <FALSE/> if there is no such relation in the set.
     */
     virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Retrieve and return the relation with the given relation type.
 
@@ -111,27 +109,27 @@ public:
             of) this relation is returned.  Otherwise a relation with the
             type INVALID is returned.
     */
-    virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+    virtual css::accessibility::AccessibleRelation SAL_CALL
         getRelationByType( sal_Int16 aRelationType )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     void AddRelation(
-        const ::com::sun::star::accessibility::AccessibleRelation& rRelation)
-            throw (::com::sun::star::uno::RuntimeException);
+        const css::accessibility::AccessibleRelation& rRelation)
+            throw (css::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a implementation id.
     */
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /// Mutex guarding this object.

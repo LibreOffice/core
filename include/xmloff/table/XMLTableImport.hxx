@@ -47,9 +47,9 @@ public:
     virtual ~XMLTableImport();
 
     SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::table::XColumnRowRange >& xColumnRowRange );
+                                            css::uno::Reference< css::table::XColumnRowRange >& xColumnRowRange );
 
-    SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     rtl::Reference< SvXMLImportPropertyMapper > GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
     rtl::Reference< SvXMLImportPropertyMapper > GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }

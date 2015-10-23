@@ -30,20 +30,13 @@ namespace com { namespace sun { namespace star { namespace uno {
 class UNOTOOLS_DLLPUBLIC CollatorWrapper
 {
     private:
-
-        ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext
-            > mxServiceFactory;
-
-        ::com::sun::star::uno::Reference<
-                ::com::sun::star::i18n::XCollator
-            > mxInternationalCollator;
+        css::uno::Reference< css::uno::XComponentContext > mxServiceFactory;
+        css::uno::Reference< css::i18n::XCollator >        mxInternationalCollator;
 
     public:
 
         CollatorWrapper (
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext > &rxContext);
+                const css::uno::Reference< css::uno::XComponentContext > &rxContext);
 
         ~CollatorWrapper();
 
@@ -51,18 +44,18 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         compareString (
                 const OUString& s1, const OUString& s2) const;
 
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
         listCollatorAlgorithms (
-                const ::com::sun::star::lang::Locale& rLocale) const;
+                const css::lang::Locale& rLocale) const;
 
         sal_Int32
         loadDefaultCollator (
-                const ::com::sun::star::lang::Locale& rLocale, sal_Int32 nOption);
+                const css::lang::Locale& rLocale, sal_Int32 nOption);
 
         sal_Int32
         loadCollatorAlgorithm (
                 const OUString& rAlgorithm,
-                const ::com::sun::star::lang::Locale& rLocale, sal_Int32 nOption);
+                const css::lang::Locale& rLocale, sal_Int32 nOption);
 
     protected:
 

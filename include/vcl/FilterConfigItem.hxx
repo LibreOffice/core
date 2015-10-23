@@ -34,32 +34,32 @@
 
 class VCL_DLLPUBLIC FilterConfigItem
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xUpdatableView;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
+    css::uno::Reference< css::uno::XInterface > xUpdatableView;
+    css::uno::Reference< css::beans::XPropertySet > xPropSet;
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
 
     bool    bModified;
 
-    static bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
+    static bool ImplGetPropertyValue( css::uno::Any& rAny,
+                            const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                             const OUString& rPropName,
                             bool bTestPropertyAvailability );
 
     void     ImpInitTree( const OUString& rTree );
 
 
-    static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
+    static css::beans::PropertyValue* GetPropertyValue(
+                css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
                     const OUString& rName );
     static  bool WritePropertyValue(
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
-                    const ::com::sun::star::beans::PropertyValue& rPropValue );
+                css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
+                    const css::beans::PropertyValue& rPropValue );
 
 public:
 
     FilterConfigItem( const OUString& rSubTree );
-    FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
-    FilterConfigItem( const OUString& rSubTree, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+    FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
+    FilterConfigItem( const OUString& rSubTree, css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
     /// Writes config in destructor
     ~FilterConfigItem();
     /// Writes config and sets unmodified state again.
@@ -79,10 +79,10 @@ public:
     void        WriteBool( const OUString& rKey, bool bValue );
     void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const { return aFilterData;}
+    css::uno::Sequence< css::beans::PropertyValue > GetFilterData() const { return aFilterData;}
 
     // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
+    css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
 #endif // INCLUDED_VCL_FILTERCONFIGITEM_HXX

@@ -37,8 +37,7 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
     const OUString       sNumberingRules;
     const OUString       sIsContinuousNumbering;
 
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace > xNumRules;
+    css::uno::Reference< css::container::XIndexReplace > xNumRules;
 
     SvxXMLListStyle_Impl        *pLevelStyles;
 
@@ -57,10 +56,10 @@ public:
     TYPEINFO_OVERRIDE();
 
     SvxXMLListStyleContext(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
+            SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             bool bOutl = false );
 
     virtual ~SvxXMLListStyleContext();
@@ -68,26 +67,20 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     void FillUnoNumRule(
-            const css::uno::Reference<
-                    css::container::XIndexReplace> & rNumRule) const;
+            const css::uno::Reference< css::container::XIndexReplace> & rNumRule) const;
 
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
+    const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
         { return xNumRules; }
 
-    static ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace >
+    static css::uno::Reference< css::container::XIndexReplace >
     CreateNumRule(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::frame::XModel > & rModel );
+        const css::uno::Reference< css::frame::XModel > & rModel );
 
     static void SetDefaultStyle(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::container::XIndexReplace > & rNumRule,
+        const css::uno::Reference< css::container::XIndexReplace > & rNumRule,
         sal_Int16 nLevel,
         bool bOrdered );
 

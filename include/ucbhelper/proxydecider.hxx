@@ -76,8 +76,7 @@ public:
       *
       * @param rxSMgr is a Service Manager.
       */
-    InternetProxyDecider( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext >& rxContext );
+    InternetProxyDecider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     /**
       * Destructor.

@@ -31,7 +31,7 @@
 namespace comphelper
 {
 
-typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > IdMap_t;
+typedef ::std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMap_t;
 
 class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 {
@@ -41,38 +41,38 @@ public:
     /** returns a unique identifier for the given uno object. IF a uno object is
         registered more than once, the returned identifier is always the same.
     */
-    const OUString& registerReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface );
+    const OUString& registerReference( const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     /** registers the given uno object with the given identifier.
 
         @returns
             false, if the given identifier already exists and is not associated with the given interface
     */
-    bool registerReference( const OUString& rIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface );
+    bool registerReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     /** always registers the given uno object with the given identifier.
 
         In contrast to registerReference(), this here overwrites any
         earlier registration of the same identifier
     */
-    void registerReferenceAlways( const rtl::OUString& rIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface );
+    void registerReferenceAlways( const rtl::OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     /** @returns
             the identifier for the given uno object. If this uno object is not already
             registered, an empty string is returned
     */
-    const OUString& getIdentifier( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface ) const;
+    const OUString& getIdentifier( const css::uno::Reference< css::uno::XInterface >& rInterface ) const;
 
     /** @returns
         the uno object that is registered with the given identifier. If no uno object
         is registered with the given identifier, an empty reference is returned.
     */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& getReference( const OUString& rIdentifier ) const;
+    const css::uno::Reference< css::uno::XInterface >& getReference( const OUString& rIdentifier ) const;
 
 private:
-    bool findReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
+    bool findReference( const css::uno::Reference< css::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
     bool findIdentifier( const OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
-    void insertReference( const OUString& rIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface );
+    void insertReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     IdMap_t	maEntries;
     sal_Int32 mnNextId;

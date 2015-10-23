@@ -55,35 +55,35 @@ class VCL_DLLPUBLIC DragAndDropClient
 public:
     virtual ~DragAndDropClient();
 
-    // ::com::sun::star::datatransfer::dnd::XDragGestureListener
-    virtual void dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge )
-        throw (::com::sun::star::uno::RuntimeException,
+    // css::datatransfer::dnd::XDragGestureListener
+    virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge )
+        throw (css::uno::RuntimeException,
                std::exception);
 
-    // ::com::sun::star::datatransfer::dnd::XDragSourceListener
-    virtual void dragDropEnd(const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde )
-        throw (::com::sun::star::uno::RuntimeException,
+    // css::datatransfer::dnd::XDragSourceListener
+    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde )
+        throw (css::uno::RuntimeException,
                std::exception);
 
-    // ::com::sun::star::datatransfer::dnd::XDropTargetListener
-    virtual void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde )
-        throw (::com::sun::star::uno::RuntimeException,
+    // css::datatransfer::dnd::XDropTargetListener
+    virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde )
+        throw (css::uno::RuntimeException,
                std::exception);
-    virtual void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee )
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee )
+        throw (css::uno::RuntimeException,
                std::exception);
-    virtual void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte )
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte )
+        throw (css::uno::RuntimeException,
                std::exception);
-    virtual void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde )
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde )
+        throw (css::uno::RuntimeException,
                std::exception);
 };
 
 class VCL_DLLPUBLIC DragAndDropWrapper :
-                            public ::com::sun::star::datatransfer::dnd::XDragGestureListener,
-                            public ::com::sun::star::datatransfer::dnd::XDragSourceListener,
-                            public ::com::sun::star::datatransfer::dnd::XDropTargetListener,
+                            public css::datatransfer::dnd::XDragGestureListener,
+                            public css::datatransfer::dnd::XDragSourceListener,
+                            public css::datatransfer::dnd::XDropTargetListener,
                             public ::cppu::OWeakObject
 {
 private:
@@ -93,30 +93,30 @@ public:
                     DragAndDropWrapper( DragAndDropClient* pClient );
                     virtual ~DragAndDropWrapper();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    // css::uno::XInterface
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    void          SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
+    void          SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XEventListener
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::datatransfer::dnd::XDragGestureListener
-    void SAL_CALL dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::datatransfer::dnd::XDragGestureListener
+    void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::datatransfer::dnd::XDragSourceListener
-    void SAL_CALL dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& dse ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::datatransfer::dnd::XDragSourceListener
+    void SAL_CALL dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::datatransfer::dnd::XDropTargetListener
-    void SAL_CALL drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::datatransfer::dnd::XDropTargetListener
+    void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 }}  // namespace vcl::unohelper
