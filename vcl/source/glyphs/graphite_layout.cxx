@@ -118,6 +118,13 @@ const gr_slot *get_next_base(const gr_slot *slot, bool bRtl)
     return slot;
 }
 
+bool isWhite(sal_Unicode nChar)
+{
+    if (nChar <= 0x0020 || nChar == 0x00A0 || (nChar >= 0x2000 && nChar <= 0x200F) || nChar == 0x3000)
+        return true;
+    return false;
+}
+
 // The Graphite glyph stream is really a sequence of glyph attachment trees
 //  each rooted at a non-attached base glyph.  fill_from walks the glyph stream,
 //  finds each non-attached base glyph and calls append to record them as a
@@ -135,6 +142,8 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     int clusterStart = -1;
     int clusterFirstChar = -1;
     const gr_slot *nextBaseSlot;
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+    int firstChar;
 
     if (!nGlyphs || lastCharPos - mnSegCharOffset == 0) return;
     const gr_slot* baseSlot = bRtl ? gr_seg_last_slot(pSegment) : gr_seg_first_slot(pSegment);
@@ -142,19 +151,24 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
         baseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
     assert(baseSlot);
+    int nextChar = gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot))) + mnSegCharOffset;
+    float thisBoundary = 0.;
     float nextBoundary = gr_slot_origin_X(baseSlot);
     // now loop over bases
     for ( ; baseSlot; baseSlot = nextBaseSlot)
     {
-        float thisBoundary = nextBoundary;
-        int firstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot))) + mnSegCharOffset;
+        firstChar = nextChar;
+        thisBoundary = nextBoundary;
         nextBaseSlot = get_next_base(bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot), bRtl);
+        nextChar = nextBaseSlot ? gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) + mnSegCharOffset : -1;
         nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
+
         if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
         {
             // handle clipping of diacritic from base
             nextBaseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
             nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
+            nextChar = nextBaseSlot ? gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) + mnSegCharOffset : -1;
             continue;
         }
         // handle reordered clusters. Presumes reordered glyphs have monotonic opposite char index until the cluster base.
@@ -204,7 +218,8 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         mvGlyph2Char[baseGlyph] = firstChar;
         append(pSegment, rArgs, baseSlot, thisBoundary, nextBoundary, fScaling, nDxOffset, true, firstChar, baseGlyph, bRtl);
         if (thisBoundary < fMinX) fMinX = thisBoundary;
-        if (nextBoundary > fMaxX) fMaxX = nextBoundary;
+        if (nextBoundary > fMaxX && (nextChar < mnMinCharPos || nextChar >= mnEndCharPos || !isWhite(pStr[nextChar]) || fMaxX <= 0.0f))
+            fMaxX = nextBoundary;
     }
 
     long nXOffset = round_to_long(fMinX * fScaling);
@@ -433,7 +448,7 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
             fprintf(grLog(),"Gr::LayoutText %d-%d, context %d-%d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:",
                 rArgs.mnMinCharPos, rArgs.mnEndCharPos,
                 nBidiMinRunPos, nBidiEndRunPos,
-                mnLength, numchars, bRightToLeft, mfScaling);
+                nLength, numchars, bRightToLeft, mfScaling);
             for (int i = mnSegCharOffset; i < nBidiEndRunPos; ++i)
                 fprintf(grLog(), " %04X", rArgs.mrStr[i]);
             fprintf(grLog(), "\n");
