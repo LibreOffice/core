@@ -408,8 +408,18 @@ Size WinMtfOutput::ImplMap(const Size& rSz, bool bDoWorldTransform)
         }
         else
         {
-            fWidth = rSz.Width();
-            fHeight = rSz.Height();
+            //take the scale, but not the rotation
+            basegfx::B2DHomMatrix aMatrix(maXForm.eM11, maXForm.eM12, 0,
+                                          maXForm.eM21, maXForm.eM22, 0);
+            basegfx::B2DTuple aScale, aTranslate;
+            double fRotate, fShearX;
+            if (!aMatrix.decompose(aScale, aTranslate, fRotate, fShearX))
+            {
+                aScale.setX(1.0);
+                aScale.setY(1.0);
+            }
+            fWidth = rSz.Width() * aScale.getX();
+            fHeight = rSz.Height() * aScale.getY();
         }
 
         if ( mnGfxMode == GM_COMPATIBLE )
