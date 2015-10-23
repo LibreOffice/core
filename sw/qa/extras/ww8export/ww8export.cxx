@@ -609,7 +609,7 @@ DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
     OUString firstPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xCursor->jumpToLastPage();
     OUString lastPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    CPPUNIT_ASSERT_EQUAL(false, firstPageStyleName.equals(lastPageStyleName));
+    CPPUNIT_ASSERT(firstPageStyleName != lastPageStyleName);
 
     uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles("PageStyles")->getByName(firstPageStyleName), uno::UNO_QUERY);
     awt::Size fSize;
@@ -618,8 +618,8 @@ DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
     uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles("PageStyles")->getByName(lastPageStyleName), uno::UNO_QUERY);
     awt::Size lSize;
     xNextPropertySet->getPropertyValue("Size") >>= lSize;
-    bool isEqual = (fSize.Width == lSize.Width) || (fSize.Height == lSize.Height);
-    CPPUNIT_ASSERT_EQUAL(false, isEqual);
+
+    CPPUNIT_ASSERT((fSize.Width != lSize.Width) && (fSize.Height != lSize.Height));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
