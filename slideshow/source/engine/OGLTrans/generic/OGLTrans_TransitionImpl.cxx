@@ -31,14 +31,10 @@
 
 #include <utility>
 
-#include <boost/make_shared.hpp>
 #include <comphelper/random.hxx>
 
 #include "OGLTrans_TransitionImpl.hxx"
 #include <math.h>
-
-using boost::make_shared;
-using boost::shared_ptr;
 
 using std::max;
 using std::min;
@@ -370,13 +366,13 @@ public:
     }
 };
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition()
 {
-    return make_shared<SimpleTransition>();
+    return std::make_shared<SimpleTransition>();
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
@@ -384,13 +380,13 @@ makeSimpleTransition(
         const SceneObjects_t& rSceneObjects,
         const TransitionSettings& rSettings = TransitionSettings())
 {
-    return make_shared<SimpleTransition>(
+    return std::make_shared<SimpleTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, rSceneObjects),
             rSettings)
         ;
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
@@ -400,7 +396,7 @@ makeSimpleTransition(
     return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t(), rSettings);
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
@@ -410,7 +406,7 @@ makeSimpleTransition(
     return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), rSceneObjects, rSettings);
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
@@ -421,7 +417,7 @@ makeSimpleTransition(
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
+std::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
 {
     Primitive Slide;
 
@@ -442,7 +438,7 @@ boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
+std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
 {
     Primitive Slide;
 
@@ -463,7 +459,7 @@ boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeFallLeaving()
+std::shared_ptr<OGLTransitionImpl> makeFallLeaving()
 {
     Primitive Slide;
 
@@ -483,7 +479,7 @@ boost::shared_ptr<OGLTransitionImpl> makeFallLeaving()
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeTurnAround()
+std::shared_ptr<OGLTransitionImpl> makeTurnAround()
 {
     Primitive Slide;
 
@@ -507,7 +503,7 @@ boost::shared_ptr<OGLTransitionImpl> makeTurnAround()
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeTurnDown()
+std::shared_ptr<OGLTransitionImpl> makeTurnDown()
 {
     Primitive Slide;
 
@@ -528,7 +524,7 @@ boost::shared_ptr<OGLTransitionImpl> makeTurnDown()
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeIris()
+std::shared_ptr<OGLTransitionImpl> makeIris()
 {
     Primitive Slide;
 
@@ -569,7 +565,7 @@ boost::shared_ptr<OGLTransitionImpl> makeIris()
         t += 1.0/nSteps;
     }
 
-    shared_ptr<Iris> pIris = make_shared<Iris>();
+    std::shared_ptr<Iris> pIris = std::make_shared<Iris>();
     double angle = 87;
 
     for (i = 0; i < nParts; i++) {
@@ -628,13 +624,13 @@ void RochadeTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlide
     }
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeRochadeTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
-    return make_shared<RochadeTransition>(
+    return std::make_shared<RochadeTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
             rSettings)
         ;
@@ -642,7 +638,7 @@ makeRochadeTransition(
 }
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeRochade()
+std::shared_ptr<OGLTransitionImpl> makeRochade()
 {
     Primitive Slide;
 
@@ -691,7 +687,7 @@ T clamp(const T& rIn)
     return glm::clamp(rIn, T(-1.0), T(1.0));
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
+std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
 {
     double dAngle(2*3.1415926/static_cast<double>( nPointsOnCircles ));
     if(nCircles < 2 || nPointsOnCircles < 4)
@@ -806,7 +802,7 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
+std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
 {
     double invN(1.0/static_cast<double>(nRows));
     double iDn = 0.0;
@@ -838,7 +834,7 @@ boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
+std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
 {
     double invN(1.0/static_cast<double>(n));
     double invM(1.0/static_cast<double>(m));
@@ -916,40 +912,40 @@ STranslate::STranslate(const glm::vec3& Vector, bool bInter, double T0, double T
 {
 }
 
-boost::shared_ptr<SRotate>
+std::shared_ptr<SRotate>
 makeSRotate(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
-    return make_shared<SRotate>(Axis, Origin, Angle, bInter, T0, T1);
+    return std::make_shared<SRotate>(Axis, Origin, Angle, bInter, T0, T1);
 }
 
-boost::shared_ptr<SScale>
+std::shared_ptr<SScale>
 makeSScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1)
 {
-    return make_shared<SScale>(Scale, Origin, bInter, T0, T1);
+    return std::make_shared<SScale>(Scale, Origin, bInter, T0, T1);
 }
 
-boost::shared_ptr<STranslate>
+std::shared_ptr<STranslate>
 makeSTranslate(const glm::vec3& Vector,bool bInter, double T0, double T1)
 {
-    return make_shared<STranslate>(Vector, bInter, T0, T1);
+    return std::make_shared<STranslate>(Vector, bInter, T0, T1);
 }
 
-boost::shared_ptr<SEllipseTranslate>
+std::shared_ptr<SEllipseTranslate>
 makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1)
 {
-    return make_shared<SEllipseTranslate>(dWidth, dHeight, dStartPosition, dEndPosition, bInter, T0, T1);
+    return std::make_shared<SEllipseTranslate>(dWidth, dHeight, dStartPosition, dEndPosition, bInter, T0, T1);
 }
 
-boost::shared_ptr<RotateAndScaleDepthByWidth>
+std::shared_ptr<RotateAndScaleDepthByWidth>
 makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
-    return make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bInter, T0, T1);
+    return std::make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bInter, T0, T1);
 }
 
-boost::shared_ptr<RotateAndScaleDepthByHeight>
+std::shared_ptr<RotateAndScaleDepthByHeight>
 makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
-    return make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bInter, T0, T1);
+    return std::make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bInter, T0, T1);
 }
 
 inline double intervalInter(double t, double T0, double T1)
@@ -1173,15 +1169,15 @@ void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /
     setScene(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives));
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeDiamondTransition(const TransitionSettings& rSettings)
 {
-    return make_shared<DiamondTransition>(TransitionScene(), rSettings);
+    return std::make_shared<DiamondTransition>(TransitionScene(), rSettings);
 }
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeDiamond()
+std::shared_ptr<OGLTransitionImpl> makeDiamond()
 {
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
@@ -1189,7 +1185,7 @@ boost::shared_ptr<OGLTransitionImpl> makeDiamond()
     return makeDiamondTransition(aSettings);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts )
+std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts )
 {
     static double t30 = tan( M_PI/6.0 );
     double ln = 0;
@@ -1275,13 +1271,13 @@ void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeaving
     CHECK_GL_ERROR();
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeFadeSmoothlyTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
-    return make_shared<FadeSmoothlyTransition>(
+    return std::make_shared<FadeSmoothlyTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
             rSettings)
         ;
@@ -1289,7 +1285,7 @@ makeFadeSmoothlyTransition(
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
+std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 {
     Primitive Slide;
 
@@ -1346,13 +1342,13 @@ void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLea
     CHECK_GL_ERROR();
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeFadeThroughBlackTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
-    return make_shared<FadeThroughBlackTransition>(
+    return std::make_shared<FadeThroughBlackTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
             rSettings)
         ;
@@ -1360,7 +1356,7 @@ makeFadeThroughBlackTransition(
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
+std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
 {
     Primitive Slide;
 
@@ -1558,13 +1554,13 @@ GLuint StaticNoiseTransition::makeShader()
     return OpenGLHelper::LoadShaders( "basicVertexShader", "staticFragmentShader" );
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeStaticNoiseTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
-    return make_shared<StaticNoiseTransition>(
+    return std::make_shared<StaticNoiseTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
             rSettings)
         ;
@@ -1572,7 +1568,7 @@ makeStaticNoiseTransition(
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeStatic()
+std::shared_ptr<OGLTransitionImpl> makeStatic()
 {
     Primitive Slide;
 
@@ -1609,13 +1605,13 @@ GLuint DissolveTransition::makeShader()
     return OpenGLHelper::LoadShaders( "basicVertexShader", "dissolveFragmentShader" );
 }
 
-shared_ptr<OGLTransitionImpl>
+std::shared_ptr<OGLTransitionImpl>
 makeDissolveTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
-    return make_shared<DissolveTransition>(
+    return std::make_shared<DissolveTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
             rSettings)
         ;
@@ -1623,7 +1619,7 @@ makeDissolveTransition(
 
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeDissolve()
+std::shared_ptr<OGLTransitionImpl> makeDissolve()
 {
     Primitive Slide;
 
@@ -1641,7 +1637,7 @@ boost::shared_ptr<OGLTransitionImpl> makeDissolve()
     return makeDissolveTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-boost::shared_ptr<OGLTransitionImpl> makeNewsflash()
+std::shared_ptr<OGLTransitionImpl> makeNewsflash()
 {
     Primitive Slide;
 

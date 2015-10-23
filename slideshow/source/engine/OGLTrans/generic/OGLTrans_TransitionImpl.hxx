@@ -32,13 +32,13 @@
 #include <glm/glm.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <GL/glew.h>
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
+#include <memory>
 #include <vector>
 
 class Primitive;
@@ -72,8 +72,8 @@ struct TransitionSettings
 };
 
 typedef std::vector<Primitive> Primitives_t;
-typedef std::vector<boost::shared_ptr<SceneObject> > SceneObjects_t;
-typedef std::vector<boost::shared_ptr<Operation> > Operations_t;
+typedef std::vector<std::shared_ptr<SceneObject> > SceneObjects_t;
+typedef std::vector<std::shared_ptr<Operation> > Operations_t;
 
 class TransitionScene
 {
@@ -215,26 +215,26 @@ private:
 
 
 // "Constructors" of available transitions
-boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft();
-boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft();
-boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
-boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
-boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows );
-boost::shared_ptr<OGLTransitionImpl> makeFallLeaving();
-boost::shared_ptr<OGLTransitionImpl> makeTurnAround();
-boost::shared_ptr<OGLTransitionImpl> makeTurnDown();
-boost::shared_ptr<OGLTransitionImpl> makeIris();
-boost::shared_ptr<OGLTransitionImpl> makeRochade();
-boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts );
-boost::shared_ptr<OGLTransitionImpl> makeStatic();
-boost::shared_ptr<OGLTransitionImpl> makeDissolve();
-boost::shared_ptr<OGLTransitionImpl> makeNewsflash();
+std::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft();
+std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft();
+std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
+std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
+std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows );
+std::shared_ptr<OGLTransitionImpl> makeFallLeaving();
+std::shared_ptr<OGLTransitionImpl> makeTurnAround();
+std::shared_ptr<OGLTransitionImpl> makeTurnDown();
+std::shared_ptr<OGLTransitionImpl> makeIris();
+std::shared_ptr<OGLTransitionImpl> makeRochade();
+std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts );
+std::shared_ptr<OGLTransitionImpl> makeStatic();
+std::shared_ptr<OGLTransitionImpl> makeDissolve();
+std::shared_ptr<OGLTransitionImpl> makeNewsflash();
 
 /** 2D replacements
     */
-boost::shared_ptr<OGLTransitionImpl> makeDiamond();
-boost::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
-boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
+std::shared_ptr<OGLTransitionImpl> makeDiamond();
+std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
+std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
 
 class SceneObject : private boost::noncopyable
 {
@@ -409,7 +409,7 @@ private:
     double angle;
 };
 
-boost::shared_ptr<SRotate>
+std::shared_ptr<SRotate>
 makeSRotate(const glm::vec3& Axis, const glm::vec3& Origin, double Angle,
         bool bInter, double T0, double T1);
 
@@ -445,7 +445,7 @@ private:
     glm::vec3 origin;
 };
 
-boost::shared_ptr<SScale>
+std::shared_ptr<SScale>
 makeSScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1);
 
 /** translation transformation
@@ -478,7 +478,7 @@ private:
     glm::vec3 vector;
 };
 
-boost::shared_ptr<STranslate>
+std::shared_ptr<STranslate>
 makeSTranslate(const glm::vec3& Vector,bool bInter, double T0, double T1);
 
 /** translation transformation
@@ -516,7 +516,7 @@ private:
     double endPosition;
 };
 
-boost::shared_ptr<SEllipseTranslate>
+std::shared_ptr<SEllipseTranslate>
 makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1);
 
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the width of the window.
@@ -534,7 +534,7 @@ private:
     double angle;
 };
 
-boost::shared_ptr<RotateAndScaleDepthByWidth>
+std::shared_ptr<RotateAndScaleDepthByWidth>
 makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
 
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the height of the window.
@@ -552,7 +552,7 @@ private:
     double angle;
 };
 
-boost::shared_ptr<RotateAndScaleDepthByHeight>
+std::shared_ptr<RotateAndScaleDepthByHeight>
 makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
 
 #endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_

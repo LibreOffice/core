@@ -26,10 +26,9 @@
  *
  ************************************************************************/
 
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <sal/types.h>
+
+#include <memory>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
@@ -174,7 +173,7 @@ class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable,
 {
 public:
     OGLTransitionerImpl();
-    void setTransition( boost::shared_ptr<OGLTransitionImpl> pOGLTransition );
+    void setTransition( std::shared_ptr<OGLTransitionImpl> pOGLTransition );
     bool initialize( const Reference< presentation::XSlideShowView >& xView,
             const Reference< rendering::XBitmap >& xLeavingSlide,
             const Reference< rendering::XBitmap >& xEnteringSlide );
@@ -273,7 +272,7 @@ private:
 
     /** Our Transition to be used.
     */
-    boost::shared_ptr<OGLTransitionImpl> mpTransition;
+    std::shared_ptr<OGLTransitionImpl> mpTransition;
 
 public:
     /** whether we are running on ATI fglrx with bug related to textures
@@ -548,7 +547,7 @@ void OGLTransitionerImpl::impl_finishTransition()
         mpTransition->finish();
 }
 
-void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> pTransition )
+void OGLTransitionerImpl::setTransition( std::shared_ptr<OGLTransitionImpl> pTransition )
 {
     if ( mpTransition ) // already initialized
         return;
@@ -1465,7 +1464,7 @@ public:
         if ( !xRes->initialize( view, leavingBitmap, enteringBitmap ) )
             return uno::Reference< presentation::XTransition >();
 
-        boost::shared_ptr<OGLTransitionImpl> pTransition;
+        std::shared_ptr<OGLTransitionImpl> pTransition;
 
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
             switch( transitionSubType )
