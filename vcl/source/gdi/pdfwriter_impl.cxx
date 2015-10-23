@@ -4497,7 +4497,7 @@ we check in the following sequence:
 // extract target file type
             INetURLObject aDocumentURL( m_aContext.BaseURL );
             INetURLObject aTargetURL( rLink.m_aURL );
-            sal_Int32   nSetGoToRMode = 0;
+            bool bSetGoToRMode = false;
             bool    bTargetHasPDFExtension = false;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
             bool    bIsUNCPath = false;
@@ -4554,7 +4554,7 @@ we check in the following sequence:
                 //check if extension is pdf, see if GoToR should be forced
                 bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" );
                 if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
-                    nSetGoToRMode++;
+                    bSetGoToRMode = true;
             }
             //prepare the URL, if relative or not
             INetProtocol eBaseProtocol = aDocumentURL.GetProtocol();
@@ -4576,7 +4576,7 @@ we check in the following sequence:
                     bSetRelative = true;
 
                 OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
-                if( nSetGoToRMode == 0 )
+                if( !bSetGoToRMode )
                 {
                     switch( m_aContext.DefaultLinkAction )
                     {
@@ -4608,7 +4608,7 @@ we check in the following sequence:
                 }
 
                 //fragment are encoded in the same way as in the named destination processing
-                if( nSetGoToRMode )
+                if( bSetGoToRMode )
                 {
                     //add the fragment
                     OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
