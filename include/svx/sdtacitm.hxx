@@ -28,10 +28,10 @@ public:
     SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
     SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE
     { return new SdrTextAniCountItem(rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
     { return new SdrTextAniCountItem(*this); }
 };
 
