@@ -259,27 +259,29 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
     }
 
-    {
-        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-        if (pSdrHint) {
-            SdrHintKind eKind=pSdrHint->GetKind();
-            if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
-                bool bObjChg=!mbSomeObjChgdFlag; // if true, evaluate for ComeBack timer
-                if (bObjChg) {
-                    mbSomeObjChgdFlag=true;
-                    maComeBackIdle.Start();
-                }
-            }
-            if (eKind==HINT_PAGEORDERCHG) {
-                const SdrPage* pPg=pSdrHint->GetPage();
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (!pSdrHint)
+        return;
 
-                if(pPg && !pPg->IsInserted())
-                {
-                    if(mpPageView && mpPageView->GetPage() == pPg)
-                    {
-                        HideSdrPage();
-                    }
-                }
+    SdrHintKind eKind = pSdrHint->GetKind();
+    if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
+    {
+        bool bObjChg = !mbSomeObjChgdFlag; // if true, evaluate for ComeBack timer
+        if (bObjChg)
+        {
+            mbSomeObjChgdFlag=true;
+            maComeBackIdle.Start();
+        }
+    }
+
+    if (eKind==HINT_PAGEORDERCHG)
+    {
+        const SdrPage* pPg=pSdrHint->GetPage();
+        if (pPg && !pPg->IsInserted())
+        {
+            if(mpPageView && mpPageView->GetPage() == pPg)
+            {
+                HideSdrPage();
             }
         }
     }
@@ -290,8 +292,6 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
     onChangeColorConfig();
     InvalidateAllWin();
 }
-
-
 
 IMPL_LINK_NOARG_TYPED(SdrPaintView, ImpComeBackHdl, Idle *, void)
 {
