@@ -36,9 +36,9 @@ namespace javaunohelper {
 ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > create_vm_access(
     JNIEnv * jni_env, jobject loader );
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+css::uno::Reference< css::uno::XComponentContext >
 install_vm_singleton(
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
     const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access );
 

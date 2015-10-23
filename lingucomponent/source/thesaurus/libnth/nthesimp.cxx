@@ -271,7 +271,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
-Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
+Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
     const OUString& qTerm, const Locale& rLocale,
     const PropertyValues& rProperties)
     throw(IllegalArgumentException, RuntimeException, std::exception)
