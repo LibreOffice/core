@@ -34,7 +34,7 @@ namespace stoc_connector
     template<class T>
     struct ReferenceHash
     {
-        size_t operator () (const ::com::sun::star::uno::Reference<T> & ref) const
+        size_t operator () (const css::uno::Reference<T> & ref) const
         {
             return reinterpret_cast<size_t>(ref.get());
         }
@@ -43,41 +43,41 @@ namespace stoc_connector
     template<class T>
     struct ReferenceEqual
     {
-        bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
-                              const ::com::sun::star::uno::Reference<T> & op2) const
+        bool operator () (const css::uno::Reference<T> & op1,
+                          const css::uno::Reference<T> & op2) const
         {
             return op1.get() == op2.get();
         }
     };
 
-    typedef std::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
-                             ReferenceHash< ::com::sun::star::io::XStreamListener>,
-                             ReferenceEqual< ::com::sun::star::io::XStreamListener> >
+    typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener>,
+                                ReferenceHash< css::io::XStreamListener>,
+                                ReferenceEqual< css::io::XStreamListener> >
             XStreamListener_hash_set;
 
     class PipeConnection :
-        public ::cppu::WeakImplHelper< ::com::sun::star::connection::XConnection >
+        public ::cppu::WeakImplHelper< css::connection::XConnection >
 
     {
     public:
         PipeConnection( const OUString &sConnectionDescription );
         virtual ~PipeConnection();
 
-        virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL write( const css::uno::Sequence< sal_Int8 >& aData )
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL flush(  ) throw(
-            ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::io::IOException,
+            css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL close(  )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
         virtual OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
@@ -85,35 +85,35 @@ namespace stoc_connector
     };
 
     class SocketConnection :
-        public ::cppu::WeakImplHelper< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >
+        public ::cppu::WeakImplHelper< css::connection::XConnection, css::connection::XConnectionBroadcaster >
 
     {
     public:
         SocketConnection( const OUString & sConnectionDescription  );
         virtual ~SocketConnection();
 
-        virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL write( const css::uno::Sequence< sal_Int8 >& aData )
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL flush(  ) throw(
-            ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::io::IOException,
+            css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL close(  )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
         virtual OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
 
 
         // XConnectionBroadcaster
-        virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener)
+            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener)
+            throw(css::uno::RuntimeException, std::exception) override;
 
     public:
         void completeConnectionString();

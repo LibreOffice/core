@@ -34,7 +34,7 @@ namespace io_acceptor {
         PipeAcceptor( const OUString &sPipeName , const OUString &sConnectionDescription );
 
         void init();
-        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >  accept(  );
+        css::uno::Reference < css::connection::XConnection >  accept(  );
 
         void stopAccepting();
 
@@ -54,7 +54,7 @@ namespace io_acceptor {
                         const OUString &sConnectionDescription );
 
         void init();
-        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection > accept();
+        css::uno::Reference < css::connection::XConnection > accept();
 
         void stopAccepting();
 
