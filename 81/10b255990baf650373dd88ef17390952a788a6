@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review-1: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Code-Review+2: Jan Holesovsky <kendy@collabora.com>
+Verified+1: Jan Holesovsky <kendy@collabora.com>
+Submitted-by: Jan Holesovsky <kendy@collabora.com>
+Submitted-at: Fri, 23 Oct 2015 07:39:33 +0000
+Reviewed-on: https://gerrit.libreoffice.org/19371
+Project: core
+Branch: refs/heads/master
