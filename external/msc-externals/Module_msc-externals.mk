@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,msc-externals))
 $(eval $(call gb_Module_add_targets,msc-externals,\
 	$(if $(ENABLE_CRASHDUMP),Package_dbghelp) \
 	Package_msvc_dlls \
-	$(if $(WITH_MOZAB4WIN),Package_msvc80_dlls) \
 ))
 
 # vim: set noet sw=4 ts=4:

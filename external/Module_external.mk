@@ -69,7 +69,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,MDDS,mdds) \
 	$(if $(WITH_EXTRA_EXTENSIONS),misc_extensions) \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
-	$(call gb_Helper_optional,MOZ,moz) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \
 	$(call gb_Helper_optional,MWAW,libmwaw) \
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \

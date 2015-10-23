@@ -11,10 +11,6 @@ $(eval $(call gb_Library_Library,mozbootstrap))
 
 $(eval $(call gb_Library_set_componentfile,mozbootstrap,connectivity/source/drivers/mozab/bootstrap/mozbootstrap))
 
-$(eval $(call gb_Library_add_defs,mozbootstrap,\
-	-DMINIMAL_PROFILEDISCOVER \
-))
-
 $(eval $(call gb_Library_set_include,mozbootstrap,\
 	-I$(SRCDIR)/connectivity/source/drivers/mozab \
 	$$(INCLUDE) \
