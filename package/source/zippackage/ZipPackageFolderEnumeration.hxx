@@ -26,31 +26,31 @@
 
 class ZipPackageFolderEnumeration : public cppu::WeakImplHelper
 <
-    com::sun::star::container::XEnumeration,
-    com::sun::star::lang::XServiceInfo
+    css::container::XEnumeration,
+    css::lang::XServiceInfo
 >
 {
 protected:
     ContentHash& rContents;
     ContentHash::const_iterator aIterator;
 public:
-    //ZipPackageFolderEnumeration (unordered_map < OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
+    //ZipPackageFolderEnumeration (unordered_map < OUString, css::uno::Reference < css::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration (ContentHash &rInput);
     virtual ~ZipPackageFolderEnumeration();
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL nextElement(  )
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 #endif

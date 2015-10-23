@@ -293,26 +293,26 @@ static PyObject* getComponentContext(
         Runtime runtime;
         ret = runtime.any2PyObject( makeAny( ctx ) );
     }
-    catch (const com::sun::star::registry::InvalidRegistryException &e)
+    catch (const css::registry::InvalidRegistryException &e)
     {
         // can't use raisePyExceptionWithAny() here, because the function
         // does any conversions, which will not work with a
         // wrongly bootstrapped pyuno!
         raisePySystemException( "InvalidRegistryException", e.Message );
     }
-    catch(const com::sun::star::lang::IllegalArgumentException & e)
+    catch(const css::lang::IllegalArgumentException & e)
     {
         raisePySystemException( "IllegalArgumentException", e.Message );
     }
-    catch(const com::sun::star::script::CannotConvertException & e)
+    catch(const css::script::CannotConvertException & e)
     {
         raisePySystemException( "CannotConvertException", e.Message );
     }
-    catch (const com::sun::star::uno::RuntimeException & e)
+    catch (const css::uno::RuntimeException & e)
     {
         raisePySystemException( "RuntimeException", e.Message );
     }
-    catch (const com::sun::star::uno::Exception & e)
+    catch (const css::uno::Exception & e)
     {
         raisePySystemException( "uno::Exception", e.Message );
     }
@@ -334,10 +334,10 @@ static PyObject* initTestEnvironment(
         Reference<XComponentContext> xContext;
         a >>= xContext;
         if (!xContext.is()) { abort(); }
-        using com::sun::star::lang::XMultiServiceFactory;
+        using css::lang::XMultiServiceFactory;
         Reference<XMultiServiceFactory> const xMSF(
             xContext->getServiceManager(),
-            com::sun::star::uno::UNO_QUERY_THROW);
+            css::uno::UNO_QUERY_THROW);
         if (!xMSF.is()) { abort(); }
         char *const testlib = getenv("TEST_LIB");
         if (!testlib) { abort(); }
@@ -356,7 +356,7 @@ static PyObject* initTestEnvironment(
         if (!pFunc) { abort(); }
         reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
     }
-    catch (const com::sun::star::uno::Exception &)
+    catch (const css::uno::Exception &)
     {
         abort();
     }
@@ -454,15 +454,15 @@ static PyObject *createUnoStructHelper(
             PyErr_SetString (PyExc_AttributeError, "pyuno._createUnoStructHelper: expects exactly two non-keyword arguments:\n\tStructure Name\n\tinitialiser tuple; may be the empty tuple");
         }
     }
-    catch( const com::sun::star::uno::RuntimeException & e )
+    catch( const css::uno::RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( const com::sun::star::script::CannotConvertException & e )
+    catch( const css::script::CannotConvertException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( const com::sun::star::uno::Exception & e )
+    catch( const css::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -486,7 +486,7 @@ static PyObject *getTypeByName(
             {
                 Runtime runtime;
                 ret = PyUNO_Type_new(
-                    name, (com::sun::star::uno::TypeClass)typeDesc.get()->eTypeClass, runtime );
+                    name, (css::uno::TypeClass)typeDesc.get()->eTypeClass, runtime );
             }
             else
             {
@@ -536,11 +536,11 @@ static PyObject *getConstantByName(
         RuntimeException runExc( e.Message );
         raisePyExceptionWithAny( makeAny( runExc ) );
     }
-    catch(const com::sun::star::script::CannotConvertException & e)
+    catch(const css::script::CannotConvertException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch(const com::sun::star::lang::IllegalArgumentException & e)
+    catch(const css::lang::IllegalArgumentException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -780,9 +780,9 @@ static PyObject *getCurrentContext(
     {
         Runtime runtime;
         ret = runtime.any2PyObject(
-            makeAny( com::sun::star::uno::getCurrentContext() ) );
+            makeAny( css::uno::getCurrentContext() ) );
     }
-    catch( const com::sun::star::uno::Exception & e )
+    catch( const css::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -801,11 +801,11 @@ static PyObject *setCurrentContext(
             Runtime runtime;
             Any a = runtime.pyObject2Any( PyTuple_GetItem( args, 0 ) );
 
-            Reference< com::sun::star::uno::XCurrentContext > context;
+            Reference< css::uno::XCurrentContext > context;
 
             if( (a.hasValue() && (a >>= context)) || ! a.hasValue() )
             {
-                ret = com::sun::star::uno::setCurrentContext( context ) ? Py_True : Py_False;
+                ret = css::uno::setCurrentContext( context ) ? Py_True : Py_False;
             }
             else
             {
@@ -825,7 +825,7 @@ static PyObject *setCurrentContext(
                 PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
         }
     }
-    catch( const com::sun::star::uno::Exception & e )
+    catch( const css::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }

@@ -25,7 +25,7 @@
 #include <osl/mutex.hxx>
 
 class OStorage;
-class OChildDispListener_Impl : public ::cppu::WeakImplHelper < ::com::sun::star::lang::XEventListener >
+class OChildDispListener_Impl : public ::cppu::WeakImplHelper < css::lang::XEventListener >
 {
     ::osl::Mutex m_aMutex;
     OStorage* m_pStorage;
@@ -36,7 +36,7 @@ public:
 
     void OwnerIsDisposed();
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

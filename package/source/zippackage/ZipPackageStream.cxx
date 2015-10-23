@@ -70,7 +70,7 @@ using namespace cppu;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
-::com::sun::star::uno::Sequence < sal_Int8 > ZipPackageStream::static_getImplementationId()
+css::uno::Sequence < sal_Int8 > ZipPackageStream::static_getImplementationId()
 {
     return lcl_CachedImplId::get().getImplementationId();
 }
@@ -202,7 +202,7 @@ sal_Int32 ZipPackageStream::GetEncryptionAlgorithm() const
 
 sal_Int32 ZipPackageStream::GetBlockSize() const
 {
-    return GetEncryptionAlgorithm() == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
+    return GetEncryptionAlgorithm() == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
 }
 
 ::rtl::Reference< EncryptionData > ZipPackageStream::GetEncryptionData( bool bUseWinEncoding )

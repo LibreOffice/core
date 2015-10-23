@@ -88,25 +88,25 @@ PyObject* PyUNO_iterator_next( PyObject *self )
         PyErr_SetString( PyExc_StopIteration, "" );
         return NULL;
     }
-    catch( com::sun::star::container::NoSuchElementException &e )
+    catch( css::container::NoSuchElementException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException &e )
+    catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return NULL;
@@ -206,7 +206,7 @@ PyObject* PyUNO_list_iterator_next( PyObject *self )
             try {
                 aRet = me->members->xIndexAccess->getByIndex( me->members->index );
             }
-            catch( com::sun::star::lang::IndexOutOfBoundsException )
+            catch( css::lang::IndexOutOfBoundsException )
             {
                 noMoreElements = true;
             }
@@ -222,21 +222,21 @@ PyObject* PyUNO_list_iterator_next( PyObject *self )
         me->members->index++;
         return rRet.getAcquired();
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException &e )
+    catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return NULL;

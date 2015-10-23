@@ -22,20 +22,17 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <cppuhelper/implbase.hxx>
 
-class ZipPackageSink : public ::cppu::WeakImplHelper
-<
-    com::sun::star::io::XActiveDataSink
->
+class ZipPackageSink : public ::cppu::WeakImplHelper< css::io::XActiveDataSink >
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    css::uno::Reference < css::io::XInputStream > xStream;
 public:
     ZipPackageSink();
     virtual ~ZipPackageSink();
-    virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  )
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 #endif
 

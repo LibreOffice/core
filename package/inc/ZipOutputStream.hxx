@@ -33,7 +33,7 @@ class ZipPackageStream;
 
 class ZipOutputStream
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xStream;
+    css::uno::Reference< css::io::XOutputStream > m_xStream;
     ::std::vector < ZipEntry * > m_aZipList;
 
     ByteChucker         m_aChucker;
@@ -43,20 +43,20 @@ class ZipOutputStream
 
 public:
     ZipOutputStream(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
+        const css::uno::Reference< css::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
     void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
 
     void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     void rawCloseEntry( bool bEncrypt = false )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
 
     void finish()
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     css::uno::Reference< css::io::XOutputStream > getStream();
 
     static sal_uInt32 getCurrentDosTime();
@@ -64,11 +64,11 @@ public:
 
 private:
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     void writeCEN( const ZipEntry &rEntry )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     void writeEXT( const ZipEntry &rEntry )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
 };
 
 #endif

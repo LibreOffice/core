@@ -33,7 +33,7 @@ using com::sun::star::uno::TypeDescription;
 namespace pyuno
 {
 
-void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
+void raisePyExceptionWithAny( const css::uno::Any &anyExc )
 {
     try
     {
@@ -46,7 +46,7 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
         }
         else
         {
-            com::sun::star::uno::Exception e;
+            css::uno::Exception e;
             anyExc >>= e;
 
             OUStringBuffer buf;
@@ -60,12 +60,12 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
                 OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US).getStr() );
         }
     }
-    catch(const com::sun::star::lang::IllegalArgumentException & e)
+    catch(const css::lang::IllegalArgumentException & e)
     {
         PyErr_SetString( PyExc_SystemError,
                          OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
-    catch(const com::sun::star::script::CannotConvertException & e)
+    catch(const css::script::CannotConvertException & e)
     {
         PyErr_SetString( PyExc_SystemError,
                          OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
@@ -100,7 +100,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         OUStringBuffer buf;
         buf.append( "pyuno.getClass: " ).append(name).append( "is a " );
         buf.appendAscii(
-            typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
+            typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass));
         buf.append( ", expected EXCEPTION, STRUCT or INTERFACE" );
         throw RuntimeException( buf.makeStringAndClear() );
     }

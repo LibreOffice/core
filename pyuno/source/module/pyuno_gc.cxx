@@ -84,7 +84,7 @@ void GCThread::execute()
             Py_XDECREF( mPyObject );
         }
     }
-    catch( const com::sun::star::uno::RuntimeException & e )
+    catch( const css::uno::RuntimeException & e )
     {
         OString msg;
         msg = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );

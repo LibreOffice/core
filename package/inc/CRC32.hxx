@@ -33,16 +33,16 @@ public:
     CRC32();
     ~CRC32();
 
-    sal_Int64 SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 len)
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL update(const ::com::sun::star::uno::Sequence< sal_Int8 > &b)
-        throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL updateStream (css::uno::Reference < css::io::XInputStream > & xStream)
+        throw(css::uno::RuntimeException);
+    void SAL_CALL updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len)
+        throw(css::uno::RuntimeException);
+    void SAL_CALL update(const css::uno::Sequence< sal_Int8 > &b)
+        throw(css::uno::RuntimeException);
     sal_Int32 SAL_CALL getValue()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
     void SAL_CALL reset()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 };
 
 #endif

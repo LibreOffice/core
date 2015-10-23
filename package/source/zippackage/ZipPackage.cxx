@@ -630,7 +630,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     else
                         bHaveZipFile = false;
                 }
-                catch ( com::sun::star::uno::Exception& )
+                catch ( css::uno::Exception& )
                 {
                     // Exception derived from uno::Exception thrown. This probably
                     // means the file doesn't exist...we'll create it at
@@ -705,7 +705,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             else
             {
                 // The URL is not acceptable
-                throw com::sun::star::uno::Exception (THROW_WHERE "Bad arguments.",
+                throw css::uno::Exception (THROW_WHERE "Bad arguments.",
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
@@ -718,7 +718,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                 m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
                 m_xContentSeek = uno::Reference < XSeekable > ( m_xContentStream, UNO_QUERY );
                 if ( ! m_xContentSeek.is() )
-                    throw com::sun::star::uno::Exception (THROW_WHERE "The package component _requires_ an XSeekable interface!",
+                    throw css::uno::Exception (THROW_WHERE "The package component _requires_ an XSeekable interface!",
                             static_cast < ::cppu::OWeakObject * > ( this ) );
 
                 if ( !m_xContentSeek->getLength() )
@@ -727,7 +727,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             else
                 bHaveZipFile = false;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( css::uno::Exception& )
         {
             // Exception derived from uno::Exception thrown. This probably
             // means the file doesn't exist...we'll create it at
@@ -764,7 +764,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                 // clean up the memory, and tell the UCB about the error
                 if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = NULL; }
 
-                throw com::sun::star::packages::zip::ZipIOException (
+                throw css::packages::zip::ZipIOException (
                     THROW_WHERE "Bad Zip File, " + message,
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
@@ -994,7 +994,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
         aZipOut.rawWrite(aType);
         aZipOut.rawCloseEntry();
     }
-    catch ( const ::com::sun::star::io::IOException & r )
+    catch ( const css::io::IOException & r )
     {
         throw WrappedTargetException(
                 THROW_WHERE "Error adding mimetype to the ZipOutputStream!",
@@ -1464,7 +1464,7 @@ void SAL_CALL ZipPackage::commitChanges()
             if( isLocalFile() )
             {
                 // write directly in case of local file
-                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xSimpleAccess(
+                uno::Reference< css::ucb::XSimpleFileAccess3 > xSimpleAccess(
                     SimpleFileAccess::create( m_xContext ) );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instantiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
@@ -1531,7 +1531,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     // if the file is still not corrupted, it can become after the next step
                     aContent.executeCommand ("transfer", aAny );
                 }
-                catch ( const ::com::sun::star::uno::Exception& r )
+                catch ( const css::uno::Exception& r )
                 {
                     if ( bCanBeCorrupted )
                         DisconnectFromTargetAndThrowException_Impl( xTempInStream );

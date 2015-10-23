@@ -51,14 +51,14 @@ struct ManifestScopeEntry
 
 typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 
-class ManifestImport : public cppu::WeakImplHelper < com::sun::star::xml::sax::XDocumentHandler >
+class ManifestImport : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
 protected:
-    std::vector< com::sun::star::beans::PropertyValue > aSequence;
+    std::vector< css::beans::PropertyValue > aSequence;
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     sal_Int32 nDerivedKeySize;
-    ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
+    ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
 
     const OUString sFileEntryElement;
     const OUString sManifestElement;
@@ -115,36 +115,36 @@ protected:
     const OUString sPBKDF2_URL;
 
     OUString PushNameAndNamespaces( const OUString& aName,
-                                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
+                                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs,
                                            StringHashMap& o_aConvertedAttribs );
     static OUString ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces );
     OUString ConvertName( const OUString& aName );
 
 public:
-    ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
+    ManifestImport( std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rNewVector );
     virtual ~ManifestImport();
     virtual void SAL_CALL startDocument(  )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument(  )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endElement( const OUString& aName )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL characters( const OUString& aChars )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
+        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 private:
-    void doFileEntry(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
-    void doEncryptionData(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
-    void doAlgorithm(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
-    void doKeyDerivation(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
-    void doStartKeyAlg(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
+    void doFileEntry(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doEncryptionData(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doAlgorithm(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doKeyDerivation(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doStartKeyAlg(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
 };
 #endif
 

@@ -60,15 +60,15 @@ protected:
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     ZipUtils::Inflater aInflater;
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
+    css::uno::Reference < css::io::XInputStream > xStream;
+    css::uno::Reference < css::io::XSeekable > xSeek;
+    const css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < css::ucb::XProgressHandler > xProgressHandler;
 
     bool bRecoveryMode;
 
     // aMediaType parameter is used only for raw stream header creation
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
+    css::uno::Reference < css::io::XInputStream >  createUnbufferedStream(
             const rtl::Reference<SotMutexHolder>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
@@ -86,38 +86,38 @@ protected:
 
 public:
 
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
+    ZipFile( css::uno::Reference < css::io::XInputStream > &xInput,
+             const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise
              )
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
+    ZipFile( css::uno::Reference < css::io::XInputStream > &xInput,
+             const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise,
              bool bForceRecover,
-             ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgress
+             css::uno::Reference < css::ucb::XProgressHandler > xProgress
              )
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
     ~ZipFile();
 
     EntryHash& GetEntryHash() { return aEntries; }
 
-    void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData(
+    void setInputStream ( css::uno::Reference < css::io::XInputStream > xNewStream );
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
             const rtl::Reference<SotMutexHolder>& aMutexHolder )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xArgContext,
+    static css::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
+            const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > StaticGetCipher(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xArgContext,
+    static css::uno::Reference< css::xml::crypto::XCipherContext > StaticGetCipher(
+            const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData,
             bool bEncrypt );
 
@@ -133,58 +133,58 @@ public:
                                      sal_Int32 &rStartKeyGenID,
                                      sal_Int32 &rSize,
                                      OUString& aMediaType,
-                                     const ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream );
+                                     const css::uno::Reference < css::io::XInputStream >& rStream );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream,
+    static css::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData )
-        throw ( ::com::sun::star::packages::WrongPasswordException,
-                ::com::sun::star::packages::zip::ZipIOException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::packages::WrongPasswordException,
+                css::packages::zip::ZipIOException,
+                css::uno::RuntimeException );
 
     static bool StaticHasValidPassword (
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
             const rtl::Reference<SotMutexHolder>& aMutexHolder )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
             const rtl::Reference<SotMutexHolder>& aMutexHolder )
-        throw ( ::com::sun::star::packages::WrongPasswordException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::packages::zip::ZipException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::packages::WrongPasswordException,
+                css::io::IOException,
+                css::packages::zip::ZipException,
+                css::uno::RuntimeException );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream(
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             const OUString& aMediaType,
             const rtl::Reference<SotMutexHolder>& aMutexHolder )
-        throw ( ::com::sun::star::packages::NoEncryptionException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::packages::zip::ZipException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::packages::NoEncryptionException,
+                css::io::IOException,
+                css::packages::zip::ZipException,
+                css::uno::RuntimeException );
 
     ZipEnumeration * SAL_CALL entries(  );
 protected:
     bool        readLOC ( ZipEntry &rEntry)
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
     sal_Int32       readCEN()
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
     sal_Int32       findEND()
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
     sal_Int32       recover()
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
 };
 

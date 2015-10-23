@@ -43,7 +43,7 @@ typedef std::unordered_map < OUString,
                         eqFunc > FolderHash;
 
 typedef std::unordered_map < OUString,
-                        rtl::Reference < com::sun::star::packages::ContentInfo >,
+                        rtl::Reference < css::packages::ContentInfo >,
                         OUStringHash,
                         eqFunc > ContentHash;
 

@@ -210,7 +210,7 @@ void SwitchablePersistenceStream::CloseAll_Impl()
     }
 }
 
-// com::sun::star::io::XStream
+// css::io::XStream
 uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInputStream(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -231,7 +231,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return static_cast< io::XOutputStream* >( this );
 }
 
-// com::sun::star::io::XInputStream
+// css::io::XInputStream
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
@@ -305,7 +305,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
         CloseAll_Impl();
 }
 
-// com::sun::star::io::XOutputStream
+// css::io::XOutputStream
 void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
@@ -358,7 +358,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
         CloseAll_Impl();
 }
 
-// com::sun::star::io::XTruncate
+// css::io::XTruncate
 void SAL_CALL SwitchablePersistenceStream::truncate(  )
     throw (io::IOException, uno::RuntimeException, std::exception)
 {
@@ -377,7 +377,7 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
     m_pStreamData->m_xOrigTruncate->truncate();
 }
 
-// com::sun::star::io::XSeekable
+// css::io::XSeekable
 void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     throw (lang::IllegalArgumentException, io::IOException, uno::RuntimeException, std::exception)
 {
@@ -424,7 +424,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 }
 
 void SAL_CALL SwitchablePersistenceStream::waitForCompletion()
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     if ( !m_pStreamData )
         throw io::NotConnectedException();

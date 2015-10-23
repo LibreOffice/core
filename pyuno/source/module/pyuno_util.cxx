@@ -172,7 +172,7 @@ void appendPointer(OUStringBuffer & buffer, void * pointer) {
 
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, const OUString &aFunctionName,
-                   const void * data, const com::sun::star::uno::Type & type )
+                   const void * data, const css::uno::Type & type )
 {
     if( isLog( cargo, LogLevel::CALL ) )
     {

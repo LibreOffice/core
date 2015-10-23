@@ -163,14 +163,14 @@ void log( RuntimeCargo *cargo, sal_Int32 level, const OUString &logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
               void * ptr, const OUString & aFunctionName,
-              const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
+              const css::uno::Sequence< css::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
               void * ptr, const OUString & aFunctionName,
-              const com::sun::star::uno::Any &returnValue,
-              const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
+              const css::uno::Any &returnValue,
+              const css::uno::Sequence< css::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, const OUString &aFunctionName,
-                   const void * data, const com::sun::star::uno::Type & type );
+                   const void * data, const css::uno::Type & type );
 static const sal_Int32 VAL2STR_MODE_DEEP = 0;
 static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP );
@@ -179,7 +179,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 typedef std::unordered_map
 <
     PyRef,
-    com::sun::star::uno::WeakReference< com::sun::star::script::XInvocation >,
+    css::uno::WeakReference< css::script::XInvocation >,
     PyRef::Hash,
     std::equal_to< PyRef >
 > PyRef2Adapter;
@@ -196,7 +196,7 @@ std::equal_to<OUString>
 typedef std::unordered_map
 <
     OUString,
-    com::sun::star::uno::Sequence< sal_Int16 >,
+    css::uno::Sequence< sal_Int16 >,
     OUStringHash,
     std::equal_to< OUString >
 > MethodOutIndexMap;
@@ -207,17 +207,17 @@ int PyUNO_initType();
 int PyUNOStruct_initType();
 
 PyRef PyUNO_new (
-    const com::sun::star::uno::Any & targetInterface,
-    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf );
+    const css::uno::Any & targetInterface,
+    const css::uno::Reference<css::lang::XSingleServiceFactory> & ssf );
 
 PyRef PyUNOStruct_new (
-    const com::sun::star::uno::Any &targetInterface,
-    const  com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> &ssf );
+    const css::uno::Any &targetInterface,
+    const  css::uno::Reference<css::lang::XSingleServiceFactory> &ssf );
 
 typedef struct
 {
-    com::sun::star::uno::Reference <com::sun::star::script::XInvocation2> xInvocation;
-    com::sun::star::uno::Any wrappedObject;
+    css::uno::Reference <css::script::XInvocation2> xInvocation;
+    css::uno::Any wrappedObject;
 } PyUNOInternals;
 
 typedef struct
@@ -227,11 +227,11 @@ typedef struct
 } PyUNO;
 
 PyObject* PyUNO_iterator_new (
-    const com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> xEnumeration);
+    const css::uno::Reference<css::container::XEnumeration> xEnumeration);
 
 typedef struct
 {
-    com::sun::star::uno::Reference <com::sun::star::container::XEnumeration> xEnumeration;
+    css::uno::Reference <css::container::XEnumeration> xEnumeration;
 } PyUNO_iterator_Internals;
 
 typedef struct
@@ -241,11 +241,11 @@ typedef struct
 } PyUNO_iterator;
 
 PyObject* PyUNO_list_iterator_new (
-    const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> &xIndexAccess);
+    const css::uno::Reference<css::container::XIndexAccess> &xIndexAccess);
 
 typedef struct
 {
-    com::sun::star::uno::Reference <com::sun::star::container::XIndexAccess> xIndexAccess;
+    css::uno::Reference <css::container::XIndexAccess> xIndexAccess;
     int index;
 } PyUNO_list_iterator_Internals;
 
@@ -260,26 +260,26 @@ PyRef ustring2PyString( const OUString & source );
 OUString pyString2ustring( PyObject *str );
 
 
-PyRef AnyToPyObject (const com::sun::star::uno::Any & a, const Runtime &r )
-    throw ( com::sun::star::uno::RuntimeException );
+PyRef AnyToPyObject (const css::uno::Any & a, const Runtime &r )
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Any PyObjectToAny (PyObject* o)
-    throw ( com::sun::star::uno::RuntimeException );
+css::uno::Any PyObjectToAny (PyObject* o)
+    throw ( css::uno::RuntimeException );
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
-    throw ( com::sun::star::reflection::InvocationTargetException );
+    throw ( css::reflection::InvocationTargetException );
 
-com::sun::star::uno::TypeClass StringToTypeClass (char* string);
+css::uno::TypeClass StringToTypeClass (char* string);
 
 PyRef PyUNO_callable_new (
-    const com::sun::star::uno::Reference<com::sun::star::script::XInvocation2> &xInv,
+    const css::uno::Reference<css::script::XInvocation2> &xInv,
     const OUString &methodName,
     ConversionMode mode = REJECT_UNO_ANY );
 
-PyObject* PyUNO_Type_new (const char *typeName , com::sun::star::uno::TypeClass t , const Runtime &r );
+PyObject* PyUNO_Type_new (const char *typeName , css::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
 PyObject* PyUNO_char_new (sal_Unicode c , const Runtime &r);
-PyObject *PyUNO_ByteSequence_new( const com::sun::star::uno::Sequence< sal_Int8 > &, const Runtime &r );
+PyObject *PyUNO_ByteSequence_new( const css::uno::Sequence< sal_Int8 > &, const Runtime &r );
 
 PyRef getTypeClass( const Runtime &);
 PyRef getEnumClass( const Runtime &);
@@ -292,33 +292,33 @@ PyRef getClass( const OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
-com::sun::star::uno::Any PyEnum2Enum( PyObject *obj )
-    throw ( com::sun::star::uno::RuntimeException );
+css::uno::Any PyEnum2Enum( PyObject *obj )
+    throw ( css::uno::RuntimeException );
 sal_Unicode PyChar2Unicode( PyObject *o )
-    throw ( com::sun::star::uno::RuntimeException );
-com::sun::star::uno::Type PyType2Type( PyObject * o )
-    throw( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
+css::uno::Type PyType2Type( PyObject * o )
+    throw( css::uno::RuntimeException );
 
-void raisePyExceptionWithAny( const com::sun::star::uno::Any &a );
-const char *typeClassToString( com::sun::star::uno::TypeClass t );
+void raisePyExceptionWithAny( const css::uno::Any &a );
+const char *typeClassToString( css::uno::TypeClass t );
 
 PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
 bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
-com::sun::star::uno::Sequence<com::sun::star::uno::Type> implementsInterfaces(
+css::uno::Sequence<css::uno::Type> implementsInterfaces(
     const Runtime & runtime, PyObject *obj );
 
 struct RuntimeCargo
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xInvocation;
-    com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter> xTypeConverter;
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext;
-    com::sun::star::uno::Reference< com::sun::star::reflection::XIdlReflection > xCoreReflection;
-    com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xTdMgr;
-    com::sun::star::uno::Reference< com::sun::star::script::XInvocationAdapterFactory2 > xAdapterFactory;
-    com::sun::star::uno::Reference< com::sun::star::beans::XIntrospection > xIntrospection;
+    css::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;
+    css::uno::Reference< css::script::XTypeConverter> xTypeConverter;
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
+    css::uno::Reference< css::script::XInvocationAdapterFactory2 > xAdapterFactory;
+    css::uno::Reference< css::beans::XIntrospection > xIntrospection;
     PyRef dictUnoModule;
     osl::Module testModule;
     bool valid;
@@ -339,65 +339,65 @@ public:
     static void del( PyObject *self );
 
     static PyRef create(
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext )
-        throw ( com::sun::star::uno::RuntimeException, std::exception );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext )
+        throw ( css::uno::RuntimeException, std::exception );
 };
 
 
 class Adapter : public cppu::WeakImplHelper<
-    com::sun::star::script::XInvocation, com::sun::star::lang::XUnoTunnel >
+    css::script::XInvocation, css::lang::XUnoTunnel >
 {
     PyRef mWrappedObject;
     PyInterpreterState *mInterpreter;  // interpreters don't seem to be refcounted !
-    com::sun::star::uno::Sequence< com::sun::star::uno::Type > mTypes;
+    css::uno::Sequence< css::uno::Type > mTypes;
     MethodOutIndexMap m_methodOutIndexMap;
 
 private:
-    com::sun::star::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
+    css::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
 
 public:
 public:
     Adapter( const PyRef &obj,
-             const com::sun::star::uno::Sequence< com::sun::star::uno::Type > & types );
+             const css::uno::Sequence< css::uno::Type > & types );
 
-    static com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     PyRef getWrappedObject() { return mWrappedObject; }
-    com::sun::star::uno::Sequence< com::sun::star::uno::Type > getWrappedTypes() { return mTypes; }
+    css::uno::Sequence< css::uno::Type > getWrappedTypes() { return mTypes; }
     virtual ~Adapter();
 
     // XInvocation
-    virtual com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >
-           SAL_CALL getIntrospection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL invoke(
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess >
+           SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL invoke(
         const OUString& aFunctionName,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
-        ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::script::CannotConvertException,
-               ::com::sun::star::reflection::InvocationTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aParams,
+        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        css::uno::Sequence< css::uno::Any >& aOutParam )
+        throw (css::lang::IllegalArgumentException,
+               css::script::CannotConvertException,
+               css::reflection::InvocationTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setValue(
         const OUString& aPropertyName,
-        const ::com::sun::star::uno::Any& aValue )
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::script::CannotConvertException,
-               ::com::sun::star::reflection::InvocationTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Any& aValue )
+        throw (css::beans::UnknownPropertyException,
+               css::script::CannotConvertException,
+               css::reflection::InvocationTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 

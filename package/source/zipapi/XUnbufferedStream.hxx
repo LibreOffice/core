@@ -43,19 +43,19 @@ namespace com { namespace sun { namespace star { namespace uno {
 class EncryptionData;
 class XUnbufferedStream : public cppu::WeakImplHelper
 <
-    com::sun::star::io::XInputStream
+    css::io::XInputStream
 >
 {
 protected:
     rtl::Reference<SotMutexHolder> maMutexHolder;
 
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
-    com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
+    css::uno::Reference < css::io::XInputStream > mxZipStream;
+    css::uno::Reference < css::io::XSeekable > mxZipSeek;
+    css::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
     ::rtl::Reference< EncryptionData > mxData;
     sal_Int32 mnBlockSize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
+    css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
     ZipUtils::Inflater maInflater;
     bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
@@ -65,10 +65,10 @@ protected:
 
 public:
     XUnbufferedStream(
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
                  const rtl::Reference<SotMutexHolder>& aMutexHolder,
                  ZipEntry & rEntry,
-                 com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
+                 css::uno::Reference < css::io::XInputStream > xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  bool bIsEncrypted,
@@ -77,32 +77,23 @@ public:
 
     // allows to read package raw stream
     XUnbufferedStream(
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-                 const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
+                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                 const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 
     virtual ~XUnbufferedStream();
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    // XSeekable
-    /*
-    virtual void SAL_CALL seek( sal_Int64 location )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    */
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 };
 #endif
 
