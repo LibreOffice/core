@@ -94,7 +94,27 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
         */
         static Sequence< OUString > GetPropertyNames();
 
-    protected:
+        void SetVisibleViewImpl( bool& bVisibleView, bool bVisible );
+
+    public:
+        void SetVisibleImpressView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleImpressView, bVisible ); }
+
+        void SetVisibleOutlineView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleOutlineView, bVisible ); }
+
+        void SetVisibleNotesView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleNotesView, bVisible ); }
+
+        void SetVisibleHandoutView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleHandoutView, bVisible ); }
+
+        void SetVisibleSlideSorterView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleSlideSorterView, bVisible ); }
+
+        void SetVisibleDrawView( bool bVisible)
+             { SetVisibleViewImpl( m_bVisibleDrawView, bVisible ); }
+
 };
 
 SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
@@ -314,6 +334,15 @@ Sequence< OUString > SvtSlideSorterBarOptions_Impl::GetPropertyNames()
     return Sequence< OUString >( pProperties, SAL_N_ELEMENTS( pProperties ) );
 }
 
+void SvtSlideSorterBarOptions_Impl::SetVisibleViewImpl( bool& bVisibleView, bool bVisible )
+{
+    if( bVisibleView != bVisible )
+    {
+        bVisibleView = bVisible;
+        SetModified();
+    }
+}
+
 //  initialize static member, see definition for further information
 //  DON'T DO IT IN YOUR HEADER!
 SvtSlideSorterBarOptions_Impl* SvtSlideSorterBarOptions::m_pDataContainer    = NULL  ;
@@ -339,6 +368,8 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
     // If last instance was deleted we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
+        if (m_pDataContainer->IsModified())
+            m_pDataContainer->Commit();
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
@@ -351,7 +382,7 @@ bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleImpressView = bVisible;
+    m_pDataContainer->SetVisibleImpressView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
@@ -361,7 +392,7 @@ bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
 
 void SvtSlideSorterBarOptions::SetVisibleOutlineView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleOutlineView = bVisible;
+    m_pDataContainer->SetVisibleOutlineView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
@@ -371,7 +402,7 @@ bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
 
 void SvtSlideSorterBarOptions::SetVisibleNotesView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleNotesView = bVisible;
+    m_pDataContainer->SetVisibleNotesView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
@@ -381,7 +412,7 @@ bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
 
 void SvtSlideSorterBarOptions::SetVisibleHandoutView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleHandoutView = bVisible;
+    m_pDataContainer->SetVisibleHandoutView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
@@ -391,7 +422,7 @@ bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
 
 void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleSlideSorterView = bVisible;
+    m_pDataContainer->SetVisibleSlideSorterView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
@@ -401,7 +432,7 @@ bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
 
 void SvtSlideSorterBarOptions::SetVisibleDrawView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleDrawView = bVisible;
+    m_pDataContainer->SetVisibleDrawView( bVisible );
 }
 
 namespace
