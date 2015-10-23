@@ -136,7 +136,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
             if(rStyleSettings.GetPreviewUsesCheckeredBackground())
             {
                 static const sal_uInt32 nLen(8);
-                static const Color aW(COL_WHITE);
+                static const Color aW(COL_TRANSPARENT);
                 static const Color aG(0xef, 0xef, 0xef);
 
                 pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);

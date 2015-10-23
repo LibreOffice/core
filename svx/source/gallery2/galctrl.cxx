@@ -263,7 +263,7 @@ void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, con
     {
         // draw checkered background
         static const sal_uInt32 nLen(8);
-        static const Color aW(COL_WHITE);
+        static const Color aW(COL_TRANSPARENT);
         static const Color aG(0xef, 0xef, 0xef);
 
         rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
