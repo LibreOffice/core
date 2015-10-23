@@ -4060,7 +4060,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
             bool bLockModify = true;
-            bool bSetNumberFormat = false;
+            bool bSetNumberFormat = IsInsTableFormatNum();
             const bool bForceNumberFormat = IsInsTableFormatNum() && IsInsTableChangeNumFormat();
 
             // if the user forced a number format in this cell previously,
