@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_3ddd3371",
+        "filename": "svx/source/gallery2/galctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-23T16:08:52Z",
+      "side": 1,
+      "message": "We want the gallery items to *always* have transparent/checkered background. So we need to take this branch unconditionally",
+      "revId": "8845c1b1237e84c8abbd78e1fdc47e0954771d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_7de7ab40",
+        "filename": "svx/source/gallery2/galctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-23T16:08:52Z",
+      "side": 1,
+      "message": "no need to change this then",
+      "revId": "8845c1b1237e84c8abbd78e1fdc47e0954771d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_1ddaf778",
+        "filename": "svx/source/gallery2/galctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-23T16:08:52Z",
+      "side": 1,
+      "message": "... and then we don\u0027t need this branch anymore :)",
+      "revId": "8845c1b1237e84c8abbd78e1fdc47e0954771d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_5de46f3a",
+        "filename": "svx/source/tbxctrls/fontworkgallery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-23T16:08:52Z",
+      "side": 1,
+      "message": "The same (as for galleries) applies here: we want to use transparent/checkered background unconditionally",
+      "revId": "8845c1b1237e84c8abbd78e1fdc47e0954771d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
