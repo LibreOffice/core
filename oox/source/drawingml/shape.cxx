@@ -953,11 +953,12 @@ Reference< XShape > Shape::createAndInsert(
             }
 
             // store unsupported effect attributes in the grab bag
-            if (!aEffectProperties.m_Effects.empty())
+            if( aEffectProperties.maEffects.size() > 0 )
             {
-                Sequence<PropertyValue> aEffects(aEffectProperties.m_Effects.size());
+                Sequence< PropertyValue > aEffects( aEffectProperties.maEffects.size() );
                 sal_uInt32 i = 0;
-                for (auto const& it : aEffectProperties.m_Effects)
+                for( boost::ptr_vector< Effect >::iterator it = aEffectProperties.maEffects.begin();
+                        it != aEffectProperties.maEffects.end(); ++it )
                 {
                     PropertyValue aEffect = it->getEffect();
                     if( !aEffect.Name.isEmpty() )
