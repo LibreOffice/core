@@ -174,7 +174,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                         ERRCODE_AREA_APP2-1,
                                         GetResMgr() );
 
-    aSpellIdle.SetPriority(SchedulerPriority::REPAINT);
+    aSpellIdle.SetPriority(SchedulerPriority::LOWER);
     aSpellIdle.SetIdleHdl( LINK( this, ScModule, SpellTimerHdl ) );
     aIdleTimer.SetTimeout(SC_IDLE_MIN);
     aIdleTimer.SetTimeoutHdl( LINK( this, ScModule, IdleHandler ) );
