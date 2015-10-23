@@ -52,7 +52,7 @@ namespace svx
 
         /** returns the current value of the property which the provider is responsible for
         */
-        virtual void getCurrentValue( ::com::sun::star::uno::Any& _out_rValue ) const = 0;
+        virtual void getCurrentValue( css::uno::Any& _out_rValue ) const = 0;
 
         virtual ~IPropertyValueProvider();
     };
@@ -76,7 +76,7 @@ namespace svx
         }
 
         virtual OUString getPropertyName() const override;
-        virtual void getCurrentValue( ::com::sun::star::uno::Any& _out_rValue ) const override;
+        virtual void getCurrentValue( css::uno::Any& _out_rValue ) const override;
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }
@@ -110,8 +110,8 @@ namespace svx
         ~PropertyChangeNotifier();
 
         // listener maintanance
-        void addPropertyChangeListener( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
-        void removePropertyChangeListener( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
+        void addPropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
+        void removePropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
 
         /** registers a IPropertyValueProvider
         */

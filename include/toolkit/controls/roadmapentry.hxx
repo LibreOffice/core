@@ -32,7 +32,7 @@
 #define RM_PROPERTY_ID_ENABLED      4
 #define RM_PROPERTY_ID_INTERACTIVE  5
 
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakImplHelper1 <   css::lang::XServiceInfo
                                 >   ORoadmapEntry_Base;
 
 class ORoadmapEntry :public ORoadmapEntry_Base
@@ -48,10 +48,10 @@ protected:
     DECLARE_XINTERFACE()        // merge XInterface implementations
     DECLARE_XTYPEPROVIDER()     // merge XTypeProvider implementations
 
-    /// @see ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+    /// @see css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         SAL_CALL getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
@@ -59,9 +59,9 @@ protected:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
     // other stuff

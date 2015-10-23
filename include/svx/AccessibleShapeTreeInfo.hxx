@@ -68,13 +68,13 @@ public:
 
     /** Deprecated.  Don't use this method.
     */
-    void SetDocumentWindow (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleComponent>& rxViewWindow);
+    void SetDocumentWindow (const css::uno::Reference<
+        css::accessibility::XAccessibleComponent>& rxViewWindow);
 
     /** Deprecated.  Don't use this method.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleComponent>
+    css::uno::Reference<
+        css::accessibility::XAccessibleComponent>
         GetDocumentWindow() const { return mxDocumentWindow;}
 
     /** Set a new broadcaster that sends events indicating shape changes.
@@ -83,16 +83,16 @@ public:
             The new broadcaster.  It replaces the current one.  An empty
             reference may be passed to unset the broadcaster
     */
-    void SetModelBroadcaster (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster>& rxModelBroadcaster);
+    void SetModelBroadcaster (const css::uno::Reference<
+        css::document::XEventBroadcaster>& rxModelBroadcaster);
 
     /** Return the current model broadcaster.
         @return
             The returned reference may be empty if the broadcaster has not
             been set or has been set to an empty reference.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster>
+    css::uno::Reference<
+        css::document::XEventBroadcaster>
         GetModelBroadcaster() const { return mxModelBroadcaster;}
 
     /** Set the view that will be used to construct SvxTextEditSources which
@@ -115,15 +115,15 @@ public:
             The new controller that replaces the current one.  An empty
             reference may be passed to unset the controller.
     */
-    void SetController (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController>& rxController);
+    void SetController (const css::uno::Reference<
+        css::frame::XController>& rxController);
 
     /** Return the currently set controller.
         @return
             The reference to the currently set controller may be empty.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController>
+    css::uno::Reference<
+        css::frame::XController>
         GetController() const { return mxController;}
 
     /** Set the window that is used to construct SvxTextEditSources which in
@@ -153,16 +153,16 @@ public:
 private:
     /** Deprecated.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleComponent> mxDocumentWindow;
+    css::uno::Reference<
+        css::accessibility::XAccessibleComponent> mxDocumentWindow;
 
     /** this broadcaster sends events indicating shape changes.
         The broadcaster usually is or belongs to a document model.
 
         This once was named mxControllerBroadcaster.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XEventBroadcaster> mxModelBroadcaster;
+    css::uno::Reference<
+        css::document::XEventBroadcaster> mxModelBroadcaster;
 
     /** This view is necessary to construct an SvxTextEditSource which in
         turn is used to create an accessible edit engine.
@@ -171,8 +171,8 @@ private:
 
     /** The controller is used e.g. for obtaining the selected shapes.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController> mxController;
+    css::uno::Reference<
+        css::frame::XController> mxController;
 
     /** This window is necessary to construct an SvxTextEditSource which in
         turn is used to create an accessible edit engine.

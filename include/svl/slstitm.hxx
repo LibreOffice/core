@@ -50,8 +50,8 @@ public:
     void                    SetString( const OUString& );
     OUString                GetString();
 
-    void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
-    void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;
+    void                    SetStringList( const css::uno::Sequence< OUString >& rList );
+    void                    GetStringList( css::uno::Sequence< OUString >& rList ) const;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            GetPresentation( SfxItemPresentation ePres,
@@ -63,9 +63,9 @@ public:
     virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 
-    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const css::uno::Any& rVal,
                                          sal_uInt8 nMemberId ) override;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( css::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 ) const override;
 };
 #endif

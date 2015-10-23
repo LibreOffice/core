@@ -41,12 +41,12 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
 {
-    const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > > maActionComponentsSequence;
-    const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > > maActionIndicesSequence;
-    const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > > maStringKeyMaps;
-    const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mxRange;
-    const com::sun::star::uno::Reference<com::sun::star::frame::XController> mxController;
-    const com::sun::star::lang::Locale maLocale;
+    const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > maActionComponentsSequence;
+    const css::uno::Sequence < css::uno::Sequence< sal_Int32 > > maActionIndicesSequence;
+    const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > maStringKeyMaps;
+    const css::uno::Reference<css::text::XTextRange> mxRange;
+    const css::uno::Reference<css::frame::XController> mxController;
+    const css::lang::Locale maLocale;
     const OUString maApplicationName;
     const OUString maRangeText;
 
@@ -54,12 +54,12 @@ public:
     TYPEINFO_OVERRIDE();
 
     SvxSmartTagItem( const sal_uInt16 nId,
-                     const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
-                     const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
-                     const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
-                     const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> rRange,
-                     const com::sun::star::uno::Reference<com::sun::star::frame::XController> rController,
-                     const com::sun::star::lang::Locale rLocale,
+                     const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
+                     const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
+                     const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                     const css::uno::Reference<css::text::XTextRange> rRange,
+                     const css::uno::Reference<css::frame::XController> rController,
+                     const css::lang::Locale rLocale,
                      const OUString& rApplicationName,
                      const OUString& rRangeText );
 
@@ -68,15 +68,15 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override; // leer
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override; // leer
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& GetActionComponentsSequence() const { return maActionComponentsSequence; }
-    const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& GetActionIndicesSequence() const { return maActionIndicesSequence; }
-    const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& GetStringKeyMaps() const { return maStringKeyMaps; }
-    const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& GetTextRange() const { return mxRange; }
-    const com::sun::star::uno::Reference<com::sun::star::frame::XController>& GetController() const { return mxController; }
-    const com::sun::star::lang::Locale& GetLocale() const { return maLocale; }
+    const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& GetActionComponentsSequence() const { return maActionComponentsSequence; }
+    const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& GetActionIndicesSequence() const { return maActionIndicesSequence; }
+    const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& GetStringKeyMaps() const { return maStringKeyMaps; }
+    const css::uno::Reference<css::text::XTextRange>& GetTextRange() const { return mxRange; }
+    const css::uno::Reference<css::frame::XController>& GetController() const { return mxController; }
+    const css::lang::Locale& GetLocale() const { return maLocale; }
     const OUString GetApplicationName() const { return maApplicationName; }
     const OUString GetRangeText() const { return maRangeText; }
 };

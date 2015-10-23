@@ -35,19 +35,19 @@
 class UnoControlTabPageModel :  public ControlModelContainerBase
 {
 protected:
-    ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 public:
-    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_factory);
+    UnoControlTabPageModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory);
 
-    // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
     // XInitialization
-    virtual void SAL_CALL initialize (const com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rArguments)
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
@@ -59,8 +59,8 @@ public:
 //  class UnoTabPageControl
 
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
-                                            ,   ::com::sun::star::awt::tab::XTabPage
-                                            ,   ::com::sun::star::awt::XWindowListener
+                                            ,   css::awt::tab::XTabPage
+                                            ,   css::awt::XWindowListener
                                             >   UnoControlTabPage_Base;
 class UnoControlTabPage : public UnoControlTabPage_Base
 {
@@ -68,20 +68,20 @@ private:
     bool            m_bWindowListener;
 public:
 
-    UnoControlTabPage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    UnoControlTabPage( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoControlTabPage();
     OUString             GetComponentServiceName() override;
 
-    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
 
-     // ::com::sun::star::awt::XWindowListener
-    virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    // ::com::sun::star::lang::XServiceInfo
+     // css::awt::XWindowListener
+    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 

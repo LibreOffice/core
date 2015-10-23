@@ -33,7 +33,7 @@ namespace vcl { class Window; }
 
 class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xWin;
+    css::uno::Reference< css::awt::XWindow >      m_xWin;
 
     XWindowItem & operator = ( const XWindowItem & ) = delete;
 

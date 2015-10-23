@@ -324,10 +324,10 @@ public:
                         ColorDistFunc pColorDistFn = &sameDistColor);
 
     using ListBox::GetEntryPos;
-    sal_Int32       GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
+    sal_Int32       GetEntryPos( sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID ) const;
     sal_uInt16      GetEntryStyle( sal_Int32  nPos ) const;
 
-    void            SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, bool bSelect = true );
+    void            SelectEntry( sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID, bool bSelect = true );
     sal_uInt16      GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }

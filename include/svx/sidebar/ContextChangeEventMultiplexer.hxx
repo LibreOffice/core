@@ -27,7 +27,7 @@
 
 class SfxViewShell;
 
-/** Convenience frontend for com::sun::star::ui::ContextChangeEventMultiplexer
+/** Convenience frontend for css::ui::ContextChangeEventMultiplexer
 */
 class SVX_DLLPUBLIC ContextChangeEventMultiplexer
 {

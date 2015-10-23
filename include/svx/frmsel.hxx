@@ -157,17 +157,17 @@ public:
 
     // accessibility ----------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
                         CreateAccessible() override;
 
     /** Returns the accessibility child object of the specified frame border (if enabled). */
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetChildAccessible( FrameBorderType eBorder );
     /** Returns the accessibility child object with specified index (counts enabled frame borders only). */
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetChildAccessible( sal_Int32 nIndex );
     /** Returns the accessibility child object at the specified position (relative to control). */
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                         GetChildAccessible( const Point& rPos );
 
     /** Returns true, if the passed point is inside the click area of any enabled frame border. */

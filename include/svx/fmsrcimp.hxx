@@ -72,7 +72,7 @@ struct FmSearchProgress
     bool        bOverflow;
 
     // the position of the search cursor - valid in case of STATE_SUCCESSFULL, STATE_CANCELED and STATE_NOTHING_FOUND
-    ::com::sun::star::uno::Any  aBookmark;
+    css::uno::Any  aBookmark;
     // the field, in which the text was found - valid in case of STATE_SUCCESSFULL
     sal_Int32   nFieldIndex;
 };
@@ -81,11 +81,11 @@ struct FmSearchProgress
  * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
  *                               the differences in RecordCount
  */
-class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< css::beans::XPropertyChangeListener>
 {
 // attribute
     Link<sal_Int32,void>     m_lnkWhoWantsToKnow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
+    css::uno::Reference< css::beans::XPropertySet >   m_xListening;
 
 // attribute access
 public:
@@ -93,18 +93,18 @@ public:
 
 // methods
 public:
-    FmRecordCountListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& dbcCursor);
+    FmRecordCountListener(const css::uno::Reference< css::sdbc::XResultSet >& dbcCursor);
     // the set has to support the sdb::ResultSet service
     virtual ~FmRecordCountListener();
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
-    //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
+    //  virtual sal_Bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertyChangeListener
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
 
     void DisConnect();
 
@@ -117,18 +117,18 @@ private:
  * class FmSearchEngine - Impl class for FmSearchDialog
  */
 namespace svxform {
-    // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent,
-    // ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
+    // We have three possible control types we may search in, determined by the supported interfaces : css::awt::XTextComponent,
+    // css::awt::XListBox, css::awt::XCheckBox.
     // While searching we don't want to do this distinction for every control in every round. So we need some helpers.
     class SAL_WARN_UNUSED ControlTextWrapper
     {
         // attributes
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xControl;
+        css::uno::Reference< css::uno::XInterface >   m_xControl;
         // attribute access
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  getControl() const{ return m_xControl; }
+        css::uno::Reference< css::uno::XInterface >  getControl() const{ return m_xControl; }
     public:
-        ControlTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xControl) { m_xControl = _xControl; }
+        ControlTextWrapper(const css::uno::Reference< css::uno::XInterface >& _xControl) { m_xControl = _xControl; }
         virtual ~ControlTextWrapper() { }
 
         virtual OUString getCurrentText() const = 0;
@@ -136,32 +136,32 @@ namespace svxform {
 
     class SAL_WARN_UNUSED SimpleTextWrapper : public ControlTextWrapper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  m_xText;
+        css::uno::Reference< css::awt::XTextComponent >  m_xText;
     public:
-        SimpleTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& _xText);
+        SimpleTextWrapper(const css::uno::Reference< css::awt::XTextComponent >& _xText);
         virtual OUString getCurrentText() const override;
     };
 
     class SAL_WARN_UNUSED ListBoxWrapper : public ControlTextWrapper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >  m_xBox;
+        css::uno::Reference< css::awt::XListBox >  m_xBox;
     public:
-        ListBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >& _xBox);
+        ListBoxWrapper(const css::uno::Reference< css::awt::XListBox >& _xBox);
         virtual OUString getCurrentText() const override;
     };
 
     class SAL_WARN_UNUSED CheckBoxWrapper : public ControlTextWrapper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >  m_xBox;
+        css::uno::Reference< css::awt::XCheckBox >  m_xBox;
     public:
-        CheckBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >& _xBox);
+        CheckBoxWrapper(const css::uno::Reference< css::awt::XCheckBox >& _xBox);
         virtual OUString getCurrentText() const override;
     };
 }
 
 enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
 
-typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
+typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
 {
@@ -173,19 +173,19 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
     CursorWrapper                   m_xSearchCursor;
     std::deque<sal_Int32>           m_arrFieldMapping;
     // Since the iterator could have more columns, as managed here (in this field listbox),
-    // a mapping of this ::com::sun::star::form keys on the indices of the respective columns is kept in the iterator
+    // a mapping of this css::form keys on the indices of the respective columns is kept in the iterator
 
     // the formatter
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xFormatSupplier;
+    css::uno::Reference< css::util::XNumberFormatter >        m_xFormatter;
 
     CharClass               m_aCharacterClassficator;
     CollatorWrapper         m_aStringCompare;
 
-    // the collection of all interesting fields (or their ::com::sun::star::data::XDatabaseVariant interfaces and FormatKeys)
+    // the collection of all interesting fields (or their css::data::XDatabaseVariant interfaces and FormatKeys)
     struct FieldInfo
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
+        css::uno::Reference< css::sdb::XColumn >          xContents;
         sal_uInt32              nFormatKey;
         bool                    bDoubleHandling;
     };
@@ -202,7 +202,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
     CursorWrapper           m_xClonedIterator;
 
     // Data for the decision in which field a "Found" is accepted
-    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
+    css::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
     FieldCollection::iterator   m_iterPreviousLocField;     // field of the last finding
 
     // Communication with the thread that does the actual searching
@@ -286,7 +286,7 @@ public:
 
 public:
     /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations ....
-        xCursor has to implement ::com::sun::star::data::DatabaseCursor service  each time.
+        xCursor has to implement css::data::DatabaseCursor service  each time.
         If eMode == SM_USETHREAD, a ProgressHandler should be set, because in this case the result forwarding will be done
         by this handler.
         If eMode != SM_USETHREAD, SearchNext and StarOver won't return, until the search has finished (independently of its
@@ -294,14 +294,14 @@ public:
         every record as well as at the end of the search.
     */
     FmSearchEngine(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
+        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         const OUString& strVisibleFields,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
+        const css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormat,
         FMSEARCH_MODE eMode);
     FmSearchEngine(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
+        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         const OUString& strVisibleFields,
         const InterfaceArray& arrFields,
         FMSEARCH_MODE eMode);
@@ -338,7 +338,7 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
+    bool SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 protected:
@@ -372,7 +372,7 @@ private:
     // moves m_xSearchIterator with respect to direction/overflow cursor
     SVX_DLLPRIVATE bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
-    SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
+    SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const css::uno::Reference< css::container::XIndexAccess >& xAllFields, sal_Int32 nField);
     // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
     // xAllFields needs to support the DatabaseRecord service
     SVX_DLLPRIVATE OUString FormatField(const FieldInfo& rField);

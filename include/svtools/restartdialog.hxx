@@ -39,8 +39,7 @@ enum RestartReason {
 
 // Must be called with the solar mutex locked:
 SVT_DLLPUBLIC void executeRestartDialog(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const & context,
+    css::uno::Reference< css::uno::XComponentContext > const & context,
     vcl::Window * parent, RestartReason reason);
 
 }

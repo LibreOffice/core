@@ -56,19 +56,19 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
     bool                        bOwnUnoControlModel;
 
 protected:
-    ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
+    css::uno::Reference< css::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
 
 private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName);
     SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName,
-        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac );
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac );
 
 public:
     TYPEINFO_OVERRIDE();
 
     explicit SdrUnoObj(const OUString& rModelName, bool bOwnsModel = true);
     SdrUnoObj(const OUString& rModelName,
-        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac,
         bool bOwnsModel = true);
     virtual ~SdrUnoObj();
 
@@ -95,8 +95,8 @@ public:
 
     virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode ) override;
 
-    ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
-    ::com::sun::star::uno::Reference< com::sun::star::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
+    css::uno::Reference< css::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
+    css::uno::Reference< css::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
 
     /** retrieves a temporary XControl instance for a given output device
 
@@ -122,15 +122,15 @@ public:
             In particular, the caller is required to dispose it when it's not needed anymore.
 
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+    css::uno::Reference< css::awt::XControl >
         GetTemporaryControlForWindow(
             const vcl::Window& _rWindow,
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer
+            css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer
         ) const;
 
     const OUString& GetUnoControlTypeName() const { return aUnoControlTypeName; }
 
-    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& xModel );
+    virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& xModel );
 
 protected:
     // SdrObject overridables

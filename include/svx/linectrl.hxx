@@ -89,7 +89,7 @@ private:
     Size            aBmpSize;
     bool            bPopupMode;
     bool            mbInResize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+    css::uno::Reference< css::frame::XFrame > mxFrame;
 
 
     DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
@@ -111,10 +111,10 @@ protected:
 
 public:
     SvxLineEndWindow( sal_uInt16 nId,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                      const css::uno::Reference< css::frame::XFrame >& rFrame,
                       const OUString& rWndTitle );
     SvxLineEndWindow( sal_uInt16 nId,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                      const css::uno::Reference< css::frame::XFrame >& rFrame,
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();

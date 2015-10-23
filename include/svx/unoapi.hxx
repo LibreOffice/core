@@ -43,16 +43,16 @@ SVX_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, sal_uI
     throw (css::uno::RuntimeException, std::exception);
 
 /** Returns a StarOffice API wrapper for the given SdrObject */
-SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
+SVX_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
 
 /** Returns the SdrObject from the given StarOffice API wrapper */
-SVX_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) throw() ;
+SVX_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( css::uno::Reference< css::drawing::XShape > xShape ) throw() ;
 
 /** Returns a StarOffice API wrapper for the given SdrPage */
-SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
+SVX_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
 
 /** Returns the SdrPage from the given StarOffice API wrapper */
-SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage ) throw() ;
+SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( css::uno::Reference< css::drawing::XDrawPage > xDrawPage ) throw() ;
 
 /**
  * Maps the vcl MapUnit enum to a API constant MeasureUnit.

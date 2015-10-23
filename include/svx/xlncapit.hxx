@@ -33,21 +33,21 @@ class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
-    XLineCapItem(com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
+    XLineCapItem(css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
     XLineCapItem(SvStream& rIn);
 
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const override;
 
     virtual sal_uInt16          GetValueCount() const override;
-    com::sun::star::drawing::LineCap GetValue() const;
+    css::drawing::LineCap GetValue() const;
 };
 
 #endif // INCLUDED_SVX_XLNCAPIT_HXX

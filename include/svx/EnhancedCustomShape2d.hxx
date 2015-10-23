@@ -107,17 +107,17 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             bool bReady;
             double fValue;
         };
-        com::sun::star::uno::Sequence< OUString >                                                       seqEquations;
+        css::uno::Sequence< OUString >                                                       seqEquations;
         std::vector< std::shared_ptr< EnhancedCustomShape::ExpressionNode > >                           vNodesSharedPtr;
         std::vector< EquationResult >                                                                   vEquationResults;
 
-        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
-        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
-        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
-        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
-        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                          seqHandles;
-        com::sun::star::uno::Sequence< com::sun::star::awt::Size >                                      seqSubViewSize;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            seqSegments;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
+        css::uno::Sequence< css::beans::PropertyValues >                          seqHandles;
+        css::uno::Sequence< css::awt::Size >                                      seqSubViewSize;
 
         bool                    bTextFlow       : 1;
         bool                    bFilled         : 1;
@@ -132,9 +132,9 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE Color    GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         SAL_DLLPRIVATE void     AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
-        SAL_DLLPRIVATE bool     GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
+        SAL_DLLPRIVATE bool     GetParameter( double& rParameterReturnValue,  const css::drawing::EnhancedCustomShapeParameter&,
                                                   const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const;
-        SAL_DLLPRIVATE Point    GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
+        SAL_DLLPRIVATE Point    GetPoint( const css::drawing::EnhancedCustomShapeParameterPair&,
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
         SAL_DLLPRIVATE void     CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
@@ -155,20 +155,20 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             bool        bMirroredY;
             bool        bSwitched;
 
-            com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPosition;
-            com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
+            css::drawing::EnhancedCustomShapeParameterPair   aPosition;
+            css::drawing::EnhancedCustomShapeParameterPair   aPolar;
 
             sal_Int32   nRefX;
             sal_Int32   nRefY;
             sal_Int32   nRefAngle;
             sal_Int32   nRefR;
 
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
-            com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
+            css::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
+            css::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
+            css::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
+            css::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
+            css::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
+            css::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
 
             Handle()
                 : nFlags(HandleFlags::NONE)
@@ -196,7 +196,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         sal_uInt32              GetHdlCount() const;
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
-        bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
+        bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition );
 
         EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
         virtual ~EnhancedCustomShape2d();
@@ -226,11 +226,11 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE static void AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue );
 
-        static void             SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
+        static void             SetEnhancedCustomShapeParameter( css::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
-        static void             SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
+        static void             SetEnhancedCustomShapeHandleParameter( css::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nPara, const bool bIsSpecialValue, bool bHorz );
-        SAL_DLLPRIVATE static bool ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
+        SAL_DLLPRIVATE static bool ConvertSequenceToEnhancedCustomShape2dHandle( const css::beans::PropertyValues& rHandleProperties,
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
         SAL_DLLPRIVATE static void SwapStartAndEndArrow( SdrObject* pObj );
 };

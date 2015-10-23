@@ -225,7 +225,7 @@ namespace svt { namespace table
 
         /** retrieves the horizontal alignment to be used for content in this cell
         */
-        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
+        virtual css::style::HorizontalAlignment getHorizontalAlign() = 0;
 
         /// deletes the column model instance
         virtual ~IColumnModel() { }
@@ -336,7 +336,7 @@ namespace svt { namespace table
 
         /** retrieves the content of the given cell
         */
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) = 0;
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) = 0;
 
         /** returns an object which should be displayed as tooltip for the given cell
 
@@ -353,11 +353,11 @@ namespace svt { namespace table
             @param o_cellToolTip
                 takes the tooltip object upon return.
         */
-        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip ) = 0;
+        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, css::uno::Any & o_cellToolTip ) = 0;
 
         /** retrieves title of a given row
         */
-        virtual ::com::sun::star::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
+        virtual css::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
 
         /** returns the color to be used for rendering the grid lines.
 
@@ -429,7 +429,7 @@ namespace svt { namespace table
 
         /** determines the vertical alignment of content within a cell
         */
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const = 0;
+        virtual css::style::VerticalAlignment getVerticalAlign() const = 0;
 
         /** returns an adapter to the sorting functionality of the model
 

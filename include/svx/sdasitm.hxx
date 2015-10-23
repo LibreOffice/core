@@ -47,14 +47,14 @@ private:
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
+    css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
 
     public:
 
             TYPEINFO_OVERRIDE();
 
             SdrCustomShapeGeometryItem();
-            SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+            SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
             SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
             virtual ~SdrCustomShapeGeometryItem();
 
@@ -69,18 +69,18 @@ private:
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const override;
             virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
-            virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-            virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+            virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+            virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
+            const css::uno::Sequence< css::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
 
-            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
-            const com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
-            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
-            const com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 ) const;
+            css::uno::Any* GetPropertyValueByName( const OUString& rPropName );
+            const css::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
+            css::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
+            const css::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 ) const;
 
-            void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );
-            void SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
+            void SetPropertyValue( const css::beans::PropertyValue& rPropVal );
+            void SetPropertyValue( const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal );
 
             void ClearPropertyValue( const OUString& rPropertyName );
 };

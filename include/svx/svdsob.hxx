@@ -91,10 +91,10 @@ public:
     void operator|=(const SetOfByte& r2ndSet);
 
     // initialize this set with a uno sequence of sal_Int8
-    void PutValue(const com::sun::star::uno::Any & rAny);
+    void PutValue(const css::uno::Any & rAny);
 
     // returns a uno sequence of sal_Int8
-    void QueryValue(com::sun::star::uno::Any & rAny) const;
+    void QueryValue(css::uno::Any & rAny) const;
 };
 
 #endif // INCLUDED_SVX_SVDSOB_HXX

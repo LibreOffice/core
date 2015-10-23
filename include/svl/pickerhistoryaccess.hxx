@@ -31,10 +31,10 @@ namespace svt
 
 
     SVL_DLLPUBLIC void addFolderPicker(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxPicker );
+        const css::uno::Reference< css::uno::XInterface >& _rxPicker );
 
     SVL_DLLPUBLIC void addFilePicker(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxPicker );
+        const css::uno::Reference< css::uno::XInterface >& _rxPicker );
 
 
 }   // namespace svt

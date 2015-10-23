@@ -105,8 +105,8 @@ public:
              set or the referenced object does not support the
              XShapeDescriptor interface.
      */
-    ShapeTypeId GetTypeId (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape) const;
+    ShapeTypeId GetTypeId (const css::uno::Reference<
+        css::drawing::XShape>& rxShape) const;
 
     /**  Create a new accessible object for the given shape.
          @param rShapeInfo
@@ -140,8 +140,8 @@ public:
 
     /// get the accessible base name for an object
     static OUString CreateAccessibleBaseName (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape)
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+        const css::uno::Reference< css::drawing::XShape >& rxShape)
+            throw (css::uno::RuntimeException, std::exception);
 
 protected:
     // Declare default constructor, copy constructor, destructor, and
@@ -192,8 +192,8 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE long GetSlotId (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape) const;
+    SVX_DLLPRIVATE long GetSlotId (const css::uno::Reference<
+        css::drawing::XShape>& rxShape) const;
 };
 
 } // end of namespace accessible

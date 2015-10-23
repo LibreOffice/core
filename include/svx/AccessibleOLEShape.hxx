@@ -34,7 +34,7 @@ namespace accessibility {
 */
 class SVX_DLLPUBLIC AccessibleOLEShape
     :   public AccessibleShape,
-        public ::com::sun::star::accessibility::XAccessibleAction
+        public css::accessibility::XAccessibleAction
 {
 public:
     //=====  internal  ========================================================
@@ -46,27 +46,27 @@ public:
     //=====  XAccessibleAction  ===============================================
 
     sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+            css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+            css::uno::RuntimeException, std::exception) override;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
+    css::uno::Reference<
+        css::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
             sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+            css::uno::RuntimeException, std::exception) override;
 
     //=====  XInterface  ======================================================
 
-    virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface (const com::sun::star::uno::Type & rType)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL
+        queryInterface (const css::uno::Type & rType)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
         acquire()
@@ -80,29 +80,29 @@ public:
 
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 // ====== XAccessibleExtendedAttributes =====================================
-    virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes() throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Any SAL_CALL getExtendedAttributes() throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override ;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString
         CreateAccessibleBaseName ()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     AccessibleOLEShape (const AccessibleOLEShape&) = delete;

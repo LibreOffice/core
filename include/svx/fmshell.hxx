@@ -137,14 +137,14 @@ public:
 
     // helper methods for implementing XFormLayerAccess
     SdrUnoObj* GetFormControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel,
+        const css::uno::Reference< css::awt::XControlModel >& _rxModel,
         const SdrView& _rView,
         const OutputDevice& _rDevice,
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _out_rxControl
+        css::uno::Reference< css::awt::XControl >& _out_rxControl
     ) const;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+    static css::uno::Reference< css::form::runtime::XFormController > GetFormController(
+        const css::uno::Reference< css::form::XForm >& _rxForm,
         const SdrView& _rView,
         const OutputDevice& _rDevice
     );

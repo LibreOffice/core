@@ -45,9 +45,9 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper* pIntl = 0 ) const override;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue( css::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
     void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }

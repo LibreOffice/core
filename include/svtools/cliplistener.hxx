@@ -30,7 +30,7 @@ namespace vcl { class Window; }
 class TransferableDataHelper;
 
 class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
-                            ::com::sun::star::datatransfer::clipboard::XClipboardListener >
+                            css::datatransfer::clipboard::XClipboardListener >
 {
     Link<TransferableDataHelper*,void>  aLink;
 
@@ -43,11 +43,11 @@ public:
     void    ClearCallbackLink();
 
             // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+                                            throw(css::uno::RuntimeException, std::exception) override;
             // XClipboardListener
-    virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& event )
-                                            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& event )
+                                            throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

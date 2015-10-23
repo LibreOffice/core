@@ -55,11 +55,11 @@ namespace vcl { class Window; }
 
 // Drag&Drop defines
 
-#define DND_ACTION_NONE     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE
-#define DND_ACTION_COPY     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY
-#define DND_ACTION_MOVE     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_MOVE
-#define DND_ACTION_COPYMOVE ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE
-#define DND_ACTION_LINK     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_LINK
+#define DND_ACTION_NONE     css::datatransfer::dnd::DNDConstants::ACTION_NONE
+#define DND_ACTION_COPY     css::datatransfer::dnd::DNDConstants::ACTION_COPY
+#define DND_ACTION_MOVE     css::datatransfer::dnd::DNDConstants::ACTION_MOVE
+#define DND_ACTION_COPYMOVE css::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE
+#define DND_ACTION_LINK     css::datatransfer::dnd::DNDConstants::ACTION_LINK
 
 #define DND_POINTER_NONE    0
 #define DND_IMAGE_NONE      0
@@ -76,7 +76,7 @@ struct TransferableObjectDescriptor
     bool                mbCanLink;
 
     TransferableObjectDescriptor()
-        : mnViewAspect(::com::sun::star::embed::Aspects::MSOLE_CONTENT)
+        : mnViewAspect(css::embed::Aspects::MSOLE_CONTENT)
         , mnOle2Misc(0)
         , mbCanLink(false)
     {}
@@ -88,7 +88,7 @@ struct AcceptDropEvent
 {
     sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
-    const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent  maDragEvent;
+    const css::datatransfer::dnd::DropTargetDragEvent               maDragEvent;
     bool                                                            mbLeaving;
     bool                                                            mbDefault;
 
@@ -99,7 +99,7 @@ struct AcceptDropEvent
 
     AcceptDropEvent( sal_Int8 nAction,
                      const Point& rPosPixel,
-                     const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDragEvent,
+                     const css::datatransfer::dnd::DropTargetDragEvent& rDragEvent,
                      bool bLeaving = false ) :
         mnAction( nAction ),
         maPosPixel( rPosPixel ),
@@ -112,7 +112,7 @@ struct ExecuteDropEvent
 {
     sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
-    const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent  maDropEvent;
+    const css::datatransfer::dnd::DropTargetDropEvent               maDropEvent;
     bool                                                            mbDefault;
 
     ExecuteDropEvent() :
@@ -121,22 +121,22 @@ struct ExecuteDropEvent
 
     ExecuteDropEvent( sal_Int8 nAction,
                       const Point& rPosPixel,
-                      const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDropEvent ) :
+                      const css::datatransfer::dnd::DropTargetDropEvent& rDropEvent ) :
         mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDropEvent( rDropEvent ),
         mbDefault( false ) {}
 };
 
-class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable2,
-                                                           ::com::sun::star::datatransfer::clipboard::XClipboardOwner,
-                                                           ::com::sun::star::datatransfer::dnd::XDragSourceListener,
-                                                           ::com::sun::star::lang::XUnoTunnel >
+class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< css::datatransfer::XTransferable2,
+                                                           css::datatransfer::clipboard::XClipboardOwner,
+                                                           css::datatransfer::dnd::XDragSourceListener,
+                                                           css::lang::XUnoTunnel >
 {
 private:
 
     // nested class to implement the XTerminateListener interface
-    class TerminateListener : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XTerminateListener >
+    class TerminateListener : public ::cppu::WeakImplHelper1< css::frame::XTerminateListener >
     {
     private:
 
@@ -145,11 +145,11 @@ private:
     private:
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
     public:
 
@@ -161,23 +161,23 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Any                                                                          maAny;
-    OUString                                                                                     maLastFormat;
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >   mxClipboard;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener >                     mxTerminateListener;
-    DataFlavorExVector*                                                                                 mpFormats;
-    TransferableObjectDescriptor*                                                                       mpObjDesc;
+    css::uno::Any                                                             maAny;
+    OUString                                                                  maLastFormat;
+    mutable css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
+    css::uno::Reference< css::frame::XTerminateListener >                     mxTerminateListener;
+    DataFlavorExVector*                                                       mpFormats;
+    TransferableObjectDescriptor*                                             mpObjDesc;
 
 protected:
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >&
+    inline const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
         getOwnClipboard() const { return mxClipboard; }
 
 private:
 
     // XTransferable
-    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) throw(css::uno::RuntimeException, std::exception) override;
 
     // Transferable2
     virtual css::uno::Any SAL_CALL getTransferData2(
@@ -185,27 +185,27 @@ private:
             throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XDragSourceListener
-    virtual void SAL_CALL dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& dse ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw(css::uno::RuntimeException, std::exception) override;
 
 private:
 
     // XClipboardOwner
-    virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
     // derivees need to access lostOwnership in case hey override it
     // on windows, changing the access rights to a method gives unresolved externals, so we introduce
     // this impl-method here 'til the next incompatible update
     inline  void    implCallOwnLostOwnership(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& _rxClipboard,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTrans
+                        const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard,
+                        const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans
                     )
             {
                 TransferableHelper::lostOwnership( _rxClipboard, _rxTrans );
@@ -221,28 +221,28 @@ protected:
     virtual             ~TransferableHelper();
 
     void                AddFormat( SotClipboardFormatId nFormat );
-    void                AddFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    void                AddFormat( const css::datatransfer::DataFlavor& rFlavor );
     void                RemoveFormat( SotClipboardFormatId nFormat );
-    void                RemoveFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    void                RemoveFormat( const css::datatransfer::DataFlavor& rFlavor );
     bool                HasFormat( SotClipboardFormatId nFormat );
     void                ClearFormats();
 
-    bool                SetAny( const ::com::sun::star::uno::Any& rAny, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetString( const OUString& rString, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetBitmapEx( const BitmapEx& rBitmap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetGDIMetaFile( const GDIMetaFile& rMtf, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetGraphic( const Graphic& rGraphic, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool                SetAny( const css::uno::Any& rAny, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetString( const OUString& rString, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetBitmapEx( const BitmapEx& rBitmap, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetGDIMetaFile( const GDIMetaFile& rMtf, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetGraphic( const Graphic& rGraphic, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetImageMap( const ImageMap& rIMap, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetINetBookmark( const INetBookmark& rBmk, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetINetImage( const INetImage& rINtImg, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
 
 protected:
 
     virtual void        AddSupportedFormats() = 0;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
-    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
@@ -260,12 +260,12 @@ public:
 
     static void         ClearSelection( vcl::Window *pWindow );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetSystemClipboard();
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static css::uno::Reference< css::datatransfer::clipboard::XClipboard > GetSystemClipboard();
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
 public:
 
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 struct TransferableDataHelper_Impl;
@@ -276,44 +276,44 @@ class SVT_DLLPUBLIC TransferableDataHelper
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >           mxTransfer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >   mxClipboard;
-    DataFlavorExVector*                                                                         mpFormats;
-    TransferableObjectDescriptor*                                                               mpObjDesc;
-    TransferableDataHelper_Impl*                                                                mpImpl;
+    css::uno::Reference< css::datatransfer::XTransferable >           mxTransfer;
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
+    DataFlavorExVector*                                               mpFormats;
+    TransferableObjectDescriptor*                                     mpObjDesc;
+    TransferableDataHelper_Impl*                                      mpImpl;
 
 protected:
     void                        InitFormats();
 
 public:
 
-    static void                 FillDataFlavorExVector( const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& rDataFlavorSeq,
+    static void                 FillDataFlavorExVector( const css::uno::Sequence< css::datatransfer::DataFlavor >& rDataFlavorSeq,
                                                         DataFlavorExVector& rDataFlavorExVector );
 
                                 TransferableDataHelper();
                                 TransferableDataHelper( const TransferableDataHelper& rDataHelper );
-                                TransferableDataHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+                                TransferableDataHelper( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
                                 ~TransferableDataHelper();
 
     TransferableDataHelper&     operator=( const TransferableDataHelper& rDataHelper );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >&    GetTransferable() const { return mxTransfer; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >           GetXTransferable() const;
+    const css::uno::Reference< css::datatransfer::XTransferable >&    GetTransferable() const { return mxTransfer; }
+    css::uno::Reference< css::datatransfer::XTransferable >           GetXTransferable() const;
 
     bool                        HasFormat( SotClipboardFormatId nFormat ) const;
-    bool                        HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
+    bool                        HasFormat( const css::datatransfer::DataFlavor& rFlavor ) const;
 
     sal_uInt32                  GetFormatCount() const;
 
-    SotClipboardFormatId                           GetFormat( sal_uInt32 nFormat ) const;
-    ::com::sun::star::datatransfer::DataFlavor  GetFormatDataFlavor( sal_uInt32 nFormat ) const;
+    SotClipboardFormatId           GetFormat( sal_uInt32 nFormat ) const;
+    css::datatransfer::DataFlavor  GetFormatDataFlavor( sal_uInt32 nFormat ) const;
 
     DataFlavorExVector&         GetDataFlavorExVector() const {return *mpFormats; }
 
     bool                        StartClipboardListening( );
     void                        StopClipboardListening( );
 
-    void                        Rebind( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxNewData );
+    void                        Rebind( const css::uno::Reference< css::datatransfer::XTransferable >& _rxNewData );
 
 public:
 
@@ -321,10 +321,10 @@ public:
     css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr );
-    bool                        GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
+    bool                        GetString( const css::datatransfer::DataFlavor& rFlavor, OUString& rStr );
 
     bool                        GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmp );
-    bool                        GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
+    bool                        GetBitmapEx( const css::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
 
     /** Return as GDI metafile.
 
@@ -335,31 +335,31 @@ public:
         any reasonable handling - and you need to set a limit.
     */
     bool                        GetGDIMetaFile( SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
-    bool                        GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
+    bool                        GetGDIMetaFile( const css::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
 
     bool                        GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic );
-    bool                        GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
+    bool                        GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
 
     bool                        GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap );
-    bool                        GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
+    bool                        GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
 
     bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc );
-    bool                        GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( const css::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
 
     bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk );
-    bool                        GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
+    bool                        GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
 
     bool                        GetINetImage( SotClipboardFormatId nFormat, INetImage& rINtImg );
-    bool                        GetINetImage( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
+    bool                        GetINetImage( const css::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
 
     bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList );
-    bool                        GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
+    bool                        GetFileList( const css::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
 
     css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
     bool                        GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotStorageStream>& rStreamRef );
-    bool                        GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotStorageStream>& rStreamRef );
+    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotStorageStream>& rStreamRef );
 
     css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
@@ -368,8 +368,8 @@ public:
 
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
     static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );
-    static bool                     IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
-                                             const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
+    static bool                     IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
+                                             const css::datatransfer::DataFlavor& rRequestFlavor,
                                              bool bCompareParameters = false );
 };
 
@@ -378,7 +378,7 @@ class SVT_DLLPUBLIC DragSourceHelper
 private:
 
     // nested class to implement the XDragGestureListener interface
-    class DragGestureListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDragGestureListener >
+    class DragGestureListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDragGestureListener >
     {
     private:
 
@@ -387,10 +387,10 @@ private:
     private:
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XDragGestureListener
-        virtual void SAL_CALL dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) throw( css::uno::RuntimeException, std::exception ) override;
 
     public:
 
@@ -402,8 +402,8 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
+    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
+    css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
 
     DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper ) = delete;
     bool                operator==( const DragSourceHelper& rDragSourceHelper ) const = delete;
@@ -422,7 +422,7 @@ class SVT_DLLPUBLIC DropTargetHelper
 private:
 
     // nested class to implement the XDropTargetListener interface
-    class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
+    class DropTargetListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDropTargetListener >
     {
     private:
 
@@ -432,14 +432,14 @@ private:
     private:
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XDropTargetListener
-        virtual void SAL_CALL drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(css::uno::RuntimeException, std::exception) override;
 
     public:
 
@@ -451,9 +451,9 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >            mxDropTarget;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
-    DataFlavorExVector*                                                                             mpFormats;
+    css::uno::Reference< css::datatransfer::dnd::XDropTarget >            mxDropTarget;
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
+    DataFlavorExVector*                                                   mpFormats;
 
                         DropTargetHelper() = delete;
     DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper ) = delete;
@@ -462,7 +462,7 @@ private:
     void                ImplConstruct();
 
                         // called by our own implementation of XDropTargetListener (DropTargetListener instance)
-    void                ImplBeginDrag( const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& rSupportedDataFlavors );
+    void                ImplBeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
     void                ImplEndDrag();
 
 public:
@@ -472,7 +472,7 @@ public:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
                         DropTargetHelper( vcl::Window* pWindow );
-                        DropTargetHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >& rxDropTarget );
+                        DropTargetHelper( const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget );
 
     virtual             ~DropTargetHelper();
 
@@ -492,7 +492,7 @@ class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
 protected:
 
     virtual void        AddSupportedFormats() override;
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
 public:
@@ -506,7 +506,7 @@ public:
     void                CopyGraphic( const Graphic& rGrf );
     void                CopyString( const OUString& rStr );
     void                CopyString( SotClipboardFormatId nFmt, const OUString& rStr );
-    void                CopyAny( SotClipboardFormatId nFmt, const ::com::sun::star::uno::Any& rAny );
+    void                CopyAny( SotClipboardFormatId nFmt, const css::uno::Any& rAny );
 
     void                CopyByteString( SotClipboardFormatId nFormatId, const OString& rStr );
     void                CopyAnyData( SotClipboardFormatId nFormatId, const sal_Char* pData, sal_uLong nLen );

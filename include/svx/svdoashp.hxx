@@ -54,7 +54,7 @@ class SdrAShapeObjGeoData : public SdrTextObjGeoData
     bool        bMirroredY;
     double      fObjectRotation;
 
-    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >
+    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >
                 aAdjustmentSeq;
 };
 
@@ -75,8 +75,8 @@ namespace o3tl
 
 struct SdrCustomShapeInteraction
 {
-    com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle >   xInteraction;
-    com::sun::star::awt::Point                                                      aPosition;
+    css::uno::Reference< css::drawing::XCustomShapeHandle >   xInteraction;
+    css::awt::Point                                                      aPosition;
     CustomShapeHandleModes                                                          nMode;
 };
 
@@ -92,7 +92,7 @@ private:
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
-    virtual void impl_setUnoShape(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxUnoShape) override;
+    virtual void impl_setUnoShape(const css::uno::Reference<css::uno::XInterface>& rxUnoShape) override;
 
 public:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
@@ -100,19 +100,19 @@ public:
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;
 
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mXRenderedCustomShape;
+    css::uno::Reference< css::drawing::XShape > mXRenderedCustomShape;
 
-    mutable com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > mxCustomShapeEngine;
+    mutable css::uno::Reference< css::drawing::XCustomShapeEngine > mxCustomShapeEngine;
 
     // #i37011# render geometry shadow
     SdrObject*                                          mpLastShadowGeometry;
 
-    com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine() const;
+    css::uno::Reference< css::drawing::XCustomShapeEngine > GetCustomShapeEngine() const;
 
-//  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
+//  SVX_DLLPRIVATE css::uno::Sequence< css::uno::Reference< css::drawing::XCustomShapeHandle > >
 //      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
 // #i47293#
-//  SVX_DLLPRIVATE std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
+//  SVX_DLLPRIVATE std::vector< css::uno::Reference< css::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
 
     SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const;
 

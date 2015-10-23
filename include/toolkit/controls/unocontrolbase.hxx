@@ -37,9 +37,9 @@ protected:
 
     bool                    ImplHasProperty( sal_uInt16 nProp );
     bool                    ImplHasProperty( const OUString& aPropertyName );
-    void                        ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, bool bUpdateThis );
-    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, bool bUpdateThis );
-    ::com::sun::star::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
+    void                        ImplSetPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, bool bUpdateThis );
+    void                        ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, bool bUpdateThis );
+    css::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
 
     template <typename T> T ImplGetPropertyValuePOD( sal_uInt16 nProp );
     template <typename T> T ImplGetPropertyValueClass( sal_uInt16 nProp );
@@ -48,16 +48,16 @@ protected:
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );
     OUString        ImplGetPropertyValue_UString( sal_uInt16 nProp );
-    ::com::sun::star::util::Date ImplGetPropertyValue_Date( sal_uInt16 nProp );
-    ::com::sun::star::util::Time ImplGetPropertyValue_Time( sal_uInt16 nProp );
+    css::util::Date ImplGetPropertyValue_Date( sal_uInt16 nProp );
+    css::util::Time ImplGetPropertyValue_Time( sal_uInt16 nProp );
 
     // XLayoutConstrains (nur wenn das Control es unterstuetzt!)
-    ::com::sun::star::awt::Size Impl_getMinimumSize();
-    ::com::sun::star::awt::Size Impl_getPreferredSize();
-    ::com::sun::star::awt::Size Impl_calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize );
+    css::awt::Size Impl_getMinimumSize();
+    css::awt::Size Impl_getPreferredSize();
+    css::awt::Size Impl_calcAdjustedSize( const css::awt::Size& rNewSize );
 
     // XTextLayoutConstrains (nur wenn das Control es unterstuetzt!)
-    ::com::sun::star::awt::Size Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 nLines );
+    css::awt::Size Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 nLines );
     void                        Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines );
 };
 

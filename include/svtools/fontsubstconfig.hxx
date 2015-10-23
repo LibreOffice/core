@@ -45,7 +45,7 @@ public:
     SvtFontSubstConfig();
     virtual ~SvtFontSubstConfig();
 
-    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) override;
+    virtual void                Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 
     bool                        IsEnabled() const {return bIsEnabled;}
     void                        Enable(bool bSet)  {bIsEnabled = bSet; SetModified();}

@@ -42,9 +42,9 @@ public:
 
     SvLockBytes*            GetValue() const { return _xVal; }
 
-    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const css::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) override;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( css::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const override;
 };
 

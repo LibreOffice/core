@@ -51,8 +51,8 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const override;
             virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
-            virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-            virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+            virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+            virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             sal_uInt32                          GetCount() const { return aAdjustmentValueList.size(); };
             SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;

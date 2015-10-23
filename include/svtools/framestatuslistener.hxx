@@ -36,15 +36,15 @@
 namespace svt
 {
 
-class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatusListener,
-                            public ::com::sun::star::frame::XFrameActionListener,
-                            public ::com::sun::star::lang::XComponent,
+class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
+                            public css::frame::XFrameActionListener,
+                            public css::lang::XComponent,
                             public ::comphelper::OBaseMutex,
                             public ::cppu::OWeakObject
 {
     public:
-        FrameStatusListener( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
+        FrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                             const css::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener();
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
@@ -53,32 +53,32 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         void unbindListener();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override = 0;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const com::sun::star::frame::FrameActionEvent& Action ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     protected:
         struct Listener
         {
-            Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
+            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
 
-            ::com::sun::star::util::URL aURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
+            css::util::URL aURL;
+            css::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         typedef std::unordered_map< OUString,
@@ -86,11 +86,11 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
                                     OUStringHash,
                                     std::equal_to< OUString > > URLToDispatchMap;
 
-        bool                                                                                m_bInitialized : 1,
-                                                                                            m_bDisposed : 1;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        URLToDispatchMap                                                                    m_aListenerMap;
+        bool                                                      m_bInitialized : 1,
+                                                                  m_bDisposed : 1;
+        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        URLToDispatchMap                                          m_aListenerMap;
 };
 
 }

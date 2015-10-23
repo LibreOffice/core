@@ -50,7 +50,7 @@
 //  class VCLXPrinterPropertySet
 
 
-typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XPrinterPropertySet
+typedef ::cppu::WeakImplHelper <   css::awt::XPrinterPropertySet
                                 >   VCLXPrinterPropertySet_Base;
 class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
                                 ,public MutexAndBroadcastHelper
@@ -58,7 +58,7 @@ class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
 {
 protected:
     VclPtr<Printer>             mxPrinter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  mxPrnDevice;
+    css::uno::Reference< css::awt::XDevice >  mxPrnDevice;
 
     sal_Int16                   mnOrientation;
     bool                        mbHorizontal;
@@ -67,36 +67,36 @@ public:
     virtual ~VCLXPrinterPropertySet();
 
     Printer*                    GetPrinter() const { return mxPrinter.get(); }
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  GetDevice();
+    css::uno::Reference< css::awt::XDevice >  GetDevice();
 
-    // ::com::sun::star::uno::XInterface
+    // css::uno::XInterface
     DECLARE_XINTERFACE();
 
-    // ::com::sun::star::lang::XTypeProvider
+    // css::lang::XTypeProvider
     DECLARE_XTYPEPROVIDER();
 
-    // ::com::sun::star::beans::XPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
-    ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    // css::beans::XPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
+    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
+    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException) override;
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) override;
+    sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException) override;
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
-    // ::com::sun::star::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XPrinterPropertySet
+    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -104,7 +104,7 @@ public:
 
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
-                                        ,   ::com::sun::star::awt::XPrinter
+                                        ,   css::awt::XPrinter
                                         >   VCLXPrinter_Base;
 class VCLXPrinter:  public VCLXPrinter_Base
 {
@@ -114,28 +114,28 @@ public:
                     VCLXPrinter( const OUString& rPrinterName );
                     virtual ~VCLXPrinter();
 
-    // ::com::sun::star::beans::XPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    // css::beans::XPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
-    // ::com::sun::star::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
-    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    // css::awt::XPrinterPropertySet
+    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
+    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
-    // ::com::sun::star::awt::XPrinter
-    sal_Bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, sal_Bool nCollate ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL end(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL terminate(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > SAL_CALL startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL endPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XPrinter
+    sal_Bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, sal_Bool nCollate ) throw(css::awt::PrinterException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL end(  ) throw(css::awt::PrinterException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL terminate(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XDevice > SAL_CALL startPage(  ) throw(css::awt::PrinterException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL endPage(  ) throw(css::awt::PrinterException, css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -143,7 +143,7 @@ public:
 
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
-                                        ,   ::com::sun::star::awt::XInfoPrinter
+                                        ,   css::awt::XInfoPrinter
                                         >   VCLXInfoPrinter_Base;
 class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
 {
@@ -151,40 +151,40 @@ public:
                         VCLXInfoPrinter( const OUString& rPrinterName );
                         virtual ~VCLXInfoPrinter();
 
-    // ::com::sun::star::beans::XPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& rxListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    // css::beans::XPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
-    // ::com::sun::star::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
-    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    // css::awt::XPrinterPropertySet
+    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    void SAL_CALL selectForm( const OUString& aFormDescription ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
+    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
-    // ::com::sun::star::awt::XInfoPrinter
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > SAL_CALL createDevice(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XInfoPrinter
+    css::uno::Reference< css::awt::XDevice > SAL_CALL createDevice(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 
 //  class VCLXPrinterServer
 
 
-typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XPrinterServer,
+typedef ::cppu::WeakImplHelper <   css::awt::XPrinterServer,
                                    css::lang::XServiceInfo
                                 >   VCLXPrinterServer_Base;
 class VCLXPrinterServer : public VCLXPrinterServer_Base
 {
 public:
-    // ::com::sun::star::awt::XPrinterServer
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XPrinterServer
+    css::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) throw(css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

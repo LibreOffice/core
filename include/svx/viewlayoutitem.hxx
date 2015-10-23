@@ -44,8 +44,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const override;                       // leer
     virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const override;                   // leer
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // leer
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // leer
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // leer
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // leer
 };
 
 

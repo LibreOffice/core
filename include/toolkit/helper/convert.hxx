@@ -26,32 +26,32 @@
 
 #include <tools/gen.hxx>
 
-inline ::com::sun::star::awt::Size AWTSize( const Size& rVCLSize )
+inline css::awt::Size AWTSize( const Size& rVCLSize )
 {
-    return ::com::sun::star::awt::Size( rVCLSize.Width(), rVCLSize.Height() );
+    return css::awt::Size( rVCLSize.Width(), rVCLSize.Height() );
 }
 
-inline ::Size VCLSize( const ::com::sun::star::awt::Size& rAWTSize )
+inline ::Size VCLSize( const css::awt::Size& rAWTSize )
 {
     return ::Size( rAWTSize.Width, rAWTSize.Height );
 }
 
-inline ::com::sun::star::awt::Point AWTPoint( const ::Point& rVCLPoint )
+inline css::awt::Point AWTPoint( const ::Point& rVCLPoint )
 {
-    return ::com::sun::star::awt::Point( rVCLPoint.X(), rVCLPoint.Y() );
+    return css::awt::Point( rVCLPoint.X(), rVCLPoint.Y() );
 }
 
-inline ::Point VCLPoint( const ::com::sun::star::awt::Point& rAWTPoint )
+inline ::Point VCLPoint( const css::awt::Point& rAWTPoint )
 {
     return ::Point( rAWTPoint.X, rAWTPoint.Y );
 }
 
-inline ::com::sun::star::awt::Rectangle AWTRectangle( const ::Rectangle& rVCLRect )
+inline css::awt::Rectangle AWTRectangle( const ::Rectangle& rVCLRect )
 {
-    return ::com::sun::star::awt::Rectangle( rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(), rVCLRect.GetHeight() );
+    return css::awt::Rectangle( rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(), rVCLRect.GetHeight() );
 }
 
-inline ::Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRect )
+inline ::Rectangle VCLRectangle( const css::awt::Rectangle& rAWTRect )
 {
     return ::Rectangle( ::Point( rAWTRect.X, rAWTRect.Y ), ::Size( rAWTRect.Width, rAWTRect.Height ) );
 }

@@ -255,7 +255,7 @@ public:
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */
-    void getTextSelection( ::com::sun::star::uno::Any& rSelection );
+    void getTextSelection( css::uno::Any& rSelection );
 
     virtual void MarkListHasChanged() override;
 

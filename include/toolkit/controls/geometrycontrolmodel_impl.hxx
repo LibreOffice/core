@@ -24,14 +24,14 @@
 
 
 template <class CONTROLMODEL>
-OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
     :OGeometryControlModel_Base(new CONTROLMODEL( i_factory ) )
 {
 }
 
 
 template <class CONTROLMODEL>
-OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance)
     :OGeometryControlModel_Base(_rxAggregateInstance)
 {
 }
@@ -45,7 +45,7 @@ template <class CONTROLMODEL>
 
 
 template <class CONTROLMODEL>
-void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rProps, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rAggregateProps) const
+void OGeometryControlModel<CONTROLMODEL>::fillProperties(css::uno::Sequence< css::beans::Property >& _rProps, css::uno::Sequence< css::beans::Property >& _rAggregateProps) const
 {
     // our own properties
     OPropertyContainer::describeProperties(_rProps);
@@ -56,7 +56,7 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
 
 
 template <class CONTROLMODEL>
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -64,7 +64,7 @@ template <class CONTROLMODEL>
 
 template <class CONTROLMODEL>
 OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
+    css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance)
 {
     return new OGeometryControlModel<CONTROLMODEL>(_rxAggregateInstance);
 }

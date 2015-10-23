@@ -61,55 +61,55 @@ class SVT_DLLPUBLIC ToolboxController :
     private:
         bool  m_bSupportVisible;
     public:
-        ToolboxController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+        ToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                           const css::uno::Reference< css::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
         ToolboxController();
         virtual ~ToolboxController();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
+        css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
+        const css::uno::Reference< css::uno::XComponentContext >& getContext() const;
+        css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
         void updateStatus( const OUString& aCommandURL );
         void updateStatus();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
         virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
             throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
-        virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override = 0;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL click() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL doubleClick() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw (css::uno::RuntimeException, std::exception) override;
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::uno::Exception, std::exception) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) throw(css::lang::IllegalArgumentException) override;
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -118,7 +118,7 @@ class SVT_DLLPUBLIC ToolboxController :
         const OUString& getCommandURL() const { return  m_aCommandURL; }
         const OUString& getModuleName() const { return m_sModuleName; }
 
-        void dispatchCommand( const OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs, const OUString &rTarget = OUString() );
+        void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString &rTarget = OUString() );
 
         void enable( bool bEnable );
 
@@ -127,22 +127,22 @@ class SVT_DLLPUBLIC ToolboxController :
         void setSupportVisibleProperty(bool bValue);
         struct Listener
         {
-            Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
+            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
 
-            ::com::sun::star::util::URL aURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
+            css::util::URL aURL;
+            css::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         struct DispatchInfo
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > mxDispatch;
-            const ::com::sun::star::util::URL maURL;
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > maArgs;
+            css::uno::Reference< css::frame::XDispatch > mxDispatch;
+            const css::util::URL maURL;
+            const css::uno::Sequence< css::beans::PropertyValue > maArgs;
 
-            DispatchInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
-                          const ::com::sun::star::util::URL& rURL,
-                          const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
+            DispatchInfo( const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                          const css::util::URL& rURL,
+                          const css::uno::Sequence< css::beans::PropertyValue >& rArgs )
                 : mxDispatch( xDispatch )
                 , maURL( rURL )
                 , maArgs( rArgs )
@@ -163,22 +163,22 @@ class SVT_DLLPUBLIC ToolboxController :
         void unbindListener();
         bool isBound() const;
         // TODO remove
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const { return m_xUrlTransformer;}
+        css::uno::Reference< css::util::XURLTransformer > getURLTransformer() const { return m_xUrlTransformer;}
         // TODO remove
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const { return m_xParentWindow;}
+        css::uno::Reference< css::awt::XWindow > getParent() const { return m_xParentWindow;}
 
-        bool                                                                                m_bInitialized : 1,
-                                                                                            m_bDisposed : 1;
-        sal_uInt16                                                                          m_nToolBoxId;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        OUString                                                                            m_aCommandURL;
-        URLToDispatchMap                                                                    m_aListenerMap;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
+        bool                                                      m_bInitialized : 1,
+                                                                  m_bDisposed : 1;
+        sal_uInt16                                                m_nToolBoxId;
+        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        OUString                                                  m_aCommandURL;
+        URLToDispatchMap                                          m_aListenerMap;
+        ::cppu::OMultiTypeInterfaceContainerHelper                m_aListenerContainer;   /// container for ALL Listener
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
-        OUString m_sModuleName;
+        css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
+        css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;
+        OUString                                                  m_sModuleName;
 };
 
 }

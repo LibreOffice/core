@@ -49,16 +49,16 @@ public:
     virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( css::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const css::uno::Any& rVal,
                                          sal_uInt8 nMemberId ) override;
 
     void                    SetBitmapURL( const OUString& rURL ) { _aURL = rURL; }
     void                    SetColor( Color nColor ) { _nColor = nColor; }
     void                    SetStyle( sal_uInt16 nStyle ) { _nStyle = nStyle; }
 
-    const OUString&    GetBitmapURL() const { return _aURL; }
+    const OUString&         GetBitmapURL() const { return _aURL; }
     Color                   GetColor() const { return _nColor; }
     sal_uInt16              GetStyle() const { return _nStyle; }
 };

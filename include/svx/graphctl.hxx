@@ -109,7 +109,7 @@ public:
 
     void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
 

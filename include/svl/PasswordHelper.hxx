@@ -26,19 +26,19 @@
 
 class SvPasswordHelper
 {
-    static void     GetHashPasswordLittleEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
-    static void     GetHashPasswordBigEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    static void     GetHashPasswordLittleEndian(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    static void     GetHashPasswordBigEndian(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
 
 public:
-    SVL_DLLPUBLIC static void     GetHashPassword(com::sun::star::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
+    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
 
-    SVL_DLLPUBLIC static void     GetHashPassword(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
     /**
     Use this method to compare a given string with another given Hash value.
     This is necessary, because in older versions exists different hashes of the same string. They were endian dependent.
     We need this to handle old files. This method will compare against big and little endian. See #101326#
     */
-    SVL_DLLPUBLIC static bool     CompareHashPassword(const com::sun::star::uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass);
+    SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass);
 };
 
 #endif

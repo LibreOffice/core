@@ -39,12 +39,12 @@ enum SvXMLGraphicHelperMode
 
 struct SvxGraphicHelperStream_Impl
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > xStorage;
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream;
+    css::uno::Reference < css::embed::XStorage > xStorage;
+    css::uno::Reference < css::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<   ::com::sun::star::document::XGraphicObjectResolver,
-                                                                    ::com::sun::star::document::XBinaryStreamResolver >
+class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<   css::document::XGraphicObjectResolver,
+                                                                    css::document::XBinaryStreamResolver >
 {
 private:
 
@@ -52,10 +52,10 @@ private:
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
     typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
     typedef ::std::set< OUString >                                                               URLSet;
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > >    GraphicOutputStreamVector;
+    typedef ::std::vector< css::uno::Reference< css::io::XOutputStream > >    GraphicOutputStreamVector;
 
     ::osl::Mutex                maMutex;
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > mxRootStorage;
+    css::uno::Reference < css::embed::XStorage > mxRootStorage;
     OUString             maCurStorageName;
     URLPairVector               maGrfURLs;
     GraphicObjectVector         maGrfObjs;
@@ -85,7 +85,7 @@ private:
 protected:
                                 SvXMLGraphicHelper();
                                 virtual ~SvXMLGraphicHelper();
-    void                        Init( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& xXMLStorage,
+    void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       bool bDirect );
 
@@ -94,7 +94,7 @@ protected:
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
-    static SvXMLGraphicHelper*  Create( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& rXMLStorage,
+    static SvXMLGraphicHelper*  Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         bool bDirect = true );
     static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
@@ -104,12 +104,12 @@ public:
 public:
 
     // XGraphicObjectResolver
-    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XBinaryStreamResolver
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

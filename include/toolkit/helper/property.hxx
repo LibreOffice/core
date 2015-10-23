@@ -43,7 +43,7 @@ namespace uno {
 #define BASEPROPERTY_LINECOLOR                       5  // sal_Int32
 #define BASEPROPERTY_BORDER                          6  // sal_Int16
 #define BASEPROPERTY_ALIGN                           7  // sal_Int16
-#define BASEPROPERTY_FONTDESCRIPTOR                  8  // ::com::sun::star::awt::FontDescriptor
+#define BASEPROPERTY_FONTDESCRIPTOR                  8  // css::awt::FontDescriptor
 #define BASEPROPERTY_DROPDOWN                        9  // sal_Bool
 #define BASEPROPERTY_MULTILINE                       10 // sal_Bool
 #define BASEPROPERTY_STRINGITEMLIST                  11 // UStringSequence
@@ -65,12 +65,12 @@ namespace uno {
 #define BASEPROPERTY_SPIN                            27 // sal_Bool
 #define BASEPROPERTY_STRICTFORMAT                    28 // sal_Bool
 #define BASEPROPERTY_DECIMALACCURACY                 29 // sal_Int16
-#define BASEPROPERTY_DATE                            30 // ::com::sun::star::util::Date
-#define BASEPROPERTY_DATEMIN                         31 // ::com::sun::star::util::Date
-#define BASEPROPERTY_DATEMAX                         32 // ::com::sun::star::util::Date
-#define BASEPROPERTY_TIME                            33 // ::com::sun::star::util::Time
-#define BASEPROPERTY_TIMEMIN                         34 // ::com::sun::star::util::Time
-#define BASEPROPERTY_TIMEMAX                         35 // ::com::sun::star::util::Time
+#define BASEPROPERTY_DATE                            30 // css::util::Date
+#define BASEPROPERTY_DATEMIN                         31 // css::util::Date
+#define BASEPROPERTY_DATEMAX                         32 // css::util::Date
+#define BASEPROPERTY_TIME                            33 // css::util::Time
+#define BASEPROPERTY_TIMEMIN                         34 // css::util::Time
+#define BASEPROPERTY_TIMEMAX                         35 // css::util::Time
 #define BASEPROPERTY_VALUE_INT32                     36 // sal_Int32
 #define BASEPROPERTY_VALUEMIN_INT32                  37 // sal_Int32
 #define BASEPROPERTY_VALUEMAX_INT32                  38 // sal_Int32
@@ -97,7 +97,7 @@ namespace uno {
 #define BASEPROPERTY_AUTOTOGGLE                      59 // sal_Bool
 //#define BASEPROPERTY_FOCUSSELECTIONHIDE            60 // sal_Bool
 #define BASEPROPERTY_FORMATKEY                       61 // sal_Bool
-#define BASEPROPERTY_FORMATSSUPPLIER                 62 // ::com::sun::star::util::XNumberFormatsSupplier
+#define BASEPROPERTY_FORMATSSUPPLIER                 62 // css::util::XNumberFormatsSupplier
 #define BASEPROPERTY_EFFECTIVE_VALUE                 63 // Any (double or string)
 #define BASEPROPERTY_TREATASNUMBER                   64 // sal_Bool
 #define BASEPROPERTY_EFFECTIVE_DEFAULT               65 // Any (double or string)
@@ -235,12 +235,12 @@ namespace uno {
 
 
 TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const OUString& rPropertyName );
-const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
+const css::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 TOOLKIT_DLLPUBLIC const OUString&    GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 sal_uInt16                          GetPropertyOrderNr( sal_uInt16 nPropertyId );
 bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
-bool                            CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 );
+bool                            CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 );
 
 
 

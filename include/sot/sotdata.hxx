@@ -30,7 +30,7 @@ class SotFactory;
 class SotObject;
 
 typedef ::std::vector< SotFactory* > SotFactoryList;
-typedef ::std::vector< com::sun::star::datatransfer::DataFlavor* > tDataFlavorList;
+typedef ::std::vector< css::datatransfer::DataFlavor* > tDataFlavorList;
 
 struct SotData_Impl
 {

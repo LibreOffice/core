@@ -47,7 +47,7 @@ enum SfxItemKind {
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
 
 // warning, if there is no boolean inside the any this will always return the value false
-inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
+inline bool Any2Bool( const css::uno::Any&rValue )
 {
     bool bValue = false;
     if( rValue.hasValue() )
@@ -99,7 +99,7 @@ enum SfxItemPresentation
 
 /**
  * These values have to match the values in the
- * com::sun::star::frame::status::ItemState IDL
+ * css::frame::status::ItemState IDL
  * to be found at offapi/com/sun/star/frame/status/ItemState.idl
 */
 enum class SfxItemState {
@@ -181,8 +181,8 @@ public:
     virtual bool             ScaleMetrics( long lMult, long lDiv );
     virtual bool             HasMetrics() const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
+    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId );
 
     virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;

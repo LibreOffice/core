@@ -26,12 +26,12 @@
 
 // FIXME: should have a single factory method with an enumeration here [!]
 
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw();
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) throw();
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pList ) throw();
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pList ) throw();
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pList ) throw();
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) throw();
 
 #endif
 

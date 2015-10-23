@@ -203,7 +203,7 @@ public:
     // Access to GrafAnimationAllowed flag
     void SetGrafAnimationAllowed(bool bNew);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
+    css::uno::Reference< css::io::XInputStream > getInputStream();
 
     // #i103116# FullDrag support
     virtual SdrObject* getFullDragClone() const override;

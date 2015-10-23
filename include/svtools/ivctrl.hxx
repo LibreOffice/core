@@ -316,8 +316,7 @@ public:
     // ACCESSIBILITY ==========================================================
 
     /** Creates and returns the accessible object of the Box. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
 #endif // INCLUDED_SVTOOLS_IVCTRL_HXX

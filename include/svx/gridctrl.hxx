@@ -41,7 +41,7 @@
 class DbGridControl;
 class CursorWrapper;
 
-bool CompareBookmark(const ::com::sun::star::uno::Any& aLeft, const ::com::sun::star::uno::Any& aRight);
+bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
 
 namespace svxform
 {
@@ -62,7 +62,7 @@ enum GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
+    css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     ::std::vector< ::svxform::DataColumn* >
                                 m_aVariants;
     GridRowStatus               m_eStatus;
@@ -84,7 +84,7 @@ public:
     void            SetNew(bool _bNew)              { m_bIsNew = _bNew; }
     bool            IsNew() const                   { return m_bIsNew; }
 
-    const ::com::sun::star::uno::Any& GetBookmark() const { return m_aBookmark; }
+    const css::uno::Any& GetBookmark() const { return m_aBookmark; }
 
     bool    IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
     bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
@@ -223,8 +223,8 @@ private:
     Link<sal_uInt16,int>   m_aMasterStateProvider;
     Link<sal_uInt16,bool>   m_aMasterSlotExecutor;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
     DbGridColumns   m_aColumns;         // Column description
     VclPtr<NavigationBar>   m_aBar;
@@ -242,7 +242,7 @@ private:
     // For that reason we have to listen to some properties of our data source.
     ::comphelper::OPropertyChangeMultiplexer*       m_pDataSourcePropMultiplexer;
     FmXGridSourcePropListener*                      m_pDataSourcePropListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener>
+    css::uno::Reference< css::sdb::XRowsChangeListener>
                                                     m_xRowSetListener; // get notification when rows were changed
 
     void*                                           m_pFieldListeners;
@@ -269,7 +269,7 @@ private:
     osl::Mutex          m_aDestructionSafety;
     osl::Mutex          m_aAdjustSafety;
 
-    com::sun::star::util::Date
+    css::util::Date
                         m_aNullDate;        // NullDate of the Numberformatter;
 
     BrowserMode         m_nMode;
@@ -347,12 +347,12 @@ protected:
     */
     virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
-    void DataSourcePropertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception);
 
-    void FieldValueChanged(sal_uInt16 _nId, const ::com::sun::star::beans::PropertyChangeEvent& _evt);
+    void FieldValueChanged(sal_uInt16 _nId, const css::beans::PropertyChangeEvent& _evt);
     void FieldListenerDisposing(sal_uInt16 _nId);
 
-    void disposing(sal_uInt16 _nId, const ::com::sun::star::lang::EventObject& _rEvt);
+    void disposing(sal_uInt16 _nId, const css::lang::EventObject& _rEvt);
 
     // own overridables
     /// called when the current row changed
@@ -367,7 +367,7 @@ protected:
 
 public:
     DbGridControl(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,
+        css::uno::Reference< css::uno::XComponentContext >,
         vcl::Window* pParent,
         WinBits nBits = WB_BORDER);
 
@@ -375,7 +375,7 @@ public:
     virtual void dispose() override;
 
     virtual void Init() override;
-    virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) = 0;
+    virtual void InitColumnsByFields(const css::uno::Reference< css::container::XIndexAccess >& xFields) = 0;
     virtual void RemoveRows() override;
 
     /** GetCellText returns the text at the given position
@@ -390,11 +390,11 @@ public:
 
     void RemoveRows(bool bNewCursor);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
+    const css::uno::Reference< css::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
 
     // the data source
     // the options can restrict but not extend the update abilities
-    void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& rCursor,
+    void setDataSource(const css::uno::Reference< css::sdbc::XRowSet >& rCursor,
         sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
     virtual void Dispatch(sal_uInt16 nId) override;
 
@@ -408,7 +408,7 @@ public:
     // which position does the column with the id in the View have, the handle column doesn't count
     sal_uInt16 GetViewColumnPos( sal_uInt16 nId ) const { sal_uInt16 nPos = GetColumnPos(nId); return (nPos==BROWSER_INVALIDID) ? GRID_COLUMN_NOT_FOUND : nPos-1; }
 
-    // which position does the column with the id in m_aColumns have, that means the ::com::sun::star::sdbcx::Container
+    // which position does the column with the id in m_aColumns have, that means the css::sdbcx::Container
     // returned from the GetColumns (may be different from the position returned by GetViewColumnPos
     // if there are hidden columns)
     sal_uInt16 GetModelColumnPos( sal_uInt16 nId ) const;
@@ -438,7 +438,7 @@ public:
         // to update, to insert or to restore, the according options are ignored. If the grid isn't
         // connected to a data source, all options except OPT_READONLY are ignored.
 
-    const com::sun::star::util::Date&   getNullDate() const {return m_aNullDate;}
+    const css::util::Date&   getNullDate() const {return m_aNullDate;}
 
     // positioning
     void MoveToPosition(sal_uInt32 nPos);
@@ -497,7 +497,7 @@ public:
     */
     void        ForceHideScrollbars( bool _bForce );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
@@ -536,8 +536,8 @@ public:
         @return
             The XAccessible interface of the specified control.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleControl( sal_Int32 _nIndex ) override;
 
     // IAccessibleTableProvider
@@ -545,8 +545,8 @@ public:
         @param nRow  The row index of the cell.
         @param nColumnId  The column ID of the cell.
         @return  The XAccessible interface of the specified cell. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
 protected:

@@ -31,21 +31,21 @@ struct ExecuteInfo;
 class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
 {
     public:
-        GenericToolboxController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                  const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        GenericToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBox,
                                   sal_uInt16   nID,
                                   const OUString& aCommand );
         virtual ~GenericToolboxController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
          DECL_STATIC_LINK_TYPED( GenericToolboxController, ExecuteHdl_Impl, void*, void );
 

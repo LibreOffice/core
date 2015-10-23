@@ -228,7 +228,7 @@ public:
 
     NfCurrencyEntry( const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
-    NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
+    NfCurrencyEntry( const css::i18n::Currency & rCurr,
                      const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
     inline NfCurrencyEntry(const OUString& rSymbol, const OUString& rBankSymbol,
@@ -317,7 +317,7 @@ public:
 
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         LanguageType eLang
         );
 
@@ -770,7 +770,7 @@ public:
     static bool IsLocaleInstalled( LanguageType eLang );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     LanguageTag maLanguageTag;
     SvNumberFormatTable aFTable;            // Table of format keys to format entries
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
@@ -816,7 +816,7 @@ private:
                                                       NumberFormatCodeWrapper& rNumberFormatCode,
                                                       bool bAfterChangingSystemCL );
 
-    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat( const ::com::sun::star::i18n::NumberFormatCode& rCode,
+    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat( const css::i18n::NumberFormatCode& rCode,
                                                     sal_uInt32 nPos,
                                                     bool bAfterChangingSystemCL = false,
                                                     sal_Int16 nOrgIndex = 0 );
@@ -856,7 +856,7 @@ private:
     // Return the index in a sequence of format codes matching an enum of
     // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't
     // contain any format code elements a default element is created and inserted.
-    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex( ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
+    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex( css::uno::Sequence< css::i18n::NumberFormatCode >& rSeq,
                                                     const NfIndexTableOffset nTabOff );
 
     // Adjust a sequence of format codes to contain only one (THE) default
@@ -865,7 +865,7 @@ private:
     // Return the default index in the sequence.
     // Non-PRODUCT version may check locale data for matching defaults in one
     // FormatElement group.
-    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault( ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
+    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault( css::i18n::NumberFormatCode * pFormatArr,
                                                          sal_Int32 nCount, bool bCheckCorrectness = true );
 
     // Obtain the format entry for a given key index.

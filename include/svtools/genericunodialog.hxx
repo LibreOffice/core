@@ -58,9 +58,9 @@ namespace svt
 
 
 
-    typedef ::cppu::WeakImplHelper3 <   com::sun::star::ui::dialogs::XExecutableDialog
-                                    ,   com::sun::star::lang::XServiceInfo
-                                    ,   com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakImplHelper3 <   css::ui::dialogs::XExecutableDialog
+                                    ,   css::lang::XServiceInfo
+                                    ,   css::lang::XInitialization
                                     >   OGenericUnoDialogBase;
 
     /** abstract base class for implementing UNO objects representing dialogs (com.sun.star.awt::XDialog)
@@ -82,43 +82,43 @@ namespace svt
         bool                        m_bNeedInitialization : 1;  /// do we need to be initialized before any other API call is allowed?
 
         // <properties>
-        OUString                                                 m_sTitle;   /// title of the dialog
-        com::sun::star::uno::Reference<com::sun::star::awt::XWindow>    m_xParent;  /// parent window
+        OUString                                         m_sTitle;   /// title of the dialog
+        css::uno::Reference<css::awt::XWindow>           m_xParent;  /// parent window
         // </properties>
 
-        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_aContext;
+        css::uno::Reference<css::uno::XComponentContext> m_aContext;
 
     public:
         inline bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
 
     protected:
-        OGenericUnoDialog(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext);
+        OGenericUnoDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~OGenericUnoDialog();
 
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase)
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
-        virtual com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::uno::Exception, std::exception) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) throw(css::lang::IllegalArgumentException) override;
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int16 SAL_CALL execute(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     protected:
         /** create the concret dialog instance. note that m_aMutex is not locked when this method get's called,
@@ -141,7 +141,7 @@ namespace svt
             tries to extract an com.sun.star.beans::PropertyValue from the value an pass it to the
             com.sun.star.beans::XPropertySet interface of the object.
         */
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
+        virtual void implInitialize(const css::uno::Any& _rValue);
 
     private:
         DECL_LINK_TYPED( OnDialogDying, VclWindowEvent&, void );
@@ -170,7 +170,7 @@ namespace svt
             :m_aGuard( _rDialog.GetMutex() )
         {
             if ( _rDialog.needInitialization() )
-                throw ::com::sun::star::lang::NotInitializedException();
+                throw css::lang::NotInitializedException();
         }
 
     private:

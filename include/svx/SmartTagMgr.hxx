@@ -70,9 +70,9 @@ namespace com { namespace sun { namespace star { namespace frame {
  */
 struct ActionReference
 {
-    com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > mxSmartTagAction;
+    css::uno::Reference< css::smarttags::XSmartTagAction > mxSmartTagAction;
     sal_Int32 mnSmartTagIndex;
-    ActionReference( com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > xSmartTagAction, sal_Int32 nSmartTagIndex )
+    ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction, sal_Int32 nSmartTagIndex )
         : mxSmartTagAction( xSmartTagAction), mnSmartTagIndex( nSmartTagIndex ) {}
 };
 
@@ -81,19 +81,19 @@ struct ActionReference
     This class organizes the available smarttag libraries and provides access functions
     to these libraries. The smart tag manager is a singleton.
 */
-class SVX_DLLPUBLIC SmartTagMgr : public cppu::WeakImplHelper2< ::com::sun::star::util::XModifyListener,
-                                                                ::com::sun::star::util::XChangesListener >
+class SVX_DLLPUBLIC SmartTagMgr : public cppu::WeakImplHelper2< css::util::XModifyListener,
+                                                                css::util::XChangesListener >
 {
 private:
 
     const OUString maApplicationName;
-    std::vector< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagRecognizer > > maRecognizerList;
-    std::vector< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > maActionList;
+    std::vector< css::uno::Reference< css::smarttags::XSmartTagRecognizer > > maRecognizerList;
+    std::vector< css::uno::Reference< css::smarttags::XSmartTagAction > > maActionList;
     std::set< OUString > maDisabledSmartTagTypes;
     std::multimap < OUString, ActionReference > maSmartTagMap;
-    mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIter;
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > mxConfigurationSettings;
+    mutable css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+    css::uno::Reference< css::uno::XComponentContext> mxContext;
+    css::uno::Reference< css::beans::XPropertySet > mxConfigurationSettings;
     bool mbLabelTextWithSmartTags;
 
     /** Checks for installed smart tag recognizers/actions and stores them in
@@ -152,14 +152,14 @@ public:
     */
 
     void RecognizeString( const OUString& rText,
-                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup >& rMarkup,
-                    const com::sun::star::uno::Reference< com::sun::star::frame::XController >& rController,
-                    const com::sun::star::lang::Locale& rLocale,
+                    const css::uno::Reference< css::text::XTextMarkup >& rMarkup,
+                    const css::uno::Reference< css::frame::XController >& rController,
+                    const css::lang::Locale& rLocale,
                     sal_uInt32 nStart, sal_uInt32 nLen ) const;
 
-    void RecognizeTextRange(const com::sun::star::uno::Reference< com::sun::star::text::XTextRange>& rRange,
-                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup >& rMarkup,
-                    const com::sun::star::uno::Reference< com::sun::star::frame::XController >& rController) const;
+    void RecognizeTextRange(const css::uno::Reference< css::text::XTextRange>& rRange,
+                    const css::uno::Reference< css::text::XTextMarkup >& rMarkup,
+                    const css::uno::Reference< css::frame::XController >& rController) const;
 
     /** Returns all action references associated with a given list of smart tag types
 
@@ -172,9 +172,9 @@ public:
         @param rActionIndicesSequence
             Output parameter
     */
-    void GetActionSequences( com::sun::star::uno::Sequence < OUString >& rSmartTagTypes,
-                             com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
-                             com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
+    void GetActionSequences( css::uno::Sequence < OUString >& rSmartTagTypes,
+                             css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
+                             css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
 
     /** Returns the caption for a smart tag type.
 
@@ -184,7 +184,7 @@ public:
         @param rLocale
             The locale.
     */
-    OUString GetSmartTagCaption( const OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const;
+    OUString GetSmartTagCaption( const OUString& rSmartTagType, const css::lang::Locale& rLocale ) const;
 
     /** Returns true if the given smart tag type is enabled.
     */
@@ -200,7 +200,7 @@ public:
 
     /** Returns a recognizer.
     */
-    com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagRecognizer >
+    css::uno::Reference< css::smarttags::XSmartTagRecognizer >
         GetRecognizer( sal_uInt32 i ) const  { return maRecognizerList[i]; }
 
     /** Is smart tag recognition active?
@@ -217,14 +217,14 @@ public:
     */
     const OUString GetApplicationName() const { return maApplicationName; }
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XModifyListener
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XChangesListener
-      virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XChangesListener
+      virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

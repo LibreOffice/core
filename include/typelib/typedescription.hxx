@@ -72,7 +72,7 @@ public:
 
         @param rType a type
     */
-    inline TypeDescription( const ::com::sun::star::uno::Type & rType );
+    inline TypeDescription( const css::uno::Type & rType );
     /** Copy constructor:
 
         @param rDescr another TypeDescription
@@ -152,7 +152,7 @@ inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTyp
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, pTypeDescrRef );
 }
 
-inline TypeDescription::TypeDescription( const ::com::sun::star::uno::Type & rType )
+inline TypeDescription::TypeDescription( const css::uno::Type & rType )
     : _pTypeDescr( 0 )
 {
     if (rType.getTypeLibType())

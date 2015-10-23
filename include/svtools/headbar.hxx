@@ -259,8 +259,7 @@ private:
     VCLXHeaderBar*      m_pVCLXHeaderBar;
 
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                         mxAccessible;
 
     using Window::ImplInit;
@@ -349,10 +348,9 @@ public:
     inline bool         IsDragable() const                          { return mbDragable; }
 
     /** Creates and returns the accessible object of the header bar. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  CreateAccessible() override;
-    void SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetComponentInterface( bool bCreate ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;
+    void SetAccessible( css::uno::Reference< css::accessibility::XAccessible > );
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface( bool bCreate ) override;
 
 };
 

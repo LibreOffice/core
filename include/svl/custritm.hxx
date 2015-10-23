@@ -52,10 +52,10 @@ public:
                                                 const IntlWrapper * = 0)
         const override;
 
-    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(css::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const override;
 
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
 

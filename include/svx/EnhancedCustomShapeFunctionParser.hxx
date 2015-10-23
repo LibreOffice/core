@@ -85,7 +85,7 @@ enum ExpressionFunct
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1
 
-SVX_DLLPUBLIC void FillEquationParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
+SVX_DLLPUBLIC void FillEquationParameter( const css::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
 
 class ExpressionNode
 {
@@ -116,7 +116,7 @@ public:
 
     /** Operator to retrieve the ms version of expression
     */
-    virtual com::sun::star::drawing::EnhancedCustomShapeParameter fillNode(
+    virtual css::drawing::EnhancedCustomShapeParameter fillNode(
         std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) = 0;
 };
 typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;

@@ -82,13 +82,13 @@ SVL_DLLPUBLIC Link<OUString *, bool> GetMaybeFileHdl();
 
    @exception std::bad_alloc if an out-of-memory condition occurs
 
-   @exception com::sun::star::uno::RuntimeException if any error occurs
+   @exception css::uno::RuntimeException if any error occurs
  */
-SVL_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uri::XUriReference >
+SVL_DLLPUBLIC css::uno::Reference< css::uri::XUriReference >
 normalizedMakeRelative(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-    const & context,
-    OUString const & baseUriReference, OUString const & uriReference);
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    OUString const & baseUriReference,
+    OUString const & uriReference);
 
 /**
    A variant of normalizedMakeRelative with a simplified interface.
@@ -107,7 +107,7 @@ normalizedMakeRelative(
 
    @exception std::bad_alloc if an out-of-memory condition occurs
 
-   @exception com::sun::star::uno::RuntimeException if any error occurs
+   @exception css::uno::RuntimeException if any error occurs
 
    @deprecated
    No code should rely on the default component context.

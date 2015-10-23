@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmGridControl : public DbGridControl
 
 public:
     FmGridControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
+        const css::uno::Reference< css::uno::XComponentContext >&,
         vcl::Window* pParent,
         FmXGridPeer* _pPeer,
         WinBits nBits);
@@ -114,17 +114,17 @@ public:
     // Window
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    // ::com::sun::star::beans::XPropertyChangeListener
-    void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
+    // css::beans::XPropertyChangeListener
+    void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt);
 
-    // ::com::sun::star::form::XPositioningListener
-    void positioned(const ::com::sun::star::lang::EventObject& rEvent);
+    // css::form::XPositioningListener
+    void positioned(const css::lang::EventObject& rEvent);
 
     // XBound
     bool commit();
 
-    // ::com::sun::star::form::XInsertListener
-    void inserted(const ::com::sun::star::lang::EventObject& rEvent);
+    // css::form::XInsertListener
+    void inserted(const css::lang::EventObject& rEvent);
 
     void markColumn(sal_uInt16 nId);
     bool isColumnMarked(sal_uInt16 nId) const;
@@ -173,23 +173,23 @@ protected:
 
     // Initialize columns
     // a.) only by column description
-    void InitColumnsByModels(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xColumns);
+    void InitColumnsByModels(const css::uno::Reference< css::container::XIndexContainer >& xColumns);
     // b.) during alivemode by database fields
-    virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) override;
+    virtual void InitColumnsByFields(const css::uno::Reference< css::container::XIndexAccess >& xFields) override;
 
             // some kind of impl version (for one single column) of our version of InitColumnsByFields
             static void InitColumnByField(
                     DbGridColumn* _pColumn,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumnModel,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxFieldsByNames,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxFieldsByIndex
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxColumnModel,
+                    const css::uno::Reference< css::container::XNameAccess >& _rxFieldsByNames,
+                    const css::uno::Reference< css::container::XIndexAccess >& _rxFieldsByIndex
                 );
 
     FmXGridPeer* GetPeer() const {return m_pPeer;}
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>
+    css::uno::Sequence< css::uno::Any>
             getSelectionBookmarks();
-    bool selectBookmarks(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _rBookmarks);
+    bool selectBookmarks(const css::uno::Sequence< css::uno::Any>& _rBookmarks);
 
     /** returns if a column is selected
         @param  nColumnId

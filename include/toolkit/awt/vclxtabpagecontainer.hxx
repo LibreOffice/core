@@ -35,8 +35,8 @@
 
 
 typedef ::cppu::ImplInheritanceHelper2 <    VCLXContainer
-                                            ,   ::com::sun::star::awt::tab::XTabPageContainer
-                                            ,   ::com::sun::star::container::XContainerListener
+                                            ,   css::awt::tab::XTabPageContainer
+                                            ,   css::container::XContainerListener
                                              > VCLXTabPageContainer_Base;
 class VCLXTabPageContainer : public VCLXTabPageContainer_Base
 {
@@ -44,37 +44,37 @@ public:
     VCLXTabPageContainer();
     virtual ~VCLXTabPageContainer();
 
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDevice,
+    css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::grid::XTabPageContainer
-    virtual ::sal_Int16 SAL_CALL getActiveTabPageID() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addTabPageContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTabPageContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::grid::XTabPageContainer
+    virtual ::sal_Int16 SAL_CALL getActiveTabPageID() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 private:
     TabPageListenerMultiplexer m_aTabPageListeners;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > > m_aTabPages;
+    ::std::vector< css::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
 };
 #endif // INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
 

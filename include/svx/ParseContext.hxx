@@ -52,7 +52,7 @@ namespace svxform
         /** get's a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>
         */
-        virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const override;
+        virtual css::lang::Locale getPreferredLocale( ) const override;
 
     };
 

@@ -45,8 +45,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16      GetValueCount() const override;
     static OUString         GetValueText( sal_uInt16 nVal );
@@ -91,8 +91,8 @@ public:
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
     virtual SvStream&        Store( SvStream&, sal_uInt16 nItemVersion ) const override;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             sal_Int16       GetLeftMargin() const {return nLeftMargin; }
             void            SetLeftMargin(sal_Int16 nLeft);

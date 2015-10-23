@@ -482,9 +482,9 @@ public:
     void SetOrdNum(sal_uInt32 nNum);
 
     // GrabBagItem for interim interop purposes
-    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
+    void GetGrabBagItem(css::uno::Any& rVal) const;
 
-    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
+    void SetGrabBagItem(const css::uno::Any& rVal);
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the
@@ -879,10 +879,10 @@ public:
     void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
 
     // access to the UNO representation of the shape
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > getWeakUnoShape() const { return maWeakUnoShape; }
+    virtual css::uno::Reference< css::uno::XInterface > getUnoShape();
+    css::uno::WeakReference< css::uno::XInterface > getWeakUnoShape() const { return maWeakUnoShape; }
 
-    static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
+    static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
 
     // sets a new UNO representation of the shape
     // This is only a public interface function. The actual work is
@@ -890,15 +890,15 @@ public:
     // Calling this function is only allowed for the UNO representation
     // itself!
     void setUnoShape(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XInterface>& _rxUnoShape);
+            const css::uno::Reference<
+                css::uno::XInterface>& _rxUnoShape);
 
     // retrieves the instance responsible for notifying changes in the properties of the shape associated with
     // the SdrObject
     //
     // @precond
     //     There already exists an SvxShape instance associated with the SdrObject
-    // @throws ::com::sun::star::uno::RuntimeException
+    // @throws css::uno::RuntimeException
     //     if there does nt yet exists an SvxShape instance associated with the SdrObject.
     svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
@@ -959,7 +959,7 @@ protected:
     ///
     /// The implementation _must_ call the same method of its parent
     /// class (preferably as the first step)!
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
+    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& _rxUnoShape );
 
     // helper function for reimplementing Clone().
     template< typename T > T* CloneHelper() const;
@@ -970,7 +970,7 @@ private:
 
     // do not use directly, always use getSvxShape() if you have to!
     SvxShape*   mpSvxShape;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >
+    css::uno::WeakReference< css::uno::XInterface >
                 maWeakUnoShape;
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.

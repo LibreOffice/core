@@ -40,8 +40,8 @@ public:
     SvxClipboardFormatItem( const SvxClipboardFormatItem& );
     virtual ~SvxClipboardFormatItem();
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     void AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos = USHRT_MAX );
     void AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,

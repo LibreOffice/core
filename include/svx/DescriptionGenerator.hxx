@@ -53,8 +53,8 @@ public:
             The shape from which properties will be extracted by later calls
             to <member>addProperty</member>.
     */
-    DescriptionGenerator (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    DescriptionGenerator (const css::uno::Reference<
+        css::drawing::XShape>& xShape);
 
     ~DescriptionGenerator();
 
@@ -150,10 +150,10 @@ public:
 
 private:
     /// Reference to the shape from which the properties are extracted.
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> mxShape;
+    css::uno::Reference< css::drawing::XShape> mxShape;
 
     /// Reference to the shape's property set.
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> mxSet;
+    css::uno::Reference< css::beans::XPropertySet> mxSet;
 
     /// The description string that is build.
     OUStringBuffer msDescription;

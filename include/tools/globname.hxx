@@ -68,7 +68,7 @@ public:
                   sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
     // create SvGlobalName from a platform independent representation
-    SvGlobalName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeq );
+    SvGlobalName( const css::uno::Sequence< sal_Int8 >& aSeq );
 
     SvGlobalName( const SvGUID & rId );
 
@@ -94,7 +94,7 @@ public:
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
-    com::sun::star::uno::Sequence < sal_Int8 > GetByteSequence() const;
+    css::uno::Sequence < sal_Int8 > GetByteSequence() const;
 };
 
 #endif

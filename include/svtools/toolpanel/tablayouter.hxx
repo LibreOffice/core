@@ -76,10 +76,10 @@ namespace svt
         virtual void        Destroy() override;
         virtual void        SetFocusToPanelSelector() override;
         virtual size_t      GetAccessibleChildCount() const override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
                             GetAccessibleChild(
                                 const size_t i_nChildIndex,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                                const css::uno::Reference< css::accessibility::XAccessible >& i_rParentAccessible
                             ) override;
 
     private:

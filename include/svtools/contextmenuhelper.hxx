@@ -53,13 +53,13 @@ class SVT_DLLPUBLIC ContextMenuHelper
         // create context menu helper
         // ARGS: xFrame = frame defines the context of the context menu
         //       bAutoRefresh = specifies that the context will be constant or not
-        ContextMenuHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, bool bAutoRefresh=true );
+        ContextMenuHelper( const css::uno::Reference< css::frame::XFrame >& xFrame, bool bAutoRefresh=true );
         ~ContextMenuHelper();
 
         // methods to complete a popup menu (set images, labels, enable/disable states)
         // ATTENTION: The item ID's must be unique for the whole popup (inclusive the sub menus!)
         void completeAndExecute( const Point& aPos, PopupMenu& aPopupMenu );
-        void completeAndExecute( const Point& aPos, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& xPopupMenu );
+        void completeAndExecute( const Point& aPos, const css::uno::Reference< css::awt::XPopupMenu >& xPopupMenu );
 
     private:
         // asynchronous link to prevent destruction while on stack
@@ -75,13 +75,13 @@ class SVT_DLLPUBLIC ContextMenuHelper
         void            completeMenuProperties( Menu* pMenu );
 
         // dispatch provided command
-        bool            dispatchCommand( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& aCommandURL );
+        bool            dispatchCommand( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& aCommandURL );
 
 
         // methods to retrieve a single command URL dependent value from a
         // ui configuration manager
         Image           getImageFromCommandURL( const OUString& aCmdURL ) const;
-        OUString   getLabelFromCommandURL( const OUString& aCmdURL ) const;
+        OUString        getLabelFromCommandURL( const OUString& aCmdURL ) const;
 
         // creates an association between current module/controller bound to the
         // provided frame and their ui configuration managers.
@@ -97,15 +97,15 @@ class SVT_DLLPUBLIC ContextMenuHelper
                 m_bUICfgMgrAssociated = false;
         }
 
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame >         m_xWeakFrame;
-        OUString                                                                 m_aSelf;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >     m_xURLTransformer;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aDefaultArgs;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >         m_xDocImageMgr;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >         m_xModuleImageMgr;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUICommandLabels;
-        bool                                                                            m_bAutoRefresh;
-        bool                                                                            m_bUICfgMgrAssociated;
+        css::uno::WeakReference< css::frame::XFrame >         m_xWeakFrame;
+        OUString                                              m_aSelf;
+        css::uno::Reference< css::util::XURLTransformer >     m_xURLTransformer;
+        css::uno::Sequence< css::beans::PropertyValue >       m_aDefaultArgs;
+        css::uno::Reference< css::ui::XImageManager >         m_xDocImageMgr;
+        css::uno::Reference< css::ui::XImageManager >         m_xModuleImageMgr;
+        css::uno::Reference< css::container::XNameAccess >    m_xUICommandLabels;
+        bool                                                  m_bAutoRefresh;
+        bool                                                  m_bUICfgMgrAssociated;
 };
 
 } // namespace svt

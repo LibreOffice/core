@@ -39,17 +39,17 @@ class UnoControlHolderList;
 //  class UnoControlContainer
 
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
-                                            ,   ::com::sun::star::awt::XUnoControlContainer
-                                            ,   ::com::sun::star::awt::XControlContainer
-                                            ,   ::com::sun::star::container::XContainer
-                                            ,   ::com::sun::star::container::XIdentifierContainer
+                                            ,   css::awt::XUnoControlContainer
+                                            ,   css::awt::XControlContainer
+                                            ,   css::container::XContainer
+                                            ,   css::container::XIdentifierContainer
                                             >   UnoControlContainer_Base;
 
 class UnoControlContainer : public UnoControlContainer_Base
 {
 private:
     UnoControlHolderList*                   mpControls;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >    maTabControllers;
+    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >    maTabControllers;
     ContainerListenerMultiplexer            maCListeners;
 
 protected:
@@ -57,53 +57,53 @@ protected:
 
 public:
                 UnoControlContainer();
-                UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xPeer );
+                UnoControlContainer( const css::uno::Reference< css::awt::XWindowPeer >& xPeer );
                 virtual ~UnoControlContainer();
 
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XEventListener
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XContainer
-    void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::container::XContainer
+    void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XIdentifierContainer
-    virtual ::sal_Int32 SAL_CALL insert( const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::container::XIdentifierContainer
+    virtual ::sal_Int32 SAL_CALL insert( const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XIdentifierReplace
-    virtual void SAL_CALL removeByIdentifier( ::sal_Int32 Identifier ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::container::XIdentifierReplace
+    virtual void SAL_CALL removeByIdentifier( ::sal_Int32 Identifier ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XIdentifierAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifierr ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::container::XIdentifierAccess
+    virtual css::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifierr ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::container::XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XControlContainer
-    void SAL_CALL setStatusText( const OUString& StatusText ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addControl( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XControlContainer
+    void SAL_CALL setStatusText( const OUString& StatusText ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeControl( const css::uno::Reference< css::awt::XControl >& Control ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XUnoControlContainer
-    void SAL_CALL setTabControllers( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >& TabControllers ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > SAL_CALL getTabControllers(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XUnoControlContainer
+    void SAL_CALL setTabControllers( const css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >& TabControllers ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > > SAL_CALL getTabControllers(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addTabController( const css::uno::Reference< css::awt::XTabController >& TabController ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeTabController( const css::uno::Reference< css::awt::XTabController >& TabController ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XControl
-    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XControl
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XWindow
-    void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XWindow
+    void SAL_CALL setVisible( sal_Bool Visible ) throw(css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -112,9 +112,9 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) override;
-    virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
-    virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+    virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
+    virtual void removingControl( const css::uno::Reference< css::awt::XControl >& _rxControl );
+    virtual void addingControl( const css::uno::Reference< css::awt::XControl >& _rxControl );
 
     /** ensures that the given control has a peer, if necessary and possible
         @param _rxControl
@@ -123,7 +123,7 @@ protected:
             our mutex is locked
     */
     virtual void    impl_createControlPeerIfNecessary(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl
+        const css::uno::Reference< css::awt::XControl >& _rxControl
     );
 private:
     /** adds the control to the container, does necessary notifications, and the like
@@ -135,7 +135,7 @@ private:
             the ID of the newly added control
     */
     sal_Int32 impl_addControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+        const css::uno::Reference< css::awt::XControl >& _rxControl,
         const OUString* _pName = NULL
     );
 
@@ -151,7 +151,7 @@ private:
     */
     void      impl_removeControl(
         sal_Int32 _nId,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+        const css::uno::Reference< css::awt::XControl >& _rxControl,
         const OUString* _pNameAccessor
     );
 

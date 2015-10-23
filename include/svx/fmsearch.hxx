@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
 
 // Helper methods
 
-SVX_DLLPUBLIC bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xControl,
+SVX_DLLPUBLIC bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _xControl,
                                             OUString* pCurrentText = NULL);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
@@ -49,7 +49,7 @@ SVX_DLLPUBLIC bool IsSearchableControl( const ::com::sun::star::uno::Reference< 
 
 struct FmFoundRecordInformation
 {
-    ::com::sun::star::uno::Any      aPosition;  // bookmark of the record in which the text was found
+    css::uno::Any      aPosition;  // bookmark of the record in which the text was found
     sal_Int16       nFieldPos;  // ditto: the relative position of the column (in the string name of the field list in the constructor)
     sal_Int16       nContext;   // the context in which was searched and found (if the current search knows several contexts)
 };

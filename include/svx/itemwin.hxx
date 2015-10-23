@@ -39,7 +39,7 @@ class SvxLineBox : public LineLB
     Size            aLogicalSize;
     bool            bRelease;
     SfxObjectShell* mpSh;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+    css::uno::Reference< css::frame::XFrame > mxFrame;
 
                     DECL_LINK_TYPED(DelayHdl_Impl, Timer *, void);
 
@@ -47,7 +47,7 @@ class SvxLineBox : public LineLB
 
 public:
     SvxLineBox( vcl::Window* pParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                const css::uno::Reference< css::frame::XFrame >& rFrame,
                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
 
     void FillControl();
@@ -69,7 +69,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     SfxMapUnit      ePoolUnit;
     FieldUnit       eDlgUnit;
     Size            aLogicalSize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+    css::uno::Reference< css::frame::XFrame > mxFrame;
 
     static void     ReleaseFocus_Impl();
 
@@ -84,7 +84,7 @@ protected:
 
 public:
     SvxMetricField( vcl::Window* pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                    const css::uno::Reference< css::frame::XFrame >& rFrame,
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
 
     void            Update( const XLineWidthItem* pItem );

@@ -38,67 +38,67 @@ namespace svt
 {
 
 class SVT_DLLPUBLIC StatusbarController :
-                            public ::com::sun::star::frame::XStatusbarController,
+                            public css::frame::XStatusbarController,
                             public ::comphelper::OBaseMutex,
                             public ::cppu::OWeakObject
 {
     public:
-        StatusbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+        StatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                             const css::uno::Reference< css::frame::XFrame >& xFrame,
                              const OUString& aCommandURL,
                              unsigned short       nID );
         StatusbarController();
         virtual ~StatusbarController();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
+        css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
+        css::uno::Reference< css::util::XURLTransformer > getURLTransformer() const;
 
         ::Rectangle getControlRect() const;
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusbarController
-        virtual sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
+        virtual sal_Bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL command( const css::awt::Point& aPos,
                                        ::sal_Int32 nCommand,
                                        sal_Bool bMouseEvent,
-                                       const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle,
-                                     ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL click( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL doubleClick( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                                       const css::uno::Any& aData ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+                                     const css::awt::Rectangle& rOutputRectangle,
+                                     ::sal_Int32 nStyle ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         struct Listener
         {
-            Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
+            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
 
-            ::com::sun::star::util::URL aURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
+            css::util::URL                               aURL;
+            css::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         typedef std::unordered_map< OUString,
@@ -112,20 +112,20 @@ class SVT_DLLPUBLIC StatusbarController :
 
         // execute methods
         // execute bound status bar controller command/execute various commands
-        void execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
-        void execute( const OUString& aCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
+        void execute( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+        void execute( const OUString& aCommand, const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
-        bool                                                                                m_bInitialized : 1,
-                                                                                            m_bDisposed : 1;
-        unsigned short                                                                      m_nID;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xParentWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        OUString                                                                       m_aCommandURL;
-        URLToDispatchMap                                                                    m_aListenerMap;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XStatusbarItem >           m_xStatusbarItem;
+        bool                                                      m_bInitialized : 1,
+                                                                  m_bDisposed : 1;
+        unsigned short                                            m_nID;
+        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        OUString                                                  m_aCommandURL;
+        URLToDispatchMap                                          m_aListenerMap;
+        ::cppu::OMultiTypeInterfaceContainerHelper                m_aListenerContainer;   /// container for ALL Listener
+        mutable css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
+        css::uno::Reference< css::ui::XStatusbarItem >            m_xStatusbarItem;
 };
 
 }

@@ -63,7 +63,7 @@ public:
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 
     // access to all forms
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& GetForms( bool _bForceCreate = true ) const;
+    const css::uno::Reference< css::form::XForms>& GetForms( bool _bForceCreate = true ) const;
 
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
 

@@ -117,7 +117,7 @@ public:
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
 
-    com::sun::star::uno::Reference< com::sun::star::table::XTable > getTable() const;
+    css::uno::Reference< css::table::XTable > getTable() const;
 
     bool isValid( const sdr::table::CellPos& rPos ) const;
     static CellPos getFirstCell();
@@ -151,8 +151,8 @@ public:
 
     const SfxItemSet& GetActiveCellItemSet() const;
 
-     void setTableStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAutoFormatStyle );
-     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& getTableStyle() const;
+     void setTableStyle( const css::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
+     const css::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;
 
      // text stuff
 
@@ -256,7 +256,7 @@ public:
     virtual bool IsVerticalWriting() const override;
     virtual void SetVerticalWriting(bool bVertical) override;
 
-    com::sun::star::text::WritingMode GetWritingMode() const;
+    css::text::WritingMode GetWritingMode() const;
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 

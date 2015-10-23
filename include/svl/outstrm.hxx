@@ -31,8 +31,7 @@ namespace com { namespace sun { namespace star { namespace io {
 
 class SVL_DLLPUBLIC SvOutputStream: public SvStream
 {
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
-        m_xStream;
+    css::uno::Reference< css::io::XOutputStream > m_xStream;
 
     SVL_DLLPRIVATE virtual sal_uLong GetData(void *, sal_uLong) override;
 
@@ -45,9 +44,7 @@ class SVL_DLLPUBLIC SvOutputStream: public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvOutputStream(com::sun::star::uno::Reference<
-                           com::sun::star::io::XOutputStream > const &
-                       rTheStream);
+    SvOutputStream(css::uno::Reference< css::io::XOutputStream > const & rTheStream);
 
     virtual ~SvOutputStream();
 };

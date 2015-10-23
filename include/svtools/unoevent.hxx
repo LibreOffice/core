@@ -56,8 +56,8 @@ struct SvEventDescription
  */
 class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::container::XNameReplace,
-    ::com::sun::star::lang::XServiceInfo
+    css::container::XNameReplace,
+    css::lang::XServiceInfo
 >
 {
     const OUString sEventType;
@@ -88,53 +88,53 @@ public:
     /// calls replaceByName(const sal_uInt16, const SvxMacro&)
     virtual void SAL_CALL replaceByName(
         const OUString& rName,                /// API name of event
-        const ::com::sun::star::uno::Any& rElement ) /// event (PropertyValues)
+        const css::uno::Any& rElement ) /// event (PropertyValues)
             throw(
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(
+    virtual css::uno::Any SAL_CALL getByName(
         const OUString& rName )  /// API name of event
             throw(
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     // XNameAxcess (via XNameReplace)
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
                                                         getElementNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess (via XNameReplace)
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     /// must be implemented in subclass
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+        throw( css::uno::RuntimeException, std::exception ) override = 0;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
 
@@ -143,19 +143,19 @@ protected:
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
             throw(
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) = 0;
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) = 0;
 
     /// Must be implemented in subclass.
     virtual void getByName(
         SvxMacro& rMacro,
         const sal_uInt16 nEvent )
             throw(
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) = 0;
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) = 0;
 
     /// convert an API event name to the event ID as used by SvxMacroItem
     sal_uInt16 mapNameToEventID(const OUString& rName) const;
@@ -165,15 +165,15 @@ protected:
 
     /// create PropertyValues and Any from macro
     void getAnyFromMacro(
-        ::com::sun::star::uno::Any& aAny,   // Any to be filled by Macro values
+        css::uno::Any& aAny,   // Any to be filled by Macro values
         const SvxMacro& rMacro);
 
     /// create macro from PropertyValues (in an Any)
     void getMacroFromAny(
         SvxMacro& aMacro,       // reference to be filled by Any
-        const ::com::sun::star::uno::Any& rAny)
+        const css::uno::Any& rAny)
             throw (
-                ::com::sun::star::lang::IllegalArgumentException);
+                css::lang::IllegalArgumentException);
 
 };
 
@@ -196,12 +196,11 @@ protected:
 class SVT_DLLPUBLIC SvEventDescriptor : public SvBaseEventDescriptor
 {
     /// keep reference to parent to prevent it from being destroyed
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface > xParentRef;
+    css::uno::Reference< css::uno::XInterface > xParentRef;
 
 public:
 
-     SvEventDescriptor(::com::sun::star::uno::XInterface& rParent,
+     SvEventDescriptor(css::uno::XInterface& rParent,
                       const SvEventDescription* pSupportedMacroItems);
 
     virtual ~SvEventDescriptor();
@@ -215,19 +214,19 @@ protected:
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
             throw(
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) override;
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) override;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
         SvxMacro& rMacros,          /// macro to be filled with values
         const sal_uInt16 nEvent )       /// item ID of event
             throw(
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) override;
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) override;
 
 
     /// Get the SvxMacroItem from the parent.
@@ -262,7 +261,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
 
@@ -273,19 +272,19 @@ protected:
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
             throw(
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) override;
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) override;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
         SvxMacro& rMacro,           /// macro to be filled
         const sal_uInt16 nEvent )       /// item ID of event
             throw(
-                ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException) override;
+                css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException) override;
 
     /// do we have an event?
     /// return true: we have a macro for the event
@@ -294,7 +293,7 @@ protected:
     bool hasById(
         const sal_uInt16 nEvent ) const     /// item ID of event
              throw(
-                ::com::sun::star::lang::IllegalArgumentException);
+                css::lang::IllegalArgumentException);
 
 };
 

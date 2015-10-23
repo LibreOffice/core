@@ -32,19 +32,19 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-class StdTabController :    public ::com::sun::star::awt::XTabController,
-                            public ::com::sun::star::lang::XServiceInfo,
-                            public ::com::sun::star::lang::XTypeProvider,
+class StdTabController :    public css::awt::XTabController,
+                            public css::lang::XServiceInfo,
+                            public css::lang::XTypeProvider,
                             public ::cppu::OWeakAggObject
 {
 private:
     ::osl::Mutex            maMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >    mxControlContainer;
+    css::uno::Reference< css::awt::XTabControllerModel >  mxModel;
+    css::uno::Reference< css::awt::XControlContainer >    mxControlContainer;
 
 protected:
     ::osl::Mutex&               GetMutex() { return maMutex; }
-    static bool                 ImplCreateComponentSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rControls, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rModels, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& rComponents, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>* pTabStops, bool bPeerComponent );
+    static bool                 ImplCreateComponentSequence( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rControls, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rModels, css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& rComponents, css::uno::Sequence< css::uno::Any>* pTabStops, bool bPeerComponent );
     // if sequence length of rModels is less than rControls, return only the matching elements in rModels sequence and remove corresponding elements from rControls
     void                        ImplActivateControl( bool bFirst ) const;
 
@@ -52,29 +52,29 @@ public:
                             StdTabController();
                             virtual ~StdTabController();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  FindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel );
+    static css::uno::Reference< css::awt::XControl >  FindControl( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return OWeakAggObject::queryInterface(rType); }
+    // css::uno::XInterface
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
 
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
     // XTabController
-    void SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& Model ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > SAL_CALL getModel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& Container ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SAL_CALL getContainer(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL autoTabOrder(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL activateTabOrder(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL activateFirst(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL activateLast(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setModel( const css::uno::Reference< css::awt::XTabControllerModel >& Model ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XTabControllerModel > SAL_CALL getModel(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setContainer( const css::uno::Reference< css::awt::XControlContainer >& Container ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XControlContainer > SAL_CALL getContainer(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL autoTabOrder(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL activateTabOrder(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL activateFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL activateLast(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

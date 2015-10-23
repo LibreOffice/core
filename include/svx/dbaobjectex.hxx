@@ -46,7 +46,7 @@ namespace svx
         */
         OComponentTransferable(
             const OUString&  _rDatasourceOrLocation
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
+            ,const css::uno::Reference< css::ucb::XContent>& _xContent
         );
 
         /** checks whether or not a component descriptor can be extracted from the data flavor vector given
