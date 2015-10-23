@@ -250,10 +250,10 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 }
 
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
-       const ::com::sun::star::lang::Locale& aLocale,
+       const css::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
-       const ::com::sun::star::beans::PropertyValues& aProperties )
-       throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
+       const css::beans::PropertyValues& aProperties )
+       throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     int k = 0;
 
@@ -496,10 +496,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
 Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const OUString& aWord,
-        const ::com::sun::star::lang::Locale& aLocale,
+        const css::lang::Locale& aLocale,
         sal_Int16 nIndex,
-        const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+        const css::beans::PropertyValues& aProperties )
+        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
     for (int extrachar = 1; extrachar <= 2; extrachar++)
@@ -535,9 +535,9 @@ static OString Win_GetShortPathName( const OUString &rLongPathName )
 #endif //defined(WNT)
 
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
-        const ::com::sun::star::lang::Locale& aLocale,
-        const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+        const css::lang::Locale& aLocale,
+        const css::beans::PropertyValues& aProperties )
+        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);

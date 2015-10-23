@@ -77,7 +77,7 @@ class Thesaurus :
     sal_Int32                               numthes;
 
     // cache for the Thesaurus dialog
-    Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > prevMeanings;
+    Sequence < Reference < css::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
     sal_Int16 prevLocale;
 
@@ -99,7 +99,7 @@ public:
     virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) throw(RuntimeException, std::exception) override;
 
     // XThesaurus
-    virtual Sequence< Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const PropertyValues& rProperties ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual Sequence< Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const PropertyValues& rProperties ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
 
     // XServiceDisplayName
     virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) throw(RuntimeException, std::exception) override;

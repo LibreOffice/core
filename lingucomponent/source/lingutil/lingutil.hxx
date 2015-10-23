@@ -41,7 +41,7 @@ struct lt_rtl_OUString
     }
 };
 
-inline bool operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com::sun::star::lang::Locale &rL2 )
+inline bool operator == ( const css::lang::Locale &rL1, const css::lang::Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
