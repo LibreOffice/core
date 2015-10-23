@@ -280,21 +280,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
-ifneq ($(WITH_MOZAB4WIN),)
-$(eval $(call gb_Rdb_add_components,services,\
-	connectivity/source/drivers/mozab/mozab \
-))
-
-else
-
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mork/mork \
 	connectivity/source/drivers/mozab/bootstrap/mozbootstrap \
 ))
 endif # DESKTOP
-
-endif # WITH_MOZAB4WIN
 
 endif # DBCONNECTIVITY
 

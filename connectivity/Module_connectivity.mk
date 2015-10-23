@@ -94,15 +94,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifneq ($(WITH_MOZAB4WIN),)
-
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab \
-	Library_mozab \
-	Library_mozabdrv \
-))
-
-else ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mork \

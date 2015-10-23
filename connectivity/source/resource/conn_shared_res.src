@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "resource/mozab_res.hrc"
+#include "resource/mork_res.hrc"
 #include "resource/macab_res.hrc"
 #include "resource/calc_res.hrc"
 #include "resource/ado_res.hrc"

@@ -440,14 +440,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xof \
 	xsltdlg \
 	xsltfilter \
-	$(if $(WITH_MOZAB4WIN), \
-		mozab2 \
-		mozabdrv \
-	) \
-	$(if $(WITH_MOZAB4WIN),,\
-		mork \
-		mozbootstrap \
-	) \
+	mork \
+	mozbootstrap \
 	$(if $(filter $(OS),WNT), \
 		ado \
 		$(if $(DISABLE_ATL),,oleautobridge) \

@@ -230,11 +230,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional_pack,VALIDATOR_EXTENSION_PACK) \
 		$(call fetch_Optional_pack,WATCH_WINDOW_EXTENSION_PACK) \
 	,$(call fetch_Download_item,http://ooo.itc.hu/oxygenoffice/download/libreoffice,$(item)))
-	$(foreach item, \
-		$(call fetch_Optional,MOZ,$(MOZ_ZIP_INC)) \
-		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
-		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
-	,$(call fetch_Download_item_unchecked,http://dev-www.libreoffice.org/mozilla,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
 	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
