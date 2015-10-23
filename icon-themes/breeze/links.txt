@@ -40,6 +40,7 @@ cmd/sc_addprintarea.png cmd/sc_inserttable.png
 cmd/sc_addtable.png cmd/sc_inserttable.png
 
 # Insert
+cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_insert.png cmd/lc_togglesheetgrid.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/lc_insertcurrencyfield.png cmd/lc_formattedfield.png
@@ -73,6 +74,7 @@ cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertspreadsheet.png cmd/lc_togglesheetgrid.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 
+cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_insert.png cmd/sc_togglesheetgrid.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/sc_insertcurrencyfield.png cmd/sc_formattedfield.png
@@ -221,11 +223,13 @@ cmd/sc_alignframemenu.png cmd/sc_alignleft.png
 cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 
 # Graphic
+cmd/lc_grafgamma.png cmd/lc_graphicfilterinvert.png
 cmd/lc_colorsettings.png cmd/lc_graphicfiltersmooth.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
+cmd/sc_grafgamma.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
@@ -379,6 +383,14 @@ cmd/sc_formatungroup.png cmd/sc_ungroup.png
 cmd/lc_recundo.png cmd/lc_undo.png
 cmd/sc_recundo.png cmd/sc_undo.png
 
+# Bezier
+cmd/lc_bezieredge.png cmd/lc_bezierappend.png
+cmd/sc_bezieredge.png cmd/sc_bezierappend.png
+
+# Frame
+cmd/lc_setborderstyle.png cmd/lc_diagramarea.png
+cmd/sc_setborderstyle.png cmd/sc_diagramarea.png
+
 # Label
 cmd/lc_definename.png cmd/lc_label.png
 cmd/sc_definename.png cmd/sc_label.png
@@ -423,6 +435,10 @@ cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
+
+# arc
+cmd/lc_basicshapes.block-arc.png cmd/lc_arc.png
+cmd/sc_basicshapes.block-arc.png cmd/sc_arc.png
 
 # Cancel
 cmd/lc_no.png cmd/lc_cancel.png
@@ -573,6 +589,12 @@ cmd/sc_yes.png cmd/sc_ok.png
 cmd/sc_apply.png cmd/sc_ok.png
 cmd/sc_accepttrackedchange.png cmd/sc_ok.png
 
+# up and down
+cmd/lc_movepageup.png cmd/lc_upsearch.png
+cmd/sc_movepageup.png cmd/sc_upsearch.png
+cmd/lc_movepagedown.png cmd/lc_downsearch.png
+cmd/sc_movepagedown.png cmd/sc_downsearch.png
+
 # Find Toolbar
 cmd/lc_scrolltonext.png cmd/lc_downsearch.png
 cmd/sc_scrolltonext.png cmd/sc_downsearch.png
@@ -653,6 +675,8 @@ cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
 # Presentation
 cmd/lc_diaauto.png cmd/lc_dia.png
 cmd/sc_diaauto.png cmd/sc_dia.png
+cmd/lc_presentation.png cmd/lc_dia.png
+cmd/sc_presentation.png cmd/sc_dia.png
 
 # Style
 cmd/lc_editstyle.png cmd/lc_designerdialog.png
@@ -794,6 +818,10 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 # Toggle graphics visibility in Writer
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 
+# navigator
+cmd/lc_dsbrowserexplorer.png cmd/lc_showfmexplorer.png
+cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
+
 # database
 # ==============================================
 database/linked_text_table.png cmd/sc_dataimport.png
@@ -878,6 +906,7 @@ reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 # ==============================================
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
 res/browse.png cmd/sc_browseview.png
+res/baswatr.png cmd/lc_addwatch.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
@@ -943,7 +972,7 @@ res/sc10864.png cmd/sc_grafcontrast.png
 res/sc10865.png cmd/sc_grafred.png
 res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
-res/sc10868.png cmd/sc_grafgamma.png
+res/sc10868.png cmd/sc_graphicfilterinvert.png
 res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
@@ -1017,7 +1046,7 @@ sd/imglst/nv08.png cmd/sc_copy.png
 sd/imglst/nv09.png sc/res/droplink.png
 sd/imglst/nv010.png cmd/sc_inserthyperlink.png
 sd/imglst/sf01.png cmd/sc_showfmexplorer.png
-sd/imglst/sf02.png cmd/sc_presentation.png
+sd/imglst/sf02.png cmd/sc_dia.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_showannotations.png
@@ -1058,6 +1087,9 @@ sfx2/res/styfam1.png cmd/sc_charfontname.png
 sfx2/res/styfam2.png cmd/sc_controlcodes.png
 sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
+sfx2/res/minus.png res/minus.png
+sfx2/res/newex.png res/plus.png
+sfx2/res/plus.png res/plus.png
 
 sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
@@ -1169,7 +1201,7 @@ svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 svx/res/reloads.png cmd/sc_reload.png
 
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
-svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
+svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/symphony/fill_color.png cmd/sc_backgroundpatterncontroller.png
