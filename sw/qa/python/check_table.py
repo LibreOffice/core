@@ -7,6 +7,8 @@ from com.sun.star.table import BorderLine
 from com.sun.star.table import BorderLine2
 from com.sun.star.table.BorderLineStyle import (DOUBLE, SOLID, EMBOSSED,\
     THICKTHIN_LARGEGAP, DASHED, DOTTED)
+from com.sun.star.util import XNumberFormats
+from com.sun.star.lang import Locale
 
 class CheckTable(unittest.TestCase):
     _uno = None
@@ -450,6 +452,74 @@ class CheckTable(unittest.TestCase):
             self.assertEqual(
                     [int(txtval) for txtval in xSeq.TextualData],
                     [val         for    val in expectedValues[col]])
+        xDoc.dispose()
+
+    def test_tdf32082(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xDocFrame = xDoc.CurrentController.Frame
+        xContext = CheckTable._uno.getContext()
+        xServiceManager = xContext.ServiceManager
+        xDispatcher = xServiceManager.createInstanceWithContext(
+            'com.sun.star.frame.DispatchHelper', xContext)
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(1,1)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        # Setup numberformat for the cell
+        xNumberFormats = xDoc.NumberFormats
+        xLocale = Locale('en', 'US', '')
+        formatString = '#,##0.00 [$€-407];[RED]-#,##0.00 [$€-407]'
+        key = xNumberFormats.queryKey(formatString, xLocale, True)
+        if key == -1:
+            key = xNumberFormats.addNew(formatString, xLocale)
+        # Apply the format on the first cell
+        xTable.getCellByPosition(0,0).NumberFormat = key
+        xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
+        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
+                                   (PropertyValue('Text', 0, '3', 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        # Check that the formatting we set up is not destroyed
+        self.assertEquals(xTable.getCellByPosition(0,0).getString(), '3.00 €')
+        self.assertEquals(xTable.getCellByPosition(0,0).getValue(), 3)
+        # Verify that it works with number recognition turned on as well
+        xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
+                                   (PropertyValue('TableNumberRecognition', 0, True, 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
+                                   (PropertyValue('Text', 0, '4', 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        self.assertEquals(xTable.getCellByPosition(0,1).getString(), '4.00 €')
+        self.assertEquals(xTable.getCellByPosition(0,1).getValue(), 4)
+        xDoc.dispose()
+
+    def test_numberRecognition(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xDocFrame = xDoc.CurrentController.Frame
+        xContext = CheckTable._uno.getContext()
+        xServiceManager = xContext.ServiceManager
+        xDispatcher = xServiceManager.createInstanceWithContext(
+            'com.sun.star.frame.DispatchHelper', xContext)
+        xTable = xDoc.createInstance('com.sun.star.text.TextTable')
+        xTable.initialize(2,1)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
+        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
+                                   (PropertyValue('Text', 0, '15-10-30', 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        # Without number recognition 15-10-30 should not be interperated as a date
+        self.assertEquals(xTable.getCellByPosition(0,0).getString(), '15-10-30')
+        self.assertEquals(xTable.getCellByPosition(0,0).getValue(), 0)
+        # Activate number recognition
+        xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
+                                   (PropertyValue('TableNumberRecognition', 0, True, 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
+                                   (PropertyValue('Text', 0, '15-10-30', 0),))
+        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        # With number recognition it should now be a date, confirm by checking
+        # the string and value of the cell.
+        self.assertEquals(xTable.getCellByPosition(0,1).getString(), '2015-10-30')
+        self.assertEquals(xTable.getCellByPosition(0,1).getValue(), 42307.0)
+        xDoc.dispose()
 
 if __name__ == '__main__':
     unittest.main()
