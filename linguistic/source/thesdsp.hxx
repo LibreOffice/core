@@ -45,24 +45,19 @@
 
 
 class ThesaurusDispatcher :
-    public cppu::WeakImplHelper
-    <
-        ::com::sun::star::linguistic2::XThesaurus
-    >,
+    public cppu::WeakImplHelper< css::linguistic2::XThesaurus >,
     public LinguDispatcher
 {
     typedef std::shared_ptr< LangSvcEntries_Thes >                LangSvcEntries_Thes_Ptr_t;
     typedef std::map< LanguageType, LangSvcEntries_Thes_Ptr_t >     ThesSvcByLangMap_t;
     ThesSvcByLangMap_t      aSvcMap;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >     xPropSet;
+    css::uno::Reference< css::linguistic2::XLinguProperties >     xPropSet;
 
     ThesaurusDispatcher(const ThesaurusDispatcher &) = delete;
     ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) = delete;
 
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >
+    inline css::uno::Reference< css::linguistic2::XLinguProperties >
             GetPropSet();
 
     void    ClearSvcList();
@@ -72,36 +67,31 @@ public:
     virtual ~ThesaurusDispatcher();
 
     // XSupportedLocales
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::lang::Locale > SAL_CALL
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        hasLocale( const css::lang::Locale& aLocale )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XThesaurus
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& aTerm,
-                const ::com::sun::star::lang::Locale& aLocale,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::lang::Locale& aLocale,
+                const css::beans::PropertyValues& aProperties )
+            throw(css::lang::IllegalArgumentException,
+                  css::uno::RuntimeException, std::exception) override;
 
     // LinguDispatcher
     virtual void
-        SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
-                const ::com::sun::star::uno::Sequence<
-                    OUString > &rSvcImplNames ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const override;
+        SetServiceList( const css::lang::Locale &rLocale,
+                const css::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual css::uno::Sequence< OUString >
+        GetServiceList( const css::lang::Locale &rLocale ) const override;
 };
 
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguProperties >
+inline css::uno::Reference< css::linguistic2::XLinguProperties >
         ThesaurusDispatcher::GetPropSet()
 {
     return xPropSet.is() ?

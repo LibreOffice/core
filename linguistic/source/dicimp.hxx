@@ -38,18 +38,17 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg );
 class DictionaryNeo :
     public ::cppu::WeakImplHelper
     <
-        ::com::sun::star::linguistic2::XDictionary,
-        ::com::sun::star::frame::XStorable
+        css::linguistic2::XDictionary,
+        css::frame::XStorable
     >
 {
 
     ::cppu::OInterfaceContainerHelper                           aDicEvtListeners;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionaryEntry > > aEntries;
+    css::uno::Sequence< css::uno::Reference<  css::linguistic2::XDictionaryEntry > >
+                                                                aEntries;
     OUString                                                    aDicName;
     OUString                                                    aMainURL;
-    ::com::sun::star::linguistic2::DictionaryType               eDicType;
+    css::linguistic2::DictionaryType                            eDicType;
     sal_Int16                                                   nCount;
     sal_Int16                                                   nLanguage;
     sal_Int16                                                   nDicVersion;
@@ -62,8 +61,7 @@ class DictionaryNeo :
     DictionaryNeo & operator = (const DictionaryNeo &) = delete;
 
     void                    launchEvent(sal_Int16 nEvent,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionaryEntry > xEntry);
+                                        css::uno::Reference< css::linguistic2::XDictionaryEntry > xEntry);
 
     sal_uLong                   loadEntries(const OUString &rMainURL);
     sal_uLong                   saveEntries(const OUString &rMainURL);
@@ -74,13 +72,12 @@ class DictionaryNeo :
                                         bool bSimilarOnly = false);
     bool                        isSorted();
 
-    bool                        addEntry_Impl(const ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryEntry >& rDicEntry,
+    bool                        addEntry_Impl(const css::uno::Reference< css::linguistic2::XDictionaryEntry >& rDicEntry,
                                           bool bIsLoadEntries = false);
 
 public:
     DictionaryNeo(const OUString &rName, sal_Int16 nLang,
-                    ::com::sun::star::linguistic2::DictionaryType eType,
+                    css::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,
                     bool bWriteable );
     virtual ~DictionaryNeo();
@@ -88,100 +85,91 @@ public:
     // XNamed
     virtual OUString SAL_CALL
         getName()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         setName( const OUString& aName )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XDictionary
-    virtual ::com::sun::star::linguistic2::DictionaryType SAL_CALL
+    virtual css::linguistic2::DictionaryType SAL_CALL
         getDictionaryType()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         setActive( sal_Bool bActivate )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         isActive()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL
         getCount()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::lang::Locale SAL_CALL
+            throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
-        setLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionaryEntry > SAL_CALL
+        setLocale( const css::lang::Locale& aLocale )
+            throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+            css::linguistic2::XDictionaryEntry > SAL_CALL
         getEntry( const OUString& aWord )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        addEntry( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryEntry >& xDicEntry )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        addEntry( const css::uno::Reference<
+                css::linguistic2::XDictionaryEntry >& xDicEntry )
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         add( const OUString& aWord, sal_Bool bIsNegative,
                 const OUString& aRplcText )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         remove( const OUString& aWord )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         isFull()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryEntry > > SAL_CALL
+            throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
         getEntries()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         clear()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        addDictionaryEventListener( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener )
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        removeDictionaryEventListener( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XStorable
     virtual sal_Bool SAL_CALL
         hasLocation()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL
         getLocation()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
         isReadonly()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         store()
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         storeAsURL( const OUString& aURL,
-                const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue >& aArgs )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         storeToURL( const OUString& aURL,
-                const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue >& aArgs )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+            throw(css::io::IOException,
+                  css::uno::RuntimeException, std::exception) override;
 };
 
 
 
 class DicEntry :
-    public cppu::WeakImplHelper
-    <
-        ::com::sun::star::linguistic2::XDictionaryEntry
-    >
+    public cppu::WeakImplHelper< css::linguistic2::XDictionaryEntry >
 {
     OUString aDicWord,       // including hyphen positions represented by "="
                     aReplacement;   // including hyphen positions represented by "="
@@ -202,11 +190,11 @@ public:
 
     // XDictionaryEntry
     virtual OUString SAL_CALL
-        getDictionaryWord() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        getDictionaryWord() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        isNegative() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        isNegative() throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL
-        getReplacementText() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        getReplacementText() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 

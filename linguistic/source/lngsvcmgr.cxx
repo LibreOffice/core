@@ -269,7 +269,7 @@ long LngSvcMgrListenerHelper::Timeout()
         // probably do not know (and need not to know) about the specific
         // SpellChecker's or Hyphenator's.
         linguistic2::LinguServiceEvent aEvtObj(
-            static_cast<com::sun::star::linguistic2::XLinguServiceManager*>(&rMyManager), nCombinedLngSvcEvt );
+            static_cast<css::linguistic2::XLinguServiceManager*>(&rMyManager), nCombinedLngSvcEvt );
         nCombinedLngSvcEvt = 0;
 
         if (rMyManager.pSpellDsp)
@@ -363,7 +363,7 @@ void SAL_CALL
 void LngSvcMgrListenerHelper::LaunchEvent( sal_Int16 nLngSvcEvtFlags )
 {
     linguistic2::LinguServiceEvent aEvt(
-        static_cast<com::sun::star::linguistic2::XLinguServiceManager*>(&rMyManager), nLngSvcEvtFlags );
+        static_cast<css::linguistic2::XLinguServiceManager*>(&rMyManager), nLngSvcEvtFlags );
 
     // pass event on to linguistic2::XLinguServiceEventListener's
     cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
@@ -497,7 +497,7 @@ LngSvcMgr::LngSvcMgr()
     }
 }
 
-// ::com::sun::star::util::XModifyListener
+// css::util::XModifyListener
 void LngSvcMgr::modified(const lang::EventObject&)
     throw(uno::RuntimeException, std::exception)
 {

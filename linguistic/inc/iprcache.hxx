@@ -44,8 +44,8 @@ class SpellCache;
 class FlushListener :
     public cppu::WeakImplHelper
     <
-        ::com::sun::star::linguistic2::XDictionaryListEventListener,
-        ::com::sun::star::beans::XPropertyChangeListener
+        css::linguistic2::XDictionaryListEventListener,
+        css::beans::XPropertyChangeListener
     >
 {
     css::uno::Reference< css::linguistic2::XSearchableDictionaryList >    xDicList;
@@ -59,24 +59,23 @@ public:
     FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
     virtual ~FlushListener() {}
 
-    void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &rDL );
-    void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguProperties > &rPS );
+    void        SetDicList( css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rDL );
+    void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > &rPS );
 
     //XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XDictionaryListEventListener
-    virtual void SAL_CALL processDictionaryListEvent( const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processDictionaryListEvent( const css::linguistic2::DictionaryListEvent& rDicListEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& rEvt ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 
 class SpellCache
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryListEventListener >
+    css::uno::Reference< css::linguistic2::XDictionaryListEventListener >
                         xFlushLstnr;
     FlushListener      *pFlushLstnr;
 

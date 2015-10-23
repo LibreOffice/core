@@ -63,7 +63,7 @@ bool FileExists( const OUString &rMainURL )
         try
         {
             ::ucbhelper::Content aContent( rMainURL,
-                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                    uno::Reference< css::ucb::XCommandEnvironment >(),
                     comphelper::getProcessComponentContext());
             bExists = aContent.isDocument();
         }

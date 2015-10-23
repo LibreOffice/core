@@ -79,17 +79,17 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
     return aLclDtaWrp;
 }
 
-LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale )
+LanguageType LinguLocaleToLanguage( const css::lang::Locale& rLocale )
 {
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
     return LanguageTag::convertToLanguageType( rLocale );
 }
 
-::com::sun::star::lang::Locale LinguLanguageToLocale( LanguageType nLanguage )
+css::lang::Locale LinguLanguageToLocale( LanguageType nLanguage )
 {
     if (nLanguage == LANGUAGE_NONE)
-        return ::com::sun::star::lang::Locale();
+        return css::lang::Locale();
     return LanguageTag::convertToLocale( nLanguage);
 }
 
@@ -415,7 +415,7 @@ bool    IsReadOnly( const OUString &rURL, bool *pbExist )
     {
         try
         {
-            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
+            uno::Reference< css::ucb::XCommandEnvironment > xCmdEnv;
             ::ucbhelper::Content aContent( rURL, xCmdEnv, comphelper::getProcessComponentContext() );
 
             bExists = aContent.isDocument();
@@ -615,7 +615,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
             for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)
             {
                 if (pCC->getCharacterType(aStr,tindex) &
-                   ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
+                   css::i18n::KCharacterType::UPPER) nc++;
             }
 
             if (nc == 0)
@@ -623,7 +623,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
             if (nc == tlen)
                 return CapType::ALLCAP;
             if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
-                  ::com::sun::star::i18n::KCharacterType::UPPER))
+                  css::i18n::KCharacterType::UPPER))
                 return CapType::INITCAP;
 
             return CapType::MIXED;

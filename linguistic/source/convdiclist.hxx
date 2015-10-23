@@ -36,9 +36,9 @@ class ConvDicNameContainer;
 class ConvDicList :
     public cppu::WeakImplHelper
     <
-        ::com::sun::star::linguistic2::XConversionDictionaryList,
-        ::com::sun::star::lang::XComponent,
-        ::com::sun::star::lang::XServiceInfo
+        css::linguistic2::XConversionDictionaryList,
+        css::lang::XComponent,
+        css::lang::XServiceInfo
     >
 {
 
@@ -55,11 +55,11 @@ class ConvDicList :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
 
     ConvDicNameContainer                   *pNameContainer;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameContainer >   xNameContainer;
+    css::uno::Reference<
+        css::container::XNameContainer >   xNameContainer;
 
     MyAppExitListener                      *pExitListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::
+    css::uno::Reference< css::frame::
                 XTerminateListener >        xExitListener;
 
     bool                                    bDisposing;
@@ -74,25 +74,25 @@ public:
     virtual ~ConvDicList();
 
     // XConversionDictionaryList
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getDictionaryContainer(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary > SAL_CALL addNewDictionary( const OUString& aName, const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL queryConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, ::com::sun::star::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL queryMaxCharCount( const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, ::com::sun::star::linguistic2::ConversionDirection eDirection ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getDictionaryContainer(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XConversionDictionary > SAL_CALL addNewDictionary( const OUString& aName, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) throw (css::lang::NoSupportException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL queryConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL queryMaxCharCount( const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
     static inline OUString
         getImplementationName_Static() throw();
-    static com::sun::star::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 
     // non UNO-specific
