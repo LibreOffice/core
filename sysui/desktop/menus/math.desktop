@@ -36,5 +36,5 @@ X-KDE-Protocols=file,http,ftp,webdav
 
 Actions=NewDocument;
 [Desktop Action NewDocument]
-Name=New Formula
+UnityQuickList=New Formula
 Exec=${UNIXBASISROOTNAME} --math

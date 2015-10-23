@@ -35,5 +35,5 @@ X-KDE-Protocols=file,http,ftp,webdav
 
 Actions=NewDocument;
 [Desktop Action NewDocument]
-Name=New Drawing
+UnityQuickList=New Drawing
 Exec=${UNIXBASISROOTNAME} --draw

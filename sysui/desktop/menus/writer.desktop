@@ -35,5 +35,5 @@ X-KDE-Protocols=file,http,ftp,webdav
 
 Actions=NewDocument;
 [Desktop Action NewDocument]
-Name=New Document
+UnityQuickList=New Document
 Exec=${UNIXBASISROOTNAME} --writer

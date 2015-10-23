@@ -66,7 +66,7 @@ if (!defined $template_dir) {
 
 # hack for unity section
 my $outkey = $key;
-if ( $outkey eq "UnityQuicklist" ) {
+if ( $outkey eq "UnityQuickList" ) {
     $outkey = "Name";
 }
 
