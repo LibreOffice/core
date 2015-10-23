@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XCipherContext >
+class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
 {
     ::osl::Mutex m_aMutex;
     void* m_pCipher;
@@ -39,11 +39,11 @@ public:
 
     virtual ~BlowfishCFB8CipherContext();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext >
-        Create( const ::com::sun::star::uno::Sequence< sal_Int8 >& aDerivedKey, const ::com::sun::star::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt );
+    static css::uno::Reference< css::xml::crypto::XCipherContext >
+        Create( const css::uno::Sequence< sal_Int8 >& aDerivedKey, const css::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt );
 
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::lang::IllegalArgumentException, css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_PACKAGE_SOURCE_ZIPAPI_BLOWFISHCONTEXT_HXX

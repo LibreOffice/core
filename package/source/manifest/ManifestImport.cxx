@@ -333,7 +333,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 
 namespace
 {
-    bool isEmpty(const com::sun::star::beans::PropertyValue &rProp)
+    bool isEmpty(const css::beans::PropertyValue &rProp)
     {
         return rProp.Name.isEmpty();
     }
@@ -347,7 +347,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
     {
         if ( aConvertedName.equals( sFileEntryElement ) && aStack.back().m_bValid )
         {
-            com::sun::star::beans::PropertyValue aEmpty;
+            css::beans::PropertyValue aEmpty;
             aSequence.erase(std::remove_if(aSequence.begin(), aSequence.end(),
                 isEmpty), aSequence.end());
 

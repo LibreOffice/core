@@ -168,7 +168,7 @@ class LO_DLLPUBLIC_PYUNO Runtime
         Safely unpacks a Python iterator into a sequence, then
         stores it in an Any. Used internally by pyObject2Any
     */
-    bool pyIterUnpack( PyObject *const, com::sun::star::uno::Any & ) const;
+    bool pyIterUnpack( PyObject *const, css::uno::Any & ) const;
 public:
     ~Runtime( );
 
@@ -183,7 +183,7 @@ public:
         @throw RuntimeException in case the runtime has not been
                initialized before
      */
-    Runtime() throw( com::sun::star::uno::RuntimeException );
+    Runtime() throw( css::uno::RuntimeException );
 
     Runtime( const Runtime & );
     Runtime & operator = ( const Runtime & );
@@ -201,12 +201,12 @@ public:
                                 has not been initialized.
     */
     static void SAL_CALL initialize(
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & ctx )
-        throw ( com::sun::star::uno::RuntimeException, std::exception );
+        const css::uno::Reference< css::uno::XComponentContext > & ctx )
+        throw ( css::uno::RuntimeException, std::exception );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
      */
-    static bool SAL_CALL isInitialized() throw (com::sun::star::uno::RuntimeException);
+    static bool SAL_CALL isInitialized() throw (css::uno::RuntimeException);
 
     /** converts something contained in an UNO Any to a Python object
 
@@ -214,10 +214,10 @@ public:
         the global interpreter lock is held and pyuno::Runtime
         has been initialized.
     */
-    PyRef any2PyObject (const com::sun::star::uno::Any &source ) const
-        throw ( com::sun::star::script::CannotConvertException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::RuntimeException );
+    PyRef any2PyObject (const css::uno::Any &source ) const
+        throw ( css::script::CannotConvertException,
+                css::lang::IllegalArgumentException,
+                css::uno::RuntimeException );
 
     /** converts a Python object to a UNO any
 
@@ -225,13 +225,13 @@ public:
         the global interpreter lock is held and pyuno
         has been initialized
     */
-    com::sun::star::uno::Any pyObject2Any (
+    css::uno::Any pyObject2Any (
         const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const
-        throw ( com::sun::star::uno::RuntimeException);
+        throw ( css::uno::RuntimeException);
 
     /** extracts a proper uno exception from a given python exception
      */
-    com::sun::star::uno::Any extractUnoException(
+    css::uno::Any extractUnoException(
         const PyRef & excType, const PyRef & excValue, const PyRef & excTraceback) const;
 
     /** Returns the internal handle. Should only be used by the module implementation
@@ -276,10 +276,10 @@ public:
         precondition: The current thread MUST NOT hold the global interpreter lock.
         postcondition: The global interpreter lock is acquired
 
-        @raises com::sun::star::uno::RuntimeException
+        @raises css::uno::RuntimeException
              in case no pythread state could be created
      */
-    PyThreadAttach( PyInterpreterState *interp) throw ( com::sun::star::uno::RuntimeException );
+    PyThreadAttach( PyInterpreterState *interp) throw ( css::uno::RuntimeException );
 
 
     /** Releases the global interpreter lock and destroys the thread state.
@@ -304,7 +304,7 @@ public:
        precondition: The current thread MUST hold the global interpreter lock.
        postcondition: The current thread does not hold the global interpreter lock anymore.
     */
-    PyThreadDetach() throw ( com::sun::star::uno::RuntimeException );
+    PyThreadDetach() throw ( css::uno::RuntimeException );
     /** Acquires the global interpreter lock again
     */
     ~PyThreadDetach();

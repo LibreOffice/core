@@ -46,7 +46,7 @@ ManifestReader::~ManifestReader()
 {
 }
 Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;
     Reference < XParser > xParser  = Parser::create(m_xContext);

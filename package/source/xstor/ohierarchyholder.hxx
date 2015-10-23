@@ -49,28 +49,28 @@ typedef std::unordered_map< OUString,
                          eqFunc > OHierarchyElementList_Impl;
 
 typedef ::std::vector< OUString > OStringList_Impl;
-typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
+typedef ::std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
-struct OHierarchyElement_Impl : public cppu::WeakImplHelper< ::com::sun::star::embed::XTransactionListener >
+struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >
 {
     ::osl::Mutex m_aMutex;
 
     ::rtl::Reference< OHierarchyElement_Impl > m_rParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xOwnStorage;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakOwnStorage;
+    css::uno::Reference< css::embed::XStorage > m_xOwnStorage;
+    css::uno::WeakReference< css::embed::XStorage > m_xWeakOwnStorage;
 
     OHierarchyElementList_Impl m_aChildren;
 
     OWeakStorRefList_Impl m_aOpenStreams;
 
 public:
-    OHierarchyElement_Impl( OHierarchyElement_Impl* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+    OHierarchyElement_Impl( OHierarchyElement_Impl* pParent, const css::uno::Reference< css::embed::XStorage >& xStorage )
     : m_rParent( pParent )
     , m_xOwnStorage( xStorage )
     {}
 
-    explicit OHierarchyElement_Impl( const ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >& xWeakStorage )
+    explicit OHierarchyElement_Impl( const css::uno::WeakReference< css::embed::XStorage >& xWeakStorage )
     : m_rParent( NULL )
     , m_xWeakOwnStorage( xWeakStorage )
     {}
@@ -83,7 +83,7 @@ public:
 
     void RemoveElement( const ::rtl::Reference< OHierarchyElement_Impl >& aRef );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
+    css::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
                                 OStringList_Impl& aPath,
                                 sal_Int32 nStreamMode,
@@ -92,34 +92,34 @@ public:
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XTransactionListener
-    virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
 class OHierarchyHolder_Impl : public ::cppu::OWeakObject
 {
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakOwnStorage;
+    css::uno::WeakReference< css::embed::XStorage > m_xWeakOwnStorage;
     ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
-    explicit OHierarchyHolder_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xOwnStorage )
+    explicit OHierarchyHolder_Impl( const css::uno::Reference< css::embed::XStorage >& xOwnStorage )
     : m_xWeakOwnStorage( xOwnStorage )
-    , m_xChild( new OHierarchyElement_Impl( ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >( xOwnStorage ) ) )
+    , m_xChild( new OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage >( xOwnStorage ) ) )
     {}
 
     static OStringList_Impl GetListPathFromString( const OUString& aPath );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
+    css::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
                                 OStringList_Impl& aListPath,
                                 sal_Int32 nStreamMode,

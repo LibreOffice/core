@@ -33,20 +33,20 @@ namespace com { namespace sun { namespace star {
 class ByteChucker
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    com::sun::star::uno::Sequence < sal_Int8 > a1Sequence, a2Sequence, a4Sequence;
+    css::uno::Reference < css::io::XOutputStream > xStream;
+    css::uno::Reference < css::io::XSeekable > xSeek;
+    css::uno::Sequence < sal_Int8 > a1Sequence, a2Sequence, a4Sequence;
     sal_Int8 * const p1Sequence, * const p2Sequence, * const p4Sequence;
 
 public:
-    ByteChucker (com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xOstream);
+    ByteChucker (css::uno::Reference<css::io::XOutputStream> xOstream);
     ~ByteChucker();
 
-    void WriteBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void WriteBytes( const css::uno::Sequence< sal_Int8 >& aData )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
 
     sal_Int64 GetPosition()
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
 
     void WriteInt16(sal_Int16 nInt16)
     {

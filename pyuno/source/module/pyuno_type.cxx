@@ -39,55 +39,55 @@ const char *typeClassToString( TypeClass t )
     const char * ret = 0;
     switch (t)
     {
-    case com::sun::star::uno::TypeClass_VOID:
+    case css::uno::TypeClass_VOID:
         ret = "VOID"; break;
-    case com::sun::star::uno::TypeClass_CHAR:
+    case css::uno::TypeClass_CHAR:
         ret = "CHAR"; break;
-    case com::sun::star::uno::TypeClass_BOOLEAN:
+    case css::uno::TypeClass_BOOLEAN:
         ret = "BOOLEAN"; break;
-    case com::sun::star::uno::TypeClass_BYTE:
+    case css::uno::TypeClass_BYTE:
         ret = "BYTE"; break;
-    case com::sun::star::uno::TypeClass_SHORT:
+    case css::uno::TypeClass_SHORT:
         ret = "SHORT"; break;
-    case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+    case css::uno::TypeClass_UNSIGNED_SHORT:
         ret = "UNSIGNED_SHORT"; break;
-    case com::sun::star::uno::TypeClass_LONG:
+    case css::uno::TypeClass_LONG:
         ret = "LONG"; break;
-    case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+    case css::uno::TypeClass_UNSIGNED_LONG:
         ret = "UNSIGNED_LONG"; break;
-    case com::sun::star::uno::TypeClass_HYPER:
+    case css::uno::TypeClass_HYPER:
         ret = "HYPER"; break;
-    case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+    case css::uno::TypeClass_UNSIGNED_HYPER:
         ret = "UNSIGNED_HYPER"; break;
-    case com::sun::star::uno::TypeClass_FLOAT:
+    case css::uno::TypeClass_FLOAT:
         ret = "FLOAT"; break;
-    case com::sun::star::uno::TypeClass_DOUBLE:
+    case css::uno::TypeClass_DOUBLE:
         ret = "DOUBLE"; break;
-    case com::sun::star::uno::TypeClass_STRING:
+    case css::uno::TypeClass_STRING:
         ret = "STRING"; break;
-    case com::sun::star::uno::TypeClass_TYPE:
+    case css::uno::TypeClass_TYPE:
         ret = "TYPE"; break;
-    case com::sun::star::uno::TypeClass_ANY:
+    case css::uno::TypeClass_ANY:
         ret = "ANY";break;
-    case com::sun::star::uno::TypeClass_ENUM:
+    case css::uno::TypeClass_ENUM:
         ret = "ENUM";break;
-    case com::sun::star::uno::TypeClass_STRUCT:
+    case css::uno::TypeClass_STRUCT:
         ret = "STRUCT"; break;
-    case com::sun::star::uno::TypeClass_EXCEPTION:
+    case css::uno::TypeClass_EXCEPTION:
         ret = "EXCEPTION"; break;
-    case com::sun::star::uno::TypeClass_SEQUENCE:
+    case css::uno::TypeClass_SEQUENCE:
         ret = "SEQUENCE"; break;
-    case com::sun::star::uno::TypeClass_INTERFACE:
+    case css::uno::TypeClass_INTERFACE:
         ret = "INTERFACE"; break;
-    case com::sun::star::uno::TypeClass_TYPEDEF:
+    case css::uno::TypeClass_TYPEDEF:
         ret = "TYPEDEF"; break;
-    case com::sun::star::uno::TypeClass_SERVICE:
+    case css::uno::TypeClass_SERVICE:
         ret = "SERVICE"; break;
-    case com::sun::star::uno::TypeClass_MODULE:
+    case css::uno::TypeClass_MODULE:
         ret = "MODULE"; break;
-    case com::sun::star::uno::TypeClass_INTERFACE_METHOD:
+    case css::uno::TypeClass_INTERFACE_METHOD:
         ret = "INTERFACE_METHOD"; break;
-    case com::sun::star::uno::TypeClass_INTERFACE_ATTRIBUTE:
+    case css::uno::TypeClass_INTERFACE_ATTRIBUTE:
         ret = "INTERFACE_ATTRIBUTE"; break;
     default:
         ret = "UNKNOWN"; break;
@@ -167,7 +167,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
             OUStringBuffer buf;
             buf.append( "pyuno.checkEnum: " ).append(strTypeName).append( "is a " );
             buf.appendAscii(
-                typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
+                typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass));
             buf.append( ", expected ENUM" );
             throw RuntimeException( buf.makeStringAndClear() );
         }
@@ -290,7 +290,7 @@ PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r )
 }
 
 PyObject *PyUNO_ByteSequence_new(
-    const com::sun::star::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
+    const css::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
 {
     PyRef str(
         PyStrBytes_FromStringAndSize( reinterpret_cast<char const *>(byteSequence.getConstArray()), byteSequence.getLength()),

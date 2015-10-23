@@ -83,7 +83,7 @@ PyObject *PyUNOStruct_repr( PyObject *self )
     PyObject *ret = 0;
 
     if( me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_EXCEPTION )
+        == css::uno::TypeClass_EXCEPTION )
     {
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
         if( rHolder.is() )
@@ -167,19 +167,19 @@ PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
         //or else...
         PyErr_SetString (PyExc_AttributeError, name);
     }
-    catch( const com::sun::star::reflection::InvocationTargetException & e )
+    catch( const css::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
     }
-    catch( const com::sun::star::beans::UnknownPropertyException & e )
+    catch( const css::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    catch( const css::lang::IllegalArgumentException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
@@ -211,17 +211,17 @@ int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
             }
         }
     }
-    catch( const com::sun::star::reflection::InvocationTargetException & e )
+    catch( const css::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
         return 1;
     }
-    catch( const com::sun::star::beans::UnknownPropertyException & e )
+    catch( const css::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
@@ -259,13 +259,13 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
 
             PyUNO *me = reinterpret_cast< PyUNO * > ( self );
             PyUNO *other = reinterpret_cast< PyUNO * > ( that );
-            com::sun::star::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
-            com::sun::star::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
+            css::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
+            css::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
 
             if( tcMe == tcOther )
             {
-                if( tcMe == com::sun::star::uno::TypeClass_STRUCT ||
-                    tcMe == com::sun::star::uno::TypeClass_EXCEPTION )
+                if( tcMe == css::uno::TypeClass_STRUCT ||
+                    tcMe == css::uno::TypeClass_EXCEPTION )
                 {
                     Reference< XMaterialHolder > xMe( me->members->xInvocation,UNO_QUERY );
                     Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );
@@ -279,7 +279,7 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
             }
         }
     }
-    catch( const com::sun::star::uno::RuntimeException & e)
+    catch( const css::uno::RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }

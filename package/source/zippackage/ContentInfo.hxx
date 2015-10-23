@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo : public cppu::OWeakObject
 {
 public:
-    com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xTunnel;
+    css::uno::Reference < css::lang::XUnoTunnel > xTunnel;
     bool bFolder;
     union
     {

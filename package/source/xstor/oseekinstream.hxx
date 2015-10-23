@@ -25,34 +25,34 @@
 #include "ocompinstream.hxx"
 
 class OInputSeekStream : public OInputCompStream
-                        , public ::com::sun::star::io::XSeekable
+                        , public css::io::XSeekable
 {
 protected:
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > m_xSeekable;
+    css::uno::Reference < css::io::XSeekable > m_xSeekable;
 
 public:
     OInputSeekStream( OWriteStream_Impl& pImpl,
-                      ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                      css::uno::Reference < css::io::XInputStream > xStream,
+                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+    OInputSeekStream( css::uno::Reference < css::io::XInputStream > xStream,
+                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
     virtual ~OInputSeekStream();
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     //XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getPosition() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getLength() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL seek( sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getPosition() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getLength() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 };
 

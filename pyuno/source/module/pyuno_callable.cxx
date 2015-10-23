@@ -80,7 +80,7 @@ PyObject* PyUNO_callable_call(
         cargo = runtime.getImpl()->cargo;
         any_params = runtime.pyObject2Any (args, me->members->mode);
 
-        if (any_params.getValueTypeClass () == com::sun::star::uno::TypeClass_SEQUENCE)
+        if (any_params.getValueTypeClass () == css::uno::TypeClass_SEQUENCE)
         {
             any_params >>= aParams;
         }
@@ -139,7 +139,7 @@ PyObject* PyUNO_callable_call(
             ret = temp;
         }
     }
-    catch( const com::sun::star::reflection::InvocationTargetException & e )
+    catch( const css::reflection::InvocationTargetException & e )
     {
 
         if( isLog( cargo, LogLevel::CALL ) )
@@ -149,32 +149,32 @@ PyObject* PyUNO_callable_call(
         }
         raisePyExceptionWithAny( e.TargetException );
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    catch( const css::lang::IllegalArgumentException &e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch (const ::com::sun::star::uno::RuntimeException &e)
+    catch (const css::uno::RuntimeException &e)
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return ret.getAcquired();

@@ -25,9 +25,9 @@
 class BaseEncryptionData : public cppu::OWeakObject
 {
 public:
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aSalt;
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aInitVector;
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDigest;
+    css::uno::Sequence< sal_Int8 > m_aSalt;
+    css::uno::Sequence< sal_Int8 > m_aInitVector;
+    css::uno::Sequence< sal_Int8 > m_aDigest;
     sal_Int32 m_nIterationCount;
 
     BaseEncryptionData()
@@ -45,13 +45,13 @@ public:
 class EncryptionData : public BaseEncryptionData
 {
 public:
-    ::com::sun::star::uno::Sequence < sal_Int8 > m_aKey;
+    css::uno::Sequence < sal_Int8 > m_aKey;
     sal_Int32 m_nEncAlg;
     sal_Int32 m_nCheckAlg;
     sal_Int32 m_nDerivedKeySize;
     sal_Int32 m_nStartKeyGenID;
 
-    EncryptionData( const BaseEncryptionData& aData, const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey, sal_Int32 nEncAlg, sal_Int32 nCheckAlg, sal_Int32 nDerivedKeySize, sal_Int32 nStartKeyGenID )
+    EncryptionData( const BaseEncryptionData& aData, const css::uno::Sequence< sal_Int8 >& aKey, sal_Int32 nEncAlg, sal_Int32 nCheckAlg, sal_Int32 nDerivedKeySize, sal_Int32 nStartKeyGenID )
     : BaseEncryptionData( aData )
     , m_aKey( aKey )
     , m_nEncAlg( nEncAlg )

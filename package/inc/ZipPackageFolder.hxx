@@ -34,8 +34,8 @@ struct ZipEntry;
 class ZipPackageFolder : public cppu::ImplInheritanceHelper
 <
     ZipPackageEntry,
-    ::com::sun::star::container::XNameContainer,
-    ::com::sun::star::container::XEnumerationAccess
+    css::container::XNameContainer,
+    css::container::XEnumerationAccess
 >
 {
 private:
@@ -54,16 +54,16 @@ public:
 
     bool LookForUnexpectedODF12Streams( const OUString& aPath );
 
-    void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
+    void setChildStreamsTypeByExtension( const css::beans::StringPair& aPair );
 
     void doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-    com::sun::star::packages::ContentInfo & doGetByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    css::packages::ContentInfo & doGetByName( const OUString& aName )
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
-    static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId();
+    static css::uno::Sequence < sal_Int8 > static_getImplementationId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( bool bRemove ) { mbAllowRemoveOnInsert = bRemove; }
@@ -77,57 +77,57 @@ public:
     // Recursive functions
     void saveContents(
             const OUString &rPath,
-            std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList,
+            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
             ZipOutputStream & rZipOut,
-            const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey,
+            const css::uno::Sequence< sal_Int8 > &rEncryptionKey,
             const rtlRandomPool & rRandomPool) const
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  )
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 #endif
 

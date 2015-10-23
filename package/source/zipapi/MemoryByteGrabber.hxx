@@ -26,11 +26,11 @@
 class MemoryByteGrabber
 {
 protected:
-    const com::sun::star::uno::Sequence < sal_Int8 > maBuffer;
+    const css::uno::Sequence < sal_Int8 > maBuffer;
     const sal_Int8 *mpBuffer;
     sal_Int32 mnCurrent, mnEnd;
 public:
-    MemoryByteGrabber ( const com::sun::star::uno::Sequence < sal_Int8 > & rBuffer )
+    MemoryByteGrabber ( const css::uno::Sequence < sal_Int8 > & rBuffer )
     : maBuffer ( rBuffer )
     , mpBuffer ( rBuffer.getConstArray() )
     , mnCurrent ( 0 )
@@ -45,7 +45,7 @@ public:
     // XInputStream chained
 
     void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException)
     {
         mnCurrent += nBytesToSkip;
     }

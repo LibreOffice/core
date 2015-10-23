@@ -20,19 +20,19 @@
 #include <ZipPackageSink.hxx>
 
 ZipPackageSink::ZipPackageSink()
-: xStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > (NULL))
+: xStream ( css::uno::Reference < css::io::XInputStream > (NULL))
 {
 }
 ZipPackageSink::~ZipPackageSink()
 {
 }
-void SAL_CALL ZipPackageSink::setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ZipPackageSink::setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
+    throw(css::uno::RuntimeException, std::exception)
 {
     xStream = aStream;
 }
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL ZipPackageSink::getInputStream(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL ZipPackageSink::getInputStream(  )
+    throw(css::uno::RuntimeException, std::exception)
 {
     return xStream;
 }

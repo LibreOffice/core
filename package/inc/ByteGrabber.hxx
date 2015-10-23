@@ -37,26 +37,26 @@ class ByteGrabber
 protected:
     ::osl::Mutex m_aMutex;
 
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    com::sun::star::uno::Sequence < sal_Int8 > aSequence;
+    css::uno::Reference < css::io::XInputStream > xStream;
+    css::uno::Reference < css::io::XSeekable > xSeek;
+    css::uno::Sequence < sal_Int8 > aSequence;
     const sal_Int8 *pSequence;
 
 public:
-    ByteGrabber (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xIstream);
+    ByteGrabber (css::uno::Reference < css::io::XInputStream > xIstream);
     ~ByteGrabber();
 
-    void setInputStream (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream);
+    void setInputStream (css::uno::Reference < css::io::XInputStream > xNewStream);
     // XInputStream
-    sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
     // XSeekable
     sal_Int64 SAL_CALL seek( sal_Int64 location )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException);
     sal_Int64 SAL_CALL getPosition(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
     sal_Int64 SAL_CALL getLength(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException);
 
     sal_uInt16 ReadUInt16();
     sal_uInt32 ReadUInt32();

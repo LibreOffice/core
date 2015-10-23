@@ -89,7 +89,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Any unoExc( runtime.extractUnoException( excType, excValue, excTraceback ) );
         throw InvocationTargetException(
-            static_cast<com::sun::star::uno::Exception const *>(unoExc.getValue())->Message,
+            static_cast<css::uno::Exception const *>(unoExc.getValue())->Message,
             Reference<XInterface>(), unoExc );
     }
 }
@@ -130,7 +130,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             }
 
             Reference< XIdlMethod > method = introspection->getMethod(
-                functionName, com::sun::star::beans::MethodConcept::ALL );
+                functionName, css::beans::MethodConcept::ALL );
             if( ! method.is( ) )
             {
                 throw RuntimeException(
@@ -142,8 +142,8 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             int nOuts = 0;
             for( i = 0 ; i < seqInfo.getLength() ; i ++ )
             {
-                if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
-                    seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
+                if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
+                    seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
                 {
                     // sequence must be interpreted as return value/outparameter tuple !
                     nOuts ++;
@@ -156,8 +156,8 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                 sal_Int32 nOutsAssigned = 0;
                 for( i = 0 ; i < seqInfo.getLength() ; i ++ )
                 {
-                    if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
-                        seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
+                    if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
+                        seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
                     {
                         ret[nOutsAssigned] = (sal_Int16) i;
                         nOutsAssigned ++;
@@ -189,7 +189,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
         Sequence< sal_Int8 > id;
         if( aParams[0] >>= id )
-            return com::sun::star::uno::makeAny( getSomething( id ) );
+            return css::uno::makeAny( getSomething( id ) );
 
     }
 
@@ -255,7 +255,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
             ret = runtime.pyObject2Any( pyRet );
 
             if( ret.hasValue() &&
-                ret.getValueTypeClass() == com::sun::star::uno::TypeClass_SEQUENCE &&
+                ret.getValueTypeClass() == css::uno::TypeClass_SEQUENCE &&
                 aFunctionName != "getTypes" &&  // needed by introspection itself !
                 aFunctionName != "getImplementationId" ) // needed by introspection itself !
             {
@@ -384,7 +384,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     }
     catch( const IllegalArgumentException & exc )
     {
-        throw InvocationTargetException( exc.Message, *this, com::sun::star::uno::makeAny( exc ) );
+        throw InvocationTargetException( exc.Message, *this, css::uno::makeAny( exc ) );
     }
 }
 

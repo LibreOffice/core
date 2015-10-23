@@ -32,32 +32,32 @@ namespace com { namespace sun { namespace star {
 
 class ManifestWriter: public ::cppu::WeakImplHelper
 <
-    ::com::sun::star::packages::manifest::XManifestWriter,
-    ::com::sun::star::lang::XServiceInfo
+    css::packages::manifest::XManifestWriter,
+    css::lang::XServiceInfo
 >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
-    ManifestWriter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
+    ManifestWriter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~ManifestWriter();
 
     // XManifestWriter
-    virtual void SAL_CALL writeManifestSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSequence )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeManifestSequence( const css::uno::Reference< css::io::XOutputStream >& rStream, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // Component constructor
     static OUString static_getImplementationName();
-    static ::com::sun::star::uno::Sequence < OUString > static_getSupportedServiceNames();
-    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
+    static css::uno::Sequence < OUString > static_getSupportedServiceNames();
+    static css::uno::Reference < css::lang::XSingleServiceFactory > createServiceFactory( css::uno::Reference < css::lang::XMultiServiceFactory > const & rServiceFactory );
 };
 #endif
 

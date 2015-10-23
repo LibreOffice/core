@@ -69,11 +69,11 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
         PyRef excType, excValue, excTraceback;
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Runtime runtime;
-        com::sun::star::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
+        css::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf;
         buf.append( "python-loader:" );
         if( a.hasValue() )
-            buf.append( static_cast<com::sun::star::uno::Exception const *>(a.getValue())->Message );
+            buf.append( static_cast<css::uno::Exception const *>(a.getValue())->Message );
         throw RuntimeException( buf.makeStringAndClear() );
     }
 }
@@ -245,7 +245,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         Runtime runtime;
 
         PyRef pyCtx = runtime.any2PyObject(
-            com::sun::star::uno::makeAny( ctx ) );
+            css::uno::makeAny( ctx ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
         PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );

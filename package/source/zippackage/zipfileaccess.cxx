@@ -187,7 +187,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     {
         ::ucbhelper::Content aContent(
             aParamURL,
-            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            uno::Reference< css::ucb::XCommandEnvironment >(),
             m_xContext );
         uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
         if ( aContent.openStream ( xSink ) )

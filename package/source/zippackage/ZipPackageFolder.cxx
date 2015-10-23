@@ -172,7 +172,7 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nExtraLen         = rSource.nExtraLen;
 }
 
-::com::sun::star::uno::Sequence < sal_Int8 > ZipPackageFolder::static_getImplementationId()
+css::uno::Sequence < sal_Int8 > ZipPackageFolder::static_getImplementationId()
 {
     return lcl_CachedImplId::get().getImplementationId();
 }

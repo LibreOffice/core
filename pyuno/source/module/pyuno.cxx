@@ -444,21 +444,21 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         }
         ret = PyRef( PyObject_CallObject( callable.get(), paras.get() ), SAL_NO_ACQUIRE );
     }
-    catch (const ::com::sun::star::lang::IllegalArgumentException &e)
+    catch (const css::lang::IllegalArgumentException &e)
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch (const ::com::sun::star::script::CannotConvertException &e)
+    catch (const css::script::CannotConvertException &e)
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch (const ::com::sun::star::uno::RuntimeException &e)
+    catch (const css::uno::RuntimeException &e)
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch (const ::com::sun::star::uno::Exception &e)
+    catch (const css::uno::Exception &e)
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return ret.getAcquired();
@@ -546,9 +546,9 @@ int PyUNO_bool( PyObject* self )
         // Anything which doesn't have members is a scalar object and therefore true
         return 1;
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return -1;
@@ -566,9 +566,9 @@ Py_ssize_t PyUNO_len( PyObject* self )
 
         PyErr_SetString( PyExc_TypeError, "object has no len()" );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return -1;
@@ -877,29 +877,29 @@ PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
 
         PyErr_SetString( PyExc_TypeError, "object is not subscriptable" );
     }
-    catch( const ::com::sun::star::lang::IndexOutOfBoundsException )
+    catch( const css::lang::IndexOutOfBoundsException )
     {
         PyErr_SetString( PyExc_IndexError, "index out of range" );
     }
-    catch( const ::com::sun::star::container::NoSuchElementException )
+    catch( const css::container::NoSuchElementException )
     {
         PyErr_SetString( PyExc_KeyError, "key not found" );
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    catch( const css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return NULL;
@@ -926,12 +926,12 @@ int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
         {
             aValue <<= runtime.pyObject2Any( pValue );
         }
-        catch ( const ::com::sun::star::uno::RuntimeException )
+        catch ( const css::uno::RuntimeException )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
             // all the rest of PyUNO
-            throw ::com::sun::star::script::CannotConvertException();
+            throw css::script::CannotConvertException();
         }
     }
 
@@ -1047,12 +1047,12 @@ int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
                 {
                     aItem <<= runtime.pyObject2Any( rItem.get() );
                 }
-                catch ( const ::com::sun::star::uno::RuntimeException )
+                catch ( const css::uno::RuntimeException )
                 {
                     // TODO pyObject2Any can't convert e.g. dicts but only throws
                     // RuntimeException on failure. Fixing this will require an audit of
                     // all the rest of PyUNO
-                    throw ::com::sun::star::script::CannotConvertException();
+                    throw css::script::CannotConvertException();
                 }
 
                 {
@@ -1106,12 +1106,12 @@ int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
         {
             aValue <<= runtime.pyObject2Any( pValue );
         }
-        catch( const ::com::sun::star::uno::RuntimeException )
+        catch( const css::uno::RuntimeException )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
             // all the rest of PyUNO
-            throw ::com::sun::star::script::CannotConvertException();
+            throw css::script::CannotConvertException();
         }
     }
 
@@ -1142,7 +1142,7 @@ int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
                         xNameContainer->insertByName( sKey, aValue );
                         return 0;
                     }
-                    catch( com::sun::star::container::ElementExistException )
+                    catch( css::container::ElementExistException )
                     {
                         // Fall through, try replace instead
                     }
@@ -1184,33 +1184,33 @@ int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
 
         PyErr_SetString( PyExc_TypeError, "list index has invalid type" );
     }
-    catch( const ::com::sun::star::lang::IndexOutOfBoundsException )
+    catch( const css::lang::IndexOutOfBoundsException )
     {
         PyErr_SetString( PyExc_IndexError, "list index out of range" );
     }
-    catch( const ::com::sun::star::container::NoSuchElementException )
+    catch( const css::container::NoSuchElementException )
     {
         PyErr_SetString( PyExc_KeyError, "key not found" );
     }
-    catch( const ::com::sun::star::lang::IllegalArgumentException )
+    catch( const css::lang::IllegalArgumentException )
     {
         PyErr_SetString( PyExc_TypeError, "value has invalid type" );
     }
-    catch( com::sun::star::script::CannotConvertException )
+    catch( css::script::CannotConvertException )
     {
         PyErr_SetString( PyExc_TypeError, "value has invalid type" );
     }
-    catch( const ::com::sun::star::container::ElementExistException &e )
+    catch( const css::container::ElementExistException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const::com::sun::star::lang::WrappedTargetException &e )
+    catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return 1;
@@ -1276,17 +1276,17 @@ PyObject* PyUNO_iter( PyObject *self )
 
         PyErr_SetString ( PyExc_TypeError, "object is not iterable" );
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException &e )
+    catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return NULL;
@@ -1305,12 +1305,12 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
         {
             aValue <<= runtime.pyObject2Any( pKey );
         }
-        catch( const ::com::sun::star::uno::RuntimeException )
+        catch( const css::uno::RuntimeException )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
             // all the rest of PyUNO
-            throw ::com::sun::star::script::CannotConvertException();
+            throw css::script::CannotConvertException();
         }
 
         // XNameAccess is tried first, because checking key presence is much more
@@ -1354,29 +1354,29 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
 
         PyErr_SetString( PyExc_TypeError, "argument is not iterable" );
     }
-    catch( const com::sun::star::script::CannotConvertException )
+    catch( const css::script::CannotConvertException )
     {
         PyErr_SetString( PyExc_TypeError, "invalid type passed as left argument to 'in'" );
     }
-    catch( const ::com::sun::star::container::NoSuchElementException &e )
+    catch( const css::container::NoSuchElementException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::lang::IndexOutOfBoundsException &e )
+    catch( const css::lang::IndexOutOfBoundsException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    catch( const css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::lang::WrappedTargetException &e )
+    catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
-    catch( const ::com::sun::star::uno::RuntimeException &e )
+    catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
     return -1;
@@ -1438,19 +1438,19 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
         //or else...
         PyErr_SetString (PyExc_AttributeError, name);
     }
-    catch( const com::sun::star::reflection::InvocationTargetException & e )
+    catch( const css::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
     }
-    catch( const com::sun::star::beans::UnknownPropertyException & e )
+    catch( const css::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( const com::sun::star::lang::IllegalArgumentException &e )
+    catch( const css::lang::IllegalArgumentException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
@@ -1482,17 +1482,17 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
             }
         }
     }
-    catch( const com::sun::star::reflection::InvocationTargetException & e )
+    catch( const css::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
         return 1;
     }
-    catch( const com::sun::star::beans::UnknownPropertyException & e )
+    catch( const css::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
     }
-    catch( const com::sun::star::script::CannotConvertException &e )
+    catch( const css::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
@@ -1529,8 +1529,8 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
             PyUNO *me = reinterpret_cast< PyUNO*> ( self );
             PyUNO *other = reinterpret_cast< PyUNO *> (that );
-            com::sun::star::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
-            com::sun::star::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
+            css::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
+            css::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
 
             if( tcMe == tcOther )
             {
@@ -1543,7 +1543,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
             }
         }
     }
-    catch( const com::sun::star::uno::RuntimeException & e)
+    catch( const css::uno::RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }

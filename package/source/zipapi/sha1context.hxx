@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-class SHA1DigestContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XDigestContext >
+class SHA1DigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigestContext >
 {
     ::osl::Mutex m_aMutex;
     void* m_pDigest;
@@ -37,11 +37,10 @@ public:
 
     virtual ~SHA1DigestContext();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext >
-        Create();
+    static css::uno::Reference< css::xml::crypto::XDigestContext > Create();
 
-    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL updateDigest( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
 
 };
 
