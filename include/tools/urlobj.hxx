@@ -176,8 +176,8 @@ public:
         const;
 
     OUString
-    getAbbreviated(com::sun::star::uno::Reference<
-                           com::sun::star::util::XStringWidth > const &
+    getAbbreviated(css::uno::Reference<
+                           css::util::XStringWidth > const &
                        rStringWidth,
                    sal_Int32 nWidth,
                    DecodeMechanism eMechanism = DECODE_TO_IURI,

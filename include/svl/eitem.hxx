@@ -94,11 +94,9 @@ public:
                                                 const IntlWrapper * = 0)
         const override;
 
-    virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 = 0)
-        const override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 = 0) const override;
 
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
-        override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8) override;
 
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const

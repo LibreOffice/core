@@ -63,62 +63,62 @@ namespace toolkit
     public:
         /** creates an accessible context for a button window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXButton* _pXWindow ) = 0;
 
         /** creates an accessible context for a checkbox window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXCheckBox* _pXWindow ) = 0;
 
         /** creates an accessible context for a radio button window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXRadioButton* _pXWindow ) = 0;
 
         /** creates an accessible context for a listbox window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXListBox* _pXWindow ) = 0;
 
         /** creates an accessible context for a fixed hyperlink window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) = 0;
 
         /** creates an accessible context for a fixed text window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXFixedText* _pXWindow ) = 0;
 
         /** creates an accessible context for a scrollbar window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXScrollBar* _pXWindow ) = 0;
 
         /** creates an accessible context for a edit window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXEdit* _pXWindow ) = 0;
 
         /** creates an accessible context for a combo box window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXComboBox* _pXWindow ) = 0;
 
         /** creates an accessible context for a toolbox window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXToolBox* _pXWindow ) = 0;
 
         /** creates an accessible context for a generic window
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXWindow* _pXWindow ) = 0;
 
         /** creates an accessible component for the given menu
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
             createAccessible( Menu* _pMenu, bool _bIsMenuBar ) = 0;
 
     protected:

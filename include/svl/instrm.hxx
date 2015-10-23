@@ -34,12 +34,10 @@ class SvDataPipe_Impl;
 
 class SVL_DLLPUBLIC SvInputStream: public SvStream
 {
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-        m_xStream;
-    com::sun::star::uno::Reference< com::sun::star::io::XSeekable >
-        m_xSeekable;
-    SvDataPipe_Impl * m_pPipe;
-    sal_uInt64 m_nSeekedFrom;
+    css::uno::Reference< css::io::XInputStream >   m_xStream;
+    css::uno::Reference< css::io::XSeekable >      m_xSeekable;
+    SvDataPipe_Impl *                              m_pPipe;
+    sal_uInt64                                     m_nSeekedFrom;
 
     SVL_DLLPRIVATE bool open();
 
@@ -54,10 +52,7 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvInputStream(
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-                const &
-            rTheStream);
+    SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream );
 
     virtual ~SvInputStream();
 };

@@ -35,8 +35,8 @@ class SfxItemPool;
     classes can set a model on demand by overiding getModelPool().
 */
 class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
-                        public ::com::sun::star::lang::XServiceInfo,
-                        public ::com::sun::star::lang::XTypeProvider,
+                        public css::lang::XServiceInfo,
+                        public css::lang::XTypeProvider,
                         public comphelper::PropertySetHelper
 {
 public:
@@ -52,33 +52,33 @@ public:
     virtual SfxItemPool* getModelPool( bool bReadOnly ) throw();
 
     // overriden helpers from comphelper::PropertySetHelper
-    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) override;
-    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) override;
+    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
+    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException ) override;
 
-    virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::beans::PropertyState* pStates ) throw(::com::sun::star::beans::UnknownPropertyException ) override;
-    virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(::com::sun::star::beans::UnknownPropertyException ) override;
-    virtual ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) override;
+    virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, css::beans::PropertyState* pStates ) throw(css::beans::UnknownPropertyException ) override;
+    virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(css::beans::UnknownPropertyException ) override;
+    virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException ) override;
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     void init();
 
-    static void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException);
-    virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
+    static void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException);
+    virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 protected:
     SdrModel* mpModel;

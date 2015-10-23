@@ -232,7 +232,7 @@ namespace svt { namespace table
                 given area.
         */
         virtual bool    FitsIntoCell(
-                            ::com::sun::star::uno::Any const & i_cellContent,
+                            css::uno::Any const & i_cellContent,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
                         ) const = 0;
 
@@ -246,7 +246,7 @@ namespace svt { namespace table
                 <TRUE/> if and only if the content could be formatted as string
         */
         virtual bool    GetFormattedCellString(
-                            ::com::sun::star::uno::Any const & i_cellValue,
+                            css::uno::Any const & i_cellValue,
                             OUString & o_cellString
                         ) const = 0;
 

@@ -44,8 +44,8 @@ public:
     virtual sal_uInt16            GetValueCount() const override; // { return 5; }
             SdrTextVertAdjust GetValue() const      { return (SdrTextVertAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;
@@ -71,8 +71,8 @@ public:
     virtual sal_uInt16        GetValueCount() const override;
             SdrTextHorzAdjust GetValue() const      { return (SdrTextHorzAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;

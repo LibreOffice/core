@@ -119,12 +119,12 @@ protected:
     const Image&    GetImage() const { return maImage; }
 
 protected:
-    // ::com::sun::star::awt::XWindow
-    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XWindow
+    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
     /** forward our bitmap to our window
@@ -146,8 +146,8 @@ public:
 //  class VCLXButton
 
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
-                                        ,   ::com::sun::star::awt::XButton
-                                        ,   ::com::sun::star::awt::XToggleButton
+                                        ,   css::awt::XButton
+                                        ,   css::awt::XToggleButton
                                         >   VCLXButton_Base;
 class VCLXButton :public VCLXButton_Base
 {
@@ -158,34 +158,34 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                     VCLXButton();
     virtual ~VCLXButton();
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XButton
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XButton
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLabel( const OUString& Label ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XToggleButton
-    // ::com::sun::star::awt::XItemEventBroadcaster
-    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XToggleButton
+    // css::awt::XItemEventBroadcaster
+    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -200,14 +200,14 @@ public:
                     VCLXImageControl();
                     virtual ~VCLXImageControl();
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -219,8 +219,8 @@ protected:
 
 //  class VCLXCheckBox
 
-class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
-                        public ::com::sun::star::awt::XButton,
+class VCLXCheckBox :    public css::awt::XCheckBox,
+                        public css::awt::XButton,
                         public VCLXGraphicControl
 {
 private:
@@ -230,45 +230,45 @@ private:
 
 protected:
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                     VCLXCheckBox();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XCheckBox
-    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getState(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setState( sal_Int16 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL enableTriState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XCheckBox
+    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getState(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setState( sal_Int16 n ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLabel( const OUString& Label ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL enableTriState( sal_Bool b ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XButton:
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XButton:
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -277,8 +277,8 @@ public:
 
 //  class VCLXRadioButton
 
-class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
-                        public ::com::sun::star::awt::XButton,
+class VCLXRadioButton : public css::awt::XRadioButton,
+                        public css::awt::XButton,
                         public VCLXGraphicControl
 {
 private:
@@ -289,43 +289,43 @@ private:
 protected:
     void            ImplClickedOrToggled( bool bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                     VCLXRadioButton();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XRadioButton
-    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL getState(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XRadioButton
+    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL getState(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setState( sal_Bool b ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLabel( const OUString& Label ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XButton:
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XButton:
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -335,32 +335,32 @@ public:
 
 //  class VCLXMessageBox
 
-class VCLXMessageBox :  public ::com::sun::star::awt::XMessageBox,
+class VCLXMessageBox :  public css::awt::XMessageBox,
                         public VCLXTopWindow
 {
 public:
                         VCLXMessageBox();
                         virtual ~VCLXMessageBox();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::awt::XMessageBox
-    void SAL_CALL setCaptionText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getCaptionText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMessageText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getMessageText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XMessageBox
+    void SAL_CALL setCaptionText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getCaptionText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMessageText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getMessageText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL execute(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -378,23 +378,23 @@ public:
     VCLXFrame();
     virtual ~VCLXFrame();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDevice,
+    css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -405,43 +405,43 @@ public:
 
 //  class VCLXDialog
 
-class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
+class TOOLKIT_DLLPUBLIC VCLXDialog :    public css::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:
                         VCLXDialog();
                         virtual ~VCLXDialog();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDialog2
-    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHelpId( const OUString& Id ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDialog2
+    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHelpId( const OUString& Id ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDialog
-    void SAL_CALL setTitle( const OUString& Title ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getTitle(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL endExecute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDialog
+    void SAL_CALL setTitle( const OUString& Title ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getTitle(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL execute(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL endExecute(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDevice,
+    css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
 };
 
@@ -454,30 +454,30 @@ public:
                         VCLXTabPage();
                         virtual ~VCLXTabPage();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDevice,
+    css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
-    TabPage*  getTabPage() const throw ( ::com::sun::star::uno::RuntimeException);
+    TabPage*  getTabPage() const throw ( css::uno::RuntimeException);
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class VCLXMultiPage : public ::com::sun::star::awt::XSimpleTabController, public VCLXContainer
+class VCLXMultiPage : public css::awt::XSimpleTabController, public VCLXContainer
 {
     TabListenerMultiplexer maTabListeners;
     sal_Int32 mTabId;
@@ -487,41 +487,41 @@ public:
     VCLXMultiPage();
     virtual ~VCLXMultiPage();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
     void SAL_CALL release() throw() override { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDevice,
+    css::awt::DeviceInfo SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
     // XSimpleTabController
-    virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL insertTab() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getActiveTabID() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getActiveTabID() throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
     // C++
-    TabControl*  getTabControl() const throw ( ::com::sun::star::uno::RuntimeException);
+    TabControl*  getTabControl() const throw ( css::uno::RuntimeException);
     sal_uInt16 insertTab( TabPage*, OUString& sTitle );
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -531,7 +531,7 @@ public:
 //  class VCLXFixedHyperlink
 
 class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink :
-    public ::com::sun::star::awt::XFixedHyperlink,
+    public css::awt::XFixedHyperlink,
     public VCLXWindow
 {
 private:
@@ -540,43 +540,43 @@ private:
 protected:
     void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                                 CreateAccessibleContext() override;
 
 public:
     VCLXFixedHyperlink();
     virtual ~VCLXFixedHyperlink();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XFixedHyperlink
-    void SAL_CALL setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setURL( const OUString& URL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getURL(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XFixedHyperlink
+    void SAL_CALL setText( const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setURL( const OUString& URL ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getURL(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getAlignment(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -585,35 +585,35 @@ public:
 
 //  class VCLXFixedText
 
-class VCLXFixedText :   public ::com::sun::star::awt::XFixedText,
+class VCLXFixedText :   public css::awt::XFixedText,
                         public VCLXWindow
 {
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                         VCLXFixedText();
                         virtual ~VCLXFixedText();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XFixedText
-    void SAL_CALL setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XFixedText
+    void SAL_CALL setText( const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getAlignment(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -622,7 +622,7 @@ public:
 
 //  class VCLXScrollBar
 
-class VCLXScrollBar :   public ::com::sun::star::awt::XScrollBar,
+class VCLXScrollBar :   public css::awt::XScrollBar,
                         public VCLXWindow
 {
 private:
@@ -630,51 +630,51 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                     VCLXScrollBar();
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XScrollbar
-    void SAL_CALL addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getValue(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getMaximum(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getLineIncrement(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getBlockIncrement(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getVisibleSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getOrientation(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XScrollbar
+    void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setValue( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getValue(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMaximum( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getMaximum(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLineIncrement( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getLineIncrement(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setBlockIncrement( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getBlockIncrement(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setVisibleSize( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getVisibleSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setOrientation( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getOrientation(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // why isn't this part of the XScrollbar?
-    void SAL_CALL setMinimum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getMinimum(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMinimum( sal_Int32 n ) throw(css::uno::RuntimeException);
+    sal_Int32 SAL_CALL getMinimum(  ) throw(css::uno::RuntimeException);
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    static ::com::sun::star::awt::Size SAL_CALL implGetMinimumSize( vcl::Window* p ) throw(::com::sun::star::uno::RuntimeException);
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
+    static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window* p ) throw(css::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -683,9 +683,9 @@ public:
 
 //  class VCLXEdit
 
-class TOOLKIT_DLLPUBLIC VCLXEdit :  public ::com::sun::star::awt::XTextComponent,
-                    public ::com::sun::star::awt::XTextEditField,
-                    public ::com::sun::star::awt::XTextLayoutConstrains,
+class TOOLKIT_DLLPUBLIC VCLXEdit :  public css::awt::XTextComponent,
+                    public css::awt::XTextEditField,
+                    public css::awt::XTextLayoutConstrains,
                     public VCLXWindow
 {
 private:
@@ -693,7 +693,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 
 public:
@@ -701,48 +701,48 @@ public:
 
     TextListenerMultiplexer&    GetTextListeners() { return maTextListeners; }
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTextComponent
-    void SAL_CALL addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL insertText( const ::com::sun::star::awt::Selection& Sel, const OUString& Text ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getSelectedText(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Selection SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEditable(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTextComponent
+    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getSelectedText(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Selection SAL_CALL getSelection(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isEditable(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getMaxTextLen(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTextEditField:
-    void SAL_CALL setEchoChar( sal_Unicode cEcho ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTextEditField:
+    void SAL_CALL setEchoChar( sal_Unicode cEcho ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTextLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTextLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -752,9 +752,9 @@ public:
 //  class VCLXListBox
 
 typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
-                                        ,   ::com::sun::star::awt::XListBox
-                                        ,   ::com::sun::star::awt::XTextLayoutConstrains
-                                        ,   ::com::sun::star::awt::XItemListListener
+                                        ,   css::awt::XListBox
+                                        ,   css::awt::XTextLayoutConstrains
+                                        ,   css::awt::XItemListListener
                                         >   VCLXListBox_Base;
 class VCLXListBox  : public VCLXListBox_Base
 {
@@ -764,62 +764,62 @@ private:
 
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                     CreateAccessibleContext() override;
     void            ImplCallItemListeners();
 
 public:
                         VCLXListBox();
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XListBox
-    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getItemCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getSelectedItemPos(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getSelectedItem(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL selectItemsPos( const ::com::sun::star::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isMutipleMode(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMultipleMode( sal_Bool bMulti ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XListBox
+    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getItemCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getSelectedItemPos(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getSelectedItem(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isMutipleMode(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMultipleMode( sal_Bool bMulti ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL makeVisible( sal_Int16 nEntry ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTextLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTextLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XItemListListener
-    virtual void SAL_CALL listItemInserted( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL listItemRemoved( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL listItemModified( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL allItemsRemoved( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL itemListChanged( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemRemoved( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemModified( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL allItemsRemoved( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL itemListChanged( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& i_rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& i_rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -829,8 +829,8 @@ public:
 //  class VCLXComboBox
 
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXEdit
-                                        ,   ::com::sun::star::awt::XComboBox
-                                        ,   ::com::sun::star::awt::XItemListListener > VCLXComboBox_Base;
+                                        ,   css::awt::XComboBox
+                                        ,   css::awt::XItemListListener > VCLXComboBox_Base;
 class VCLXComboBox :    public VCLXComboBox_Base
 {
 private:
@@ -839,51 +839,51 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 
 public:
                         VCLXComboBox();
     virtual ~VCLXComboBox();
 
-     // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+     // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XComboBox
-    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getItemCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XComboBox
+    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getItemCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTextLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTextLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XItemListListener
-    virtual void SAL_CALL listItemInserted( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL listItemRemoved( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL listItemModified( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL allItemsRemoved( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL itemListChanged( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemRemoved( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL listItemModified( const css::awt::ItemListEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL allItemsRemoved( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL itemListChanged( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& i_rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& i_rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -892,7 +892,7 @@ public:
 
 //  class VCLXSpinField
 
-class TOOLKIT_DLLPUBLIC VCLXSpinField : public ::com::sun::star::awt::XSpinField,
+class TOOLKIT_DLLPUBLIC VCLXSpinField : public css::awt::XSpinField,
                         public VCLXEdit
 {
 private:
@@ -904,24 +904,24 @@ protected:
 public:
                     VCLXSpinField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::awt::XSpinField
-    void SAL_CALL addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL up(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL down(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL first(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL last(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XSpinField
+    void SAL_CALL addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL up(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL down(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL first(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL last(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL enableRepeat( sal_Bool bRepeat ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -947,9 +947,9 @@ public:
     void            setStrictFormat( bool bStrict );
     bool        isStrictFormat();
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -958,46 +958,46 @@ public:
 
 //  class VCLXDateField
 
-class TOOLKIT_DLLPUBLIC VCLXDateField : public ::com::sun::star::awt::XDateField,
+class TOOLKIT_DLLPUBLIC VCLXDateField : public css::awt::XDateField,
                         public VCLXFormattedSpinField
 {
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXDateField();
                     virtual ~VCLXDateField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::awt::XDateField
-    void SAL_CALL setDate( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Date SAL_CALL getDate(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Date SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Date SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Date SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Date SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLongFormat( sal_Bool bLong ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isLongFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEmpty(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEmpty(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDateField
+    void SAL_CALL setDate( const css::util::Date& Date ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Date SAL_CALL getDate(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMin( const css::util::Date& Date ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Date SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMax( const css::util::Date& Date ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Date SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFirst( const css::util::Date& Date ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Date SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLast( const css::util::Date& Date ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Date SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLongFormat( sal_Bool bLong ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isLongFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setEmpty(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isEmpty(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1006,43 +1006,43 @@ public:
 
 //  class VCLXTimeField
 
-class VCLXTimeField :   public ::com::sun::star::awt::XTimeField,
+class VCLXTimeField :   public css::awt::XTimeField,
                         public VCLXFormattedSpinField
 {
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXTimeField();
                     virtual ~VCLXTimeField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTimeField
-    void SAL_CALL setTime( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Time SAL_CALL getTime(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Time SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Time SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Time SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::util::Time SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEmpty(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEmpty(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTimeField
+    void SAL_CALL setTime( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Time SAL_CALL getTime(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMin( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Time SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMax( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Time SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFirst( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Time SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLast( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
+    css::util::Time SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setEmpty(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isEmpty(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1051,43 +1051,43 @@ public:
 
 //  class VCLXNumericField
 
-class VCLXNumericField :    public ::com::sun::star::awt::XNumericField,
+class VCLXNumericField :    public css::awt::XNumericField,
                             public VCLXFormattedSpinField
 {
 public:
                     VCLXNumericField();
                     virtual ~VCLXNumericField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XNumericField
-    void SAL_CALL setValue( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getValue(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSpinSize( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getSpinSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XNumericField
+    void SAL_CALL setValue( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getValue(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMin( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMax( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFirst( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLast( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getSpinSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1098,48 +1098,48 @@ public:
 
 class MetricFormatter;
 class MetricField;
-class VCLXMetricField : public ::com::sun::star::awt::XMetricField,
+class VCLXMetricField : public css::awt::XMetricField,
                         public VCLXFormattedSpinField
 {
-    MetricFormatter *GetMetricFormatter() throw(::com::sun::star::uno::RuntimeException);
-    MetricField     *GetMetricField() throw(::com::sun::star::uno::RuntimeException);
+    MetricFormatter *GetMetricFormatter() throw(css::uno::RuntimeException);
+    MetricField     *GetMetricField() throw(css::uno::RuntimeException);
     void CallListeners();
 public:
     VCLXMetricField();
     virtual ~VCLXMetricField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XMetricField
-    virtual void SAL_CALL setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getValue( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getCorrectedValue( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMin( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getMin( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMax( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getMax( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFirst( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getFirst( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLast( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getLast( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSpinSize( ::sal_Int64 Value ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getSpinSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDecimalDigits( ::sal_Int16 nDigits ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL getDecimalDigits(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isStrictFormat(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XMetricField
+    virtual void SAL_CALL setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getValue( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getCorrectedValue( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMin( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getMin( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMax( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getMax( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFirst( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getFirst( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLast( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getLast( ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSpinSize( ::sal_Int64 Value ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getSpinSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDecimalDigits( ::sal_Int16 nDigits ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int16 SAL_CALL getDecimalDigits(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isStrictFormat(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1148,44 +1148,44 @@ public:
 
 //  class VCLXCurrencyField
 
-class VCLXCurrencyField :   public ::com::sun::star::awt::XCurrencyField,
+class VCLXCurrencyField :   public css::awt::XCurrencyField,
                             public VCLXFormattedSpinField
 {
 public:
                     VCLXCurrencyField();
                     virtual ~VCLXCurrencyField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::awt::XCurrencyField
-    void SAL_CALL setValue( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getValue(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSpinSize( double Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getSpinSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XCurrencyField
+    void SAL_CALL setValue( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getValue(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMin( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMax( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFirst( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setLast( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception) override;
+    double SAL_CALL getSpinSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1194,34 +1194,34 @@ public:
 
 //  class VCLXPatternField
 
-class VCLXPatternField :    public ::com::sun::star::awt::XPatternField,
+class VCLXPatternField :    public css::awt::XPatternField,
                             public VCLXFormattedSpinField
 {
 public:
                     VCLXPatternField();
                     virtual ~VCLXPatternField();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
 
-    // ::com::sun::star::awt::XPatternField
-    void SAL_CALL setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getMasks( OUString& EditMask, OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setString( const OUString& Str ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getString(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XPatternField
+    void SAL_CALL setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getMasks( OUString& EditMask, OUString& LiteralMask ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setString( const OUString& Str ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getString(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::VclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -1235,7 +1235,7 @@ class VCLXToolBox : public VCLXWindow
 private:
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                         CreateAccessibleContext() override;
 
 public:

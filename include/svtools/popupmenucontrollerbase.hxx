@@ -47,58 +47,58 @@ namespace svt
     struct PopupMenuControllerBaseDispatchInfo;
 
     typedef ::cppu::WeakComponentImplHelper7<
-                        com::sun::star::lang::XServiceInfo            ,
-                        com::sun::star::frame::XPopupMenuController ,
-                        com::sun::star::lang::XInitialization         ,
-                        com::sun::star::frame::XStatusListener        ,
-                        com::sun::star::awt::XMenuListener            ,
-                        com::sun::star::frame::XDispatchProvider      ,
-                        com::sun::star::frame::XDispatch > PopupMenuControllerBaseType;
+                        css::lang::XServiceInfo            ,
+                        css::frame::XPopupMenuController ,
+                        css::lang::XInitialization         ,
+                        css::frame::XStatusListener        ,
+                        css::awt::XMenuListener            ,
+                        css::frame::XDispatchProvider      ,
+                        css::frame::XDispatch > PopupMenuControllerBaseType;
 
     class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                                   public PopupMenuControllerBaseType
     {
         public:
-            PopupMenuControllerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            PopupMenuControllerBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~PopupMenuControllerBase();
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+            virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
 
             // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL updatePopupMenu() throw (css::uno::RuntimeException, std::exception) override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override = 0;
 
             // XMenuListener
-            virtual void SAL_CALL itemHighlighted( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemSelected( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemActivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemDeactivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemHighlighted( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemDeactivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XDispatchProvider
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( css::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception ) override;
 
             // XDispatch
-            virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqProperties ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-            virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-            virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) throw( css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-            void dispatchCommand( const OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+            void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
     protected:
-            void throwIfDisposed() throw ( ::com::sun::star::uno::RuntimeException );
+            void throwIfDisposed() throw ( css::uno::RuntimeException );
 
             /** helper method to cause statusChanged is called once for the given command url */
             void SAL_CALL updateCommand( const OUString& rCommandURL );
@@ -107,21 +107,21 @@ namespace svt
             */
             virtual void SAL_CALL disposing() override;
 
-            static void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            static void resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
             virtual void impl_setPopupMenu();
             static OUString determineBaseURL( const OUString& aURL );
 
             DECL_STATIC_LINK_TYPED( PopupMenuControllerBase, ExecuteHdl_Impl, void*, void );
 
 
-            bool                                                                             m_bInitialized;
-            OUString                                                                    m_aCommandURL;
-            OUString                                                                    m_aBaseURL;
-            OUString                                                                    m_aModuleName;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >            m_xPopupMenu;
+            bool                                                   m_bInitialized;
+            OUString                                               m_aCommandURL;
+            OUString                                               m_aBaseURL;
+            OUString                                               m_aModuleName;
+            css::uno::Reference< css::frame::XDispatch >           m_xDispatch;
+            css::uno::Reference< css::frame::XFrame >              m_xFrame;
+            css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
+            css::uno::Reference< css::awt::XPopupMenu >            m_xPopupMenu;
     };
 }
 

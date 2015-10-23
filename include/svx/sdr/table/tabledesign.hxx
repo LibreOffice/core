@@ -38,7 +38,7 @@ const sal_Int32 body_style = 8;
 const sal_Int32 background_style = 9;
 const sal_Int32 style_count = 10;
 
-extern SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > CreateTableDesignFamily();
+extern SVX_DLLPUBLIC css::uno::Reference< css::container::XNameAccess > CreateTableDesignFamily();
 
 } }
 

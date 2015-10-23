@@ -426,7 +426,7 @@
 #define RID_SVXSTR_LINECAP_ROUND            (RID_SVX_START + 587 )
 #define RID_SVXSTR_LINECAP_SQUARE           (RID_SVX_START + 588 )
 
-// string resources for com::sun::star::drawing::LineJoint item
+// string resources for css::drawing::LineJoint item
 #define RID_SVXSTR_LINEJOINT_NONE           RID_SVXSTR_NONE
 #define RID_SVXSTR_LINEJOINT_MIDDLE         (RID_SVX_START + 589 )
 #define RID_SVXSTR_LINEJOINT_BEVEL          (RID_SVX_START + 590 )

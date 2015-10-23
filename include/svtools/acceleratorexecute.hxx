@@ -171,7 +171,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         * @param aKey The key event
         * @return The command or an empty string if the key event could not be found.
         */
-        OUString  findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
+        OUString  findCommand(const css::awt::KeyEvent& aKey);
 
         /** TODO document me */
         static css::awt::KeyEvent st_VCLKey2AWTKey(const vcl::KeyCode&       aKey);

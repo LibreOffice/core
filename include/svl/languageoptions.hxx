@@ -29,7 +29,7 @@
 // class SvtLanguageOptions ----------------------------------------------------
 
 // these defines can be ORed
-// note these values DO NOT match the values in com::sun::star::i18n::ScriptType
+// note these values DO NOT match the values in css::i18n::ScriptType
 enum class SvtScriptType
 {
     NONE         = 0x00,
@@ -124,7 +124,7 @@ public:
     SvtSystemLanguageOptions();
     virtual ~SvtSystemLanguageOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
 
     LanguageType    GetWin16SystemLanguage() const;
 

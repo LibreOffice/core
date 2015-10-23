@@ -110,10 +110,10 @@ namespace svx
                 supported formats. Must be a combination of the CTF_XXX flags
         */
         OColumnTransferable(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
             const OUString& _rFieldName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             ColumnTransferFormatFlags  _nFormats
         );
 
@@ -196,7 +196,7 @@ namespace svx
             ,const OUString& _rConnectionResource
             ,const sal_Int32            _nCommandType
             ,const OUString& _rCommand
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         /** should be used when copying a query object and no connection is available.
@@ -217,7 +217,7 @@ namespace svx
         /** with this ctor, only the object descriptor format will be provided
         */
         ODataAccessObjectTransferable(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLivingForm
+            const css::uno::Reference< css::beans::XPropertySet >& _rxLivingForm
         );
 
         /** checks whether or not an object descriptor can be extracted from the data flavor vector given
@@ -235,7 +235,7 @@ namespace svx
 
     protected:
         virtual void        AddSupportedFormats() override;
-        virtual bool GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void        ObjectReleased() override;
 
     protected:
@@ -243,7 +243,7 @@ namespace svx
                 ODataAccessDescriptor&  getDescriptor()         { return m_aDescriptor; }
     protected:
         void    addCompatibleSelectionDescription(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelRows
+            const css::uno::Sequence< css::uno::Any >& _rSelRows
         );
             // normally, a derived class could simply access getDescriptor[daSelection] and place the sequence therein
             // but unfortunately, we have this damned compatible format, and this can't be accessed in
@@ -254,7 +254,7 @@ namespace svx
                         ,const OUString& _rConnectionResource
                         ,const sal_Int32        _nCommandType
                         ,const OUString& _rCommand
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                        ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
                         ,bool _bAddCommand
                         ,const OUString& _sActiveCommand);
     };
@@ -266,10 +266,10 @@ namespace svx
     */
     class SVX_DLLPUBLIC SAL_WARN_UNUSED OMultiColumnTransferable : public TransferableHelper
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aDescriptors;
+        css::uno::Sequence< css::beans::PropertyValue >   m_aDescriptors;
 
     public:
-        OMultiColumnTransferable(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aDescriptors);
+        OMultiColumnTransferable(const css::uno::Sequence< css::beans::PropertyValue >& _aDescriptors);
 
         /** checks whether or not an object descriptor can be extracted from the data flavor vector given
             @param _rFlavors
@@ -281,7 +281,7 @@ namespace svx
 
         /** extracts a object descriptor from the transferable given
         */
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
+        static css::uno::Sequence< css::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 
     protected:
         virtual void        AddSupportedFormats() override;

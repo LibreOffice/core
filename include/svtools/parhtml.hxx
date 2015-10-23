@@ -220,16 +220,14 @@ protected:
 
 private:
     /// parse meta options into XDocumentProperties and encoding
-    bool ParseMetaOptionsImpl( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
+    bool ParseMetaOptionsImpl( const css::uno::Reference< css::document::XDocumentProperties>&,
             SvKeyValueIterator*,
             const HTMLOptions&,
             rtl_TextEncoding& rEnc );
 
 public:
     /// overriding method must call this implementation!
-    virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
+    virtual bool ParseMetaOptions( const css::uno::Reference< css::document::XDocumentProperties>&,
             SvKeyValueIterator* );
 
     bool ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,

@@ -340,20 +340,20 @@ public:
     const OUString&     GetOldName() const { return aName; }
 };
 
-class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >
+class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel >
 {
 public:
     SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske );
 
-    static SfxUnoStyleSheet* getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle );
+    static SfxUnoStyleSheet* getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle );
 
     // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     SfxUnoStyleSheet(); // not implemented
 
-    static const ::com::sun::star::uno::Sequence< ::sal_Int8 >& getIdentifier();
+    static const css::uno::Sequence< ::sal_Int8 >& getIdentifier();
 };
 
 #endif

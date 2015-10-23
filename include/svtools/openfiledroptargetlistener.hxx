@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
-class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
+class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDropTargetListener >
 {
     private:
         /// uno service manager to create necessary services

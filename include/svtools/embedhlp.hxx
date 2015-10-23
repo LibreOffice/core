@@ -55,32 +55,32 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
 public:
     static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
     static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
-    static bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+    static bool TryRunningState( const css::uno::Reference < css::embed::XEmbeddedObject >& );
     static void SetGraphicToContainer( const Graphic& rGraphic,
                                         comphelper::EmbeddedObjectContainer& aContainer,
                                         const OUString& aName,
                                         const OUString& aMediaType );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetGraphicReplacementStream(
+    static css::uno::Reference< css::io::XInputStream > GetGraphicReplacementStream(
                                         sal_Int64 nViewAspect,
-                                        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&,
+                                        const css::uno::Reference < css::embed::XEmbeddedObject >&,
                                         OUString* pMediaType )
                             throw();
 
-    static bool IsChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
-    static bool IsGLChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
+    static bool IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
+    static bool IsGLChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
 
-    const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& operator->() const;
-    const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& GetObject() const;
+    const css::uno::Reference <css::embed::XEmbeddedObject>& operator->() const;
+    const css::uno::Reference <css::embed::XEmbeddedObject>& GetObject() const;
 
     // default constructed object; needs further assignment before it can be used
     EmbeddedObjectRef();
 
     // assign a previously default constructed object
-    void Assign( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    void Assign( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
     // create object for a certain view aspect
-    EmbeddedObjectRef( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    EmbeddedObjectRef( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
     ~EmbeddedObjectRef();
     EmbeddedObjectRef( const EmbeddedObjectRef& );
@@ -99,7 +99,7 @@ public:
 
     void            SetGraphic( const Graphic& rGraphic, const OUString& rMediaType );
     void            SetGraphicStream(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
+                        const css::uno::Reference< css::io::XInputStream >& xInGrStream,
                         const OUString& rMediaType );
 
     void            UpdateReplacement();

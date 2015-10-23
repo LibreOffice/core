@@ -257,7 +257,7 @@ public:
 
 protected:
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+    virtual css::uno::Reference< css::uno::XInterface > createUnoModel();
 
 private:
     SdrModel(const SdrModel& rSrcModel) = delete;
@@ -274,7 +274,7 @@ private:
 
 
     // this is a weak reference to a possible living api wrapper for this model
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoModel;
+    css::uno::Reference< css::uno::XInterface > mxUnoModel;
 
 public:
     bool     IsPasteResize() const        { return bPasteResize; }
@@ -302,10 +302,10 @@ public:
     // swapping.
     // The stream from which the model was loaded or in which is was saved last
     // needs to be delivered
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XInputStream >
+    virtual css::uno::Reference<
+                css::embed::XStorage> GetDocumentStorage() const;
+    css::uno::Reference<
+            css::io::XInputStream >
         GetDocumentStream(OUString const& rURL,
                 ::comphelper::LifecycleProxy & rProxy) const;
     // Change the template attributes of the symbol objects to hard attributes
@@ -568,8 +568,8 @@ public:
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
-    void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
+    css::uno::Reference< css::uno::XInterface > getUnoModel();
+    void setUnoModel( css::uno::Reference< css::uno::XInterface > xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
@@ -604,7 +604,7 @@ public:
 
     bool IsInDestruction() const { return mbInDestruction;}
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
 
     virtual ImageMap* GetImageMapForObject(SdrObject*){return NULL;};
 

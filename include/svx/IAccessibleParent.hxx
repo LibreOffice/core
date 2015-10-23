@@ -76,19 +76,19 @@ public:
     */
     virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException) = 0;
+    )   throw (css::uno::RuntimeException) = 0;
     //Add this method to support Form Controls
     virtual AccessibleControlShape* GetAccControlShapeFromModel
-        (::com::sun::star::beans::XPropertySet*)
-        throw (::com::sun::star::uno::RuntimeException){return NULL;};
-    virtual  ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>&)
-            throw (::com::sun::star::uno::RuntimeException){return NULL;};
+        (css::beans::XPropertySet*)
+        throw (css::uno::RuntimeException){return NULL;};
+    virtual  css::uno::Reference<
+            css::accessibility::XAccessible>
+        GetAccessibleCaption (const css::uno::Reference<
+            css::drawing::XShape>&)
+            throw (css::uno::RuntimeException){return NULL;};
     virtual bool IsDocumentSelAll(){ return false; }
 };
 

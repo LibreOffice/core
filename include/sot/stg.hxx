@@ -228,7 +228,7 @@ protected:
                                 virtual ~UCBStorageStream();
 public:
                                 TYPEINFO_OVERRIDE();
-                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
+                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual sal_uLong           Read( void * pData, sal_uLong nSize ) override;
@@ -243,7 +243,7 @@ public:
     virtual bool                Validate( bool=false ) const override;
     virtual bool                ValidateMode( StreamMode ) const override;
     virtual bool                Equals( const BaseStorageStream& rStream ) const override;
-    bool                        SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
+    bool                        SetProperty( const OUString& rName, const css::uno::Any& rValue );
 
     SvStream*                   GetModifySvStream();
 };
@@ -276,7 +276,7 @@ public:
                                             bool bDirect,
                                             bool bIsRoot,
                                             bool bIsRepair,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
+                                            css::uno::Reference< css::ucb::XProgressHandler >
                                             xProgressHandler );
 
                                 UCBStorage( UCBStorage_Impl* );

@@ -395,7 +395,7 @@ public:
 
     // rAttr.Number not empty if NatNum attributes are to be stored
     void GetNatNumXml(
-            ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
+            css::i18n::NativeNumberXmlAttributes& rAttr,
             sal_uInt16 nNumFor ) const;
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
@@ -477,7 +477,7 @@ private:
         @param eCodeType
             a NfKeywordIndex, must designate a month type code
 
-        @returns one of com::sun::star::i18n::CalendarDisplayCode values
+        @returns one of css::i18n::CalendarDisplayCode values
             according to eCodeType and the check executed (or passed).
      */
     SVL_DLLPRIVATE sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const;

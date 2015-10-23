@@ -42,7 +42,7 @@ public:
     // it will be used to embed the chart to the SdrObject transformation. This
     // allows to define possible distances between chart and SDrObject bounds here
     static drawinglayer::primitive2d::Primitive2DSequence tryToGetChartContentAsPrimitive2DSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rXModel,
+        const css::uno::Reference< css::frame::XModel >& rXModel,
         basegfx::B2DRange& rRange);
 
     // #i121334# Allow to switch off line and fill style by setting these as attributes
@@ -52,7 +52,7 @@ public:
     // since this would not be saved/loaded, thus the compatibility will be better when setting it at
     // newly created charts using this method
     static void AdaptDefaultsForChart(
-        const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > & xEmbObj,
+        const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj,
         bool bNoFillStyle = true,
         bool bNoLineStyle = true);
 };

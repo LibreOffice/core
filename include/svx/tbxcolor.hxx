@@ -35,8 +35,8 @@ namespace svx
     private:
         bool                                                    m_bDocking;
         OUString                                         m_sToolboxResName;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XLayoutManager >   m_xLayouter;
+        css::uno::Reference<
+            css::frame::XLayoutManager >   m_xLayouter;
 
     public:
         ToolboxAccess( const OUString& rToolboxName );

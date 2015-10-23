@@ -60,7 +60,7 @@ public:
 
     static sal_uInt16   ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
-                                       const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = NULL );
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 

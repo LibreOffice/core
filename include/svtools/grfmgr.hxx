@@ -492,7 +492,7 @@ public:
     // properties and return these in a vector. Note: this implementation
     // will cater for XNameContainer objects and deepinspect any containees
     // if they exist
-    static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
+    static void InspectForGraphicObjectImageURL( const css::uno::Reference< css::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
 
     // create CropScaling information
     // fWidth, fHeight: object size

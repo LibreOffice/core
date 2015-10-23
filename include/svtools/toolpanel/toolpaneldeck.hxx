@@ -169,7 +169,7 @@ namespace svt
         virtual bool Notify( NotifyEvent& i_rNotifyEvent ) override;
         virtual void GetFocus() override;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+        virtual css::uno::Reference< css::awt::XWindowPeer >
                      GetComponentInterface( bool i_bCreate ) override;
 
     private:

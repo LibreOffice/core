@@ -36,13 +36,13 @@ namespace svt {
 
 class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xOutputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xSeekable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate > m_xTruncate;
+    css::uno::Reference< css::io::XStream >       m_xStream;
+    css::uno::Reference< css::io::XInputStream >  m_xInputStream;
+    css::uno::Reference< css::io::XOutputStream > m_xOutputStream;
+    css::uno::Reference< css::io::XSeekable >     m_xSeekable;
+    css::uno::Reference< css::io::XTruncate >     m_xTruncate;
 
-    std::vector< LockFileEntry > m_aUsersData;
+    std::vector< LockFileEntry >                  m_aUsersData;
 
     void OpenStream();
     void Close();

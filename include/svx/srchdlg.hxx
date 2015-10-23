@@ -139,7 +139,7 @@ public:
     vcl::Window* GetDocWin() { return mpDocWin; }
     void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+    virtual css::uno::Reference< css::awt::XWindowPeer >
         GetComponentInterface( bool bCreate ) override;
 
     void            SetSaveToModule(bool b);

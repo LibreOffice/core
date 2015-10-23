@@ -29,7 +29,7 @@
 
 #include <tools/toolsdllapi.h>
 
-TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
+TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
 
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
@@ -55,14 +55,14 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& cau
  */
 #define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
                                      OSL_ENSURE(c, m); \
-                                     throw ::com::sun::star::lang::IllegalArgumentException( \
+                                     throw css::lang::IllegalArgumentException( \
                                      OUStringLiteral(BOOST_CURRENT_FUNCTION) \
                                      + ",\n" m, \
-                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
+                                     css::uno::Reference< css::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
-                                               throw ::com::sun::star::lang::IllegalArgumentException( \
+                                               throw css::lang::IllegalArgumentException( \
                                                OUStringLiteral(BOOST_CURRENT_FUNCTION) \
                                                + ",\n" m, \
                                                ifc, \
@@ -74,14 +74,14 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& cau
 #define ENSURE_OR_THROW(c, m) \
     if( !(c) ){ \
         OSL_ENSURE(c, m); \
-        throw ::com::sun::star::uno::RuntimeException( \
+        throw css::uno::RuntimeException( \
         OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
+        css::uno::Reference< css::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \
         OSL_ENSURE(c, m); \
-        throw ::com::sun::star::uno::RuntimeException( \
+        throw css::uno::RuntimeException( \
         OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
         ifc ); }
 

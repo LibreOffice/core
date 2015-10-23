@@ -31,10 +31,10 @@ public:
         OUString& rText, const IntlWrapper* pIntlWrapper = NULL ) const override;
 
     virtual bool QueryValue(
-        com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+        css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     virtual bool PutValue(
-        const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+        const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SfxPoolItem* Create( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
 

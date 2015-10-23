@@ -216,15 +216,15 @@ public:
     static OUString GetDefaultExtFilter(XPropertyListType t);
     OUString GetDefaultExt() const { return GetDefaultExt(meType); }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    virtual css::uno::Reference< css::container::XNameContainer >
         createInstance() = 0;
     bool Load();
-    bool LoadFrom(const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::embed::XStorage > &xStorage,
+    bool LoadFrom(const css::uno::Reference<
+                       css::embed::XStorage > &xStorage,
                   const OUString &rURL, const OUString &rReferer);
     bool Save();
-    bool SaveTo  (const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::embed::XStorage > &xStorage,
+    bool SaveTo  (const css::uno::Reference<
+                       css::embed::XStorage > &xStorage,
                    const OUString &rURL,
                                   OUString *pOptName);
     virtual bool Create() = 0;
@@ -267,7 +267,7 @@ public:
     XColorEntry* Replace(long nIndex, XColorEntry* pEntry);
     XColorEntry* Remove(long nIndex);
     XColorEntry* GetColor(long nIndex) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 
     static XColorListRef CreateStdColorList();
@@ -287,7 +287,7 @@ public:
     XLineEndEntry* Remove(long nIndex);
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -312,7 +312,7 @@ public:
     XDashEntry* Remove(long nIndex);
     XDashEntry* GetDash(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 
     // Special call to get a bitmap for the solid line representation. It
@@ -341,7 +341,7 @@ public:
     XHatchEntry* Remove(long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -360,7 +360,7 @@ public:
     XGradientEntry* Remove(long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -378,7 +378,7 @@ public:
     XBitmapEntry* Remove(long nIndex);
     XBitmapEntry* GetBitmap(long nIndex) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() override;
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 

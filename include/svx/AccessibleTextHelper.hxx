@@ -203,7 +203,7 @@ namespace accessibility
             The interface that should be set as the source for
             accessibility events sent by this object.
          */
-        void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
+        void SetEventSource( const css::uno::Reference< css::accessibility::XAccessible >& rInterface );
 
         /** Set offset of EditEngine/Outliner from parent
 
@@ -250,7 +250,7 @@ namespace accessibility
 
             The states are passed to every created child object
             (text paragraph). The state values are defined in
-            com::sun::star::accessibility::AccessibleStateType.
+            css::accessibility::AccessibleStateType.
 
             This function has to be called before querying for
             any children (e.g. with GetChild()).
@@ -333,7 +333,7 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
+        css::uno::Reference< css::accessibility::XAccessible > GetChild( sal_Int32 i );
 
         // XAccessibleEventBroadcaster child related methods
 
@@ -341,12 +341,12 @@ namespace accessibility
 
             @attention Don't call with locked mutexes
         */
-        void AddEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
+        void AddEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener );
         /** Implements removeEventListener
 
             @attention Don't call with locked mutexes
         */
-        void RemoveEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
+        void RemoveEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener );
 
         // XAccessibleComponent child related methods
 
@@ -355,7 +355,7 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL GetAt( const ::com::sun::star::awt::Point& aPoint );
+        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL GetAt( const css::awt::Point& aPoint );
 
     private:
 

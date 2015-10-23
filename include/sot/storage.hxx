@@ -69,7 +69,7 @@ public:
     sal_uInt32          GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
     bool                Commit();
-    bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
+    bool                SetProperty( const OUString& rName, const css::uno::Any& rValue );
     virtual sal_uInt64 remainingSize() override;
 };
 
@@ -177,10 +177,10 @@ public:
     static bool         IsOLEStorage( const OUString & rFileName );
     static bool         IsOLEStorage( SvStream* pStream );
 
-    static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+    static SotStorage*  OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
                                         const OUString& rEleName, StreamMode = STREAM_STD_READWRITE );
-    static SotClipboardFormatId  GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-    static sal_Int32    GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    static SotClipboardFormatId  GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage );
+    static sal_Int32    GetVersion( const css::uno::Reference < css::embed::XStorage >& xStorage );
 };
 
 #endif // _SVSTOR_HXX

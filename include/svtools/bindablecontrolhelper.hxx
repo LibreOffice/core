@@ -36,7 +36,7 @@ namespace svt
     */
     namespace BindableControlHelper
     {
-        SVT_DLLPUBLIC void ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
+        SVT_DLLPUBLIC void ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
     }
 
 

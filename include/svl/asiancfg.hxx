@@ -48,15 +48,14 @@ public:
 
     void SetCharDistanceCompression(sal_Int16 value);
 
-    com::sun::star::uno::Sequence< com::sun::star::lang::Locale >
-    GetStartEndCharLocales() const;
+    css::uno::Sequence< css::lang::Locale > GetStartEndCharLocales() const;
 
     bool GetStartEndChars(
-        com::sun::star::lang::Locale const & locale, OUString & startChars,
+        css::lang::Locale const & locale, OUString & startChars,
         OUString & endChars) const;
 
     void SetStartEndChars(
-        com::sun::star::lang::Locale const & locale,
+        css::lang::Locale const & locale,
         OUString const * startChars, OUString const * endChars);
 
 private:

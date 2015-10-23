@@ -32,8 +32,7 @@ class SVT_DLLPUBLIC MultiLineEdit : public VclMultiLineEdit
 public:
     MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(bool bCreate = true) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) override;
 };
 
 

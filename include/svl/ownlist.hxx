@@ -65,8 +65,8 @@ public:
     SvCommand&      Append( const OUString & rCommand, const OUString & rArg );
     bool        AppendCommands( const OUString & rCmd, sal_Int32 * pEaten );
 
-    bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
-    void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
+    bool FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& );
+    void FillSequence( css::uno::Sequence < css::beans::PropertyValue >& );
 
     size_t          size() const { return aCommandList.size(); }
 

@@ -33,7 +33,7 @@ private:
 
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
+            const css::uno::Reference<css::frame::XFrame> &rFrame);
     virtual ~PanelLayout();
     virtual void dispose() override;
 

@@ -39,7 +39,7 @@ class UHashMap
 public:
     static sal_uInt32 getId( const OUString& rCompareString );
     static OUString getNameFromId (sal_uInt32 nId);
-    static ::com::sun::star::uno::Sequence< OUString > getServiceNames();
+    static css::uno::Sequence< OUString > getServiceNames();
 };
 
 /**

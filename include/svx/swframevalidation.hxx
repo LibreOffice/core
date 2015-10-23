@@ -27,11 +27,11 @@
  */
 struct SvxSwFrameValidation
 {
-    sal_Int16           nAnchorType; //com::sun::star::text::TextContentAnchorType
-    sal_Int16           nHoriOrient; //com::sun::star::text::HoriOrientation
-    sal_Int16           nVertOrient; //com::sun::star::text::VertOrientation
-    sal_Int16           nHRelOrient; //com::sun::star::text::RelOrientation
-    sal_Int16           nVRelOrient; //com::sun::star::text::RelOrientation
+    sal_Int16           nAnchorType; //css::text::TextContentAnchorType
+    sal_Int16           nHoriOrient; //css::text::HoriOrientation
+    sal_Int16           nVertOrient; //css::text::VertOrientation
+    sal_Int16           nHRelOrient; //css::text::RelOrientation
+    sal_Int16           nVRelOrient; //css::text::RelOrientation
     bool                bAutoHeight;
     bool                bAutoWidth;
     bool                bMirror;

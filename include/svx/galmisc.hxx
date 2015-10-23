@@ -137,7 +137,7 @@ class GraphicFilter;
 
 class SVX_DLLPUBLIC GalleryProgress
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > mxProgressBar;
+    css::uno::Reference< css::awt::XProgressBar > mxProgressBar;
     GraphicFilter*                                                          mpFilter;
 
     public:
@@ -177,7 +177,7 @@ protected:
     // TransferableHelper
     virtual void                    AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual bool                    WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) override;
+    virtual bool                    WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void                    DragFinished( sal_Int8 nDropAction ) override;
     virtual void                    ObjectReleased() override;
 

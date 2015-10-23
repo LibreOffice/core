@@ -34,7 +34,7 @@ namespace svt
 //generated class. This conflicts with other libraries if they use the same inline
 //class.
     class SVT_DLLPUBLIC JavaContext :
-        public com::sun::star::uno::XCurrentContext
+        public css::uno::XCurrentContext
     {
 
     public:
@@ -44,35 +44,31 @@ namespace svt
             particular Request then the message box is shown. Afterwards
             nothing happens.
          */
-        JavaContext( const com::sun::star::uno::Reference<
-                     com::sun::star::uno::XCurrentContext> & ctx,
+        JavaContext( const css::uno::Reference< css::uno::XCurrentContext> & ctx,
                      bool bReportErrorOnce = true );
         virtual ~JavaContext();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type& aType )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface(
+            const css::uno::Type& aType )
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL acquire() throw () override;
 
         virtual void SAL_CALL release() throw () override;
 
         // XCurrentContext
-        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name )
+            throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         JavaContext(JavaContext&) = delete;
         JavaContext& operator = (JavaContext&) = delete;
 
-        oslInterlockedCount m_aRefCount;
-
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XCurrentContext > m_xNextContext;
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionHandler> m_xHandler;
-        bool m_bShowErrorsOnce;
+        oslInterlockedCount                                  m_aRefCount;
+        css::uno::Reference< css::uno::XCurrentContext >     m_xNextContext;
+        css::uno::Reference< css::task::XInteractionHandler> m_xHandler;
+        bool                                                 m_bShowErrorsOnce;
     };
 }
 

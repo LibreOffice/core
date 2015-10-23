@@ -134,7 +134,7 @@ private:
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
-    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const ::com::sun::star::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const css::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
     SVX_DLLPRIVATE bool StopTextEdit();
 
     SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* pWindow );
@@ -165,7 +165,7 @@ private:
     SdrObjectWeakRef mxTableObj;
     SdrModel* mpModel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxModifyListener;
+    css::uno::Reference< css::util::XModifyListener > mxModifyListener;
 
     ImplSVEvent * mnUpdateEvent;
 };

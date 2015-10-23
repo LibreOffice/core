@@ -62,15 +62,15 @@ namespace toolkit
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
 typedef ::cppu::ImplInheritanceHelper9  <   VCLXDevice
-                                        ,   ::com::sun::star::awt::XWindow2
-                                        ,   ::com::sun::star::awt::XVclWindowPeer
-                                        ,   ::com::sun::star::awt::XLayoutConstrains
-                                        ,   ::com::sun::star::awt::XView
-                                        ,   ::com::sun::star::awt::XDockableWindow
-                                        ,   ::com::sun::star::accessibility::XAccessible
-                                        ,   ::com::sun::star::lang::XEventListener
-                                        ,   ::com::sun::star::beans::XPropertySetInfo
-                                        ,   ::com::sun::star::awt::XStyleSettingsSupplier
+                                        ,   css::awt::XWindow2
+                                        ,   css::awt::XVclWindowPeer
+                                        ,   css::awt::XLayoutConstrains
+                                        ,   css::awt::XView
+                                        ,   css::awt::XDockableWindow
+                                        ,   css::accessibility::XAccessible
+                                        ,   css::lang::XEventListener
+                                        ,   css::beans::XPropertySetInfo
+                                        ,   css::awt::XStyleSettingsSupplier
                                         >   VCLXWindow_Base;
 
 class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
@@ -85,13 +85,13 @@ protected:
     DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
 
     void            SetSynthesizingVCLEvent( bool b );
     bool            IsSynthesizingVCLEvent() const;
 
-    void        SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
+    void        SetSystemParent_Impl( const css::uno::Any& rHandle );
 
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
@@ -138,100 +138,100 @@ public:
 
     void    notifyWindowRemoved( vcl::Window& _rWindow );
 
-    // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    static VCLXWindow*                                          GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace );
-    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XUnoTunnel
+    static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+    static VCLXWindow*                                          GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace );
+    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XWindow
-    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEnable( sal_Bool Enable ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFocus(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rrxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XWindow
+    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Rectangle SAL_CALL getPosSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setVisible( sal_Bool Visible ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setEnable( sal_Bool Enable ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFocus(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rrxListener ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XWindowPeer
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > SAL_CALL getToolkit(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setPointer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >& Pointer ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setBackground( sal_Int32 Color ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL invalidate( sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL invalidateRect( const ::com::sun::star::awt::Rectangle& Rect, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XWindowPeer
+    css::uno::Reference< css::awt::XToolkit > SAL_CALL getToolkit(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setPointer( const css::uno::Reference< css::awt::XPointer >& Pointer ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setBackground( sal_Int32 Color ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL invalidate( sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL invalidateRect( const css::awt::Rectangle& Rect, sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    sal_Bool SAL_CALL isChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Peer ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setForeground( sal_Int32 Color ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setControlFont( const ::com::sun::star::awt::FontDescriptor& aFont ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value )
-        throw(::com::sun::star::uno::RuntimeException,
+    // css::awt::XVclWindowPeer
+    sal_Bool SAL_CALL isChild( const css::uno::Reference< css::awt::XWindowPeer >& Peer ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDesignMode( sal_Bool bOn ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isDesignMode(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL enableClipSiblings( sal_Bool bClip ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setForeground( sal_Int32 Color ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setControlFont( const css::awt::FontDescriptor& aFont ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value )
+        throw(css::uno::RuntimeException,
               std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XView
-    sal_Bool SAL_CALL setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& aDevice ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XView
+    sal_Bool SAL_CALL setGraphics( const css::uno::Reference< css::awt::XGraphics >& aDevice ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getSize(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setZoom( float fZoomX, float fZoomY ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::accessibility::XAccessible
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::accessibility::XAccessible
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XDockableWindow
-    void SAL_CALL addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isFloating(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XDockableWindow
+    void SAL_CALL addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL enableDocking( sal_Bool bEnable ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isFloating(  ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFloatingMode( sal_Bool bFloating ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL lock(  ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL unlock(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isLocked(  ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL startPopupMode( const css::awt::Rectangle& WindowRect ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isInPopupMode(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XWindow2
-    void SAL_CALL setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isActive(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL hasFocus(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XWindow2
+    void SAL_CALL setOutputSize( const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getOutputSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isVisible(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isActive(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isEnabled(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL hasFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertySetInfo
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertySetInfo
+    css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) throw (css::uno::RuntimeException, std::exception) override;
+    css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XStyleSettingsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings > SAL_CALL getStyleSettings() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOW_HXX

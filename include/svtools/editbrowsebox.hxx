@@ -624,8 +624,7 @@ namespace svt
             The column ID of the cell.
         @return
             The XAccessible interface of the specified cell. */
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
         CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos ) override;
 
         /** @return  The count of additional controls of the control area. */
@@ -636,8 +635,7 @@ namespace svt
                 The 0-based index of the control.
             @return
                 The XAccessible interface of the specified control. */
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
         CreateAccessibleControl( sal_Int32 nIndex ) override;
 
         /** Creates the accessible object of a column header.
@@ -645,8 +643,7 @@ namespace svt
                 The column ID of the header.
             @return
                 The XAccessible interface of the specified column header. */
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
         CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
 
         /** Sets focus to current cell of the data table. */
@@ -655,8 +652,7 @@ namespace svt
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
     protected:
         // creates the accessible which wraps the active cell
         void    implCreateActiveAccessible( );

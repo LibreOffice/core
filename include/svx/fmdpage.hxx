@@ -28,18 +28,18 @@
 // SvxFmDrawPage
 
 class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
-                                    ,public ::com::sun::star::form::XFormsSupplier2
+                                    ,public css::form::XFormsSupplier2
 {
 protected:
 
     // Creating a SdrObject based on a Description. Cann be used by derived classes to
-    // support own ::com::sun::star::drawing::Shapes (for example Controls)
-    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
+    // support own css::drawing::Shapes (for example Controls)
+    virtual SdrObject *_CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xShape )
         throw (css::uno::RuntimeException, std::exception) override;
 
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
+    virtual css::uno::Reference< css::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
         throw (css::uno::RuntimeException, std::exception) override;
 
 public:
@@ -49,19 +49,19 @@ public:
     // UNO connection
     DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XFormsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getForms() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getForms() throw( css::uno::RuntimeException, std::exception ) override;
 
     // XFormsSupplier2
-    virtual sal_Bool SAL_CALL hasForms() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL hasForms() throw( css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::lang::XServiceInfo
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::lang::XServiceInfo
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif // INCLUDED_SVX_FMDPAGE_HXX

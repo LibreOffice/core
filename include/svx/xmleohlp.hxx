@@ -51,8 +51,8 @@ struct OUStringLess;
 class OutputStorageWrapper_Impl;
 
 class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
-    ::com::sun::star::document::XEmbeddedObjectResolver,
-    ::com::sun::star::container::XNameAccess >
+    css::document::XEmbeddedObjectResolver,
+    css::container::XNameAccess >
 {
     typedef ::std::map< OUString, OutputStorageWrapper_Impl*,
                          OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
@@ -65,10 +65,10 @@ private:
     OUString             maCurContainerStorageName;
 
 
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
+    css::uno::Reference < css::embed::XStorage > mxRootStorage;  // package
     ::comphelper::IEmbeddedHelper*             mpDocPersist;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxContainerStorage; // container sub package for
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxTempStorage;  // package
+    css::uno::Reference < css::embed::XStorage > mxContainerStorage; // container sub package for
+    css::uno::Reference < css::embed::XStorage > mxTempStorage;  // package
                                                 // objects
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
@@ -81,7 +81,7 @@ private:
                                        bool *pGraphicRepl=0,
                                        bool *pOasisFormat=0 ) const;
 
-    SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
+    SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage > ImplGetContainerStorage(
                                     const OUString& rStorageName );
 
     SVX_DLLPRIVATE bool                 ImplReadObject(
@@ -93,14 +93,14 @@ private:
     SVX_DLLPRIVATE OUString              ImplInsertEmbeddedObjectURL(
                                     const OUString& rURLStr );
 
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > ImplGetReplacementImage(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj );
+    SVX_DLLPRIVATE css::uno::Reference< css::io::XInputStream > ImplGetReplacementImage(
+                                const css::uno::Reference< css::embed::XEmbeddedObject >& xObj );
 
 protected:
 
                                 SvXMLEmbeddedObjectHelper();
                                 virtual ~SvXMLEmbeddedObjectHelper();
-    void                        Init( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+    void                        Init( const css::uno::Reference < css::embed::XStorage >&,
                                       ::comphelper::IEmbeddedHelper& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );
 
@@ -112,7 +112,7 @@ public:
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     static SvXMLEmbeddedObjectHelper*   Create(
-                                    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                    const css::uno::Reference < css::embed::XStorage >&,
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
                                     bool bDirect = true );
@@ -124,16 +124,16 @@ public:
     void                        Flush();
 
     // XEmbeddedObjectResolver
-    virtual OUString SAL_CALL resolveEmbeddedObjectURL( const OUString& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL resolveEmbeddedObjectURL( const OUString& aURL ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
     static void splitObjectURL(const OUString& aURLNoPar,

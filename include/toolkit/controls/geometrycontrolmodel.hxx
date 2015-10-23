@@ -53,8 +53,8 @@ namespace com { namespace sun { namespace star {
 
     //= OGeometryControlModel_Base
 
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::util::XCloneable
-                                                ,   ::com::sun::star::script::XScriptEventsSupplier
+    typedef ::cppu::WeakAggComponentImplHelper2 <   css::util::XCloneable
+                                                ,   css::script::XScriptEventsSupplier
                                                 >   OGCM_Base;
     class OGeometryControlModel_Base
         :public ::comphelper::OMutexAndBroadcastHelper
@@ -63,9 +63,9 @@ namespace com { namespace sun { namespace star {
         ,public OGCM_Base
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
+        css::uno::Reference< css::uno::XAggregation >
                     m_xAggregate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        css::uno::Reference< css::container::XNameContainer >
                     mxEventContainer;
 
         // <properties>
@@ -77,29 +77,29 @@ namespace com { namespace sun { namespace star {
         sal_Int16       m_nTabIndex;
         sal_Int32       m_nStep;
         OUString m_aTag;
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xStrResolver;
+        css::uno::Reference< css::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
         bool        m_bCloneable;
 
     protected:
-        static ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle);
-        ::com::sun::star::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
-        void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue);
+        static css::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle);
+        css::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
+        void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: css::uno::Any& aValue);
 
     protected:
         /**
             @param _pAggregateInstance
                 the object to be aggregated. The refcount of the instance given MUST be 0!
         */
-        OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance);
+        OGeometryControlModel_Base(css::uno::XAggregation* _pAggregateInstance);
 
         /**
             @param _rxAggregateInstance
                 is the object to be aggregated. Must be acquired exactly once (by the reference object given).<br/>
                 Will be reset to NULL upon leaving
         */
-        OGeometryControlModel_Base(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+        OGeometryControlModel_Base(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
 
         /** releases the aggregation
             <p>Can be used if in a derived class, an exception has to be thrown after this base class here already
@@ -111,51 +111,51 @@ namespace com { namespace sun { namespace star {
         virtual ~OGeometryControlModel_Base();
 
         // XAggregation
-        ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire(  ) throw() override;
         virtual void SAL_CALL release(  ) throw() override;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // OPropertySetHelper overridables
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue,
-                sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-            throw (::com::sun::star::lang::IllegalArgumentException) override;
+                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue,
+                sal_Int32 _nHandle, const css::uno::Any& _rValue )
+            throw (css::lang::IllegalArgumentException) override;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue)
-            throw (::com::sun::star::uno::Exception, std::exception) override;
+                sal_Int32 _nHandle, const css::uno::Any& _rValue)
+            throw (css::uno::Exception, std::exception) override;
 
         using comphelper::OPropertySetAggregationHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue(
-            ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const override;
+            css::uno::Any& _rValue, sal_Int32 _nHandle) const override;
 
         // OPropertyStateHelper overridables
-        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle) override;
+        virtual css::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle) override;
         virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle) override;
-        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
+        virtual css::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
 
         // OPropertySetAggregationHelper overridables
         using OPropertySetAggregationHelper::getInfoHelper;
 
         // XCloneable
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         //XScriptEventsSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-            SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XNameContainer >
+            SAL_CALL getEvents(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XCloneable implementation - to be overwritten
         virtual OGeometryControlModel_Base* createClone_Impl(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) = 0;
+            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) = 0;
 
         // XComponent
         using comphelper::OPropertySetAggregationHelper::disposing;
@@ -185,16 +185,16 @@ namespace com { namespace sun { namespace star {
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
     public:
-        OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+        OGeometryControlModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
 
     private:
-        OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+        OGeometryControlModel(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
 
     protected:
         // OAggregationArrayUsageHelper overridables
         virtual void fillProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rProps,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rAggregateProps
+            css::uno::Sequence< css::beans::Property >& _rProps,
+            css::uno::Sequence< css::beans::Property >& _rAggregateProps
             ) const override;
 
         // OPropertySetAggregationHelper overridables
@@ -202,10 +202,10 @@ namespace com { namespace sun { namespace star {
 
         // OGeometryControlModel_Base
         virtual OGeometryControlModel_Base* createClone_Impl(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) override;
+            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 
@@ -230,7 +230,7 @@ namespace com { namespace sun { namespace star {
                 (this is not checked here)
         */
         OCommonGeometryControlModel(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAgg,
+                    css::uno::Reference< css::util::XCloneable >& _rxAgg,
             const   OUString& _rxServiceSpecifier
         );
 
@@ -242,15 +242,15 @@ namespace com { namespace sun { namespace star {
 
         // OGeometryControlModel_Base
         virtual OGeometryControlModel_Base* createClone_Impl(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) override;
+            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue)
-            throw (::com::sun::star::uno::Exception, std::exception) override;
+                sal_Int32 _nHandle, const css::uno::Any& _rValue)
+            throw (css::uno::Exception, std::exception) override;
     };
 
 #include <toolkit/controls/geometrycontrolmodel_impl.hxx>

@@ -107,10 +107,10 @@ namespace toolkit
     DECLARE_XTYPEPROVIDER( )
 
 
-    // ::com::sun::star::io::XPersistObject
+    // css::io::XPersistObject
     OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 
@@ -133,7 +133,7 @@ namespace toolkit
     void          SAL_CALL release() throw() override  { UnoControlRoadmapModel_Base::release(); }
 
 
-    // ::com::sun::star::beans::XPropertySet
+    // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
@@ -182,7 +182,7 @@ namespace toolkit
     DECLARE_XTYPEPROVIDER( )
     DECLARE_XINTERFACE()
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 

@@ -45,13 +45,13 @@ public:
     /** The shape itself for which an accessible object is to be
         constructed.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape> mxShape;
+    css::uno::Reference<
+        css::drawing::XShape> mxShape;
 
     /** The accessible parent object of the shape.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> mxParent;
+    css::uno::Reference<
+        css::accessibility::XAccessible> mxParent;
 
     /** This object that may be realized by the same implementation as that
         of that of <member>mxParent</member> can be used to modify
@@ -70,10 +70,10 @@ public:
     /** Copy the given values into the members described above.
     */
     AccessibleShapeInfo (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<
+            css::drawing::XShape>& rxShape,
+        const css::uno::Reference<
+            css::accessibility::XAccessible>& rxParent,
         IAccessibleParent* pChildrenManager,
         sal_Int32 nIndex = -1);
 
@@ -81,10 +81,10 @@ public:
         The accessible parent implementation object is set to NULL.
     */
     AccessibleShapeInfo (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<
+            css::drawing::XShape>& rxShape,
+        const css::uno::Reference<
+            css::accessibility::XAccessible>& rxParent,
         sal_Int32 nIndex = -1);
 
     ~AccessibleShapeInfo();

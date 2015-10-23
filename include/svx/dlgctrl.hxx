@@ -133,9 +133,9 @@ public:
     Rectangle           CalculateFocusRectangle() const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    RECT_POINT          GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& rPixelPoint ) const;
+    RECT_POINT          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(bool bNew);
@@ -213,8 +213,8 @@ public:
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
     SvxPixelCtlAccessible*  m_pAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xAccess;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    css::uno::Reference< css::accessibility::XAccessible >        m_xAccess;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
     long GetSquares() const { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }

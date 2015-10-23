@@ -73,36 +73,36 @@ class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {
 public:
     // Toolkit
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>   CreateToolkit();
+    static css::uno::Reference< css::awt::XToolkit>   CreateToolkit();
 
     // Bitmap
-    static BitmapEx                                                         GetBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>& rxBitmap );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
+    static BitmapEx                                                         GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap );
+    static css::uno::Reference< css::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
 
     // Window
-    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
-    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
-    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( vcl::Window* pWindow );
+    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow );
+    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow2 );
+    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindowPeer );
+    static css::uno::Reference< css::awt::XWindow>    GetInterface( vcl::Window* pWindow );
 
     // OutputDevice
-    static OutputDevice*                            GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice );
-    static OutputDevice*                            GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>& rxGraphics );
+    static OutputDevice*                            GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice );
+    static OutputDevice*                            GetOutputDevice( const css::uno::Reference< css::awt::XGraphics>& rxGraphics );
 
     // Region
-    static vcl::Region                                   GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion );
+    static vcl::Region                                   GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion );
 
     // Polygon
-    static tools::Polygon CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY );
+    static tools::Polygon CreatePolygon( const css::uno::Sequence< sal_Int32 >& DataX, const css::uno::Sequence< sal_Int32 >& DataY );
 
-    /** convert Font to ::com::sun::star::awt::FontDescriptor
+    /** convert Font to css::awt::FontDescriptor
         @param  rFont  Font to be converted
         @return the new FontDescriptor
     */
-    static ::com::sun::star::awt::FontDescriptor    CreateFontDescriptor( const vcl::Font& rFont );
-    static vcl::Font                                CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont );
-    static vcl::Font                                CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
-    static ::com::sun::star::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
+    static css::awt::FontDescriptor    CreateFontDescriptor( const vcl::Font& rFont );
+    static vcl::Font                                CreateFont( const css::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont );
+    static vcl::Font                                CreateFont( const css::uno::Reference< css::awt::XFont >& rxFont );
+    static css::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
     static float                                    ConvertFontWidth( FontWidth eWidth );
     static FontWidth                                ConvertFontWidth( float f );
     static float                                    ConvertFontWeight( FontWeight eWeight );
@@ -113,7 +113,7 @@ public:
     // Rectangle
     static bool                                     IsZero(const css::awt::Rectangle& rRect);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( vcl::Window* pWindow );
+    static css::uno::Reference< css::awt::XControlContainer>  CreateControlContainer( vcl::Window* pWindow );
 
     // MapUnits
     static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
@@ -128,32 +128,32 @@ public:
     static sal_Int16                                ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
     static FieldUnit                                ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );
 
-    static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (::com::sun::star::lang::IllegalArgumentException);
+    static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (css::lang::IllegalArgumentException);
 
-    static ::Size /* VCLSize */ ConvertToVCLSize(::com::sun::star::awt::Size const& _aSize);
-    static ::com::sun::star::awt::Size ConvertToAWTSize(::Size /* VCLSize */ const& _aSize);
+    static ::Size /* VCLSize */ ConvertToVCLSize(css::awt::Size const& _aSize);
+    static css::awt::Size ConvertToAWTSize(::Size /* VCLSize */ const& _aSize);
 
-    static ::Point /* VCLPoint */ ConvertToVCLPoint(::com::sun::star::awt::Point const& _aPoint);
-    static ::com::sun::star::awt::Point ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint);
+    static ::Point /* VCLPoint */ ConvertToVCLPoint(css::awt::Point const& _aPoint);
+    static css::awt::Point ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint);
 
-    static ::Rectangle ConvertToVCLRect( ::com::sun::star::awt::Rectangle const & _rRect );
-    static ::com::sun::star::awt::Rectangle ConvertToAWTRect( ::Rectangle const & _rRect );
+    static ::Rectangle ConvertToVCLRect( css::awt::Rectangle const & _rRect );
+    static css::awt::Rectangle ConvertToAWTRect( ::Rectangle const & _rRect );
 
-    static ::com::sun::star::awt::MouseEvent
+    static css::awt::MouseEvent
         createMouseEvent(
             const ::MouseEvent& _rVclEvent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+            const css::uno::Reference< css::uno::XInterface >& _rxContext
         );
 
-    static ::MouseEvent createVCLMouseEvent( const ::com::sun::star::awt::MouseEvent& _rAwtEvent );
+    static ::MouseEvent createVCLMouseEvent( const css::awt::MouseEvent& _rAwtEvent );
 
-    static ::com::sun::star::awt::KeyEvent
+    static css::awt::KeyEvent
         createKeyEvent(
             const ::KeyEvent& _rVclEvent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+            const css::uno::Reference< css::uno::XInterface >& _rxContext
         );
 
-    static ::KeyEvent createVCLKeyEvent( const ::com::sun::star::awt::KeyEvent& _rAwtEvent );
+    static ::KeyEvent createVCLKeyEvent( const css::awt::KeyEvent& _rAwtEvent );
 };
 
 

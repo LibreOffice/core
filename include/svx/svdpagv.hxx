@@ -149,7 +149,7 @@ public:
      *      SdrPageView instance, the XControlContainer for this output device is returned, <NULL/>
      *      otherwise.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+    css::uno::Reference< css::awt::XControlContainer >
         GetControlContainer( const OutputDevice& _rDevice ) const;
 
     /// Sets all elements in the view which support a design and a alive mode into the given mode

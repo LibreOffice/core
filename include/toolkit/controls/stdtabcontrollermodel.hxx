@@ -64,14 +64,14 @@ struct UnoControlModelEntry
     bool        bGroup;
     union
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >* pxControl;
+        css::uno::Reference< css::awt::XControlModel >* pxControl;
         UnoControlModelEntryList*   pGroup;
     };
 };
 
 struct ComponentEntry
 {
-    ::com::sun::star::awt::XWindow*     pComponent;
+    css::awt::XWindow*     pComponent;
     Point                               aPos;
 };
 
@@ -79,10 +79,10 @@ typedef ::std::vector< ComponentEntry* > ComponentEntryList;
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
-class StdTabControllerModel :   public ::com::sun::star::awt::XTabControllerModel,
-                                public ::com::sun::star::lang::XServiceInfo,
-                                public ::com::sun::star::io::XPersistObject,
-                                public ::com::sun::star::lang::XTypeProvider,
+class StdTabControllerModel :   public css::awt::XTabControllerModel,
+                                public css::lang::XServiceInfo,
+                                public css::io::XPersistObject,
+                                public css::lang::XTypeProvider,
                                 public ::cppu::OWeakAggObject
 {
 private:
@@ -93,39 +93,39 @@ private:
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }
     sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
-    void                    ImplGetControlModels( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
-    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls );
-    static sal_uInt32       ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
+    void                    ImplGetControlModels( css::uno::Reference< css::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
+    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls );
+    static sal_uInt32       ImplGetControlPos( const css::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
 
 public:
                             StdTabControllerModel();
                             virtual ~StdTabControllerModel();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override { return OWeakAggObject::queryInterface(rType); }
+    // css::uno::XInterface
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
 
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTabControllerModel
-    sal_Bool SAL_CALL getGroupControl(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setGroupControl( sal_Bool GroupControl ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setControlModels( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL getControlModels(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group, const OUString& GroupName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Int32 SAL_CALL getGroupCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getGroup( sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group, OUString& Name ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getGroupByName( const OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTabControllerModel
+    sal_Bool SAL_CALL getGroupControl(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setGroupControl( sal_Bool GroupControl ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setControlModels( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getGroupCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getGroup( sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL getGroupByName( const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

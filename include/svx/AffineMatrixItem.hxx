@@ -26,11 +26,11 @@
 class SVX_DLLPUBLIC AffineMatrixItem : public SfxPoolItem
 {
 private:
-    com::sun::star::geometry::AffineMatrix2D        maMatrix;
+    css::geometry::AffineMatrix2D        maMatrix;
 
 public:
     TYPEINFO_OVERRIDE();
-    AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2D* pMatrix = 0);
+    AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix = 0);
     AffineMatrixItem(SvStream& rIn);
     AffineMatrixItem(const AffineMatrixItem&);
     virtual ~AffineMatrixItem();
@@ -40,8 +40,8 @@ public:
     virtual SfxPoolItem* Create( SvStream& rIn, sal_uInt16 nVer ) const override;
     virtual SvStream& Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif // INCLUDED_SVX_AFFINEMATRIXITEM_HXX

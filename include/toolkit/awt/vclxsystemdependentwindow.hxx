@@ -32,24 +32,24 @@
 //  class VCLXSystemDependendtWindow
 
 
-class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public ::com::sun::star::awt::XSystemDependentWindowPeer,
+class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public css::awt::XSystemDependentWindowPeer,
                                                     public VCLXWindow
 {
 public:
     VCLXSystemDependentWindow();
     virtual ~VCLXSystemDependentWindow();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XSystemDependendtWindowPeer
-    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XSystemDependendtWindowPeer
+    css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 

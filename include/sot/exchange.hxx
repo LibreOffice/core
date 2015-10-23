@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 } } } }
 
 
-struct DataFlavorEx : public ::com::sun::star::datatransfer::DataFlavor
+struct DataFlavorEx : public css::datatransfer::DataFlavor
 {
     SotClipboardFormatId mnSotId;
 };
@@ -54,11 +54,11 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 
 // actions
 #define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
-#define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE)
+#define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_NONE)
 #define EXCHG_IN_ACTION_DEFAULT                 EXCHG_INOUT_ACTION_NONE
-#define EXCHG_IN_ACTION_MOVE                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_MOVE)
-#define EXCHG_IN_ACTION_COPY                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY)
-#define EXCHG_IN_ACTION_LINK                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_LINK)
+#define EXCHG_IN_ACTION_MOVE                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+#define EXCHG_IN_ACTION_COPY                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+#define EXCHG_IN_ACTION_LINK                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_LINK)
 #define EXCHG_OUT_ACTION_INSERT_OBJ             ((sal_uInt16)17)
 #define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((sal_uInt16)18)
 #define EXCHG_OUT_ACTION_INSERT_FILE            ((sal_uInt16)20)
@@ -122,13 +122,13 @@ class SvGlobalName;
 class SOT_DLLPUBLIC SotExchange
 {
 public:
-    static SotClipboardFormatId    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static SotClipboardFormatId    RegisterFormat( const css::datatransfer::DataFlavor& rFlavor );
     static SotClipboardFormatId    RegisterFormatName( const OUString& rName );
     static SotClipboardFormatId    RegisterFormatMimeType( const OUString& rMimeType );
 
-    static SotClipboardFormatId    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static SotClipboardFormatId    GetFormat( const css::datatransfer::DataFlavor& rFlavor );
     static OUString     GetFormatName( SotClipboardFormatId nFormat );
-    static bool         GetFormatDataFlavor( SotClipboardFormatId nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static bool         GetFormatDataFlavor( SotClipboardFormatId nFormat, css::datatransfer::DataFlavor& rFlavor );
     static OUString     GetFormatMimeType( SotClipboardFormatId nFormat );
     static bool         IsInternal( const SvGlobalName& );
     static SotClipboardFormatId   GetFormatIdFromMimeType( const OUString& rMimeType );
@@ -150,7 +150,7 @@ public:
         // In:- optional - check only for this specific format
         SotClipboardFormatId nOnlyTestFormat = SotClipboardFormatId::NONE,
         // In:- optional - check the contents of Xtransferable
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >* pxTransferable = NULL );
+        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = NULL );
 
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );

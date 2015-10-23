@@ -90,8 +90,8 @@ public:
         OutputDevice* _pOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
+        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const OUString& _rFieldPostfix,
         sal_uInt32 _nInventor,
@@ -119,8 +119,8 @@ public:
 
     /** returns the form controller for a given form and a given device
     */
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
-            GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
+    SVX_DLLPRIVATE css::uno::Reference< css::form::runtime::XFormController >
+            GetFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
     bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
@@ -141,14 +141,14 @@ public:
 
     struct ImplAccess { friend class FmXFormView; private: ImplAccess() { } };
     void SetMoveOutside( bool _bMoveOutside, ImplAccess ) { E3dView::SetMoveOutside( _bMoveOutside ); }
-     void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
-     void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
+     void InsertControlContainer(const css::uno::Reference< css::awt::XControlContainer >& xCC);
+     void RemoveControlContainer(const css::uno::Reference< css::awt::XControlContainer >& xCC);
 
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) override;
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) override;
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
-    SVX_DLLPRIVATE bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
+    SVX_DLLPRIVATE bool checkUnMarkAll(const css::uno::Reference< css::uno::XInterface >& _xSource);
 
 private:
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;

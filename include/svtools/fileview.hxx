@@ -64,10 +64,9 @@ struct FileViewAsyncAction
 class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
-    SvtFileView_Impl*       mpImp;
-    bool                    bSortColumn;
-
-    ::com::sun::star::uno::Sequence< OUString > mpBlackList;
+    SvtFileView_Impl*              mpImp;
+    bool                           bSortColumn;
+    css::uno::Sequence< OUString > mpBlackList;
 
     DECL_DLLPRIVATE_LINK_TYPED( HeaderSelect_Impl, HeaderBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar*, void );
@@ -109,12 +108,12 @@ public:
                                 const OUString& rFolderURL,
                                 const OUString& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor,
-                                const ::com::sun::star::uno::Sequence< OUString >& rBlackList
+                                const css::uno::Sequence< OUString >& rBlackList
                             );
 
     /** initializes the view with the content of a folder given by an UCB content
     */
-    bool                    Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
+    bool                    Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent,
                                         const OUString& rFilter );
 
     /** reads the current content of the current folder again, and applies the given filter to it

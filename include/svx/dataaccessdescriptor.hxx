@@ -59,7 +59,7 @@ namespace svx
 
     //= ODataAccessDescriptor
 
-    /** class encapsulating the com::sun::star::sdb::DataAccessDescriptor service.
+    /** class encapsulating the css::sdb::DataAccessDescriptor service.
     */
     class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessDescriptor
     {
@@ -69,11 +69,11 @@ namespace svx
     public:
         ODataAccessDescriptor();
         ODataAccessDescriptor( const ODataAccessDescriptor& _rSource );
-        ODataAccessDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rValues );
-        ODataAccessDescriptor( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rValues );
+        ODataAccessDescriptor( const css::uno::Reference< css::beans::XPropertySet >& _rValues );
+        ODataAccessDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& _rValues );
 
         // allows to construct a descriptor from an Any containing either an XPropertySet or a property value sequence
-        ODataAccessDescriptor( const ::com::sun::star::uno::Any& _rValues );
+        ODataAccessDescriptor( const css::uno::Any& _rValues );
 
         const ODataAccessDescriptor& operator=(const ODataAccessDescriptor& _rSource);
 
@@ -83,7 +83,7 @@ namespace svx
             <p>If you call this method more than once, without writing any values between both calls, the same object
             is returned. If you wrote values, a new object is returned.</p>
         */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        css::uno::Sequence< css::beans::PropertyValue >
                     createPropertyValueSequence();
 
         /** initialized the descriptor from the property values given
@@ -91,7 +91,7 @@ namespace svx
             initializing with the new ones.</p>
         */
         void        initializeFrom(
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rValues,
+                        const css::uno::Sequence< css::beans::PropertyValue >& _rValues,
                         bool _bClear = true);
 
         /// checks whether or not a given property is present in the descriptor
@@ -106,12 +106,12 @@ namespace svx
         void        clear();
 
         /// return the value of a given property
-        const   ::com::sun::star::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
+        const   css::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
 
         /** return the (modifiable) value of a given property
             <p>This operator is not allowed to be called if the descriptor is readonly.</p>
         */
-                ::com::sun::star::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich );
+                css::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich );
 
 
         /** returns either the data source name if given or the database location

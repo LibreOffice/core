@@ -34,10 +34,10 @@ namespace svt
     //= ODialogClosedListener
 
     /**
-        C++ class to implement a ::com::sun::star::ui::dialogs::XDialogClosedListener
+        C++ class to implement a css::ui::dialogs::XDialogClosedListener
     */
     class SVT_DLLPUBLIC DialogClosedListener :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XDialogClosedListener >
+        public ::cppu::WeakImplHelper1< css::ui::dialogs::XDialogClosedListener >
     {
     private:
         /**
@@ -51,10 +51,10 @@ namespace svt
         inline void SetDialogClosedLink( const Link<css::ui::dialogs::DialogClosedEvent*,void>& rLink ) { m_aDialogClosedLink = rLink; }
 
         // XDialogClosedListener methods
-        virtual void SAL_CALL   dialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL   dialogClosed( const css::ui::dialogs::DialogClosedEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener methods
-        virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
     };
 
 

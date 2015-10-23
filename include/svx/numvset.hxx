@@ -62,16 +62,16 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     Rectangle       aOrgRect;
     VclPtr<VirtualDevice> pVDev;
 
-    com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
-    com::sun::star::lang::Locale aLocale;
+    css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
+    css::lang::Locale aLocale;
 
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue> > aNumSettings;
+    css::uno::Sequence<
+        css::uno::Sequence<
+            css::beans::PropertyValue> > aNumSettings;
 
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexAccess> > aOutlineSettings;
+    css::uno::Sequence<
+        css::uno::Reference<
+            css::container::XIndexAccess> > aOutlineSettings;
 
 public:
     SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);

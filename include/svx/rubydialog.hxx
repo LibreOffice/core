@@ -124,7 +124,7 @@ class SvxRubyDialog : public SfxModelessDialog
 
     bool                bModified;
 
-    com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
+    css::uno::Reference<css::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
     SvxRubyData_Impl* pImpl;
 

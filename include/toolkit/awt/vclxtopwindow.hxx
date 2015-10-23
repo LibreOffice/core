@@ -30,9 +30,9 @@
 
 #include <toolkit/awt/vclxcontainer.hxx>
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XTopWindow2
+typedef ::cppu::ImplHelper1 <   css::awt::XTopWindow2
                             >   VCLXTopWindow_XBase;
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XSystemDependentWindowPeer
+typedef ::cppu::ImplHelper1 <   css::awt::XSystemDependentWindowPeer
                             >   VCLXTopWindow_SBase;
 
 class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base  :public VCLXTopWindow_XBase
@@ -42,7 +42,7 @@ private:
     const bool  m_bWHWND;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
+    css::uno::Reference< css::awt::XMenuBar> mxMenuBar;
 
 
     virtual vcl::Window* GetWindowImpl() = 0;
@@ -54,27 +54,27 @@ public:
     virtual ~VCLXTopWindow_Base();
 
     // XInterface equivalents
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     // XTypeProvider equivalents
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XSystemDependentWindowPeer
-    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XSystemDependentWindowPeer
+    css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTopWindow
-    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL toFront() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL toBack() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTopWindow
+    void SAL_CALL addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL toFront() throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL toBack() throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& xMenu ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XTopWindow2
-    virtual sal_Bool SAL_CALL getIsMaximized() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setIsMaximized( sal_Bool _ismaximized ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getIsMinimized() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setIsMinimized( sal_Bool _isminimized ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getDisplay() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) override;
+    virtual sal_Bool SAL_CALL getIsMaximized() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setIsMaximized( sal_Bool _ismaximized ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getIsMinimized() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setIsMinimized( sal_Bool _isminimized ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getDisplay() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception) override;
 };
 
 
@@ -92,14 +92,14 @@ public:
     VCLXTopWindow(bool bWHWND = false);
     virtual ~VCLXTopWindow();
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XTypeProvider
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

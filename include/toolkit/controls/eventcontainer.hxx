@@ -29,8 +29,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <unordered_map>
 
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
-                                 ::com::sun::star::container::XContainer > NameContainerHelper;
+typedef ::cppu::WeakImplHelper2< css::container::XNameContainer,
+                                 css::container::XContainer > NameContainerHelper;
 
 
 namespace toolkit
@@ -49,15 +49,15 @@ NameContainerNameMap;
 class NameContainer_Impl : public NameContainerHelper
 {
     NameContainerNameMap mHashMap;
-    ::com::sun::star::uno::Sequence< OUString > mNames;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
+    css::uno::Sequence< OUString > mNames;
+    css::uno::Sequence< css::uno::Any > mValues;
     sal_Int32 mnElementCount;
-    ::com::sun::star::uno::Type mType;
+    css::uno::Type mType;
 
     ContainerListenerMultiplexer maContainerListeners;
 
 public:
-    NameContainer_Impl( ::com::sun::star::uno::Type const & aType )
+    NameContainer_Impl( css::uno::Type const & aType )
         : mnElementCount( 0 ),
           mType( aType ),
           maContainerListeners( *this )
@@ -65,44 +65,44 @@ public:
     }
 
     // Methods XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::ElementExistException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::ElementExistException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) override;
 
     // Methods XContainer
-    void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+        throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 
 class ScriptEventContainer : public NameContainer_Impl

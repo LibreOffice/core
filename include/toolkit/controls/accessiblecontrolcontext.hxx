@@ -39,7 +39,7 @@ namespace toolkit
 
 
     typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
+    typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
                                 >   OAccessibleControlContext_IBase;
 
     /** class implementing the AccessibleContext for an UNO control - to be used in design mode of the control.
@@ -54,9 +54,9 @@ namespace toolkit
             ,public OAccessibleControlContext_IBase
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;        // the model of the control which's context we implement
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        css::uno::Reference< css::beans::XPropertySetInfo >
                     m_xModelPropsInfo;      // the cached property set info of the model
 
     protected:
@@ -67,11 +67,11 @@ namespace toolkit
         /** late ctor
         */
         void Init(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
         );
 
         // OCommonAccessibleComponent overridables
-        virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) override;
+        virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException) override;
 
     public:
         /** creates an accessible context for an uno control
@@ -80,7 +80,7 @@ namespace toolkit
             can be retrieved.
         */
         static OAccessibleControlContext* create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
         );
 
     protected:
@@ -89,24 +89,24 @@ namespace toolkit
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XAccessibleComponent
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL grabFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getForeground(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         using comphelper::OAccessibleContextHelper::disposing;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         // retrieves the value of a string property from the model, if the property is present
@@ -117,7 +117,7 @@ namespace toolkit
         // stops listening at the control model
         void stopModelListening( );
 
-        VclPtr< vcl::Window > implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
+        VclPtr< vcl::Window > implGetWindow( css::uno::Reference< css::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
 

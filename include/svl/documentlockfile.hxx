@@ -37,9 +37,9 @@ class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
     // the workaround for automated testing!
     static bool m_bAllowInteraction;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenStream();
+    css::uno::Reference< css::io::XInputStream > OpenStream();
 
-    void WriteEntryToStream( const LockFileEntry& aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
+    void WriteEntryToStream( const LockFileEntry& aEntry, css::uno::Reference< css::io::XOutputStream > xStream );
 
 public:
     DocumentLockFile( const OUString& aOrigURL );

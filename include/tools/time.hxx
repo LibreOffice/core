@@ -69,14 +69,14 @@ public:
                     Time( TimeInitSystem );
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
-                    Time( const ::com::sun::star::util::Time& rTime );
-                    Time( const ::com::sun::star::util::DateTime& rDateTime );
+                    Time( const css::util::Time& rTime );
+                    Time( const css::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
 
     void            SetTime( sal_Int64 nNewTime ) { nTime = nNewTime; }
     sal_Int64       GetTime() const { return nTime; }
-    ::com::sun::star::util::Time GetUNOTime() const { return ::com::sun::star::util::Time(GetNanoSec(),GetSec(),GetMin(),GetHour(),false); }
+    css::util::Time GetUNOTime() const { return css::util::Time(GetNanoSec(),GetSec(),GetMin(),GetHour(),false); }
 
     void            SetHour( sal_uInt16 nNewHour );
     void            SetMin( sal_uInt16 nNewMin );
