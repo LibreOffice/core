@@ -45,22 +45,22 @@ class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
     OModuleClient       m_aModuleClient;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         m_xInspectorContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
+    css::uno::Reference< css::frame::XFrame2 >
                         m_xMeAsFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspector >
+    css::uno::Reference< css::inspection::XObjectInspector >
                         m_xBrowserController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                         m_xBrowserComponentWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+    css::uno::Reference< css::uno::XInterface>
                         m_xLastSection; /// is the previously displayed section
-    OUString     m_sLastActivePage;
+    OUString            m_sLastActivePage;
     VclPtr<ODesignView>        m_pDesignView;
     OSectionView*       m_pView;
-    bool            m_bInitialStateChange;
+    bool                m_bInitialStateChange;
 
     PropBrw(PropBrw&) = delete;
     void operator =(PropBrw&) = delete;
@@ -69,24 +69,24 @@ protected:
     virtual void Resize() override;
     virtual bool Close() override;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >
+    css::uno::Sequence< css::uno::Reference< css::uno::XInterface> >
         CreateCompPropSet(const SdrMarkList& rMarkList);
 
     void implSetNewObject(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >());
+        const css::uno::Sequence< css::uno::Reference< css::uno::XInterface> >& _aObjects = css::uno::Sequence< css::uno::Reference< css::uno::XInterface> >());
 
     static OUString GetHeadlineName(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects);
+        const css::uno::Sequence< css::uno::Reference< css::uno::XInterface> >& _aObjects);
 
     void implDetachController();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> CreateComponentPair(OObjectBase* _pObj);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> CreateComponentPair(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xFormComponent
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
+    css::uno::Reference< css::uno::XInterface> CreateComponentPair(OObjectBase* _pObj);
+    css::uno::Reference< css::uno::XInterface> CreateComponentPair(
+             const css::uno::Reference< css::uno::XInterface>& _xFormComponent
+            ,const css::uno::Reference< css::uno::XInterface>& _xReportComponent);
     DECL_LINK_TYPED( OnAsyncGetFocus, void*, void );
 
 public:
-    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
+    PropBrw(const css::uno::Reference< css::uno::XComponentContext >& _xORB
             ,Window* pParent
             ,ODesignView*  _pDesignView);
     virtual ~PropBrw();
@@ -95,7 +95,7 @@ public:
     virtual void LoseFocus() override;
 
     void    Update( OSectionView* m_pView );
-    void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
+    void    Update( const css::uno::Reference< css::uno::XInterface>& _xReportComponent);
     OUString         getCurrentPage() const;
     void                    setCurrentPage(const OUString& _sLastActivePage);
 

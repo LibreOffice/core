@@ -80,7 +80,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 break;
             case XML_TOK_VALUE_TYPE:
                 {
-                    // needs to be translated into a ::com::sun::star::uno::Type
+                    // needs to be translated into a css::uno::Type
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
@@ -91,8 +91,8 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = cppu::UnoType<OUString>::get();
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = cppu::UnoType<sal_Int32>::get();
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = cppu::UnoType<sal_Int16>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = cppu::UnoType<com::sun::star::util::Date>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = cppu::UnoType<com::sun::star::util::Time>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = cppu::UnoType<css::util::Date>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = cppu::UnoType<css::util::Time>::get();
                         s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<void>::get();
                     }
 
@@ -190,7 +190,7 @@ ORptFilter& OXMLControlProperty::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
+Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
@@ -246,9 +246,9 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_STRUCT:
             {
                 // recognized structs:
-                static ::com::sun::star::uno::Type s_aDateType      = ::cppu::UnoType<com::sun::star::util::Date>::get();
-                static ::com::sun::star::uno::Type s_aTimeType      = ::cppu::UnoType<com::sun::star::util::Time>::get();
-                static ::com::sun::star::uno::Type s_aDateTimeType  = ::cppu::UnoType<com::sun::star::util::DateTime>::get();
+                static css::uno::Type s_aDateType      = ::cppu::UnoType<css::util::Date>::get();
+                static css::uno::Type s_aTimeType      = ::cppu::UnoType<css::util::Time>::get();
+                static css::uno::Type s_aDateTimeType  = ::cppu::UnoType<css::util::DateTime>::get();
                 sal_Int32 nType = 0;
                 if  ( _rExpectedType.equals(s_aDateType) )
                     nType = TYPE_DATE;
@@ -286,10 +286,10 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                         break;
                         case TYPE_DATETIME:
                         {
-                            ::com::sun::star::util::Time aTime = implGetTime(nValue);
-                            ::com::sun::star::util::Date aDate = implGetDate(nValue);
+                            css::util::Time aTime = implGetTime(nValue);
+                            css::util::Date aDate = implGetDate(nValue);
 
-                            ::com::sun::star::util::DateTime aDateTime;
+                            css::util::DateTime aDateTime;
                             aDateTime.NanoSeconds = aTime.NanoSeconds;
                             aDateTime.Seconds = aTime.Seconds;
                             aDateTime.Minutes = aTime.Minutes;
@@ -315,9 +315,9 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     return aReturn;
 }
 
-::com::sun::star::util::Time OXMLControlProperty::implGetTime(double _nValue)
+css::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
-    ::com::sun::star::util::Time aTime;
+    css::util::Time aTime;
     sal_uInt64 nIntValue = ::rtl::math::round(_nValue * 86400000000000.0);
     aTime.NanoSeconds = (sal_uInt16)( nIntValue % 1000000000 );
     nIntValue /= 1000000000;
@@ -332,10 +332,10 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 }
 
 
-::com::sun::star::util::Date OXMLControlProperty::implGetDate(double _nValue)
+css::util::Date OXMLControlProperty::implGetDate(double _nValue)
 {
     Date aToolsDate((sal_uInt32)_nValue);
-    ::com::sun::star::util::Date aDate;
+    css::util::Date aDate;
     ::utl::typeConvert(aToolsDate, aDate);
     return aDate;
 }

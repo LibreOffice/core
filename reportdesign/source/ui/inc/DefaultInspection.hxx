@@ -35,19 +35,19 @@ namespace rptui
 
     //= DefaultComponentInspectorModel
 
-    typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::inspection::XObjectInspectorModel
-                                        ,   ::com::sun::star::lang::XServiceInfo
-                                        ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakAggImplHelper3  <   css::inspection::XObjectInspectorModel
+                                        ,   css::lang::XServiceInfo
+                                        ,   css::lang::XInitialization
                                         >   DefaultComponentInspectorModel_Base;
     class DefaultComponentInspectorModel : public DefaultComponentInspectorModel_Base
     {
     private:
         ::osl::Mutex                                                                            m_aMutex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel > m_xComponent; /// delegatee
+        css::uno::Reference< css::uno::XComponentContext >                                      m_xContext;
+        css::uno::Reference< css::inspection::XObjectInspectorModel >                           m_xComponent; /// delegatee
         bool                                                                                    m_bConstructed;
         bool                                                                                    m_bHasHelpSection;
-        bool                                                                                m_bIsReadOnly;
+        bool                                                                                    m_bIsReadOnly;
         sal_Int32                                                                               m_nMinHelpTextLines;
         sal_Int32                                                                               m_nMaxHelpTextLines;
         /// access to property meta data
@@ -59,33 +59,33 @@ namespace rptui
         virtual ~DefaultComponentInspectorModel();
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XObjectInspectorModel
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getHandlerFactories() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getHasHelpSection() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setIsReadOnly( sal_Bool _isreadonly ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getHandlerFactories() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL getHasHelpSection() throw (css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL getIsReadOnly() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setIsReadOnly( sal_Bool _isreadonly ) throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     public:
         // XServiceInfo - static versions
-        static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                        create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     public:
-        DefaultComponentInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+        DefaultComponentInspectorModel( const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     protected:
         // Service constructors

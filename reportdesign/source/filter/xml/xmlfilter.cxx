@@ -76,10 +76,11 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::xml::sax;
 using namespace xmloff;
+using namespace ::com::sun::star::util;
+
     sal_Char const sXML_np__rpt[] = "_report";
     sal_Char const sXML_np___rpt[] = "__report";
 
-    using namespace ::com::sun::star::util;
 
 class RptMLMasterStylesContext_Impl:
     public XMLTextMasterStylesContext, private boost::noncopyable
@@ -1011,7 +1012,7 @@ void ORptFilter::removeFunction(const OUString& _sFunctionName)
     m_aFunctions.erase(_sFunctionName);
 }
 
-void ORptFilter::insertFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > & _xFunction)
+void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunction > & _xFunction)
 {
     m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }

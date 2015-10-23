@@ -153,7 +153,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
     }
 }
 
-void SAL_CALL OPropertyMediator::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL OPropertyMediator::disposing( const css::lang::EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     disposing();

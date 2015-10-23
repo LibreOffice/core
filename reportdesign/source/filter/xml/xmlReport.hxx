@@ -27,7 +27,7 @@ namespace rptxml
     class ORptFilter;
     class OXMLReport : public OXMLReportElementBase, public IMasterDetailFieds
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xComponent;
+        css::uno::Reference< css::report::XReportDefinition > m_xComponent;
         ::std::vector< OUString> m_aMasterFields;
         ::std::vector< OUString> m_aDetailFields;
         OXMLReport(const OXMLReport&) = delete;
@@ -36,14 +36,14 @@ namespace rptxml
 
         OXMLReport( ORptFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xComponent
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::report::XReportDefinition >& _xComponent
                     ,OXMLTable* _pContainer);
         virtual ~OXMLReport();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
         virtual void EndElement() override;
 

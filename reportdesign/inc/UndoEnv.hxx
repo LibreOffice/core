@@ -34,9 +34,9 @@ namespace rptui
 
 
     class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment
-        : public ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::container::XContainerListener
-                                        ,   ::com::sun::star::util::XModifyListener
+        : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
+                                        ,   css::container::XContainerListener
+                                        ,   css::util::XModifyListener
                                         >
         , public SfxListener
     {
@@ -97,11 +97,11 @@ namespace rptui
         struct Accessor { friend class OReportModel; private: Accessor() { } };
         void Clear(const Accessor& _r);
 
-        void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-        void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+        void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
+        void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
 
-        void AddSection( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection);
-        void RemoveSection( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection );
+        void AddSection( const css::uno::Reference< css::report::XSection>& _xSection);
+        void RemoveSection( const css::uno::Reference< css::report::XSection>& _xSection );
         /** removes the section from the page out of the undo env
         *
         * \param _pPage
@@ -110,33 +110,33 @@ namespace rptui
 
     protected:
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         void ModeChanged();
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     private:
-        void TogglePropertyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+        void TogglePropertyListening(const css::uno::Reference< css::uno::XInterface>& Element);
 
         void    implSetModified();
 
-        void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer, bool _bStartListening );
-        void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening );
+        void    switchListening( const css::uno::Reference< css::container::XIndexAccess >& _rxContainer, bool _bStartListening );
+        void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
 
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator
-            getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild>& _xContainer) const;
+        ::std::vector< css::uno::Reference< css::container::XChild> >::const_iterator
+            getSection(const css::uno::Reference< css::container::XChild>& _xContainer) const;
     };
 
 }

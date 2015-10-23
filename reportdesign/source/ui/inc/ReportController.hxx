@@ -70,11 +70,11 @@ namespace rptui
     class OSectionWindow;
 
     typedef ::dbaui::DBSubComponentController   OReportController_BASE;
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::beans::XPropertyChangeListener
-                                ,   ::com::sun::star::view::XSelectionSupplier
-                                ,   ::com::sun::star::util::XModeSelector
-                                ,   ::com::sun::star::embed::XVisualObject
+    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+                                ,   css::beans::XPropertyChangeListener
+                                ,   css::view::XSelectionSupplier
+                                ,   css::util::XModeSelector
+                                ,   css::embed::XVisualObject
                                 >   OReportController_Listener;
 
     class OReportController :    public OReportController_BASE
@@ -88,7 +88,7 @@ namespace rptui
         OModuleClient           m_aModuleClient;
         ::cppu::OInterfaceContainerHelper
                                 m_aSelectionListeners;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
+        css::uno::Sequence< css::beans::PropertyValue>
                                 m_aCollapsedSections;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         TransferableClipboardListener*
@@ -99,33 +99,33 @@ namespace rptui
 
         ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >         m_xReportDefinition;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine >             m_xReportEngine;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 >                  m_xFrameLoader;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >          m_xHoldAlive;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-        ::com::sun::star::awt::Size                                                             m_aVisualAreaSize;
+        css::uno::Reference< css::report::XReportDefinition >         m_xReportDefinition;
+        css::uno::Reference< css::report::XReportEngine >             m_xReportEngine;
+        css::uno::Reference< css::frame::XDesktop2 >                  m_xFrameLoader;
+        css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
+        css::uno::Reference< css::beans::XPropertyChangeListener >    m_xRowSetMediator;
+        css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
+        mutable css::uno::Reference< css::lang::XComponent >          m_xHoldAlive;
+        mutable css::uno::Reference< css::container::XNameAccess >    m_xColumns;
+        css::awt::Size                                                m_aVisualAreaSize;
 
         std::shared_ptr<rptui::OReportModel>
                                 m_aReportModel;
-        OUString         m_sName;                /// name for the report definition
-        OUString         m_sLastActivePage;      /// last active property browser page
-        OUString         m_sMode;                /// the current mode of the controller
+        OUString                m_sName;                /// name for the report definition
+        OUString                m_sLastActivePage;      /// last active property browser page
+        OUString                m_sMode;                /// the current mode of the controller
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         sal_Int32               m_nSelectionCount;
         ::sal_Int64             m_nAspect;
         sal_Int16               m_nZoomValue;
         SvxZoomType             m_eZoomType;
-        bool                m_bShowRuler;
-        bool                m_bGridVisible;
-        bool                m_bGridUse;
-        bool                m_bShowProperties;
-        bool                m_bGroupFloaterWasVisible;
-        bool                m_bHelplinesMove;
+        bool                    m_bShowRuler;
+        bool                    m_bGridVisible;
+        bool                    m_bGridUse;
+        bool                    m_bShowProperties;
+        bool                    m_bGroupFloaterWasVisible;
+        bool                    m_bHelplinesMove;
         bool                    m_bChartEnabled;
         bool                    m_bChartEnabledAsked;
         bool                    m_bInGeneratePreview;
@@ -136,7 +136,7 @@ namespace rptui
         * \param _xSection the section where to create the formatted field
         * \param _sFunction the function which will be set at the data field.
         */
-        void createControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,const OUString& _sFunction ,sal_uInt16 _nObjectId = OBJ_DLG_FORMATTEDFIELD);
+        void createControl(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs,const css::uno::Reference< css::report::XSection>& _xSection,const OUString& _sFunction ,sal_uInt16 _nObjectId = OBJ_DLG_FORMATTEDFIELD);
         /** switch the report header/footer sectionon off with undo or without depending on the given id.
         *
         * \param _nId   Can either be SID_REPORTHEADER_WITHOUT_UNDO or SID_REPORTFOOTER_WITHOUT_UNDO or SID_REPORTHEADERFOOTER.
@@ -154,7 +154,7 @@ namespace rptui
         * \param _bAppend
         * \param _aArgs The args which contains a element named PROPERTY_GROUP of type report::XGroup.
         */
-        void modifyGroup(const bool _bAppend, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
+        void modifyGroup(const bool _bAppend, const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
         /** creates a group section.
         *
@@ -162,7 +162,7 @@ namespace rptui
         * \param _bHeader true when it is a header otherwise it is a footer
         * \param _aArgs The args which contains a element named PROPERTY_GROUP of type report::XGroup.
         */
-        void createGroupSection(const bool _bUndo,const bool _bHeader,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&_aArgs);
+        void createGroupSection(const bool _bUndo,const bool _bHeader,const css::uno::Sequence< css::beans::PropertyValue >&_aArgs);
 
         /** add or remove me as listener at the report definition
         *
@@ -172,7 +172,7 @@ namespace rptui
 
         /** opens the common page dialog
         */
-        void openPageDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection);
+        void openPageDialog(const css::uno::Reference< css::report::XSection>& _xSection);
 
         /** opens or hides the sorting and grouping dialog
         */
@@ -184,13 +184,13 @@ namespace rptui
 
         /** returns the position of the group inside the groups collection
         */
-        sal_Int32 getGroupPosition(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup);
+        sal_Int32 getGroupPosition(const css::uno::Reference< css::report::XGroup >& _xGroup);
 
         /** calls propertyChanged when the header or footer is really turned on.
             @param  _rEvent the group
             @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
         */
-        void notifyGroupSections(const ::com::sun::star::container::ContainerEvent& _rEvent
+        void notifyGroupSections(const css::container::ContainerEvent& _rEvent
                                 ,bool _bShow);
 
         /** change the sections for a group
@@ -199,7 +199,7 @@ namespace rptui
             @param  _nGroupPos  the position of the group inside the groups collection or the previous index when it was removed
             @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
         */
-        void groupChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
+        void groupChange( const css::uno::Reference< css::report::XGroup>& _xGroup
                          ,const OUString& _sPropName
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
@@ -210,17 +210,17 @@ namespace rptui
         // open the help agent of report designer at start time
         void doOpenHelpAgent();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
+        css::uno::Reference< css::frame::XFrame > getXFrame();
 
         /** shrink a section
         @param _nUndoStrId the string id of the string which is shown in undo menu
         @param _nShrinkId  ID of what you would like to shrink.
         */
-        static void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
-        static void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+        static void shrinkSectionBottom(css::uno::Reference< css::report::XSection > _xSection);
+        static void shrinkSectionTop(css::uno::Reference< css::report::XSection > _xSection);
 
     public:
-        void shrinkSection(sal_uInt16 _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
+        void shrinkSection(sal_uInt16 _nUndoStrId, css::uno::Reference< css::report::XSection > _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.
@@ -235,25 +235,25 @@ namespace rptui
         *
         * \param _aValue contains a XNameContainer
         */
-        void createNewFunction(const ::com::sun::star::uno::Any& _aValue);
+        void createNewFunction(const css::uno::Any& _aValue);
 
         /** inserts a label - field pair into the current selected section
         *
         * \param aArgs
         */
-        void addPairControls(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
+        void addPairControls(const css::uno::Sequence< css::beans::PropertyValue >& aArgs);
 
         /** inserts a label - field combination to show the page number and/or page count
         *
         * \param _aArgs
         */
-        void createPageNumber(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
+        void createPageNumber(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
         /** creates a formatted filed with TODAY() function and if set also an NOW() function
         *
         * \param _aArgs
         */
-        void createDateTime(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
+        void createDateTime(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
         /** gets the current section (SdrView)
         *
@@ -290,14 +290,14 @@ namespace rptui
 
         virtual void impl_onModifyChanged() override;
 
-        virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager ) override;
+        virtual void onLoadedMenu( const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager ) override;
         virtual void impl_initialize( ) override;
         bool isUiVisible() const;
 
         /** creates a new default control for the currently set type when the modifier KEY_MOD1 was pressed
         * \param _aArgs must contain a properyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
         */
-        void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
+        void createDefaultControl(const css::uno::Sequence< css::beans::PropertyValue>& _aArgs);
 
         /** fills the state for the feature request.
             @param  _sProperty  the property which should be filled in the value
@@ -311,8 +311,8 @@ namespace rptui
         */
         bool impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId
             ,const OUString& _sProperty
-            ,const ::com::sun::star::uno::Any& _aValue
-            ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
+            ,const css::uno::Any& _aValue
+            ,const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
         void OnInvalidateClipboard();
         DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
@@ -320,19 +320,19 @@ namespace rptui
         DECL_LINK_TYPED( OnOpenHelpAgent, void*, void );
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() override;
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual dbaui::FeatureState GetState(sal_uInt16 nId) const override;
         // execute a feature
-        virtual void Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) override;
+        virtual void Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
-        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception, std::exception) override;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) override;
 
     private:
         virtual ~OReportController();
 
     public:
-        OReportController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & the_context);
+        OReportController(css::uno::Reference< css::uno::XComponentContext > const & the_context);
 
         DECL_LINK_TYPED( EventLstHdl, VclWindowEvent&, void );
         DECL_LINK_TYPED( OnCreateHdl, OAddFieldWindow&, void);
@@ -348,68 +348,68 @@ namespace rptui
             @param  _xControlFormat the report control format
         */
         static bool                         isFormatCommandEnabled(sal_uInt16 _nCommand
-                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat);
+                                                ,const css::uno::Reference< css::report::XReportControlFormat>& _xControlFormat);
 
         virtual bool                        Construct(vcl::Window* pParent) override;
         // XEventListener
-        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::frame::XController
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
 
-        // ::com::sun::star::lang::XComponent
+        // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-            create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+            create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
-        // ::com::sun::star::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::container::XContainerListener
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XSelectionSupplier
-        virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
 
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getViewData() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::frame::XController
+        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) override;
 
         /** gives access to the report definition
         * \return the report definition object, may be <NULL/>
         */
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
+        inline css::uno::Reference< css::report::XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-        // ::com::sun::star::frame::XController
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        // css::frame::XController
+        virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override;
 
         // XTitle
-        virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XModeSelector
-        virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) override ;
+        virtual void SAL_CALL setMode( const OUString& aMode ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override ;
+        virtual OUString SAL_CALL getMode(  ) throw (css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception) override ;
+        virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception) override ;
 
         // XVisualObject
-        virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( ::sal_Int64 nAspect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMapUnit( ::sal_Int64 nAspect ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const css::awt::Size& aSize ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual css::awt::Size SAL_CALL getVisualAreaSize( ::sal_Int64 nAspect ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getMapUnit( ::sal_Int64 nAspect ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 
         /** returns the current position of the splitter
@@ -423,18 +423,18 @@ namespace rptui
          *
          * \return The model or <NULL/> if the model could not be created.
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> executeReport();
+        css::uno::Reference< css::frame::XModel> executeReport();
 
         /** returns the RowSet which reflects the current settings of the report definition
 
             The caller is allowed to hold a reference to the RowSet - it is kept alive as long
             as the controller lives, and it's settings will follow the report definition's settings.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > getRowSet();
+        css::uno::Reference< css::sdbc::XRowSet > getRowSet();
 
         /** returns the number formatter
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const { return m_xFormatter;}
+        css::uno::Reference< css::util::XNumberFormatter >    getReportNumberFormatter() const { return m_xFormatter;}
 
         /** return the SdrModel of the real model
         *
@@ -442,12 +442,12 @@ namespace rptui
         */
         std::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_aReportModel;}
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
+        inline css::uno::Reference< css::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
         inline void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
 
-        // com::sun::star::beans::XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override
+        // css::beans::XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override
         {
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }
@@ -457,9 +457,9 @@ namespace rptui
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const;
+        css::uno::Reference< css::container::XNameAccess > getColumns() const;
         OUString getColumnLabel_throw(const OUString& i_sColumnName) const;
 
         SfxUndoManager& getUndoManager() const;

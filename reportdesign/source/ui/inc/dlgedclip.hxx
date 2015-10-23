@@ -37,7 +37,7 @@ namespace rptui
 class OReportExchange : public TransferableHelper
 {
 public:
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > TSectionElements;
+    typedef css::uno::Sequence< css::beans::NamedValue > TSectionElements;
 
     /** Constructs a new exchange object with section elements
     *

@@ -256,7 +256,7 @@ public:
     DECLARE_XINTERFACE( )
 
     // XPropertySet
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
@@ -785,7 +785,7 @@ void SAL_CALL OReportDefinition::setCaption( const OUString& _caption ) throw (u
 void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptogether ) throw (uno::RuntimeException, std::exception)
 {
     if ( _groupkeeptogether < report::GroupKeepTogether::PER_PAGE || _groupkeeptogether > report::GroupKeepTogether::PER_COLUMN )
-        throwIllegallArgumentException("com::sun::star::report::GroupKeepTogether"
+        throwIllegallArgumentException("css::report::GroupKeepTogether"
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);
@@ -801,7 +801,7 @@ void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptog
 void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderoption ) throw (uno::RuntimeException, std::exception)
 {
     if ( _pageheaderoption < report::ReportPrintOption::ALL_PAGES || _pageheaderoption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
-        throwIllegallArgumentException("com::sun::star::report::ReportPrintOption"
+        throwIllegallArgumentException("css::report::ReportPrintOption"
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);
@@ -817,7 +817,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderopt
 void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteroption ) throw (uno::RuntimeException, std::exception)
 {
     if ( _pagefooteroption < report::ReportPrintOption::ALL_PAGES || _pagefooteroption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
-        throwIllegallArgumentException("com::sun::star::report::ReportPrintOption"
+        throwIllegallArgumentException("css::report::ReportPrintOption"
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);
@@ -844,7 +844,7 @@ void SAL_CALL OReportDefinition::setCommand( const OUString& _command ) throw (u
 void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype ) throw (uno::RuntimeException, std::exception)
 {
     if ( _commandtype < sdb::CommandType::TABLE || _commandtype > sdb::CommandType::COMMAND )
-        throwIllegallArgumentException("com::sun::star::sdb::CommandType"
+        throwIllegallArgumentException("css::sdb::CommandType"
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);
@@ -1981,7 +1981,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) 
     return s_aList;
 }
 
-// com::sun::star::XUnoTunnel
+// css::XUnoTunnel
 sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     sal_Int64 nRet = 0;

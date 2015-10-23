@@ -46,10 +46,10 @@ namespace rptui
         OSectionView*                       m_pView;
         VclPtr<OSectionWindow>              m_pParent;
         ::std::unique_ptr<DlgEdFunc>        m_pFunc;
-        std::shared_ptr<OReportModel>   m_pModel;
+        std::shared_ptr<OReportModel>       m_pModel;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pReportListener;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
+        css::uno::Reference< css::report::XSection >              m_xSection;
         sal_Int32                   m_nPaintEntranceCount;
 
         DlgEdMode                   m_eMode;
@@ -75,9 +75,9 @@ namespace rptui
         virtual void        Resize() override;
 
         // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) override;
+        virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException) override;
     public:
-        OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        OReportSection(OSectionWindow* _pParent,const css::uno::Reference< css::report::XSection >& _xSection);
         virtual ~OReportSection();
         virtual void dispose() override;
 
@@ -88,15 +88,15 @@ namespace rptui
         /** copies the current selection in this section
             @param  _rAllreadyCopiedObjects This is an out/in put param which contains all already copied objects.
         */
-        void Copy(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rAllreadyCopiedObjects);
+        void Copy(css::uno::Sequence< css::beans::NamedValue >& _rAllreadyCopiedObjects);
 
-        void Copy(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone);
+        void Copy(css::uno::Sequence< css::beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone);
 
         /** paste a new control in this section
             @param  _aAllreadyCopiedObjects objects to paste into the section. Only objects are pasted where the name is equal to the section name.
             @param  _bForce If set to <TRUE/> than the objects will be copied into this section. The name is not compared in this case.
         */
-        void Paste(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce = false);
+        void Paste(const css::uno::Sequence< css::beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce = false);
 
         /** Deletes the current selection in this section
         *
@@ -116,7 +116,7 @@ namespace rptui
         inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
         inline OSectionView&        getSectionView() const { return *m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
+        inline css::uno::Reference< css::report::XSection > getSection() const { return m_xSection; }
 
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
@@ -129,12 +129,12 @@ namespace rptui
 
         /** returns the current control report model or <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
+        css::uno::Reference< css::report::XReportComponent > getCurrentControlModel() const;
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
 
         /** creates a default object (custom shape)
         *

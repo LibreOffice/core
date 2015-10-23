@@ -75,12 +75,12 @@ class OGroupsSortingDialog :    public FloatingWindow
     VclPtr<FixedText>                              m_pHelpWindow;
 
     VclPtr<OFieldExpressionControl>                m_pFieldExpression;
-    ::rptui::OReportController*             m_pController;
+    ::rptui::OReportController*                    m_pController;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pCurrentGroupListener;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>            m_xGroups;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-    bool                                m_bReadOnly;
+    css::uno::Reference< css::report::XGroups>            m_xGroups;
+    css::uno::Reference< css::container::XNameAccess >    m_xColumns;
+    bool                                                  m_bReadOnly;
 private:
     DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
     DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
@@ -90,12 +90,12 @@ private:
     /** returns the groups
         @return the groups which now have to check which one changes
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>& getGroups() { return m_xGroups; }
+    css::uno::Reference< css::report::XGroups>& getGroups() { return m_xGroups; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup> getGroup(sal_Int32 _nPos)
+    css::uno::Reference< css::report::XGroup> getGroup(sal_Int32 _nPos)
     {
         OSL_ENSURE(_nPos >= 0 && _nPos < m_xGroups->getCount(),"Invalid count!");
-        return ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>(m_xGroups->getByIndex(_nPos),::com::sun::star::uno::UNO_QUERY);
+        return css::uno::Reference< css::report::XGroup>(m_xGroups->getByIndex(_nPos),css::uno::UNO_QUERY);
     }
 
     /** updates the listboxes with the new group properties
@@ -124,7 +124,7 @@ private:
     /** display the group props
         @param  _xGroup the group to display
     */
-    void displayGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
+    void displayGroup(const css::uno::Reference< css::report::XGroup>& _xGroup);
 
     /** enables or disables the up and down button
         @param  _nRow   the row which will be active
@@ -139,7 +139,7 @@ private:
     void operator =(OGroupsSortingDialog&) = delete;
 protected:
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
+    virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
 public:
     OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly

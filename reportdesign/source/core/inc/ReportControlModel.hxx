@@ -33,9 +33,9 @@
 
 namespace reportdesign
 {
-    bool operator==( const ::com::sun::star::awt::FontDescriptor& _lhs, const ::com::sun::star::awt::FontDescriptor& _rhs );
+    bool operator==( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs );
 
-    inline bool operator!=( const ::com::sun::star::awt::FontDescriptor& _lhs, const ::com::sun::star::awt::FontDescriptor& _rhs )
+    inline bool operator!=( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs )
     {
         return !( _lhs == _rhs );
     }
@@ -43,26 +43,26 @@ namespace reportdesign
     struct OFormatProperties
     {
         ::sal_Int16                                         nAlign;
-        ::com::sun::star::awt::FontDescriptor               aFontDescriptor;
-        ::com::sun::star::awt::FontDescriptor               aAsianFontDescriptor;
-        ::com::sun::star::awt::FontDescriptor               aComplexFontDescriptor;
-        ::com::sun::star::lang::Locale                      aCharLocale;
-        ::com::sun::star::lang::Locale                      aCharLocaleAsian;
-        ::com::sun::star::lang::Locale                      aCharLocaleComplex;
+        css::awt::FontDescriptor                            aFontDescriptor;
+        css::awt::FontDescriptor                            aAsianFontDescriptor;
+        css::awt::FontDescriptor                            aComplexFontDescriptor;
+        css::lang::Locale                                   aCharLocale;
+        css::lang::Locale                                   aCharLocaleAsian;
+        css::lang::Locale                                   aCharLocaleComplex;
         ::sal_Int16                                         nFontEmphasisMark;
         ::sal_Int16                                         nFontRelief;
         ::sal_Int32                                         nTextColor;
         ::sal_Int32                                         nTextLineColor;
         ::sal_Int32                                         nCharUnderlineColor;
         ::sal_Int32                                         nBackgroundColor;
-        OUString                                     sCharCombinePrefix;
-        OUString                                     sCharCombineSuffix;
-        OUString                                     sHyperLinkURL;
-        OUString                                     sHyperLinkTarget;
-        OUString                                     sHyperLinkName;
-        OUString                                     sVisitedCharStyleName;
-        OUString                                     sUnvisitedCharStyleName;
-        com::sun::star::style::VerticalAlignment            aVerticalAlignment;
+        OUString                                            sCharCombinePrefix;
+        OUString                                            sCharCombineSuffix;
+        OUString                                            sHyperLinkURL;
+        OUString                                            sHyperLinkTarget;
+        OUString                                            sHyperLinkName;
+        OUString                                            sVisitedCharStyleName;
+        OUString                                            sUnvisitedCharStyleName;
+        css::style::VerticalAlignment                       aVerticalAlignment;
         ::sal_Int16                                         nCharEscapement;
         ::sal_Int16                                         nCharCaseMap;
         ::sal_Int16                                         nCharKerning;
@@ -85,8 +85,8 @@ namespace reportdesign
         ::cppu::OInterfaceContainerHelper                   aContainerListeners;
         OReportComponentProperties                          aComponent;
         OFormatProperties                                   aFormatProperties;
-        ::com::sun::star::container::XContainer*            m_pOwner;
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition> >
+        css::container::XContainer*                         m_pOwner;
+        ::std::vector< css::uno::Reference< css::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;
         OUString                                            aDataField;
@@ -94,8 +94,8 @@ namespace reportdesign
         bool                                                bPrintWhenGroupChange;
 
         OReportControlModel(osl::Mutex& _rMutex
-                            ,::com::sun::star::container::XContainer* _pOwner
-                            ,::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext)
+                            ,css::container::XContainer* _pOwner
+                            ,css::uno::Reference< css::uno::XComponentContext > const & _xContext)
             :aContainerListeners(_rMutex)
             ,aComponent(_xContext)
             ,m_pOwner(_pOwner)
@@ -104,24 +104,24 @@ namespace reportdesign
         {}
 
         // XContainer
-        void addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        void removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+        void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
 
         // XElementAccess
-        bool hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool hasElements(  ) throw (css::uno::RuntimeException);
 
         // XIndexReplace
-        void replaceByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        void replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         // XIndexContainer
-        void insertByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        void removeByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        void insertByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+        void removeByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         // XIndexAccess
-        ::sal_Int32 getCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Any getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        ::sal_Int32 getCount(  ) throw (css::uno::RuntimeException);
+        css::uno::Any getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        static bool isInterfaceForbidden(const ::com::sun::star::uno::Type& _rType);
+        static bool isInterfaceForbidden(const css::uno::Type& _rType);
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCONTROLMODEL_HXX

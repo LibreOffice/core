@@ -24,7 +24,7 @@ namespace reportdesign
 using namespace com::sun::star;
 using namespace comphelper;
 
-bool operator==( const ::com::sun::star::awt::FontDescriptor& _lhs, const ::com::sun::star::awt::FontDescriptor& _rhs )
+bool operator==( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs )
 {
     return  ( _lhs.Name           == _rhs.Name )
         &&  ( _lhs.Height         == _rhs.Height )

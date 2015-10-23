@@ -364,7 +364,7 @@ void OAddFieldWindow::Update()
             }
 
             // add the parameter columns to the list
-            uno::Reference< ::com::sun::star::sdbc::XRowSet > xRowSet(m_xRowSet,uno::UNO_QUERY);
+            uno::Reference< css::sdbc::XRowSet > xRowSet(m_xRowSet,uno::UNO_QUERY);
             Sequence< OUString > aParamNames( getParameterNames( xRowSet ) );
             lcl_addToList( *m_pListBox, aParamNames );
 
@@ -461,7 +461,7 @@ void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAcces
     }
 }
 
-void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )  throw(css::uno::RuntimeException, std::exception)
 {
     if ( m_pListBox.get() )
     {
@@ -480,7 +480,7 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
     }
 }
 
-void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     if ( m_pListBox.get() )
     {
@@ -490,7 +490,7 @@ void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEven
     }
 }
 
-void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 

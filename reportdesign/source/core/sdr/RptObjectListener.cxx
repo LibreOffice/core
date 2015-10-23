@@ -41,14 +41,14 @@ OObjectListener::~OObjectListener()
 // XEventListener
 
 
-void SAL_CALL OObjectListener::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OObjectListener::disposing( const  css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception)
 {
 }
 
 // XPropertyChangeListener
 
 
-void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OObjectListener::propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException, std::exception)
 {
     m_pObject->_propertyChange( evt );
 }

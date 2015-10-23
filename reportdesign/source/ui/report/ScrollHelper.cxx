@@ -305,7 +305,7 @@ OSectionWindow* OScrollWindowHelper::getMarkedSection(NearSectionAccess nsa) con
     return m_aReportWindow->getMarkedSection(nsa);
 }
 
-OSectionWindow* OScrollWindowHelper::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OScrollWindowHelper::getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const
 {
     return  m_aReportWindow->getSectionWindow(_xSection);
 }
@@ -320,7 +320,7 @@ void OScrollWindowHelper::fillCollapsedSections(::std::vector<sal_uInt16>& _rCol
     m_aReportWindow->fillCollapsedSections(_rCollapsedPositions);
 }
 
-void OScrollWindowHelper::collapseSections(const uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections)
+void OScrollWindowHelper::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections)
 {
     m_aReportWindow->collapseSections(_aCollpasedSections);
 }

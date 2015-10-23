@@ -60,7 +60,7 @@ namespace rptui
     private:
         VclPtr<SplitWindow>                 m_aSplitWin;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
+        css::uno::Reference< css::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
         VclPtr<OScrollWindowHelper>         m_aScrollWindow;
         VclPtr<vcl::Window>                 m_pTaskPane;
@@ -92,7 +92,7 @@ namespace rptui
 
     public:
         ODesignView(vcl::Window* pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
+                    const css::uno::Reference< css::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();
         virtual void dispose() override;
@@ -160,7 +160,7 @@ namespace rptui
             If the section is <NULL/> nothing happens.
             If the position is grater than the current elements, the section will be appended.
         */
-        void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        void            addSection(const css::uno::Reference< css::report::XSection >& _xSection
                                     ,const OUString& _sColorEntry
                                     ,sal_uInt16 _nPosition = USHRT_MAX);
 
@@ -196,20 +196,20 @@ namespace rptui
         /** triggers the property browser with the section
             @param  _xReportComponent the report component
         */
-        void            showProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
-        ::com::sun::star::uno::Any getCurrentlyShownProperty() const;
+        void            showProperties( const css::uno::Reference< css::uno::XInterface>& _xReportComponent);
+        css::uno::Any getCurrentlyShownProperty() const;
 
         /** returns the current section or the detail section if no section was selected previously
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getCurrentSection() const;
+        css::uno::Reference< css::report::XSection > getCurrentSection() const;
 
         /** returns the current control report model or <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
+        css::uno::Reference< css::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
         OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
-        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos) override;
 
         /** fills the positions of all collapsed sections.
@@ -222,7 +222,7 @@ namespace rptui
         *
         * \param _aCollpasedSections The position of the sections which should be collapsed.
         */
-        void collapseSections(const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections);
+        void collapseSections(const css::uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections);
 
         OUString  getCurrentPage() const;
         void             setCurrentPage(const OUString& _sLastActivePage);
@@ -237,8 +237,8 @@ namespace rptui
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,bool _bMark);
+        void            setMarked(const css::uno::Reference< css::report::XSection>& _xSection,bool _bMark);
+        void            setMarked(const css::uno::Sequence< css::uno::Reference< css::report::XReportComponent> >& _xShape,bool _bMark);
 
         /** returns if the view handles the event by itself
         *
@@ -256,7 +256,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
 
         /** calculates the zoom factor.
             @param  _eType  which kind of zoom is needed

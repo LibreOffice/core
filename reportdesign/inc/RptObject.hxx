@@ -72,17 +72,16 @@ public:
     typedef rtl::Reference<OPropertyMediator> TMediator;
 
 protected:
-    mutable TMediator                                                                           m_xMediator;
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
-    //mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>       m_xReportComponent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>          m_xContainerListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>                       m_xSection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xKeepShapeAlive;
+    mutable TMediator                                                 m_xMediator;
+    mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
+    mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
+    css::uno::Reference< css::container::XContainerListener>          m_xContainerListener;
+    css::uno::Reference< css::report::XSection>                       m_xSection;
+    css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;
     OUString m_sComponentName;
     bool        m_bIsListening;
 
-    OObjectBase(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    OObjectBase(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
     OObjectBase(const OUString& _sComponentName);
 
     virtual ~OObjectBase();
@@ -95,33 +94,33 @@ protected:
 
     /** called by instances of derived classes to implement their overriding of getUnoShape
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
             getUnoShapeOf( SdrObject& _rSdrObject );
 
 private:
     static void    ensureSdrObjectOwnership(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxShape );
+                    const css::uno::Reference< css::uno::XInterface >& _rxShape );
 
 public:
     void StartListening();
     void EndListening(bool bRemoveListener = true);
     // PropertyChangeListener
-    virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException);
     virtual void initializeOle() {}
 
     bool        supportsService( const OUString& _sServiceName ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const { return m_xReportComponent;}
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getSection() const;
+    css::uno::Reference< css::report::XReportComponent> getReportComponent() const { return m_xReportComponent;}
+    virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent();
+    css::uno::Reference< css::report::XSection> getSection() const;
     inline const OUString getServiceName() const { return m_sComponentName; }
 
     /** releases the reference to our UNO shape (m_xKeepShapeAlive)
     */
     void    releaseUnoShape() { m_xKeepShapeAlive.clear(); }
 
-    static SdrObject* createObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-    static sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    static SdrObject* createObject(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
+    static sal_uInt16 getObjectType(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
 };
 
 // OCustomShape
@@ -132,13 +131,13 @@ class REPORTDESIGN_DLLPUBLIC OCustomShape: public SdrObjCustomShape , public OOb
     friend class DlgEdFactory;
 
 public:
-    static OCustomShape* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent )
+    static OCustomShape* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent )
     {
         return new OCustomShape( _xComponent );
     }
 
 protected:
-    OCustomShape(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    OCustomShape(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
     OCustomShape(const OUString& _sComponentName);
 
     virtual void NbcMove( const Size& rSize ) override;
@@ -153,14 +152,14 @@ public:
 
     virtual ~OCustomShape();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
+    virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual sal_uInt32 GetObjInventor() const override;
 
 private:
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
+    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
 };
 
 
@@ -173,16 +172,16 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
 
     sal_uInt16 m_nType;
     bool    m_bOnlyOnce;
-    void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
+    void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
+    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
 
 public:
-    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
+    static OOle2Obj* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
     {
         return new OOle2Obj( _xComponent,_nType );
     }
 protected:
-    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
+    OOle2Obj(const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
     OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
 
 
@@ -198,9 +197,9 @@ public:
 
     virtual ~OOle2Obj();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
+    virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual sal_uInt32 GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
@@ -209,7 +208,7 @@ public:
 
     OOle2Obj& operator=(const OOle2Obj& rObj);
 
-    void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
+    void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
 };
 
 
@@ -226,7 +225,7 @@ protected:
     OUnoObject(const OUString& _sComponentName
                 ,const OUString& rModelName
                 ,sal_uInt16   _nObjectType);
-    OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
+    OUnoObject(  const css::uno::Reference< css::report::XReportComponent>& _xComponent
                 ,const OUString& rModelName
                 ,sal_uInt16   _nObjectType);
 
@@ -242,18 +241,18 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException) override;
+    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException) override;
 
     /** creates the m_xMediator when it doesn't already exist.
         @param  _bReverse   when set to <TRUE/> then the properties from the uno control will be copied into report control
     */
     void CreateMediator(bool _bReverse = false);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() override;
+    virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
     static OUString GetDefaultName(const OUnoObject* _pObj);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual sal_uInt32 GetObjInventor() const override;
     virtual OUnoObject* Clone() const override;
@@ -261,7 +260,7 @@ public:
     OUnoObject& operator=(const OUnoObject& rObj);
 
 private:
-    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape ) override;
+    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
     void    impl_setReportComponent_nothrow();
     void    impl_initializeModel_nothrow();
 };

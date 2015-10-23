@@ -29,7 +29,7 @@ namespace rptxml
     class OXMLSection : public SvXMLImportContext
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
+        css::uno::Reference< css::report::XSection >              m_xSection;
         ORptFilter& GetOwnImport();
 
         OXMLSection(const OXMLSection&) = delete;
@@ -39,14 +39,14 @@ namespace rptxml
         OXMLSection( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::report::XSection >& _xSection
                     ,bool _bPageHeader = true);
         virtual ~OXMLSection();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
     };
 
 } // namespace rptxml

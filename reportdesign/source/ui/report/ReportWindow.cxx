@@ -330,7 +330,7 @@ OSectionWindow* OReportWindow::getMarkedSection(NearSectionAccess nsa) const
     return  m_aViewsWindow->getMarkedSection(nsa);
 }
 
-OSectionWindow* OReportWindow::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OReportWindow::getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const
 {
     return  m_aViewsWindow->getSectionWindow(_xSection);
 }
@@ -347,7 +347,7 @@ void OReportWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsed
     m_aViewsWindow->fillCollapsedSections(_rCollapsedPositions);
 }
 
-void OReportWindow::collapseSections(const uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections)
+void OReportWindow::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections)
 {
 
     m_aViewsWindow->collapseSections(_aCollpasedSections);

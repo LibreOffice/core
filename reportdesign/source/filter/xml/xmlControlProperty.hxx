@@ -31,15 +31,15 @@ namespace rptxml
     class ORptFilter;
     class OXMLControlProperty : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xControl;
-        ::com::sun::star::beans::PropertyValue m_aSetting;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aSequence;
+        css::uno::Reference< css::beans::XPropertySet > m_xControl;
+        css::beans::PropertyValue m_aSetting;
+        css::uno::Sequence< css::uno::Any> m_aSequence;
         OXMLControlProperty* m_pContainer;
-        ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
+        css::uno::Type m_aPropType;            // the type of the property the instance imports currently
         bool m_bIsList;
 
         ORptFilter& GetOwnImport();
-        static ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static css::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
         OXMLControlProperty(const OXMLControlProperty&) = delete;
         void operator =(const OXMLControlProperty&) = delete;
     public:
@@ -47,14 +47,14 @@ namespace rptxml
         OXMLControlProperty( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xControl
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::beans::XPropertySet >& _xControl
                     ,OXMLControlProperty* _pContainer = NULL);
         virtual ~OXMLControlProperty();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
         virtual void EndElement() override;
 
@@ -68,8 +68,8 @@ namespace rptxml
         void addValue(const OUString& _sValue);
 
     private:
-        static ::com::sun::star::util::Time implGetTime(double _nValue);
-        static ::com::sun::star::util::Date implGetDate(double _nValue);
+        static css::util::Time implGetTime(double _nValue);
+        static css::util::Date implGetDate(double _nValue);
     };
 
 } // namespace rptxml

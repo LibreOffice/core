@@ -4076,23 +4076,23 @@ void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHa
         impl_zoom_nothrow();
     }
 }
-void SAL_CALL OReportController::setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OReportController::setMode( const OUString& aMode ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     m_sMode = aMode;
 }
-OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OReportController::getMode(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_sMode;
 }
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception)
 {
     static const OUString s_sModes[] = { OUString("remote"),
                                           OUString("normal") };
     return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
 }
-sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString> aModes = getSupportedModes();
     const OUString* pIter = aModes.getConstArray();
@@ -4213,7 +4213,7 @@ void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomSh
 }
 
 
-OSectionWindow* OReportController::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OReportController::getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const
 {
     if ( getDesignView() )
     {

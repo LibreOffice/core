@@ -29,9 +29,9 @@ namespace rptui
     */
     class OGroupExchange : public TransferableHelper
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aGroupRow;
+        css::uno::Sequence< css::uno::Any> m_aGroupRow;
     public:
-        explicit OGroupExchange(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _aGroupRow);
+        explicit OGroupExchange(const css::uno::Sequence< css::uno::Any>& _aGroupRow);
 
         static SotClipboardFormatId getReportGroupId();
     protected:

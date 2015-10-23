@@ -315,7 +315,7 @@ void OSection::checkNotPageHeaderFooter()
 void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException("com::sun::star::report::ForceNewPage"
+        throwIllegallArgumentException("css::report::ForceNewPage"
                         ,*this
                         ,1
                         ,m_xContext);
@@ -333,7 +333,7 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
 void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException("com::sun::star::report::ForceNewPage"
+        throwIllegallArgumentException("css::report::ForceNewPage"
                         ,*this
                         ,1
                         ,m_xContext);
@@ -578,7 +578,7 @@ sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException, std::except
 }
 
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw (uno::RuntimeException, std::exception)
 {

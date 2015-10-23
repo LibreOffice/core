@@ -35,7 +35,7 @@
 
 namespace reportdesign
 {
-    template <class T> void lcl_createSectionIfNeeded(bool _bOn,const T& _xParent,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection/*in/out*/,bool _bPageSection = false)
+    template <class T> void lcl_createSectionIfNeeded(bool _bOn,const T& _xParent,css::uno::Reference< css::report::XSection>& _xSection/*in/out*/,bool _bPageSection = false)
     {
         if ( _bOn && !_xSection.is() )
             _xSection = OSection::createOSection(_xParent,_xParent->getContext(),_bPageSection);
@@ -48,7 +48,7 @@ namespace reportdesign
      * \param _xReportComponent A report component which is a child of the section.
      * \return The section where this report component resists in.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> lcl_getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
+    css::uno::Reference< css::report::XSection> lcl_getSection(const css::uno::Reference< css::uno::XInterface>& _xReportComponent);
 
     /** throws an illegal argument exception. The message text is the resource RID_STR_ERROR_WRONG_ARGUMENT + the type as reference.
      *
@@ -58,9 +58,9 @@ namespace reportdesign
      * \param Context_ The context to get the factory service.
      */
     void throwIllegallArgumentException(const OUString& _sTypeName
-                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& ExceptionContext_
+                                        ,const css::uno::Reference< css::uno::XInterface >& ExceptionContext_
                                         ,const ::sal_Int16& ArgumentPosition_
-                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context_);
+                                        ,const css::uno::Reference< css::uno::XComponentContext >& Context_);
 
     /** clones the given object
     *
@@ -69,22 +69,22 @@ namespace reportdesign
     * \param _sServiceName the service of the to be cloned object
     * \return the clone
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > cloneObject(
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xReportComponent
-                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xFactory
+    css::uno::Reference< css::util::XCloneable > cloneObject(
+                                        const css::uno::Reference< css::report::XReportComponent>& _xReportComponent
+                                        ,const css::uno::Reference< css::lang::XMultiServiceFactory>& _xFactory
                                         ,const OUString& _sServiceName);
 
     class OShapeHelper
     {
     public:
-        template<typename T> static void setSize(const ::com::sun::star::awt::Size& aSize,T* _pShape)
+        template<typename T> static void setSize(const css::awt::Size& aSize,T* _pShape)
         {
             OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal width or height!");
 
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
-                ::com::sun::star::awt::Size aOldSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
+                css::awt::Size aOldSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
                 if ( aOldSize.Height != aSize.Height || aOldSize.Width != aSize.Width )
                 {
                     _pShape->m_aProps.aComponent.m_nWidth = aOldSize.Width;
@@ -95,29 +95,29 @@ namespace reportdesign
             _pShape->set(PROPERTY_WIDTH,aSize.Width,_pShape->m_aProps.aComponent.m_nWidth);
             _pShape->set(PROPERTY_HEIGHT,aSize.Height,_pShape->m_aProps.aComponent.m_nHeight);
         }
-        template<typename T> static ::com::sun::star::awt::Size getSize( T* _pShape )
+        template<typename T> static css::awt::Size getSize( T* _pShape )
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
-                ::com::sun::star::awt::Size aSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
+                css::awt::Size aSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
                 OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal width or height!");
                 return aSize;
             }
-            return ::com::sun::star::awt::Size(_pShape->m_aProps.aComponent.m_nWidth,_pShape->m_aProps.aComponent.m_nHeight);
+            return css::awt::Size(_pShape->m_aProps.aComponent.m_nWidth,_pShape->m_aProps.aComponent.m_nHeight);
         }
 
-        template<typename T> static void setPosition( const ::com::sun::star::awt::Point& _aPosition ,T* _pShape)
+        template<typename T> static void setPosition( const css::awt::Point& _aPosition ,T* _pShape)
         {
             // we know it is not allowed that the position in smaller 0, but in NbcMove() it will handled right.
             // only at 'Undo' it is possible to short set the position smaller 0
             // OSL_ENSURE(_aPosition.X >= 0 && _aPosition.Y >= 0,"set to Illegal position!");
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
-            ::com::sun::star::awt::Point aOldPos;
+            css::awt::Point aOldPos;
             aOldPos.X = _pShape->m_aProps.aComponent.m_nPosX;
             aOldPos.Y = _pShape->m_aProps.aComponent.m_nPosY;
 
-            ::com::sun::star::awt::Point aPosition(_aPosition);
+            css::awt::Point aPosition(_aPosition);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 aOldPos = _pShape->m_aProps.aComponent.m_xShape->getPosition();
@@ -131,29 +131,29 @@ namespace reportdesign
             _pShape->set(PROPERTY_POSITIONX,aPosition.X,aOldPos.X);
             _pShape->set(PROPERTY_POSITIONY,aPosition.Y,aOldPos.Y);
         }
-        template<typename T> static ::com::sun::star::awt::Point getPosition(T* _pShape)
+        template<typename T> static css::awt::Point getPosition(T* _pShape)
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
-                ::com::sun::star::awt::Point aPosition = _pShape->m_aProps.aComponent.m_xShape->getPosition();
+                css::awt::Point aPosition = _pShape->m_aProps.aComponent.m_xShape->getPosition();
                 return aPosition;
             }
-            return ::com::sun::star::awt::Point(_pShape->m_aProps.aComponent.m_nPosX,_pShape->m_aProps.aComponent.m_nPosY);
+            return css::awt::Point(_pShape->m_aProps.aComponent.m_nPosX,_pShape->m_aProps.aComponent.m_nPosY);
         }
-        template<typename T> static void setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& Parent, T* _pShape)
+        template<typename T> static void setParent( const css::uno::Reference< css::uno::XInterface >& Parent, T* _pShape)
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
-            _pShape->m_aProps.aComponent.m_xParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >(Parent,::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xChild;
+            _pShape->m_aProps.aComponent.m_xParent = css::uno::Reference< css::container::XChild >(Parent,css::uno::UNO_QUERY);
+            css::uno::Reference< css::container::XChild > xChild;
             comphelper::query_aggregation(_pShape->m_aProps.aComponent.m_xProxy,xChild);
             if ( xChild.is() )
                 xChild->setParent(Parent);
         }
-        template<typename T> static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getParent( T* _pShape )
+        template<typename T> static css::uno::Reference< css::uno::XInterface > getParent( T* _pShape )
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xChild;
+            css::uno::Reference< css::container::XChild > xChild;
             comphelper::query_aggregation(_pShape->m_aProps.aComponent.m_xProxy,xChild);
             if ( xChild.is() )
                     return xChild->getParent();

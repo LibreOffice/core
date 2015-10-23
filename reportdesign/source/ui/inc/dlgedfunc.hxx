@@ -45,7 +45,7 @@ protected:
     OSectionView&   m_rView;
     Timer           aScrollTimer;
     Point           m_aMDPos;
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
+    css::uno::Reference<css::uno::XInterface> m_xOverlappingObj;
     SdrObject *     m_pOverlappingObj;
     sal_Int32       m_nOverlappedControlColor;
     sal_Int32       m_nOldColor;

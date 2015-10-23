@@ -37,19 +37,18 @@ namespace reportdesign
     class OReportComponentProperties
     {
     public:
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XChild > m_xParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                                                                    m_xFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       m_xShape;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     m_xProxy;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xProperty;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >   m_xTypeProvider;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel >      m_xUnoTunnel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >    m_xServiceInfo;
-        ::com::sun::star::uno::Sequence< OUString >                          m_aMasterFields;
-        ::com::sun::star::uno::Sequence< OUString >                          m_aDetailFields;
-        OUString                                                             m_sName;
+        css::uno::WeakReference< css::container::XChild >                           m_xParent;
+        css::uno::Reference< css::uno::XComponentContext >                          m_xContext;
+        css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xFactory;
+        css::uno::Reference< css::drawing::XShape >                                 m_xShape;
+        css::uno::Reference< css::uno::XAggregation >                               m_xProxy;
+        css::uno::Reference< css::beans::XPropertySet >                             m_xProperty;
+        css::uno::Reference< css::lang::XTypeProvider >                             m_xTypeProvider;
+        css::uno::Reference< css::lang::XUnoTunnel >                                m_xUnoTunnel;
+        css::uno::Reference< css::lang::XServiceInfo >                              m_xServiceInfo;
+        css::uno::Sequence< OUString >                                              m_aMasterFields;
+        css::uno::Sequence< OUString >                                              m_aDetailFields;
+        OUString                                                                    m_sName;
         ::sal_Int32                                                                 m_nHeight;
         ::sal_Int32                                                                 m_nWidth;
         ::sal_Int32                                                                 m_nPosX;
@@ -58,7 +57,7 @@ namespace reportdesign
         ::sal_Int16                                                                 m_nBorder;
         bool                                                                        m_bPrintRepeatedValues;
 
-        OReportComponentProperties(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext
+        OReportComponentProperties(css::uno::Reference< css::uno::XComponentContext > const & _xContext
             )
             :m_xContext(_xContext)
             ,m_nHeight(0)
@@ -71,8 +70,8 @@ namespace reportdesign
         {}
         ~OReportComponentProperties();
 
-        void setShape(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _xShape
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xTunnel
+        void setShape(css::uno::Reference< css::drawing::XShape >& _xShape
+                    ,const css::uno::Reference< css::report::XReportComponent>& _xTunnel
                     ,oslInterlockedCount& _rRefCount);
     };
 }

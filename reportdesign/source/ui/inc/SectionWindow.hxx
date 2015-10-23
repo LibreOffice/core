@@ -66,7 +66,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool, OGroupHelper>& _pIsSectionOn);
+        bool setGroupSectionTitle(const css::uno::Reference< css::report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool, OGroupHelper>& _pIsSectionOn);
 
         /** set the title of the (report/page) header or footer
         *
@@ -76,7 +76,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
+        bool setReportSectionTitle(const css::uno::Reference< css::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
         void ImplInitSettings();
 
         DECL_LINK_TYPED(Collapsed, OColorListener&, void);
@@ -90,11 +90,11 @@ namespace rptui
         virtual void Resize() override;
 
     protected:
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent)
+        virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent)
             throw (css::uno::RuntimeException, std::exception) override;
     public:
         OSectionWindow( OViewsWindow* _pParent
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+                        ,const css::uno::Reference< css::report::XSection >& _xSection
                         ,const OUString& _sColorEntry);
         virtual ~OSectionWindow();
         virtual void dispose() override;

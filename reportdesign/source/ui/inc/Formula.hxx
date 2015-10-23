@@ -48,23 +48,23 @@ class FormulaDialog : public formula::FormulaModalDialog,
     std::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
     formula::FormEditData*             m_pFormulaData;
     VclPtr<OAddFieldWindow>            m_pAddField;
-    ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >          m_xRowSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFormulaParser>   m_xParser;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
+    css::uno::Reference < css::beans::XPropertySet >          m_xRowSet;
+    css::uno::Reference< css::report::meta::XFormulaParser>   m_xParser;
+    css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     VclPtr<formula::RefEdit>           m_pEdit;
-    OUString                    m_sFormula;
-    sal_Int32                   m_nStart;
-    sal_Int32                   m_nEnd;
+    OUString                           m_sFormula;
+    sal_Int32                          m_nStart;
+    sal_Int32                          m_nEnd;
 
-    svl::SharedStringPool& mrStringPool;
+    svl::SharedStringPool&             mrStringPool;
 
     DECL_LINK_TYPED( OnClickHdl, OAddFieldWindow&, void );
 public:
     FormulaDialog( vcl::Window* pParent
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xServiceFactory
+        , const css::uno::Reference< css::lang::XMultiServiceFactory>& _xServiceFactory
         , const std::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula
-        , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+        , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
         , svl::SharedStringPool& rStrPool );
 
     virtual ~FormulaDialog();
@@ -90,11 +90,11 @@ public:
     virtual OUString getCurrentFormula() const override;
 
     virtual formula::IFunctionManager* getFunctionManager() override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
-    virtual ::com::sun::star::table::CellAddress getReferencePosition() const override;
+    virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const override;
+    virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
+    virtual css::table::CellAddress getReferencePosition() const override;
 
-    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) override;
+    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
 
     // IControlReferenceHandler
     virtual void ShowReference(const OUString& _sRef) override;

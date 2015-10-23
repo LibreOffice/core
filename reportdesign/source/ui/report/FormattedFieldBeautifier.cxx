@@ -128,7 +128,7 @@ namespace rptui
         uno::Any aFontDescriptor = _xVclWindowPeer->getProperty(PROPERTY_FONTDESCRIPTOR);
         awt::FontDescriptor aFontDescriptorStructure;
         aFontDescriptor >>= aFontDescriptorStructure;
-        aFontDescriptorStructure.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
+        aFontDescriptorStructure.Slant = css::awt::FontSlant_ITALIC;
         _xVclWindowPeer->setProperty(PROPERTY_FONTDESCRIPTOR, uno::makeAny(aFontDescriptorStructure));
     }
 

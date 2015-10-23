@@ -31,9 +31,9 @@ namespace rptxml
     class OXMLFunction : public SvXMLImportContext
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions >    m_xFunctions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction >     m_xFunction;
-        bool                                                                        m_bAddToReport;
+        css::uno::Reference< css::report::XFunctions >    m_xFunctions;
+        css::uno::Reference< css::report::XFunction >     m_xFunction;
+        bool                                              m_bAddToReport;
 
         ORptFilter& GetOwnImport();
 
@@ -44,8 +44,8 @@ namespace rptxml
         OXMLFunction( ORptFilter& rImport
                     , sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier >&    _xFunctions
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::report::XFunctionsSupplier >&    _xFunctions
                     ,bool _bAddToReport = false
                     );
         virtual ~OXMLFunction();
