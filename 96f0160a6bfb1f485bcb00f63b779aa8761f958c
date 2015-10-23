@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_5a90f5ec",
+        "filename": "unotools/source/config/searchopt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-23T00:12:00Z",
+      "side": 1,
+      "message": "This lacks a comma to separate the entries, which leads to one concatenated \"IsIgnoreKashida_CTLIsSearchFormatted\" string. In fact when opening or closing the search dialog in a dbgutil build there are several failure messages\n\n unotools/source/config/configitem.cxx:447: ignoring XHierarchicalNameAccess to /org.openoffice.Office.Common/SearchOptions/IsIgnoreKashida_CTLIsSearchFormatted Exception: IsIgnoreKashida_CTLIsSearchFormatted\n unotools/source/config/searchopt.cxx:184: property value missing\n unotools/source/config/searchopt.cxx:207: value missing\n unotools/source/config/searchopt.cxx:212: LoadConfig failed\n\nAdditionally this lacks the property\u0027s configuration definition, i.e. in officecfg/registry/schema/org/openoffice/Office/Common.xcs within \u003cgroup oor:name\u003d\"SearchOptions\"\u003e, otherwise there still is an exception\n\n unotools/source/config/configitem.cxx:447: ignoring XHierarchicalNameAccess to /org.openoffice.Office.Common/SearchOptions/IsSearchFormatted Exception: IsSearchFormatted\n ...\n\nI\u0027m adding that as well.",
+      "range": {
+        "startLine": 151,
+        "startChar": 29,
+        "endLine": 151,
+        "endChar": 30
+      },
+      "revId": "96f0160a6bfb1f485bcb00f63b779aa8761f958c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
