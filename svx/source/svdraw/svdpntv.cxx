@@ -259,12 +259,12 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
     }
 
-    bool bObjChg=!mbSomeObjChgdFlag; // if true, evaluate for ComeBack timer
-    if (bObjChg) {
+    {
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
         if (pSdrHint) {
             SdrHintKind eKind=pSdrHint->GetKind();
             if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
+                bool bObjChg=!mbSomeObjChgdFlag; // if true, evaluate for ComeBack timer
                 if (bObjChg) {
                     mbSomeObjChgdFlag=true;
                     maComeBackIdle.Start();
