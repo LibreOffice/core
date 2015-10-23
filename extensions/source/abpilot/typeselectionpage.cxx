@@ -66,8 +66,7 @@ namespace abp
         // - OTHER
         //
         // On Windows:
-        // - MORK, THUNDERBIRD, LDAP, OUTLOOK, OUTLOOKEXPRESS (via mozab driver,
-        //   if WITH_MOZILLA)
+        // - MORK, THUNDERBIRD
         // - OTHER
 
         bool bWithMozilla = false;

@@ -285,10 +285,6 @@ postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 postprocess_DRIVERS += dbase flat mysql odbc
 ifeq (WNT,$(OS))
-ifneq ($(WITH_MOZAB4WIN),)
-postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mozab)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
-postprocess_DRIVERS += mozab
-endif
 else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mork)/org/openoffice/Office/DataAccess/Drivers-mork.xcu

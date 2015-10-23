@@ -28,7 +28,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_LIBXSLT \
 	SYSTEM_REDLAND \
 	WITH_GALLERY_BUILD \
-	WITH_MOZAB4WIN \
 	WITH_MYSPELL_DICTS \
 ))
 

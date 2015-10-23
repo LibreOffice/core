@@ -19,65 +19,6 @@
 
 
 #include "MNSProfileDiscover.hxx"
-#ifndef MINIMAL_PROFILEDISCOVER
-#include "MNSProfile.hxx"
-
-#include "pratom.h"
-#include "prmem.h"
-#include "plstr.h"
-#include "prenv.h"
-
-#include "nsIEnumerator.h"
-#include "prprf.h"
-#include "nsCOMPtr.h"
-#include "nsIComponentManager.h"
-#include "nsEscape.h"
-#include "nsDirectoryServiceDefs.h"
-#include "nsAppDirectoryServiceDefs.h"
-#include "nsILocalFile.h"
-#include "nsReadableUtils.h"
-
-
-#if defined(XP_MAC) || defined(XP_MACOSX)
-#include <Processes.h>
-#include <CFBundle.h>
-#include "nsILocalFileMac.h"
-#endif
-
-#ifdef XP_UNIX
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <signal.h>
-#include "prnetdb.h"
-#include "prsystem.h"
-#endif
-
-#ifdef VMS
-#include <rmsdef.h>
-#endif
-
-#include "pre_include_mozilla.h"
-#include "nsICharsetConverterManager.h"
-#include "nsIPlatformCharset.h"
-#include "post_include_mozilla.h"
-
-#if defined (XP_UNIX)
-#   define USER_ENVIRONMENT_VARIABLE "USER"
-#   define LOGNAME_ENVIRONMENT_VARIABLE "LOGNAME"
-#   define HOME_ENVIRONMENT_VARIABLE "HOME"
-#   define PROFILE_NAME_ENVIRONMENT_VARIABLE "PROFILE_NAME"
-#   define PROFILE_HOME_ENVIRONMENT_VARIABLE "PROFILE_HOME"
-#   define DEFAULT_UNIX_PROFILE_NAME "default"
-#   ifndef XP_MACOSX   /* Don't use symlink-based locking on OS X */
-#       define USE_SYMLINK_LOCKING
-#   endif
-#endif
-
-// IID and CIDs of all the services needed
-static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CID);
-#endif
-
 #include "MNSFolders.hxx"
 #include "MNSINIParser.hxx"
 
@@ -86,11 +27,7 @@ namespace connectivity
     namespace mozab
     {
         ProfileStruct::ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
-#ifdef MINIMAL_PROFILEDISCOVER
             const OUString& aProfilePath
-#else
-            nsILocalFile * aProfilePath
-#endif
           )
         {
             product=aProduct;
@@ -99,20 +36,7 @@ namespace connectivity
         }
         OUString ProfileStruct::getProfilePath()
         {
-#ifdef MINIMAL_PROFILEDISCOVER
             return profilePath;
-#else
-            if (profilePath)
-            {
-                nsAutoString path;
-                nsresult rv = profilePath->GetPath(path);
-                NS_ENSURE_SUCCESS(rv, OUString());
-                // PRUnichar != sal_Unicode in mingw
-                return OUString(reinterpret_cast_mingw_only<const sal_Unicode *>(path.get()));
-            }
-            else
-                return OUString();
-#endif
         }
 
         ProfileAccess::~ProfileAccess()
@@ -143,9 +67,6 @@ namespace connectivity
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
 
-#ifndef MINIMAL_PROFILEDISCOVER
-            nsresult rv;
-#endif
             OUString regDir = getRegistryDir(product);
             OUString profilesIni = regDir + "profiles.ini";
             IniParser parser( profilesIni );
@@ -191,28 +112,6 @@ namespace connectivity
                         isRelative = sIsRelative.toInt32();
                     }
 
-#ifndef MINIMAL_PROFILEDISCOVER
-                    nsCOMPtr<nsILocalFile> rootDir;
-                    rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
-                                            getter_AddRefs(rootDir));
-                    if (NS_FAILED(rv)) continue;
-
-                    OString sPath = OUStringToOString(profilePath, RTL_TEXTENCODING_UTF8);
-                    nsCAutoString filePath(sPath.getStr());
-
-                    if (isRelative) {
-                        // PRUnichar != sal_Unicode in mingw
-                        nsAutoString registryDir( reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()) );
-                        nsCOMPtr<nsILocalFile>     mAppData;
-                        rv = NS_NewLocalFile(registryDir, PR_TRUE,
-                                        getter_AddRefs(mAppData));
-                        if (NS_FAILED(rv)) continue;
-                        rv = rootDir->SetRelativeDescriptor(mAppData, filePath);
-                    } else {
-                        rv = rootDir->SetPersistentDescriptor(filePath);
-                    }
-                    if (NS_FAILED(rv)) continue;
-#else
                     OUString fullProfilePath;
                     if(isRelative)
                     {
@@ -222,14 +121,9 @@ namespace connectivity
                     {
                         fullProfilePath = profilePath;
                     }
-#endif
 
                     ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
-#ifdef MINIMAL_PROFILEDISCOVER
                             fullProfilePath
-#else
-                            rootDir
-#endif
                         );
                     m_Product.mProfileList[profileName] = profileItem;
 
@@ -301,98 +195,11 @@ namespace connectivity
             ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;
             return aProfile->getProfileName();
         }
-#ifndef MINIMAL_PROFILEDISCOVER
-        nsresult ProfileAccess::isExistFileOrSymlink(nsILocalFile* aFile,PRBool *bExist)
-        {
-            nsresult rv;
-            nsAutoString path;
-            aFile->GetPath(path);
-            rv = aFile->Exists(bExist);
-            NS_ENSURE_SUCCESS(rv, rv);
-            if (!*bExist)
-            {
-                rv = aFile->IsSymlink(bExist);
-                NS_ENSURE_SUCCESS(rv, rv);
-            }
-            return rv;
-        }
-        nsresult ProfileAccess::isLockExist(nsILocalFile* aFile)
-        {
-#if defined (XP_MACOSX)
-            NS_NAMED_LITERAL_STRING(LOCKFILE_NAME, ".parentlock");
-            NS_NAMED_LITERAL_STRING(OLD_LOCKFILE_NAME, "parent.lock");
-#elif defined (XP_UNIX)
-            NS_ConvertASCIItoUTF16 OLD_LOCKFILE_NAME("lock");
-            NS_ConvertASCIItoUTF16 LOCKFILE_NAME(".parentlock");
-#else
-            NS_NAMED_LITERAL_STRING(OLD_LOCKFILE_NAME, "parent.lock");
-            NS_NAMED_LITERAL_STRING(LOCKFILE_NAME, "parent.lock");
-#endif
-
-            nsresult rv;
-
-            PRBool isDir;
-            rv = aFile->IsDirectory(&isDir);
-            NS_ENSURE_SUCCESS(rv, rv);
-            if (!isDir)
-                return NS_ERROR_FILE_NOT_DIRECTORY;
-
-            nsCOMPtr<nsILocalFile> lockFile;
-            rv = aFile->Clone((nsIFile **)((void **)getter_AddRefs(lockFile)));
-            NS_ENSURE_SUCCESS(rv, rv);
-
-            rv = lockFile->Append(LOCKFILE_NAME);
-            NS_ENSURE_SUCCESS(rv, rv);
-            PRBool nExist=PR_FALSE;
-            rv = isExistFileOrSymlink(lockFile,&nExist);
-            NS_ENSURE_SUCCESS(rv, rv);
-            if (!nExist) // Check OLD_LOCKFILE_NAME
-            {
-                nsCOMPtr<nsILocalFile> oldlockFile;
-                rv = aFile->Clone((nsIFile **)((void **)getter_AddRefs(oldlockFile)));
-                NS_ENSURE_SUCCESS(rv, rv);
-
-                rv = oldlockFile->Append(OLD_LOCKFILE_NAME);
-                NS_ENSURE_SUCCESS(rv, rv);
-                rv = isExistFileOrSymlink(oldlockFile,&nExist);
-                NS_ENSURE_SUCCESS(rv, rv);
-            }
-            return nExist;
-        }
-
-#endif
         bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
-#ifdef MINIMAL_PROFILEDISCOVER
             (void)product; /* avoid warning about unused parameter */
             (void)profileName; /* avoid warning about unused parameter */
             return true;
-#else
-            OUString path = getProfilePath(product,profileName);
-            if (path.isEmpty())
-                return sal_True;
-
-            // PRUnichar != sal_Unicode in mingw
-            nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
-
-            nsresult rv;
-            nsCOMPtr<nsILocalFile>  localFile;
-            rv = NS_NewLocalFile(filePath, PR_TRUE,
-                                getter_AddRefs(localFile));
-            NS_ENSURE_SUCCESS(rv,sal_True);
-
-            PRBool exists = PR_FALSE;
-            rv = localFile->Exists(&exists);
-            NS_ENSURE_SUCCESS(rv, sal_True);
-            if (!exists)
-                return sal_True;
-
-            // If the profile is locked, we return true
-            rv = isLockExist(localFile);
-            if (rv)
-                return sal_True;
-            return sal_False;
-#endif
         }
 
         bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
