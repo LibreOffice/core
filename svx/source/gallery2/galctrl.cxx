@@ -257,23 +257,13 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 
 void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if (rStyleSettings.GetPreviewUsesCheckeredBackground())
-    {
-        // draw checkered background
-        static const sal_uInt32 nLen(8);
-        static const Color aW(COL_WHITE);
-        static const Color aG(0xef, 0xef, 0xef);
+    // draw checkered background
+    static const sal_uInt32 nLen(8);
+    static const Color aW(COL_WHITE);
+    static const Color aG(0xef, 0xef, 0xef);
 
-        rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
-    }
-    else
-    {
-        rOut.SetLineColor();
-        rOut.SetFillColor(rStyleSettings.GetFieldColor());
-        rOut.DrawRect(Rectangle(rPos, rSize));
-    }
+    rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
 
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
