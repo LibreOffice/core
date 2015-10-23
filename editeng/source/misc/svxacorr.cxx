@@ -1796,6 +1796,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     }
 
     // otherwise for example EN
+    aLanguageTag.reset(aLanguageTag.getLanguage());
     LanguageType nTmpKey2 = aLanguageTag.getLanguageType(false);
     if (nTmpKey2 != eLang && nTmpKey2 != LANGUAGE_UNDETERMINED &&
                 (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() ||
@@ -1882,6 +1883,7 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     }
 
     // otherwise for example EN
+    aLanguageTag.reset(aLanguageTag.getLanguage());
     LanguageType nTmpKey2 = aLanguageTag.getLanguageType(false);
     if (nTmpKey2 != eLang && nTmpKey2 != LANGUAGE_UNDETERMINED &&
                 (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() ||
